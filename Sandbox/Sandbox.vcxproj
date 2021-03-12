@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Sandbox_Debug_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\Sandbox_Debug_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Debug_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\bin-int\Debug_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Sandbox_Release_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\Sandbox_Release_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Release_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\bin-int\Release_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Sandbox_Publish_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\Sandbox_Publish_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Publish_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\bin-int\Publish_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
@@ -130,6 +130,9 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\SandboxApp.cpp" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">
       <Project>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</Project>

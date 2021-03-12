@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="FoolsEngine">
+      <UniqueIdentifier>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Application.h">
+      <Filter>FoolsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Core.h">
+      <Filter>FoolsEngine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Application.cpp">
+      <Filter>FoolsEngine</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\FoolsEngine_Debug_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\FoolsEngine_Debug_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Debug_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\bin-int\Debug_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\FoolsEngine_Release_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\FoolsEngine_Release_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Release_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\bin-int\Release_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\FoolsEngine_Publish_windows_x86_64\</OutDir>
-    <IntDir>..\bin-int\FoolsEngine_Publish_windows_x86_64\</IntDir>
+    <OutDir>..\bin\Publish_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\bin-int\Publish_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
@@ -88,8 +88,11 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>..\bin\FoolsEngine_Debug_windows_x86_64\FoolsEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -109,8 +112,11 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\FoolsEngine_Release_windows_x86_64\FoolsEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
     <ClCompile>
@@ -130,9 +136,20 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\FoolsEngine_Publish_windows_x86_64\FoolsEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Application.h" />
+    <ClInclude Include="src\FoolsEngine\Core.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Application.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
