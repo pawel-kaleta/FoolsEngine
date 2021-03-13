@@ -26,7 +26,7 @@ project "FoolsEngine"
 
 	includedirs
 	{
-		"%{prj.name}/externals/../include"
+		"FoolsEngine/externals/spdlog/include"
 	}
 
 	filter "system:windows"
@@ -74,8 +74,8 @@ project "Sandbox"
 
 	includedirs
 	{
-		"FoolsEngine/externals/../include",
-		"FoolsEngine/src"
+		"FoolsEngine/src",
+		"FoolsEngine/externals/spdlog/include"
 	}
 
 	links

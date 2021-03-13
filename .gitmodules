@@ -1,0 +1,3 @@
+[submodule "FoolsEngine/externals/spdlog"]
+	path = FoolsEngine/externals/spdlog
+	url = https://github.com/gabime/spdlog
