@@ -16,11 +16,7 @@ public:
 
 };
 
-int main()
+fe::Application* fe::CreateApplication()
 {
-	SandboxApp* sandbox = new SandboxApp();
-
-	sandbox->Run();
-
-	delete sandbox;
+	return new SandboxApp();
 }

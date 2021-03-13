@@ -91,7 +91,8 @@
       <ImportLibrary>..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF NOT EXIST ..\bin\Debug_windows_x86_64\Sandbox (mkdir ..\bin\Debug_windows_x86_64\Sandbox)
+IF EXIST ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Debug_windows_x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -115,7 +116,8 @@
       <ImportLibrary>..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF NOT EXIST ..\bin\Release_windows_x86_64\Sandbox (mkdir ..\bin\Release_windows_x86_64\Sandbox)
+IF EXIST ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Release_windows_x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
@@ -139,13 +141,15 @@
       <ImportLibrary>..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF NOT EXIST ..\bin\Publish_windows_x86_64\Sandbox (mkdir ..\bin\Publish_windows_x86_64\Sandbox)
+IF EXIST ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll ..\bin\Publish_windows_x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core.h" />
+    <ClInclude Include="src\FoolsEngine\EntryPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application.cpp" />

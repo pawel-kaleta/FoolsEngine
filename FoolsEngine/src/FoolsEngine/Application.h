@@ -13,4 +13,6 @@ namespace fe {
 		void Run();
 	};
 
+	// To be defined in FoolsEngine application (game)
+	Application* CreateApplication();
 }

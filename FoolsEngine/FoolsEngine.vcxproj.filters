@@ -13,6 +13,7 @@
     <ClInclude Include="src\FoolsEngine\Core.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\EntryPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application.cpp">
