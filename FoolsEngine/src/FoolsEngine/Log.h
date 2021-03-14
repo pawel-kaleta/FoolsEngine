@@ -39,9 +39,9 @@ namespace fe {
 #define FE_LOG_CORE_TRACE(...) fe::Log::GetCoreLogger()->trace   (__VA_ARGS__)
 
 // Macros for logging client app issues
-#define FE_LOG_CLIENT_FATAL(...) fe::Log::GetClientLogger()->critical(__VA_ARGS__)
-#define FE_LOG_CLIENT_ERROR(...) fe::Log::GetClientLogger()->error   (__VA_ARGS__)
-#define FE_LOG_CLIENT_WARN(...)  fe::Log::GetClientLogger()->warn    (__VA_ARGS__)
-#define FE_LOG_CLIENT_INFO(...)  fe::Log::GetClientLogger()->info    (__VA_ARGS__)
-#define FE_LOG_CLIENT_DEBUG(...) fe::Log::GetClientLogger()->debug    (__VA_ARGS__)
-#define FE_LOG_CLIENT_TRACE(...) fe::Log::GetClientLogger()->trace   (__VA_ARGS__)
+#define FE_LOG_FATAL(...) fe::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define FE_LOG_ERROR(...) fe::Log::GetClientLogger()->error   (__VA_ARGS__)
+#define FE_LOG_WARN(...)  fe::Log::GetClientLogger()->warn    (__VA_ARGS__)
+#define FE_LOG_INFO(...)  fe::Log::GetClientLogger()->info    (__VA_ARGS__)
+#define FE_LOG_DEBUG(...) fe::Log::GetClientLogger()->debug   (__VA_ARGS__)
+#define FE_LOG_TRACE(...) fe::Log::GetClientLogger()->trace   (__VA_ARGS__)
