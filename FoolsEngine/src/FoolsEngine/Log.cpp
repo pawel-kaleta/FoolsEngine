@@ -1,5 +1,4 @@
-#include "Log.h"
-#include <vector>
+#include "FoolsEngine/Log.h"
 
 namespace fe
 {
@@ -18,8 +17,8 @@ namespace fe
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Logs/FoolsEngine.log", true));
 		loggingTargets.back()->set_pattern("%T:%f | %-8l | %-3n | %v");
 
-		s_CoreLogger   = std::make_shared<spdlog::logger>("FoolsEngine", begin(loggingTargets), end(loggingTargets));
-		s_ClientLogger = std::make_shared<spdlog::logger>("Application", begin(loggingTargets), end(loggingTargets));
+		s_CoreLogger   = std::make_shared<spdlog::logger>("FE", begin(loggingTargets), end(loggingTargets));
+		s_ClientLogger = std::make_shared<spdlog::logger>("App", begin(loggingTargets), end(loggingTargets));
 
 		spdlog::register_logger(s_CoreLogger);
 		spdlog::register_logger(s_ClientLogger);

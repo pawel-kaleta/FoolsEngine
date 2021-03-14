@@ -26,6 +26,7 @@ project "FoolsEngine"
 
 	includedirs
 	{
+		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include"
 	}
 
