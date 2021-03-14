@@ -13,10 +13,18 @@
     <ClInclude Include="src\FoolsEngine\Core.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\EntryPoint.h" />
+    <ClInclude Include="src\FoolsEngine\EntryPoint.h">
+      <Filter>FoolsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Log.h">
+      <Filter>FoolsEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application.cpp">
+      <Filter>FoolsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Log.cpp">
       <Filter>FoolsEngine</Filter>
     </ClCompile>
   </ItemGroup>

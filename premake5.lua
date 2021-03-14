@@ -90,8 +90,7 @@ project "Sandbox"
 
 		defines
 		{
-			"FE_PLATFORM_WINDOWS",
-			"FE_BUILD_DLL"
+			"FE_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"

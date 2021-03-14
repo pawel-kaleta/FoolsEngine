@@ -4,8 +4,8 @@
 	#ifdef FE_BUILD_DLL
 		#define FE_API __declspec(dllexport)
 	#else
-		#define FE_API __declspec(dllimoirt)
+		#define FE_API __declspec(dllimport)
 	#endif
 #else
-	#error FoolsEngine does not support dzis platform!
+	#error FoolsEngine does not support this platform!
 #endif
