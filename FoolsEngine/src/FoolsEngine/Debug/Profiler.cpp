@@ -1,11 +1,10 @@
-#ifdef FE_INTERNAL_BUILD
 
+
+#include "FE_pch.h"
 #include "FoolsEngine/Debug/Profiler.h"
 #include "FoolsEngine/Debug/Log.h"
 
-#include <sstream>
-#include <iomanip>
-
+#ifdef FE_INTERNAL_BUILD
 namespace fe
 {
 	void Timer::Stop()

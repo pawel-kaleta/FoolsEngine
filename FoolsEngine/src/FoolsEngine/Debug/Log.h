@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include "FoolsEngine/Core.h"
 
 #include "spdlog/spdlog.h"
@@ -11,7 +9,7 @@
 
 namespace fe {
 
-	class FE_API Log
+	class Log
 	{
 	public:
 		static void Init();

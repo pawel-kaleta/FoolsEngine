@@ -3,9 +3,6 @@
 #include "FoolsEngine/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 
-#include <functional>
-#include <vector>
-#include <memory>
 /*
 namespace fe
 {
@@ -53,7 +50,8 @@ namespace fe
 	// GetCategoryFlags()       - base Event class forces this implementation - need a way to read category flags from unknown instance
 
 
-	class FE_API Event
+	class 
+	Event
 	{
 	public:
 		virtual ~Event() = default;
@@ -76,7 +74,7 @@ namespace fe
 	};
 	int Event::m_categoryFlags = EventCategory::None;
 
-	class FE_API CustomEvent : Event
+	class CustomEvent : Event
 	{
 	public:
 		CustomEvent() {};
@@ -91,7 +89,7 @@ namespace fe
 
 	/*
 	CUSTOM EVENT CLASS TEMPLATE
-	class FE_API NewEventClass : BaseEventClass
+	class NewEventClass : BaseEventClass
 	{
 	public:
 		NewEventClass() {};
@@ -105,7 +103,7 @@ namespace fe
 	int NewEventClass::m_id = getNewEventClassID(); // do not ever again use m_id directly, use getID() and getStaticID() instead
 	*/
 /*
-	class FE_API EventSubscryption
+	class EventSubscryption
 	{
 	public:
 		EventSubscryption(std::function<void(std::shared_ptr<Event>)> handler, EventType type)
@@ -115,7 +113,7 @@ namespace fe
 		EventType m_condition;
 	};
 
-	class FE_API EventDispacher
+	class EventDispacher
 	{
 	public:
 		void AddSubscription(std::shared_ptr<EventSubscryption> subscription);
@@ -136,7 +134,7 @@ namespace fe
 		std::vector<std::shared_ptr<EventSubscryption>>* m_subscryptions;
 	};
 
-	class FE_API EventDispacherBuffering : EventDispacher
+	class EventDispacherBuffering : EventDispacher
 	{
 	public:
 		void ReceiveEvent(std::shared_ptr<Event> event) const override;
@@ -156,7 +154,7 @@ namespace fe
 		std::vector<std::shared_ptr<Event>>* m_eventsQueue;
 	};
 
-	class FE_API EventDispacherBlocking : EventDispacher
+	class EventDispacherBlocking : EventDispacher
 	{
 	public:
 		void ReceiveEvent(std::shared_ptr<Event> event) const override;

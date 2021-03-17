@@ -1,3 +1,4 @@
+#include "FE_pch.h"
 #include "FoolsEngine/Events/Events.h"
 /*
 namespace fe

@@ -1,14 +1,10 @@
-#ifdef FE_INTERNAL_BUILD
-
-#pragma once
-
+#include "FE_pch.h"
 #include "FoolsEngine/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 #include "FoolsEngine/Debug/UnitTests.h"
 #include "FoolsEngine/Debug/Profiler.h"
-#include <string>
-#include <functional>
 
+#ifdef FE_INTERNAL_BUILD
 namespace fe
 {
 	void Tester::LoggingTests()

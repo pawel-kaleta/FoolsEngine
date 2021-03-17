@@ -1,10 +1,7 @@
 #pragma once
 
+#include "FE_pch.h"
 #include "FoolsEngine/Core.h"
-#include <chrono>
-#include <thread>
-#include <mutex>
-#include <fstream>
 
 namespace fe
 {
@@ -35,7 +32,7 @@ namespace fe
 		std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
 	};
 
-	class FE_API Profiler
+	class Profiler
 	{
 	public:
 		static Profiler& Get()

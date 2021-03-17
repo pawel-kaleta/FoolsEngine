@@ -12,6 +12,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Application.h">
       <Filter>FoolsEngine</Filter>
@@ -36,6 +37,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FE_pch.cpp" />
     <ClCompile Include="src\FoolsEngine\Application.cpp">
       <Filter>FoolsEngine</Filter>
     </ClCompile>

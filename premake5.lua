@@ -21,6 +21,9 @@ project "FoolsEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "FE_pch.h"
+	pchsource "FoolsEngine/src/FE_pch.cpp"
+
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
@@ -35,8 +38,7 @@ project "FoolsEngine"
 		systemversion "latest"
 
 		defines	{
-			"FE_PLATFORM_WINDOWS",
-			"FE_BUILD_DLL"
+			"FE_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"

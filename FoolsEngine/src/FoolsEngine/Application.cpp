@@ -1,3 +1,4 @@
+#include "FE_pch.h"
 #include "FoolsEngine/Application.h"
 #include "Debug/Profiler.h"
 

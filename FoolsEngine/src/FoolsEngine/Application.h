@@ -4,7 +4,7 @@
 
 namespace fe {
 
-	class FE_API Application
+	class Application
 	{
 	public:
 		Application();
