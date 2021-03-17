@@ -7,12 +7,16 @@ workspace "FoolsEngine"
 		"Publish"
 	}
 
+	startproject "Sandbox"
+
 outputdir = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
 
 project "FoolsEngine"
 	location "FoolsEngine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -28,8 +32,6 @@ project "FoolsEngine"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines	{
@@ -37,33 +39,33 @@ project "FoolsEngine"
 			"FE_BUILD_DLL"
 		}
 
-		postbuildcommands {
-			"{mkdir} ../bin/" .. outputdir .. "/Sandbox",
-			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox"
-		}
-
 	filter "configurations:Debug"
 		defines {
 			"FE_DEBUG",
 			"FE_INTERNAL_BUILD"
 		}
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines {
 			"FE_RELEASE",
 			"FE_INTERNAL_BUILD"
 		}
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Publish"
 		defines "FE_PUBLISH"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -83,10 +85,7 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
-
 		defines	{
 			"FE_PLATFORM_WINDOWS"
 		}
@@ -96,15 +95,18 @@ project "Sandbox"
 			"FE_DEBUG",
 			"FE_INTERNAL_BUILD"
 		}
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines {
 			"FE_RELEASE",
 			"FE_INTERNAL_BUILD"
 		}
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Publish"
 		defines "FE_PUBLISH"
-		optimize "On"
+		runtime "Release"
+		optimize "on"

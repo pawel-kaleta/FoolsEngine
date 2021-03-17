@@ -140,7 +140,7 @@ namespace fe
 	void profilingTestFunction(int limit)
 	{
 		FE_PROFILER_SCOPE_FUNC();
-		FE_LOG_CORE_INFO("Profiler Scope Begin: PASSED");
+		FE_LOG_CORE_INFO("Profiler Scope Function Begin: PASSED");
 		for (int i = 0; i < limit; i++) {}
 	}
 
@@ -150,8 +150,10 @@ namespace fe
 		FE_LOG_CORE_INFO("Profiler Start Session: PASSED");
 		int limit = 200000000;
 		profilingTestFunction(limit);
+		FE_LOG_CORE_INFO("Profiler Timer Stop: PASSED");
 		{
 			FE_PROFILER_SCOPE_NAME("Scope_lvl_1()");
+			FE_LOG_CORE_INFO("Profiler Scope Name Begin: PASSED");
 			for (int i = 0; i < limit; i++) {}
 			{
 				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
@@ -160,7 +162,6 @@ namespace fe
 					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
 					for (int i = 0; i < limit; i++) {}
 				}
-				FE_LOG_CORE_INFO("Profiler Timer Stop: PASSED");
 				for (int i = 0; i < limit; i++) {}
 			}
 			for (int i = 0; i < limit; i++) {}
