@@ -1,3 +1,6 @@
 [submodule "FoolsEngine/externals/spdlog"]
 	path = FoolsEngine/externals/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "FoolsEngine/externals/glfw"]
+	path = FoolsEngine/externals/glfw
+	url = https://github.com/glfw/glfw
