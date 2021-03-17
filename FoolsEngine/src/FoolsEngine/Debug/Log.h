@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "FoolsEngine/Core.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/basic_file_sink.h"
@@ -13,7 +14,6 @@ namespace fe {
 	class FE_API Log
 	{
 	public:
-
 		static void Init();
 
 		static std::shared_ptr<spdlog::logger> GetCoreLogger()   { return s_CoreLogger; }
@@ -22,7 +22,8 @@ namespace fe {
 		static void SetCoreLoggingLevel(int lvl);
 		static void SetClientLoggingLevel(int lvl);
 
-		static void UnitTest();
+		static spdlog::level::level_enum GetCoreLoggingLevel() { return s_CoreLogger->level(); }
+		static spdlog::level::level_enum GetClientLoggingLevel() { return s_ClientLogger->level(); }
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;

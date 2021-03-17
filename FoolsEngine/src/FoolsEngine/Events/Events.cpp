@@ -1,5 +1,5 @@
 #include "FoolsEngine/Events/Events.h"
-
+/*
 namespace fe
 {
 	void EventDispacher::AddSubscription(std::shared_ptr<EventSubscryption> subscription)
@@ -9,7 +9,7 @@ namespace fe
 
 	void EventDispacher::RemoveSubscription(std::shared_ptr<EventSubscryption>)
 	{
-		FE_LOG_CORE_ERROR("Feature not implementet yet: EventDispacher::RemoveSubscription()");
+		FE_LOG_CORE_FATAL("Feature not implementet yet: EventDispacher::RemoveSubscription()");
 	}
 
 	void EventDispacherBlocking::ReceiveEvent(std::shared_ptr<Event> event) const
@@ -48,4 +48,4 @@ namespace fe
 			}
 		}
 	}
-}
+}*/

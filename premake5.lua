@@ -1,8 +1,7 @@
 workspace "FoolsEngine"
 	architecture "x64"
 
-	configurations
-	{
+	configurations {
 		"Debug",
 		"Release",
 		"Publish"
@@ -18,14 +17,12 @@ project "FoolsEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
 
-	includedirs
-	{
+	includedirs	{
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include"
 	}
@@ -35,24 +32,28 @@ project "FoolsEngine"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines
-		{
+		defines	{
 			"FE_PLATFORM_WINDOWS",
 			"FE_BUILD_DLL"
 		}
 
-		postbuildcommands
-		{
+		postbuildcommands {
 			"{mkdir} ../bin/" .. outputdir .. "/Sandbox",
 			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox"
 		}
 
 	filter "configurations:Debug"
-		defines "FE_DEBUG"
+		defines {
+			"FE_DEBUG",
+			"FE_INTERNAL_BUILD"
+		}
 		symbols "On"
 
 	filter "configurations:Release"
-		defines "FE_RELEASE"
+		defines {
+			"FE_RELEASE",
+			"FE_INTERNAL_BUILD"
+		}
 		optimize "On"
 
 	filter "configurations:Publish"
@@ -67,20 +68,17 @@ project "Sandbox"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
 
-	includedirs
-	{
+	includedirs {
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include"
 	}
 
-	links
-	{
+	links {
 		"FoolsEngine"
 	}
 
@@ -89,17 +87,22 @@ project "Sandbox"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines
-		{
+		defines	{
 			"FE_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"
-		defines "FE_DEBUG"
+		defines {
+			"FE_DEBUG",
+			"FE_INTERNAL_BUILD"
+		}
 		symbols "On"
 
 	filter "configurations:Release"
-		defines "FE_RELEASE"
+		defines {
+			"FE_RELEASE",
+			"FE_INTERNAL_BUILD"
+		}
 		optimize "On"
 
 	filter "configurations:Publish"

@@ -1,0 +1,57 @@
+{"otherdata": {}, "traceEvents": [ {},{
+"cat": "function",
+"dur": 32,
+"name": "Scope_lvl_3()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774016597.300
+},{
+"cat": "function",
+"dur": 543,
+"name": "Scope_lvl_2()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774016565.600
+},{
+"cat": "function",
+"dur": 50,
+"name": "Scope_lvl_3()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774017276.500
+},{
+"cat": "function",
+"dur": 193,
+"name": "Scope_lvl_2()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774017233.200
+},{
+"cat": "function",
+"dur": 49,
+"name": "Scope_lvl_3()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774017558.700
+},{
+"cat": "function",
+"dur": 507,
+"name": "Scope_lvl_2()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774017511.100
+},{
+"cat": "function",
+"dur": 1580,
+"name": "Scope_lvl_1()",
+"ph": "X",
+"pid": 0,
+"tid": 19856,
+"ts": 374774016533.900
+}]}

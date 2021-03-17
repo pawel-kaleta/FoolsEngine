@@ -1,4 +1,4 @@
-#include "FoolsEngine/Log.h"
+#include "FoolsEngine/Debug/Log.h"
 
 namespace fe
 {
@@ -11,8 +11,10 @@ namespace fe
 
 		std::vector<spdlog::sink_ptr> loggingTargets;
 
+#ifdef FE_INTERNAL_BUILD
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 		loggingTargets.back()->set_pattern("%^%T:%f | %-3n | %v%$");
+#endif // FE_INTERNAL_BUILD
 
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Logs/FoolsEngine.log", true));
 		loggingTargets.back()->set_pattern("%T:%f | %-8l | %-3n | %v");
@@ -23,8 +25,20 @@ namespace fe
 		spdlog::register_logger(s_CoreLogger);
 		spdlog::register_logger(s_ClientLogger);
 
+#ifdef FE_DEBUG
 		s_CoreLogger  ->set_level(spdlog::level::trace);
 		s_ClientLogger->set_level(spdlog::level::trace);
+#endif // DEBUG
+
+#ifdef FE_RELEASE
+		s_CoreLogger->set_level(spdlog::level::debug);
+		s_ClientLogger->set_level(spdlog::level::trace);
+#endif // RELEASE
+
+#ifdef FE_PUBLISH
+		s_CoreLogger->set_level(spdlog::level::info);
+		s_ClientLogger->set_level(spdlog::level::trace);
+#endif // PUBLISH
 
 		s_CoreLogger  ->flush_on(spdlog::level::trace);
 		s_ClientLogger->flush_on(spdlog::level::trace);
@@ -115,29 +129,4 @@ namespace fe
 		}
 	}
 
-	void Log::UnitTest()
-	{
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
-		FE_LOG_CORE_DEBUG("----------------------Logging test----------------------");
-		FE_LOG_CORE_FATAL("Fatal test");
-		FE_LOG_FATAL("Fatal test");
-		FE_LOG_CORE_ERROR("Error test");
-		FE_LOG_ERROR("Error test");
-		FE_LOG_CORE_WARN("Warn test");
-		FE_LOG_WARN("Warn test");
-		FE_LOG_CORE_INFO("Info test");
-		FE_LOG_INFO("Info test");
-		FE_LOG_CORE_DEBUG("Debug test");
-		FE_LOG_DEBUG("Debug test");
-		FE_LOG_CORE_TRACE("Trace test");
-		FE_LOG_TRACE("Trace test");
-		fe::Log::SetCoreLoggingLevel(5);
-		fe::Log::SetCoreLoggingLevel(10);
-		fe::Log::SetCoreLoggingLevel(0);
-		fe::Log::SetClientLoggingLevel(4);
-		fe::Log::SetClientLoggingLevel(11);
-		fe::Log::SetClientLoggingLevel(0);
-		FE_LOG_CORE_DEBUG("----------------------Logging test----------------------");
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
-	}
 }

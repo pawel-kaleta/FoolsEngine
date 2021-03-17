@@ -1,15 +1,18 @@
 #pragma once
 
 #include "FoolsEngine/Core.h"
-#include "FoolsEngine/Log.h"
+#include "FoolsEngine/Debug/Log.h"
 
 #include <functional>
 #include <vector>
 #include <memory>
-
+/*
 namespace fe
 {
 	// Events are blocking (for now) - when created, must be immediately handled
+
+	int lastNewEventClassID = 0;
+	int getNewEventClassID() { return ++lastNewEventClassID; }
 
 	enum class EventType
 	{
@@ -44,10 +47,10 @@ namespace fe
 	};
 
 	// macro for easier implementations of events
-	#define EVENT_CLASS_CATEGORY(category) static int GetStaticCategoryFlags() { return category; } \
-	                                       virtual int GetCategoryFlags() const override { return #category; }
-	// GetStaticCategoryFlags() - base Event class forces this implementation - need a way to read category flags from unknown instance
-	// GetCategoryFlags()       - do not need an instance to read category flags
+	#define EVENT_CLASS_CATEGORY(category) static int GetStaticCategoryFlags() { return EventCategory::category; } \
+	                                       virtual int GetCategoryFlags() const override { return EventCategory::category; }
+	// GetStaticCategoryFlags() - do not need an instance to read category flags
+	// GetCategoryFlags()       - base Event class forces this implementation - need a way to read category flags from unknown instance
 
 
 	class FE_API Event
@@ -57,20 +60,51 @@ namespace fe
 
 		bool Handled = false;
 
-		virtual EventType GetEventType() const = 0;
-		virtual const char* GetName() const = 0;
-		virtual int GetCategoryFlags() const = 0;
+		virtual EventType GetEventType() const { return m_eventType; };
+		const static EventType m_eventType = EventType::None;
+		virtual const char* GetName() const { return "None"; }
+		virtual int GetCategoryFlags() const { return m_categoryFlags; }
+		const static int GetStaticCategoryFlags() { return m_categoryFlags; }
 		virtual std::string ToString() const { return GetName(); }
-
 		bool IsInCategory(EventCategory category)
 		{
 			return GetCategoryFlags() & category; // bitwise AND (not "adress-of")
 		}
-
-	private:
-		Event();
+	protected:
+		Event() {};
+		static int m_categoryFlags;
 	};
+	int Event::m_categoryFlags = EventCategory::None;
 
+	class FE_API CustomEvent : Event
+	{
+	public:
+		CustomEvent() {};
+		virtual int GetCategoryFlags() const override { return m_categoryFlags; }
+		const static int m_categoryFlags = Event::m_categoryFlags + EventCategory::Custom;
+		static int getStaticID() { return m_id; }
+		virtual int getID() const { return m_id; }
+	private:
+		static int m_id;
+	};
+	int CustomEvent::m_id = getNewEventClassID();
+
+	/*
+	CUSTOM EVENT CLASS TEMPLATE
+	class FE_API NewEventClass : BaseEventClass
+	{
+	public:
+		NewEventClass() {};
+		virtual int GetCategoryFlags() const override { return m_categoryFlags; }
+		const static int m_categoryFlags = Event::m_categoryFlags; //add other categories using | operator
+		static int getStaticID() { return m_id; }
+		virtual int getID() const override { return m_id; }
+	private:
+		static int m_id;
+	};
+	int NewEventClass::m_id = getNewEventClassID(); // do not ever again use m_id directly, use getID() and getStaticID() instead
+	*/
+/*
 	class FE_API EventSubscryption
 	{
 	public:
@@ -124,6 +158,7 @@ namespace fe
 
 	class FE_API EventDispacherBlocking : EventDispacher
 	{
+	public:
 		void ReceiveEvent(std::shared_ptr<Event> event) const override;
 
 		EventDispacherBlocking()
@@ -136,7 +171,7 @@ namespace fe
 			delete m_subscryptions;
 		}
 
-	private:
+	protected:
 		std::vector<std::shared_ptr<EventSubscryption>>* m_subscryptions;
 	};
-}
+}*/

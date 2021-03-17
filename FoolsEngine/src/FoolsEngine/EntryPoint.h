@@ -4,12 +4,13 @@
 
 extern fe::Application* fe::CreateApplication();
 
-
-
 int main(int argc, char** argv)
 {
 	fe::Log::Init();
-	fe::Log::UnitTest();
+	
+//#ifdef FE_INTERNAL_BUILD
+	fe::tester::Test();
+//#endif // FE_INTERNAL_BUILD
 
 	auto app = fe::CreateApplication();
 

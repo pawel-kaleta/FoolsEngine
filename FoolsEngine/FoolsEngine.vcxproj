@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;FE_BUILD_DLL;FE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;FE_BUILD_DLL;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;externals\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -99,7 +99,7 @@ IF EXIST ..\bin\Debug_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E /
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;FE_BUILD_DLL;FE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;FE_BUILD_DLL;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;externals\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -149,14 +149,18 @@ IF EXIST ..\bin\Publish_windows_x86_64\FoolsEngine\FoolsEngine.dll\ (xcopy /Q /E
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core.h" />
+    <ClInclude Include="src\FoolsEngine\Debug\Log.h" />
+    <ClInclude Include="src\FoolsEngine\Debug\Profiler.h" />
+    <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
     <ClInclude Include="src\FoolsEngine\EntryPoint.h" />
     <ClInclude Include="src\FoolsEngine\Events\Events.h" />
-    <ClInclude Include="src\FoolsEngine\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application.cpp" />
+    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
+    <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
+    <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
     <ClCompile Include="src\FoolsEngine\Events\Events.cpp" />
-    <ClCompile Include="src\FoolsEngine\Log.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

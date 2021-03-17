@@ -4,6 +4,9 @@
     <Filter Include="FoolsEngine">
       <UniqueIdentifier>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Debug">
+      <UniqueIdentifier>{140A0399-8020-012F-C997-8C5035EDD1B6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Events">
       <UniqueIdentifier>{429FEEBC-2E83-AF12-97E3-A96583E69994}</UniqueIdentifier>
     </Filter>
@@ -16,23 +19,37 @@
     <ClInclude Include="src\FoolsEngine\Core.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Debug\Log.h">
+      <Filter>FoolsEngine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Debug\Profiler.h">
+      <Filter>FoolsEngine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h">
+      <Filter>FoolsEngine\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\EntryPoint.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Events\Events.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Log.h">
-      <Filter>FoolsEngine</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application.cpp">
       <Filter>FoolsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Log.cpp">
-      <Filter>FoolsEngine</Filter>
+    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp">
+      <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Events\Events.cpp" />
+    <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp">
+      <Filter>FoolsEngine\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp">
+      <Filter>FoolsEngine\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Events\Events.cpp">
+      <Filter>FoolsEngine\Events</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

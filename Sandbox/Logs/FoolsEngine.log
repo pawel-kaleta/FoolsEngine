@@ -1,0 +1,35 @@
+04:32:20:892011 | info     | FE  | Logging innitialized!
+04:32:20:892954 | info     | App | Logging innitialized!
+04:32:20:893058 | debug    | FE  | -----------------------UNIT TESTS-----------------------
+04:32:20:893147 | debug    | FE  | --------------------------------------------------------
+04:32:20:893232 | debug    | FE  | ----------------------Logging tests---------------------
+04:32:20:893328 | info     | FE  | Logging level set to 0 - all.
+04:32:20:893421 | info     | App | Logging level set to 0 - all.
+04:32:20:893529 | critical | FE  | Fatal test
+04:32:20:893651 | critical | App | Fatal test
+04:32:20:893778 | error    | FE  | Error test
+04:32:20:893898 | error    | App | Error test
+04:32:20:894038 | warning  | FE  | Warn test
+04:32:20:894165 | warning  | App | Warn test
+04:32:20:894265 | info     | FE  | Info test
+04:32:20:894360 | info     | App | Info test
+04:32:20:894443 | debug    | FE  | Debug test
+04:32:20:894533 | debug    | App | Debug test
+04:32:20:894622 | trace    | FE  | Trace test
+04:32:20:894712 | trace    | App | Trace test
+04:32:20:894797 | info     | FE  | Logging level set to 5 - fatal error or higher.
+04:32:20:894917 | error    | FE  | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
+04:32:20:895006 | info     | App | Logging level set to 4 - error or higher.
+04:32:20:895105 | error    | App | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
+04:32:20:895190 | info     | FE  | Logging level set to 0 - all.
+04:32:20:895273 | info     | App | Logging level set to 0 - all.
+04:32:20:895358 | debug    | FE  | ----------------------Logging test----------------------
+04:32:20:895451 | debug    | FE  | --------------------------------------------------------
+04:32:20:895543 | debug    | FE  | ---------------------PROFILER TESTS---------------------
+04:32:20:895642 | debug    | FE  | --------------------------------------------------------
+04:32:20:896028 | info     | FE  | Profiler Start Session: PASSED
+04:32:20:896141 | info     | FE  | Profiler Scope Begin: PASSED
+04:32:20:896993 | info     | FE  | Profiler Timer Stop: PASSED
+04:32:20:898380 | info     | FE  | Profiler End Session: PASSED
+04:32:20:898538 | info     | FE  | Profiler: PASSED
+04:32:20:898944 | debug    | FE  | --------------------------------------------------------
