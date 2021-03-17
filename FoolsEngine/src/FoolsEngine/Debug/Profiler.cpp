@@ -49,6 +49,9 @@ namespace fe
 			m_ActiveSession = true;
 			m_SessionName = name;
 			WriteHeader();
+
+			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
+				FE_LOG_CORE_INFO("Profiler session '{0}' started.", name);
 		}
 		else
 		{
@@ -64,9 +67,17 @@ namespace fe
 		{
 			WriteFooter();
 			m_OutputStream.close();
-			//delete m_SessionName;
+			m_ActiveSession = false;
+
+			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
+				FE_LOG_CORE_INFO("Profiler session '{0}' closed.", m_SessionName);
+
 			m_SessionName = nullptr;
+			return;
 		}
+
+		if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
+			FE_LOG_CORE_WARN("Attempt to close profiler session with no active session.");
 	}
 
 	void Profiler::WriteHeader()

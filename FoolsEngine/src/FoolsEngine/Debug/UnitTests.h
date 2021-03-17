@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	class FE_API tester
+	class FE_API Tester
 	{
 	public:
 		static void Test();

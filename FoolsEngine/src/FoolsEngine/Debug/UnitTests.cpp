@@ -11,7 +11,7 @@
 
 namespace fe
 {
-	void tester::LoggingTests()
+	void Tester::LoggingTests()
 	{
 		FE_LOG_CORE_DEBUG("----------------------Logging tests---------------------");
 		int coreLoggingLvl = Log::GetCoreLoggingLevel();
@@ -137,54 +137,61 @@ namespace fe
 	}
 	*/
 
-	void tester::ProfilingTests()
+	void profilingTestFunction(int limit)
 	{
-		FE_PROFILER_START_SESSION("TEST", "Logs/profiler.json");
-		FE_LOG_CORE_INFO("Profiler Start Session: PASSED");
-		FE_PROFILER_SCOPE_BEGIN("void ProfilingTests()");
+		FE_PROFILER_SCOPE_FUNC();
 		FE_LOG_CORE_INFO("Profiler Scope Begin: PASSED");
+		for (int i = 0; i < limit; i++) {}
+	}
+
+	void Tester::ProfilingTests()
+	{
+		FE_PROFILER_SESSION_START("TEST", "Logs/UNIT_TESTS_profiler.json");
+		FE_LOG_CORE_INFO("Profiler Start Session: PASSED");
+		int limit = 200000000;
+		profilingTestFunction(limit);
 		{
-			FE_PROFILER_SCOPE_BEGIN("Scope_lvl_1()");
-			for (int i = 0; i < 100000; i++) {}
+			FE_PROFILER_SCOPE_NAME("Scope_lvl_1()");
+			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_BEGIN("Scope_lvl_2()");
-				for (int i = 0; i < 100000; i++) {}
+				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_BEGIN("Scope_lvl_3()");
-					for (int i = 0; i < 100000; i++) {}
+					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					for (int i = 0; i < limit; i++) {}
 				}
 				FE_LOG_CORE_INFO("Profiler Timer Stop: PASSED");
-				for (int i = 0; i < 100000; i++) {}
+				for (int i = 0; i < limit; i++) {}
 			}
-			for (int i = 0; i < 100000; i++) {}
+			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_BEGIN("Scope_lvl_2()");
-				for (int i = 0; i < 100000; i++) {}
+				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_BEGIN("Scope_lvl_3()");
-					for (int i = 0; i < 100000; i++) {}
+					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					for (int i = 0; i < limit; i++) {}
 				}
-				for (int i = 0; i < 100000; i++) {}
+				for (int i = 0; i < limit; i++) {}
 			}
-			for (int i = 0; i < 100000; i++) {}
+			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_BEGIN("Scope_lvl_2()");
-				for (int i = 0; i < 100000; i++) {}
+				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_BEGIN("Scope_lvl_3()");
-					for (int i = 0; i < 100000; i++) {}
+					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					for (int i = 0; i < limit; i++) {}
 				}
-				for (int i = 0; i < 100000; i++) {}
+				for (int i = 0; i < limit; i++) {}
 			}
-			for (int i = 0; i < 100000; i++) {}
+			for (int i = 0; i < limit; i++) {}
 		}
-		for (int i = 0; i < 100000; i++) {}
-		FE_PROFILER_END_SESSION();
+		for (int i = 0; i < limit; i++) {}
+		FE_PROFILER_SESSION_END();
 		FE_LOG_CORE_INFO("Profiler End Session: PASSED");
 		FE_LOG_CORE_INFO("Profiler: PASSED");
 	}
 
-	void tester::Test()
+	void Tester::Test()
 	{
 		FE_LOG_CORE_DEBUG("-----------------------UNIT TESTS-----------------------");
 		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
