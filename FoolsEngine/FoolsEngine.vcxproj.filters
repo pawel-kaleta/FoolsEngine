@@ -35,14 +35,12 @@
     <ClInclude Include="src\FoolsEngine\Events\Events.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Debug\Asserts.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
     <ClCompile Include="src\FoolsEngine\Application.cpp">
       <Filter>FoolsEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp">
-      <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp">
       <Filter>FoolsEngine\Debug</Filter>
@@ -53,5 +51,6 @@
     <ClCompile Include="src\FoolsEngine\Events\Events.cpp">
       <Filter>FoolsEngine\Events</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
   </ItemGroup>
 </Project>

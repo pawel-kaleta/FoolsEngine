@@ -135,6 +135,7 @@
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core.h" />
+    <ClInclude Include="src\FoolsEngine\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Profiler.h" />
     <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />

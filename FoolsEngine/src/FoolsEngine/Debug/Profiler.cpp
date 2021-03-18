@@ -1,5 +1,3 @@
-
-
 #include "FE_pch.h"
 #include "FoolsEngine/Debug/Profiler.h"
 #include "FoolsEngine/Debug/Log.h"

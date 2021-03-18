@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "FoolsEngine/Debug/Log.h"
 
+// https://github.com/gabime/spdlog/wiki
+
 namespace fe
 {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
@@ -8,8 +10,6 @@ namespace fe
 
 	void Log::Init()
 	{
-		// https://github.com/gabime/spdlog/wiki
-
 		std::vector<spdlog::sink_ptr> loggingTargets;
 
 #ifdef FE_INTERNAL_BUILD

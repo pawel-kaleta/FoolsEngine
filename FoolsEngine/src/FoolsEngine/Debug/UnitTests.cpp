@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 #include "FoolsEngine/Core.h"
 #include "FoolsEngine/Debug/Log.h"
+#include "FoolsEngine/Debug/Asserts.h"
 #include "FoolsEngine/Debug/UnitTests.h"
 #include "FoolsEngine/Debug/Profiler.h"
 
@@ -201,6 +202,13 @@ namespace fe
 		//EventsTests();
 		//FE_LOG_CORE_DEBUG("--------------------------------------------------------");
 		//EventsDispachersTests();
+		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		FE_LOG_CORE_DEBUG("--------------------ASSERTIONS TESTS--------------------");
+		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		FE_ASSERT(false, "test assert 1");
+		int a = 6;
+		FE_ASSERT(false, "test assert 2, val={0}", a);
+		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
 	}
 }
 
