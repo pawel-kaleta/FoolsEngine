@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FoolsEngine", "FoolsEngine\FoolsEngine.vcxproj", "{1E21718E-8AD6-E983-13CB-E35A7F7FE087}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw", "FoolsEngine\externals\_projects_of_externals\glfw\glfw.vcxproj", "{9563977C-819A-980D-2A87-7E10169D140F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -24,6 +26,12 @@ Global
 		{1E21718E-8AD6-E983-13CB-E35A7F7FE087}.Publish|x64.Build.0 = Publish|x64
 		{1E21718E-8AD6-E983-13CB-E35A7F7FE087}.Release|x64.ActiveCfg = Release|x64
 		{1E21718E-8AD6-E983-13CB-E35A7F7FE087}.Release|x64.Build.0 = Release|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Debug|x64.ActiveCfg = Debug|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Debug|x64.Build.0 = Debug|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Publish|x64.ActiveCfg = Publish|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Publish|x64.Build.0 = Publish|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Release|x64.ActiveCfg = Release|x64
+		{9563977C-819A-980D-2A87-7E10169D140F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,8 @@ workspace "FoolsEngine"
 
 outputdir = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
 
+include "FoolsEngine/externals"
+
 project "FoolsEngine"
 	location "FoolsEngine"
 	kind "StaticLib"
@@ -18,8 +20,8 @@ project "FoolsEngine"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/"     .. outputdir .. "/%{prj.name}")
+	objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "FE_pch.h"
 	pchsource "FoolsEngine/src/FE_pch.cpp"
@@ -31,7 +33,12 @@ project "FoolsEngine"
 
 	includedirs	{
 		"FoolsEngine/src",
-		"FoolsEngine/externals/spdlog/include"
+		"FoolsEngine/externals/spdlog/include",
+		"FoolsEngine/externals/glfw/include"
+	}
+
+	links {
+		"glfw"
 	}
 
 	filter "system:windows"
@@ -69,8 +76,8 @@ project "Sandbox"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/"     .. outputdir .. "/%{prj.name}")
+	objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files {
 		"%{prj.name}/src/**.h",
@@ -79,7 +86,8 @@ project "Sandbox"
 
 	includedirs {
 		"FoolsEngine/src",
-		"FoolsEngine/externals/spdlog/include"
+		"FoolsEngine/externals/spdlog/include",
+		"FoolsEngine/externals/glfw/include"
 	}
 
 	links {
@@ -112,3 +120,4 @@ project "Sandbox"
 		defines "FE_PUBLISH"
 		runtime "Release"
 		optimize "on"
+

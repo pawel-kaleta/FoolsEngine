@@ -6,6 +6,7 @@
 #include <filesystem>
 
 #ifdef FE_INTERNAL_BUILD
+	// to do: change FE_ENABLE_ASSERTIONS into a global variable to be able to turn on and off assertions at runtime
 	#ifdef FE_ENABLE_ASSERTIONS
 		#define FE_DEBUG_BREAK() __debugbreak()
 	#else

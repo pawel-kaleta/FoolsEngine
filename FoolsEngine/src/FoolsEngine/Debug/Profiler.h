@@ -86,19 +86,19 @@ namespace fe
 		#define FE_FUNC_SIG "FE_FUNC_SIG unknown!"
 	#endif
 
-	#define FE_PROFILER_SCOPE_LINE(name, line) fe::Timer timer##line(name);
+	#define __PROFILER(name, line) fe::Timer timer##line(name);
 	///////////////////////////////
 	//   MAKROS FOR PROFILEING   //
 	///////////////////////////////
 	#define FE_PROFILER_SESSION_START(name, filepath) fe::Profiler::Get().StartSession(name, filepath)
 	#define FE_PROFILER_SESSION_END() fe::Profiler::Get().EndSession()
-	#define FE_PROFILER_SCOPE_FUNC() FE_PROFILER_SCOPE_LINE(FE_FUNC_SIG, __LINE__)
-	#define FE_PROFILER_SCOPE_NAME(name) FE_PROFILER_SCOPE_LINE(name, __LINE__)
+	#define FE_PROFILER_FUNC() __PROFILER(FE_FUNC_SIG, __LINE__)
+	#define FE_PROFILER_SCOPE(name) __PROFILER(name, __LINE__)
 	///////////////////////////////
 	
 #else
 	#define FE_PROFILER_SESSION_START(name, filepath)
 	#define FE_PROFILER_SESSION_END()
-	#define FE_PROFILER_SCOPE_FUNC()
-	#define FE_PROFILER_SCOPE_NAME(name)
+	#define FE_PROFILER_FUNC()
+	#define FE_PROFILER_SCOPE(name)
 #endif

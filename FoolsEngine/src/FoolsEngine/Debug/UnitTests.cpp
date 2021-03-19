@@ -136,7 +136,7 @@ namespace fe
 
 	void profilingTestFunction(int limit)
 	{
-		FE_PROFILER_SCOPE_FUNC();
+		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Profiler Scope Function Begin: PASSED");
 		for (int i = 0; i < limit; i++) {}
 	}
@@ -149,34 +149,34 @@ namespace fe
 		profilingTestFunction(limit);
 		FE_LOG_CORE_INFO("Profiler Timer Stop: PASSED");
 		{
-			FE_PROFILER_SCOPE_NAME("Scope_lvl_1()");
+			FE_PROFILER_SCOPE("Scope_lvl_1()");
 			FE_LOG_CORE_INFO("Profiler Scope Name Begin: PASSED");
 			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				FE_PROFILER_SCOPE("Scope_lvl_2()");
 				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					FE_PROFILER_SCOPE("Scope_lvl_3()");
 					for (int i = 0; i < limit; i++) {}
 				}
 				for (int i = 0; i < limit; i++) {}
 			}
 			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				FE_PROFILER_SCOPE("Scope_lvl_2()");
 				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					FE_PROFILER_SCOPE("Scope_lvl_3()");
 					for (int i = 0; i < limit; i++) {}
 				}
 				for (int i = 0; i < limit; i++) {}
 			}
 			for (int i = 0; i < limit; i++) {}
 			{
-				FE_PROFILER_SCOPE_NAME("Scope_lvl_2()");
+				FE_PROFILER_SCOPE("Scope_lvl_2()");
 				for (int i = 0; i < limit; i++) {}
 				{
-					FE_PROFILER_SCOPE_NAME("Scope_lvl_3()");
+					FE_PROFILER_SCOPE("Scope_lvl_3()");
 					for (int i = 0; i < limit; i++) {}
 				}
 				for (int i = 0; i < limit; i++) {}
