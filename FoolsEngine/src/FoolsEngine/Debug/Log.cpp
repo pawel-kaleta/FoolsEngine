@@ -27,19 +27,18 @@ namespace fe
 		spdlog::register_logger(s_ClientLogger);
 
 #ifdef FE_DEBUG
-		s_CoreLogger  ->set_level(spdlog::level::trace);
-		s_ClientLogger->set_level(spdlog::level::trace);
-#endif // DEBUG
+		s_CoreLogger->set_level(spdlog::level::trace);
+#endif // FE_DEBUG
 
 #ifdef FE_RELEASE
 		s_CoreLogger->set_level(spdlog::level::debug);
-		s_ClientLogger->set_level(spdlog::level::trace);
-#endif // RELEASE
+#endif // FE_RELEASE
 
 #ifdef FE_PUBLISH
 		s_CoreLogger->set_level(spdlog::level::info);
+#endif // FE_PUBLISH
+
 		s_ClientLogger->set_level(spdlog::level::trace);
-#endif // PUBLISH
 
 		s_CoreLogger  ->flush_on(spdlog::level::trace);
 		s_ClientLogger->flush_on(spdlog::level::trace);
@@ -51,7 +50,7 @@ namespace fe
 	void Log::SetCoreLoggingLevel(int lvl)
 	{
 		spdlog::level::level_enum currentLoggingLvl = s_CoreLogger->level();
-		s_CoreLogger->set_level(spdlog::level::trace);
+		s_CoreLogger->set_level(spdlog::level::info);
 		switch (lvl)
 		{
 			case 0:

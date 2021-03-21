@@ -3,20 +3,15 @@
 #include "FoolsEngine/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 
-/*
+
 namespace fe
 {
-	// Events are blocking (for now) - when created, must be immediately handled
-
-	int lastNewEventClassID = 0;
-	int getNewEventClassID() { return ++lastNewEventClassID; }
-
 	enum class EventType
 	{
 		None = 0,
 		WindowClose, WindowLostFocus, WindowFocus, WindowMoved, WindowResize,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
 		Custom
 	};
@@ -33,19 +28,17 @@ namespace fe
 	enum EventCategory
 	{
 		None        = 0,
-		EngineSys   = BIT_FLAG(1),
+		App         = BIT_FLAG(1),
 		Window      = BIT_FLAG(2),
-		RunLoop     = BIT_FLAG(3),
-		Input	    = BIT_FLAG(4),
-		Keyboard    = BIT_FLAG(5),
-		Mouse	    = BIT_FLAG(6),
-		MouseButton = BIT_FLAG(7),
-		Custom      = BIT_FLAG(8)
+		Input	    = BIT_FLAG(3),
+		Keyboard    = BIT_FLAG(4),
+		Mouse	    = BIT_FLAG(5),
+		MouseButton = BIT_FLAG(6)
 	};
 
 	// macro for easier implementations of events
-	#define EVENT_CLASS_CATEGORY(category) static int GetStaticCategoryFlags() { return EventCategory::category; } \
-	                                       virtual int GetCategoryFlags() const override { return EventCategory::category; }
+	#define EVENT_CLASS_CATEGORY(category) static int GetStaticCategoryFlags() { return category; } \
+	                                       virtual int GetCategoryFlags() const override { return category; }
 	// GetStaticCategoryFlags() - do not need an instance to read category flags
 	// GetCategoryFlags()       - base Event class forces this implementation - need a way to read category flags from unknown instance
 
@@ -58,118 +51,55 @@ namespace fe
 
 		bool Handled = false;
 
-		virtual EventType GetEventType() const { return m_eventType; };
-		const static EventType m_eventType = EventType::None;
-		virtual const char* GetName() const { return "None"; }
-		virtual int GetCategoryFlags() const { return m_categoryFlags; }
-		const static int GetStaticCategoryFlags() { return m_categoryFlags; }
+		virtual EventType GetEventType() const { return GetStaticEventType(); };
+		static EventType GetStaticEventType() { return EventType::None; }
+
+		virtual EventCategory GetCategoryFlags() const { return GetStaticCategoryFlags(); }
+		static EventCategory GetStaticCategoryFlags() { return EventCategory::None; }
+
+		virtual const char* GetName() const { return "Base Event Class"; }
 		virtual std::string ToString() const { return GetName(); }
+
 		bool IsInCategory(EventCategory category)
 		{
-			return GetCategoryFlags() & category; // bitwise AND (not "adress-of")
+			return GetStaticCategoryFlags() & category; // bitwise AND (not a reference)
 		}
-	protected:
-		Event() {};
-		static int m_categoryFlags;
-	};
-	int Event::m_categoryFlags = EventCategory::None;
-
-	class CustomEvent : Event
-	{
-	public:
-		CustomEvent() {};
-		virtual int GetCategoryFlags() const override { return m_categoryFlags; }
-		const static int m_categoryFlags = Event::m_categoryFlags + EventCategory::Custom;
-		static int getStaticID() { return m_id; }
-		virtual int getID() const { return m_id; }
-	private:
-		static int m_id;
-	};
-	int CustomEvent::m_id = getNewEventClassID();
-
-	/*
-	CUSTOM EVENT CLASS TEMPLATE
-	class NewEventClass : BaseEventClass
-	{
-	public:
-		NewEventClass() {};
-		virtual int GetCategoryFlags() const override { return m_categoryFlags; }
-		const static int m_categoryFlags = Event::m_categoryFlags; //add other categories using | operator
-		static int getStaticID() { return m_id; }
-		virtual int getID() const override { return m_id; }
-	private:
-		static int m_id;
-	};
-	int NewEventClass::m_id = getNewEventClassID(); // do not ever again use m_id directly, use getID() and getStaticID() instead
-	*/
-/*
-	class EventSubscryption
-	{
-	public:
-		EventSubscryption(std::function<void(std::shared_ptr<Event>)> handler, EventType type)
-			: m_handler(handler), m_condition(type) {}
-
-		std::function<void(std::shared_ptr<Event>)> m_handler;
-		EventType m_condition;
 	};
 
 	class EventDispacher
 	{
 	public:
-		void AddSubscription(std::shared_ptr<EventSubscryption> subscription);
-		void RemoveSubscription(std::shared_ptr<EventSubscryption> subscription);
-		virtual void ReceiveEvent(std::shared_ptr<Event> event) const = 0;
-
-		~EventDispacher()
-		{
-			m_subscryptions->clear();
-			delete m_subscryptions;
-		}
-
+		void AddSubscription(std::function<void(std::shared_ptr<Event>)> handler);
+		void RemoveSubscription(std::function<void(std::shared_ptr<Event>)> handler);
+		bool IsSubscription(std::function<void(std::shared_ptr<Event>)> handler);
+		std::vector<std::function<void(std::shared_ptr<Event>)> > GetSubsciptions() { return m_subscryptions; }
+		virtual void ReceiveEvent(std::shared_ptr<Event> event) = 0;
 	protected:
-		EventDispacher()
-			: m_subscryptions(new std::vector<std::shared_ptr<EventSubscryption>>)
-		{ }
-
-		std::vector<std::shared_ptr<EventSubscryption>>* m_subscryptions;
+		std::vector<std::function<void(std::shared_ptr<Event>)> > m_subscryptions;
+		EventDispacher() {};
 	};
 
-	class EventDispacherBuffering : EventDispacher
+	class MainDispacher : EventDispacher
 	{
 	public:
-		void ReceiveEvent(std::shared_ptr<Event> event) const override;
-		void Dispach();
-
-		EventDispacherBuffering()
-			: m_eventsQueue(new std::vector<std::shared_ptr<Event>>)
-		{ }
-
-		~EventDispacherBuffering()
-		{
-			m_eventsQueue->clear();
-			delete m_eventsQueue;
-		}
-
-	protected:
-		std::vector<std::shared_ptr<Event>>* m_eventsQueue;
+		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
+		void DispachEvents();
+	private:
+		std::vector<std::shared_ptr<Event>> m_eventsQueue;
 	};
-
-	class EventDispacherBlocking : EventDispacher
+	
+	class LayerDispacher : EventDispacher
 	{
 	public:
-		void ReceiveEvent(std::shared_ptr<Event> event) const override;
-
-		EventDispacherBlocking()
-			: m_subscryptions(new std::vector<std::shared_ptr<EventSubscryption>>)
-		{ }
-
-		~EventDispacherBlocking()
+		LayerDispacher(EventDispacher* origin)
 		{
-			m_subscryptions->clear();
-			delete m_subscryptions;
-		}
-
-	protected:
-		std::vector<std::shared_ptr<EventSubscryption>>* m_subscryptions;
+			std::function<void(std::shared_ptr<Event>)> handler = std::bind(&LayerDispacher::ReceiveEvent, this, std::placeholders::_1);
+			origin->AddSubscription(handler);
+		};
+		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
+	private:
+		virtual void DispachEvent(std::shared_ptr<Event> event) const = 0;
 	};
-}*/
+
+    
+}

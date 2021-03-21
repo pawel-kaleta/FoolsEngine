@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Core.h"
+#include "FoolsEngine/Events/Events.h"
 
 namespace fe {
 
@@ -11,6 +12,9 @@ namespace fe {
 		virtual ~Application();
 
 		void Run();
+
+	protected:
+		MainDispacher m_MainEventDispacher;
 	};
 
 	// To be defined in FoolsEngine application (game)
