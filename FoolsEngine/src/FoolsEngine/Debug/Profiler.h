@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FE_pch.h"
-#include "FoolsEngine/Core.h"
+#include "FoolsEngine/Core/Core.h"
 
 namespace fe
 {

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "FoolsEngine/Core.h"
+#include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Events/Events.h"
+#include "FoolsEngine/Core/Window.h"
 
 namespace fe {
 
@@ -13,8 +14,10 @@ namespace fe {
 
 		void Run();
 
-	protected:
-		MainDispacher m_MainEventDispacher;
+	private:
+		std::unique_ptr<MainDispacher> m_MainEventDispacher;
+		std::unique_ptr<Window> m_Window;
+		bool m_Running = true;
 	};
 
 	// To be defined in FoolsEngine application (game)

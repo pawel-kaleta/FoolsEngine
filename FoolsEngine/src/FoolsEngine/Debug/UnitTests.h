@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Core.h"
+#include "FoolsEngine/Core/Core.h"
 
 namespace fe
 {

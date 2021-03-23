@@ -1,6 +1,6 @@
 #pragma once
-
-#include "FoolsEngine/Core.h"
+#include "FE_pch.h"
+#include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 
 
@@ -29,7 +29,7 @@ namespace fe
 	{
 		None        = 0,
 		App         = BIT_FLAG(1),
-		Window      = BIT_FLAG(2),
+		Win         = BIT_FLAG(2),
 		Input	    = BIT_FLAG(3),
 		Keyboard    = BIT_FLAG(4),
 		Mouse	    = BIT_FLAG(5),
@@ -76,7 +76,6 @@ namespace fe
 		virtual void ReceiveEvent(std::shared_ptr<Event> event) = 0;
 	protected:
 		std::vector<std::function<void(std::shared_ptr<Event>)> > m_subscryptions;
-		EventDispacher() {};
 	};
 
 	class MainDispacher : EventDispacher
@@ -91,10 +90,10 @@ namespace fe
 	class LayerDispacher : EventDispacher
 	{
 	public:
-		LayerDispacher(EventDispacher* origin)
+		LayerDispacher(EventDispacher* SubscriptionProvider)
 		{
 			std::function<void(std::shared_ptr<Event>)> handler = std::bind(&LayerDispacher::ReceiveEvent, this, std::placeholders::_1);
-			origin->AddSubscription(handler);
+			SubscriptionProvider->AddSubscription(handler);
 		};
 		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
 	private:

@@ -14,10 +14,10 @@
   <ItemGroup>
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
-    <ClInclude Include="src\FoolsEngine\Application.h">
+    <ClInclude Include="src\FoolsEngine\Core\Application.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core.h">
+    <ClInclude Include="src\FoolsEngine\Core\Core.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Debug\Asserts.h">
@@ -32,16 +32,18 @@
     <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h">
       <Filter>FoolsEngine\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\EntryPoint.h">
+    <ClInclude Include="src\FoolsEngine\Core\EntryPoint.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Events\Events.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Core\Window.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application.cpp">
+    <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
       <Filter>FoolsEngine</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Debug\Log.cpp">
@@ -56,5 +58,7 @@
     <ClCompile Include="src\FoolsEngine\Events\Events.cpp">
       <Filter>FoolsEngine\Events</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
   </ItemGroup>
 </Project>

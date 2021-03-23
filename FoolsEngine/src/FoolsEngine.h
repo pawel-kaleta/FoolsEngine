@@ -5,7 +5,7 @@
 
 #include "FoolsEngine/Debug/Log.h"
 #include "FoolsEngine/Debug/Asserts.h"
-#include "FoolsEngine/Application.h"
+#include "FoolsEngine/Core/Application.h"
 #include "FoolsEngine/Events/Events.h"
 
 
@@ -17,5 +17,5 @@
 
 
 //-----Entry Point-------------
-#include "FoolsEngine/EntryPoint.h"
+#include "FoolsEngine/Core/EntryPoint.h"
 //-----------------------------

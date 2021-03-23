@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Core.h"
+#include "FoolsEngine/Core/Core.h"
 
 // https://github.com/gabime/spdlog/wiki
 #include "spdlog/spdlog.h"

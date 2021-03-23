@@ -1,5 +1,5 @@
 #include "FE_pch.h"
-#include "FoolsEngine/Core.h"
+#include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 #include "FoolsEngine/Debug/Asserts.h"
 #include "FoolsEngine/Debug/UnitTests.h"
