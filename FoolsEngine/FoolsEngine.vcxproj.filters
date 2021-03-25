@@ -40,6 +40,10 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Window.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
+    <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
+    <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
+    <ClInclude Include="src\FoolsEngine\Core\InputCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

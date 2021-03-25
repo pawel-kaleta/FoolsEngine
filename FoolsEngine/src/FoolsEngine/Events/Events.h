@@ -9,7 +9,7 @@ namespace fe
 	enum class EventType
 	{
 		None = 0,
-		WindowClose, WindowLostFocus, WindowFocus, WindowMoved, WindowResize,
+		WindowClose, WindowLostFocus, WindowGainedFocus, WindowResize,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
@@ -17,7 +17,7 @@ namespace fe
 	};
 	
 	// macro for easier implementations of events
-	#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; } \
+	#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return type; } \
 	                               virtual EventType GetEventType() const override { return GetStaticType(); } \
 	                               virtual const char* GetName() const override { return #type; }
 	// GetStaticType() - do not need an instance to read a type
@@ -29,11 +29,10 @@ namespace fe
 	{
 		None        = 0,
 		App         = BIT_FLAG(1),
-		Win         = BIT_FLAG(2),
-		Input	    = BIT_FLAG(3),
-		Keyboard    = BIT_FLAG(4),
-		Mouse	    = BIT_FLAG(5),
-		MouseButton = BIT_FLAG(6)
+		Input	    = BIT_FLAG(2),
+		Keyboard    = BIT_FLAG(3),
+		Mouse	    = BIT_FLAG(4),
+		MouseButton = BIT_FLAG(5)
 	};
 
 	// macro for easier implementations of events
@@ -54,8 +53,8 @@ namespace fe
 		virtual EventType GetEventType() const { return GetStaticEventType(); };
 		static EventType GetStaticEventType() { return EventType::None; }
 
-		virtual EventCategory GetCategoryFlags() const { return GetStaticCategoryFlags(); }
-		static EventCategory GetStaticCategoryFlags() { return EventCategory::None; }
+		virtual int GetCategoryFlags() const { return GetStaticCategoryFlags(); }
+		static int GetStaticCategoryFlags() { return EventCategory::None; }
 
 		virtual const char* GetName() const { return "Base Event Class"; }
 		virtual std::string ToString() const { return GetName(); }
@@ -78,7 +77,7 @@ namespace fe
 		std::vector<std::function<void(std::shared_ptr<Event>)> > m_subscryptions;
 	};
 
-	class MainDispacher : EventDispacher
+	class MainDispacher : public EventDispacher
 	{
 	public:
 		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
@@ -87,7 +86,7 @@ namespace fe
 		std::vector<std::shared_ptr<Event>> m_eventsQueue;
 	};
 	
-	class LayerDispacher : EventDispacher
+	class LayerDispacher : public EventDispacher
 	{
 	public:
 		LayerDispacher(EventDispacher* SubscriptionProvider)
@@ -99,6 +98,7 @@ namespace fe
 	private:
 		virtual void DispachEvent(std::shared_ptr<Event> event) const = 0;
 	};
-
-    
 }
+
+#define FE_NEW_EVENT(callback, localName, type, ...) std::shared_ptr<type> localName = std::make_shared<type>(__VA_ARGS__);\
+                                                     callback(localName);

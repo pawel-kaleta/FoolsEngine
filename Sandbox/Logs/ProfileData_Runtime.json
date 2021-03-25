@@ -1,0 +1,1081 @@
+{"otherdata": {}, "traceEvents": [ {},{
+"cat": "function",
+"dur": 24910,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065638705.200
+},{
+"cat": "function",
+"dur": 18889,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065663812.900
+},{
+"cat": "function",
+"dur": 14139,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065682879.300
+},{
+"cat": "function",
+"dur": 16887,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065697196.600
+},{
+"cat": "function",
+"dur": 16138,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065714273.400
+},{
+"cat": "function",
+"dur": 16062,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065730599.400
+},{
+"cat": "function",
+"dur": 16729,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065746843.300
+},{
+"cat": "function",
+"dur": 15831,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065763736.500
+},{
+"cat": "function",
+"dur": 16821,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065779781.000
+},{
+"cat": "function",
+"dur": 16032,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065796764.200
+},{
+"cat": "function",
+"dur": 17008,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065812927.600
+},{
+"cat": "function",
+"dur": 15904,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065830114.000
+},{
+"cat": "function",
+"dur": 17180,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065846156.300
+},{
+"cat": "function",
+"dur": 16033,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065863516.700
+},{
+"cat": "function",
+"dur": 16819,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065879716.100
+},{
+"cat": "function",
+"dur": 15989,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065896663.400
+},{
+"cat": "function",
+"dur": 16527,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065912791.700
+},{
+"cat": "function",
+"dur": 14687,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065929486.000
+},{
+"cat": "function",
+"dur": 16618,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065944297.600
+},{
+"cat": "function",
+"dur": 16536,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065961040.300
+},{
+"cat": "function",
+"dur": 18173,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065977732.800
+},{
+"cat": "function",
+"dur": 14828,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906065996046.600
+},{
+"cat": "function",
+"dur": 16629,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066011011.500
+},{
+"cat": "function",
+"dur": 18187,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066027803.100
+},{
+"cat": "function",
+"dur": 14836,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066046126.900
+},{
+"cat": "function",
+"dur": 16518,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066061089.600
+},{
+"cat": "function",
+"dur": 16459,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066077810.700
+},{
+"cat": "function",
+"dur": 18248,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066094392.700
+},{
+"cat": "function",
+"dur": 14852,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066112807.800
+},{
+"cat": "function",
+"dur": 16506,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066127822.200
+},{
+"cat": "function",
+"dur": 16483,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066144448.300
+},{
+"cat": "function",
+"dur": 18709,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066161072.600
+},{
+"cat": "function",
+"dur": 14633,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066179943.900
+},{
+"cat": "function",
+"dur": 16330,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066194738.200
+},{
+"cat": "function",
+"dur": 18377,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066211204.000
+},{
+"cat": "function",
+"dur": 14589,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066229745.700
+},{
+"cat": "function",
+"dur": 16538,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066244478.000
+},{
+"cat": "function",
+"dur": 16509,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066261178.500
+},{
+"cat": "function",
+"dur": 18447,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066277831.600
+},{
+"cat": "function",
+"dur": 14725,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066296397.600
+},{
+"cat": "function",
+"dur": 16442,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066311281.700
+},{
+"cat": "function",
+"dur": 16618,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066327872.700
+},{
+"cat": "function",
+"dur": 18436,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066344639.000
+},{
+"cat": "function",
+"dur": 14489,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066363241.900
+},{
+"cat": "function",
+"dur": 16643,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066377876.600
+},{
+"cat": "function",
+"dur": 16471,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066394672.400
+},{
+"cat": "function",
+"dur": 18353,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066411299.800
+},{
+"cat": "function",
+"dur": 14858,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066429818.000
+},{
+"cat": "function",
+"dur": 16347,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066444903.900
+},{
+"cat": "function",
+"dur": 18194,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066461398.100
+},{
+"cat": "function",
+"dur": 14769,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066479755.500
+},{
+"cat": "function",
+"dur": 16518,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066494672.300
+},{
+"cat": "function",
+"dur": 16644,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066511354.800
+},{
+"cat": "function",
+"dur": 18359,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066528171.000
+},{
+"cat": "function",
+"dur": 14805,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066546666.200
+},{
+"cat": "function",
+"dur": 16443,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066561656.800
+},{
+"cat": "function",
+"dur": 16361,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066578280.900
+},{
+"cat": "function",
+"dur": 18791,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066594795.600
+},{
+"cat": "function",
+"dur": 14303,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066613810.500
+},{
+"cat": "function",
+"dur": 16493,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066628285.500
+},{
+"cat": "function",
+"dur": 16495,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066644944.600
+},{
+"cat": "function",
+"dur": 18094,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066661599.600
+},{
+"cat": "function",
+"dur": 14991,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066679857.200
+},{
+"cat": "function",
+"dur": 16486,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066695006.900
+},{
+"cat": "function",
+"dur": 18271,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066711667.800
+},{
+"cat": "function",
+"dur": 775250,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906066730107.600
+},{
+"cat": "function",
+"dur": 6766,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067505570.300
+},{
+"cat": "function",
+"dur": 16491,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067512466.500
+},{
+"cat": "function",
+"dur": 16504,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067529120.200
+},{
+"cat": "function",
+"dur": 16626,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067545776.600
+},{
+"cat": "function",
+"dur": 16429,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067562561.200
+},{
+"cat": "function",
+"dur": 16565,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067579119.600
+},{
+"cat": "function",
+"dur": 16605,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067595842.200
+},{
+"cat": "function",
+"dur": 16564,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067612567.300
+},{
+"cat": "function",
+"dur": 16359,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067629303.100
+},{
+"cat": "function",
+"dur": 16724,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067645788.800
+},{
+"cat": "function",
+"dur": 16622,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067662635.400
+},{
+"cat": "function",
+"dur": 16375,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067679374.200
+},{
+"cat": "function",
+"dur": 16667,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067695970.500
+},{
+"cat": "function",
+"dur": 16358,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067712827.700
+},{
+"cat": "function",
+"dur": 16474,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067729364.800
+},{
+"cat": "function",
+"dur": 16503,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067745998.900
+},{
+"cat": "function",
+"dur": 16558,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067762623.600
+},{
+"cat": "function",
+"dur": 16527,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067779350.700
+},{
+"cat": "function",
+"dur": 16728,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067796025.700
+},{
+"cat": "function",
+"dur": 16336,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067812915.500
+},{
+"cat": "function",
+"dur": 16511,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067829405.600
+},{
+"cat": "function",
+"dur": 16490,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067846046.000
+},{
+"cat": "function",
+"dur": 16694,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067862662.600
+},{
+"cat": "function",
+"dur": 16577,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067879525.100
+},{
+"cat": "function",
+"dur": 16331,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067896271.000
+},{
+"cat": "function",
+"dur": 16507,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067912755.700
+},{
+"cat": "function",
+"dur": 16517,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067929427.800
+},{
+"cat": "function",
+"dur": 16545,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067946061.300
+},{
+"cat": "function",
+"dur": 16667,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067962750.800
+},{
+"cat": "function",
+"dur": 16394,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067979584.300
+},{
+"cat": "function",
+"dur": 16545,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906067996114.300
+},{
+"cat": "function",
+"dur": 16850,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068012806.700
+},{
+"cat": "function",
+"dur": 16219,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068029805.700
+},{
+"cat": "function",
+"dur": 16674,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068046149.100
+},{
+"cat": "function",
+"dur": 16547,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068062973.900
+},{
+"cat": "function",
+"dur": 16472,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068079674.400
+},{
+"cat": "function",
+"dur": 16719,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068096279.900
+},{
+"cat": "function",
+"dur": 16310,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068113131.200
+},{
+"cat": "function",
+"dur": 16532,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068129599.000
+},{
+"cat": "function",
+"dur": 16608,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068146309.200
+},{
+"cat": "function",
+"dur": 16485,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068163061.400
+},{
+"cat": "function",
+"dur": 16468,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068179694.800
+},{
+"cat": "function",
+"dur": 16473,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068196326.200
+},{
+"cat": "function",
+"dur": 16603,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068212953.800
+},{
+"cat": "function",
+"dur": 16449,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068229704.600
+},{
+"cat": "function",
+"dur": 16697,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068246315.900
+},{
+"cat": "function",
+"dur": 16546,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068263148.200
+},{
+"cat": "function",
+"dur": 16630,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068279856.900
+},{
+"cat": "function",
+"dur": 16511,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068296649.600
+},{
+"cat": "function",
+"dur": 16282,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068313323.500
+},{
+"cat": "function",
+"dur": 16524,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068329762.500
+},{
+"cat": "function",
+"dur": 16500,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068346449.500
+},{
+"cat": "function",
+"dur": 16510,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068363086.900
+},{
+"cat": "function",
+"dur": 16522,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068379749.500
+},{
+"cat": "function",
+"dur": 16570,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068396400.800
+},{
+"cat": "function",
+"dur": 16580,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068413093.300
+},{
+"cat": "function",
+"dur": 16508,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068429828.300
+},{
+"cat": "function",
+"dur": 16528,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068446494.700
+},{
+"cat": "function",
+"dur": 16755,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068463195.700
+},{
+"cat": "function",
+"dur": 16534,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068480116.300
+},{
+"cat": "function",
+"dur": 16420,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068496854.600
+},{
+"cat": "function",
+"dur": 16517,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068513423.900
+},{
+"cat": "function",
+"dur": 16323,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068530088.100
+},{
+"cat": "function",
+"dur": 16544,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068546564.100
+},{
+"cat": "function",
+"dur": 16495,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068563276.000
+},{
+"cat": "function",
+"dur": 16593,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068579916.800
+},{
+"cat": "function",
+"dur": 16559,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068596654.400
+},{
+"cat": "function",
+"dur": 16483,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068613379.000
+},{
+"cat": "function",
+"dur": 96843,
+"name": "void __cdecl fe::Win10Window::OnUpdate(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20812,
+"ts": 906068730564.200
+}

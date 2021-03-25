@@ -12,6 +12,8 @@ namespace fe {
 		Application();
 		virtual ~Application();
 
+		void OnEvent(std::shared_ptr<Event> event);
+
 		void Run();
 
 	private:

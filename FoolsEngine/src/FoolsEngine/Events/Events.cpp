@@ -21,6 +21,7 @@ namespace fe
 
 	void MainDispacher::ReceiveEvent(std::shared_ptr<Event> event)
 	{
+		FE_LOG_CORE_INFO("NEW EVENT: {0}", event->ToString());
 		m_eventsQueue.push_back(event);
 	}
 
@@ -40,13 +41,17 @@ namespace fe
 			{
 				(*sub_it).operator()(*event_it);
 				if ((*event_it)->Handled)
-				{
-					m_eventsQueue.erase(event_it);
-					event_it--;
 					break;
-				}
+			}
+			if (!((*event_it)->Handled))
+			{
+				//FE_LOG_CORE_WARN("Unhandled event: {0}", (*event_it)->ToString());
 			}
 		}
+
+		m_eventsQueue.clear();
 		
+		FE_CORE_ASSERT(m_eventsQueue.size() == 0, "Events buffer not cleared!");
+		FE_LOG_CORE_TRACE("Events dispached!");
 	}
 }

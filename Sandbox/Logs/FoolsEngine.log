@@ -1,0 +1,61 @@
+08:07:09:062298 | info     | FE  | Logging innitialized!
+08:07:09:063688 | info     | App | Logging innitialized!
+08:07:09:063971 | debug    | FE  | -----------------------UNIT TESTS-----------------------
+08:07:09:064240 | debug    | FE  | --------------------------------------------------------
+08:07:09:064489 | debug    | FE  | ----------------------Logging tests---------------------
+08:07:09:064710 | info     | FE  | Logging level set to 0 - all.
+08:07:09:064856 | info     | App | Logging level set to 0 - all.
+08:07:09:065001 | critical | FE  | Fatal test
+08:07:09:065141 | critical | App | Fatal test
+08:07:09:065274 | error    | FE  | Error test
+08:07:09:065395 | error    | App | Error test
+08:07:09:065517 | warning  | FE  | Warn test
+08:07:09:065638 | warning  | App | Warn test
+08:07:09:065754 | info     | FE  | Info test
+08:07:09:065870 | info     | App | Info test
+08:07:09:066017 | debug    | FE  | Debug test
+08:07:09:066164 | debug    | App | Debug test
+08:07:09:066308 | trace    | FE  | Trace test
+08:07:09:066452 | trace    | App | Trace test
+08:07:09:066601 | info     | FE  | Logging level set to 5 - fatal error or higher.
+08:07:09:066770 | error    | FE  | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
+08:07:09:066897 | info     | App | Logging level set to 4 - error or higher.
+08:07:09:067051 | error    | App | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
+08:07:09:067196 | info     | FE  | Logging level set to 0 - all.
+08:07:09:067330 | info     | App | Logging level set to 0 - all.
+08:07:09:067456 | debug    | FE  | ----------------------Logging test----------------------
+08:07:09:067586 | debug    | FE  | --------------------------------------------------------
+08:07:09:067713 | debug    | FE  | ---------------------PROFILER TESTS---------------------
+08:07:09:067834 | debug    | FE  | --------------------------------------------------------
+08:07:09:068324 | info     | FE  | Profiler session 'TEST' started.
+08:07:09:068470 | info     | FE  | Profiler Start Session: PASSED
+08:07:09:068626 | info     | FE  | Profiler Scope Function Begin: PASSED
+08:07:09:158918 | info     | FE  | Profiler Timer Stop: PASSED
+08:07:09:159488 | info     | FE  | Profiler Scope Name Begin: PASSED
+08:07:10:309121 | info     | FE  | Profiler session 'TEST' closed.
+08:07:10:311972 | info     | FE  | Profiler End Session: PASSED
+08:07:10:312165 | info     | FE  | Profiler: PASSED
+08:07:10:312367 | debug    | FE  | --------------------------------------------------------
+08:07:10:313889 | debug    | FE  | --------------------------------------------------------
+08:07:10:314078 | debug    | FE  | --------------------ASSERTIONS TESTS--------------------
+08:07:10:314235 | debug    | FE  | --------------------------------------------------------
+08:07:10:314430 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 208.
+08:07:10:314582 | error    | App | Assertion Message: test assert 1
+08:07:10:314736 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 210.
+08:07:10:314886 | error    | App | Assertion Message: test assert 2, val=6
+08:07:10:315012 | debug    | FE  | --------------------------------------------------------
+08:07:10:315427 | info     | FE  | Profiler session 'Startup' started.
+08:07:10:315583 | info     | FE  | Initializing GLFW
+08:07:10:483744 | info     | FE  | Creating Window FoolsEngine (1600, 900)
+08:07:10:731414 | info     | FE  | Profiler session 'Startup' closed.
+08:07:10:732162 | info     | FE  | Profiler session 'Runtime' started.
+08:07:13:830119 | trace    | FE  | lambda
+08:07:13:836143 | trace    | FE  | lambda
+08:07:13:841854 | trace    | FE  | lambda
+08:07:13:847393 | trace    | FE  | lambda
+08:07:13:876675 | trace    | FE  | lambda
+08:07:13:922317 | info     | FE  | Base Event Class
+08:07:13:922630 | info     | FE  | Base Event Class
+08:07:13:923001 | info     | FE  | Base Event Class
+08:07:13:923373 | info     | FE  | Base Event Class
+08:07:13:923644 | info     | FE  | Base Event Class
