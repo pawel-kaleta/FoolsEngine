@@ -22,11 +22,8 @@
 	#include <Windows.h>
 #endif
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/fmt/ostr.h"
-
 #include "FoolsEngine/Debug/Log.h"
 #include "FoolsEngine/Debug/Asserts.h"
 #include "FoolsEngine/Debug/Profiler.h"
+#include "FoolsEngine/Core/InputCodes.h"
+#include "FoolsEngine/Core/Core.h"

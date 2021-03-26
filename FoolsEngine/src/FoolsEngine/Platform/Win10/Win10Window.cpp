@@ -2,7 +2,7 @@
 #include "FoolsEngine/Core/Window.h"
 #include "Win10Window.h"
 
-#include "FoolsEngine/Events/Events.h"
+#include "FoolsEngine/Events/Event.h"
 #include "FoolsEngine/Events/ApplicationEvent.h"
 #include "FoolsEngine/Events/KeyEvent.h"
 #include "FoolsEngine/Events/MouseEvent.h"
@@ -52,8 +52,10 @@ namespace fe
 			FE_PROFILER_SCOPE("GLFW_Initialization");
 			FE_LOG_CORE_INFO("Initializing GLFW");
 
-			if(!glfwInit())
+			if (!glfwInit())
+			{
 				FE_CORE_ASSERT(false, "GLFW initialization failed!");
+			}
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
@@ -76,6 +78,8 @@ namespace fe
 	void Win10Window::SetGLFWEventsCallbacks()
 	{
 		FE_PROFILER_FUNC();
+
+		FE_LOG_CORE_DEBUG("Setting events callbacks for window.");
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
@@ -165,15 +169,25 @@ namespace fe
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, MouseMovedEvent, (float)x_position, (float)y_position);
 			});
+
+		FE_LOG_CORE_INFO("Events callbacks for Win10Window setted up.");
 	}
 
 	void Win10Window::ShutDown()
 	{
 		FE_PROFILER_FUNC();
-		glfwDestroyWindow(m_Window);
+		FE_LOG_CORE_INFO("Closing Window.");
+
+		{
+			FE_PROFILER_SCOPE("lfwDestroyWindow()");
+			glfwDestroyWindow(m_Window);
+		}
 
 		// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
-		glfwTerminate();
+		{
+			FE_PROFILER_SCOPE("glfwTerminate()");
+			glfwTerminate();
+		}
 	}
 
 	void Win10Window::SetVSync(bool enabled)
@@ -181,10 +195,15 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		if (enabled)
+		{
 			glfwSwapInterval(1);
+			FE_LOG_CORE_INFO("VSync enablled.");
+		}
 		else
+		{
 			glfwSwapInterval(0);
-
+			FE_LOG_CORE_INFO("VSync disabled.");
+		}
 		m_Data.VSync = enabled;
 	}
 }

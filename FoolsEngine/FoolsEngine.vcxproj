@@ -131,6 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Core\Layer.h" />
+    <ClInclude Include="src\FoolsEngine\Core\LayerStack.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h" />
@@ -142,13 +144,14 @@
     <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
     <ClInclude Include="src\FoolsEngine\Core\EntryPoint.h" />
     <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\FoolsEngine\Events\Events.h" />
+    <ClInclude Include="src\FoolsEngine\Events\Event.h" />
     <ClInclude Include="src\FoolsEngine\Core\Window.h" />
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -156,7 +159,6 @@
     <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
-    <ClCompile Include="src\FoolsEngine\Events\Events.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
   </ItemGroup>

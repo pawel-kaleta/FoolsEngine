@@ -6,7 +6,9 @@
 #include "FoolsEngine/Debug/Log.h"
 #include "FoolsEngine/Debug/Asserts.h"
 #include "FoolsEngine/Core/Application.h"
-#include "FoolsEngine/Events/Events.h"
+#include "FoolsEngine/Events/Event.h"
+#include "FoolsEngine/Core/Layer.h"
+#include "FoolsEngine/Core/LayerStack.h"
 
 
 #ifdef FE_INTERNAL_BUILD

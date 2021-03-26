@@ -35,7 +35,7 @@
     <ClInclude Include="src\FoolsEngine\Core\EntryPoint.h">
       <Filter>FoolsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\Events.h">
+    <ClInclude Include="src\FoolsEngine\Events\Event.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Window.h" />
@@ -44,6 +44,8 @@
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\Core\InputCodes.h" />
+    <ClInclude Include="src\FoolsEngine\Core\LayerStack.h" />
+    <ClInclude Include="src\FoolsEngine\Core\Layer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -59,10 +61,8 @@
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Events\Events.cpp">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
   </ItemGroup>
 </Project>

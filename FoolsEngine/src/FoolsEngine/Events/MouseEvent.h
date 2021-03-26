@@ -1,6 +1,6 @@
 #pragma once
 #include "FE_pch.h"
-#include "FoolsEngine/Events/Events.h"
+#include "FoolsEngine/Events/Event.h"
 #include "FoolsEngine/Core/InputCodes.h"
 
 /*

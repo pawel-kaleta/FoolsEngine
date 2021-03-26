@@ -3,7 +3,6 @@
 #include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 
-
 namespace fe
 {
 	enum class EventType
@@ -42,15 +41,14 @@ namespace fe
 	// GetCategoryFlags()       - base Event class forces this implementation - need a way to read category flags from unknown instance
 
 
-	class 
-	Event
+	class Event
 	{
 	public:
 		virtual ~Event() = default;
 
 		bool Handled = false;
 
-		virtual EventType GetEventType() const { return GetStaticEventType(); };
+		virtual EventType GetEventType() const { return GetStaticEventType(); }
 		static EventType GetStaticEventType() { return EventType::None; }
 
 		virtual int GetCategoryFlags() const { return GetStaticCategoryFlags(); }
@@ -63,40 +61,6 @@ namespace fe
 		{
 			return GetStaticCategoryFlags() & category; // bitwise AND (not a reference)
 		}
-	};
-
-	class EventDispacher
-	{
-	public:
-		void AddSubscription(std::function<void(std::shared_ptr<Event>)> handler);
-		void RemoveSubscription(std::function<void(std::shared_ptr<Event>)> handler);
-		bool IsSubscription(std::function<void(std::shared_ptr<Event>)> handler);
-		std::vector<std::function<void(std::shared_ptr<Event>)> > GetSubsciptions() { return m_subscryptions; }
-		virtual void ReceiveEvent(std::shared_ptr<Event> event) = 0;
-	protected:
-		std::vector<std::function<void(std::shared_ptr<Event>)> > m_subscryptions;
-	};
-
-	class MainDispacher : public EventDispacher
-	{
-	public:
-		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
-		void DispachEvents();
-	private:
-		std::vector<std::shared_ptr<Event>> m_eventsQueue;
-	};
-	
-	class LayerDispacher : public EventDispacher
-	{
-	public:
-		LayerDispacher(EventDispacher* SubscriptionProvider)
-		{
-			std::function<void(std::shared_ptr<Event>)> handler = std::bind(&LayerDispacher::ReceiveEvent, this, std::placeholders::_1);
-			SubscriptionProvider->AddSubscription(handler);
-		};
-		virtual void ReceiveEvent(std::shared_ptr<Event> event) override;
-	private:
-		virtual void DispachEvent(std::shared_ptr<Event> event) const = 0;
 	};
 }
 

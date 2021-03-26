@@ -1,0 +1,25 @@
+{"otherdata": {}, "traceEvents": [ {},{
+"cat": "function",
+"dur": 1,
+"name": "__cdecl fe::Application::~Application(void)",
+"ph": "X",
+"pid": 0,
+"tid": 36672,
+"ts": 1185009044039.800
+},{
+"cat": "function",
+"dur": 23602,
+"name": "void __cdecl fe::Win10Window::ShutDown(void)",
+"ph": "X",
+"pid": 0,
+"tid": 36672,
+"ts": 1185009044138.700
+},{
+"cat": "function",
+"dur": 23740,
+"name": "__cdecl fe::Win10Window::~Win10Window(void)",
+"ph": "X",
+"pid": 0,
+"tid": 36672,
+"ts": 1185009044138.500
+}]}

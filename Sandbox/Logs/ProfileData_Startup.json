@@ -1,65 +1,65 @@
 {"otherdata": {}, "traceEvents": [ {},{
 "cat": "function",
-"dur": 167962,
+"dur": 57398,
 "name": "GLFW_Initialization",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065220875.000
+"tid": 36672,
+"ts": 1184986759325.600
 },{
 "cat": "function",
-"dur": 246094,
+"dur": 248172,
 "name": "GLFW_CreateWindow",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065389008.100
+"tid": 36672,
+"ts": 1184986816902.300
 },{
 "cat": "function",
-"dur": 10,
+"dur": 479,
 "name": "void __cdecl fe::Win10Window::SetVSync(bool)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065635791.600
+"tid": 36672,
+"ts": 1184987065485.600
 },{
 "cat": "function",
-"dur": 1,
+"dur": 873,
 "name": "void __cdecl fe::Win10Window::SetGLFWEventsCallbacks(void)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065635935.500
+"tid": 36672,
+"ts": 1184987066094.800
 },{
 "cat": "function",
-"dur": 415193,
+"dur": 307755,
 "name": "void __cdecl fe::Win10Window::Init(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065220874.200
+"tid": 36672,
+"ts": 1184986759324.700
 },{
 "cat": "function",
-"dur": 415315,
+"dur": 307868,
 "name": "__cdecl fe::Win10Window::Win10Window(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065220873.900
+"tid": 36672,
+"ts": 1184986759321.800
 },{
 "cat": "function",
-"dur": 415424,
+"dur": 307978,
 "name": "class fe::Window *__cdecl fe::Window::Create(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065220871.500
+"tid": 36672,
+"ts": 1184986759315.100
 },{
 "cat": "function",
-"dur": 415591,
+"dur": 308148,
 "name": "__cdecl fe::Application::Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 20812,
-"ts": 906065220865.900
+"tid": 36672,
+"ts": 1184986759306.400
 }]}
