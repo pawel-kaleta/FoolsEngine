@@ -34,11 +34,13 @@ project "FoolsEngine"
 	includedirs	{
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include",
-		"FoolsEngine/externals/glfw/include"
+		"FoolsEngine/externals/glfw/include",
+		"FoolsEngine/externals/glad/include"
 	}
 
 	links {
-		"glfw"
+		"glfw",
+		"glad"
 	}
 
 	filter "system:windows"
@@ -87,7 +89,8 @@ project "Sandbox"
 	includedirs {
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include",
-		"FoolsEngine/externals/glfw/include"
+		"FoolsEngine/externals/glfw/include",
+		"FoolsEngine/externals/glad/include"
 	}
 
 	links {

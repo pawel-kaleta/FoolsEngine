@@ -47,6 +47,32 @@ project "glfw"
 		runtime "Release"
 		optimize "on"
 
-	filter "configurations:Publish"
+project "glad"
+	location "_projects_of_externals/glad"
+	kind "StaticLib"
+	language "C"
+
+	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
+	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
+
+	files {
+		"%{prj.name}/include/glad/glad.h",
+		"%{prj.name}/include/KHR/khrplatform.h",
+		"%{prj.name}/src/glad.c"
+	}
+
+	includedirs	{
+		"glad/include"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		staticruntime "on"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
