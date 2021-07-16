@@ -7,6 +7,8 @@
 #include "FoolsEngine/Events/KeyEvent.h"
 #include "FoolsEngine/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+
 namespace fe
 {
 	static bool s_GLFWInitialized = false;
@@ -69,6 +71,8 @@ namespace fe
 		}
 
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!")
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

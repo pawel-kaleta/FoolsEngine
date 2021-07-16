@@ -3,7 +3,7 @@
 #include "FoolsEngine/Debug/Profiler.h"
 #include "FoolsEngine/Platform/Win10/Win10Window.h"
 
-#include "GLFW/glfw3.h"
+#include <glad/glad.h>
 
 namespace fe {
 

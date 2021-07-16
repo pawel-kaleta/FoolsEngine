@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\glad\include\KHR\khrplatform.h">
-      <Filter>include\KHR</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\glad\include\glad\glad.h">
       <Filter>include\glad</Filter>
     </ClInclude>
@@ -26,5 +23,10 @@
     <ClCompile Include="..\..\glad\src\glad.c">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\glad\include\KHR\khrplatformcludedirs">
+      <Filter>include\KHR</Filter>
+    </None>
   </ItemGroup>
 </Project>

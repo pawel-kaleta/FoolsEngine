@@ -47,7 +47,8 @@ project "FoolsEngine"
 		systemversion "latest"
 
 		defines	{
-			"FE_PLATFORM_WINDOWS"
+			"FE_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
@@ -100,7 +101,8 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 		defines	{
-			"FE_PLATFORM_WINDOWS"
+			"FE_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"

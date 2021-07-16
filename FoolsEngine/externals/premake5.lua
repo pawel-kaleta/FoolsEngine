@@ -57,13 +57,14 @@ project "glad"
 
 	files {
 		"%{prj.name}/include/glad/glad.h",
-		"%{prj.name}/include/KHR/khrplatform.h",
+		"%{prj.name}/include/KHR/khrplatformcludedirs",
 		"%{prj.name}/src/glad.c"
 	}
 
 	includedirs	{
 		"glad/include"
 	}
+
 
 	filter "system:windows"
 		systemversion "latest"

@@ -116,11 +116,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="..\..\glad\include\glad\glad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glad\src\glad.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\glad\include\KHR\khrplatformcludedirs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
