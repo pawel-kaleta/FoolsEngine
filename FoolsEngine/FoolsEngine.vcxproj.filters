@@ -13,8 +13,14 @@
     <Filter Include="FoolsEngine\Events">
       <UniqueIdentifier>{429FEEBC-2E83-AF12-97E3-A96583E69994}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\ImGui">
+      <UniqueIdentifier>{C8746199-348B-5F2F-7D02-EB50E95730B7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Platform">
       <UniqueIdentifier>{327F31CF-1E0E-BB98-C72C-CF93B39ACB3E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Platform\OpenGL">
+      <UniqueIdentifier>{26DCE45D-92E9-1244-1BD0-0E2F87DCDEFA}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Platform\Win10">
       <UniqueIdentifier>{50D4F850-3CE4-A421-A59D-094091CC93BA}</UniqueIdentifier>
@@ -68,6 +74,12 @@
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
+      <Filter>FoolsEngine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
@@ -92,8 +104,12 @@
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
   </ItemGroup>
 </Project>

@@ -3,21 +3,22 @@
 
 // To be included by FoolsEngine application (game)
 
-#include "FoolsEngine/Debug/Log.h"
-#include "FoolsEngine/Debug/Asserts.h"
-#include "FoolsEngine/Core/Application.h"
-#include "FoolsEngine/Events/Event.h"
-#include "FoolsEngine/Core/Layer.h"
-#include "FoolsEngine/Core/LayerStack.h"
+#include "FoolsEngine\Debug\Log.h"
+#include "FoolsEngine\Debug\Asserts.h"
+#include "FoolsEngine\Core\Application.h"
+#include "FoolsEngine\Events\Event.h"
+#include "FoolsEngine\Core\Layer.h"
+#include "FoolsEngine\Core\LayerStack.h"
+#include "FoolsEngine\ImGui\ImGuiLayer.h"
 
 
 #ifdef FE_INTERNAL_BUILD
-#include "FoolsEngine/Debug/Profiler.h"
+#include "FoolsEngine\Debug\Profiler.h"
 
-#include "FoolsEngine/Debug/UnitTests.h"
+#include "FoolsEngine\Debug\UnitTests.h"
 #endif // INTERNAL_BUILD
 
 
 //-----Entry Point-------------
-#include "FoolsEngine/Core/EntryPoint.h"
+#include "FoolsEngine\Core\EntryPoint.h"
 //-----------------------------

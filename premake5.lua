@@ -35,12 +35,14 @@ project "FoolsEngine"
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include",
 		"FoolsEngine/externals/glfw/include",
-		"FoolsEngine/externals/glad/include"
+		"FoolsEngine/externals/glad/include",
+		"FoolsEngine/externals/imgui"
 	}
 
 	links {
 		"glfw",
-		"glad"
+		"glad",
+		"imgui"
 	}
 
 	filter "system:windows"
@@ -91,7 +93,8 @@ project "Sandbox"
 		"FoolsEngine/src",
 		"FoolsEngine/externals/spdlog/include",
 		"FoolsEngine/externals/glfw/include",
-		"FoolsEngine/externals/glad/include"
+		"FoolsEngine/externals/glad/include",
+		"FoolsEngine/externals/imgui"
 	}
 
 	links {

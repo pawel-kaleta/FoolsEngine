@@ -1,5 +1,5 @@
 #pragma once
-#include "FE_pch.h"
+
 #include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Events/Event.h"
 #include "FoolsEngine/Core/Window.h"
@@ -41,11 +41,14 @@ namespace fe {
 
 		void Run();
 
+		inline static Application& Get() { return *s_Instance;  }
+		inline Window& GetWindow() { return *m_Window; }
+
 	protected:
-		void PushInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushInnerLayer(layer); }
-		void PushOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushOuterLayer(layer); }
-		void PopInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopInnerLayer(layer); }
-		void PopOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopOuterLayer(layer); }
+		void PushInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	layer->OnAttach(); }
+		void PushOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushOuterLayer(layer);	layer->OnAttach(); }
+		void PopInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopInnerLayer(layer);	layer->OnDetach(); }
+		void PopOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopOuterLayer(layer);	layer->OnDetach(); }
 
 	private:
 		void UpdateLayers();
@@ -57,6 +60,8 @@ namespace fe {
 		LayerStack m_LayerStack;
 		std::shared_ptr<ApplicationLayer> m_AppLayer;
 		bool m_Running = true;
+
+		static Application* s_Instance;
 	};
 
 	// To be defined in FoolsEngine application (game)
