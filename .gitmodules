@@ -4,3 +4,6 @@
 [submodule "FoolsEngine/externals/glfw"]
 	path = FoolsEngine/externals/glfw
 	url = https://github.com/glfw/glfw
+[submodule "FoolsEngine/externals/imgui"]
+	path = FoolsEngine/externals/imgui
+	url = https://github.com/ocornut/imgui
