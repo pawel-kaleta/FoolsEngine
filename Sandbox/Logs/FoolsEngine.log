@@ -1,2206 +1,1000 @@
-05:37:20:676266 | info     | FE  | Logging innitialized!
-05:37:20:678554 | info     | App | Logging innitialized!
-05:37:20:678676 | debug    | FE  | -----------------------UNIT TESTS-----------------------
-05:37:20:678774 | debug    | FE  | --------------------------------------------------------
-05:37:20:678862 | debug    | FE  | ----------------------Logging tests---------------------
-05:37:20:678948 | info     | FE  | Logging level set to 0 - all.
-05:37:20:679048 | info     | App | Logging level set to 0 - all.
-05:37:20:679139 | critical | FE  | Fatal test
-05:37:20:679226 | critical | App | Fatal test
-05:37:20:679316 | error    | FE  | Error test
-05:37:20:679411 | error    | App | Error test
-05:37:20:679500 | warning  | FE  | Warn test
-05:37:20:679592 | warning  | App | Warn test
-05:37:20:679676 | info     | FE  | Info test
-05:37:20:679757 | info     | App | Info test
-05:37:20:679837 | debug    | FE  | Debug test
-05:37:20:679918 | debug    | App | Debug test
-05:37:20:680010 | trace    | FE  | Trace test
-05:37:20:680133 | trace    | App | Trace test
-05:37:20:680245 | info     | FE  | Logging level set to 5 - fatal error or higher.
-05:37:20:680414 | error    | FE  | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
-05:37:20:680520 | info     | App | Logging level set to 4 - error or higher.
-05:37:20:680624 | error    | App | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
-05:37:20:680722 | info     | FE  | Logging level set to 0 - all.
-05:37:20:680815 | info     | App | Logging level set to 0 - all.
-05:37:20:680913 | debug    | FE  | ----------------------Logging test----------------------
-05:37:20:680997 | debug    | FE  | --------------------------------------------------------
-05:37:20:681101 | debug    | FE  | ---------------------PROFILER TESTS---------------------
-05:37:20:681208 | debug    | FE  | --------------------------------------------------------
-05:37:20:681577 | info     | FE  | Profiler session 'TEST' started.
-05:37:20:681689 | info     | FE  | Profiler Start Session: PASSED
-05:37:20:682758 | info     | FE  | Profiler Scope Function Begin: PASSED
-05:37:20:761817 | info     | FE  | Profiler Timer Stop: PASSED
-05:37:20:762074 | info     | FE  | Profiler Scope Name Begin: PASSED
-05:37:21:898279 | info     | FE  | Profiler session 'TEST' closed.
-05:37:21:898608 | info     | FE  | Profiler End Session: PASSED
-05:37:21:899759 | info     | FE  | Profiler: PASSED
-05:37:21:900057 | debug    | FE  | --------------------------------------------------------
-05:37:21:900354 | debug    | FE  | --------------------------------------------------------
-05:37:21:900653 | debug    | FE  | --------------------ASSERTIONS TESTS--------------------
-05:37:21:901020 | debug    | FE  | --------------------------------------------------------
-05:37:21:901657 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 208.
-05:37:21:902207 | error    | App | Assertion Message: test assert 1
-05:37:21:902841 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 210.
-05:37:21:903415 | error    | App | Assertion Message: test assert 2, val=6
-05:37:21:903707 | debug    | FE  | --------------------------------------------------------
-05:37:21:904271 | info     | FE  | Profiler session 'Startup' started.
-05:37:21:904559 | info     | FE  | Initializing GLFW
-05:37:22:006768 | info     | FE  | Creating Window FoolsEngine (1600, 900)
-05:37:22:264838 | info     | FE  | VSync enablled.
-05:37:22:265706 | debug    | FE  | Setting events callbacks for window.
-05:37:22:267264 | info     | FE  | Events callbacks for Win10Window setted up.
-05:37:22:268641 | info     | FE  | New outer layer "ApplicationLayer" added to LayerStack
-05:37:22:268953 | info     | FE  | New inner layer "LayerExample" added to LayerStack
-05:37:22:269283 | info     | FE  | New outer layer "ImGuiLayer" added to LayerStack
-05:37:22:269863 | info     | FE  | Profiler session 'Startup' closed.
-05:37:22:270352 | info     | FE  | Profiler session 'Runtime' started.
-05:37:22:271765 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1176, y=468
-05:37:22:321405 | info     | App | LayerExample::OnUpdate()
-05:37:22:333186 | trace    | App | MouseMovedEvent: x=1176, y=468
-05:37:22:333847 | debug    | FE  | Events dispached!
-05:37:22:345903 | info     | App | LayerExample::OnUpdate()
-05:37:22:363339 | info     | App | LayerExample::OnUpdate()
-05:37:22:379935 | info     | App | LayerExample::OnUpdate()
-05:37:22:397151 | info     | App | LayerExample::OnUpdate()
-05:37:22:412465 | info     | App | LayerExample::OnUpdate()
-05:37:22:429899 | info     | App | LayerExample::OnUpdate()
-05:37:22:445835 | info     | App | LayerExample::OnUpdate()
-05:37:22:463746 | info     | App | LayerExample::OnUpdate()
-05:37:22:479488 | info     | App | LayerExample::OnUpdate()
-05:37:22:497191 | info     | App | LayerExample::OnUpdate()
-05:37:22:513620 | info     | App | LayerExample::OnUpdate()
-05:37:22:530204 | info     | App | LayerExample::OnUpdate()
-05:37:22:545532 | info     | App | LayerExample::OnUpdate()
-05:37:22:560512 | info     | App | LayerExample::OnUpdate()
-05:37:22:577223 | info     | App | LayerExample::OnUpdate()
-05:37:22:593881 | info     | App | LayerExample::OnUpdate()
-05:37:22:610478 | info     | App | LayerExample::OnUpdate()
-05:37:22:627226 | info     | App | LayerExample::OnUpdate()
-05:37:22:643854 | info     | App | LayerExample::OnUpdate()
-05:37:22:660490 | info     | App | LayerExample::OnUpdate()
-05:37:22:677206 | info     | App | LayerExample::OnUpdate()
-05:37:22:695180 | info     | App | LayerExample::OnUpdate()
-05:37:22:711969 | info     | App | LayerExample::OnUpdate()
-05:37:22:727391 | info     | App | LayerExample::OnUpdate()
-05:37:22:744081 | info     | App | LayerExample::OnUpdate()
-05:37:22:760718 | info     | App | LayerExample::OnUpdate()
-05:37:22:777385 | info     | App | LayerExample::OnUpdate()
-05:37:22:793992 | info     | App | LayerExample::OnUpdate()
-05:37:22:810622 | info     | App | LayerExample::OnUpdate()
-05:37:22:827268 | info     | App | LayerExample::OnUpdate()
-05:37:22:843945 | info     | App | LayerExample::OnUpdate()
-05:37:22:860647 | info     | App | LayerExample::OnUpdate()
-05:37:22:877342 | info     | App | LayerExample::OnUpdate()
-05:37:22:895416 | info     | App | LayerExample::OnUpdate()
-05:37:22:911022 | info     | App | LayerExample::OnUpdate()
-05:37:22:927782 | info     | App | LayerExample::OnUpdate()
-05:37:22:944248 | info     | App | LayerExample::OnUpdate()
-05:37:22:960915 | info     | App | LayerExample::OnUpdate()
-05:37:22:961683 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1171, y=477
-05:37:22:977731 | info     | App | LayerExample::OnUpdate()
-05:37:22:978143 | trace    | App | MouseMovedEvent: x=1171, y=477
-05:37:22:978332 | debug    | FE  | Events dispached!
-05:37:22:978960 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1171, y=479
-05:37:22:979385 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1172, y=479
-05:37:22:994368 | info     | App | LayerExample::OnUpdate()
-05:37:22:994766 | trace    | App | MouseMovedEvent: x=1171, y=479
-05:37:22:994973 | trace    | App | MouseMovedEvent: x=1172, y=479
-05:37:22:995286 | debug    | FE  | Events dispached!
-05:37:22:995843 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1180, y=475
-05:37:23:010931 | info     | App | LayerExample::OnUpdate()
-05:37:23:011317 | trace    | App | MouseMovedEvent: x=1180, y=475
-05:37:23:011577 | debug    | FE  | Events dispached!
-05:37:23:012176 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1180, y=467
-05:37:23:027534 | info     | App | LayerExample::OnUpdate()
-05:37:23:027917 | trace    | App | MouseMovedEvent: x=1180, y=467
-05:37:23:028088 | debug    | FE  | Events dispached!
-05:37:23:028646 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1168, y=451
-05:37:23:029202 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1167, y=450
-05:37:23:044220 | info     | App | LayerExample::OnUpdate()
-05:37:23:044659 | trace    | App | MouseMovedEvent: x=1168, y=451
-05:37:23:044874 | trace    | App | MouseMovedEvent: x=1167, y=450
-05:37:23:045200 | debug    | FE  | Events dispached!
-05:37:23:045775 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1149, y=430
-05:37:23:046313 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1147, y=429
-05:37:23:060888 | info     | App | LayerExample::OnUpdate()
-05:37:23:061260 | trace    | App | MouseMovedEvent: x=1149, y=430
-05:37:23:061568 | trace    | App | MouseMovedEvent: x=1147, y=429
-05:37:23:061894 | debug    | FE  | Events dispached!
-05:37:23:062528 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1127, y=404
-05:37:23:077612 | info     | App | LayerExample::OnUpdate()
-05:37:23:077976 | trace    | App | MouseMovedEvent: x=1127, y=404
-05:37:23:078249 | debug    | FE  | Events dispached!
-05:37:23:078771 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1112, y=381
-05:37:23:079258 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1111, y=380
-05:37:23:095207 | info     | App | LayerExample::OnUpdate()
-05:37:23:095840 | trace    | App | MouseMovedEvent: x=1112, y=381
-05:37:23:096463 | trace    | App | MouseMovedEvent: x=1111, y=380
-05:37:23:096811 | debug    | FE  | Events dispached!
-05:37:23:097326 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1107, y=359
-05:37:23:110917 | info     | App | LayerExample::OnUpdate()
-05:37:23:111430 | trace    | App | MouseMovedEvent: x=1107, y=359
-05:37:23:111688 | debug    | FE  | Events dispached!
-05:37:23:112365 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1107, y=341
-05:37:23:128227 | info     | App | LayerExample::OnUpdate()
-05:37:23:129246 | trace    | App | MouseMovedEvent: x=1107, y=341
-05:37:23:129694 | debug    | FE  | Events dispached!
-05:37:23:130348 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1119, y=315
-05:37:23:144308 | info     | App | LayerExample::OnUpdate()
-05:37:23:144738 | trace    | App | MouseMovedEvent: x=1119, y=315
-05:37:23:144933 | debug    | FE  | Events dispached!
-05:37:23:145559 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1132, y=293
-05:37:23:161001 | info     | App | LayerExample::OnUpdate()
-05:37:23:161473 | trace    | App | MouseMovedEvent: x=1132, y=293
-05:37:23:161661 | debug    | FE  | Events dispached!
-05:37:23:162241 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1147, y=270
-05:37:23:177671 | info     | App | LayerExample::OnUpdate()
-05:37:23:178054 | trace    | App | MouseMovedEvent: x=1147, y=270
-05:37:23:178395 | debug    | FE  | Events dispached!
-05:37:23:179081 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1157, y=252
-05:37:23:179543 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1158, y=250
-05:37:23:194330 | info     | App | LayerExample::OnUpdate()
-05:37:23:194742 | trace    | App | MouseMovedEvent: x=1157, y=252
-05:37:23:194964 | trace    | App | MouseMovedEvent: x=1158, y=250
-05:37:23:195303 | debug    | FE  | Events dispached!
-05:37:23:195893 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1167, y=231
-05:37:23:196445 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1167, y=230
-05:37:23:210998 | info     | App | LayerExample::OnUpdate()
-05:37:23:211447 | trace    | App | MouseMovedEvent: x=1167, y=231
-05:37:23:211704 | trace    | App | MouseMovedEvent: x=1167, y=230
-05:37:23:212047 | debug    | FE  | Events dispached!
-05:37:23:212614 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1172, y=213
-05:37:23:213518 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1172, y=211
-05:37:23:227676 | info     | App | LayerExample::OnUpdate()
-05:37:23:228151 | trace    | App | MouseMovedEvent: x=1172, y=213
-05:37:23:228817 | trace    | App | MouseMovedEvent: x=1172, y=211
-05:37:23:229151 | debug    | FE  | Events dispached!
-05:37:23:229686 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1173, y=191
-05:37:23:230191 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1173, y=190
-05:37:23:244550 | info     | App | LayerExample::OnUpdate()
-05:37:23:244947 | trace    | App | MouseMovedEvent: x=1173, y=191
-05:37:23:245180 | trace    | App | MouseMovedEvent: x=1173, y=190
-05:37:23:245455 | debug    | FE  | Events dispached!
-05:37:23:246069 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1173, y=168
-05:37:23:246521 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1173, y=167
-05:37:23:261059 | info     | App | LayerExample::OnUpdate()
-05:37:23:261510 | trace    | App | MouseMovedEvent: x=1173, y=168
-05:37:23:261752 | trace    | App | MouseMovedEvent: x=1173, y=167
-05:37:23:262124 | debug    | FE  | Events dispached!
-05:37:23:262688 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1170, y=141
-05:37:23:263232 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1169, y=140
-05:37:23:277676 | info     | App | LayerExample::OnUpdate()
-05:37:23:278034 | trace    | App | MouseMovedEvent: x=1170, y=141
-05:37:23:278405 | trace    | App | MouseMovedEvent: x=1169, y=140
-05:37:23:278641 | debug    | FE  | Events dispached!
-05:37:23:279195 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1163, y=114
-05:37:23:294354 | info     | App | LayerExample::OnUpdate()
-05:37:23:294756 | trace    | App | MouseMovedEvent: x=1163, y=114
-05:37:23:294957 | debug    | FE  | Events dispached!
-05:37:23:295650 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1157, y=94
-05:37:23:296199 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1157, y=93
-05:37:23:311999 | info     | App | LayerExample::OnUpdate()
-05:37:23:312637 | trace    | App | MouseMovedEvent: x=1157, y=94
-05:37:23:313118 | trace    | App | MouseMovedEvent: x=1157, y=93
-05:37:23:313516 | debug    | FE  | Events dispached!
-05:37:23:314269 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1152, y=78
-05:37:23:328500 | info     | App | LayerExample::OnUpdate()
-05:37:23:329372 | trace    | App | MouseMovedEvent: x=1152, y=78
-05:37:23:329825 | debug    | FE  | Events dispached!
-05:37:23:330465 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1149, y=67
-05:37:23:344528 | info     | App | LayerExample::OnUpdate()
-05:37:23:345030 | trace    | App | MouseMovedEvent: x=1149, y=67
-05:37:23:345275 | debug    | FE  | Events dispached!
-05:37:23:345905 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1147, y=61
-05:37:23:361137 | info     | App | LayerExample::OnUpdate()
-05:37:23:361585 | trace    | App | MouseMovedEvent: x=1147, y=61
-05:37:23:361782 | debug    | FE  | Events dispached!
-05:37:23:362386 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1146, y=56
-05:37:23:377783 | info     | App | LayerExample::OnUpdate()
-05:37:23:378655 | trace    | App | MouseMovedEvent: x=1146, y=56
-05:37:23:379159 | debug    | FE  | Events dispached!
-05:37:23:379930 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1145, y=50
-05:37:23:394506 | info     | App | LayerExample::OnUpdate()
-05:37:23:394895 | trace    | App | MouseMovedEvent: x=1145, y=50
-05:37:23:395082 | debug    | FE  | Events dispached!
-05:37:23:395630 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1143, y=42
-05:37:23:411140 | info     | App | LayerExample::OnUpdate()
-05:37:23:411570 | trace    | App | MouseMovedEvent: x=1143, y=42
-05:37:23:411771 | debug    | FE  | Events dispached!
-05:37:23:412370 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1142, y=34
-05:37:23:427875 | info     | App | LayerExample::OnUpdate()
-05:37:23:428248 | trace    | App | MouseMovedEvent: x=1142, y=34
-05:37:23:428515 | debug    | FE  | Events dispached!
-05:37:23:429192 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1142, y=23
-05:37:23:430237 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1143, y=22
-05:37:23:444829 | info     | App | LayerExample::OnUpdate()
-05:37:23:445182 | trace    | App | MouseMovedEvent: x=1142, y=23
-05:37:23:445384 | trace    | App | MouseMovedEvent: x=1143, y=22
-05:37:23:445659 | debug    | FE  | Events dispached!
-05:37:23:446237 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1147, y=14
-05:37:23:461166 | info     | App | LayerExample::OnUpdate()
-05:37:23:461532 | trace    | App | MouseMovedEvent: x=1147, y=14
-05:37:23:461721 | debug    | FE  | Events dispached!
-05:37:23:462393 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1151, y=7
-05:37:23:477872 | info     | App | LayerExample::OnUpdate()
-05:37:23:478285 | trace    | App | MouseMovedEvent: x=1151, y=7
-05:37:23:478567 | debug    | FE  | Events dispached!
-05:37:23:479199 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1156, y=3
-05:37:23:494515 | info     | App | LayerExample::OnUpdate()
-05:37:23:494891 | trace    | App | MouseMovedEvent: x=1156, y=3
-05:37:23:495062 | debug    | FE  | Events dispached!
-05:37:23:511246 | info     | App | LayerExample::OnUpdate()
-05:37:23:529047 | info     | App | LayerExample::OnUpdate()
-05:37:23:545433 | info     | App | LayerExample::OnUpdate()
-05:37:23:561315 | info     | App | LayerExample::OnUpdate()
-05:37:23:578058 | info     | App | LayerExample::OnUpdate()
-05:37:23:594627 | info     | App | LayerExample::OnUpdate()
-05:37:23:611285 | info     | App | LayerExample::OnUpdate()
-05:37:23:627950 | info     | App | LayerExample::OnUpdate()
-05:37:23:644719 | info     | App | LayerExample::OnUpdate()
-05:37:23:661319 | info     | App | LayerExample::OnUpdate()
-05:37:23:678068 | info     | App | LayerExample::OnUpdate()
-05:37:23:694670 | info     | App | LayerExample::OnUpdate()
-05:37:23:711338 | info     | App | LayerExample::OnUpdate()
-05:37:23:729053 | info     | App | LayerExample::OnUpdate()
-05:37:23:745591 | info     | App | LayerExample::OnUpdate()
-05:37:23:761580 | info     | App | LayerExample::OnUpdate()
-05:37:23:778172 | info     | App | LayerExample::OnUpdate()
-05:37:23:794825 | info     | App | LayerExample::OnUpdate()
-05:37:23:811490 | info     | App | LayerExample::OnUpdate()
-05:37:23:828118 | info     | App | LayerExample::OnUpdate()
-05:37:23:844955 | info     | App | LayerExample::OnUpdate()
-05:37:23:861589 | info     | App | LayerExample::OnUpdate()
-05:37:23:878256 | info     | App | LayerExample::OnUpdate()
-05:37:23:895291 | info     | App | LayerExample::OnUpdate()
-05:37:23:911608 | info     | App | LayerExample::OnUpdate()
-05:37:23:929186 | info     | App | LayerExample::OnUpdate()
-05:37:23:946114 | info     | App | LayerExample::OnUpdate()
-05:37:23:961873 | info     | App | LayerExample::OnUpdate()
-05:37:23:978379 | info     | App | LayerExample::OnUpdate()
-05:37:23:994957 | info     | App | LayerExample::OnUpdate()
-05:37:24:011612 | info     | App | LayerExample::OnUpdate()
-05:37:24:028283 | info     | App | LayerExample::OnUpdate()
-05:37:24:044950 | info     | App | LayerExample::OnUpdate()
-05:37:24:061694 | info     | App | LayerExample::OnUpdate()
-05:37:24:078386 | info     | App | LayerExample::OnUpdate()
-05:37:24:095069 | info     | App | LayerExample::OnUpdate()
-05:37:24:111699 | info     | App | LayerExample::OnUpdate()
-05:37:24:128348 | info     | App | LayerExample::OnUpdate()
-05:37:24:145157 | info     | App | LayerExample::OnUpdate()
-05:37:24:162850 | info     | App | LayerExample::OnUpdate()
-05:37:24:178518 | info     | App | LayerExample::OnUpdate()
-05:37:24:195109 | info     | App | LayerExample::OnUpdate()
-05:37:24:211778 | info     | App | LayerExample::OnUpdate()
-05:37:24:228468 | info     | App | LayerExample::OnUpdate()
-05:37:24:245133 | info     | App | LayerExample::OnUpdate()
-05:37:24:261988 | info     | App | LayerExample::OnUpdate()
-05:37:25:847071 | info     | App | LayerExample::OnUpdate()
-05:37:25:863153 | info     | App | LayerExample::OnUpdate()
-05:37:25:879991 | info     | App | LayerExample::OnUpdate()
-05:37:25:896596 | info     | App | LayerExample::OnUpdate()
-05:37:25:913222 | info     | App | LayerExample::OnUpdate()
-05:37:25:929983 | info     | App | LayerExample::OnUpdate()
-05:37:25:946614 | info     | App | LayerExample::OnUpdate()
-05:37:25:963281 | info     | App | LayerExample::OnUpdate()
-05:37:25:980031 | info     | App | LayerExample::OnUpdate()
-05:37:25:996695 | info     | App | LayerExample::OnUpdate()
-05:37:26:014035 | info     | App | LayerExample::OnUpdate()
-05:37:26:030123 | info     | App | LayerExample::OnUpdate()
-05:37:26:047584 | info     | App | LayerExample::OnUpdate()
-05:37:26:063447 | info     | App | LayerExample::OnUpdate()
-05:37:26:080954 | info     | App | LayerExample::OnUpdate()
-05:37:26:096819 | info     | App | LayerExample::OnUpdate()
-05:37:26:113388 | info     | App | LayerExample::OnUpdate()
-05:37:26:130104 | info     | App | LayerExample::OnUpdate()
-05:37:26:146785 | info     | App | LayerExample::OnUpdate()
-05:37:26:163562 | info     | App | LayerExample::OnUpdate()
-05:37:26:180096 | info     | App | LayerExample::OnUpdate()
-05:37:26:196857 | info     | App | LayerExample::OnUpdate()
-05:37:26:213444 | info     | App | LayerExample::OnUpdate()
-05:37:26:230117 | info     | App | LayerExample::OnUpdate()
-05:37:26:246827 | info     | App | LayerExample::OnUpdate()
-05:37:26:264349 | info     | App | LayerExample::OnUpdate()
-05:37:26:280989 | info     | App | LayerExample::OnUpdate()
-05:37:26:296933 | info     | App | LayerExample::OnUpdate()
-05:37:26:313571 | info     | App | LayerExample::OnUpdate()
-05:37:26:330208 | info     | App | LayerExample::OnUpdate()
-05:37:26:347035 | info     | App | LayerExample::OnUpdate()
-05:37:26:363738 | info     | App | LayerExample::OnUpdate()
-05:37:26:380303 | info     | App | LayerExample::OnUpdate()
-05:37:26:397005 | info     | App | LayerExample::OnUpdate()
-05:37:26:413623 | info     | App | LayerExample::OnUpdate()
-05:37:26:430341 | info     | App | LayerExample::OnUpdate()
-05:37:26:446968 | info     | App | LayerExample::OnUpdate()
-05:37:26:463692 | info     | App | LayerExample::OnUpdate()
-05:37:26:481288 | info     | App | LayerExample::OnUpdate()
-05:37:26:497799 | info     | App | LayerExample::OnUpdate()
-05:37:26:513804 | info     | App | LayerExample::OnUpdate()
-05:37:26:530599 | info     | App | LayerExample::OnUpdate()
-05:37:26:547112 | info     | App | LayerExample::OnUpdate()
-05:37:26:563767 | info     | App | LayerExample::OnUpdate()
-05:37:26:580438 | info     | App | LayerExample::OnUpdate()
-05:37:26:597160 | info     | App | LayerExample::OnUpdate()
-05:37:26:613796 | info     | App | LayerExample::OnUpdate()
-05:37:26:630507 | info     | App | LayerExample::OnUpdate()
-05:37:26:647163 | info     | App | LayerExample::OnUpdate()
-05:37:26:663873 | info     | App | LayerExample::OnUpdate()
-05:37:26:681279 | info     | App | LayerExample::OnUpdate()
-05:37:26:697845 | info     | App | LayerExample::OnUpdate()
-05:37:26:713869 | info     | App | LayerExample::OnUpdate()
-05:37:26:730582 | info     | App | LayerExample::OnUpdate()
-05:37:26:747557 | info     | App | LayerExample::OnUpdate()
-05:37:26:764099 | info     | App | LayerExample::OnUpdate()
-05:37:26:780658 | info     | App | LayerExample::OnUpdate()
-05:37:26:797611 | info     | App | LayerExample::OnUpdate()
-05:37:26:814035 | info     | App | LayerExample::OnUpdate()
-05:37:26:830665 | info     | App | LayerExample::OnUpdate()
-05:37:26:847369 | info     | App | LayerExample::OnUpdate()
-05:37:26:864102 | info     | App | LayerExample::OnUpdate()
-05:37:26:880730 | info     | App | LayerExample::OnUpdate()
-05:37:26:898208 | info     | App | LayerExample::OnUpdate()
-05:37:26:915095 | info     | App | LayerExample::OnUpdate()
-05:37:26:930889 | info     | App | LayerExample::OnUpdate()
-05:37:26:947519 | info     | App | LayerExample::OnUpdate()
-05:37:26:964222 | info     | App | LayerExample::OnUpdate()
-05:37:26:980809 | info     | App | LayerExample::OnUpdate()
-05:37:26:997502 | info     | App | LayerExample::OnUpdate()
-05:37:27:014171 | info     | App | LayerExample::OnUpdate()
-05:37:27:030845 | info     | App | LayerExample::OnUpdate()
-05:37:27:047488 | info     | App | LayerExample::OnUpdate()
-05:37:27:064313 | info     | App | LayerExample::OnUpdate()
-05:37:27:080880 | info     | App | LayerExample::OnUpdate()
-05:37:27:098530 | info     | App | LayerExample::OnUpdate()
-05:37:27:114816 | info     | App | LayerExample::OnUpdate()
-05:37:27:131034 | info     | App | LayerExample::OnUpdate()
-05:37:27:147638 | info     | App | LayerExample::OnUpdate()
-05:37:27:164296 | info     | App | LayerExample::OnUpdate()
-05:37:27:180980 | info     | App | LayerExample::OnUpdate()
-05:37:27:197613 | info     | App | LayerExample::OnUpdate()
-05:37:27:214310 | info     | App | LayerExample::OnUpdate()
-05:37:27:231003 | info     | App | LayerExample::OnUpdate()
-05:37:27:247638 | info     | App | LayerExample::OnUpdate()
-05:37:27:264311 | info     | App | LayerExample::OnUpdate()
-05:37:27:281040 | info     | App | LayerExample::OnUpdate()
-05:37:27:297683 | info     | App | LayerExample::OnUpdate()
-05:37:27:315789 | info     | App | LayerExample::OnUpdate()
-05:37:27:331692 | info     | App | LayerExample::OnUpdate()
-05:37:27:347773 | info     | App | LayerExample::OnUpdate()
-05:37:27:364468 | info     | App | LayerExample::OnUpdate()
-05:37:27:381120 | info     | App | LayerExample::OnUpdate()
-05:37:27:397925 | info     | App | LayerExample::OnUpdate()
-05:37:27:414463 | info     | App | LayerExample::OnUpdate()
-05:37:27:431229 | info     | App | LayerExample::OnUpdate()
-05:37:27:447822 | info     | App | LayerExample::OnUpdate()
-05:37:27:464514 | info     | App | LayerExample::OnUpdate()
-05:37:27:481147 | info     | App | LayerExample::OnUpdate()
-05:37:27:497898 | info     | App | LayerExample::OnUpdate()
-05:37:27:515387 | info     | App | LayerExample::OnUpdate()
-05:37:27:531825 | info     | App | LayerExample::OnUpdate()
-05:37:27:547902 | info     | App | LayerExample::OnUpdate()
-05:37:27:564674 | info     | App | LayerExample::OnUpdate()
-05:37:27:581269 | info     | App | LayerExample::OnUpdate()
-05:37:27:598037 | info     | App | LayerExample::OnUpdate()
-05:37:27:614852 | info     | App | LayerExample::OnUpdate()
-05:37:27:631341 | info     | App | LayerExample::OnUpdate()
-05:37:27:648016 | info     | App | LayerExample::OnUpdate()
-05:37:27:664676 | info     | App | LayerExample::OnUpdate()
-05:37:27:681382 | info     | App | LayerExample::OnUpdate()
-05:37:27:698105 | info     | App | LayerExample::OnUpdate()
-05:37:27:714758 | info     | App | LayerExample::OnUpdate()
-05:37:27:732237 | info     | App | LayerExample::OnUpdate()
-05:37:27:748735 | info     | App | LayerExample::OnUpdate()
-05:37:27:764800 | info     | App | LayerExample::OnUpdate()
-05:37:27:781668 | info     | App | LayerExample::OnUpdate()
-05:37:27:798309 | info     | App | LayerExample::OnUpdate()
-05:37:27:814970 | info     | App | LayerExample::OnUpdate()
-05:37:27:831533 | info     | App | LayerExample::OnUpdate()
-05:37:27:848220 | info     | App | LayerExample::OnUpdate()
-05:37:27:864861 | info     | App | LayerExample::OnUpdate()
-05:37:27:881483 | info     | App | LayerExample::OnUpdate()
-05:37:27:898187 | info     | App | LayerExample::OnUpdate()
-05:37:27:914856 | info     | App | LayerExample::OnUpdate()
-05:37:27:931602 | info     | App | LayerExample::OnUpdate()
-05:37:27:949252 | info     | App | LayerExample::OnUpdate()
-05:37:27:965736 | info     | App | LayerExample::OnUpdate()
-05:37:27:981707 | info     | App | LayerExample::OnUpdate()
-05:37:27:998600 | info     | App | LayerExample::OnUpdate()
-05:37:28:014982 | info     | App | LayerExample::OnUpdate()
-05:37:28:031808 | info     | App | LayerExample::OnUpdate()
-05:37:28:048307 | info     | App | LayerExample::OnUpdate()
-05:37:28:065003 | info     | App | LayerExample::OnUpdate()
-05:37:28:081735 | info     | App | LayerExample::OnUpdate()
-05:37:28:098381 | info     | App | LayerExample::OnUpdate()
-05:37:28:115005 | info     | App | LayerExample::OnUpdate()
-05:37:28:131719 | info     | App | LayerExample::OnUpdate()
-05:37:28:148405 | info     | App | LayerExample::OnUpdate()
-05:37:28:166024 | info     | App | LayerExample::OnUpdate()
-05:37:28:181878 | info     | App | LayerExample::OnUpdate()
-05:37:28:199035 | info     | App | LayerExample::OnUpdate()
-05:37:28:215181 | info     | App | LayerExample::OnUpdate()
-05:37:28:231847 | info     | App | LayerExample::OnUpdate()
-05:37:28:248514 | info     | App | LayerExample::OnUpdate()
-05:37:28:265199 | info     | App | LayerExample::OnUpdate()
-05:37:28:281830 | info     | App | LayerExample::OnUpdate()
-05:37:28:298525 | info     | App | LayerExample::OnUpdate()
-05:37:28:315230 | info     | App | LayerExample::OnUpdate()
-05:37:28:331898 | info     | App | LayerExample::OnUpdate()
-05:37:28:348547 | info     | App | LayerExample::OnUpdate()
-05:37:28:365517 | info     | App | LayerExample::OnUpdate()
-05:37:28:382075 | info     | App | LayerExample::OnUpdate()
-05:37:28:399006 | info     | App | LayerExample::OnUpdate()
-05:37:28:415564 | info     | App | LayerExample::OnUpdate()
-05:37:28:432020 | info     | App | LayerExample::OnUpdate()
-05:37:28:448626 | info     | App | LayerExample::OnUpdate()
-05:37:28:465365 | info     | App | LayerExample::OnUpdate()
-05:37:28:482042 | info     | App | LayerExample::OnUpdate()
-05:37:28:498660 | info     | App | LayerExample::OnUpdate()
-05:37:28:515391 | info     | App | LayerExample::OnUpdate()
-05:37:28:532118 | info     | App | LayerExample::OnUpdate()
-05:37:28:548719 | info     | App | LayerExample::OnUpdate()
-05:37:28:565582 | info     | App | LayerExample::OnUpdate()
-05:37:28:582267 | info     | App | LayerExample::OnUpdate()
-05:37:28:599605 | info     | App | LayerExample::OnUpdate()
-05:37:28:615550 | info     | App | LayerExample::OnUpdate()
-05:37:28:632150 | info     | App | LayerExample::OnUpdate()
-05:37:28:648829 | info     | App | LayerExample::OnUpdate()
-05:37:28:665481 | info     | App | LayerExample::OnUpdate()
-05:37:28:682155 | info     | App | LayerExample::OnUpdate()
-05:37:28:698905 | info     | App | LayerExample::OnUpdate()
-05:37:28:715517 | info     | App | LayerExample::OnUpdate()
-05:37:28:732235 | info     | App | LayerExample::OnUpdate()
-05:37:28:749039 | info     | App | LayerExample::OnUpdate()
-05:37:28:765746 | info     | App | LayerExample::OnUpdate()
-05:37:28:782369 | info     | App | LayerExample::OnUpdate()
-05:37:28:799676 | info     | App | LayerExample::OnUpdate()
-05:37:28:815972 | info     | App | LayerExample::OnUpdate()
-05:37:28:832324 | info     | App | LayerExample::OnUpdate()
-05:37:28:849014 | info     | App | LayerExample::OnUpdate()
-05:37:28:865644 | info     | App | LayerExample::OnUpdate()
-05:37:28:882363 | info     | App | LayerExample::OnUpdate()
-05:37:28:899099 | info     | App | LayerExample::OnUpdate()
-05:37:28:915672 | info     | App | LayerExample::OnUpdate()
-05:37:28:932387 | info     | App | LayerExample::OnUpdate()
-05:37:28:949104 | info     | App | LayerExample::OnUpdate()
-05:37:28:965951 | info     | App | LayerExample::OnUpdate()
-05:37:28:982502 | info     | App | LayerExample::OnUpdate()
-05:37:28:999121 | info     | App | LayerExample::OnUpdate()
-05:37:29:016781 | info     | App | LayerExample::OnUpdate()
-05:37:29:033087 | info     | App | LayerExample::OnUpdate()
-05:37:29:049188 | info     | App | LayerExample::OnUpdate()
-05:37:29:065837 | info     | App | LayerExample::OnUpdate()
-05:37:29:082484 | info     | App | LayerExample::OnUpdate()
-05:37:29:099243 | info     | App | LayerExample::OnUpdate()
-05:37:29:115880 | info     | App | LayerExample::OnUpdate()
-05:37:29:132586 | info     | App | LayerExample::OnUpdate()
-05:37:29:149317 | info     | App | LayerExample::OnUpdate()
-05:37:29:165913 | info     | App | LayerExample::OnUpdate()
-05:37:29:182613 | info     | App | LayerExample::OnUpdate()
-05:37:29:199279 | info     | App | LayerExample::OnUpdate()
-05:37:29:216092 | info     | App | LayerExample::OnUpdate()
-05:37:29:233579 | info     | App | LayerExample::OnUpdate()
-05:37:29:249973 | info     | App | LayerExample::OnUpdate()
-05:37:29:265997 | info     | App | LayerExample::OnUpdate()
-05:37:29:282671 | info     | App | LayerExample::OnUpdate()
-05:37:29:299364 | info     | App | LayerExample::OnUpdate()
-05:37:29:316074 | info     | App | LayerExample::OnUpdate()
-05:37:29:332765 | info     | App | LayerExample::OnUpdate()
-05:37:29:349498 | info     | App | LayerExample::OnUpdate()
-05:37:29:366100 | info     | App | LayerExample::OnUpdate()
-05:37:29:382767 | info     | App | LayerExample::OnUpdate()
-05:37:29:399552 | info     | App | LayerExample::OnUpdate()
-05:37:29:416135 | info     | App | LayerExample::OnUpdate()
-05:37:29:432849 | info     | App | LayerExample::OnUpdate()
-05:37:29:450480 | info     | App | LayerExample::OnUpdate()
-05:37:29:466826 | info     | App | LayerExample::OnUpdate()
-05:37:29:482880 | info     | App | LayerExample::OnUpdate()
-05:37:29:499518 | info     | App | LayerExample::OnUpdate()
-05:37:29:516178 | info     | App | LayerExample::OnUpdate()
-05:37:29:532897 | info     | App | LayerExample::OnUpdate()
-05:37:29:549618 | info     | App | LayerExample::OnUpdate()
-05:37:29:566405 | info     | App | LayerExample::OnUpdate()
-05:37:29:582938 | info     | App | LayerExample::OnUpdate()
-05:37:29:599605 | info     | App | LayerExample::OnUpdate()
-05:37:29:616366 | info     | App | LayerExample::OnUpdate()
-05:37:29:633020 | info     | App | LayerExample::OnUpdate()
-05:37:29:649653 | info     | App | LayerExample::OnUpdate()
-05:37:29:667167 | info     | App | LayerExample::OnUpdate()
-05:37:29:683965 | info     | App | LayerExample::OnUpdate()
-05:37:29:699958 | info     | App | LayerExample::OnUpdate()
-05:37:29:716398 | info     | App | LayerExample::OnUpdate()
-05:37:29:733034 | info     | App | LayerExample::OnUpdate()
-05:37:29:749739 | info     | App | LayerExample::OnUpdate()
-05:37:29:766482 | info     | App | LayerExample::OnUpdate()
-05:37:29:783141 | info     | App | LayerExample::OnUpdate()
-05:37:29:799634 | info     | App | LayerExample::OnUpdate()
-05:37:29:816487 | info     | App | LayerExample::OnUpdate()
-05:37:29:833171 | info     | App | LayerExample::OnUpdate()
-05:37:29:849852 | info     | App | LayerExample::OnUpdate()
-05:37:29:866673 | info     | App | LayerExample::OnUpdate()
-05:37:29:884096 | info     | App | LayerExample::OnUpdate()
-05:37:29:899983 | info     | App | LayerExample::OnUpdate()
-05:37:29:916524 | info     | App | LayerExample::OnUpdate()
-05:37:29:933196 | info     | App | LayerExample::OnUpdate()
-05:37:29:949915 | info     | App | LayerExample::OnUpdate()
-05:37:29:966597 | info     | App | LayerExample::OnUpdate()
-05:37:29:983403 | info     | App | LayerExample::OnUpdate()
-05:37:30:000008 | info     | App | LayerExample::OnUpdate()
-05:37:30:016658 | info     | App | LayerExample::OnUpdate()
-05:37:30:033407 | info     | App | LayerExample::OnUpdate()
-05:37:30:049919 | info     | App | LayerExample::OnUpdate()
-05:37:30:067701 | info     | App | LayerExample::OnUpdate()
-05:37:30:083982 | info     | App | LayerExample::OnUpdate()
-05:37:30:100047 | info     | App | LayerExample::OnUpdate()
-05:37:30:116701 | info     | App | LayerExample::OnUpdate()
-05:37:30:133353 | info     | App | LayerExample::OnUpdate()
-05:37:30:150050 | info     | App | LayerExample::OnUpdate()
-05:37:30:166741 | info     | App | LayerExample::OnUpdate()
-05:37:30:183385 | info     | App | LayerExample::OnUpdate()
-05:37:30:200129 | info     | App | LayerExample::OnUpdate()
-05:37:30:217099 | info     | App | LayerExample::OnUpdate()
-05:37:30:233556 | info     | App | LayerExample::OnUpdate()
-05:37:30:250183 | info     | App | LayerExample::OnUpdate()
-05:37:30:266819 | info     | App | LayerExample::OnUpdate()
-05:37:30:284322 | info     | App | LayerExample::OnUpdate()
-05:37:30:300816 | info     | App | LayerExample::OnUpdate()
-05:37:30:317027 | info     | App | LayerExample::OnUpdate()
-05:37:30:333660 | info     | App | LayerExample::OnUpdate()
-05:37:30:350232 | info     | App | LayerExample::OnUpdate()
-05:37:30:366957 | info     | App | LayerExample::OnUpdate()
-05:37:30:383644 | info     | App | LayerExample::OnUpdate()
-05:37:30:400304 | info     | App | LayerExample::OnUpdate()
-05:37:30:417167 | info     | App | LayerExample::OnUpdate()
-05:37:30:433644 | info     | App | LayerExample::OnUpdate()
-05:37:30:450353 | info     | App | LayerExample::OnUpdate()
-05:37:30:467050 | info     | App | LayerExample::OnUpdate()
-05:37:30:483684 | info     | App | LayerExample::OnUpdate()
-05:37:30:501211 | info     | App | LayerExample::OnUpdate()
-05:37:30:517091 | info     | App | LayerExample::OnUpdate()
-05:37:30:534473 | info     | App | LayerExample::OnUpdate()
-05:37:30:550390 | info     | App | LayerExample::OnUpdate()
-05:37:30:567088 | info     | App | LayerExample::OnUpdate()
-05:37:30:583896 | info     | App | LayerExample::OnUpdate()
-05:37:30:600491 | info     | App | LayerExample::OnUpdate()
-05:37:30:617282 | info     | App | LayerExample::OnUpdate()
-05:37:30:633866 | info     | App | LayerExample::OnUpdate()
-05:37:30:650621 | info     | App | LayerExample::OnUpdate()
-05:37:30:667165 | info     | App | LayerExample::OnUpdate()
-05:37:30:683866 | info     | App | LayerExample::OnUpdate()
-05:37:30:700481 | info     | App | LayerExample::OnUpdate()
-05:37:30:718104 | info     | App | LayerExample::OnUpdate()
-05:37:30:734665 | info     | App | LayerExample::OnUpdate()
-05:37:30:750649 | info     | App | LayerExample::OnUpdate()
-05:37:30:767241 | info     | App | LayerExample::OnUpdate()
-05:37:30:783921 | info     | App | LayerExample::OnUpdate()
-05:37:30:800726 | info     | App | LayerExample::OnUpdate()
-05:37:30:817431 | info     | App | LayerExample::OnUpdate()
-05:37:30:834250 | info     | App | LayerExample::OnUpdate()
-05:37:30:850684 | info     | App | LayerExample::OnUpdate()
-05:37:30:867332 | info     | App | LayerExample::OnUpdate()
-05:37:30:884218 | info     | App | LayerExample::OnUpdate()
-05:37:30:900651 | info     | App | LayerExample::OnUpdate()
-05:37:30:917389 | info     | App | LayerExample::OnUpdate()
-05:37:30:935021 | info     | App | LayerExample::OnUpdate()
-05:37:30:951447 | info     | App | LayerExample::OnUpdate()
-05:37:30:967425 | info     | App | LayerExample::OnUpdate()
-05:37:30:984125 | info     | App | LayerExample::OnUpdate()
-05:37:31:000763 | info     | App | LayerExample::OnUpdate()
-05:37:31:017475 | info     | App | LayerExample::OnUpdate()
-05:37:31:034225 | info     | App | LayerExample::OnUpdate()
-05:37:31:050822 | info     | App | LayerExample::OnUpdate()
-05:37:31:067501 | info     | App | LayerExample::OnUpdate()
-05:37:31:084205 | info     | App | LayerExample::OnUpdate()
-05:37:31:100902 | info     | App | LayerExample::OnUpdate()
-05:37:31:117532 | info     | App | LayerExample::OnUpdate()
-05:37:31:135089 | info     | App | LayerExample::OnUpdate()
-05:37:31:151477 | info     | App | LayerExample::OnUpdate()
-05:37:31:167789 | info     | App | LayerExample::OnUpdate()
-05:37:31:184252 | info     | App | LayerExample::OnUpdate()
-05:37:31:200945 | info     | App | LayerExample::OnUpdate()
-05:37:31:217580 | info     | App | LayerExample::OnUpdate()
-05:37:31:234295 | info     | App | LayerExample::OnUpdate()
-05:37:31:250978 | info     | App | LayerExample::OnUpdate()
-05:37:31:267656 | info     | App | LayerExample::OnUpdate()
-05:37:31:284511 | info     | App | LayerExample::OnUpdate()
-05:37:31:301020 | info     | App | LayerExample::OnUpdate()
-05:37:31:317758 | info     | App | LayerExample::OnUpdate()
-05:37:31:334304 | info     | App | LayerExample::OnUpdate()
-05:37:31:351997 | info     | App | LayerExample::OnUpdate()
-05:37:31:368351 | info     | App | LayerExample::OnUpdate()
-05:37:31:384441 | info     | App | LayerExample::OnUpdate()
-05:37:31:401263 | info     | App | LayerExample::OnUpdate()
-05:37:31:417812 | info     | App | LayerExample::OnUpdate()
-05:37:31:434460 | info     | App | LayerExample::OnUpdate()
-05:37:31:451175 | info     | App | LayerExample::OnUpdate()
-05:37:31:467865 | info     | App | LayerExample::OnUpdate()
-05:37:31:484508 | info     | App | LayerExample::OnUpdate()
-05:37:31:501200 | info     | App | LayerExample::OnUpdate()
-05:37:31:517886 | info     | App | LayerExample::OnUpdate()
-05:37:31:534607 | info     | App | LayerExample::OnUpdate()
-05:37:31:552157 | info     | App | LayerExample::OnUpdate()
-05:37:31:568500 | info     | App | LayerExample::OnUpdate()
-05:37:31:584602 | info     | App | LayerExample::OnUpdate()
-05:37:31:601262 | info     | App | LayerExample::OnUpdate()
-05:37:31:617992 | info     | App | LayerExample::OnUpdate()
-05:37:31:634645 | info     | App | LayerExample::OnUpdate()
-05:37:31:651272 | info     | App | LayerExample::OnUpdate()
-05:37:31:668060 | info     | App | LayerExample::OnUpdate()
-05:37:31:684742 | info     | App | LayerExample::OnUpdate()
-05:37:31:701397 | info     | App | LayerExample::OnUpdate()
-05:37:31:718087 | info     | App | LayerExample::OnUpdate()
-05:37:31:734786 | info     | App | LayerExample::OnUpdate()
-05:37:31:751403 | info     | App | LayerExample::OnUpdate()
-05:37:31:768927 | info     | App | LayerExample::OnUpdate()
-05:37:31:785455 | info     | App | LayerExample::OnUpdate()
-05:37:31:801524 | info     | App | LayerExample::OnUpdate()
-05:37:31:818120 | info     | App | LayerExample::OnUpdate()
-05:37:31:834767 | info     | App | LayerExample::OnUpdate()
-05:37:31:851488 | info     | App | LayerExample::OnUpdate()
-05:37:31:868307 | info     | App | LayerExample::OnUpdate()
-05:37:31:884928 | info     | App | LayerExample::OnUpdate()
-05:37:31:901550 | info     | App | LayerExample::OnUpdate()
-05:37:31:918238 | info     | App | LayerExample::OnUpdate()
-05:37:31:934868 | info     | App | LayerExample::OnUpdate()
-05:37:31:951552 | info     | App | LayerExample::OnUpdate()
-05:37:31:968209 | info     | App | LayerExample::OnUpdate()
-05:37:31:985717 | info     | App | LayerExample::OnUpdate()
-05:37:32:002246 | info     | App | LayerExample::OnUpdate()
-05:37:32:018288 | info     | App | LayerExample::OnUpdate()
-05:37:32:034989 | info     | App | LayerExample::OnUpdate()
-05:37:32:051646 | info     | App | LayerExample::OnUpdate()
-05:37:32:068482 | info     | App | LayerExample::OnUpdate()
-05:37:32:085049 | info     | App | LayerExample::OnUpdate()
-05:37:32:101700 | info     | App | LayerExample::OnUpdate()
-05:37:32:118398 | info     | App | LayerExample::OnUpdate()
-05:37:32:135146 | info     | App | LayerExample::OnUpdate()
-05:37:32:151685 | info     | App | LayerExample::OnUpdate()
-05:37:32:168439 | info     | App | LayerExample::OnUpdate()
-05:37:32:185124 | info     | App | LayerExample::OnUpdate()
-05:37:32:202593 | info     | App | LayerExample::OnUpdate()
-05:37:32:219000 | info     | App | LayerExample::OnUpdate()
-05:37:32:235199 | info     | App | LayerExample::OnUpdate()
-05:37:32:252034 | info     | App | LayerExample::OnUpdate()
-05:37:32:268634 | info     | App | LayerExample::OnUpdate()
-05:37:32:285139 | info     | App | LayerExample::OnUpdate()
-05:37:32:301944 | info     | App | LayerExample::OnUpdate()
-05:37:32:318537 | info     | App | LayerExample::OnUpdate()
-05:37:32:335250 | info     | App | LayerExample::OnUpdate()
-05:37:32:351870 | info     | App | LayerExample::OnUpdate()
-05:37:32:368575 | info     | App | LayerExample::OnUpdate()
-05:37:32:385208 | info     | App | LayerExample::OnUpdate()
-05:37:32:402694 | info     | App | LayerExample::OnUpdate()
-05:37:32:419225 | info     | App | LayerExample::OnUpdate()
-05:37:32:435307 | info     | App | LayerExample::OnUpdate()
-05:37:32:451999 | info     | App | LayerExample::OnUpdate()
-05:37:32:468642 | info     | App | LayerExample::OnUpdate()
-05:37:32:485349 | info     | App | LayerExample::OnUpdate()
-05:37:32:502066 | info     | App | LayerExample::OnUpdate()
-05:37:32:518703 | info     | App | LayerExample::OnUpdate()
-05:37:32:535386 | info     | App | LayerExample::OnUpdate()
-05:37:32:552073 | info     | App | LayerExample::OnUpdate()
-05:37:32:568705 | info     | App | LayerExample::OnUpdate()
-05:37:32:585473 | info     | App | LayerExample::OnUpdate()
-05:37:32:602919 | info     | App | LayerExample::OnUpdate()
-05:37:32:619511 | info     | App | LayerExample::OnUpdate()
-05:37:32:635655 | info     | App | LayerExample::OnUpdate()
-05:37:32:652145 | info     | App | LayerExample::OnUpdate()
-05:37:32:668819 | info     | App | LayerExample::OnUpdate()
-05:37:32:685587 | info     | App | LayerExample::OnUpdate()
-05:37:32:702231 | info     | App | LayerExample::OnUpdate()
-05:37:32:719004 | info     | App | LayerExample::OnUpdate()
-05:37:32:735637 | info     | App | LayerExample::OnUpdate()
-05:37:32:752227 | info     | App | LayerExample::OnUpdate()
-05:37:32:768951 | info     | App | LayerExample::OnUpdate()
-05:37:32:785567 | info     | App | LayerExample::OnUpdate()
-05:37:32:802361 | info     | App | LayerExample::OnUpdate()
-05:37:32:819799 | info     | App | LayerExample::OnUpdate()
-05:37:32:835704 | info     | App | LayerExample::OnUpdate()
-05:37:32:852330 | info     | App | LayerExample::OnUpdate()
-05:37:32:868987 | info     | App | LayerExample::OnUpdate()
-05:37:32:885714 | info     | App | LayerExample::OnUpdate()
-05:37:32:902319 | info     | App | LayerExample::OnUpdate()
-05:37:32:919167 | info     | App | LayerExample::OnUpdate()
-05:37:32:935749 | info     | App | LayerExample::OnUpdate()
-05:37:32:952434 | info     | App | LayerExample::OnUpdate()
-05:37:32:969144 | info     | App | LayerExample::OnUpdate()
-05:37:32:985787 | info     | App | LayerExample::OnUpdate()
-05:37:33:003290 | info     | App | LayerExample::OnUpdate()
-05:37:33:019650 | info     | App | LayerExample::OnUpdate()
-05:37:33:035809 | info     | App | LayerExample::OnUpdate()
-05:37:33:052472 | info     | App | LayerExample::OnUpdate()
-05:37:33:069118 | info     | App | LayerExample::OnUpdate()
-05:37:33:085812 | info     | App | LayerExample::OnUpdate()
-05:37:33:102546 | info     | App | LayerExample::OnUpdate()
-05:37:33:119243 | info     | App | LayerExample::OnUpdate()
-05:37:33:135899 | info     | App | LayerExample::OnUpdate()
-05:37:33:152542 | info     | App | LayerExample::OnUpdate()
-05:37:33:169289 | info     | App | LayerExample::OnUpdate()
-05:37:33:185963 | info     | App | LayerExample::OnUpdate()
-05:37:33:202571 | info     | App | LayerExample::OnUpdate()
-05:37:33:220138 | info     | App | LayerExample::OnUpdate()
-05:37:33:236695 | info     | App | LayerExample::OnUpdate()
-05:37:33:252672 | info     | App | LayerExample::OnUpdate()
-05:37:33:269359 | info     | App | LayerExample::OnUpdate()
-05:37:33:286048 | info     | App | LayerExample::OnUpdate()
-05:37:33:302696 | info     | App | LayerExample::OnUpdate()
-05:37:33:319378 | info     | App | LayerExample::OnUpdate()
-05:37:33:336102 | info     | App | LayerExample::OnUpdate()
-05:37:33:352699 | info     | App | LayerExample::OnUpdate()
-05:37:33:369471 | info     | App | LayerExample::OnUpdate()
-05:37:33:386155 | info     | App | LayerExample::OnUpdate()
-05:37:33:402835 | info     | App | LayerExample::OnUpdate()
-05:37:33:419547 | info     | App | LayerExample::OnUpdate()
-05:37:33:436985 | info     | App | LayerExample::OnUpdate()
-05:37:33:453356 | info     | App | LayerExample::OnUpdate()
-05:37:33:469498 | info     | App | LayerExample::OnUpdate()
-05:37:33:486170 | info     | App | LayerExample::OnUpdate()
-05:37:33:502818 | info     | App | LayerExample::OnUpdate()
-05:37:33:519580 | info     | App | LayerExample::OnUpdate()
-05:37:33:536223 | info     | App | LayerExample::OnUpdate()
-05:37:33:552930 | info     | App | LayerExample::OnUpdate()
-05:37:33:569544 | info     | App | LayerExample::OnUpdate()
-05:37:33:586278 | info     | App | LayerExample::OnUpdate()
-05:37:33:602912 | info     | App | LayerExample::OnUpdate()
-05:37:33:619578 | info     | App | LayerExample::OnUpdate()
-05:37:33:636278 | info     | App | LayerExample::OnUpdate()
-05:37:33:653986 | info     | App | LayerExample::OnUpdate()
-05:37:33:670297 | info     | App | LayerExample::OnUpdate()
-05:37:33:686332 | info     | App | LayerExample::OnUpdate()
-05:37:33:703023 | info     | App | LayerExample::OnUpdate()
-05:37:33:719693 | info     | App | LayerExample::OnUpdate()
-05:37:33:736443 | info     | App | LayerExample::OnUpdate()
-05:37:33:753115 | info     | App | LayerExample::OnUpdate()
-05:37:33:769834 | info     | App | LayerExample::OnUpdate()
-05:37:33:786432 | info     | App | LayerExample::OnUpdate()
-05:37:33:803271 | info     | App | LayerExample::OnUpdate()
-05:37:33:820021 | info     | App | LayerExample::OnUpdate()
-05:37:33:836530 | info     | App | LayerExample::OnUpdate()
-05:37:33:853989 | info     | App | LayerExample::OnUpdate()
-05:37:33:870553 | info     | App | LayerExample::OnUpdate()
-05:37:33:886510 | info     | App | LayerExample::OnUpdate()
-05:37:33:903163 | info     | App | LayerExample::OnUpdate()
-05:37:33:919832 | info     | App | LayerExample::OnUpdate()
-05:37:33:936569 | info     | App | LayerExample::OnUpdate()
-05:37:33:953259 | info     | App | LayerExample::OnUpdate()
-05:37:33:969909 | info     | App | LayerExample::OnUpdate()
-05:37:33:986762 | info     | App | LayerExample::OnUpdate()
-05:37:34:003226 | info     | App | LayerExample::OnUpdate()
-05:37:34:019953 | info     | App | LayerExample::OnUpdate()
-05:37:34:036676 | info     | App | LayerExample::OnUpdate()
-05:37:34:053292 | info     | App | LayerExample::OnUpdate()
-05:37:34:070746 | info     | App | LayerExample::OnUpdate()
-05:37:34:087426 | info     | App | LayerExample::OnUpdate()
-05:37:34:103670 | info     | App | LayerExample::OnUpdate()
-05:37:34:120112 | info     | App | LayerExample::OnUpdate()
-05:37:34:136701 | info     | App | LayerExample::OnUpdate()
-05:37:34:153449 | info     | App | LayerExample::OnUpdate()
-05:37:34:170105 | info     | App | LayerExample::OnUpdate()
-05:37:34:186785 | info     | App | LayerExample::OnUpdate()
-05:37:34:203497 | info     | App | LayerExample::OnUpdate()
-05:37:34:220155 | info     | App | LayerExample::OnUpdate()
-05:37:34:236847 | info     | App | LayerExample::OnUpdate()
-05:37:34:253458 | info     | App | LayerExample::OnUpdate()
-05:37:34:270092 | info     | App | LayerExample::OnUpdate()
-05:37:34:287819 | info     | App | LayerExample::OnUpdate()
-05:37:34:303581 | info     | App | LayerExample::OnUpdate()
-05:37:34:320931 | info     | App | LayerExample::OnUpdate()
-05:37:34:336924 | info     | App | LayerExample::OnUpdate()
-05:37:34:353745 | info     | App | LayerExample::OnUpdate()
-05:37:34:370351 | info     | App | LayerExample::OnUpdate()
-05:37:34:387042 | info     | App | LayerExample::OnUpdate()
-05:37:34:403578 | info     | App | LayerExample::OnUpdate()
-05:37:34:420374 | info     | App | LayerExample::OnUpdate()
-05:37:34:436967 | info     | App | LayerExample::OnUpdate()
-05:37:34:453674 | info     | App | LayerExample::OnUpdate()
-05:37:34:470331 | info     | App | LayerExample::OnUpdate()
-05:37:34:486971 | info     | App | LayerExample::OnUpdate()
-05:37:34:504531 | info     | App | LayerExample::OnUpdate()
-05:37:34:520924 | info     | App | LayerExample::OnUpdate()
-05:37:34:537090 | info     | App | LayerExample::OnUpdate()
-05:37:34:553730 | info     | App | LayerExample::OnUpdate()
-05:37:34:570403 | info     | App | LayerExample::OnUpdate()
-05:37:34:586990 | info     | App | LayerExample::OnUpdate()
-05:37:34:603877 | info     | App | LayerExample::OnUpdate()
-05:37:34:620464 | info     | App | LayerExample::OnUpdate()
-05:37:34:637132 | info     | App | LayerExample::OnUpdate()
-05:37:34:653856 | info     | App | LayerExample::OnUpdate()
-05:37:34:670483 | info     | App | LayerExample::OnUpdate()
-05:37:34:687172 | info     | App | LayerExample::OnUpdate()
-05:37:34:703838 | info     | App | LayerExample::OnUpdate()
-05:37:34:721394 | info     | App | LayerExample::OnUpdate()
-05:37:34:737832 | info     | App | LayerExample::OnUpdate()
-05:37:34:753964 | info     | App | LayerExample::OnUpdate()
-05:37:34:770607 | info     | App | LayerExample::OnUpdate()
-05:37:34:787210 | info     | App | LayerExample::OnUpdate()
-05:37:34:804018 | info     | App | LayerExample::OnUpdate()
-05:37:34:820627 | info     | App | LayerExample::OnUpdate()
-05:37:34:837279 | info     | App | LayerExample::OnUpdate()
-05:37:34:853940 | info     | App | LayerExample::OnUpdate()
-05:37:34:870662 | info     | App | LayerExample::OnUpdate()
-05:37:34:887675 | info     | App | LayerExample::OnUpdate()
-05:37:34:904123 | info     | App | LayerExample::OnUpdate()
-05:37:34:921530 | info     | App | LayerExample::OnUpdate()
-05:37:34:937978 | info     | App | LayerExample::OnUpdate()
-05:37:34:954075 | info     | App | LayerExample::OnUpdate()
-05:37:34:970763 | info     | App | LayerExample::OnUpdate()
-05:37:34:987642 | info     | App | LayerExample::OnUpdate()
-05:37:35:004061 | info     | App | LayerExample::OnUpdate()
-05:37:35:020852 | info     | App | LayerExample::OnUpdate()
-05:37:35:037466 | info     | App | LayerExample::OnUpdate()
-05:37:35:054146 | info     | App | LayerExample::OnUpdate()
-05:37:35:070962 | info     | App | LayerExample::OnUpdate()
-05:37:35:087614 | info     | App | LayerExample::OnUpdate()
-05:37:35:104117 | info     | App | LayerExample::OnUpdate()
-05:37:35:121536 | info     | App | LayerExample::OnUpdate()
-05:37:35:138168 | info     | App | LayerExample::OnUpdate()
-05:37:35:154206 | info     | App | LayerExample::OnUpdate()
-05:37:35:171091 | info     | App | LayerExample::OnUpdate()
-05:37:35:187808 | info     | App | LayerExample::OnUpdate()
-05:37:35:204369 | info     | App | LayerExample::OnUpdate()
-05:37:35:221033 | info     | App | LayerExample::OnUpdate()
-05:37:35:237657 | info     | App | LayerExample::OnUpdate()
-05:37:35:254290 | info     | App | LayerExample::OnUpdate()
-05:37:35:271052 | info     | App | LayerExample::OnUpdate()
-05:37:35:287619 | info     | App | LayerExample::OnUpdate()
-05:37:35:304330 | info     | App | LayerExample::OnUpdate()
-05:37:35:321867 | info     | App | LayerExample::OnUpdate()
-05:37:35:338338 | info     | App | LayerExample::OnUpdate()
-05:37:35:354401 | info     | App | LayerExample::OnUpdate()
-05:37:35:371064 | info     | App | LayerExample::OnUpdate()
-05:37:35:387863 | info     | App | LayerExample::OnUpdate()
-05:37:35:404538 | info     | App | LayerExample::OnUpdate()
-05:37:35:421154 | info     | App | LayerExample::OnUpdate()
-05:37:35:437818 | info     | App | LayerExample::OnUpdate()
-05:37:35:454457 | info     | App | LayerExample::OnUpdate()
-05:37:35:471133 | info     | App | LayerExample::OnUpdate()
-05:37:35:487870 | info     | App | LayerExample::OnUpdate()
-05:37:35:504485 | info     | App | LayerExample::OnUpdate()
-05:37:35:521168 | info     | App | LayerExample::OnUpdate()
-05:37:35:538584 | info     | App | LayerExample::OnUpdate()
-05:37:35:554606 | info     | App | LayerExample::OnUpdate()
-05:37:35:572289 | info     | App | LayerExample::OnUpdate()
-05:37:35:588027 | info     | App | LayerExample::OnUpdate()
-05:37:35:604712 | info     | App | LayerExample::OnUpdate()
-05:37:35:621245 | info     | App | LayerExample::OnUpdate()
-05:37:35:638006 | info     | App | LayerExample::OnUpdate()
-05:37:35:654593 | info     | App | LayerExample::OnUpdate()
-05:37:35:671255 | info     | App | LayerExample::OnUpdate()
-05:37:35:687946 | info     | App | LayerExample::OnUpdate()
-05:37:35:704645 | info     | App | LayerExample::OnUpdate()
-05:37:35:721330 | info     | App | LayerExample::OnUpdate()
-05:37:35:738053 | info     | App | LayerExample::OnUpdate()
-05:37:35:755885 | info     | App | LayerExample::OnUpdate()
-05:37:35:771499 | info     | App | LayerExample::OnUpdate()
-05:37:35:788747 | info     | App | LayerExample::OnUpdate()
-05:37:35:804856 | info     | App | LayerExample::OnUpdate()
-05:37:35:821456 | info     | App | LayerExample::OnUpdate()
-05:37:35:838153 | info     | App | LayerExample::OnUpdate()
-05:37:35:854844 | info     | App | LayerExample::OnUpdate()
-05:37:35:871459 | info     | App | LayerExample::OnUpdate()
-05:37:35:888099 | info     | App | LayerExample::OnUpdate()
-05:37:35:904839 | info     | App | LayerExample::OnUpdate()
-05:37:35:921505 | info     | App | LayerExample::OnUpdate()
-05:37:35:938243 | info     | App | LayerExample::OnUpdate()
-05:37:35:954950 | info     | App | LayerExample::OnUpdate()
-05:37:35:972335 | info     | App | LayerExample::OnUpdate()
-05:37:35:988875 | info     | App | LayerExample::OnUpdate()
-05:37:36:005006 | info     | App | LayerExample::OnUpdate()
-05:37:36:021726 | info     | App | LayerExample::OnUpdate()
-05:37:36:038490 | info     | App | LayerExample::OnUpdate()
-05:37:36:055106 | info     | App | LayerExample::OnUpdate()
-05:37:36:071643 | info     | App | LayerExample::OnUpdate()
-05:37:36:088277 | info     | App | LayerExample::OnUpdate()
-05:37:36:104969 | info     | App | LayerExample::OnUpdate()
-05:37:36:121638 | info     | App | LayerExample::OnUpdate()
-05:37:36:138385 | info     | App | LayerExample::OnUpdate()
-05:37:36:155078 | info     | App | LayerExample::OnUpdate()
-05:37:36:171730 | info     | App | LayerExample::OnUpdate()
-05:37:36:189493 | info     | App | LayerExample::OnUpdate()
-05:37:36:205602 | info     | App | LayerExample::OnUpdate()
-05:37:36:221826 | info     | App | LayerExample::OnUpdate()
-05:37:36:238454 | info     | App | LayerExample::OnUpdate()
-05:37:36:255127 | info     | App | LayerExample::OnUpdate()
-05:37:36:271978 | info     | App | LayerExample::OnUpdate()
-05:37:36:288431 | info     | App | LayerExample::OnUpdate()
-05:37:36:305165 | info     | App | LayerExample::OnUpdate()
-05:37:36:321831 | info     | App | LayerExample::OnUpdate()
-05:37:36:338552 | info     | App | LayerExample::OnUpdate()
-05:37:36:355159 | info     | App | LayerExample::OnUpdate()
-05:37:36:371887 | info     | App | LayerExample::OnUpdate()
-05:37:36:389332 | info     | App | LayerExample::OnUpdate()
-05:37:36:405880 | info     | App | LayerExample::OnUpdate()
-05:37:36:422159 | info     | App | LayerExample::OnUpdate()
-05:37:36:438785 | info     | App | LayerExample::OnUpdate()
-05:37:36:455283 | info     | App | LayerExample::OnUpdate()
-05:37:36:472072 | info     | App | LayerExample::OnUpdate()
-05:37:36:488632 | info     | App | LayerExample::OnUpdate()
-05:37:36:505286 | info     | App | LayerExample::OnUpdate()
-05:37:36:522049 | info     | App | LayerExample::OnUpdate()
-05:37:36:538643 | info     | App | LayerExample::OnUpdate()
-05:37:36:555374 | info     | App | LayerExample::OnUpdate()
-05:37:36:572060 | info     | App | LayerExample::OnUpdate()
-05:37:36:590010 | info     | App | LayerExample::OnUpdate()
-05:37:36:606106 | info     | App | LayerExample::OnUpdate()
-05:37:36:622220 | info     | App | LayerExample::OnUpdate()
-05:37:36:638991 | info     | App | LayerExample::OnUpdate()
-05:37:36:655462 | info     | App | LayerExample::OnUpdate()
-05:37:36:672154 | info     | App | LayerExample::OnUpdate()
-05:37:36:689012 | info     | App | LayerExample::OnUpdate()
-05:37:36:705471 | info     | App | LayerExample::OnUpdate()
-05:37:36:722086 | info     | App | LayerExample::OnUpdate()
-05:37:36:739070 | info     | App | LayerExample::OnUpdate()
-05:37:36:755514 | info     | App | LayerExample::OnUpdate()
-05:37:36:772249 | info     | App | LayerExample::OnUpdate()
-05:37:36:788919 | info     | App | LayerExample::OnUpdate()
-05:37:36:806429 | info     | App | LayerExample::OnUpdate()
-05:37:36:822852 | info     | App | LayerExample::OnUpdate()
-05:37:36:839328 | info     | App | LayerExample::OnUpdate()
-05:37:36:855762 | info     | App | LayerExample::OnUpdate()
-05:37:36:872272 | info     | App | LayerExample::OnUpdate()
-05:37:36:888998 | info     | App | LayerExample::OnUpdate()
-05:37:36:905626 | info     | App | LayerExample::OnUpdate()
-05:37:36:922280 | info     | App | LayerExample::OnUpdate()
-05:37:36:939095 | info     | App | LayerExample::OnUpdate()
-05:37:36:955746 | info     | App | LayerExample::OnUpdate()
-05:37:36:972331 | info     | App | LayerExample::OnUpdate()
-05:37:36:989083 | info     | App | LayerExample::OnUpdate()
-05:37:37:006757 | info     | App | LayerExample::OnUpdate()
-05:37:37:023377 | info     | App | LayerExample::OnUpdate()
-05:37:37:039276 | info     | App | LayerExample::OnUpdate()
-05:37:37:056112 | info     | App | LayerExample::OnUpdate()
-05:37:37:072352 | info     | App | LayerExample::OnUpdate()
-05:37:37:089194 | info     | App | LayerExample::OnUpdate()
-05:37:37:105785 | info     | App | LayerExample::OnUpdate()
-05:37:37:122479 | info     | App | LayerExample::OnUpdate()
-05:37:37:139191 | info     | App | LayerExample::OnUpdate()
-05:37:37:156094 | info     | App | LayerExample::OnUpdate()
-05:37:37:172488 | info     | App | LayerExample::OnUpdate()
-05:37:37:189230 | info     | App | LayerExample::OnUpdate()
-05:37:37:205904 | info     | App | LayerExample::OnUpdate()
-05:37:37:223478 | info     | App | LayerExample::OnUpdate()
-05:37:37:239899 | info     | App | LayerExample::OnUpdate()
-05:37:37:256397 | info     | App | LayerExample::OnUpdate()
-05:37:37:272756 | info     | App | LayerExample::OnUpdate()
-05:37:37:289296 | info     | App | LayerExample::OnUpdate()
-05:37:37:306033 | info     | App | LayerExample::OnUpdate()
-05:37:37:322680 | info     | App | LayerExample::OnUpdate()
-05:37:37:339327 | info     | App | LayerExample::OnUpdate()
-05:37:37:356074 | info     | App | LayerExample::OnUpdate()
-05:37:37:372696 | info     | App | LayerExample::OnUpdate()
-05:37:37:389398 | info     | App | LayerExample::OnUpdate()
-05:37:37:406087 | info     | App | LayerExample::OnUpdate()
-05:37:37:422806 | info     | App | LayerExample::OnUpdate()
-05:37:37:440337 | info     | App | LayerExample::OnUpdate()
-05:37:37:456728 | info     | App | LayerExample::OnUpdate()
-05:37:37:473158 | info     | App | LayerExample::OnUpdate()
-05:37:37:489491 | info     | App | LayerExample::OnUpdate()
-05:37:37:506149 | info     | App | LayerExample::OnUpdate()
-05:37:37:522829 | info     | App | LayerExample::OnUpdate()
-05:37:37:539475 | info     | App | LayerExample::OnUpdate()
-05:37:37:556175 | info     | App | LayerExample::OnUpdate()
-05:37:37:572884 | info     | App | LayerExample::OnUpdate()
-05:37:37:589536 | info     | App | LayerExample::OnUpdate()
-05:37:37:606197 | info     | App | LayerExample::OnUpdate()
-05:37:37:622886 | info     | App | LayerExample::OnUpdate()
-05:37:37:640413 | info     | App | LayerExample::OnUpdate()
-05:37:37:657036 | info     | App | LayerExample::OnUpdate()
-05:37:37:673063 | info     | App | LayerExample::OnUpdate()
-05:37:37:689856 | info     | App | LayerExample::OnUpdate()
-05:37:37:706643 | info     | App | LayerExample::OnUpdate()
-05:37:37:723169 | info     | App | LayerExample::OnUpdate()
-05:37:37:739739 | info     | App | LayerExample::OnUpdate()
-05:37:37:756350 | info     | App | LayerExample::OnUpdate()
-05:37:37:773087 | info     | App | LayerExample::OnUpdate()
-05:37:37:789687 | info     | App | LayerExample::OnUpdate()
-05:37:37:806415 | info     | App | LayerExample::OnUpdate()
-05:37:37:823069 | info     | App | LayerExample::OnUpdate()
-05:37:37:840638 | info     | App | LayerExample::OnUpdate()
-05:37:37:857021 | info     | App | LayerExample::OnUpdate()
-05:37:37:873141 | info     | App | LayerExample::OnUpdate()
-05:37:37:889781 | info     | App | LayerExample::OnUpdate()
-05:37:37:906460 | info     | App | LayerExample::OnUpdate()
-05:37:37:923195 | info     | App | LayerExample::OnUpdate()
-05:37:37:939866 | info     | App | LayerExample::OnUpdate()
-05:37:37:956508 | info     | App | LayerExample::OnUpdate()
-05:37:37:973232 | info     | App | LayerExample::OnUpdate()
-05:37:37:989917 | info     | App | LayerExample::OnUpdate()
-05:37:38:006551 | info     | App | LayerExample::OnUpdate()
-05:37:38:023252 | info     | App | LayerExample::OnUpdate()
-05:37:38:039938 | info     | App | LayerExample::OnUpdate()
-05:37:38:057470 | info     | App | LayerExample::OnUpdate()
-05:37:38:073910 | info     | App | LayerExample::OnUpdate()
-05:37:38:090013 | info     | App | LayerExample::OnUpdate()
-05:37:38:106641 | info     | App | LayerExample::OnUpdate()
-05:37:38:123489 | info     | App | LayerExample::OnUpdate()
-05:37:38:140120 | info     | App | LayerExample::OnUpdate()
-05:37:38:156722 | info     | App | LayerExample::OnUpdate()
-05:37:38:173407 | info     | App | LayerExample::OnUpdate()
-05:37:38:190143 | info     | App | LayerExample::OnUpdate()
-05:37:38:206693 | info     | App | LayerExample::OnUpdate()
-05:37:38:223382 | info     | App | LayerExample::OnUpdate()
-05:37:38:240135 | info     | App | LayerExample::OnUpdate()
-05:37:38:256806 | info     | App | LayerExample::OnUpdate()
-05:37:38:274257 | info     | App | LayerExample::OnUpdate()
-05:37:38:290743 | info     | App | LayerExample::OnUpdate()
-05:37:38:306817 | info     | App | LayerExample::OnUpdate()
-05:37:38:323562 | info     | App | LayerExample::OnUpdate()
-05:37:38:340270 | info     | App | LayerExample::OnUpdate()
-05:37:38:356867 | info     | App | LayerExample::OnUpdate()
-05:37:38:373544 | info     | App | LayerExample::OnUpdate()
-05:37:38:390248 | info     | App | LayerExample::OnUpdate()
-05:37:38:406861 | info     | App | LayerExample::OnUpdate()
-05:37:38:423546 | info     | App | LayerExample::OnUpdate()
-05:37:38:440224 | info     | App | LayerExample::OnUpdate()
-05:37:38:456905 | info     | App | LayerExample::OnUpdate()
-05:37:38:473592 | info     | App | LayerExample::OnUpdate()
-05:37:38:491161 | info     | App | LayerExample::OnUpdate()
-05:37:38:507827 | info     | App | LayerExample::OnUpdate()
-05:37:38:523885 | info     | App | LayerExample::OnUpdate()
-05:37:38:540430 | info     | App | LayerExample::OnUpdate()
-05:37:38:557057 | info     | App | LayerExample::OnUpdate()
-05:37:38:573750 | info     | App | LayerExample::OnUpdate()
-05:37:38:590459 | info     | App | LayerExample::OnUpdate()
-05:37:38:607131 | info     | App | LayerExample::OnUpdate()
-05:37:38:623921 | info     | App | LayerExample::OnUpdate()
-05:37:38:640455 | info     | App | LayerExample::OnUpdate()
-05:37:38:657141 | info     | App | LayerExample::OnUpdate()
-05:37:38:673752 | info     | App | LayerExample::OnUpdate()
-05:37:38:690480 | info     | App | LayerExample::OnUpdate()
-05:37:38:708269 | info     | App | LayerExample::OnUpdate()
-05:37:38:723900 | info     | App | LayerExample::OnUpdate()
-05:37:38:741132 | info     | App | LayerExample::OnUpdate()
-05:37:38:757799 | info     | App | LayerExample::OnUpdate()
-05:37:38:774001 | info     | App | LayerExample::OnUpdate()
-05:37:38:790713 | info     | App | LayerExample::OnUpdate()
-05:37:38:807267 | info     | App | LayerExample::OnUpdate()
-05:37:38:823891 | info     | App | LayerExample::OnUpdate()
-05:37:38:840602 | info     | App | LayerExample::OnUpdate()
-05:37:38:857299 | info     | App | LayerExample::OnUpdate()
-05:37:38:874178 | info     | App | LayerExample::OnUpdate()
-05:37:38:890607 | info     | App | LayerExample::OnUpdate()
-05:37:38:907333 | info     | App | LayerExample::OnUpdate()
-05:37:38:924845 | info     | App | LayerExample::OnUpdate()
-05:37:38:941334 | info     | App | LayerExample::OnUpdate()
-05:37:38:957702 | info     | App | LayerExample::OnUpdate()
-05:37:38:974004 | info     | App | LayerExample::OnUpdate()
-05:37:38:991003 | info     | App | LayerExample::OnUpdate()
-05:37:39:007428 | info     | App | LayerExample::OnUpdate()
-05:37:39:024115 | info     | App | LayerExample::OnUpdate()
-05:37:39:040785 | info     | App | LayerExample::OnUpdate()
-05:37:39:057442 | info     | App | LayerExample::OnUpdate()
-05:37:39:074136 | info     | App | LayerExample::OnUpdate()
-05:37:39:090743 | info     | App | LayerExample::OnUpdate()
-05:37:39:107427 | info     | App | LayerExample::OnUpdate()
-05:37:39:125582 | info     | App | LayerExample::OnUpdate()
-05:37:39:141127 | info     | App | LayerExample::OnUpdate()
-05:37:39:157631 | info     | App | LayerExample::OnUpdate()
-05:37:39:174946 | info     | App | LayerExample::OnUpdate()
-05:37:39:191050 | info     | App | LayerExample::OnUpdate()
-05:37:39:207573 | info     | App | LayerExample::OnUpdate()
-05:37:39:224389 | info     | App | LayerExample::OnUpdate()
-05:37:39:240949 | info     | App | LayerExample::OnUpdate()
-05:37:39:257608 | info     | App | LayerExample::OnUpdate()
-05:37:39:274268 | info     | App | LayerExample::OnUpdate()
-05:37:39:290958 | info     | App | LayerExample::OnUpdate()
-05:37:39:307655 | info     | App | LayerExample::OnUpdate()
-05:37:39:324350 | info     | App | LayerExample::OnUpdate()
-05:37:39:341822 | info     | App | LayerExample::OnUpdate()
-05:37:39:357858 | info     | App | LayerExample::OnUpdate()
-05:37:39:374495 | info     | App | LayerExample::OnUpdate()
-05:37:39:391521 | info     | App | LayerExample::OnUpdate()
-05:37:39:407955 | info     | App | LayerExample::OnUpdate()
-05:37:39:424493 | info     | App | LayerExample::OnUpdate()
-05:37:39:441052 | info     | App | LayerExample::OnUpdate()
-05:37:39:457747 | info     | App | LayerExample::OnUpdate()
-05:37:39:474493 | info     | App | LayerExample::OnUpdate()
-05:37:39:491094 | info     | App | LayerExample::OnUpdate()
-05:37:39:507767 | info     | App | LayerExample::OnUpdate()
-05:37:39:524437 | info     | App | LayerExample::OnUpdate()
-05:37:39:542129 | info     | App | LayerExample::OnUpdate()
-05:37:39:558568 | info     | App | LayerExample::OnUpdate()
-05:37:39:574548 | info     | App | LayerExample::OnUpdate()
-05:37:39:591447 | info     | App | LayerExample::OnUpdate()
-05:37:39:607929 | info     | App | LayerExample::OnUpdate()
-05:37:39:624607 | info     | App | LayerExample::OnUpdate()
-05:37:39:641279 | info     | App | LayerExample::OnUpdate()
-05:37:39:657959 | info     | App | LayerExample::OnUpdate()
-05:37:39:674652 | info     | App | LayerExample::OnUpdate()
-05:37:39:691307 | info     | App | LayerExample::OnUpdate()
-05:37:39:708067 | info     | App | LayerExample::OnUpdate()
-05:37:39:724605 | info     | App | LayerExample::OnUpdate()
-05:37:39:741274 | info     | App | LayerExample::OnUpdate()
-05:37:39:758826 | info     | App | LayerExample::OnUpdate()
-05:37:39:775275 | info     | App | LayerExample::OnUpdate()
-05:37:39:791470 | info     | App | LayerExample::OnUpdate()
-05:37:39:808099 | info     | App | LayerExample::OnUpdate()
-05:37:39:824816 | info     | App | LayerExample::OnUpdate()
-05:37:39:841540 | info     | App | LayerExample::OnUpdate()
-05:37:39:858309 | info     | App | LayerExample::OnUpdate()
-05:37:39:874861 | info     | App | LayerExample::OnUpdate()
-05:37:39:891445 | info     | App | LayerExample::OnUpdate()
-05:37:39:908155 | info     | App | LayerExample::OnUpdate()
-05:37:39:924838 | info     | App | LayerExample::OnUpdate()
-05:37:39:941492 | info     | App | LayerExample::OnUpdate()
-05:37:39:958130 | info     | App | LayerExample::OnUpdate()
-05:37:39:976131 | info     | App | LayerExample::OnUpdate()
-05:37:39:992370 | info     | App | LayerExample::OnUpdate()
-05:37:40:008305 | info     | App | LayerExample::OnUpdate()
-05:37:40:025023 | info     | App | LayerExample::OnUpdate()
-05:37:40:041737 | info     | App | LayerExample::OnUpdate()
-05:37:40:058297 | info     | App | LayerExample::OnUpdate()
-05:37:40:074921 | info     | App | LayerExample::OnUpdate()
-05:37:40:091667 | info     | App | LayerExample::OnUpdate()
-05:37:40:108285 | info     | App | LayerExample::OnUpdate()
-05:37:40:124961 | info     | App | LayerExample::OnUpdate()
-05:37:40:141802 | info     | App | LayerExample::OnUpdate()
-05:37:40:158295 | info     | App | LayerExample::OnUpdate()
-05:37:40:175053 | info     | App | LayerExample::OnUpdate()
-05:37:40:192438 | info     | App | LayerExample::OnUpdate()
-05:37:40:209026 | info     | App | LayerExample::OnUpdate()
-05:37:40:225296 | info     | App | LayerExample::OnUpdate()
-05:37:40:241891 | info     | App | LayerExample::OnUpdate()
-05:37:40:258437 | info     | App | LayerExample::OnUpdate()
-05:37:40:275189 | info     | App | LayerExample::OnUpdate()
-05:37:40:291781 | info     | App | LayerExample::OnUpdate()
-05:37:40:308428 | info     | App | LayerExample::OnUpdate()
-05:37:40:325165 | info     | App | LayerExample::OnUpdate()
-05:37:40:341808 | info     | App | LayerExample::OnUpdate()
-05:37:40:358708 | info     | App | LayerExample::OnUpdate()
-05:37:40:375176 | info     | App | LayerExample::OnUpdate()
-05:37:40:392667 | info     | App | LayerExample::OnUpdate()
-05:37:40:409249 | info     | App | LayerExample::OnUpdate()
-05:37:40:425304 | info     | App | LayerExample::OnUpdate()
-05:37:40:441961 | info     | App | LayerExample::OnUpdate()
-05:37:40:458604 | info     | App | LayerExample::OnUpdate()
-05:37:40:475345 | info     | App | LayerExample::OnUpdate()
-05:37:40:491993 | info     | App | LayerExample::OnUpdate()
-05:37:40:508648 | info     | App | LayerExample::OnUpdate()
-05:37:40:525341 | info     | App | LayerExample::OnUpdate()
-05:37:40:541977 | info     | App | LayerExample::OnUpdate()
-05:37:40:558638 | info     | App | LayerExample::OnUpdate()
-05:37:40:575364 | info     | App | LayerExample::OnUpdate()
-05:37:40:593058 | info     | App | LayerExample::OnUpdate()
-05:37:40:609333 | info     | App | LayerExample::OnUpdate()
-05:37:40:625400 | info     | App | LayerExample::OnUpdate()
-05:37:40:642104 | info     | App | LayerExample::OnUpdate()
-05:37:40:658801 | info     | App | LayerExample::OnUpdate()
-05:37:40:675467 | info     | App | LayerExample::OnUpdate()
-05:37:40:692116 | info     | App | LayerExample::OnUpdate()
-05:37:40:708847 | info     | App | LayerExample::OnUpdate()
-05:37:40:725480 | info     | App | LayerExample::OnUpdate()
-05:37:40:742371 | info     | App | LayerExample::OnUpdate()
-05:37:40:758880 | info     | App | LayerExample::OnUpdate()
-05:37:40:775536 | info     | App | LayerExample::OnUpdate()
-05:37:40:793146 | info     | App | LayerExample::OnUpdate()
-05:37:40:809687 | info     | App | LayerExample::OnUpdate()
-05:37:40:825578 | info     | App | LayerExample::OnUpdate()
-05:37:40:842331 | info     | App | LayerExample::OnUpdate()
-05:37:40:859037 | info     | App | LayerExample::OnUpdate()
-05:37:40:875668 | info     | App | LayerExample::OnUpdate()
-05:37:40:892302 | info     | App | LayerExample::OnUpdate()
-05:37:40:908943 | info     | App | LayerExample::OnUpdate()
-05:37:40:925620 | info     | App | LayerExample::OnUpdate()
-05:37:40:942321 | info     | App | LayerExample::OnUpdate()
-05:37:40:959052 | info     | App | LayerExample::OnUpdate()
-05:37:40:975679 | info     | App | LayerExample::OnUpdate()
-05:37:40:992393 | info     | App | LayerExample::OnUpdate()
-05:37:41:009880 | info     | App | LayerExample::OnUpdate()
-05:37:41:026365 | info     | App | LayerExample::OnUpdate()
-05:37:41:042443 | info     | App | LayerExample::OnUpdate()
-05:37:41:059148 | info     | App | LayerExample::OnUpdate()
-05:37:41:075780 | info     | App | LayerExample::OnUpdate()
-05:37:41:092597 | info     | App | LayerExample::OnUpdate()
-05:37:41:109205 | info     | App | LayerExample::OnUpdate()
-05:37:41:125820 | info     | App | LayerExample::OnUpdate()
-05:37:41:142444 | info     | App | LayerExample::OnUpdate()
-05:37:41:159190 | info     | App | LayerExample::OnUpdate()
-05:37:41:175841 | info     | App | LayerExample::OnUpdate()
-05:37:41:192529 | info     | App | LayerExample::OnUpdate()
-05:37:41:209217 | info     | App | LayerExample::OnUpdate()
-05:37:41:226767 | info     | App | LayerExample::OnUpdate()
-05:37:41:243508 | info     | App | LayerExample::OnUpdate()
-05:37:41:259408 | info     | App | LayerExample::OnUpdate()
-05:37:41:276052 | info     | App | LayerExample::OnUpdate()
-05:37:41:292602 | info     | App | LayerExample::OnUpdate()
-05:37:41:309352 | info     | App | LayerExample::OnUpdate()
-05:37:41:326011 | info     | App | LayerExample::OnUpdate()
-05:37:41:342667 | info     | App | LayerExample::OnUpdate()
-05:37:41:359353 | info     | App | LayerExample::OnUpdate()
-05:37:41:376051 | info     | App | LayerExample::OnUpdate()
-05:37:41:392664 | info     | App | LayerExample::OnUpdate()
-05:37:41:409362 | info     | App | LayerExample::OnUpdate()
-05:37:41:426963 | info     | App | LayerExample::OnUpdate()
-05:37:41:443331 | info     | App | LayerExample::OnUpdate()
-05:37:41:459443 | info     | App | LayerExample::OnUpdate()
-05:37:41:476117 | info     | App | LayerExample::OnUpdate()
-05:37:41:492798 | info     | App | LayerExample::OnUpdate()
-05:37:41:509527 | info     | App | LayerExample::OnUpdate()
-05:37:41:526216 | info     | App | LayerExample::OnUpdate()
-05:37:41:542817 | info     | App | LayerExample::OnUpdate()
-05:37:41:559498 | info     | App | LayerExample::OnUpdate()
-05:37:41:576225 | info     | App | LayerExample::OnUpdate()
-05:37:41:592858 | info     | App | LayerExample::OnUpdate()
-05:37:41:609545 | info     | App | LayerExample::OnUpdate()
-05:37:41:626218 | info     | App | LayerExample::OnUpdate()
-05:37:41:643772 | info     | App | LayerExample::OnUpdate()
-05:37:41:659658 | info     | App | LayerExample::OnUpdate()
-05:37:41:676280 | info     | App | LayerExample::OnUpdate()
-05:37:41:692952 | info     | App | LayerExample::OnUpdate()
-05:37:41:709739 | info     | App | LayerExample::OnUpdate()
-05:37:41:726297 | info     | App | LayerExample::OnUpdate()
-05:37:41:743108 | info     | App | LayerExample::OnUpdate()
-05:37:41:759643 | info     | App | LayerExample::OnUpdate()
-05:37:41:776341 | info     | App | LayerExample::OnUpdate()
-05:37:41:793063 | info     | App | LayerExample::OnUpdate()
-05:37:41:809701 | info     | App | LayerExample::OnUpdate()
-05:37:41:826355 | info     | App | LayerExample::OnUpdate()
-05:37:41:843039 | info     | App | LayerExample::OnUpdate()
-05:37:41:859835 | info     | App | LayerExample::OnUpdate()
-05:37:41:876610 | info     | App | LayerExample::OnUpdate()
-05:37:41:893171 | info     | App | LayerExample::OnUpdate()
-05:37:41:909887 | info     | App | LayerExample::OnUpdate()
-05:37:41:926551 | info     | App | LayerExample::OnUpdate()
-05:37:41:943205 | info     | App | LayerExample::OnUpdate()
-05:37:41:959817 | info     | App | LayerExample::OnUpdate()
-05:37:41:976540 | info     | App | LayerExample::OnUpdate()
-05:37:41:993270 | info     | App | LayerExample::OnUpdate()
-05:37:42:009885 | info     | App | LayerExample::OnUpdate()
-05:37:42:026580 | info     | App | LayerExample::OnUpdate()
-05:37:42:043241 | info     | App | LayerExample::OnUpdate()
-05:37:42:060860 | info     | App | LayerExample::OnUpdate()
-05:37:42:077213 | info     | App | LayerExample::OnUpdate()
-05:37:42:093279 | info     | App | LayerExample::OnUpdate()
-05:37:42:109959 | info     | App | LayerExample::OnUpdate()
-05:37:42:126852 | info     | App | LayerExample::OnUpdate()
-05:37:42:143336 | info     | App | LayerExample::OnUpdate()
-05:37:42:160032 | info     | App | LayerExample::OnUpdate()
-05:37:42:176692 | info     | App | LayerExample::OnUpdate()
-05:37:42:193516 | info     | App | LayerExample::OnUpdate()
-05:37:42:210086 | info     | App | LayerExample::OnUpdate()
-05:37:42:226798 | info     | App | LayerExample::OnUpdate()
-05:37:42:243399 | info     | App | LayerExample::OnUpdate()
-05:37:42:260823 | info     | App | LayerExample::OnUpdate()
-05:37:42:277180 | info     | App | LayerExample::OnUpdate()
-05:37:42:293451 | info     | App | LayerExample::OnUpdate()
-05:37:42:310145 | info     | App | LayerExample::OnUpdate()
-05:37:42:326832 | info     | App | LayerExample::OnUpdate()
-05:37:42:343464 | info     | App | LayerExample::OnUpdate()
-05:37:42:360183 | info     | App | LayerExample::OnUpdate()
-05:37:42:376790 | info     | App | LayerExample::OnUpdate()
-05:37:42:393632 | info     | App | LayerExample::OnUpdate()
-05:37:42:410348 | info     | App | LayerExample::OnUpdate()
-05:37:42:426955 | info     | App | LayerExample::OnUpdate()
-05:37:42:443536 | info     | App | LayerExample::OnUpdate()
-05:37:42:460295 | info     | App | LayerExample::OnUpdate()
-05:37:42:477746 | info     | App | LayerExample::OnUpdate()
-05:37:42:494225 | info     | App | LayerExample::OnUpdate()
-05:37:42:510305 | info     | App | LayerExample::OnUpdate()
-05:37:42:527014 | info     | App | LayerExample::OnUpdate()
-05:37:42:543645 | info     | App | LayerExample::OnUpdate()
-05:37:42:560357 | info     | App | LayerExample::OnUpdate()
-05:37:42:577055 | info     | App | LayerExample::OnUpdate()
-05:37:42:593650 | info     | App | LayerExample::OnUpdate()
-05:37:42:610503 | info     | App | LayerExample::OnUpdate()
-05:37:42:627113 | info     | App | LayerExample::OnUpdate()
-05:37:42:643989 | info     | App | LayerExample::OnUpdate()
-05:37:42:660427 | info     | App | LayerExample::OnUpdate()
-05:37:42:677146 | info     | App | LayerExample::OnUpdate()
-05:37:42:694461 | info     | App | LayerExample::OnUpdate()
-05:37:42:711213 | info     | App | LayerExample::OnUpdate()
-05:37:42:727393 | info     | App | LayerExample::OnUpdate()
-05:37:42:743821 | info     | App | LayerExample::OnUpdate()
-05:37:42:760479 | info     | App | LayerExample::OnUpdate()
-05:37:42:777207 | info     | App | LayerExample::OnUpdate()
-05:37:42:794122 | info     | App | LayerExample::OnUpdate()
-05:37:42:810574 | info     | App | LayerExample::OnUpdate()
-05:37:42:827258 | info     | App | LayerExample::OnUpdate()
-05:37:42:843906 | info     | App | LayerExample::OnUpdate()
-05:37:42:860770 | info     | App | LayerExample::OnUpdate()
-05:37:42:877554 | info     | App | LayerExample::OnUpdate()
-05:37:42:894743 | info     | App | LayerExample::OnUpdate()
-05:37:42:911473 | info     | App | LayerExample::OnUpdate()
-05:37:42:927406 | info     | App | LayerExample::OnUpdate()
-05:37:42:944011 | info     | App | LayerExample::OnUpdate()
-05:37:42:960646 | info     | App | LayerExample::OnUpdate()
-05:37:42:977384 | info     | App | LayerExample::OnUpdate()
-05:37:42:994035 | info     | App | LayerExample::OnUpdate()
-05:37:43:010713 | info     | App | LayerExample::OnUpdate()
-05:37:43:027339 | info     | App | LayerExample::OnUpdate()
-05:37:43:044071 | info     | App | LayerExample::OnUpdate()
-05:37:43:060768 | info     | App | LayerExample::OnUpdate()
-05:37:43:077516 | info     | App | LayerExample::OnUpdate()
-05:37:43:094157 | info     | App | LayerExample::OnUpdate()
-05:37:43:111587 | info     | App | LayerExample::OnUpdate()
-05:37:43:128109 | info     | App | LayerExample::OnUpdate()
-05:37:43:144170 | info     | App | LayerExample::OnUpdate()
-05:37:43:160842 | info     | App | LayerExample::OnUpdate()
-05:37:43:177529 | info     | App | LayerExample::OnUpdate()
-05:37:43:194173 | info     | App | LayerExample::OnUpdate()
-05:37:43:210828 | info     | App | LayerExample::OnUpdate()
-05:37:43:227528 | info     | App | LayerExample::OnUpdate()
-05:37:43:244225 | info     | App | LayerExample::OnUpdate()
-05:37:43:261046 | info     | App | LayerExample::OnUpdate()
-05:37:43:277612 | info     | App | LayerExample::OnUpdate()
-05:37:43:294324 | info     | App | LayerExample::OnUpdate()
-05:37:43:311645 | info     | App | LayerExample::OnUpdate()
-05:37:43:327559 | info     | App | LayerExample::OnUpdate()
-05:37:43:345000 | info     | App | LayerExample::OnUpdate()
-05:37:43:361013 | info     | App | LayerExample::OnUpdate()
-05:37:43:377645 | info     | App | LayerExample::OnUpdate()
-05:37:43:394332 | info     | App | LayerExample::OnUpdate()
-05:37:43:411131 | info     | App | LayerExample::OnUpdate()
-05:37:43:427790 | info     | App | LayerExample::OnUpdate()
-05:37:43:444405 | info     | App | LayerExample::OnUpdate()
-05:37:43:461122 | info     | App | LayerExample::OnUpdate()
-05:37:43:477726 | info     | App | LayerExample::OnUpdate()
-05:37:43:494468 | info     | App | LayerExample::OnUpdate()
-05:37:43:511163 | info     | App | LayerExample::OnUpdate()
-05:37:43:527767 | info     | App | LayerExample::OnUpdate()
-05:37:43:544638 | info     | App | LayerExample::OnUpdate()
-05:37:43:561181 | info     | App | LayerExample::OnUpdate()
-05:37:43:577810 | info     | App | LayerExample::OnUpdate()
-05:37:43:594478 | info     | App | LayerExample::OnUpdate()
-05:37:43:611193 | info     | App | LayerExample::OnUpdate()
-05:37:43:627832 | info     | App | LayerExample::OnUpdate()
-05:37:43:644562 | info     | App | LayerExample::OnUpdate()
-05:37:43:661261 | info     | App | LayerExample::OnUpdate()
-05:37:43:677923 | info     | App | LayerExample::OnUpdate()
-05:37:43:694642 | info     | App | LayerExample::OnUpdate()
-05:37:43:711410 | info     | App | LayerExample::OnUpdate()
-05:37:43:728065 | info     | App | LayerExample::OnUpdate()
-05:37:43:745597 | info     | App | LayerExample::OnUpdate()
-05:37:43:761374 | info     | App | LayerExample::OnUpdate()
-05:37:43:778230 | info     | App | LayerExample::OnUpdate()
-05:37:43:794671 | info     | App | LayerExample::OnUpdate()
-05:37:43:811342 | info     | App | LayerExample::OnUpdate()
-05:37:43:828061 | info     | App | LayerExample::OnUpdate()
-05:37:43:844686 | info     | App | LayerExample::OnUpdate()
-05:37:43:861755 | info     | App | LayerExample::OnUpdate()
-05:37:43:878149 | info     | App | LayerExample::OnUpdate()
-05:37:43:894828 | info     | App | LayerExample::OnUpdate()
-05:37:43:911439 | info     | App | LayerExample::OnUpdate()
-05:37:43:928158 | info     | App | LayerExample::OnUpdate()
-05:37:43:945593 | info     | App | LayerExample::OnUpdate()
-05:37:43:961834 | info     | App | LayerExample::OnUpdate()
-05:37:43:978208 | info     | App | LayerExample::OnUpdate()
-05:37:43:994872 | info     | App | LayerExample::OnUpdate()
-05:37:44:011495 | info     | App | LayerExample::OnUpdate()
-05:37:44:028261 | info     | App | LayerExample::OnUpdate()
-05:37:44:044933 | info     | App | LayerExample::OnUpdate()
-05:37:44:061565 | info     | App | LayerExample::OnUpdate()
-05:37:44:078257 | info     | App | LayerExample::OnUpdate()
-05:37:44:095012 | info     | App | LayerExample::OnUpdate()
-05:37:44:111745 | info     | App | LayerExample::OnUpdate()
-05:37:44:128277 | info     | App | LayerExample::OnUpdate()
-05:37:44:144998 | info     | App | LayerExample::OnUpdate()
-05:37:44:162352 | info     | App | LayerExample::OnUpdate()
-05:37:44:178992 | info     | App | LayerExample::OnUpdate()
-05:37:44:195327 | info     | App | LayerExample::OnUpdate()
-05:37:44:211708 | info     | App | LayerExample::OnUpdate()
-05:37:44:228563 | info     | App | LayerExample::OnUpdate()
-05:37:44:245110 | info     | App | LayerExample::OnUpdate()
-05:37:44:261710 | info     | App | LayerExample::OnUpdate()
-05:37:44:278434 | info     | App | LayerExample::OnUpdate()
-05:37:44:295211 | info     | App | LayerExample::OnUpdate()
-05:37:44:311899 | info     | App | LayerExample::OnUpdate()
-05:37:44:328538 | info     | App | LayerExample::OnUpdate()
-05:37:44:345220 | info     | App | LayerExample::OnUpdate()
-05:37:44:362542 | info     | App | LayerExample::OnUpdate()
-05:37:44:379080 | info     | App | LayerExample::OnUpdate()
-05:37:44:395200 | info     | App | LayerExample::OnUpdate()
-05:37:44:411853 | info     | App | LayerExample::OnUpdate()
-05:37:44:428530 | info     | App | LayerExample::OnUpdate()
-05:37:44:445194 | info     | App | LayerExample::OnUpdate()
-05:37:44:461880 | info     | App | LayerExample::OnUpdate()
-05:37:44:478555 | info     | App | LayerExample::OnUpdate()
-05:37:44:495334 | info     | App | LayerExample::OnUpdate()
-05:37:44:512077 | info     | App | LayerExample::OnUpdate()
-05:37:44:528663 | info     | App | LayerExample::OnUpdate()
-05:37:44:545363 | info     | App | LayerExample::OnUpdate()
-05:37:44:562039 | info     | App | LayerExample::OnUpdate()
-05:37:44:579412 | info     | App | LayerExample::OnUpdate()
-05:37:44:595936 | info     | App | LayerExample::OnUpdate()
-05:37:44:612059 | info     | App | LayerExample::OnUpdate()
-05:37:44:628686 | info     | App | LayerExample::OnUpdate()
-05:37:44:645382 | info     | App | LayerExample::OnUpdate()
-05:37:44:662107 | info     | App | LayerExample::OnUpdate()
-05:37:44:678929 | info     | App | LayerExample::OnUpdate()
-05:37:44:695428 | info     | App | LayerExample::OnUpdate()
-05:37:44:712122 | info     | App | LayerExample::OnUpdate()
-05:37:44:728823 | info     | App | LayerExample::OnUpdate()
-05:37:44:745482 | info     | App | LayerExample::OnUpdate()
-05:37:44:762180 | info     | App | LayerExample::OnUpdate()
-05:37:44:778857 | info     | App | LayerExample::OnUpdate()
-05:37:44:795591 | info     | App | LayerExample::OnUpdate()
-05:37:44:812217 | info     | App | LayerExample::OnUpdate()
-05:37:44:828852 | info     | App | LayerExample::OnUpdate()
-05:37:44:845507 | info     | App | LayerExample::OnUpdate()
-05:37:44:862286 | info     | App | LayerExample::OnUpdate()
-05:37:44:878870 | info     | App | LayerExample::OnUpdate()
-05:37:44:895573 | info     | App | LayerExample::OnUpdate()
-05:37:44:912264 | info     | App | LayerExample::OnUpdate()
-05:37:44:928921 | info     | App | LayerExample::OnUpdate()
-05:37:44:945638 | info     | App | LayerExample::OnUpdate()
-05:37:44:962366 | info     | App | LayerExample::OnUpdate()
-05:37:44:978961 | info     | App | LayerExample::OnUpdate()
-05:37:44:996517 | info     | App | LayerExample::OnUpdate()
-05:37:45:013043 | info     | App | LayerExample::OnUpdate()
-05:37:45:029092 | info     | App | LayerExample::OnUpdate()
-05:37:45:045728 | info     | App | LayerExample::OnUpdate()
-05:37:45:062352 | info     | App | LayerExample::OnUpdate()
-05:37:45:079087 | info     | App | LayerExample::OnUpdate()
-05:37:45:095781 | info     | App | LayerExample::OnUpdate()
-05:37:45:112454 | info     | App | LayerExample::OnUpdate()
-05:37:45:129173 | info     | App | LayerExample::OnUpdate()
-05:37:45:145808 | info     | App | LayerExample::OnUpdate()
-05:37:45:162495 | info     | App | LayerExample::OnUpdate()
-05:37:45:179225 | info     | App | LayerExample::OnUpdate()
-05:37:45:195797 | info     | App | LayerExample::OnUpdate()
-05:37:45:212774 | info     | App | LayerExample::OnUpdate()
-05:37:45:229278 | info     | App | LayerExample::OnUpdate()
-05:37:45:246547 | info     | App | LayerExample::OnUpdate()
-05:37:45:262649 | info     | App | LayerExample::OnUpdate()
-05:37:45:279254 | info     | App | LayerExample::OnUpdate()
-05:37:45:296180 | info     | App | LayerExample::OnUpdate()
-05:37:45:312584 | info     | App | LayerExample::OnUpdate()
-05:37:45:329289 | info     | App | LayerExample::OnUpdate()
-05:37:45:346008 | info     | App | LayerExample::OnUpdate()
-05:37:45:362843 | info     | App | LayerExample::OnUpdate()
-05:37:45:379359 | info     | App | LayerExample::OnUpdate()
-05:37:45:396042 | info     | App | LayerExample::OnUpdate()
-05:37:45:413565 | info     | App | LayerExample::OnUpdate()
-05:37:45:430192 | info     | App | LayerExample::OnUpdate()
-05:37:45:446257 | info     | App | LayerExample::OnUpdate()
-05:37:45:463252 | info     | App | LayerExample::OnUpdate()
-05:37:45:479443 | info     | App | LayerExample::OnUpdate()
-05:37:45:496289 | info     | App | LayerExample::OnUpdate()
-05:37:45:512789 | info     | App | LayerExample::OnUpdate()
-05:37:45:529489 | info     | App | LayerExample::OnUpdate()
-05:37:45:546208 | info     | App | LayerExample::OnUpdate()
-05:37:45:562925 | info     | App | LayerExample::OnUpdate()
-05:37:45:579759 | info     | App | LayerExample::OnUpdate()
-05:37:45:596248 | info     | App | LayerExample::OnUpdate()
-05:37:45:614052 | info     | App | LayerExample::OnUpdate()
-05:37:45:629974 | info     | App | LayerExample::OnUpdate()
-05:37:45:647118 | info     | App | LayerExample::OnUpdate()
-05:37:45:662966 | info     | App | LayerExample::OnUpdate()
-05:37:45:679567 | info     | App | LayerExample::OnUpdate()
-05:37:45:696216 | info     | App | LayerExample::OnUpdate()
-05:37:45:712925 | info     | App | LayerExample::OnUpdate()
-05:37:45:729615 | info     | App | LayerExample::OnUpdate()
-05:37:45:746314 | info     | App | LayerExample::OnUpdate()
-05:37:45:763041 | info     | App | LayerExample::OnUpdate()
-05:37:45:779655 | info     | App | LayerExample::OnUpdate()
-05:37:45:796395 | info     | App | LayerExample::OnUpdate()
-05:37:45:813088 | info     | App | LayerExample::OnUpdate()
-05:37:45:829811 | info     | App | LayerExample::OnUpdate()
-05:37:45:846416 | info     | App | LayerExample::OnUpdate()
-05:37:45:863107 | info     | App | LayerExample::OnUpdate()
-05:37:45:880176 | info     | App | LayerExample::OnUpdate()
-05:37:45:896577 | info     | App | LayerExample::OnUpdate()
-05:37:45:913179 | info     | App | LayerExample::OnUpdate()
-05:37:45:929732 | info     | App | LayerExample::OnUpdate()
-05:37:45:946464 | info     | App | LayerExample::OnUpdate()
-05:37:45:963158 | info     | App | LayerExample::OnUpdate()
-05:37:45:979853 | info     | App | LayerExample::OnUpdate()
-05:37:45:996524 | info     | App | LayerExample::OnUpdate()
-05:37:46:013316 | info     | App | LayerExample::OnUpdate()
-05:37:46:029956 | info     | App | LayerExample::OnUpdate()
-05:37:46:046622 | info     | App | LayerExample::OnUpdate()
-05:37:46:063322 | info     | App | LayerExample::OnUpdate()
-05:37:46:079945 | info     | App | LayerExample::OnUpdate()
-05:37:46:096560 | info     | App | LayerExample::OnUpdate()
-05:37:46:097335 | trace    | FE  | NEW EVENT: KeyPressedEvent: 49 (0 repeats)
-05:37:46:097583 | trace    | FE  | NEW EVENT: KeyTypedEvent: 49
-05:37:46:113272 | info     | App | LayerExample::OnUpdate()
-05:37:46:113711 | trace    | App | KeyPressedEvent: 49 (0 repeats)
-05:37:46:113936 | trace    | App | KeyTypedEvent: 49
-05:37:46:114237 | debug    | FE  | Events dispached!
-05:37:46:130037 | info     | App | LayerExample::OnUpdate()
-05:37:46:146664 | info     | App | LayerExample::OnUpdate()
-05:37:46:147173 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 49
-05:37:46:163321 | info     | App | LayerExample::OnUpdate()
-05:37:46:164022 | trace    | App | KeyReleasedEvent: 49
-05:37:46:164372 | debug    | FE  | Events dispached!
-05:37:46:180001 | info     | App | LayerExample::OnUpdate()
-05:37:46:196694 | info     | App | LayerExample::OnUpdate()
-05:37:46:213537 | info     | App | LayerExample::OnUpdate()
-05:37:46:230020 | info     | App | LayerExample::OnUpdate()
-05:37:46:247405 | info     | App | LayerExample::OnUpdate()
-05:37:46:263487 | info     | App | LayerExample::OnUpdate()
-05:37:46:280762 | info     | App | LayerExample::OnUpdate()
-05:37:46:296774 | info     | App | LayerExample::OnUpdate()
-05:37:46:313421 | info     | App | LayerExample::OnUpdate()
-05:37:46:330157 | info     | App | LayerExample::OnUpdate()
-05:37:46:346858 | info     | App | LayerExample::OnUpdate()
-05:37:46:363487 | info     | App | LayerExample::OnUpdate()
-05:37:46:380190 | info     | App | LayerExample::OnUpdate()
-05:37:46:380681 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:46:396862 | info     | App | LayerExample::OnUpdate()
-05:37:46:397224 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:46:397486 | debug    | FE  | Events dispached!
-05:37:46:413551 | info     | App | LayerExample::OnUpdate()
-05:37:46:430274 | info     | App | LayerExample::OnUpdate()
-05:37:46:446969 | info     | App | LayerExample::OnUpdate()
-05:37:46:464427 | info     | App | LayerExample::OnUpdate()
-05:37:46:480858 | info     | App | LayerExample::OnUpdate()
-05:37:46:496943 | info     | App | LayerExample::OnUpdate()
-05:37:46:497593 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:46:513635 | info     | App | LayerExample::OnUpdate()
-05:37:46:514015 | trace    | App | KeyReleasedEvent: 256
-05:37:46:514196 | debug    | FE  | Events dispached!
-05:37:46:530294 | info     | App | LayerExample::OnUpdate()
-05:37:46:547008 | info     | App | LayerExample::OnUpdate()
-05:37:46:563646 | info     | App | LayerExample::OnUpdate()
-05:37:46:580301 | info     | App | LayerExample::OnUpdate()
-05:37:46:597026 | info     | App | LayerExample::OnUpdate()
-05:37:46:613850 | info     | App | LayerExample::OnUpdate()
-05:37:46:630434 | info     | App | LayerExample::OnUpdate()
-05:37:46:647140 | info     | App | LayerExample::OnUpdate()
-05:37:46:663717 | info     | App | LayerExample::OnUpdate()
-05:37:46:681256 | info     | App | LayerExample::OnUpdate()
-05:37:46:697422 | info     | App | LayerExample::OnUpdate()
-05:37:46:713802 | info     | App | LayerExample::OnUpdate()
-05:37:46:730428 | info     | App | LayerExample::OnUpdate()
-05:37:46:747191 | info     | App | LayerExample::OnUpdate()
-05:37:46:763826 | info     | App | LayerExample::OnUpdate()
-05:37:46:780493 | info     | App | LayerExample::OnUpdate()
-05:37:46:797227 | info     | App | LayerExample::OnUpdate()
-05:37:46:813971 | info     | App | LayerExample::OnUpdate()
-05:37:46:830597 | info     | App | LayerExample::OnUpdate()
-05:37:46:847314 | info     | App | LayerExample::OnUpdate()
-05:37:46:863924 | info     | App | LayerExample::OnUpdate()
-05:37:46:880561 | info     | App | LayerExample::OnUpdate()
-05:37:46:898103 | info     | App | LayerExample::OnUpdate()
-05:37:46:914923 | info     | App | LayerExample::OnUpdate()
-05:37:46:930873 | info     | App | LayerExample::OnUpdate()
-05:37:46:947357 | info     | App | LayerExample::OnUpdate()
-05:37:46:963940 | info     | App | LayerExample::OnUpdate()
-05:37:46:980660 | info     | App | LayerExample::OnUpdate()
-05:37:46:997352 | info     | App | LayerExample::OnUpdate()
-05:37:47:014097 | info     | App | LayerExample::OnUpdate()
-05:37:47:030686 | info     | App | LayerExample::OnUpdate()
-05:37:47:047426 | info     | App | LayerExample::OnUpdate()
-05:37:47:064213 | info     | App | LayerExample::OnUpdate()
-05:37:47:080741 | info     | App | LayerExample::OnUpdate()
-05:37:47:097404 | info     | App | LayerExample::OnUpdate()
-05:37:47:114286 | info     | App | LayerExample::OnUpdate()
-05:37:47:131634 | info     | App | LayerExample::OnUpdate()
-05:37:47:147523 | info     | App | LayerExample::OnUpdate()
-05:37:47:164145 | info     | App | LayerExample::OnUpdate()
-05:37:47:180809 | info     | App | LayerExample::OnUpdate()
-05:37:47:197520 | info     | App | LayerExample::OnUpdate()
-05:37:47:214307 | info     | App | LayerExample::OnUpdate()
-05:37:47:230902 | info     | App | LayerExample::OnUpdate()
-05:37:47:247561 | info     | App | LayerExample::OnUpdate()
-05:37:47:264191 | info     | App | LayerExample::OnUpdate()
-05:37:47:264770 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:47:280874 | info     | App | LayerExample::OnUpdate()
-05:37:47:281328 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:47:281519 | debug    | FE  | Events dispached!
-05:37:47:297555 | info     | App | LayerExample::OnUpdate()
-05:37:47:314264 | info     | App | LayerExample::OnUpdate()
-05:37:47:331862 | info     | App | LayerExample::OnUpdate()
-05:37:47:348243 | info     | App | LayerExample::OnUpdate()
-05:37:47:364304 | info     | App | LayerExample::OnUpdate()
-05:37:47:381006 | info     | App | LayerExample::OnUpdate()
-05:37:47:381688 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:47:397672 | info     | App | LayerExample::OnUpdate()
-05:37:47:398045 | trace    | App | KeyReleasedEvent: 256
-05:37:47:398221 | debug    | FE  | Events dispached!
-05:37:47:414387 | info     | App | LayerExample::OnUpdate()
-05:37:47:431025 | info     | App | LayerExample::OnUpdate()
-05:37:47:447787 | info     | App | LayerExample::OnUpdate()
-05:37:47:464389 | info     | App | LayerExample::OnUpdate()
-05:37:47:481079 | info     | App | LayerExample::OnUpdate()
-05:37:47:497743 | info     | App | LayerExample::OnUpdate()
-05:37:47:514371 | info     | App | LayerExample::OnUpdate()
-05:37:47:531191 | info     | App | LayerExample::OnUpdate()
-05:37:47:548644 | info     | App | LayerExample::OnUpdate()
-05:37:47:565113 | info     | App | LayerExample::OnUpdate()
-05:37:47:581219 | info     | App | LayerExample::OnUpdate()
-05:37:47:597909 | info     | App | LayerExample::OnUpdate()
-05:37:47:614590 | info     | App | LayerExample::OnUpdate()
-05:37:47:631272 | info     | App | LayerExample::OnUpdate()
-05:37:47:647929 | info     | App | LayerExample::OnUpdate()
-05:37:47:648578 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:47:664528 | info     | App | LayerExample::OnUpdate()
-05:37:47:664952 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:47:665139 | debug    | FE  | Events dispached!
-05:37:47:681230 | info     | App | LayerExample::OnUpdate()
-05:37:47:697920 | info     | App | LayerExample::OnUpdate()
-05:37:47:714568 | info     | App | LayerExample::OnUpdate()
-05:37:47:731273 | info     | App | LayerExample::OnUpdate()
-05:37:47:748838 | info     | App | LayerExample::OnUpdate()
-05:37:47:750082 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:47:765206 | info     | App | LayerExample::OnUpdate()
-05:37:47:765974 | trace    | App | KeyReleasedEvent: 256
-05:37:47:766383 | debug    | FE  | Events dispached!
-05:37:47:781353 | info     | App | LayerExample::OnUpdate()
-05:37:47:798026 | info     | App | LayerExample::OnUpdate()
-05:37:47:814851 | info     | App | LayerExample::OnUpdate()
-05:37:47:831397 | info     | App | LayerExample::OnUpdate()
-05:37:47:848145 | info     | App | LayerExample::OnUpdate()
-05:37:47:864775 | info     | App | LayerExample::OnUpdate()
-05:37:47:865436 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:47:881473 | info     | App | LayerExample::OnUpdate()
-05:37:47:881903 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:47:882079 | debug    | FE  | Events dispached!
-05:37:47:898092 | info     | App | LayerExample::OnUpdate()
-05:37:47:914758 | info     | App | LayerExample::OnUpdate()
-05:37:47:931448 | info     | App | LayerExample::OnUpdate()
-05:37:47:948117 | info     | App | LayerExample::OnUpdate()
-05:37:47:965549 | info     | App | LayerExample::OnUpdate()
-05:37:47:982058 | info     | App | LayerExample::OnUpdate()
-05:37:47:998251 | info     | App | LayerExample::OnUpdate()
-05:37:47:998895 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:48:014870 | info     | App | LayerExample::OnUpdate()
-05:37:48:015344 | trace    | App | KeyReleasedEvent: 256
-05:37:48:015588 | debug    | FE  | Events dispached!
-05:37:48:031550 | info     | App | LayerExample::OnUpdate()
-05:37:48:048382 | info     | App | LayerExample::OnUpdate()
-05:37:48:064908 | info     | App | LayerExample::OnUpdate()
-05:37:48:081539 | info     | App | LayerExample::OnUpdate()
-05:37:48:098205 | info     | App | LayerExample::OnUpdate()
-05:37:48:114918 | info     | App | LayerExample::OnUpdate()
-05:37:48:131759 | info     | App | LayerExample::OnUpdate()
-05:37:48:148305 | info     | App | LayerExample::OnUpdate()
-05:37:48:164986 | info     | App | LayerExample::OnUpdate()
-05:37:48:182496 | info     | App | LayerExample::OnUpdate()
-05:37:48:198986 | info     | App | LayerExample::OnUpdate()
-05:37:48:215054 | info     | App | LayerExample::OnUpdate()
-05:37:48:231700 | info     | App | LayerExample::OnUpdate()
-05:37:48:248452 | info     | App | LayerExample::OnUpdate()
-05:37:48:265044 | info     | App | LayerExample::OnUpdate()
-05:37:48:281697 | info     | App | LayerExample::OnUpdate()
-05:37:48:298603 | info     | App | LayerExample::OnUpdate()
-05:37:48:315104 | info     | App | LayerExample::OnUpdate()
-05:37:48:331765 | info     | App | LayerExample::OnUpdate()
-05:37:48:348402 | info     | App | LayerExample::OnUpdate()
-05:37:48:365116 | info     | App | LayerExample::OnUpdate()
-05:37:48:382608 | info     | App | LayerExample::OnUpdate()
-05:37:48:399448 | info     | App | LayerExample::OnUpdate()
-05:37:48:415343 | info     | App | LayerExample::OnUpdate()
-05:37:48:431872 | info     | App | LayerExample::OnUpdate()
-05:37:48:448532 | info     | App | LayerExample::OnUpdate()
-05:37:48:465302 | info     | App | LayerExample::OnUpdate()
-05:37:48:481916 | info     | App | LayerExample::OnUpdate()
-05:37:48:498641 | info     | App | LayerExample::OnUpdate()
-05:37:48:515239 | info     | App | LayerExample::OnUpdate()
-05:37:48:531885 | info     | App | LayerExample::OnUpdate()
-05:37:48:548595 | info     | App | LayerExample::OnUpdate()
-05:37:48:565295 | info     | App | LayerExample::OnUpdate()
-05:37:48:582277 | info     | App | LayerExample::OnUpdate()
-05:37:48:599516 | info     | App | LayerExample::OnUpdate()
-05:37:48:615413 | info     | App | LayerExample::OnUpdate()
-05:37:48:632069 | info     | App | LayerExample::OnUpdate()
-05:37:48:648677 | info     | App | LayerExample::OnUpdate()
-05:37:48:665375 | info     | App | LayerExample::OnUpdate()
-05:37:48:682181 | info     | App | LayerExample::OnUpdate()
-05:37:48:698756 | info     | App | LayerExample::OnUpdate()
-05:37:48:715400 | info     | App | LayerExample::OnUpdate()
-05:37:48:732139 | info     | App | LayerExample::OnUpdate()
-05:37:48:748804 | info     | App | LayerExample::OnUpdate()
-05:37:48:765490 | info     | App | LayerExample::OnUpdate()
-05:37:48:782115 | info     | App | LayerExample::OnUpdate()
-05:37:48:799628 | info     | App | LayerExample::OnUpdate()
-05:37:48:815667 | info     | App | LayerExample::OnUpdate()
-05:37:48:832935 | info     | App | LayerExample::OnUpdate()
-05:37:48:848883 | info     | App | LayerExample::OnUpdate()
-05:37:48:865795 | info     | App | LayerExample::OnUpdate()
-05:37:48:882343 | info     | App | LayerExample::OnUpdate()
-05:37:48:898977 | info     | App | LayerExample::OnUpdate()
-05:37:48:915944 | info     | App | LayerExample::OnUpdate()
-05:37:48:932390 | info     | App | LayerExample::OnUpdate()
-05:37:48:948955 | info     | App | LayerExample::OnUpdate()
-05:37:48:965639 | info     | App | LayerExample::OnUpdate()
-05:37:48:982305 | info     | App | LayerExample::OnUpdate()
-05:37:48:998995 | info     | App | LayerExample::OnUpdate()
-05:37:49:016658 | info     | App | LayerExample::OnUpdate()
-05:37:49:032987 | info     | App | LayerExample::OnUpdate()
-05:37:49:049137 | info     | App | LayerExample::OnUpdate()
-05:37:49:065784 | info     | App | LayerExample::OnUpdate()
-05:37:49:082396 | info     | App | LayerExample::OnUpdate()
-05:37:49:099108 | info     | App | LayerExample::OnUpdate()
-05:37:49:115847 | info     | App | LayerExample::OnUpdate()
-05:37:49:132438 | info     | App | LayerExample::OnUpdate()
-05:37:49:149175 | info     | App | LayerExample::OnUpdate()
-05:37:49:165790 | info     | App | LayerExample::OnUpdate()
-05:37:49:182419 | info     | App | LayerExample::OnUpdate()
-05:37:49:199195 | info     | App | LayerExample::OnUpdate()
-05:37:49:215810 | info     | App | LayerExample::OnUpdate()
-05:37:49:233436 | info     | App | LayerExample::OnUpdate()
-05:37:49:250017 | info     | App | LayerExample::OnUpdate()
-05:37:49:265906 | info     | App | LayerExample::OnUpdate()
-05:37:49:282566 | info     | App | LayerExample::OnUpdate()
-05:37:49:299386 | info     | App | LayerExample::OnUpdate()
-05:37:49:316061 | info     | App | LayerExample::OnUpdate()
-05:37:49:332586 | info     | App | LayerExample::OnUpdate()
-05:37:49:349316 | info     | App | LayerExample::OnUpdate()
-05:37:49:365925 | info     | App | LayerExample::OnUpdate()
-05:37:49:382607 | info     | App | LayerExample::OnUpdate()
-05:37:49:399334 | info     | App | LayerExample::OnUpdate()
-05:37:49:415956 | info     | App | LayerExample::OnUpdate()
-05:37:49:432679 | info     | App | LayerExample::OnUpdate()
-05:37:49:450233 | info     | App | LayerExample::OnUpdate()
-05:37:49:599512 | info     | App | LayerExample::OnUpdate()
-05:37:49:616203 | info     | App | LayerExample::OnUpdate()
-05:37:49:632879 | info     | App | LayerExample::OnUpdate()
-05:37:49:649505 | info     | App | LayerExample::OnUpdate()
-05:37:49:667216 | info     | App | LayerExample::OnUpdate()
-05:37:49:683802 | info     | App | LayerExample::OnUpdate()
-05:37:49:699634 | info     | App | LayerExample::OnUpdate()
-05:37:49:716260 | info     | App | LayerExample::OnUpdate()
-05:37:49:732908 | info     | App | LayerExample::OnUpdate()
-05:37:49:749582 | info     | App | LayerExample::OnUpdate()
-05:37:49:766305 | info     | App | LayerExample::OnUpdate()
-05:37:49:782942 | info     | App | LayerExample::OnUpdate()
-05:37:49:799604 | info     | App | LayerExample::OnUpdate()
-05:37:49:816322 | info     | App | LayerExample::OnUpdate()
-05:37:49:833002 | info     | App | LayerExample::OnUpdate()
-05:37:49:833603 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:49:849708 | info     | App | LayerExample::OnUpdate()
-05:37:49:850196 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:49:850388 | debug    | FE  | Events dispached!
-05:37:49:866566 | info     | App | LayerExample::OnUpdate()
-05:37:49:884077 | info     | App | LayerExample::OnUpdate()
-05:37:49:900263 | info     | App | LayerExample::OnUpdate()
-05:37:49:916667 | info     | App | LayerExample::OnUpdate()
-05:37:49:917222 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:49:933304 | info     | App | LayerExample::OnUpdate()
-05:37:49:933808 | trace    | App | KeyReleasedEvent: 256
-05:37:49:933998 | debug    | FE  | Events dispached!
-05:37:49:949777 | info     | App | LayerExample::OnUpdate()
-05:37:49:966433 | info     | App | LayerExample::OnUpdate()
-05:37:49:983151 | info     | App | LayerExample::OnUpdate()
-05:37:49:999829 | info     | App | LayerExample::OnUpdate()
-05:37:50:016458 | info     | App | LayerExample::OnUpdate()
-05:37:50:017033 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:50:033195 | info     | App | LayerExample::OnUpdate()
-05:37:50:033556 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:50:033823 | debug    | FE  | Events dispached!
-05:37:50:049895 | info     | App | LayerExample::OnUpdate()
-05:37:50:066636 | info     | App | LayerExample::OnUpdate()
-05:37:50:083238 | info     | App | LayerExample::OnUpdate()
-05:37:50:099877 | info     | App | LayerExample::OnUpdate()
-05:37:50:100426 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:50:116733 | info     | App | LayerExample::OnUpdate()
-05:37:50:117441 | trace    | App | KeyReleasedEvent: 256
-05:37:50:117845 | debug    | FE  | Events dispached!
-05:37:50:133318 | info     | App | LayerExample::OnUpdate()
-05:37:50:150167 | info     | App | LayerExample::OnUpdate()
-05:37:50:166582 | info     | App | LayerExample::OnUpdate()
-05:37:50:183318 | info     | App | LayerExample::OnUpdate()
-05:37:50:200017 | info     | App | LayerExample::OnUpdate()
-05:37:50:200498 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:50:216692 | info     | App | LayerExample::OnUpdate()
-05:37:50:217180 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:50:217369 | debug    | FE  | Events dispached!
-05:37:50:233352 | info     | App | LayerExample::OnUpdate()
-05:37:50:250016 | info     | App | LayerExample::OnUpdate()
-05:37:50:266693 | info     | App | LayerExample::OnUpdate()
-05:37:50:283431 | info     | App | LayerExample::OnUpdate()
-05:37:50:284096 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:50:300219 | info     | App | LayerExample::OnUpdate()
-05:37:50:300555 | trace    | App | KeyReleasedEvent: 256
-05:37:50:300737 | debug    | FE  | Events dispached!
-05:37:50:316822 | info     | App | LayerExample::OnUpdate()
-05:37:50:333498 | info     | App | LayerExample::OnUpdate()
-05:37:50:350143 | info     | App | LayerExample::OnUpdate()
-05:37:50:366761 | info     | App | LayerExample::OnUpdate()
-05:37:50:367481 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:50:383467 | info     | App | LayerExample::OnUpdate()
-05:37:50:383897 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:50:384084 | debug    | FE  | Events dispached!
-05:37:50:400167 | info     | App | LayerExample::OnUpdate()
-05:37:50:416840 | info     | App | LayerExample::OnUpdate()
-05:37:50:433511 | info     | App | LayerExample::OnUpdate()
-05:37:50:450250 | info     | App | LayerExample::OnUpdate()
-05:37:50:466891 | info     | App | LayerExample::OnUpdate()
-05:37:50:467541 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:50:483593 | info     | App | LayerExample::OnUpdate()
-05:37:50:484010 | trace    | App | KeyReleasedEvent: 256
-05:37:50:484216 | debug    | FE  | Events dispached!
-05:37:50:501246 | info     | App | LayerExample::OnUpdate()
-05:37:50:502335 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1323, y=9
-05:37:50:503065 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1323, y=10
-05:37:50:503415 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1323, y=11
-05:37:50:517364 | info     | App | LayerExample::OnUpdate()
-05:37:50:518001 | trace    | App | MouseMovedEvent: x=1323, y=9
-05:37:50:518472 | trace    | App | MouseMovedEvent: x=1323, y=10
-05:37:50:518778 | trace    | App | MouseMovedEvent: x=1323, y=11
-05:37:50:519061 | debug    | FE  | Events dispached!
-05:37:50:519612 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1332, y=25
-05:37:50:533780 | info     | App | LayerExample::OnUpdate()
-05:37:50:534181 | trace    | App | MouseMovedEvent: x=1332, y=25
-05:37:50:534441 | debug    | FE  | Events dispached!
-05:37:50:535154 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1342, y=44
-05:37:50:535686 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1343, y=46
-05:37:50:550364 | info     | App | LayerExample::OnUpdate()
-05:37:50:550867 | trace    | App | MouseMovedEvent: x=1342, y=44
-05:37:50:551077 | trace    | App | MouseMovedEvent: x=1343, y=46
-05:37:50:551351 | debug    | FE  | Events dispached!
-05:37:50:551952 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1348, y=55
-05:37:50:552281 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:50:552700 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1357, y=73
-05:37:50:553116 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1357, y=74
-05:37:50:553583 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1357, y=75
-05:37:50:567014 | info     | App | LayerExample::OnUpdate()
-05:37:50:567476 | trace    | App | MouseMovedEvent: x=1348, y=55
-05:37:50:567732 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:50:568109 | trace    | App | MouseMovedEvent: x=1357, y=73
-05:37:50:568438 | trace    | App | MouseMovedEvent: x=1357, y=74
-05:37:50:568746 | trace    | App | MouseMovedEvent: x=1357, y=75
-05:37:50:569080 | debug    | FE  | Events dispached!
-05:37:50:569643 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1370, y=102
-05:37:50:583666 | info     | App | LayerExample::OnUpdate()
-05:37:50:584064 | trace    | App | MouseMovedEvent: x=1370, y=102
-05:37:50:584298 | debug    | FE  | Events dispached!
-05:37:50:584836 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1378, y=124
-05:37:50:585327 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1378, y=126
-05:37:50:600351 | info     | App | LayerExample::OnUpdate()
-05:37:50:600799 | trace    | App | MouseMovedEvent: x=1378, y=124
-05:37:50:601056 | trace    | App | MouseMovedEvent: x=1378, y=126
-05:37:50:601326 | debug    | FE  | Events dispached!
-05:37:50:601875 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1381, y=145
-05:37:50:602354 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1381, y=146
-05:37:50:617048 | info     | App | LayerExample::OnUpdate()
-05:37:50:617534 | trace    | App | MouseMovedEvent: x=1381, y=145
-05:37:50:617767 | trace    | App | MouseMovedEvent: x=1381, y=146
-05:37:50:618113 | debug    | FE  | Events dispached!
-05:37:50:618678 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1383, y=157
-05:37:50:633638 | info     | App | LayerExample::OnUpdate()
-05:37:50:634063 | trace    | App | MouseMovedEvent: x=1383, y=157
-05:37:50:634235 | debug    | FE  | Events dispached!
-05:37:50:634792 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1383, y=160
-05:37:50:635117 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:50:635579 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1383, y=161
-05:37:50:650307 | info     | App | LayerExample::OnUpdate()
-05:37:50:650747 | trace    | App | MouseMovedEvent: x=1383, y=160
-05:37:50:650973 | trace    | App | KeyReleasedEvent: 256
-05:37:50:651287 | trace    | App | MouseMovedEvent: x=1383, y=161
-05:37:50:651562 | debug    | FE  | Events dispached!
-05:37:50:667070 | info     | App | LayerExample::OnUpdate()
-05:37:50:683725 | info     | App | LayerExample::OnUpdate()
-05:37:50:684312 | trace    | FE  | NEW EVENT: MouseButtonPressedEvent: 0
-05:37:50:700465 | info     | App | LayerExample::OnUpdate()
-05:37:50:700991 | trace    | App | MouseButtonPressedEvent: 0
-05:37:50:701220 | debug    | FE  | Events dispached!
-05:37:50:717177 | info     | App | LayerExample::OnUpdate()
-05:37:50:733749 | info     | App | LayerExample::OnUpdate()
-05:37:50:750467 | info     | App | LayerExample::OnUpdate()
-05:37:50:767142 | info     | App | LayerExample::OnUpdate()
-05:37:50:783986 | info     | App | LayerExample::OnUpdate()
-05:37:50:800477 | info     | App | LayerExample::OnUpdate()
-05:37:50:801054 | trace    | FE  | NEW EVENT: MouseButtonReleasedEvent: 0
-05:37:50:817150 | info     | App | LayerExample::OnUpdate()
-05:37:50:817545 | trace    | App | MouseButtonReleasedEvent: 0
-05:37:50:817794 | debug    | FE  | Events dispached!
-05:37:50:833830 | info     | App | LayerExample::OnUpdate()
-05:37:50:850512 | info     | App | LayerExample::OnUpdate()
-05:37:50:867261 | info     | App | LayerExample::OnUpdate()
-05:37:50:883863 | info     | App | LayerExample::OnUpdate()
-05:37:50:900541 | info     | App | LayerExample::OnUpdate()
-05:37:50:901091 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:50:918159 | info     | App | LayerExample::OnUpdate()
-05:37:50:918798 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:50:919225 | debug    | FE  | Events dispached!
-05:37:50:934465 | info     | App | LayerExample::OnUpdate()
-05:37:50:935803 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1384, y=161
-05:37:50:950699 | info     | App | LayerExample::OnUpdate()
-05:37:50:951118 | trace    | App | MouseMovedEvent: x=1384, y=161
-05:37:50:951635 | debug    | FE  | Events dispached!
-05:37:50:967264 | info     | App | LayerExample::OnUpdate()
-05:37:50:984093 | info     | App | LayerExample::OnUpdate()
-05:37:50:984888 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1385, y=161
-05:37:50:985165 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:50:985715 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1389, y=160
-05:37:51:000668 | info     | App | LayerExample::OnUpdate()
-05:37:51:001135 | trace    | App | MouseMovedEvent: x=1385, y=161
-05:37:51:001342 | trace    | App | KeyReleasedEvent: 256
-05:37:51:001661 | trace    | App | MouseMovedEvent: x=1389, y=160
-05:37:51:001940 | debug    | FE  | Events dispached!
-05:37:51:002556 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1397, y=155
-05:37:51:017297 | info     | App | LayerExample::OnUpdate()
-05:37:51:017718 | trace    | App | MouseMovedEvent: x=1397, y=155
-05:37:51:017948 | debug    | FE  | Events dispached!
-05:37:51:018550 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1406, y=151
-05:37:51:034030 | info     | App | LayerExample::OnUpdate()
-05:37:51:034447 | trace    | App | MouseMovedEvent: x=1406, y=151
-05:37:51:034690 | debug    | FE  | Events dispached!
-05:37:51:035333 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1413, y=147
-05:37:51:050676 | info     | App | LayerExample::OnUpdate()
-05:37:51:051145 | trace    | App | MouseMovedEvent: x=1413, y=147
-05:37:51:051334 | debug    | FE  | Events dispached!
-05:37:51:051892 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1420, y=144
-05:37:51:052363 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1420, y=143
-05:37:51:067416 | info     | App | LayerExample::OnUpdate()
-05:37:51:067849 | trace    | App | MouseMovedEvent: x=1420, y=144
-05:37:51:068083 | trace    | App | MouseMovedEvent: x=1420, y=143
-05:37:51:068357 | debug    | FE  | Events dispached!
-05:37:51:068984 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1425, y=139
-05:37:51:084140 | info     | App | LayerExample::OnUpdate()
-05:37:51:084631 | trace    | App | MouseMovedEvent: x=1425, y=139
-05:37:51:084836 | debug    | FE  | Events dispached!
-05:37:51:085509 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1428, y=136
-05:37:51:100732 | info     | App | LayerExample::OnUpdate()
-05:37:51:101128 | trace    | App | MouseMovedEvent: x=1428, y=136
-05:37:51:101334 | debug    | FE  | Events dispached!
-05:37:51:101713 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:51:102292 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1431, y=133
-05:37:51:118339 | info     | App | LayerExample::OnUpdate()
-05:37:51:119090 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:51:119570 | trace    | App | MouseMovedEvent: x=1431, y=133
-05:37:51:119986 | debug    | FE  | Events dispached!
-05:37:51:120481 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1434, y=127
-05:37:51:134692 | info     | App | LayerExample::OnUpdate()
-05:37:51:135409 | trace    | App | MouseMovedEvent: x=1434, y=127
-05:37:51:135810 | debug    | FE  | Events dispached!
-05:37:51:136372 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1436, y=124
-05:37:51:150872 | info     | App | LayerExample::OnUpdate()
-05:37:51:151241 | trace    | App | MouseMovedEvent: x=1436, y=124
-05:37:51:151489 | debug    | FE  | Events dispached!
-05:37:51:152161 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1441, y=120
-05:37:51:167488 | info     | App | LayerExample::OnUpdate()
-05:37:51:167934 | trace    | App | MouseMovedEvent: x=1441, y=120
-05:37:51:168112 | debug    | FE  | Events dispached!
-05:37:51:168652 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1450, y=114
-05:37:51:169340 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:51:184347 | info     | App | LayerExample::OnUpdate()
-05:37:51:184811 | trace    | App | MouseMovedEvent: x=1450, y=114
-05:37:51:185022 | trace    | App | KeyReleasedEvent: 256
-05:37:51:185351 | debug    | FE  | Events dispached!
-05:37:51:185893 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1458, y=108
-05:37:51:186368 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1459, y=108
-05:37:51:200862 | info     | App | LayerExample::OnUpdate()
-05:37:51:201220 | trace    | App | MouseMovedEvent: x=1458, y=108
-05:37:51:201433 | trace    | App | MouseMovedEvent: x=1459, y=108
-05:37:51:201724 | debug    | FE  | Events dispached!
-05:37:51:202328 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1468, y=100
-05:37:51:217549 | info     | App | LayerExample::OnUpdate()
-05:37:51:217979 | trace    | App | MouseMovedEvent: x=1468, y=100
-05:37:51:218149 | debug    | FE  | Events dispached!
-05:37:51:218681 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1480, y=91
-05:37:51:219221 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1481, y=90
-05:37:51:234170 | info     | App | LayerExample::OnUpdate()
-05:37:51:234632 | trace    | App | MouseMovedEvent: x=1480, y=91
-05:37:51:234853 | trace    | App | MouseMovedEvent: x=1481, y=90
-05:37:51:235238 | debug    | FE  | Events dispached!
-05:37:51:235804 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1493, y=82
-05:37:51:236318 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1493, y=81
-05:37:51:250920 | info     | App | LayerExample::OnUpdate()
-05:37:51:251389 | trace    | App | MouseMovedEvent: x=1493, y=82
-05:37:51:251606 | trace    | App | MouseMovedEvent: x=1493, y=81
-05:37:51:252069 | debug    | FE  | Events dispached!
-05:37:51:252576 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1505, y=73
-05:37:51:267597 | info     | App | LayerExample::OnUpdate()
-05:37:51:268017 | trace    | App | MouseMovedEvent: x=1505, y=73
-05:37:51:268193 | debug    | FE  | Events dispached!
-05:37:51:268740 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1517, y=63
-05:37:51:269079 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:51:269586 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1519, y=62
-05:37:51:284244 | info     | App | LayerExample::OnUpdate()
-05:37:51:284720 | trace    | App | MouseMovedEvent: x=1517, y=63
-05:37:51:284950 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:51:285410 | trace    | App | MouseMovedEvent: x=1519, y=62
-05:37:51:285771 | debug    | FE  | Events dispached!
-05:37:51:286250 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1532, y=53
-05:37:51:300899 | info     | App | LayerExample::OnUpdate()
-05:37:51:301279 | trace    | App | MouseMovedEvent: x=1532, y=53
-05:37:51:301534 | debug    | FE  | Events dispached!
-05:37:51:302185 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1542, y=45
-05:37:51:317627 | info     | App | LayerExample::OnUpdate()
-05:37:51:318037 | trace    | App | MouseMovedEvent: x=1542, y=45
-05:37:51:318313 | debug    | FE  | Events dispached!
-05:37:51:318828 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1552, y=37
-05:37:51:335658 | info     | App | LayerExample::OnUpdate()
-05:37:51:336642 | trace    | App | MouseMovedEvent: x=1552, y=37
-05:37:51:337115 | debug    | FE  | Events dispached!
-05:37:51:338085 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1563, y=28
-05:37:51:351830 | info     | App | LayerExample::OnUpdate()
-05:37:51:352691 | trace    | App | MouseMovedEvent: x=1563, y=28
-05:37:51:353149 | debug    | FE  | Events dispached!
-05:37:51:353752 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1568, y=24
-05:37:51:354080 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:51:355111 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1570, y=22
-05:37:51:367982 | info     | App | LayerExample::OnUpdate()
-05:37:51:368536 | trace    | App | MouseMovedEvent: x=1568, y=24
-05:37:51:368806 | trace    | App | KeyReleasedEvent: 256
-05:37:51:369178 | trace    | App | MouseMovedEvent: x=1570, y=22
-05:37:51:369453 | debug    | FE  | Events dispached!
-05:37:51:370188 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1573, y=17
-05:37:51:371349 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1574, y=17
-05:37:51:385168 | info     | App | LayerExample::OnUpdate()
-05:37:51:385679 | trace    | App | MouseMovedEvent: x=1573, y=17
-05:37:51:386556 | trace    | App | MouseMovedEvent: x=1574, y=17
-05:37:51:386851 | debug    | FE  | Events dispached!
-05:37:51:387508 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1575, y=15
-05:37:51:401126 | info     | App | LayerExample::OnUpdate()
-05:37:51:401905 | trace    | App | MouseMovedEvent: x=1575, y=15
-05:37:51:402089 | debug    | FE  | Events dispached!
-05:37:51:402634 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1575, y=13
-05:37:51:417751 | info     | App | LayerExample::OnUpdate()
-05:37:51:418128 | trace    | App | MouseMovedEvent: x=1575, y=13
-05:37:51:418309 | debug    | FE  | Events dispached!
-05:37:51:434391 | info     | App | LayerExample::OnUpdate()
-05:37:51:451107 | info     | App | LayerExample::OnUpdate()
-05:37:51:467737 | info     | App | LayerExample::OnUpdate()
-05:37:51:468388 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:51:484348 | info     | App | LayerExample::OnUpdate()
-05:37:51:484783 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:51:484990 | debug    | FE  | Events dispached!
-05:37:51:501116 | info     | App | LayerExample::OnUpdate()
-05:37:51:517704 | info     | App | LayerExample::OnUpdate()
-05:37:51:534391 | info     | App | LayerExample::OnUpdate()
-05:37:51:535098 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1575, y=12
-05:37:51:552052 | info     | App | LayerExample::OnUpdate()
-05:37:51:552676 | trace    | App | MouseMovedEvent: x=1575, y=12
-05:37:51:553094 | debug    | FE  | Events dispached!
-05:37:51:553654 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1577, y=10
-05:37:51:553983 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:51:554441 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1578, y=8
-05:37:51:568410 | info     | App | LayerExample::OnUpdate()
-05:37:51:569050 | trace    | App | MouseMovedEvent: x=1577, y=10
-05:37:51:569492 | trace    | App | KeyReleasedEvent: 256
-05:37:51:569798 | trace    | App | MouseMovedEvent: x=1578, y=8
-05:37:51:570076 | debug    | FE  | Events dispached!
-05:37:51:570612 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1582, y=5
-05:37:51:584557 | info     | App | LayerExample::OnUpdate()
-05:37:51:584997 | trace    | App | MouseMovedEvent: x=1582, y=5
-05:37:51:585235 | debug    | FE  | Events dispached!
-05:37:51:585747 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1585, y=2
-05:37:51:601259 | info     | App | LayerExample::OnUpdate()
-05:37:51:601654 | trace    | App | MouseMovedEvent: x=1585, y=2
-05:37:51:601904 | debug    | FE  | Events dispached!
-05:37:51:602506 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1585, y=1
-05:37:51:619076 | info     | App | LayerExample::OnUpdate()
-05:37:51:619764 | trace    | App | MouseMovedEvent: x=1585, y=1
-05:37:51:620075 | debug    | FE  | Events dispached!
-05:37:51:620661 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1586, y=0
-05:37:51:634491 | info     | App | LayerExample::OnUpdate()
-05:37:51:634964 | trace    | App | MouseMovedEvent: x=1586, y=0
-05:37:51:635139 | debug    | FE  | Events dispached!
-05:37:51:651238 | info     | App | LayerExample::OnUpdate()
-05:37:51:667830 | info     | App | LayerExample::OnUpdate()
-05:37:51:668388 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:51:684843 | info     | App | LayerExample::OnUpdate()
-05:37:51:685209 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:51:685604 | debug    | FE  | Events dispached!
-05:37:51:701248 | info     | App | LayerExample::OnUpdate()
-05:37:51:717973 | info     | App | LayerExample::OnUpdate()
-05:37:51:734528 | info     | App | LayerExample::OnUpdate()
-05:37:51:751289 | info     | App | LayerExample::OnUpdate()
-05:37:51:768837 | info     | App | LayerExample::OnUpdate()
-05:37:51:769589 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:51:785257 | info     | App | LayerExample::OnUpdate()
-05:37:51:785869 | trace    | App | KeyReleasedEvent: 256
-05:37:51:786320 | debug    | FE  | Events dispached!
-05:37:51:801362 | info     | App | LayerExample::OnUpdate()
-05:37:51:818213 | info     | App | LayerExample::OnUpdate()
-05:37:51:834731 | info     | App | LayerExample::OnUpdate()
-05:37:51:851373 | info     | App | LayerExample::OnUpdate()
-05:37:51:868069 | info     | App | LayerExample::OnUpdate()
-05:37:51:884669 | info     | App | LayerExample::OnUpdate()
-05:37:51:885356 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:51:901407 | info     | App | LayerExample::OnUpdate()
-05:37:51:901830 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:51:902040 | debug    | FE  | Events dispached!
-05:37:51:918451 | info     | App | LayerExample::OnUpdate()
-05:37:51:934839 | info     | App | LayerExample::OnUpdate()
-05:37:51:951519 | info     | App | LayerExample::OnUpdate()
-05:37:51:968167 | info     | App | LayerExample::OnUpdate()
-05:37:51:985542 | info     | App | LayerExample::OnUpdate()
-05:37:51:986389 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:52:002127 | info     | App | LayerExample::OnUpdate()
-05:37:52:002726 | trace    | App | KeyReleasedEvent: 256
-05:37:52:004793 | debug    | FE  | Events dispached!
-05:37:52:018341 | info     | App | LayerExample::OnUpdate()
-05:37:52:034905 | info     | App | LayerExample::OnUpdate()
-05:37:52:051535 | info     | App | LayerExample::OnUpdate()
-05:37:52:068223 | info     | App | LayerExample::OnUpdate()
-05:37:52:084894 | info     | App | LayerExample::OnUpdate()
-05:37:52:101563 | info     | App | LayerExample::OnUpdate()
-05:37:52:102174 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:52:118262 | info     | App | LayerExample::OnUpdate()
-05:37:52:118737 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:52:118944 | debug    | FE  | Events dispached!
-05:37:52:134920 | info     | App | LayerExample::OnUpdate()
-05:37:52:151602 | info     | App | LayerExample::OnUpdate()
-05:37:52:168288 | info     | App | LayerExample::OnUpdate()
-05:37:52:184945 | info     | App | LayerExample::OnUpdate()
-05:37:52:202477 | info     | App | LayerExample::OnUpdate()
-05:37:52:218980 | info     | App | LayerExample::OnUpdate()
-05:37:52:219833 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:52:235137 | info     | App | LayerExample::OnUpdate()
-05:37:52:235580 | trace    | App | KeyReleasedEvent: 256
-05:37:52:235807 | debug    | FE  | Events dispached!
-05:37:52:251778 | info     | App | LayerExample::OnUpdate()
-05:37:52:268343 | info     | App | LayerExample::OnUpdate()
-05:37:52:285047 | info     | App | LayerExample::OnUpdate()
-05:37:52:301708 | info     | App | LayerExample::OnUpdate()
-05:37:52:318356 | info     | App | LayerExample::OnUpdate()
-05:37:52:335113 | info     | App | LayerExample::OnUpdate()
-05:37:52:335733 | trace    | FE  | NEW EVENT: KeyPressedEvent: 256 (0 repeats)
-05:37:52:351724 | info     | App | LayerExample::OnUpdate()
-05:37:52:352171 | trace    | App | KeyPressedEvent: 256 (0 repeats)
-05:37:52:352362 | debug    | FE  | Events dispached!
-05:37:52:368427 | info     | App | LayerExample::OnUpdate()
-05:37:52:385172 | info     | App | LayerExample::OnUpdate()
-05:37:52:401790 | info     | App | LayerExample::OnUpdate()
-05:37:52:419401 | info     | App | LayerExample::OnUpdate()
-05:37:52:436088 | info     | App | LayerExample::OnUpdate()
-05:37:52:451846 | info     | App | LayerExample::OnUpdate()
-05:37:52:468528 | info     | App | LayerExample::OnUpdate()
-05:37:52:485238 | info     | App | LayerExample::OnUpdate()
-05:37:52:501904 | info     | App | LayerExample::OnUpdate()
-05:37:52:518519 | info     | App | LayerExample::OnUpdate()
-05:37:52:535292 | info     | App | LayerExample::OnUpdate()
-05:37:52:551930 | info     | App | LayerExample::OnUpdate()
-05:37:52:568619 | info     | App | LayerExample::OnUpdate()
-05:37:52:585293 | info     | App | LayerExample::OnUpdate()
-05:37:52:601991 | info     | App | LayerExample::OnUpdate()
-05:37:52:618789 | info     | App | LayerExample::OnUpdate()
-05:37:52:635972 | info     | App | LayerExample::OnUpdate()
-05:37:52:652493 | info     | App | LayerExample::OnUpdate()
-05:37:52:668824 | info     | App | LayerExample::OnUpdate()
-05:37:52:669587 | trace    | FE  | NEW EVENT: KeyReleasedEvent: 256
-05:37:52:685414 | info     | App | LayerExample::OnUpdate()
-05:37:52:685825 | trace    | App | KeyReleasedEvent: 256
-05:37:52:686035 | debug    | FE  | Events dispached!
-05:37:52:702062 | info     | App | LayerExample::OnUpdate()
-05:37:52:718773 | info     | App | LayerExample::OnUpdate()
-05:37:52:735442 | info     | App | LayerExample::OnUpdate()
-05:37:52:752150 | info     | App | LayerExample::OnUpdate()
-05:37:52:768720 | info     | App | LayerExample::OnUpdate()
-05:37:52:785420 | info     | App | LayerExample::OnUpdate()
-05:37:52:802175 | info     | App | LayerExample::OnUpdate()
-05:37:52:819057 | info     | App | LayerExample::OnUpdate()
-05:37:52:835595 | info     | App | LayerExample::OnUpdate()
-05:37:52:852163 | info     | App | LayerExample::OnUpdate()
-05:37:52:869042 | info     | App | LayerExample::OnUpdate()
-05:37:52:885602 | info     | App | LayerExample::OnUpdate()
-05:37:52:902432 | info     | App | LayerExample::OnUpdate()
-05:37:52:919127 | info     | App | LayerExample::OnUpdate()
-05:37:52:935626 | info     | App | LayerExample::OnUpdate()
-05:37:52:952294 | info     | App | LayerExample::OnUpdate()
-05:37:52:968995 | info     | App | LayerExample::OnUpdate()
-05:37:52:985607 | info     | App | LayerExample::OnUpdate()
-05:37:53:002308 | info     | App | LayerExample::OnUpdate()
-05:37:53:019254 | info     | App | LayerExample::OnUpdate()
-05:37:53:035684 | info     | App | LayerExample::OnUpdate()
-05:37:53:053207 | info     | App | LayerExample::OnUpdate()
-05:37:53:069099 | info     | App | LayerExample::OnUpdate()
-05:37:53:086338 | info     | App | LayerExample::OnUpdate()
-05:37:53:102422 | info     | App | LayerExample::OnUpdate()
-05:37:53:119099 | info     | App | LayerExample::OnUpdate()
-05:37:53:135716 | info     | App | LayerExample::OnUpdate()
-05:37:53:214123 | trace    | FE  | NEW EVENT: EventType::WindowClose
-05:37:53:218872 | info     | App | LayerExample::OnUpdate()
-05:37:53:219238 | trace    | App | EventType::WindowClose
-05:37:53:219358 | info     | FE  | Window Close Event
-05:37:53:219776 | debug    | FE  | Events dispached!
-05:37:53:220203 | info     | FE  | Profiler session 'Runtime' closed.
-05:37:53:220535 | info     | FE  | Profiler session 'Shutdown' started.
-05:37:53:220809 | info     | FE  | Closing Window.
-05:37:53:273759 | info     | FE  | Profiler session 'Shutdown' closed.
-05:37:53:274475 | warning  | FE  | Attempt to close profiler session with no active session.
+02:12:43:190009 | info     | FE  | Logging innitialized!
+02:12:43:191202 | info     | App | Logging innitialized!
+02:12:43:191321 | debug    | FE  | -----------------------UNIT TESTS-----------------------
+02:12:43:191424 | debug    | FE  | --------------------------------------------------------
+02:12:43:191520 | debug    | FE  | ----------------------Logging tests---------------------
+02:12:43:191630 | info     | FE  | Logging level set to 0 - all.
+02:12:43:191726 | info     | App | Logging level set to 0 - all.
+02:12:43:191814 | critical | FE  | Fatal test
+02:12:43:191898 | critical | App | Fatal test
+02:12:43:191979 | error    | FE  | Error test
+02:12:43:192114 | error    | App | Error test
+02:12:43:192237 | warning  | FE  | Warn test
+02:12:43:192345 | warning  | App | Warn test
+02:12:43:192433 | info     | FE  | Info test
+02:12:43:192515 | info     | App | Info test
+02:12:43:192598 | debug    | FE  | Debug test
+02:12:43:192683 | debug    | App | Debug test
+02:12:43:192764 | trace    | FE  | Trace test
+02:12:43:192861 | trace    | App | Trace test
+02:12:43:192948 | info     | FE  | Logging level set to 5 - fatal error or higher.
+02:12:43:193068 | error    | FE  | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
+02:12:43:193156 | info     | App | Logging level set to 4 - error or higher.
+02:12:43:193251 | error    | App | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
+02:12:43:193335 | info     | FE  | Logging level set to 0 - all.
+02:12:43:193418 | info     | App | Logging level set to 0 - all.
+02:12:43:193500 | debug    | FE  | ----------------------Logging test----------------------
+02:12:43:193607 | debug    | FE  | --------------------------------------------------------
+02:12:43:193699 | debug    | FE  | ---------------------PROFILER TESTS---------------------
+02:12:43:193788 | debug    | FE  | --------------------------------------------------------
+02:12:43:194132 | info     | FE  | Profiler session 'TEST' started.
+02:12:43:194258 | info     | FE  | Profiler Start Session: PASSED
+02:12:43:194761 | info     | FE  | Profiler Scope Function Begin: PASSED
+02:12:43:272173 | info     | FE  | Profiler Timer Stop: PASSED
+02:12:43:276125 | info     | FE  | Profiler Scope Name Begin: PASSED
+02:12:44:421982 | info     | FE  | Profiler session 'TEST' closed.
+02:12:44:422280 | info     | FE  | Profiler End Session: PASSED
+02:12:44:422867 | info     | FE  | Profiler: PASSED
+02:12:44:423173 | debug    | FE  | --------------------------------------------------------
+02:12:44:423463 | debug    | FE  | --------------------------------------------------------
+02:12:44:423756 | debug    | FE  | --------------------ASSERTIONS TESTS--------------------
+02:12:44:424048 | debug    | FE  | --------------------------------------------------------
+02:12:44:424496 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 208.
+02:12:44:425600 | error    | App | Assertion Message: test assert 1
+02:12:44:426221 | error    | App | ASSERTION FAILED: in file UnitTests.cpp in function void __cdecl fe::Tester::Test(void) at line 210.
+02:12:44:426794 | error    | App | Assertion Message: test assert 2, val=6
+02:12:44:427241 | debug    | FE  | --------------------------------------------------------
+02:12:44:427865 | info     | FE  | Profiler session 'Startup' started.
+02:12:44:429579 | info     | FE  | Initializing GLFW
+02:12:44:510653 | info     | FE  | Creating Window FoolsEngine (1600, 900)
+02:12:44:713196 | info     | FE  | VSync enablled.
+02:12:44:713711 | debug    | FE  | Setting events callbacks for window.
+02:12:44:715338 | info     | FE  | Events callbacks for Win10Window setted up.
+02:12:44:716097 | info     | FE  | New outer layer "ApplicationLayer" added to LayerStack
+02:12:44:716412 | info     | FE  | New inner layer "LayerExample" added to LayerStack
+02:12:44:716807 | info     | FE  | New outer layer "ImGuiLayer" added to LayerStack
+02:12:44:717507 | info     | FE  | Profiler session 'Startup' closed.
+02:12:44:718283 | info     | FE  | Profiler session 'Runtime' started.
+02:12:44:719802 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=829, y=411
+02:12:44:719959 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=829, y=411
+02:12:44:773453 | info     | App | LayerExample::OnUpdate()
+02:12:44:780951 | trace    | FE  | Application::OnEvent
+02:12:44:781112 | trace    | FE  | 13
+02:12:44:781536 | trace    | FE  | EventType::MouseMoved
+02:12:44:781900 | trace    | FE  | 20
+02:12:44:782335 | debug    | FE  | Events dispached!
+02:12:44:787404 | info     | App | LayerExample::OnUpdate()
+02:12:44:803078 | info     | App | LayerExample::OnUpdate()
+02:12:44:820423 | info     | App | LayerExample::OnUpdate()
+02:12:44:836293 | info     | App | LayerExample::OnUpdate()
+02:12:44:854148 | info     | App | LayerExample::OnUpdate()
+02:12:44:869710 | info     | App | LayerExample::OnUpdate()
+02:12:44:887991 | info     | App | LayerExample::OnUpdate()
+02:12:44:902915 | info     | App | LayerExample::OnUpdate()
+02:12:44:920558 | info     | App | LayerExample::OnUpdate()
+02:12:44:936718 | info     | App | LayerExample::OnUpdate()
+02:12:44:954513 | info     | App | LayerExample::OnUpdate()
+02:12:44:970004 | info     | App | LayerExample::OnUpdate()
+02:12:44:987538 | info     | App | LayerExample::OnUpdate()
+02:12:45:001028 | info     | App | LayerExample::OnUpdate()
+02:12:45:017582 | info     | App | LayerExample::OnUpdate()
+02:12:45:034241 | info     | App | LayerExample::OnUpdate()
+02:12:45:051605 | info     | App | LayerExample::OnUpdate()
+02:12:45:067981 | info     | App | LayerExample::OnUpdate()
+02:12:45:084572 | info     | App | LayerExample::OnUpdate()
+02:12:45:101187 | info     | App | LayerExample::OnUpdate()
+02:12:45:117935 | info     | App | LayerExample::OnUpdate()
+02:12:45:134527 | info     | App | LayerExample::OnUpdate()
+02:12:45:151089 | info     | App | LayerExample::OnUpdate()
+02:12:45:167683 | info     | App | LayerExample::OnUpdate()
+02:12:45:184387 | info     | App | LayerExample::OnUpdate()
+02:12:45:201073 | info     | App | LayerExample::OnUpdate()
+02:12:45:217702 | info     | App | LayerExample::OnUpdate()
+02:12:45:234366 | info     | App | LayerExample::OnUpdate()
+02:12:45:251051 | info     | App | LayerExample::OnUpdate()
+02:12:45:268284 | info     | App | LayerExample::OnUpdate()
+02:12:45:284419 | info     | App | LayerExample::OnUpdate()
+02:12:45:301152 | info     | App | LayerExample::OnUpdate()
+02:12:45:317786 | info     | App | LayerExample::OnUpdate()
+02:12:45:334737 | info     | App | LayerExample::OnUpdate()
+02:12:45:351453 | info     | App | LayerExample::OnUpdate()
+02:12:45:367884 | info     | App | LayerExample::OnUpdate()
+02:12:45:384609 | info     | App | LayerExample::OnUpdate()
+02:12:45:401221 | info     | App | LayerExample::OnUpdate()
+02:12:45:417884 | info     | App | LayerExample::OnUpdate()
+02:12:45:434556 | info     | App | LayerExample::OnUpdate()
+02:12:45:451235 | info     | App | LayerExample::OnUpdate()
+02:12:45:467904 | info     | App | LayerExample::OnUpdate()
+02:12:45:484682 | info     | App | LayerExample::OnUpdate()
+02:12:45:501517 | info     | App | LayerExample::OnUpdate()
+02:12:45:518057 | info     | App | LayerExample::OnUpdate()
+02:12:45:534813 | info     | App | LayerExample::OnUpdate()
+02:12:45:551442 | info     | App | LayerExample::OnUpdate()
+02:12:45:568063 | info     | App | LayerExample::OnUpdate()
+02:12:45:584700 | info     | App | LayerExample::OnUpdate()
+02:12:45:601351 | info     | App | LayerExample::OnUpdate()
+02:12:45:618220 | info     | App | LayerExample::OnUpdate()
+02:12:45:634719 | info     | App | LayerExample::OnUpdate()
+02:12:45:651378 | info     | App | LayerExample::OnUpdate()
+02:12:45:668123 | info     | App | LayerExample::OnUpdate()
+02:12:45:684786 | info     | App | LayerExample::OnUpdate()
+02:12:45:685513 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=834, y=409
+02:12:45:685654 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=834, y=409
+02:12:45:701839 | info     | App | LayerExample::OnUpdate()
+02:12:45:702194 | trace    | FE  | Application::OnEvent
+02:12:45:702627 | trace    | FE  | 13
+02:12:45:703146 | trace    | FE  | EventType::MouseMoved
+02:12:45:703460 | trace    | FE  | 20
+02:12:45:703847 | debug    | FE  | Events dispached!
+02:12:45:704478 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=844, y=404
+02:12:45:704621 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=844, y=404
+02:12:45:705286 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=845, y=403
+02:12:45:705589 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=845, y=403
+02:12:45:706236 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=846, y=402
+02:12:45:706388 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=846, y=402
+02:12:45:718277 | info     | App | LayerExample::OnUpdate()
+02:12:45:718744 | trace    | FE  | Application::OnEvent
+02:12:45:718869 | trace    | FE  | 13
+02:12:45:719164 | trace    | FE  | EventType::MouseMoved
+02:12:45:719477 | trace    | FE  | 20
+02:12:45:719859 | trace    | FE  | Application::OnEvent
+02:12:45:720082 | trace    | FE  | 13
+02:12:45:720384 | trace    | FE  | EventType::MouseMoved
+02:12:45:720720 | trace    | FE  | 20
+02:12:45:721104 | trace    | FE  | Application::OnEvent
+02:12:45:721324 | trace    | FE  | 13
+02:12:45:721685 | trace    | FE  | EventType::MouseMoved
+02:12:45:721980 | trace    | FE  | 20
+02:12:45:722367 | debug    | FE  | Events dispached!
+02:12:45:723025 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=859, y=396
+02:12:45:723185 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=859, y=396
+02:12:45:723827 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=861, y=395
+02:12:45:723998 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=861, y=395
+02:12:45:734903 | info     | App | LayerExample::OnUpdate()
+02:12:45:735236 | trace    | FE  | Application::OnEvent
+02:12:45:735484 | trace    | FE  | 13
+02:12:45:735819 | trace    | FE  | EventType::MouseMoved
+02:12:45:736116 | trace    | FE  | 20
+02:12:45:736553 | trace    | FE  | Application::OnEvent
+02:12:45:736773 | trace    | FE  | 13
+02:12:45:737075 | trace    | FE  | EventType::MouseMoved
+02:12:45:737407 | trace    | FE  | 20
+02:12:45:737804 | debug    | FE  | Events dispached!
+02:12:45:738495 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=873, y=388
+02:12:45:738638 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=873, y=388
+02:12:45:739310 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=874, y=387
+02:12:45:739503 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=874, y=387
+02:12:45:751651 | info     | App | LayerExample::OnUpdate()
+02:12:45:752034 | trace    | FE  | Application::OnEvent
+02:12:45:752241 | trace    | FE  | 13
+02:12:45:752655 | trace    | FE  | EventType::MouseMoved
+02:12:45:753013 | trace    | FE  | 20
+02:12:45:753469 | trace    | FE  | Application::OnEvent
+02:12:45:753675 | trace    | FE  | 13
+02:12:45:753979 | trace    | FE  | EventType::MouseMoved
+02:12:45:754279 | trace    | FE  | 20
+02:12:45:754757 | debug    | FE  | Events dispached!
+02:12:45:755284 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=884, y=380
+02:12:45:755469 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=884, y=380
+02:12:45:756044 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=885, y=380
+02:12:45:756184 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=885, y=380
+02:12:45:768281 | info     | App | LayerExample::OnUpdate()
+02:12:45:768681 | trace    | FE  | Application::OnEvent
+02:12:45:768838 | trace    | FE  | 13
+02:12:45:769133 | trace    | FE  | EventType::MouseMoved
+02:12:45:769468 | trace    | FE  | 20
+02:12:45:769859 | trace    | FE  | Application::OnEvent
+02:12:45:770074 | trace    | FE  | 13
+02:12:45:770369 | trace    | FE  | EventType::MouseMoved
+02:12:45:770719 | trace    | FE  | 20
+02:12:45:771143 | debug    | FE  | Events dispached!
+02:12:45:771713 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=892, y=373
+02:12:45:771974 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=892, y=373
+02:12:45:784872 | info     | App | LayerExample::OnUpdate()
+02:12:45:785290 | trace    | FE  | Application::OnEvent
+02:12:45:785444 | trace    | FE  | 13
+02:12:45:785823 | trace    | FE  | EventType::MouseMoved
+02:12:45:786122 | trace    | FE  | 20
+02:12:45:786549 | debug    | FE  | Events dispached!
+02:12:45:787171 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=898, y=367
+02:12:45:787338 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=898, y=367
+02:12:45:801624 | info     | App | LayerExample::OnUpdate()
+02:12:45:802001 | trace    | FE  | Application::OnEvent
+02:12:45:802245 | trace    | FE  | 13
+02:12:45:802570 | trace    | FE  | EventType::MouseMoved
+02:12:45:802862 | trace    | FE  | 20
+02:12:45:803243 | debug    | FE  | Events dispached!
+02:12:45:803813 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=904, y=362
+02:12:45:803983 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=904, y=362
+02:12:45:804741 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=905, y=362
+02:12:45:804881 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=905, y=362
+02:12:45:818204 | info     | App | LayerExample::OnUpdate()
+02:12:45:818584 | trace    | FE  | Application::OnEvent
+02:12:45:818750 | trace    | FE  | 13
+02:12:45:819070 | trace    | FE  | EventType::MouseMoved
+02:12:45:819400 | trace    | FE  | 20
+02:12:45:819821 | trace    | FE  | Application::OnEvent
+02:12:45:820044 | trace    | FE  | 13
+02:12:45:820334 | trace    | FE  | EventType::MouseMoved
+02:12:45:820634 | trace    | FE  | 20
+02:12:45:821003 | debug    | FE  | Events dispached!
+02:12:45:821593 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=908, y=360
+02:12:45:821775 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=908, y=360
+02:12:45:834965 | info     | App | LayerExample::OnUpdate()
+02:12:45:835414 | trace    | FE  | Application::OnEvent
+02:12:45:835558 | trace    | FE  | 13
+02:12:45:835842 | trace    | FE  | EventType::MouseMoved
+02:12:45:836141 | trace    | FE  | 20
+02:12:45:836553 | debug    | FE  | Events dispached!
+02:12:45:837128 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=912, y=359
+02:12:45:837291 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=912, y=359
+02:12:45:837950 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=913, y=359
+02:12:45:838098 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=913, y=359
+02:12:45:851620 | info     | App | LayerExample::OnUpdate()
+02:12:45:852037 | trace    | FE  | Application::OnEvent
+02:12:45:852254 | trace    | FE  | 13
+02:12:45:852559 | trace    | FE  | EventType::MouseMoved
+02:12:45:852852 | trace    | FE  | 20
+02:12:45:853255 | trace    | FE  | Application::OnEvent
+02:12:45:853466 | trace    | FE  | 13
+02:12:45:853760 | trace    | FE  | EventType::MouseMoved
+02:12:45:854061 | trace    | FE  | 20
+02:12:45:854468 | debug    | FE  | Events dispached!
+02:12:45:855603 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=918, y=359
+02:12:45:856519 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=918, y=359
+02:12:45:868269 | info     | App | LayerExample::OnUpdate()
+02:12:45:868658 | trace    | FE  | Application::OnEvent
+02:12:45:868828 | trace    | FE  | 13
+02:12:45:869142 | trace    | FE  | EventType::MouseMoved
+02:12:45:869459 | trace    | FE  | 20
+02:12:45:869838 | debug    | FE  | Events dispached!
+02:12:45:870405 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=923, y=359
+02:12:45:870580 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=923, y=359
+02:12:45:884953 | info     | App | LayerExample::OnUpdate()
+02:12:45:885338 | trace    | FE  | Application::OnEvent
+02:12:45:885475 | trace    | FE  | 13
+02:12:45:885786 | trace    | FE  | EventType::MouseMoved
+02:12:45:886091 | trace    | FE  | 20
+02:12:45:887167 | debug    | FE  | Events dispached!
+02:12:45:888080 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=932, y=359
+02:12:45:888255 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=932, y=359
+02:12:45:901753 | info     | App | LayerExample::OnUpdate()
+02:12:45:902205 | trace    | FE  | Application::OnEvent
+02:12:45:902392 | trace    | FE  | 13
+02:12:45:903674 | trace    | FE  | EventType::MouseMoved
+02:12:45:904056 | trace    | FE  | 20
+02:12:45:904539 | debug    | FE  | Events dispached!
+02:12:45:905248 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=939, y=361
+02:12:45:905426 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=939, y=361
+02:12:45:906047 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=940, y=361
+02:12:45:906221 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=940, y=361
+02:12:45:906826 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=940, y=362
+02:12:45:907025 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=940, y=362
+02:12:45:918948 | info     | App | LayerExample::OnUpdate()
+02:12:45:919495 | trace    | FE  | Application::OnEvent
+02:12:45:919792 | trace    | FE  | 13
+02:12:45:920151 | trace    | FE  | EventType::MouseMoved
+02:12:45:920514 | trace    | FE  | 20
+02:12:45:920924 | trace    | FE  | Application::OnEvent
+02:12:45:921249 | trace    | FE  | 13
+02:12:45:921632 | trace    | FE  | EventType::MouseMoved
+02:12:45:921939 | trace    | FE  | 20
+02:12:45:922340 | trace    | FE  | Application::OnEvent
+02:12:45:922679 | trace    | FE  | 13
+02:12:45:923031 | trace    | FE  | EventType::MouseMoved
+02:12:45:923327 | trace    | FE  | 20
+02:12:45:923720 | debug    | FE  | Events dispached!
+02:12:45:924280 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=947, y=364
+02:12:45:924504 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=947, y=364
+02:12:45:935167 | info     | App | LayerExample::OnUpdate()
+02:12:45:935508 | trace    | FE  | Application::OnEvent
+02:12:45:935716 | trace    | FE  | 13
+02:12:45:936043 | trace    | FE  | EventType::MouseMoved
+02:12:45:936362 | trace    | FE  | 20
+02:12:45:936820 | debug    | FE  | Events dispached!
+02:12:45:937366 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=950, y=366
+02:12:45:937562 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=950, y=366
+02:12:45:951758 | info     | App | LayerExample::OnUpdate()
+02:12:45:952085 | trace    | FE  | Application::OnEvent
+02:12:45:952220 | trace    | FE  | 13
+02:12:45:952512 | trace    | FE  | EventType::MouseMoved
+02:12:45:952814 | trace    | FE  | 20
+02:12:45:953197 | debug    | FE  | Events dispached!
+02:12:45:953783 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=953, y=367
+02:12:45:953947 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=953, y=367
+02:12:45:968405 | info     | App | LayerExample::OnUpdate()
+02:12:45:968803 | trace    | FE  | Application::OnEvent
+02:12:45:968932 | trace    | FE  | 13
+02:12:45:969233 | trace    | FE  | EventType::MouseMoved
+02:12:45:969541 | trace    | FE  | 20
+02:12:45:969980 | debug    | FE  | Events dispached!
+02:12:45:970620 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=957, y=367
+02:12:45:970760 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=957, y=367
+02:12:45:985095 | info     | App | LayerExample::OnUpdate()
+02:12:45:985533 | trace    | FE  | Application::OnEvent
+02:12:45:985822 | trace    | FE  | 13
+02:12:45:986115 | trace    | FE  | EventType::MouseMoved
+02:12:45:986456 | trace    | FE  | 20
+02:12:45:986837 | debug    | FE  | Events dispached!
+02:12:45:987413 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=962, y=367
+02:12:45:987586 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=962, y=367
+02:12:46:001692 | info     | App | LayerExample::OnUpdate()
+02:12:46:002139 | trace    | FE  | Application::OnEvent
+02:12:46:002269 | trace    | FE  | 13
+02:12:46:002574 | trace    | FE  | EventType::MouseMoved
+02:12:46:002866 | trace    | FE  | 20
+02:12:46:003329 | debug    | FE  | Events dispached!
+02:12:46:003930 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=965, y=366
+02:12:46:004069 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=965, y=366
+02:12:46:004709 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=965, y=365
+02:12:46:004967 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=965, y=365
+02:12:46:018401 | info     | App | LayerExample::OnUpdate()
+02:12:46:018783 | trace    | FE  | Application::OnEvent
+02:12:46:018945 | trace    | FE  | 13
+02:12:46:019240 | trace    | FE  | EventType::MouseMoved
+02:12:46:019549 | trace    | FE  | 20
+02:12:46:019924 | trace    | FE  | Application::OnEvent
+02:12:46:020139 | trace    | FE  | 13
+02:12:46:020479 | trace    | FE  | EventType::MouseMoved
+02:12:46:020863 | trace    | FE  | 20
+02:12:46:021244 | debug    | FE  | Events dispached!
+02:12:46:021816 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=968, y=362
+02:12:46:021986 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=968, y=362
+02:12:46:035081 | info     | App | LayerExample::OnUpdate()
+02:12:46:035513 | trace    | FE  | Application::OnEvent
+02:12:46:035868 | trace    | FE  | 13
+02:12:46:036166 | trace    | FE  | EventType::MouseMoved
+02:12:46:036467 | trace    | FE  | 20
+02:12:46:036891 | debug    | FE  | Events dispached!
+02:12:46:037423 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=971, y=359
+02:12:46:037590 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=971, y=359
+02:12:46:051758 | info     | App | LayerExample::OnUpdate()
+02:12:46:052183 | trace    | FE  | Application::OnEvent
+02:12:46:052325 | trace    | FE  | 13
+02:12:46:052715 | trace    | FE  | EventType::MouseMoved
+02:12:46:053002 | trace    | FE  | 20
+02:12:46:053388 | debug    | FE  | Events dispached!
+02:12:46:054276 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=973, y=354
+02:12:46:054825 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=973, y=354
+02:12:46:068429 | info     | App | LayerExample::OnUpdate()
+02:12:46:068805 | trace    | FE  | Application::OnEvent
+02:12:46:068945 | trace    | FE  | 13
+02:12:46:069241 | trace    | FE  | EventType::MouseMoved
+02:12:46:069618 | trace    | FE  | 20
+02:12:46:070974 | debug    | FE  | Events dispached!
+02:12:46:071705 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=978, y=349
+02:12:46:071894 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=978, y=349
+02:12:46:085122 | info     | App | LayerExample::OnUpdate()
+02:12:46:085568 | trace    | FE  | Application::OnEvent
+02:12:46:086645 | trace    | FE  | 13
+02:12:46:086955 | trace    | FE  | EventType::MouseMoved
+02:12:46:087262 | trace    | FE  | 20
+02:12:46:087751 | debug    | FE  | Events dispached!
+02:12:46:088265 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=982, y=345
+02:12:46:088485 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=982, y=345
+02:12:46:101870 | info     | App | LayerExample::OnUpdate()
+02:12:46:102164 | trace    | FE  | Application::OnEvent
+02:12:46:102315 | trace    | FE  | 13
+02:12:46:102688 | trace    | FE  | EventType::MouseMoved
+02:12:46:102986 | trace    | FE  | 20
+02:12:46:103373 | debug    | FE  | Events dispached!
+02:12:46:103999 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=985, y=342
+02:12:46:104221 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=985, y=342
+02:12:46:104863 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=985, y=341
+02:12:46:105004 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=985, y=341
+02:12:46:118542 | info     | App | LayerExample::OnUpdate()
+02:12:46:118902 | trace    | FE  | Application::OnEvent
+02:12:46:119180 | trace    | FE  | 13
+02:12:46:119489 | trace    | FE  | EventType::MouseMoved
+02:12:46:119792 | trace    | FE  | 20
+02:12:46:120185 | trace    | FE  | Application::OnEvent
+02:12:46:120404 | trace    | FE  | 13
+02:12:46:120725 | trace    | FE  | EventType::MouseMoved
+02:12:46:121083 | trace    | FE  | 20
+02:12:46:121551 | debug    | FE  | Events dispached!
+02:12:46:122214 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=987, y=339
+02:12:46:122395 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=987, y=339
+02:12:46:135262 | info     | App | LayerExample::OnUpdate()
+02:12:46:135648 | trace    | FE  | Application::OnEvent
+02:12:46:136063 | trace    | FE  | 13
+02:12:46:136370 | trace    | FE  | EventType::MouseMoved
+02:12:46:136683 | trace    | FE  | 20
+02:12:46:137103 | debug    | FE  | Events dispached!
+02:12:46:137694 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=989, y=337
+02:12:46:137845 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=989, y=337
+02:12:46:152171 | info     | App | LayerExample::OnUpdate()
+02:12:46:152531 | trace    | FE  | Application::OnEvent
+02:12:46:152639 | trace    | FE  | 13
+02:12:46:152932 | trace    | FE  | EventType::MouseMoved
+02:12:46:153231 | trace    | FE  | 20
+02:12:46:153703 | debug    | FE  | Events dispached!
+02:12:46:154354 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=990, y=336
+02:12:46:154527 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=990, y=336
+02:12:46:168694 | info     | App | LayerExample::OnUpdate()
+02:12:46:169042 | trace    | FE  | Application::OnEvent
+02:12:46:169268 | trace    | FE  | 13
+02:12:46:169561 | trace    | FE  | EventType::MouseMoved
+02:12:46:169862 | trace    | FE  | 20
+02:12:46:170256 | debug    | FE  | Events dispached!
+02:12:46:170857 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=990, y=335
+02:12:46:171005 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=990, y=335
+02:12:46:185202 | info     | App | LayerExample::OnUpdate()
+02:12:46:185581 | trace    | FE  | Application::OnEvent
+02:12:46:185750 | trace    | FE  | 13
+02:12:46:186074 | trace    | FE  | EventType::MouseMoved
+02:12:46:186375 | trace    | FE  | 20
+02:12:46:186788 | debug    | FE  | Events dispached!
+02:12:46:201899 | info     | App | LayerExample::OnUpdate()
+02:12:46:218629 | info     | App | LayerExample::OnUpdate()
+02:12:46:219329 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=991, y=334
+02:12:46:219469 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=991, y=334
+02:12:46:235264 | info     | App | LayerExample::OnUpdate()
+02:12:46:235641 | trace    | FE  | Application::OnEvent
+02:12:46:235816 | trace    | FE  | 13
+02:12:46:236121 | trace    | FE  | EventType::MouseMoved
+02:12:46:236422 | trace    | FE  | 20
+02:12:46:236829 | debug    | FE  | Events dispached!
+02:12:46:237403 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=991, y=333
+02:12:46:237601 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=991, y=333
+02:12:46:251968 | info     | App | LayerExample::OnUpdate()
+02:12:46:252390 | trace    | FE  | Application::OnEvent
+02:12:46:252551 | trace    | FE  | 13
+02:12:46:252902 | trace    | FE  | EventType::MouseMoved
+02:12:46:253207 | trace    | FE  | 20
+02:12:46:253595 | debug    | FE  | Events dispached!
+02:12:46:254166 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=991, y=332
+02:12:46:254340 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=991, y=332
+02:12:46:268599 | info     | App | LayerExample::OnUpdate()
+02:12:46:268953 | trace    | FE  | Application::OnEvent
+02:12:46:269201 | trace    | FE  | 13
+02:12:46:269496 | trace    | FE  | EventType::MouseMoved
+02:12:46:269802 | trace    | FE  | 20
+02:12:46:270279 | debug    | FE  | Events dispached!
+02:12:46:270843 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=992, y=332
+02:12:46:271755 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=992, y=332
+02:12:46:285267 | info     | App | LayerExample::OnUpdate()
+02:12:46:285656 | trace    | FE  | Application::OnEvent
+02:12:46:285802 | trace    | FE  | 13
+02:12:46:286102 | trace    | FE  | EventType::MouseMoved
+02:12:46:286400 | trace    | FE  | 20
+02:12:46:287259 | debug    | FE  | Events dispached!
+02:12:46:301956 | info     | App | LayerExample::OnUpdate()
+02:12:46:318677 | info     | App | LayerExample::OnUpdate()
+02:12:46:319390 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=993, y=332
+02:12:46:319578 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=993, y=332
+02:12:46:335246 | info     | App | LayerExample::OnUpdate()
+02:12:46:335576 | trace    | FE  | Application::OnEvent
+02:12:46:335685 | trace    | FE  | 13
+02:12:46:335986 | trace    | FE  | EventType::MouseMoved
+02:12:46:336293 | trace    | FE  | 20
+02:12:46:336780 | debug    | FE  | Events dispached!
+02:12:46:337361 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=994, y=332
+02:12:46:337516 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=994, y=332
+02:12:46:352241 | info     | App | LayerExample::OnUpdate()
+02:12:46:352705 | trace    | FE  | Application::OnEvent
+02:12:46:352865 | trace    | FE  | 13
+02:12:46:353165 | trace    | FE  | EventType::MouseMoved
+02:12:46:353473 | trace    | FE  | 20
+02:12:46:353854 | debug    | FE  | Events dispached!
+02:12:46:354438 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=995, y=332
+02:12:46:354646 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=995, y=332
+02:12:46:369056 | info     | App | LayerExample::OnUpdate()
+02:12:46:369450 | trace    | FE  | Application::OnEvent
+02:12:46:369696 | trace    | FE  | 13
+02:12:46:370062 | trace    | FE  | EventType::MouseMoved
+02:12:46:370437 | trace    | FE  | 20
+02:12:46:370836 | debug    | FE  | Events dispached!
+02:12:46:371499 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=997, y=332
+02:12:46:371668 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=997, y=332
+02:12:46:385456 | info     | App | LayerExample::OnUpdate()
+02:12:46:385849 | trace    | FE  | Application::OnEvent
+02:12:46:385958 | trace    | FE  | 13
+02:12:46:386256 | trace    | FE  | EventType::MouseMoved
+02:12:46:386560 | trace    | FE  | 20
+02:12:46:386946 | debug    | FE  | Events dispached!
+02:12:46:387537 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=998, y=332
+02:12:46:387703 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=998, y=332
+02:12:46:402238 | info     | App | LayerExample::OnUpdate()
+02:12:46:402580 | trace    | FE  | Application::OnEvent
+02:12:46:402940 | trace    | FE  | 13
+02:12:46:403233 | trace    | FE  | EventType::MouseMoved
+02:12:46:403570 | trace    | FE  | 20
+02:12:46:404011 | debug    | FE  | Events dispached!
+02:12:46:404588 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=999, y=332
+02:12:46:404754 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=999, y=332
+02:12:46:418729 | info     | App | LayerExample::OnUpdate()
+02:12:46:419059 | trace    | FE  | Application::OnEvent
+02:12:46:419209 | trace    | FE  | 13
+02:12:46:419506 | trace    | FE  | EventType::MouseMoved
+02:12:46:419809 | trace    | FE  | 20
+02:12:46:420237 | debug    | FE  | Events dispached!
+02:12:46:435449 | info     | App | LayerExample::OnUpdate()
+02:12:46:436172 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1000, y=332
+02:12:46:436374 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1000, y=332
+02:12:46:452089 | info     | App | LayerExample::OnUpdate()
+02:12:46:452482 | trace    | FE  | Application::OnEvent
+02:12:46:452780 | trace    | FE  | 13
+02:12:46:453106 | trace    | FE  | EventType::MouseMoved
+02:12:46:453405 | trace    | FE  | 20
+02:12:46:453800 | debug    | FE  | Events dispached!
+02:12:46:468796 | info     | App | LayerExample::OnUpdate()
+02:12:46:469606 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1001, y=332
+02:12:46:469778 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1001, y=332
+02:12:46:485499 | info     | App | LayerExample::OnUpdate()
+02:12:46:485873 | trace    | FE  | Application::OnEvent
+02:12:46:486046 | trace    | FE  | 13
+02:12:46:486337 | trace    | FE  | EventType::MouseMoved
+02:12:46:486656 | trace    | FE  | 20
+02:12:46:488443 | debug    | FE  | Events dispached!
+02:12:46:489774 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1002, y=331
+02:12:46:490049 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1002, y=331
+02:12:46:502220 | info     | App | LayerExample::OnUpdate()
+02:12:46:503329 | trace    | FE  | Application::OnEvent
+02:12:46:503449 | trace    | FE  | 13
+02:12:46:503755 | trace    | FE  | EventType::MouseMoved
+02:12:46:504055 | trace    | FE  | 20
+02:12:46:504459 | debug    | FE  | Events dispached!
+02:12:46:505097 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1003, y=328
+02:12:46:505315 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1003, y=328
+02:12:46:518734 | info     | App | LayerExample::OnUpdate()
+02:12:46:519040 | trace    | FE  | Application::OnEvent
+02:12:46:519165 | trace    | FE  | 13
+02:12:46:519478 | trace    | FE  | EventType::MouseMoved
+02:12:46:519786 | trace    | FE  | 20
+02:12:46:520217 | debug    | FE  | Events dispached!
+02:12:46:520750 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1005, y=324
+02:12:46:520890 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1005, y=324
+02:12:46:535567 | info     | App | LayerExample::OnUpdate()
+02:12:46:535925 | trace    | FE  | Application::OnEvent
+02:12:46:536193 | trace    | FE  | 13
+02:12:46:536489 | trace    | FE  | EventType::MouseMoved
+02:12:46:536788 | trace    | FE  | 20
+02:12:46:537183 | debug    | FE  | Events dispached!
+02:12:46:537804 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1009, y=317
+02:12:46:538039 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1009, y=317
+02:12:46:552387 | info     | App | LayerExample::OnUpdate()
+02:12:46:552812 | trace    | FE  | Application::OnEvent
+02:12:46:553085 | trace    | FE  | 13
+02:12:46:553391 | trace    | FE  | EventType::MouseMoved
+02:12:46:553742 | trace    | FE  | 20
+02:12:46:554193 | debug    | FE  | Events dispached!
+02:12:46:554746 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1014, y=307
+02:12:46:555016 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1014, y=307
+02:12:46:569047 | info     | App | LayerExample::OnUpdate()
+02:12:46:569505 | trace    | FE  | Application::OnEvent
+02:12:46:569824 | trace    | FE  | 13
+02:12:46:570124 | trace    | FE  | EventType::MouseMoved
+02:12:46:570458 | trace    | FE  | 20
+02:12:46:570887 | debug    | FE  | Events dispached!
+02:12:46:571564 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1019, y=295
+02:12:46:571735 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1019, y=295
+02:12:46:572326 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1020, y=294
+02:12:46:572503 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1020, y=294
+02:12:46:585672 | info     | App | LayerExample::OnUpdate()
+02:12:46:586025 | trace    | FE  | Application::OnEvent
+02:12:46:586273 | trace    | FE  | 13
+02:12:46:586654 | trace    | FE  | EventType::MouseMoved
+02:12:46:586970 | trace    | FE  | 20
+02:12:46:587363 | trace    | FE  | Application::OnEvent
+02:12:46:587645 | trace    | FE  | 13
+02:12:46:587958 | trace    | FE  | EventType::MouseMoved
+02:12:46:588267 | trace    | FE  | 20
+02:12:46:588717 | debug    | FE  | Events dispached!
+02:12:46:589319 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1026, y=278
+02:12:46:589507 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1026, y=278
+02:12:46:590102 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1027, y=278
+02:12:46:590243 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1027, y=278
+02:12:46:590937 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1027, y=277
+02:12:46:591180 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1027, y=277
+02:12:46:591796 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1027, y=276
+02:12:46:591988 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1027, y=276
+02:12:46:602344 | info     | App | LayerExample::OnUpdate()
+02:12:46:602734 | trace    | FE  | Application::OnEvent
+02:12:46:602875 | trace    | FE  | 13
+02:12:46:603173 | trace    | FE  | EventType::MouseMoved
+02:12:46:603478 | trace    | FE  | 20
+02:12:46:603859 | trace    | FE  | Application::OnEvent
+02:12:46:604076 | trace    | FE  | 13
+02:12:46:604409 | trace    | FE  | EventType::MouseMoved
+02:12:46:604759 | trace    | FE  | 20
+02:12:46:605144 | trace    | FE  | Application::OnEvent
+02:12:46:605379 | trace    | FE  | 13
+02:12:46:605688 | trace    | FE  | EventType::MouseMoved
+02:12:46:605985 | trace    | FE  | 20
+02:12:46:606365 | trace    | FE  | Application::OnEvent
+02:12:46:606752 | trace    | FE  | 13
+02:12:46:607059 | trace    | FE  | EventType::MouseMoved
+02:12:46:607367 | trace    | FE  | 20
+02:12:46:607816 | debug    | FE  | Events dispached!
+02:12:46:608468 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1034, y=261
+02:12:46:608622 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1034, y=261
+02:12:46:618954 | info     | App | LayerExample::OnUpdate()
+02:12:46:619361 | trace    | FE  | Application::OnEvent
+02:12:46:619493 | trace    | FE  | 13
+02:12:46:619861 | trace    | FE  | EventType::MouseMoved
+02:12:46:620161 | trace    | FE  | 20
+02:12:46:620623 | debug    | FE  | Events dispached!
+02:12:46:621185 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1040, y=250
+02:12:46:621359 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1040, y=250
+02:12:46:622015 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1040, y=249
+02:12:46:622195 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1040, y=249
+02:12:46:622800 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1040, y=247
+02:12:46:622957 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1040, y=247
+02:12:46:635750 | info     | App | LayerExample::OnUpdate()
+02:12:46:636089 | trace    | FE  | Application::OnEvent
+02:12:46:636334 | trace    | FE  | 13
+02:12:46:636689 | trace    | FE  | EventType::MouseMoved
+02:12:46:637021 | trace    | FE  | 20
+02:12:46:637477 | trace    | FE  | Application::OnEvent
+02:12:46:637700 | trace    | FE  | 13
+02:12:46:638010 | trace    | FE  | EventType::MouseMoved
+02:12:46:638315 | trace    | FE  | 20
+02:12:46:638759 | trace    | FE  | Application::OnEvent
+02:12:46:638991 | trace    | FE  | 13
+02:12:46:639293 | trace    | FE  | EventType::MouseMoved
+02:12:46:639668 | trace    | FE  | 20
+02:12:46:641064 | debug    | FE  | Events dispached!
+02:12:46:641651 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1048, y=233
+02:12:46:641921 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1048, y=233
+02:12:46:652300 | info     | App | LayerExample::OnUpdate()
+02:12:46:652724 | trace    | FE  | Application::OnEvent
+02:12:46:652861 | trace    | FE  | 13
+02:12:46:653169 | trace    | FE  | EventType::MouseMoved
+02:12:46:653466 | trace    | FE  | 20
+02:12:46:653845 | debug    | FE  | Events dispached!
+02:12:46:654488 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1054, y=224
+02:12:46:654660 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1054, y=224
+02:12:46:655269 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1055, y=222
+02:12:46:655464 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1055, y=222
+02:12:46:656836 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1056, y=221
+02:12:46:657011 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1056, y=221
+02:12:46:668915 | info     | App | LayerExample::OnUpdate()
+02:12:46:669325 | trace    | FE  | Application::OnEvent
+02:12:46:669477 | trace    | FE  | 13
+02:12:46:669788 | trace    | FE  | EventType::MouseMoved
+02:12:46:670085 | trace    | FE  | 20
+02:12:46:670486 | trace    | FE  | Application::OnEvent
+02:12:46:670719 | trace    | FE  | 13
+02:12:46:671010 | trace    | FE  | EventType::MouseMoved
+02:12:46:672171 | trace    | FE  | 20
+02:12:46:672760 | trace    | FE  | Application::OnEvent
+02:12:46:672987 | trace    | FE  | 13
+02:12:46:673304 | trace    | FE  | EventType::MouseMoved
+02:12:46:673671 | trace    | FE  | 20
+02:12:46:674054 | debug    | FE  | Events dispached!
+02:12:46:674669 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1068, y=199
+02:12:46:674930 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1068, y=199
+02:12:46:675606 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1069, y=198
+02:12:46:675746 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1069, y=198
+02:12:46:676497 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1070, y=196
+02:12:46:676734 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1070, y=196
+02:12:46:677413 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1071, y=194
+02:12:46:677582 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1071, y=194
+02:12:46:678165 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1072, y=192
+02:12:46:678343 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1072, y=192
+02:12:46:679104 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1073, y=191
+02:12:46:679286 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1073, y=191
+02:12:46:679950 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1073, y=189
+02:12:46:680157 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1073, y=189
+02:12:46:680823 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1074, y=188
+02:12:46:680962 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1074, y=188
+02:12:46:685683 | info     | App | LayerExample::OnUpdate()
+02:12:46:686011 | trace    | FE  | Application::OnEvent
+02:12:46:686177 | trace    | FE  | 13
+02:12:46:686501 | trace    | FE  | EventType::MouseMoved
+02:12:46:686790 | trace    | FE  | 20
+02:12:46:688349 | trace    | FE  | Application::OnEvent
+02:12:46:688629 | trace    | FE  | 13
+02:12:46:688955 | trace    | FE  | EventType::MouseMoved
+02:12:46:689389 | trace    | FE  | 20
+02:12:46:689815 | trace    | FE  | Application::OnEvent
+02:12:46:690013 | trace    | FE  | 13
+02:12:46:690309 | trace    | FE  | EventType::MouseMoved
+02:12:46:690692 | trace    | FE  | 20
+02:12:46:691079 | trace    | FE  | Application::OnEvent
+02:12:46:691293 | trace    | FE  | 13
+02:12:46:691659 | trace    | FE  | EventType::MouseMoved
+02:12:46:691955 | trace    | FE  | 20
+02:12:46:692340 | trace    | FE  | Application::OnEvent
+02:12:46:692621 | trace    | FE  | 13
+02:12:46:692927 | trace    | FE  | EventType::MouseMoved
+02:12:46:693267 | trace    | FE  | 20
+02:12:46:693756 | trace    | FE  | Application::OnEvent
+02:12:46:693934 | trace    | FE  | 13
+02:12:46:694232 | trace    | FE  | EventType::MouseMoved
+02:12:46:694578 | trace    | FE  | 20
+02:12:46:694954 | trace    | FE  | Application::OnEvent
+02:12:46:695170 | trace    | FE  | 13
+02:12:46:695485 | trace    | FE  | EventType::MouseMoved
+02:12:46:695806 | trace    | FE  | 20
+02:12:46:696229 | trace    | FE  | Application::OnEvent
+02:12:46:696447 | trace    | FE  | 13
+02:12:46:696736 | trace    | FE  | EventType::MouseMoved
+02:12:46:697056 | trace    | FE  | 20
+02:12:46:697462 | debug    | FE  | Events dispached!
+02:12:46:698041 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1085, y=164
+02:12:46:698247 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1085, y=164
+02:12:46:698880 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1085, y=163
+02:12:46:699019 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1085, y=163
+02:12:46:702280 | info     | App | LayerExample::OnUpdate()
+02:12:46:704284 | trace    | FE  | Application::OnEvent
+02:12:46:704497 | trace    | FE  | 13
+02:12:46:704867 | trace    | FE  | EventType::MouseMoved
+02:12:46:705166 | trace    | FE  | 20
+02:12:46:705561 | trace    | FE  | Application::OnEvent
+02:12:46:705770 | trace    | FE  | 13
+02:12:46:706070 | trace    | FE  | EventType::MouseMoved
+02:12:46:706412 | trace    | FE  | 20
+02:12:46:706802 | debug    | FE  | Events dispached!
+02:12:46:707504 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1088, y=155
+02:12:46:707658 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1088, y=155
+02:12:46:708270 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1089, y=154
+02:12:46:708482 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1089, y=154
+02:12:46:709087 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1090, y=152
+02:12:46:709264 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1090, y=152
+02:12:46:709906 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1091, y=151
+02:12:46:710108 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1091, y=151
+02:12:46:710723 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1091, y=149
+02:12:46:710870 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1091, y=149
+02:12:46:719132 | info     | App | LayerExample::OnUpdate()
+02:12:46:719661 | trace    | FE  | Application::OnEvent
+02:12:46:719886 | trace    | FE  | 13
+02:12:46:720184 | trace    | FE  | EventType::MouseMoved
+02:12:46:720506 | trace    | FE  | 20
+02:12:46:720893 | trace    | FE  | Application::OnEvent
+02:12:46:721108 | trace    | FE  | 13
+02:12:46:721470 | trace    | FE  | EventType::MouseMoved
+02:12:46:721777 | trace    | FE  | 20
+02:12:46:722167 | trace    | FE  | Application::OnEvent
+02:12:46:722414 | trace    | FE  | 13
+02:12:46:722804 | trace    | FE  | EventType::MouseMoved
+02:12:46:723100 | trace    | FE  | 20
+02:12:46:723543 | trace    | FE  | Application::OnEvent
+02:12:46:723777 | trace    | FE  | 13
+02:12:46:724076 | trace    | FE  | EventType::MouseMoved
+02:12:46:724395 | trace    | FE  | 20
+02:12:46:724789 | trace    | FE  | Application::OnEvent
+02:12:46:725005 | trace    | FE  | 13
+02:12:46:725303 | trace    | FE  | EventType::MouseMoved
+02:12:46:725694 | trace    | FE  | 20
+02:12:46:726110 | debug    | FE  | Events dispached!
+02:12:46:726723 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1102, y=126
+02:12:46:726886 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1102, y=126
+02:12:46:735691 | info     | App | LayerExample::OnUpdate()
+02:12:46:735982 | trace    | FE  | Application::OnEvent
+02:12:46:736119 | trace    | FE  | 13
+02:12:46:736463 | trace    | FE  | EventType::MouseMoved
+02:12:46:736766 | trace    | FE  | 20
+02:12:46:737147 | debug    | FE  | Events dispached!
+02:12:46:737747 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1109, y=113
+02:12:46:737941 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1109, y=113
+02:12:46:752441 | info     | App | LayerExample::OnUpdate()
+02:12:46:752893 | trace    | FE  | Application::OnEvent
+02:12:46:753028 | trace    | FE  | 13
+02:12:46:753324 | trace    | FE  | EventType::MouseMoved
+02:12:46:753701 | trace    | FE  | 20
+02:12:46:754069 | debug    | FE  | Events dispached!
+02:12:46:754669 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1118, y=98
+02:12:46:754969 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1118, y=98
+02:12:46:755618 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1119, y=96
+02:12:46:755789 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1119, y=96
+02:12:46:769163 | info     | App | LayerExample::OnUpdate()
+02:12:46:769536 | trace    | FE  | Application::OnEvent
+02:12:46:769928 | trace    | FE  | 13
+02:12:46:770218 | trace    | FE  | EventType::MouseMoved
+02:12:46:770558 | trace    | FE  | 20
+02:12:46:770948 | trace    | FE  | Application::OnEvent
+02:12:46:771161 | trace    | FE  | 13
+02:12:46:771499 | trace    | FE  | EventType::MouseMoved
+02:12:46:771825 | trace    | FE  | 20
+02:12:46:772243 | debug    | FE  | Events dispached!
+02:12:46:772878 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1128, y=83
+02:12:46:773017 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1128, y=83
+02:12:46:773771 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1128, y=82
+02:12:46:774014 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1128, y=82
+02:12:46:785848 | info     | App | LayerExample::OnUpdate()
+02:12:46:786185 | trace    | FE  | Application::OnEvent
+02:12:46:786464 | trace    | FE  | 13
+02:12:46:786836 | trace    | FE  | EventType::MouseMoved
+02:12:46:787158 | trace    | FE  | 20
+02:12:46:787557 | trace    | FE  | Application::OnEvent
+02:12:46:787767 | trace    | FE  | 13
+02:12:46:788062 | trace    | FE  | EventType::MouseMoved
+02:12:46:788392 | trace    | FE  | 20
+02:12:46:788771 | debug    | FE  | Events dispached!
+02:12:46:789497 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1136, y=73
+02:12:46:789641 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1136, y=73
+02:12:46:790317 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1136, y=72
+02:12:46:790493 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1136, y=72
+02:12:46:802459 | info     | App | LayerExample::OnUpdate()
+02:12:46:802855 | trace    | FE  | Application::OnEvent
+02:12:46:802978 | trace    | FE  | 13
+02:12:46:803375 | trace    | FE  | EventType::MouseMoved
+02:12:46:803715 | trace    | FE  | 20
+02:12:46:804147 | trace    | FE  | Application::OnEvent
+02:12:46:804343 | trace    | FE  | 13
+02:12:46:804712 | trace    | FE  | EventType::MouseMoved
+02:12:46:805065 | trace    | FE  | 20
+02:12:46:805561 | debug    | FE  | Events dispached!
+02:12:46:806277 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1143, y=65
+02:12:46:806436 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1143, y=65
+02:12:46:819166 | info     | App | LayerExample::OnUpdate()
+02:12:46:819592 | trace    | FE  | Application::OnEvent
+02:12:46:819793 | trace    | FE  | 13
+02:12:46:820088 | trace    | FE  | EventType::MouseMoved
+02:12:46:820407 | trace    | FE  | 20
+02:12:46:820804 | debug    | FE  | Events dispached!
+02:12:46:821425 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1149, y=58
+02:12:46:821574 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1149, y=58
+02:12:46:835772 | info     | App | LayerExample::OnUpdate()
+02:12:46:836175 | trace    | FE  | Application::OnEvent
+02:12:46:836292 | trace    | FE  | 13
+02:12:46:836702 | trace    | FE  | EventType::MouseMoved
+02:12:46:836984 | trace    | FE  | 20
+02:12:46:837367 | debug    | FE  | Events dispached!
+02:12:46:838001 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1155, y=52
+02:12:46:838177 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1155, y=52
+02:12:46:852441 | info     | App | LayerExample::OnUpdate()
+02:12:46:852827 | trace    | FE  | Application::OnEvent
+02:12:46:852959 | trace    | FE  | 13
+02:12:46:853261 | trace    | FE  | EventType::MouseMoved
+02:12:46:853641 | trace    | FE  | 20
+02:12:46:854091 | debug    | FE  | Events dispached!
+02:12:46:854688 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1160, y=45
+02:12:46:854874 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1160, y=45
+02:12:46:869129 | info     | App | LayerExample::OnUpdate()
+02:12:46:869520 | trace    | FE  | Application::OnEvent
+02:12:46:869879 | trace    | FE  | 13
+02:12:46:870177 | trace    | FE  | EventType::MouseMoved
+02:12:46:870509 | trace    | FE  | 20
+02:12:46:870895 | debug    | FE  | Events dispached!
+02:12:46:871540 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1166, y=39
+02:12:46:871684 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1166, y=39
+02:12:46:872305 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1166, y=38
+02:12:46:873091 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1166, y=38
+02:12:46:885804 | info     | App | LayerExample::OnUpdate()
+02:12:46:886232 | trace    | FE  | Application::OnEvent
+02:12:46:886369 | trace    | FE  | 13
+02:12:46:886709 | trace    | FE  | EventType::MouseMoved
+02:12:46:887007 | trace    | FE  | 20
+02:12:46:887392 | trace    | FE  | Application::OnEvent
+02:12:46:887674 | trace    | FE  | 13
+02:12:46:887966 | trace    | FE  | EventType::MouseMoved
+02:12:46:888926 | trace    | FE  | 20
+02:12:46:889562 | debug    | FE  | Events dispached!
+02:12:46:890117 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1171, y=31
+02:12:46:890297 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1171, y=31
+02:12:46:902555 | info     | App | LayerExample::OnUpdate()
+02:12:46:902915 | trace    | FE  | Application::OnEvent
+02:12:46:903061 | trace    | FE  | 13
+02:12:46:903389 | trace    | FE  | EventType::MouseMoved
+02:12:46:903687 | trace    | FE  | 20
+02:12:46:905476 | debug    | FE  | Events dispached!
+02:12:46:906084 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1176, y=24
+02:12:46:906262 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1176, y=24
+02:12:46:906900 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1176, y=23
+02:12:46:907050 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1176, y=23
+02:12:46:919337 | info     | App | LayerExample::OnUpdate()
+02:12:46:920248 | trace    | FE  | Application::OnEvent
+02:12:46:920359 | trace    | FE  | 13
+02:12:46:920683 | trace    | FE  | EventType::MouseMoved
+02:12:46:920982 | trace    | FE  | 20
+02:12:46:921379 | trace    | FE  | Application::OnEvent
+02:12:46:921648 | trace    | FE  | 13
+02:12:46:921940 | trace    | FE  | EventType::MouseMoved
+02:12:46:922237 | trace    | FE  | 20
+02:12:46:922767 | debug    | FE  | Events dispached!
+02:12:46:923348 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1181, y=17
+02:12:46:923523 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1181, y=17
+02:12:46:924106 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1181, y=16
+02:12:46:924278 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1181, y=16
+02:12:46:925007 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1182, y=15
+02:12:46:925243 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1182, y=15
+02:12:46:935928 | info     | App | LayerExample::OnUpdate()
+02:12:46:936517 | trace    | FE  | Application::OnEvent
+02:12:46:936648 | trace    | FE  | 13
+02:12:46:936932 | trace    | FE  | EventType::MouseMoved
+02:12:46:937234 | trace    | FE  | 20
+02:12:46:937666 | trace    | FE  | Application::OnEvent
+02:12:46:937880 | trace    | FE  | 13
+02:12:46:938173 | trace    | FE  | EventType::MouseMoved
+02:12:46:938477 | trace    | FE  | 20
+02:12:46:938853 | trace    | FE  | Application::OnEvent
+02:12:46:939110 | trace    | FE  | 13
+02:12:46:939442 | trace    | FE  | EventType::MouseMoved
+02:12:46:939748 | trace    | FE  | 20
+02:12:46:940173 | debug    | FE  | Events dispached!
+02:12:46:940738 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1186, y=8
+02:12:46:940909 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1186, y=8
+02:12:46:952682 | info     | App | LayerExample::OnUpdate()
+02:12:46:952998 | trace    | FE  | Application::OnEvent
+02:12:46:953124 | trace    | FE  | 13
+02:12:46:953665 | trace    | FE  | EventType::MouseMoved
+02:12:46:953969 | trace    | FE  | 20
+02:12:46:954393 | debug    | FE  | Events dispached!
+02:12:46:954959 | trace    | FE  | NEW EVENT: MouseMovedEvent: x=1188, y=3
+02:12:46:955098 | trace    | FE  | SAVED EVENT: MouseMovedEvent: x=1188, y=3
+02:12:46:969207 | info     | App | LayerExample::OnUpdate()
+02:12:46:969521 | trace    | FE  | Application::OnEvent
+02:12:46:969825 | trace    | FE  | 13
+02:12:46:970119 | trace    | FE  | EventType::MouseMoved
+02:12:46:970468 | trace    | FE  | 20
+02:12:46:970864 | debug    | FE  | Events dispached!
+02:12:46:985862 | info     | App | LayerExample::OnUpdate()
+02:12:47:002582 | info     | App | LayerExample::OnUpdate()
+02:12:47:019344 | info     | App | LayerExample::OnUpdate()
+02:12:47:035881 | info     | App | LayerExample::OnUpdate()
+02:12:47:052542 | info     | App | LayerExample::OnUpdate()
+02:12:47:069209 | info     | App | LayerExample::OnUpdate()
+02:12:47:085935 | info     | App | LayerExample::OnUpdate()
+02:12:47:102657 | info     | App | LayerExample::OnUpdate()
+02:12:47:119260 | info     | App | LayerExample::OnUpdate()
+02:12:47:135988 | info     | App | LayerExample::OnUpdate()
+02:12:47:152639 | info     | App | LayerExample::OnUpdate()
+02:12:47:169400 | info     | App | LayerExample::OnUpdate()
+02:12:47:186086 | info     | App | LayerExample::OnUpdate()
+02:12:47:202741 | info     | App | LayerExample::OnUpdate()
+02:12:47:219397 | info     | App | LayerExample::OnUpdate()
+02:12:47:236143 | info     | App | LayerExample::OnUpdate()
+02:12:47:252730 | info     | App | LayerExample::OnUpdate()
+02:12:47:269409 | info     | App | LayerExample::OnUpdate()
+02:12:47:286195 | info     | App | LayerExample::OnUpdate()
+02:12:47:302763 | info     | App | LayerExample::OnUpdate()
+02:12:47:319470 | info     | App | LayerExample::OnUpdate()
+02:12:47:686906 | info     | App | LayerExample::OnUpdate()
+02:12:47:703104 | info     | App | LayerExample::OnUpdate()
+02:12:47:719819 | info     | App | LayerExample::OnUpdate()
+02:12:47:736491 | info     | App | LayerExample::OnUpdate()
+02:12:47:753126 | info     | App | LayerExample::OnUpdate()
+02:12:47:769818 | info     | App | LayerExample::OnUpdate()
+02:12:47:786559 | info     | App | LayerExample::OnUpdate()
+02:12:47:803155 | info     | App | LayerExample::OnUpdate()
+02:12:47:820153 | info     | App | LayerExample::OnUpdate()
+02:12:47:836626 | info     | App | LayerExample::OnUpdate()
+02:12:47:853650 | info     | App | LayerExample::OnUpdate()
+02:12:47:870194 | info     | App | LayerExample::OnUpdate()
+02:12:47:886801 | info     | App | LayerExample::OnUpdate()
+02:12:47:903502 | info     | App | LayerExample::OnUpdate()
+02:12:47:920221 | info     | App | LayerExample::OnUpdate()
+02:12:47:936750 | info     | App | LayerExample::OnUpdate()
+02:12:47:953320 | info     | App | LayerExample::OnUpdate()
+02:12:47:970123 | info     | App | LayerExample::OnUpdate()
+02:12:47:986703 | info     | App | LayerExample::OnUpdate()
+02:12:48:003367 | info     | App | LayerExample::OnUpdate()
+02:12:48:020032 | info     | App | LayerExample::OnUpdate()
+02:12:48:036946 | info     | App | LayerExample::OnUpdate()
+02:12:48:053688 | info     | App | LayerExample::OnUpdate()
+02:12:48:070317 | info     | App | LayerExample::OnUpdate()
+02:12:48:086996 | info     | App | LayerExample::OnUpdate()
+02:12:48:103518 | info     | App | LayerExample::OnUpdate()
+02:12:48:120249 | info     | App | LayerExample::OnUpdate()
+02:12:48:136935 | info     | App | LayerExample::OnUpdate()
+02:12:48:153549 | info     | App | LayerExample::OnUpdate()
+02:12:48:170240 | info     | App | LayerExample::OnUpdate()
+02:12:48:186951 | info     | App | LayerExample::OnUpdate()
+02:12:48:203594 | info     | App | LayerExample::OnUpdate()
+02:12:48:220290 | info     | App | LayerExample::OnUpdate()
+02:12:48:236980 | info     | App | LayerExample::OnUpdate()
+02:12:48:253574 | info     | App | LayerExample::OnUpdate()
+02:12:48:270617 | info     | App | LayerExample::OnUpdate()
+02:12:48:287093 | info     | App | LayerExample::OnUpdate()
+02:12:48:303783 | info     | App | LayerExample::OnUpdate()
+02:12:48:320290 | info     | App | LayerExample::OnUpdate()
+02:12:48:336979 | info     | App | LayerExample::OnUpdate()
+02:12:48:353888 | info     | App | LayerExample::OnUpdate()
+02:12:48:370331 | info     | App | LayerExample::OnUpdate()
+02:12:48:387023 | info     | App | LayerExample::OnUpdate()
+02:12:48:460708 | trace    | FE  | NEW EVENT: EventType::WindowClose
+02:12:48:460985 | trace    | FE  | SAVED EVENT: EventType::WindowClose
+02:12:48:470431 | info     | App | LayerExample::OnUpdate()
+02:12:48:470861 | trace    | FE  | Application::OnEvent
+02:12:48:470997 | trace    | FE  | 1
+02:12:48:471305 | trace    | FE  | EventType::WindowClose
+02:12:48:471623 | trace    | FE  | 2
+02:12:48:471930 | info     | FE  | Window Close Event
+02:12:48:472352 | debug    | FE  | Events dispached!
+02:12:48:472734 | info     | FE  | Profiler session 'Runtime' closed.
+02:12:48:473078 | info     | FE  | Profiler session 'Shutdown' started.
+02:12:48:473426 | info     | FE  | Closing Window.
+02:12:48:508248 | info     | FE  | Profiler session 'Shutdown' closed.
+02:12:48:508774 | warning  | FE  | Attempt to close profiler session with no active session.

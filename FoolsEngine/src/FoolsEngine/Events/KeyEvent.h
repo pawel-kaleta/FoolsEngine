@@ -3,7 +3,8 @@
 #include "FoolsEngine/Events/Event.h"
 #include "FoolsEngine/Core/InputCodes.h"
 
-/*
+/*  cheat sheet
+
 	enum class EventType
 	{
 		None = 0,

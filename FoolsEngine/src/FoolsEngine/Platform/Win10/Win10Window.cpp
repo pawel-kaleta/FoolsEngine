@@ -34,6 +34,9 @@ namespace fe
 
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(1, 0, 1, 1);
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)
@@ -98,6 +101,8 @@ namespace fe
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, WindowCloseEvent);
+				//FE_LOG_CORE_TRACE("EVENT CREATION");
+				//FE_LOG_CORE_TRACE(event.GetEventType());
 			});
 
 		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focus)

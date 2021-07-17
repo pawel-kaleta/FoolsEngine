@@ -51,9 +51,9 @@ namespace fe
 	};
 
 	
-	void TestEventHandler(std::shared_ptr<Event> event)
+	void TestEventHandler(Event& event)
 	{
-		FE_LOG_CORE_DEBUG(event->ToString());
+		FE_LOG_CORE_DEBUG(event.ToString());
 	}
 	*/
 	/*
@@ -61,53 +61,53 @@ namespace fe
 	{
 		FE_LOG_CORE_DEBUG("----------------------Events tests----------------------");
 
-		std::shared_ptr<TestEvent> event = std::make_shared<TestEvent>(99);
+		TestEvent event = TestEvent(99);
 
-		if ( "Custom" == (event->GetName()) )
-			FE_LOG_CORE_INFO("Event->GetName() test: PASSED" );
+		if ( "Custom" == (event.GetName()) )
+			FE_LOG_CORE_INFO("event.GetName() test: PASSED" );
 		else
-			FE_LOG_CORE_ERROR("Event->GetName() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetName() test: FAILED");
 
-		if (event->GetEventType() == EventType::Custom)
-			FE_LOG_CORE_INFO("Event->GetEventType() test: PASSED");
+		if (event.GetEventType() == EventType::Custom)
+			FE_LOG_CORE_INFO("event.GetEventType() test: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->GetEventType() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetEventType() test: FAILED");
 
-		if (event->GetStaticType() == EventType::Custom)
-			FE_LOG_CORE_INFO("Event->GetStaticType() test: PASSED");
+		if (event.GetStaticType() == EventType::Custom)
+			FE_LOG_CORE_INFO("event.GetStaticType() test: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->GetStaticType() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetStaticType() test: FAILED");
 
-		if (event->GetCategoryFlags() == EventCategory::Custom)
-			FE_LOG_CORE_INFO("Event->GetCategoryFlags() test: PASSED");
+		if (event.GetCategoryFlags() == EventCategory::Custom)
+			FE_LOG_CORE_INFO("event.GetCategoryFlags() test: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->GetCategoryFlags() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetCategoryFlags() test: FAILED");
 
-		if (event->GetStaticCategoryFlags() == EventCategory::Custom)
-			FE_LOG_CORE_INFO("Event->GetStaticCategoryFlags() test: PASSED");
+		if (event.GetStaticCategoryFlags() == EventCategory::Custom)
+			FE_LOG_CORE_INFO("event.GetStaticCategoryFlags() test: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->GetStaticCategoryFlags() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetStaticCategoryFlags() test: FAILED");
 
-		if (event->m_TestData == 99)
-			FE_LOG_CORE_INFO("Event->m_TestData test: PASSED");
+		if (event.m_TestData == 99)
+			FE_LOG_CORE_INFO("event.m_TestData test: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->m_TestData test: FAILED");
+			FE_LOG_CORE_ERROR("event.m_TestData test: FAILED");
 
-		if (event->IsInCategory(EventCategory::EngineSys))
-			FE_LOG_CORE_ERROR("Event->IsInCategory() test_1: FAILED");
+		if (event.IsInCategory(EventCategory::EngineSys))
+			FE_LOG_CORE_ERROR("event.IsInCategory() test_1: FAILED");
 		else
-			FE_LOG_CORE_INFO("Event->IsInCategory() test_1: PASSED");
+			FE_LOG_CORE_INFO("event.IsInCategory() test_1: PASSED");
 
-		if (event->IsInCategory(EventCategory::Custom))
-			FE_LOG_CORE_INFO("Event->IsInCategory() test_2: PASSED");
+		if (event.IsInCategory(EventCategory::Custom))
+			FE_LOG_CORE_INFO("event.IsInCategory() test_2: PASSED");
 		else
-			FE_LOG_CORE_ERROR("Event->IsInCategory() test_2: FAILED");
+			FE_LOG_CORE_ERROR("event.IsInCategory() test_2: FAILED");
 
 		FE_LOG_CORE_DEBUG("----------------------Events tests----------------------");
 	}
 
 	bool funtionRunned = false;
-	void TestEventHandler(std::shared_ptr<Event> event)
+	void TestEventHandler(Event& event)
 	{
 		funtionRunned = true;
 	}
@@ -116,8 +116,8 @@ namespace fe
 	{
 		FE_LOG_CORE_DEBUG("-----------------Events Dispachers tests----------------");
 
-		std::shared_ptr<TestEvent> event = std::make_shared<TestEvent>(99);
-		std::function< void(std::shared_ptr<Event>) > f = TestEventHandler;
+		TestEvent event = TestEvent(99);
+		std::function< void(Event&) > f = TestEventHandler;
 
 		f(event);
 		if (funtionRunned)

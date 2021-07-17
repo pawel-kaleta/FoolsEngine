@@ -21,7 +21,7 @@ namespace fe
 	                               virtual const char* GetName() const override { return #type; }
 	// GetStaticType() - do not need an instance to read a type
 	// GetEventType()  - base Event class forces this implementation, also need a way to read type from unknown instance							   
-	// GetName()       - base Event class forces this implementation, also need a way to read type from unknown instance
+	// GetName()       - base Event class forces this implementation, also need a way to read name from unknown instance
 	
 
 	enum EventCategory
@@ -61,6 +61,30 @@ namespace fe
 		{
 			return GetStaticCategoryFlags() & category; // bitwise AND (not a reference)
 		}
+	};
+
+	class EventDispacher
+	{
+	public:
+		EventDispacher(std::shared_ptr<Event> e)
+			: m_Event(e)
+		{
+
+		}
+
+		template<typename T>
+		bool Dispach(const std::function<bool(std::shared_ptr<T>)>& func)
+		{
+			if (m_Event->GetEventType() == T::GetStaticType())
+			{
+				m_Event->Handled |= func(std::dynamic_pointer_cast<T>(m_Event));
+				return true;
+			}
+			return false;
+		}
+	private:
+		std::shared_ptr<Event> m_Event;
+
 	};
 }
 

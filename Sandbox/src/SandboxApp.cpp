@@ -13,9 +13,9 @@ public:
 		FE_LOG_INFO("LayerExample::OnUpdate()");
 	}
 
-	void OnEvent(std::shared_ptr<fe::Event> event)
+	void OnEvent(fe::Event& event)
 	{
-		FE_LOG_TRACE("{0}", event->ToString());
+		FE_LOG_TRACE("{0}", event.ToString());
 	}
 };
 

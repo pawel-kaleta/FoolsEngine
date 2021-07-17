@@ -83,6 +83,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -111,5 +112,6 @@
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
   </ItemGroup>
 </Project>

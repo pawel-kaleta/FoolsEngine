@@ -146,6 +146,7 @@
     <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
     <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\Event.h" />
+    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
+    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
