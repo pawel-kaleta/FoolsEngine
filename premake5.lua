@@ -38,7 +38,8 @@ project "FoolsEngine"
 		"FoolsEngine/externals/spdlog/include",
 		"FoolsEngine/externals/glfw/include",
 		"FoolsEngine/externals/glad/include",
-		"FoolsEngine/externals/imgui"
+		"FoolsEngine/externals/imgui",
+		"FoolsEngine/externals/glm"
 	}
 
 	links {
@@ -96,7 +97,8 @@ project "Sandbox"
 		"FoolsEngine/externals/spdlog/include",
 		"FoolsEngine/externals/glfw/include",
 		"FoolsEngine/externals/glad/include",
-		"FoolsEngine/externals/imgui"
+		"FoolsEngine/externals/imgui",
+		"FoolsEngine/externals/glm"
 	}
 
 	links {

@@ -10,17 +10,17 @@
 #include "FoolsEngine\Core\Application.h"
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Core\Layer.h"
-#include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
+#include "FoolsEngine\Core\InputCodes.h"
+#include "FoolsEngine\Core\InputPolling.h"
 
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"
-
 #include "FoolsEngine\Debug\UnitTests.h"
 #endif // INTERNAL_BUILD
 
 
-//-----Entry Point-------------
+//---------Entry Point---------
 #include "FoolsEngine\Core\EntryPoint.h"
 //-----------------------------

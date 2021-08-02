@@ -41,6 +41,9 @@
     <ClInclude Include="src\FoolsEngine\Core\InputCodes.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h">
+      <Filter>FoolsEngine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Layer.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
@@ -83,11 +86,12 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h">
+      <Filter>FoolsEngine\Platform\Win10</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -118,9 +122,11 @@
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp">
+      <Filter>FoolsEngine\Platform\Win10</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
   </ItemGroup>
 </Project>
