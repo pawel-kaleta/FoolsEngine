@@ -3,6 +3,8 @@
 
 // To be included by FoolsEngine application (game)
 
+
+
 #include "FoolsEngine\Debug\Log.h"
 #include "FoolsEngine\Debug\Asserts.h"
 #include "FoolsEngine\Core\Application.h"

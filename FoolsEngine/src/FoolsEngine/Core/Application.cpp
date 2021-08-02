@@ -1,9 +1,10 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine/Core/Application.h"
-#include "FoolsEngine/Platform/Win10/Win10Window.h"
+#include "FoolsEngine\Core\Application.h"
+#include "FoolsEngine\Platform\Win10\Win10Window.h"
+#include "FoolsEngine\Core\InputPolling.h"
 
-#include <glad/glad.h>
+#include <glad\glad.h>
 
 namespace fe {
 
@@ -62,6 +63,9 @@ namespace fe {
 
 			UpdateLayers();
 
+			auto [x, y] = InputPolling::GetMousePosition();
+			FE_LOG_CORE_TRACE("Mouse position: {0}, {1}", x, y);
+
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 		}
 			
@@ -74,8 +78,4 @@ namespace fe {
 			(*layer_it)->OnUpdate();
 		}
 	}
-
-
-
-
 }

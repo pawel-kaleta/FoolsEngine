@@ -11,7 +11,9 @@ workspace "FoolsEngine"
 
 outputdir = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
 
-include "FoolsEngine/externals"
+group "Dependencies"
+	include "FoolsEngine/externals"
+group ""
 
 project "FoolsEngine"
 	location "FoolsEngine"

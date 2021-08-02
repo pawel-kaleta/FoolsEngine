@@ -90,3 +90,7 @@ namespace fe
 
 #define FE_NEW_EVENT(callback, localName, type, ...) std::shared_ptr<type> localName = std::make_shared<type>(__VA_ARGS__);\
                                                      callback(localName);
+
+#include "FoolsEngine\Events\ApplicationEvent.h"
+#include "FoolsEngine\Events\KeyEvent.h"
+#include "FoolsEngine\Events\MouseEvent.h"

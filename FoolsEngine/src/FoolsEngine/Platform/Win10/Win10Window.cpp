@@ -1,11 +1,9 @@
 #include "FE_pch.h"
-#include "FoolsEngine/Core/Window.h"
+#include "FoolsEngine\Core\Window.h"
 #include "Win10Window.h"
 
-#include "FoolsEngine/Events/Event.h"
-#include "FoolsEngine/Events/ApplicationEvent.h"
-#include "FoolsEngine/Events/KeyEvent.h"
-#include "FoolsEngine/Events/MouseEvent.h"
+#include "FoolsEngine\Events\Event.h"
+#include "FoolsEngine\Platform\Win10\Win10InputPolling.h"
 
 #include <glad/glad.h>
 
@@ -35,8 +33,7 @@ namespace fe
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
 
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(1, 0, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)

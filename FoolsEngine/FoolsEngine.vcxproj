@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h" />
@@ -146,11 +147,12 @@
     <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
     <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\Event.h" />
-    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
+    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +168,7 @@
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
   </ItemGroup>
   <ItemGroup>

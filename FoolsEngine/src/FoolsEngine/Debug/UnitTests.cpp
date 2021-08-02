@@ -33,7 +33,6 @@ namespace fe
 		Log::SetClientLoggingLevel(11);
 		Log::SetCoreLoggingLevel(coreLoggingLvl);
 		Log::SetClientLoggingLevel(clientLoggingLvl);
-		FE_LOG_CORE_DEBUG("----------------------Logging test----------------------");
 	}
 	
 	/*
@@ -143,6 +142,7 @@ namespace fe
 
 	void Tester::ProfilingTests()
 	{
+		FE_LOG_CORE_DEBUG("---------------------Profiler tests---------------------");
 		FE_PROFILER_SESSION_START("TEST", "Logs/UNIT_TESTS_profiler.json");
 		FE_LOG_CORE_INFO("Profiler Start Session: PASSED");
 		int limit = 200000000;
@@ -189,26 +189,49 @@ namespace fe
 		FE_LOG_CORE_INFO("Profiler: PASSED");
 	}
 
+	void Tester::AssertionTests()
+	{
+		FE_LOG_CORE_DEBUG("--------------------Assertion Tests--------------------");
+
+		if (Asserts::EnableCoreAssertions) {
+			FE_LOG_CORE_INFO("Skipping core assertion testing due to core assertion break enabled.");
+		}
+		else {
+			FE_CORE_ASSERT(false, "core test assert 1");
+			int a = 6;
+			FE_CORE_ASSERT(false, "core test assert 2, val={0}", a);
+		}
+
+		if (Asserts::EnableAssertions) {
+			FE_LOG_CORE_INFO("Skipping assertion testing due to assertion break enabled.");
+		}
+		else {
+			FE_ASSERT(false, "test assert 1");
+			int a = 6;
+			FE_ASSERT(false, "test assert 2, val={0}", a);
+		}
+	}
+
 	void Tester::Test()
 	{
-		FE_LOG_CORE_DEBUG("-----------------------UNIT TESTS-----------------------");
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+		FE_LOG_CORE_DEBUG("////////////////////// UNIT TESTS //////////////////////");
+		FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+
 		LoggingTests();
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
-		FE_LOG_CORE_DEBUG("---------------------PROFILER TESTS---------------------");
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+
 		ProfilingTests();
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+
 		//EventsTests();
-		//FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		//FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+		
 		//EventsDispachersTests();
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
-		FE_LOG_CORE_DEBUG("--------------------ASSERTIONS TESTS--------------------");
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
-		FE_ASSERT(false, "test assert 1");
-		int a = 6;
-		FE_ASSERT(false, "test assert 2, val={0}", a);
-		FE_LOG_CORE_DEBUG("--------------------------------------------------------");
+		//FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
+
+		//AssertionTests();
+		FE_LOG_CORE_DEBUG("////////////////////////////////////////////////////////");
 	}
 }
 

@@ -71,6 +71,9 @@
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h">
+      <Filter>FoolsEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
@@ -83,7 +86,8 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
+    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -105,13 +109,18 @@
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp">
+      <Filter>FoolsEngine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
+      <Filter>FoolsEngine\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
   </ItemGroup>
 </Project>

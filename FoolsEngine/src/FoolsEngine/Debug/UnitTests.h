@@ -10,5 +10,6 @@ namespace fe
 		static void Test();
 		static void LoggingTests();
 		static void ProfilingTests();
+		static void AssertionTests();
 	};
 }
