@@ -7,6 +7,8 @@
 
 #include <glad/glad.h>
 
+// fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
+
 namespace fe
 {
 	static bool s_GLFWInitialized = false;
@@ -30,10 +32,23 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		// events polling
+		{
+			FE_PROFILER_SCOPE("GLFW events polling");
+			glfwPollEvents();
+		}
+		
+		// swaping render buffers
+		{
+			FE_PROFILER_SCOPE("GLFW swaping render buffers");
+			glfwSwapBuffers(m_Window);
+		}
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// clearing buffer
+		{
+			FE_PROFILER_SCOPE("GLFW clearing buffer");
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)

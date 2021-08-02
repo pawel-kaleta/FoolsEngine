@@ -1,13 +1,6 @@
 #pragma once
 
-namespace fe {
-	bool FE_ENABLE_ASSERTIONS = false;
-	bool FE_ENABLE_CORE_ASSERTIONS = false;
-}
-
 #ifdef FE_PLATFORM_WINDOWS
-
-
 
 extern fe::Application* fe::CreateApplication();
 

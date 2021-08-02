@@ -73,6 +73,8 @@ namespace fe {
 
 	void Application::UpdateLayers()
 	{
+		FE_PROFILER_FUNC();
+
 		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< std::shared_ptr< Layer > >::iterator
 		{
 			(*layer_it)->OnUpdate();
