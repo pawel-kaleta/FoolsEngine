@@ -86,6 +86,11 @@ namespace fe
 		std::shared_ptr<Event> m_Event;
 
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
+	{
+		return os << e.ToString();
+	}
 }
 
 #define FE_NEW_EVENT(callback, localName, type, ...) std::shared_ptr<type> localName = std::make_shared<type>(__VA_ARGS__);\

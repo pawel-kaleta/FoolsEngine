@@ -78,7 +78,6 @@ project "glad"
 		runtime "Release"
 		optimize "on"
 
-
 project "imgui"
 	location "_projects_of_externals/imgui"
 	kind "StaticLib"

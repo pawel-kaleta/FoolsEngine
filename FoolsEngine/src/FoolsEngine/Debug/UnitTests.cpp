@@ -52,7 +52,7 @@ namespace fe
 	
 	void TestEventHandler(Event& event)
 	{
-		FE_LOG_CORE_DEBUG(event.ToString());
+		FE_LOG_CORE_DEBUG("{0}", event);
 	}
 	*/
 	/*

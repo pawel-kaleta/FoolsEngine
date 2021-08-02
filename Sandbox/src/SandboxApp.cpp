@@ -16,7 +16,7 @@ public:
 
 	void OnEvent(fe::Event& event)
 	{
-		FE_LOG_TRACE("{0}", event.ToString());
+		FE_LOG_TRACE("{0}", event);
 	}
 };
 
