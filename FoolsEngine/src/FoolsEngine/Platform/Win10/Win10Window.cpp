@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 #include "Win10Window.h"
 
+#include <glad/glad.h>
 #include "FoolsEngine\Platform\OpenGL\OpenGLContext.h"
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Platform\Win10\Win10InputPolling.h"
-
 
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
@@ -65,6 +65,9 @@ namespace fe
 			{
 				FE_CORE_ASSERT(false, "GLFW initialization failed!");
 			}
+			//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}

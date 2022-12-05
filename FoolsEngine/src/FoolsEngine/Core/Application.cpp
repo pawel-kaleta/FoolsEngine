@@ -23,9 +23,11 @@ namespace fe {
 		m_AppLayer = std::make_shared<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		m_LayerStack.PushOuterLayer(m_AppLayer);
 
-
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
+
+
+		TriangleTestSetup();
 	}
 
 	Application::~Application()
@@ -65,6 +67,8 @@ namespace fe {
 		{
 			m_Window->OnUpdate();
 
+			TriangleTestDraw();
+
 			UpdateLayers();
 			UpdateImGui();
 
@@ -87,6 +91,7 @@ namespace fe {
 			(*layer_it)->OnUpdate();
 		}
 	}
+
 	void Application::UpdateImGui()
 	{
 		FE_PROFILER_FUNC();
@@ -97,5 +102,45 @@ namespace fe {
 			layer->OnImGuiRender();
 
 		m_ImGuiLayer->End();
+	}
+
+	void Application::TriangleTestSetup()
+	{
+		FE_LOG_CORE_DEBUG("TriangleTestSetup begin.");
+		FE_LOG_CORE_DEBUG("This requires OpenGL profile to be 'Compatibility', not 'Core' (look for glfw initialization).");
+
+		glGenVertexArrays(1, &m_VertexArray);
+		glBindVertexArray(m_VertexArray);
+
+		glGenBuffers(1, &m_VertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+
+		float vertices[3 * 3] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		glGenBuffers(1, &m_IndexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+
+		unsigned int indecies[3] = { 0, 1, 2 };
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indecies), indecies, GL_STATIC_DRAW);
+
+		FE_LOG_CORE_DEBUG("TriangleTestSetup end.");
+	}
+
+	void Application::TriangleTestDraw()
+	{
+		FE_LOG_CORE_TRACE("TriangleTestDraw");
+
+		glBindVertexArray(m_VertexArray);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
 	}
 }

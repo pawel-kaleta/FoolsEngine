@@ -52,6 +52,10 @@ namespace fe
 		void OnEvent(std::shared_ptr<Event> event);
 		void OnWindowCloseEvent(std::shared_ptr<Event> event);
 
+		void TriangleTestSetup();
+		void TriangleTestDraw();
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
 		LayerStack m_LayerStack;

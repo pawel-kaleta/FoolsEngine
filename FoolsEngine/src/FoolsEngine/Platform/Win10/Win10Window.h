@@ -2,7 +2,7 @@
 
 #include "FoolsEngine/Core/Window.h"
 #include "FoolsEngine\Renderer\RenderingContext.h"
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace fe

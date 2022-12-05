@@ -1,7 +1,7 @@
 #include "FE_pch.h"
+#include <glad/glad.h>
 #include "OpenGLContext.h"
 
-#include <glad/glad.h>
 
 namespace fe
 {
@@ -18,6 +18,11 @@ namespace fe
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
+
+		FE_LOG_CORE_INFO("Rendering platform info:");
+		FE_LOG_CORE_INFO("	Vendor:		{0}", glGetString(GL_VENDOR));
+		FE_LOG_CORE_INFO("	Renderer:	{0}", glGetString(GL_RENDERER));
+		FE_LOG_CORE_INFO("	Version:	{0}", glGetString(GL_VERSION));
 	}
 
 	void OpenGLContext::SwapBuffers()
@@ -31,6 +36,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		glClearColor(0.1f, 0.1f, 0.1f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 }

@@ -16,7 +16,7 @@ namespace fe {
 #ifdef FE_INTERNAL_BUILD
 	#define FE_ASSERTION_BREAK() if (fe::Asserts::EnableAssertions) __debugbreak();
 	#define FE_CORE_ASSERTION_BREAK() if (fe::Asserts::EnableCoreAssertions) __debugbreak();
-#elif
+#else
 	#define FE_ASSERTION_BREAK()
 	#define FE_CORE_ASSERTION_BREAK()
 #endif
