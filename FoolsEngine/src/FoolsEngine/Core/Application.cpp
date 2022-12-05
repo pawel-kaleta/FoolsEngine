@@ -68,7 +68,9 @@ namespace fe {
 
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 		}
-			
+		
+		Log::SetClientLoggingLevel(spdlog::level::trace);
+		Log::SetCoreLoggingLevel(spdlog::level::trace);
 	}
 
 	void Application::UpdateLayers()

@@ -25,6 +25,9 @@
     <Filter Include="FoolsEngine\Platform\Win10">
       <UniqueIdentifier>{50D4F850-3CE4-A421-A59D-094091CC93BA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Renderer">
+      <UniqueIdentifier>{84860EAA-7015-9873-1934-AC6E05A2A819}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FE_pch.h" />
@@ -83,6 +86,9 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\RenderingContext.h">
+      <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +128,9 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
@@ -127,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\RenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

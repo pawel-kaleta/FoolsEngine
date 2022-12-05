@@ -26,19 +26,19 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -151,9 +151,11 @@
     <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\RenderingContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp">
@@ -167,9 +169,11 @@
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\RenderingContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\_projects_of_externals\glfw\glfw.vcxproj">

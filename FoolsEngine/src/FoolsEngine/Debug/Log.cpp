@@ -12,13 +12,13 @@ namespace fe
 	{
 		std::vector<spdlog::sink_ptr> loggingTargets;
 
-#ifdef FE_INTERNAL_BUILD
+#ifdef FE_DEBUG
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-		loggingTargets.back()->set_pattern("%^%T:%f | %-3n | %v%$");
-#endif // FE_INTERNAL_BUILD
+		loggingTargets.back()->set_pattern("%^%T:%f | %-3n | %-8l | %v%$");
+#endif // FE_DEBUG
 
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Logs/FoolsEngine.log", true));
-		loggingTargets.back()->set_pattern("%T:%f | %-8l | %-3n | %v");
+		loggingTargets.back()->set_pattern("%T:%f | %-3n | %-8l | %v");
 
 		s_CoreLogger   = std::make_shared<spdlog::logger>("FE", begin(loggingTargets), end(loggingTargets));
 		s_ClientLogger = std::make_shared<spdlog::logger>("App", begin(loggingTargets), end(loggingTargets));
@@ -27,18 +27,19 @@ namespace fe
 		spdlog::register_logger(s_ClientLogger);
 
 #ifdef FE_DEBUG
-		s_CoreLogger->set_level(spdlog::level::trace);
+		s_CoreLogger->set_level(spdlog::level::debug);
+		s_ClientLogger->set_level(spdlog::level::debug);
 #endif // FE_DEBUG
 
 #ifdef FE_RELEASE
-		s_CoreLogger->set_level(spdlog::level::debug);
+		s_CoreLogger->set_level(spdlog::level::info);
+		s_ClientLogger->set_level(spdlog::level::info);
 #endif // FE_RELEASE
 
 #ifdef FE_PUBLISH
-		s_CoreLogger->set_level(spdlog::level::info);
+		s_CoreLogger->set_level(spdlog::level::warn);
+		s_ClientLogger->set_level(spdlog::level::warn);
 #endif // FE_PUBLISH
-
-		s_ClientLogger->set_level(spdlog::level::trace);
 
 		s_CoreLogger  ->flush_on(spdlog::level::trace);
 		s_ClientLogger->flush_on(spdlog::level::trace);

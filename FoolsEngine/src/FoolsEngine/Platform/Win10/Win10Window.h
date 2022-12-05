@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Core/Window.h"
+#include "FoolsEngine\Renderer\RenderingContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -26,6 +27,7 @@ namespace fe
 
 	private:
 		GLFWwindow* m_Window;
+		RenderingContext* m_RenderingContext;
 
 		struct WinData
 		{

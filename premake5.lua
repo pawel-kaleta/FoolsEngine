@@ -10,6 +10,14 @@ workspace "FoolsEngine"
 	startproject "Sandbox"
 
 outputdir = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
+common_includedirs = {
+	"FoolsEngine/src",
+	"FoolsEngine/externals/spdlog/include",
+	"FoolsEngine/externals/glfw/include",
+	"FoolsEngine/externals/glad/include",
+	"FoolsEngine/externals/imgui",
+	"FoolsEngine/externals/glm"
+}
 
 group "Dependencies"
 	include "FoolsEngine/externals"
@@ -34,12 +42,7 @@ project "FoolsEngine"
 	}
 
 	includedirs	{
-		"FoolsEngine/src",
-		"FoolsEngine/externals/spdlog/include",
-		"FoolsEngine/externals/glfw/include",
-		"FoolsEngine/externals/glad/include",
-		"FoolsEngine/externals/imgui",
-		"FoolsEngine/externals/glm"
+		common_includedirs
 	}
 
 	links {
@@ -93,12 +96,7 @@ project "Sandbox"
 	}
 
 	includedirs {
-		"FoolsEngine/src",
-		"FoolsEngine/externals/spdlog/include",
-		"FoolsEngine/externals/glfw/include",
-		"FoolsEngine/externals/glad/include",
-		"FoolsEngine/externals/imgui",
-		"FoolsEngine/externals/glm"
+		common_includedirs
 	}
 
 	links {

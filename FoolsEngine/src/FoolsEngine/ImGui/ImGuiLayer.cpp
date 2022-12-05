@@ -83,7 +83,6 @@ namespace fe {
 
 	void ImGuiLayer::OnEvent(std::shared_ptr<Event> event)
 	{
-		
 		EventDispacher dispacher(event);
 		dispacher.Dispach<MouseButtonPressedEvent>	(std::bind(&ImGuiLayer::OnMouseButtonPressedEvent,	this, std::placeholders::_1));
 		dispacher.Dispach<MouseButtonReleasedEvent>	(std::bind(&ImGuiLayer::OnMouseButtonReleasedEvent,	this, std::placeholders::_1));

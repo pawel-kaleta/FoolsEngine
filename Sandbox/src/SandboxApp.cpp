@@ -11,7 +11,7 @@ public:
 	void OnUpdate() override
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_INFO("LayerExample::OnUpdate()");
+		FE_LOG_TRACE("LayerExample::OnUpdate()");
 	}
 
 	void OnEvent(fe::Event& event)

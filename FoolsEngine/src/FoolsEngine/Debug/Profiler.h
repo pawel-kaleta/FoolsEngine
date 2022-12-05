@@ -52,7 +52,7 @@ namespace fe
 			: m_ActiveSession(false), m_SessionName(nullptr)
 		{}
 		~Profiler() {
-			EndSession();
+			if(m_ActiveSession) EndSession();
 		}
 
 		bool m_ActiveSession;

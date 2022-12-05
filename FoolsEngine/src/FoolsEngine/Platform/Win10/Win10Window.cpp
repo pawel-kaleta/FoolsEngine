@@ -1,11 +1,11 @@
 #include "FE_pch.h"
-#include "FoolsEngine\Core\Window.h"
 #include "Win10Window.h"
 
+#include "FoolsEngine\Platform\OpenGL\OpenGLContext.h"
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Platform\Win10\Win10InputPolling.h"
 
-#include <glad/glad.h>
+
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
 
@@ -38,17 +38,9 @@ namespace fe
 			glfwPollEvents();
 		}
 		
-		// swaping render buffers
-		{
-			FE_PROFILER_SCOPE("GLFW swaping render buffers");
-			glfwSwapBuffers(m_Window);
-		}
+		m_RenderingContext->SwapBuffers();
 
-		// clearing buffer
-		{
-			FE_PROFILER_SCOPE("GLFW clearing buffer");
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		}
+		m_RenderingContext->ClearBuffer();
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)
@@ -85,9 +77,16 @@ namespace fe
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
 		}
 
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!")
+		// rendering context creation
+		{
+			FE_PROFILER_SCOPE("RenderingContext_Retrieval");
+			FE_LOG_CORE_INFO("Creating rendering context");
+			
+			m_RenderingContext = new OpenGLContext(m_Window);
+			m_RenderingContext->Init();
+
+		}
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

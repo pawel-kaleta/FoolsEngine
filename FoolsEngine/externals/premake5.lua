@@ -57,7 +57,7 @@ project "glad"
 
 	files {
 		"%{prj.name}/include/glad/glad.h",
-		"%{prj.name}/include/KHR/khrplatformcludedirs",
+		"%{prj.name}/include/KHR/khrplatform.h",
 		"%{prj.name}/src/glad.c"
 	}
 

@@ -30,13 +30,10 @@ namespace fe
 			}
 			if (!((*event_it)->Handled))
 			{
-				//FE_LOG_CORE_WARN("Unhandled event: {0}", (*event_it)->ToString());
+				FE_LOG_CORE_WARN("Unhandled event: {0}", (*event_it)->ToString());
 			}
 		}
-
 		m_eventsQueue.clear();
-
-		FE_CORE_ASSERT(m_eventsQueue.size() == 0, "Events buffer not cleared!");
 		FE_LOG_CORE_DEBUG("Events dispached!");
 	}
 }

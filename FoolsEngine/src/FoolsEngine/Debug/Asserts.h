@@ -29,3 +29,4 @@ namespace fe {
 										   FE_CORE_ASSERTION_BREAK(); }
 // USAGE:
 // FE_ASSERT( if_statement == true, "assertion message");
+// FE_ASSERT( if_statement == true, "assertion message {0}", message_argument);

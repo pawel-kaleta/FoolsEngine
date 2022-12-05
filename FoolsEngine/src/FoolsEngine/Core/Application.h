@@ -7,10 +7,8 @@
 #include "FoolsEngine\Core\Layer.h"
 #include "FoolsEngine\Core\LayerStack.h"
 
-namespace fe {
-
-	
-
+namespace fe
+{
 	class ApplicationLayer : public Layer
 	{
 	public:
