@@ -8,7 +8,7 @@ namespace fe
 	OpenGLContext::OpenGLContext(GLFWwindow* window)
 		: m_Window(window)
 	{
-		FE_CORE_ASSERT(window, "Window pointer is null during OpenGLContext construction");
+		FE_CORE_ASSERT(window, "Window pointer is null during OpenGLContext construction!");
 	}
 
 	void OpenGLContext::Init()

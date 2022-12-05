@@ -2,11 +2,12 @@
 
 //tmp backend renderer for ImGui
 #include <GLFW\glfw3.h>
-#include "FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h"
+
+
 
 #include "FoolsEngine\Core\Application.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
-#include "FoolsEngine\Core\InputCodes.h"
+
 
 namespace fe {
 
@@ -23,131 +24,80 @@ namespace fe {
 
 	void ImGuiLayer::OnAttach()
 	{
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGui::StyleColorsClassic();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		//io.ConfigViewportsNoAutoMerge = true;
+		//io.ConfigViewportsNoTaskBarIcon = true;
 
-		ImGuiIO& io = ImGui::GetIO();
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsClassic();
 
-		
-		io.KeyMap[ImGuiKey_Tab] = InputCodes::Tab;
-		io.KeyMap[ImGuiKey_LeftArrow] = InputCodes::Left;
-		io.KeyMap[ImGuiKey_RightArrow] = InputCodes::Right;
-		io.KeyMap[ImGuiKey_UpArrow] = InputCodes::Up;
-		io.KeyMap[ImGuiKey_DownArrow] = InputCodes::Down;
-		io.KeyMap[ImGuiKey_PageUp] = InputCodes::PageUp;
-		io.KeyMap[ImGuiKey_PageDown] = InputCodes::PageDown;
-		io.KeyMap[ImGuiKey_Home] = InputCodes::Home;
-		io.KeyMap[ImGuiKey_End] = InputCodes::End;
-		io.KeyMap[ImGuiKey_Insert] = InputCodes::Insert;
-		io.KeyMap[ImGuiKey_Delete] = InputCodes::Delete;
-		io.KeyMap[ImGuiKey_Backspace] = InputCodes::Backspace;
-		io.KeyMap[ImGuiKey_Space] = InputCodes::Space;
-		io.KeyMap[ImGuiKey_Enter] = InputCodes::Enter;
-		io.KeyMap[ImGuiKey_Escape] = InputCodes::Escape;
-		io.KeyMap[ImGuiKey_KeyPadEnter] = InputCodes::KPEnter;
-		
-		//io.
-		
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
+		// Setup Platform/Renderer backends
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
-
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::OnUpdate()
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+		
+	}
 
-		float time = (float)glfwGetTime();
-		io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1.0f / 60.0f);
-		
+	//void ImGuiLayer::OnImGuiRender()
+	//{
+
+	//}
+
+	void ImGuiLayer::Begin()
+	{
 		ImGui_ImplOpenGL3_NewFrame();
-		
+		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+	}
+
+	void ImGuiLayer::End()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		Window& window = Application::Get().GetWindow();
+		io.DisplaySize = ImVec2(window.GetWidth(), window.GetHeight());
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		
 
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			// disconnecting ImGui from applications window creates a new platform window
+			// updating and rendering them will change glfw context
+			// so it needs to be backed and restored
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
+
+		//glfwSwapBuffers(static_cast<GLFWwindow*>(window.GetNativeWindow()));
 	}
-
-	void ImGuiLayer::OnEvent(std::shared_ptr<Event> event)
-	{
-		EventDispacher dispacher(event);
-		dispacher.Dispach<MouseButtonPressedEvent>	(std::bind(&ImGuiLayer::OnMouseButtonPressedEvent,	this, std::placeholders::_1));
-		dispacher.Dispach<MouseButtonReleasedEvent>	(std::bind(&ImGuiLayer::OnMouseButtonReleasedEvent,	this, std::placeholders::_1));
-		dispacher.Dispach<MouseMovedEvent>			(std::bind(&ImGuiLayer::OnMouseMovedEvent,			this, std::placeholders::_1));
-		dispacher.Dispach<MouseScrolledEvent>		(std::bind(&ImGuiLayer::OnMouseScrolledEvent,		this, std::placeholders::_1));
-		dispacher.Dispach<KeyPressedEvent>			(std::bind(&ImGuiLayer::OnKeyPressedEvent,			this, std::placeholders::_1));
-		dispacher.Dispach<KeyReleasedEvent>			(std::bind(&ImGuiLayer::OnKeyReleasedEvent,			this, std::placeholders::_1));
-		dispacher.Dispach<KeyTypedEvent>			(std::bind(&ImGuiLayer::OnKeyTypedEvent,			this, std::placeholders::_1));
-		dispacher.Dispach<WindowResizeEvent>		(std::bind(&ImGuiLayer::OnWindowResizeEvent,		this, std::placeholders::_1));
-		
-	}
-
-	bool ImGuiLayer::OnMouseButtonPressedEvent(std::shared_ptr<MouseButtonPressedEvent> e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e->GetMouseButtonCode()] = true;
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseButtonReleasedEvent(std::shared_ptr < MouseButtonReleasedEvent> e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e->GetMouseButtonCode()] = false;
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseMovedEvent(std::shared_ptr<MouseMovedEvent> e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MousePos = ImVec2(e->GetX(), e->GetY());
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseScrolledEvent(std::shared_ptr<MouseScrolledEvent> e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseWheel	+= e->GetOffsetY();
-		io.MouseWheelH	+= e->GetOffsetX();
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyPressedEvent(std::shared_ptr<KeyPressedEvent> e)
-	{
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyReleasedEvent(std::shared_ptr<KeyReleasedEvent> e)
-	{
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyTypedEvent(std::shared_ptr<KeyTypedEvent> e)
-	{
-		return false;
-	}
-
-	bool ImGuiLayer::OnWindowResizeEvent(std::shared_ptr<WindowResizeEvent> e)
-	{
-		return false;
-	}
-
-	
 	
 }

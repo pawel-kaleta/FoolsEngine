@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include "FoolsEngine/Events/Event.h"
 
 namespace fe
@@ -19,6 +17,7 @@ namespace fe
 		virtual void OnAttach() { }
 		virtual void OnDetach() { }
 		virtual void OnUpdate() { }
+		virtual void OnImGuiRender() { }
 		virtual void OnEvent(std::shared_ptr<Event> event) { }
 
 		const std::string& GetName() const { return m_Name; }

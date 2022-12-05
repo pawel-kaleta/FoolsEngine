@@ -26,7 +26,6 @@ public:
 	SandboxApp()
 	{
 		PushInnerLayer(std::make_shared<LayerExample>());
-		PushOuterLayer(std::make_shared<fe::ImGuiLayer>());
 	}
 
 	~SandboxApp()

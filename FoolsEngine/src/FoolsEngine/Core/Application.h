@@ -6,6 +6,7 @@
 #include "FoolsEngine\Core\Window.h"
 #include "FoolsEngine\Core\Layer.h"
 #include "FoolsEngine\Core\LayerStack.h"
+#include "FoolsEngine\ImGui\ImGuiLayer.h"
 
 namespace fe
 {
@@ -19,6 +20,11 @@ namespace fe
 		}
 
 		void OnEvent(std::shared_ptr<Event> event) override { m_Callback(event); };
+		void OnImGuiRender() override
+		{
+			static bool show = true;
+			ImGui::ShowDemoWindow(&show);
+		}
 	private:
 		std::function<void(std::shared_ptr<Event>)> m_Callback;
 	};
@@ -42,6 +48,7 @@ namespace fe
 
 	private:
 		void UpdateLayers();
+		void UpdateImGui();
 		void OnEvent(std::shared_ptr<Event> event);
 		void OnWindowCloseEvent(std::shared_ptr<Event> event);
 
@@ -49,6 +56,7 @@ namespace fe
 		MainEventDispacher m_MainEventDispacher;
 		LayerStack m_LayerStack;
 		std::shared_ptr<ApplicationLayer> m_AppLayer;
+		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
 		bool m_Running = true;
 
 		static Application* s_Instance;

@@ -22,6 +22,10 @@ namespace fe {
 
 		m_AppLayer = std::make_shared<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		m_LayerStack.PushOuterLayer(m_AppLayer);
+
+
+		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
+		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -62,6 +66,7 @@ namespace fe {
 			m_Window->OnUpdate();
 
 			UpdateLayers();
+			UpdateImGui();
 
 			auto [x, y] = InputPolling::GetMousePosition();
 			FE_LOG_CORE_TRACE("Mouse position: {0}, {1}", x, y);
@@ -81,5 +86,16 @@ namespace fe {
 		{
 			(*layer_it)->OnUpdate();
 		}
+	}
+	void Application::UpdateImGui()
+	{
+		FE_PROFILER_FUNC();
+
+		m_ImGuiLayer->Begin();
+
+		for (std::shared_ptr<Layer> layer : m_LayerStack)
+			layer->OnImGuiRender();
+
+		m_ImGuiLayer->End();
 	}
 }

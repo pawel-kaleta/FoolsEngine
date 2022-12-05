@@ -150,9 +150,9 @@
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
+    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\RenderingContext.h" />
@@ -168,9 +168,9 @@
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
+    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\RenderingContext.cpp" />

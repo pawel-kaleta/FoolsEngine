@@ -22,6 +22,8 @@ namespace fe
 		m_InnerLayerInsertIndex++;
 
 		FE_LOG_CORE_INFO("New inner layer \"{0}\" added to LayerStack", layer->ToString());
+
+		layer->OnAttach();
 	}
 
 	void LayerStack::PushOuterLayer(std::shared_ptr<Layer> layer)
@@ -31,6 +33,8 @@ namespace fe
 		m_Layers.push_back(layer);
 
 		FE_LOG_CORE_INFO("New outer layer \"{0}\" added to LayerStack", layer->ToString());
+
+		layer->OnAttach();
 	}
 
 	void LayerStack::PopInnerLayer(std::shared_ptr<Layer> layer)

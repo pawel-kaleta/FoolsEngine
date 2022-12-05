@@ -203,6 +203,8 @@ namespace fe
 			glfwDestroyWindow(m_Window);
 		}
 
+		delete m_RenderingContext;
+
 		// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
 		{
 			FE_PROFILER_SCOPE("glfwTerminate()");

@@ -13,7 +13,7 @@ namespace fe
 		Win10Window(const WindowAttributes& attr);
 		~Win10Window();
 
-		void OnUpdate() override;
+		virtual void OnUpdate() override;
 
 		unsigned int GetWidth() const override { return m_Data.Width; };
 		unsigned int GetHeight() const override { return m_Data.Height; };

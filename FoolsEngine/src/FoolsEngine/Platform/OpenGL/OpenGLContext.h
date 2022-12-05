@@ -16,7 +16,5 @@ namespace fe
 		virtual void ClearBuffer() override;
 	private:
 		GLFWwindow* m_Window;
-
-		// Odziedziczono za poœrednictwem elementu RenderingContext
 	};
 }
