@@ -85,7 +85,7 @@ namespace fe
 			FE_PROFILER_SCOPE("RenderingContext_Retrieval");
 			FE_LOG_CORE_INFO("Creating rendering context");
 			
-			m_RenderingContext = new OpenGLContext(m_Window);
+			m_RenderingContext.reset((RenderingContext*) new OpenGLContext(m_Window));
 			m_RenderingContext->Init();
 
 		}
@@ -205,8 +205,6 @@ namespace fe
 			FE_PROFILER_SCOPE("lfwDestroyWindow()");
 			glfwDestroyWindow(m_Window);
 		}
-
-		delete m_RenderingContext;
 
 		// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
 		{

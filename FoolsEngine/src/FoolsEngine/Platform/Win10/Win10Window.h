@@ -27,7 +27,7 @@ namespace fe
 
 	private:
 		GLFWwindow* m_Window;
-		RenderingContext* m_RenderingContext;
+		std::unique_ptr<RenderingContext> m_RenderingContext;
 
 		struct WinData
 		{

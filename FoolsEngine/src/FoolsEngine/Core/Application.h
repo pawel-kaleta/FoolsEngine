@@ -8,6 +8,8 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
+#include "FoolsEngine\Renderer\Shader.h"
+
 namespace fe
 {
 	class ApplicationLayer : public Layer
@@ -55,6 +57,7 @@ namespace fe
 		void TriangleTestSetup();
 		void TriangleTestDraw();
 		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;

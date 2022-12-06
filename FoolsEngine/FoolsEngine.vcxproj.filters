@@ -99,6 +99,9 @@
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\Shader.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -139,5 +142,8 @@
       <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>
