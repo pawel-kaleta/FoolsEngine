@@ -102,6 +102,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\Buffers.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -145,5 +147,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Shader.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Buffers.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
   </ItemGroup>
 </Project>

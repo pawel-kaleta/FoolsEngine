@@ -9,6 +9,7 @@
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
 #include "FoolsEngine\Renderer\Shader.h"
+#include "FoolsEngine\Renderer\Buffers.h"
 
 namespace fe
 {
@@ -56,8 +57,10 @@ namespace fe
 
 		void TriangleTestSetup();
 		void TriangleTestDraw();
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		unsigned int m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
