@@ -2,7 +2,6 @@
 
 #include "FE_pch.h"
 #include "OpenGLBuffers.h"
-#include <glad\glad.h>
 
 namespace fe
 {
@@ -35,8 +34,6 @@ namespace fe
 		return m_Size;
 	}
 
-
-
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 		: m_Count(count)
 	{
@@ -65,4 +62,5 @@ namespace fe
 	{
 		return m_Count;
 	}
+	
 }

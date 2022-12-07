@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\Buffers.h"
+#include <glad\glad.h>
 
 namespace fe
 {
@@ -15,10 +16,13 @@ namespace fe
 
 		virtual uint32_t GetSize() const override;
 
+		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
+		virtual const BufferLayout& GetLayout() override { return m_Layout;  }
+
 	private:
 		uint32_t m_ID;
 		uint32_t m_Size;
-
+		BufferLayout m_Layout;
 	};
 
 	class OpenGLIndexBuffer : IndexBuffer
@@ -35,5 +39,11 @@ namespace fe
 	private:
 		uint32_t m_ID;
 		uint32_t m_Count;
+	};
+
+	static GLenum SDPrimitiveToGLBaseType(SDPrimitive primitive)
+	{
+		const static GLenum LookupTable[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
+		return LookupTable[(int)primitive - 1];
 	};
 }

@@ -4,182 +4,182 @@
 "name": "__cdecl fe::MainEventDispacher::MainEventDispacher(void)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304057882.800
+"tid": 13844,
+"ts": 1303507288107.900
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::LayerStack::LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058011.400
+"tid": 13844,
+"ts": 1303507288179.200
 },{
 "cat": "function",
-"dur": 96338,
+"dur": 55867,
 "name": "GLFW_Initialization",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058107.500
+"tid": 13844,
+"ts": 1303507288236.200
 },{
 "cat": "function",
-"dur": 207669,
+"dur": 154383,
 "name": "GLFW_CreateWindow",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304154519.600
+"tid": 13844,
+"ts": 1303507344187.100
 },{
 "cat": "function",
-"dur": 6870,
+"dur": 5544,
 "name": "void __cdecl fe::OpenGLContext::Init(void)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304362834.600
+"tid": 13844,
+"ts": 1303507498902.600
 },{
 "cat": "function",
-"dur": 7486,
+"dur": 5836,
 "name": "RenderingContext_Retrieval",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304362290.100
+"tid": 13844,
+"ts": 1303507498662.300
 },{
 "cat": "function",
-"dur": 401,
+"dur": 661,
 "name": "void __cdecl fe::Win10Window::SetVSync(bool)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304369827.200
+"tid": 13844,
+"ts": 1303507504551.000
 },{
 "cat": "function",
-"dur": 1171,
+"dur": 935,
 "name": "void __cdecl fe::Win10Window::SetGLFWEventsCallbacks(void)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304370280.900
+"tid": 13844,
+"ts": 1303507505257.000
 },{
 "cat": "function",
-"dur": 313394,
+"dur": 218011,
 "name": "void __cdecl fe::Win10Window::Init(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058106.800
+"tid": 13844,
+"ts": 1303507288235.700
 },{
 "cat": "function",
-"dur": 313446,
+"dur": 218049,
 "name": "__cdecl fe::Win10Window::Win10Window(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058102.100
+"tid": 13844,
+"ts": 1303507288234.200
 },{
 "cat": "function",
-"dur": 313504,
+"dur": 218093,
 "name": "class fe::Window *__cdecl fe::Window::Create(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058083.000
+"tid": 13844,
+"ts": 1303507288224.700
 },{
 "cat": "function",
-"dur": 1,
+"dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304371656.900
+"tid": 13844,
+"ts": 1303507506437.400
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::ApplicationLayer::ApplicationLayer(class std::function<void __cdecl(class std::shared_ptr<class fe::Event>)>)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304371703.200
+"tid": 13844,
+"ts": 1303507506492.100
 },{
 "cat": "function",
-"dur": 513,
+"dur": 903,
 "name": "void __cdecl fe::LayerStack::PushOuterLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304371756.400
+"tid": 13844,
+"ts": 1303507506536.600
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304372325.800
+"tid": 13844,
+"ts": 1303507507496.100
 },{
 "cat": "function",
-"dur": 946,
+"dur": 633,
 "name": "void __cdecl fe::LayerStack::PushOuterLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304372362.200
+"tid": 13844,
+"ts": 1303507507541.900
 },{
 "cat": "function",
-"dur": 25473,
+"dur": 35600,
 "name": "OpenGL vertexShader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304375945.300
+"tid": 13844,
+"ts": 1303507509020.700
 },{
 "cat": "function",
-"dur": 342,
+"dur": 305,
 "name": "OpenGL fragmentShader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304401609.500
+"tid": 13844,
+"ts": 1303507544793.300
 },{
 "cat": "function",
-"dur": 1203,
+"dur": 1253,
 "name": "OpenGL vertexShader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304402009.100
+"tid": 13844,
+"ts": 1303507545153.000
 },{
 "cat": "function",
-"dur": 27499,
+"dur": 37713,
 "name": "__cdecl fe::OpenGLShader::OpenGLShader(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304375762.700
+"tid": 13844,
+"ts": 1303507508743.400
 },{
 "cat": "function",
-"dur": 345402,
+"dur": 258668,
 "name": "__cdecl fe::Application::Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304058080.800
+"tid": 13844,
+"ts": 1303507288223.200
 },{
 "cat": "function",
-"dur": 1,
+"dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304403552.900
+"tid": 13844,
+"ts": 1303507546952.500
 },{
 "cat": "function",
-"dur": 705,
+"dur": 324,
 "name": "void __cdecl fe::LayerStack::PushInnerLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 37040,
-"ts": 1229304403642.500
+"tid": 13844,
+"ts": 1303507547048.500
 }]}
