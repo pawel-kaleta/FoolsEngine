@@ -16,13 +16,14 @@ namespace fe
 
 		virtual uint32_t GetSize() const override;
 
-		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
-		virtual const BufferLayout& GetLayout() override { return m_Layout;  }
+		virtual void SetLayout(const BufferLayout& layout) override;
+		virtual const BufferLayout& GetLayout() override;
 
 	private:
 		uint32_t m_ID;
 		uint32_t m_Size;
 		BufferLayout m_Layout;
+		bool m_SetLayout = false;
 	};
 
 	class OpenGLIndexBuffer : IndexBuffer

@@ -34,6 +34,20 @@ namespace fe
 		return m_Size;
 	}
 
+	void OpenGLVertexBuffer::SetLayout(const BufferLayout& layout)
+	{
+		m_Layout = layout;
+		m_SetLayout = true;
+	}
+
+	const BufferLayout& OpenGLVertexBuffer::GetLayout()
+	{
+		if (m_SetLayout)
+			return m_Layout;
+
+		FE_CORE_ASSERT(false, "Vertex Buffer has no layout!");
+	}
+
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 		: m_Count(count)
 	{

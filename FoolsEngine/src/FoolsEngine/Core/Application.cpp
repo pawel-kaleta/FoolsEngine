@@ -5,7 +5,7 @@
 #include "FoolsEngine\Core\InputPolling.h"
 
 #include <glad\glad.h>
-#include "FoolsEngine\Platform\OpenGL\OpenGLBuffers.h"
+
 
 namespace fe {
 
@@ -109,8 +109,8 @@ namespace fe {
 	{
 		FE_LOG_CORE_DEBUG("TriangleTestSetup begin.");
 
-		glCreateVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->Bind();
 
 		float vertices[3 * (3+4)] = {
 			-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,
@@ -119,31 +119,15 @@ namespace fe {
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-		BufferLayout layout = {
-			{ "a_Position", SDType::Float3 },
+		m_VertexBuffer->SetLayout({
+			{ SDType::Float3, "a_Position" },
 			{ "a_Color", SDPrimitive::Float, 4 }
-		};
-
-		uint32_t index = 0;
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				element.ComponentCount,
-				SDPrimitiveToGLBaseType(element.Primitive),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset
-			);
-			index++;
-		}
-
+		});
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
 		uint32_t indecies[3] = { 0, 1, 2 };
-		
 		m_IndexBuffer.reset(IndexBuffer::Create(indecies, 3));
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		std::string vertexSource = R"(
 			#version 330 core
@@ -187,7 +171,7 @@ namespace fe {
 		FE_LOG_CORE_TRACE("TriangleTestDraw");
 
 		m_Shader->Bind();
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray->Bind();
 		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 	}

@@ -45,14 +45,14 @@ namespace fe
 
 		const static SDPrimitive SDPrimitiveInTypeLookupTable[] = {
 			SDPrimitive::None,
-			SDPrimitive::Bool,	 SDPrimitive::Bool,	  SDPrimitive::Bool,   SDPrimitive::Bool,
-			SDPrimitive::Int,	 SDPrimitive::Int,	  SDPrimitive::Int,	   SDPrimitive::Int,
-			SDPrimitive::UInt,	 SDPrimitive::UInt,	  SDPrimitive::UInt,   SDPrimitive::UInt,
-			SDPrimitive::Float,	 SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float,
+			SDPrimitive::Bool,   SDPrimitive::Bool,   SDPrimitive::Bool,   SDPrimitive::Bool,
+			SDPrimitive::Int,    SDPrimitive::Int,    SDPrimitive::Int,    SDPrimitive::Int,
+			SDPrimitive::UInt,   SDPrimitive::UInt,	  SDPrimitive::UInt,   SDPrimitive::UInt,
+			SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float,
 			SDPrimitive::Double, SDPrimitive::Double, SDPrimitive::Double, SDPrimitive::Double,
-			SDPrimitive::Float,	 SDPrimitive::Float,  SDPrimitive::Float,
-			SDPrimitive::Float,	 SDPrimitive::Float,  SDPrimitive::Float,
-			SDPrimitive::Float,	 SDPrimitive::Float,  SDPrimitive::Float
+			SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float,
+			SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float,
+			SDPrimitive::Float,  SDPrimitive::Float,  SDPrimitive::Float
 		};
 		
 		return SDPrimitiveInTypeLookupTable[(int)type];
@@ -72,9 +72,9 @@ namespace fe
 			 SDStructure::Scalar, SDStructure::Vector, SDStructure::Vector, SDStructure::Vector,
 			 SDStructure::Scalar, SDStructure::Vector, SDStructure::Vector, SDStructure::Vector,
 			 SDStructure::Scalar, SDStructure::Vector, SDStructure::Vector, SDStructure::Vector,
-			 SDStructure::Matrix, SDStructure::Matrix, SDStructure::Matrix,
-			 SDStructure::Matrix, SDStructure::Matrix, SDStructure::Matrix,
-			 SDStructure::Matrix, SDStructure::Matrix, SDStructure::Matrix
+			 SDStructure::Matrix2, SDStructure::Matrix2, SDStructure::Matrix2,
+			 SDStructure::Matrix3, SDStructure::Matrix3, SDStructure::Matrix3,
+			 SDStructure::Matrix4, SDStructure::Matrix4, SDStructure::Matrix4
 		};
 
 		return SDStructureInTypeLookupTable[(int)type];
@@ -102,8 +102,7 @@ namespace fe
 		return SDSizeOfTypeLookupTable[(int)type];
 	}
 
-	const SDType BufferElement::m_SDTypeOfMatrixLookupTable[3][3] =
-	{
+	const SDType BufferElement::m_SDTypeOfMatrixLookupTable[3][3] =	{
 		{ SDType::Mat2,   SDType::Mat2x3, SDType::Mat2x4 },
 		{ SDType::Mat3x2, SDType::Mat3,   SDType::Mat3x4 },
 		{ SDType::Mat4x2, SDType::Mat4x3, SDType::Mat4   }
@@ -133,30 +132,45 @@ namespace fe
 	}
 
 	BufferElement::BufferElement(const std::string& name, int collumns, int rows, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Structure(SDStructure::Matrix), Offset(0), Normalized(normalized)
+		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
 	{
 		Type = m_SDTypeOfMatrixLookupTable[collumns-2][rows-2];
 		Size = SDSizeOfType(Type);
 		ComponentCount = collumns * rows;
+		Structure = SDStructureInType(Type);
 	}
 
 	BufferElement::BufferElement(const std::string& name, int collumns, uint32_t rows, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Structure(SDStructure::Matrix), Offset(0), Normalized(normalized)
+		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
 	{
 		Type = m_SDTypeOfMatrixLookupTable[collumns - 2][rows - 2];
 		Size = SDSizeOfType(Type);
 		ComponentCount = collumns * rows;
+		Structure = SDStructureInType(Type);
 	}
 
-	BufferElement::BufferElement(const std::string& name, int count, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Structure(SDStructure::Matrix), Offset(0), Normalized(normalized)
+	BufferElement::BufferElement(const std::string& name, int order, bool normalized)
+		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
 	{
-		Type = m_SDTypeOfMatrixLookupTable[count - 2][count - 2];
+		Type = m_SDTypeOfMatrixLookupTable[order - 2][order - 2];
 		Size = SDSizeOfType(Type);
-		ComponentCount = count * count;
+		ComponentCount = order * order;
+		Structure = SDStructureInType(Type);
 	}
 
 	BufferElement::BufferElement(const std::string& name, SDType type, bool normalized)
+		: Name(name), Type(type), Offset(0), Normalized(normalized)
+	{
+		Primitive = SDPrimitiveInType(Type);
+		Structure = SDStructureInType(Type);
+		Size = SDSizeOfType(Type);
+		if (Primitive == SDPrimitive::Double)
+			ComponentCount = Size / 8;
+		else
+			ComponentCount = Size / 4;
+	}
+
+	BufferElement::BufferElement(SDType type, const std::string& name, bool normalized)
 		: Name(name), Type(type), Offset(0), Normalized(normalized)
 	{
 		Primitive = SDPrimitiveInType(Type);

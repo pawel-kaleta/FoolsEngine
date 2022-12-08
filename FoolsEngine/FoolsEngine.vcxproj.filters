@@ -104,6 +104,8 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Buffers.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -149,5 +151,7 @@
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Buffers.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\VertexArray.cpp" />
   </ItemGroup>
 </Project>

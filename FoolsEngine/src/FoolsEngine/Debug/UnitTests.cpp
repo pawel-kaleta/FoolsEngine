@@ -193,7 +193,7 @@ namespace fe
 	{
 		FE_LOG_CORE_DEBUG("--------------------Assertion Tests--------------------");
 
-		if (Asserts::EnableCoreAssertions) {
+		if (Asserts::EnableCoreAssertionBreak) {
 			FE_LOG_CORE_INFO("Skipping core assertion testing due to core assertion break enabled.");
 		}
 		else {
@@ -202,7 +202,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "core test assert 2, val={0}", a);
 		}
 
-		if (Asserts::EnableAssertions) {
+		if (Asserts::EnableAssertionBreak) {
 			FE_LOG_CORE_INFO("Skipping assertion testing due to assertion break enabled.");
 		}
 		else {

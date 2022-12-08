@@ -18,20 +18,22 @@ namespace fe
 		None = 0,
 		Scalar,
 		Vector,
-		Matrix
+		Matrix2, //2x2, 2x3, 2x4
+		Matrix3, //3x2, 3x3, 3x4
+		Matrix4  //4x2, 4x3, 4x4
 	};
 	
 	enum class SDType
 	{
 		None = 0,
-		Bool,	Bool2,   Bool3,   Bool4,
-		Int,	Int2,    Int3,    Int4,
+		Bool,   Bool2,   Bool3,   Bool4,
+		Int,    Int2,    Int3,    Int4,
 		UInt,   UInt2,   UInt3,   UInt4,
-		Float,	Float2,  Float3,  Float4,
-		Double,	Double2, Double3, Double4,
-		Mat2,	Mat2x3,	Mat2x4,
-		Mat3x2,	Mat3,	Mat3x4,
-		Mat4x2,	Mat4x3,	Mat4
+		Float,  Float2,  Float3,  Float4,
+		Double, Double2, Double3, Double4,
+		Mat2,   Mat2x3, Mat2x4,
+		Mat3x2, Mat3,   Mat3x4,
+		Mat4x2, Mat4x3, Mat4
 	};
 
 	static SDPrimitive SDPrimitiveInType(SDType type);
@@ -44,8 +46,8 @@ namespace fe
 	public:
 		std::string Name;
 		SDPrimitive Primitive;
-		SDType Type;
 		SDStructure Structure;
+		SDType Type;
 		uint32_t Size;
 		uint32_t Offset;
 		uint32_t ComponentCount;
@@ -54,15 +56,16 @@ namespace fe
 		BufferElement(const std::string& name,	SDPrimitive primitive,					bool normalized = false);
 		BufferElement(const std::string& name,	SDPrimitive primitive, int count,		bool normalized = false);
 		BufferElement(const std::string& name,	SDPrimitive primitive, uint32_t count,	bool normalized = false);
-		BufferElement(const std::string& name,	int collumns, int rows,					bool normalized = false);
-		BufferElement(const std::string& name,	int collumns, uint32_t rows,			bool normalized = false);
-		BufferElement(const std::string& name,	int count,								bool normalized = false);
+		BufferElement(const std::string& name,	int columns, int rows,					bool normalized = false);
+		BufferElement(const std::string& name,	int columns, uint32_t rows,				bool normalized = false);
+		BufferElement(const std::string& name,	int order,								bool normalized = false);
 		BufferElement(const std::string& name,	SDType type,							bool normalized = false);
+		
+		BufferElement(SDType type, const std::string& name, bool normalized = false);
 
 	private:
 		const static SDType m_SDTypeOfMatrixLookupTable[3][3];
 	};
-
 
 
 	class BufferLayout
@@ -84,9 +87,12 @@ namespace fe
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
 
+		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
+		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
+
 	private:
 		std::vector<BufferElement> m_Elements;
-		uint32_t m_Stride;
+		uint32_t m_Stride = 0;
 
 		void CalculateOffsetsAndStride();
 	};
