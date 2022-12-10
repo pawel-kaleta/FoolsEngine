@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 #include <glad/glad.h>
 #include "OpenGLContext.h"
-
+#include "OpenGLRendererAPI.h"
 
 namespace fe
 {
@@ -23,6 +23,10 @@ namespace fe
 		FE_LOG_CORE_INFO("	Vendor:		{0}", glGetString(GL_VENDOR));
 		FE_LOG_CORE_INFO("	Renderer:	{0}", glGetString(GL_RENDERER));
 		FE_LOG_CORE_INFO("	Version:	{0}", glGetString(GL_VERSION));
+
+		Renderer::SetAPI((RendererAPI*)new OpenGLRendererAPI());
+
+		FE_LOG_CORE_INFO("OpenGLRenderAPI initialized.");
 	}
 
 	void OpenGLContext::SwapBuffers()
@@ -30,13 +34,5 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		glfwSwapBuffers(m_Window);
-	}
-
-	void OpenGLContext::ClearBuffer()
-	{
-		FE_PROFILER_FUNC();
-
-		glClearColor(0.1f, 0.1f, 0.1f, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 }

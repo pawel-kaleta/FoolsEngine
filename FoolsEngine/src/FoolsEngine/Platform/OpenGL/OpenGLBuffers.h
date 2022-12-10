@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\Buffers.h"
+#include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
 #include <glad\glad.h>
 
 namespace fe
@@ -17,7 +17,7 @@ namespace fe
 		virtual uint32_t GetSize() const override;
 
 		virtual void SetLayout(const BufferLayout& layout) override;
-		virtual const BufferLayout& GetLayout() override;
+		virtual const BufferLayout& GetLayout() const override;
 
 	private:
 		uint32_t m_ID;

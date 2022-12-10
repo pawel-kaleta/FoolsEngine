@@ -1,5 +1,5 @@
 #pragma once
-#include "FoolsEngine\Renderer\VertexArray.h"
+#include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"
 
 namespace fe
 {

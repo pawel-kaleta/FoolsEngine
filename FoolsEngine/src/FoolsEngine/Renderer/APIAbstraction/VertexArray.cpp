@@ -1,18 +1,18 @@
 #include "FE_pch.h"
 #include "VertexArray.h"
-#include "Renderer.h"
+#include "FoolsEngine\Renderer\Renderer.h"
 #include "FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h"
 
 namespace fe
 {
 	VertexArray* VertexArray::Create()
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::GetNativeAPI())
 		{
-		case Renderer::RendererAPI::none:
+		case RendererAPI::NativeAPI::none:
 			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
 			return nullptr;
-		case Renderer::RendererAPI::OpenGL:
+		case RendererAPI::NativeAPI::OpenGL:
 			return (VertexArray*) new OpenGLVertexArray();
 		}
 

@@ -8,9 +8,9 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
-#include "FoolsEngine\Renderer\Shader.h"
-#include "FoolsEngine\Renderer\Buffers.h"
-#include "FoolsEngine\Renderer\VertexArray.h"
+#include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
+#include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"
 
 namespace fe
 {
@@ -54,10 +54,9 @@ namespace fe
 		void UpdateLayers();
 		void UpdateImGui();
 		void OnEvent(std::shared_ptr<Event> event);
-		void OnWindowCloseEvent(std::shared_ptr<Event> event);
+		bool OnWindowCloseEvent(std::shared_ptr<WindowCloseEvent> event);
 
 		void TriangleTestSetup();
-		void TriangleTestDraw();
 		std::shared_ptr<VertexArray> m_VertexArray;
 		std::shared_ptr<Shader> m_Shader;
 		std::shared_ptr<VertexBuffer> m_VertexBuffer;

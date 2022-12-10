@@ -10,7 +10,6 @@ namespace fe
 	{
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-
 		glBufferData(GL_ARRAY_BUFFER, m_Size, vertices, GL_STATIC_DRAW);
 	}
 
@@ -40,7 +39,7 @@ namespace fe
 		m_SetLayout = true;
 	}
 
-	const BufferLayout& OpenGLVertexBuffer::GetLayout()
+	const BufferLayout& OpenGLVertexBuffer::GetLayout() const
 	{
 		if (m_SetLayout)
 			return m_Layout;

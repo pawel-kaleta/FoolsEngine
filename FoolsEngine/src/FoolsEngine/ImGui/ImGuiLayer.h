@@ -15,11 +15,10 @@ namespace fe {
 	{
 	public:
 		ImGuiLayer();
-		~ImGuiLayer();
+		~ImGuiLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnUpdate() override;
 
 		void Begin();
 		void End();

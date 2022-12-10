@@ -39,8 +39,6 @@ namespace fe
 		}
 		
 		m_RenderingContext->SwapBuffers();
-
-		m_RenderingContext->ClearBuffer();
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)

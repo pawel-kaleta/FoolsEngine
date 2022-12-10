@@ -2,18 +2,18 @@
 
 #include "Buffers.h"
 #include "FoolsEngine\Platform\OpenGL\OpenGLBuffers.h"
-#include "Renderer.h"
+#include "FoolsEngine\Renderer\Renderer.h"
 
 namespace fe
 {
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::GetNativeAPI())
 		{
-		case Renderer::RendererAPI::none:
-			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
+		case RendererAPI::NativeAPI::none:
+			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
-		case Renderer::RendererAPI::OpenGL:
+		case RendererAPI::NativeAPI::OpenGL:
 			return (VertexBuffer*) new OpenGLVertexBuffer(vertices, size);
 		}
 
@@ -23,12 +23,12 @@ namespace fe
 	
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
-		switch (Renderer::GetAPI())
+		switch (RendererAPI::GetNativeAPI())
 		{
-		case Renderer::RendererAPI::none:
-			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
+		case RendererAPI::NativeAPI::none:
+			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
-		case Renderer::RendererAPI::OpenGL:
+		case RendererAPI::NativeAPI::OpenGL:
 			return (IndexBuffer*) new OpenGLIndexBuffer(indices, count);
 		}
 
@@ -80,7 +80,7 @@ namespace fe
 		return SDStructureInTypeLookupTable[(int)type];
 	}
 
-	uint32_t SDSizeOfType(SDType type)
+	static uint32_t SDSizeOfType(SDType type)
 	{
 		const static uint32_t SDSizeOfTypeLookupTable[] = {
 			0,
@@ -94,7 +94,7 @@ namespace fe
 			4*4*2, 4*4*3, 4*4*4
 		};
 
-		if ((int)type > 29 || (int)type <= 0) {
+		if ((int)type >= 29 || (int)type < 0) {
 			FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 			return 0;
 		}

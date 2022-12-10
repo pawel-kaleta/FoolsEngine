@@ -17,10 +17,6 @@ namespace fe {
 
 	}
 
-	ImGuiLayer::~ImGuiLayer()
-	{
-
-	}
 
 	void ImGuiLayer::OnAttach()
 	{
@@ -58,11 +54,6 @@ namespace fe {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-	}
-
-	void ImGuiLayer::OnUpdate()
-	{
-		
 	}
 
 	//void ImGuiLayer::OnImGuiRender()

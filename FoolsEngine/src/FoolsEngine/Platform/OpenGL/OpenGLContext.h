@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\RenderingContext.h"
+#include "FoolsEngine\Renderer\APIAbstraction\RenderingContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -13,7 +13,6 @@ namespace fe
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
-		virtual void ClearBuffer() override;
 	private:
 		GLFWwindow* m_Window;
 	};

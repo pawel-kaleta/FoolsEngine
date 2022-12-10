@@ -1,10 +1,8 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine\Core\Application.h"
-#include "FoolsEngine\Platform\Win10\Win10Window.h"
-#include "FoolsEngine\Core\InputPolling.h"
+#include "FoolsEngine\Renderer\Renderer.h"
 
-#include <glad\glad.h>
 
 
 namespace fe {
@@ -27,6 +25,7 @@ namespace fe {
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
+		Renderer::Init();
 
 		TriangleTestSetup();
 	}
@@ -44,19 +43,18 @@ namespace fe {
 		FE_LOG_CORE_TRACE(event->GetName());
 		FE_LOG_CORE_TRACE(event->GetCategoryFlags());
 
-		if (event->GetEventType() == EventType::WindowClose)
-		{
-			OnWindowCloseEvent(event);
-		}
+		EventDispacher dispacher(event);
+		dispacher.Dispach<WindowCloseEvent>(std::bind(&Application::OnWindowCloseEvent, this, std::placeholders::_1));
 	}
 
-	void Application::OnWindowCloseEvent(std::shared_ptr<Event> event)
+	bool Application::OnWindowCloseEvent(std::shared_ptr<WindowCloseEvent> event)
 	{
 		FE_PROFILER_FUNC();
 
 		m_Running = false;
-		event->Handled = true;
 		FE_LOG_CORE_INFO("Window Close Event");
+
+		return true;
 	}
 
 
@@ -66,17 +64,23 @@ namespace fe {
 
 		while (m_Running)
 		{
-			m_Window->OnUpdate();
+			RenderCommands::Clear();
+			RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 
-			TriangleTestDraw();
+			Renderer::BeginScene();
+			{
+				FE_LOG_CORE_TRACE("TriangleTestDraw");
+
+				m_Shader->Bind();
+				Renderer::Submit(m_VertexArray);
+			}
+			Renderer::EndScene();
 
 			UpdateLayers();
 			UpdateImGui();
 
-			auto [x, y] = InputPolling::GetMousePosition();
-			FE_LOG_CORE_TRACE("Mouse position: {0}, {1}", x, y);
-
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
+			m_Window->OnUpdate();
 		}
 		
 		Log::SetClientLoggingLevel(spdlog::level::trace);
@@ -166,13 +170,4 @@ namespace fe {
 		FE_LOG_CORE_DEBUG("TriangleTestSetup end.");
 	}
 
-	void Application::TriangleTestDraw()
-	{
-		FE_LOG_CORE_TRACE("TriangleTestDraw");
-
-		m_Shader->Bind();
-		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-	}
 }

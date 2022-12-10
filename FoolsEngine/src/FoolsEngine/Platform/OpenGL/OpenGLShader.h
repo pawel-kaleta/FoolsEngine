@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\Shader.h"
+#include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 
 namespace fe
 {
