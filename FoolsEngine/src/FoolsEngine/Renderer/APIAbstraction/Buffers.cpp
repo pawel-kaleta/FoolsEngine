@@ -94,7 +94,7 @@ namespace fe
 			4*4*2, 4*4*3, 4*4*4
 		};
 
-		if ((int)type >= 29 || (int)type < 0) {
+		if ((int)type > 29 || (int)type <= 0) {
 			FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 			return 0;
 		}

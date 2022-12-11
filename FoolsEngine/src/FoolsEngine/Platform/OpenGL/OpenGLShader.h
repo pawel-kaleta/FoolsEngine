@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 
+
 namespace fe
 {
 	class OpenGLShader : Shader
@@ -16,8 +17,10 @@ namespace fe
 		virtual const std::string& GetName() const override { return m_Name; };
 		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
 
+		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) override;
 	private:
 		std::string m_Name;
 		uint32_t m_ProgramID;
+
 	};
 }

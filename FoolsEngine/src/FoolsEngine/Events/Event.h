@@ -66,26 +66,31 @@ namespace fe
 	class EventDispacher
 	{
 	public:
-		EventDispacher(std::shared_ptr<Event> e)
+		EventDispacher(Event& e)
 			: m_Event(e)
 		{
 
 		}
 
 		template<typename T>
-		bool Dispach(const std::function<bool(std::shared_ptr<T>)>& func)
+		bool Dispach(const std::function<bool(T&)> func)
 		{
-			if (m_Event->GetEventType() == T::GetStaticType())
+			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event->Handled |= func(std::dynamic_pointer_cast<T>(m_Event));
+				m_Event.Handled |= func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;
 		}
 	private:
-		std::shared_ptr<Event> m_Event;
+		Event& m_Event;
 
 	};
+
+#define FE_BIND_EVENT_HANDLER(fn) std::bind(&fn, this, std::placeholders::_1)
+
+	// EGZAMPLE
+	// dispacher.Dispach<fe::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{

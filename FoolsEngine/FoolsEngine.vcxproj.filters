@@ -109,6 +109,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\OrtographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -159,5 +160,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp" />
   </ItemGroup>
 </Project>

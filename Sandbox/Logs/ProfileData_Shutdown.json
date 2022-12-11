@@ -1,65 +1,81 @@
 {"otherdata": {}, "traceEvents": [ {},{
 "cat": "function",
-"dur": 1,
+"dur": 0,
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 49220,
-"ts": 1520247852808.900
+"tid": 41864,
+"ts": 1583664531988.400
 },{
 "cat": "function",
-"dur": 6071,
-"name": "__cdecl fe::LayerStack::~LayerStack(void)",
+"dur": 6,
+"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 49220,
-"ts": 1520247852851.800
+"tid": 41864,
+"ts": 1583664541460.800
 },{
 "cat": "function",
-"dur": 16038,
-"name": "lfwDestroyWindow()",
+"dur": 5,
+"name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 49220,
-"ts": 1520247859086.900
-},{
-"cat": "function",
-"dur": 6036,
-"name": "glfwTerminate()",
-"ph": "X",
-"pid": 0,
-"tid": 49220,
-"ts": 1520247875206.200
-},{
-"cat": "function",
-"dur": 22343,
-"name": "void __cdecl fe::Win10Window::ShutDown(void)",
-"ph": "X",
-"pid": 0,
-"tid": 49220,
-"ts": 1520247858972.000
-},{
-"cat": "function",
-"dur": 22377,
-"name": "__cdecl fe::Win10Window::~Win10Window(void)",
-"ph": "X",
-"pid": 0,
-"tid": 49220,
-"ts": 1520247858971.900
+"tid": 41864,
+"ts": 1583664541550.100
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 49220,
-"ts": 1520247881396.600
+"tid": 41864,
+"ts": 1583664541606.400
 },{
 "cat": "function",
-"dur": 3,
+"dur": 2,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 49220,
-"ts": 1520247881428.800
+"tid": 41864,
+"ts": 1583664541650.100
+},{
+"cat": "function",
+"dur": 9645,
+"name": "__cdecl fe::LayerStack::~LayerStack(void)",
+"ph": "X",
+"pid": 0,
+"tid": 41864,
+"ts": 1583664532056.300
+},{
+"cat": "function",
+"dur": 18426,
+"name": "lfwDestroyWindow()",
+"ph": "X",
+"pid": 0,
+"tid": 41864,
+"ts": 1583664541902.200
+},{
+"cat": "function",
+"dur": 6414,
+"name": "glfwTerminate()",
+"ph": "X",
+"pid": 0,
+"tid": 41864,
+"ts": 1583664560445.000
+},{
+"cat": "function",
+"dur": 25181,
+"name": "void __cdecl fe::Win10Window::ShutDown(void)",
+"ph": "X",
+"pid": 0,
+"tid": 41864,
+"ts": 1583664541744.000
+},{
+"cat": "function",
+"dur": 25213,
+"name": "__cdecl fe::Win10Window::~Win10Window(void)",
+"ph": "X",
+"pid": 0,
+"tid": 41864,
+"ts": 1583664541743.700
 }]}

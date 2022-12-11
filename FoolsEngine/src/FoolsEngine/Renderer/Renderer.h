@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderCommands.h"
+#include "OrtographicCamera.h"
 
 namespace fe
 {
@@ -13,13 +14,17 @@ namespace fe
 		static void Init();
 		static void SetAPI(RendererAPI* rendererAPI) { RenderCommands::SetAPI(rendererAPI); }
 
-		static void BeginScene();
+		static void BeginScene(OrtographicCamera& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
 
 	private:
-		
+		struct SceneData
+		{
+			glm::mat4 VPMatrix;
+		};
 
+		static SceneData* m_SceneData;
 	};
 }

@@ -8,6 +8,7 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
+#include "FoolsEngine\Renderer\OrtographicCamera.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
 #include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"
@@ -17,20 +18,20 @@ namespace fe
 	class ApplicationLayer : public Layer
 	{
 	public:
-		ApplicationLayer(std::function<void(std::shared_ptr<Event>)> EventCallback)
+		ApplicationLayer(std::function<void(Event&)> EventCallback)
 			: Layer("ApplicationLayer"), m_Callback(EventCallback)
 		{
 			FE_PROFILER_FUNC();
 		}
 
-		void OnEvent(std::shared_ptr<Event> event) override { m_Callback(event); };
+		void OnEvent(Event& event) override { m_Callback(event); };
 		void OnImGuiRender() override
 		{
 			static bool show = true;
 			ImGui::ShowDemoWindow(&show);
 		}
 	private:
-		std::function<void(std::shared_ptr<Event>)> m_Callback;
+		std::function<void(Event&)> m_Callback;
 	};
 
 	class Application
@@ -53,14 +54,11 @@ namespace fe
 	private:
 		void UpdateLayers();
 		void UpdateImGui();
-		void OnEvent(std::shared_ptr<Event> event);
-		bool OnWindowCloseEvent(std::shared_ptr<WindowCloseEvent> event);
+		void OnEvent(Event& event);
+		bool OnWindowCloseEvent(WindowCloseEvent& event);
 
 		void TriangleTestSetup();
-		std::shared_ptr<VertexArray> m_VertexArray;
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		
 
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;

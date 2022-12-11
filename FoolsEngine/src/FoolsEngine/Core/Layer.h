@@ -18,7 +18,7 @@ namespace fe
 		virtual void OnDetach() { }
 		virtual void OnUpdate() { }
 		virtual void OnImGuiRender() { }
-		virtual void OnEvent(std::shared_ptr<Event> event) { }
+		virtual void OnEvent(Event& event) { }
 
 		const std::string& GetName() const { return m_Name; }
 		const std::string& ToString() const { return m_Name; }

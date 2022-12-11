@@ -13,6 +13,7 @@
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "FoolsEngine\Core\InputCodes.h"
 #include "FoolsEngine\Core\InputPolling.h"
+#include "FoolsEngine\Renderer\Renderer.h"
 
 
 #ifdef FE_INTERNAL_BUILD

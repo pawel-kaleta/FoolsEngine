@@ -27,7 +27,7 @@ namespace fe {
 
 		Renderer::Init();
 
-		TriangleTestSetup();
+		
 	}
 
 	Application::~Application()
@@ -35,19 +35,22 @@ namespace fe {
 		FE_PROFILER_FUNC();
 	}
 
-	void Application::OnEvent(std::shared_ptr<Event> event)
+	void Application::OnEvent(Event& event)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_TRACE("Application::OnEvent");
-		FE_LOG_CORE_TRACE(event->GetEventType());
-		FE_LOG_CORE_TRACE(event->GetName());
-		FE_LOG_CORE_TRACE(event->GetCategoryFlags());
+		FE_LOG_CORE_TRACE(event.GetEventType());
+		FE_LOG_CORE_TRACE(event.GetName());
+		FE_LOG_CORE_TRACE(event.GetCategoryFlags());
 
 		EventDispacher dispacher(event);
-		dispacher.Dispach<WindowCloseEvent>(std::bind(&Application::OnWindowCloseEvent, this, std::placeholders::_1));
+		//dispacher.Dispach<WindowCloseEvent>(std::bind(&Application::OnWindowCloseEvent, this, std::placeholders::_1));
+		dispacher.Dispach<WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
+
+		
 	}
 
-	bool Application::OnWindowCloseEvent(std::shared_ptr<WindowCloseEvent> event)
+	bool Application::OnWindowCloseEvent(WindowCloseEvent& event)
 	{
 		FE_PROFILER_FUNC();
 
@@ -64,18 +67,6 @@ namespace fe {
 
 		while (m_Running)
 		{
-			RenderCommands::Clear();
-			RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
-
-			Renderer::BeginScene();
-			{
-				FE_LOG_CORE_TRACE("TriangleTestDraw");
-
-				m_Shader->Bind();
-				Renderer::Submit(m_VertexArray);
-			}
-			Renderer::EndScene();
-
 			UpdateLayers();
 			UpdateImGui();
 
@@ -109,65 +100,6 @@ namespace fe {
 		m_ImGuiLayer->End();
 	}
 
-	void Application::TriangleTestSetup()
-	{
-		FE_LOG_CORE_DEBUG("TriangleTestSetup begin.");
-
-		m_VertexArray.reset(VertexArray::Create());
-		m_VertexArray->Bind();
-
-		float vertices[3 * (3+4)] = {
-			-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f
-		};
-
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		m_VertexBuffer->SetLayout({
-			{ SDType::Float3, "a_Position" },
-			{ "a_Color", SDPrimitive::Float, 4 }
-		});
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-		uint32_t indecies[3] = { 0, 1, 2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indecies, 3));
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
-		std::string vertexSource = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Color = a_Color;
-				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string fragmentSource = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				o_color = vec4(v_Position + 0.5, 1.0);
-				o_color = v_Color;
-			}
-		)";
-
-		m_Shader.reset(Shader::Create("TestShader", vertexSource, fragmentSource));
-
-		FE_LOG_CORE_DEBUG("TriangleTestSetup end.");
-	}
+	
 
 }

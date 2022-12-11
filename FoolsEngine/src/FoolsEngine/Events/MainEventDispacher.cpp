@@ -24,7 +24,7 @@ namespace fe
 		{
 			for (auto layer_it = layerStack.begin(); layer_it != layerStack.end(); layer_it++) // auto = std::vector< std::shared_ptr< Layer > >::iterator
 			{
-				(*layer_it)->OnEvent(*event_it);
+				(*layer_it)->OnEvent(**event_it);
 				if ((*event_it)->Handled)
 					break;
 			}
