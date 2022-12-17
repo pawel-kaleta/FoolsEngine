@@ -31,6 +31,11 @@ namespace fe {
 	};
 }
 
+// TO DO: Local logger
+// 
+// int logerID = FE_LOCALLOG_CORE_INIT();
+// FE_LOCALLOG_CORE_FATAL(logerID, ...)
+
 
 // Macros for logging core engine issues
 #define FE_LOG_CORE_FATAL(...) fe::Log::GetCoreLogger()->critical(__VA_ARGS__)

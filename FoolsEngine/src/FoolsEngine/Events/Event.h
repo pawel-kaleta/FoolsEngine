@@ -88,9 +88,8 @@ namespace fe
 	};
 
 #define FE_BIND_EVENT_HANDLER(fn) std::bind(&fn, this, std::placeholders::_1)
-
-	// EGZAMPLE
-	// dispacher.Dispach<fe::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
+// EGZAMPLE
+// dispacher.Dispach<fe::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{

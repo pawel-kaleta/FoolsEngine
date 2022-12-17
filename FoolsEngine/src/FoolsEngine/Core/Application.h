@@ -13,6 +13,8 @@
 #include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
 #include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"
 
+#include "Time.h"
+
 namespace fe
 {
 	class ApplicationLayer : public Layer
@@ -42,8 +44,10 @@ namespace fe
 
 		void Run();
 
-		inline static Application& Get() { return *s_Instance;  }
+		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
+		inline Time::TimeStep GetLastFrameTimeStep() { return m_LastFrameTimeStep; }
+
 
 	protected:
 		void PushInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	layer->OnAttach(); }
@@ -57,9 +61,6 @@ namespace fe
 		void OnEvent(Event& event);
 		bool OnWindowCloseEvent(WindowCloseEvent& event);
 
-		void TriangleTestSetup();
-		
-
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
 		LayerStack m_LayerStack;
@@ -67,9 +68,17 @@ namespace fe
 		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
 		bool m_Running = true;
 
+		Time::TimePoint m_LastFrameTimePoint;
+		Time::TimeStep m_LastFrameTimeStep;
+
 		static Application* s_Instance;
 	};
 
 	// To be defined in FoolsEngine application (game)
-	Application* CreateApplication();
+	//Application* CreateApplication();
+
+	namespace Time
+	{
+		inline Time::TimeStep FrameStep() {	return Application::Get().GetLastFrameTimeStep(); }
+	}
 }

@@ -27,7 +27,6 @@ namespace fe {
 
 		Renderer::Init();
 
-		
 	}
 
 	Application::~Application()
@@ -47,7 +46,6 @@ namespace fe {
 		//dispacher.Dispach<WindowCloseEvent>(std::bind(&Application::OnWindowCloseEvent, this, std::placeholders::_1));
 		dispacher.Dispach<WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
 
-		
 	}
 
 	bool Application::OnWindowCloseEvent(WindowCloseEvent& event)
@@ -65,14 +63,29 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 
+		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
+		FE_LOG_CORE_INFO("////////////////////// RUNTIME //////////////////////");
+		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
+
 		while (m_Running)
 		{
+			Time::TimePoint now = Time::Now();
+			m_LastFrameTimeStep = now - m_LastFrameTimePoint;
+			m_LastFrameTimePoint = now;
+
+			FE_LOG_CORE_TRACE("m_LastFrameTimeStep: {0}", m_LastFrameTimeStep.GetSeconds());
+			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
+
 			UpdateLayers();
 			UpdateImGui();
 
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 			m_Window->OnUpdate();
 		}
+
+		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
+		FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");
+		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 		
 		Log::SetClientLoggingLevel(spdlog::level::trace);
 		Log::SetCoreLoggingLevel(spdlog::level::trace);

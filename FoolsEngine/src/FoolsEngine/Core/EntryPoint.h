@@ -2,7 +2,11 @@
 
 #ifdef FE_PLATFORM_WINDOWS
 
-extern fe::Application* fe::CreateApplication();
+namespace fe {
+
+	extern Application* CreateApplication();
+}
+//extern fe::Application* fe::CreateApplication();
 
 int main(int argc, char** argv)
 {
@@ -11,6 +15,10 @@ int main(int argc, char** argv)
 #ifdef FE_INTERNAL_BUILD
 	fe::Tester::Test();
 #endif // FE_INTERNAL_BUILD
+
+	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
+	FE_LOG_CORE_INFO("////////////////////// STARTUP //////////////////////");
+	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 
 	FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
 	auto app = fe::CreateApplication();

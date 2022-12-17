@@ -14,6 +14,7 @@
 #include "FoolsEngine\Core\InputCodes.h"
 #include "FoolsEngine\Core\InputPolling.h"
 #include "FoolsEngine\Renderer\Renderer.h"
+#include "FoolsEngine\Core\Time.h"
 
 
 #ifdef FE_INTERNAL_BUILD

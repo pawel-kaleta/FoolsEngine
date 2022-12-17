@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Core\Time.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\OrtographicCamera.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp" />

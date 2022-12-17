@@ -4,78 +4,78 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664531988.400
+"tid": 24808,
+"ts": 195104047794.200
 },{
 "cat": "function",
 "dur": 6,
 "name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541460.800
+"tid": 24808,
+"ts": 195104068633.300
 },{
 "cat": "function",
 "dur": 5,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541550.100
+"tid": 24808,
+"ts": 195104068713.900
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541606.400
+"tid": 24808,
+"ts": 195104068763.400
 },{
 "cat": "function",
 "dur": 2,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541650.100
+"tid": 24808,
+"ts": 195104068798.900
 },{
 "cat": "function",
-"dur": 9645,
+"dur": 20986,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664532056.300
+"tid": 24808,
+"ts": 195104047855.900
 },{
 "cat": "function",
-"dur": 18426,
+"dur": 41907,
 "name": "lfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541902.200
+"tid": 24808,
+"ts": 195104069021.900
 },{
 "cat": "function",
-"dur": 6414,
+"dur": 69091,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664560445.000
+"tid": 24808,
+"ts": 195104111051.500
 },{
 "cat": "function",
-"dur": 25181,
+"dur": 111382,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541744.000
+"tid": 24808,
+"ts": 195104068877.200
 },{
 "cat": "function",
-"dur": 25213,
+"dur": 111436,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 41864,
-"ts": 1583664541743.700
+"tid": 24808,
+"ts": 195104068877.000
 }]}

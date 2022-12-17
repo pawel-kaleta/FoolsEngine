@@ -25,6 +25,6 @@ namespace fe
 			glm::mat4 VPMatrix;
 		};
 
-		static SceneData* m_SceneData;
+		static SceneData* s_SceneData;
 	};
 }

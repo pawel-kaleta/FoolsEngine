@@ -18,7 +18,6 @@ public:
 			{ fe::SDType::Float3, "a_Position" },
 			{ fe::SDType::Float4, "a_Color" }
 		};
-		// vSourceTriangle
 		std::string vSourceTriangle = R"(
 			#version 330 core
 			
@@ -97,7 +96,7 @@ public:
 		uint32_t triangleIndecies[3] = { 0, 1, 2 };
 		uint32_t rectangleIndecies[6] = { 0, 1, 2, 2, 3, 0 };
 
-		RenderTestSetup(m_Triangle, triangle_Layout, vSourceTriangle, fSourceTriangle, triangleVertices, 3 * (3 + 4), triangleIndecies, 3);
+		RenderTestSetup(m_Triangle,   triangle_Layout,  vSourceTriangle, fSourceTriangle,   triangleVertices, 3 * (3 + 4),  triangleIndecies, 3);
 		RenderTestSetup(m_Rectangle, rectangle_Layout, vSourceRectangle, fSourceRectangle, rectangleVertices, 4 * (3 + 4), rectangleIndecies, 6);
 	}
 
@@ -116,19 +115,19 @@ public:
 
 		if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))
 		{
-			m_CameraPosition.x += m_CameraSpeed;
+			m_CameraPosition.x += m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
 		}
-		if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))
+		else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))
 		{
-			m_CameraPosition.x -= m_CameraSpeed;
+			m_CameraPosition.x -= m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
 		}
-		if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
+		else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
 		{
-			m_CameraPosition.y += m_CameraSpeed;
+			m_CameraPosition.y += m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
 		}
-		if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))
+		else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))
 		{
-			m_CameraPosition.y -= m_CameraSpeed;
+			m_CameraPosition.y -= m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
 		}
 
 
@@ -139,7 +138,7 @@ public:
 
 		fe::Renderer::BeginScene(m_Camera);
 		{
-			FE_LOG_CORE_TRACE("RenderTestDraw");
+			FE_LOG_TRACE("RenderTestDraw");
 
 			fe::Renderer::Submit(m_Rectangle.VertexArray, m_Rectangle.Shader);
 			fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.Shader);
@@ -167,7 +166,7 @@ public:
 		float* vertices, uint32_t verticesNum,
 		uint32_t* indecies, uint32_t indeciesNum)
 	{
-		FE_LOG_CORE_DEBUG("RenderTestSetup begin.");
+		FE_LOG_DEBUG("RenderTestSetup begin.");
 
 		sprite.VertexArray.reset(fe::VertexArray::Create());
 		sprite.VertexArray->Bind();
@@ -181,13 +180,13 @@ public:
 
 		sprite.Shader.reset(fe::Shader::Create("TestShader", vertexSource, fragmentSource));
 
-		FE_LOG_CORE_DEBUG("RenderTestSetup end.");
+		FE_LOG_DEBUG("RenderTestSetup end.");
 	}
 
 private:
 	fe::OrtographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-	float m_CameraSpeed = 0.01f;
+	float m_CameraSpeed = 1.0f;
 
 	
 	Sprite m_Triangle;

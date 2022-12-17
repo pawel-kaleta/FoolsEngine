@@ -23,7 +23,7 @@ namespace fe
 		uint32_t m_ID;
 		uint32_t m_Size;
 		BufferLayout m_Layout;
-		bool m_SetLayout = false;
+		bool m_LayoutSet = false;
 	};
 
 	class OpenGLIndexBuffer : IndexBuffer

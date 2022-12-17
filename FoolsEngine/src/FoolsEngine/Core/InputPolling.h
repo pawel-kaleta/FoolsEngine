@@ -25,8 +25,4 @@ namespace fe {
 	private:
 		static InputPolling* s_Instance;
 	};
-	
 }
-
-
-

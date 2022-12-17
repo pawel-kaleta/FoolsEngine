@@ -3,7 +3,7 @@
 
 namespace fe
 {
-	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 
 	void Renderer::Init()
 	{
@@ -12,7 +12,7 @@ namespace fe
 
 	void Renderer::BeginScene(OrtographicCamera& camera)
 	{
-		m_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
+		s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::EndScene()
@@ -25,7 +25,7 @@ namespace fe
 		// TO DO: adding into a queue for future collective draw at the end of main loop
 		
 		shader->Bind();
-		shader->UploadUniformMat4("u_ViewProjection", m_SceneData->VPMatrix);
+		shader->UploadUniformMat4("u_ViewProjection", s_SceneData->VPMatrix);
 
 		vertexArray->Bind();
 		RenderCommands::DrawIndexed(vertexArray);
