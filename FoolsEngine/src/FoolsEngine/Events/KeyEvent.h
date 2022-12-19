@@ -34,20 +34,20 @@ namespace fe
 	class KeyEvent : public Event
 	{
 	public:
-		KeyCode GetKeyCode() const { return m_KeyCode; }
+		InputCodes::Key GetKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::Input | EventCategory::Keyboard);
 	protected:
-		KeyEvent(const KeyCode keyCode)
+		KeyEvent(const InputCodes::Key keyCode)
 			: m_KeyCode(keyCode) {}
 		
-		KeyCode m_KeyCode;
+		InputCodes::Key m_KeyCode;
 	};
 	
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(const KeyCode keyCode, const uint16_t RepeatCount)
+		KeyPressedEvent(const InputCodes::Key keyCode, const uint16_t RepeatCount)
 			: KeyEvent(keyCode), m_RepeatCount(RepeatCount) {}
 
 		uint16_t GetRepeatCount() const { return m_RepeatCount; }
@@ -67,7 +67,7 @@ namespace fe
 	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(const KeyCode keyCode)
+		KeyReleasedEvent(const InputCodes::Key keyCode)
 			: KeyEvent(keyCode) {}
 
 
@@ -84,7 +84,7 @@ namespace fe
 	class KeyTypedEvent : public KeyEvent
 	{
 	public:
-		KeyTypedEvent(const KeyCode keyCode)
+		KeyTypedEvent(const InputCodes::Key keyCode)
 			: KeyEvent(keyCode) {}
 
 		std::string ToString() const override

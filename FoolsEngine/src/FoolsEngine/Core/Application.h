@@ -75,7 +75,7 @@ namespace fe
 	};
 
 	// To be defined in FoolsEngine application (game)
-	//Application* CreateApplication();
+	Application* CreateApplication();
 
 	namespace Time
 	{

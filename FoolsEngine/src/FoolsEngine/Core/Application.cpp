@@ -63,14 +63,10 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-		FE_LOG_CORE_INFO("////////////////////// RUNTIME //////////////////////");
-		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-
 		while (m_Running)
 		{
 			Time::TimePoint now = Time::Now();
-			m_LastFrameTimeStep = now - m_LastFrameTimePoint;
+			m_LastFrameTimeStep = Time::TimeStep(m_LastFrameTimePoint, now);
 			m_LastFrameTimePoint = now;
 
 			FE_LOG_CORE_TRACE("m_LastFrameTimeStep: {0}", m_LastFrameTimeStep.GetSeconds());
@@ -83,12 +79,7 @@ namespace fe {
 			m_Window->OnUpdate();
 		}
 
-		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-		FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");
-		FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-		
-		Log::SetClientLoggingLevel(spdlog::level::trace);
-		Log::SetCoreLoggingLevel(spdlog::level::trace);
+
 	}
 
 	void Application::UpdateLayers()

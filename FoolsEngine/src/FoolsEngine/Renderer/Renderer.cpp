@@ -20,12 +20,16 @@ namespace fe
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(
+		const std::shared_ptr<VertexArray>& vertexArray,
+		const std::shared_ptr<Shader>& shader,
+		const glm::mat4& transform)
 	{
 		// TO DO: adding into a queue for future collective draw at the end of main loop
 		
 		shader->Bind();
 		shader->UploadUniformMat4("u_ViewProjection", s_SceneData->VPMatrix);
+		shader->UploadUniformMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommands::DrawIndexed(vertexArray);

@@ -77,20 +77,20 @@ namespace fe
 	class MouseButtonEvent : public Event
 	{
 	public:
-		MouseCode GetMouseButtonCode() const { return m_ButtonCode; }
+		InputCodes::Mouse GetMouseButtonCode() const { return m_ButtonCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::Input | EventCategory::Mouse | EventCategory::MouseButton);
 	protected:
-		MouseButtonEvent(const MouseCode buttonCode)
+		MouseButtonEvent(const InputCodes::Mouse buttonCode)
 			: m_ButtonCode(buttonCode) {}
 
-		MouseCode m_ButtonCode;
+		InputCodes::Mouse m_ButtonCode;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(const MouseCode buttonCode)
+		MouseButtonPressedEvent(const InputCodes::Mouse buttonCode)
 			: MouseButtonEvent(buttonCode) {}
 
 		std::string ToString() const override
@@ -106,7 +106,7 @@ namespace fe
 	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(const MouseCode buttonCode)
+		MouseButtonReleasedEvent(const InputCodes::Mouse buttonCode)
 			: MouseButtonEvent(buttonCode) {}
 
 		std::string ToString() const override

@@ -38,7 +38,7 @@
     <ClInclude Include="src\FoolsEngine\Core\Core.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\EntryPoint.h">
+    <ClInclude Include="src\EntryPoint.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\InputCodes.h">

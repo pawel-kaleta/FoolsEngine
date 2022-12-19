@@ -3,12 +3,12 @@
 
 namespace fe
 {
-	using MouseCode = uint16_t;
-	using KeyCode = uint16_t;
-
 	namespace InputCodes
 	{
-		enum : MouseCode
+		using Mouse = uint16_t;
+		using Key = uint16_t;
+
+		enum : Mouse
 		{
 			// From glfw3.h
 			Button0      = 0,
@@ -26,7 +26,7 @@ namespace fe
 			ButtonMiddle = Button2
 		};
 
-		enum : KeyCode
+		enum : Key
 		{
 			// From glfw3.h
 			Space        = 32,

@@ -24,5 +24,5 @@
 
 
 //---------Entry Point---------
-#include "FoolsEngine\Core\EntryPoint.h"
+//#include "FoolsEngine\Core\EntryPoint.h"
 //-----------------------------

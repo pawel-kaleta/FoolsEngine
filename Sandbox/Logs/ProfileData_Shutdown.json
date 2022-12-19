@@ -4,78 +4,78 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104047794.200
-},{
-"cat": "function",
-"dur": 6,
-"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
-"ph": "X",
-"pid": 0,
-"tid": 24808,
-"ts": 195104068633.300
+"tid": 38592,
+"ts": 351318169505.000
 },{
 "cat": "function",
 "dur": 5,
-"name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
-"ph": "X",
-"pid": 0,
-"tid": 24808,
-"ts": 195104068713.900
-},{
-"cat": "function",
-"dur": 0,
 "name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104068763.400
+"tid": 38592,
+"ts": 351318182043.200
 },{
 "cat": "function",
-"dur": 2,
+"dur": 4,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104068798.900
+"tid": 38592,
+"ts": 351318182120.100
 },{
 "cat": "function",
-"dur": 20986,
+"dur": 1,
+"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
+"ph": "X",
+"pid": 0,
+"tid": 38592,
+"ts": 351318182165.700
+},{
+"cat": "function",
+"dur": 1,
+"name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
+"ph": "X",
+"pid": 0,
+"tid": 38592,
+"ts": 351318182196.000
+},{
+"cat": "function",
+"dur": 12643,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104047855.900
+"tid": 38592,
+"ts": 351318169601.000
 },{
 "cat": "function",
-"dur": 41907,
+"dur": 21687,
 "name": "lfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104069021.900
+"tid": 38592,
+"ts": 351318182552.500
 },{
 "cat": "function",
-"dur": 69091,
+"dur": 4695,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104111051.500
+"tid": 38592,
+"ts": 351318204385.100
 },{
 "cat": "function",
-"dur": 111382,
+"dur": 26852,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104068877.200
+"tid": 38592,
+"ts": 351318182300.400
 },{
 "cat": "function",
-"dur": 111436,
+"dur": 26890,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 24808,
-"ts": 195104068877.000
+"tid": 38592,
+"ts": 351318182300.100
 }]}

@@ -33,8 +33,8 @@ namespace fe {
 
 // TO DO: Local logger
 // 
-// int logerID = FE_LOCALLOG_CORE_INIT();
-// FE_LOCALLOG_CORE_FATAL(logerID, ...)
+// auto localLogger = FE_LOCALLOG_CORE_INIT("MyLocalLogger");
+// FE_LOCALLOG_CORE_DEBUG("MyLocalLogger", ...)
 
 
 // Macros for logging core engine issues
