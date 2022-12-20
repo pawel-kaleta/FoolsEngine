@@ -4,78 +4,70 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318169505.000
+"tid": 27572,
+"ts": 107599269724.000
 },{
 "cat": "function",
-"dur": 5,
-"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
-"ph": "X",
-"pid": 0,
-"tid": 38592,
-"ts": 351318182043.200
-},{
-"cat": "function",
-"dur": 4,
+"dur": 3,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318182120.100
+"tid": 27572,
+"ts": 107599279269.200
 },{
 "cat": "function",
-"dur": 1,
-"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
-"ph": "X",
-"pid": 0,
-"tid": 38592,
-"ts": 351318182165.700
-},{
-"cat": "function",
-"dur": 1,
+"dur": 2,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318182196.000
+"tid": 27572,
+"ts": 107599279329.800
 },{
 "cat": "function",
-"dur": 12643,
+"dur": 0,
+"name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
+"ph": "X",
+"pid": 0,
+"tid": 27572,
+"ts": 107599279371.100
+},{
+"cat": "function",
+"dur": 9639,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318169601.000
+"tid": 27572,
+"ts": 107599269766.600
 },{
 "cat": "function",
-"dur": 21687,
+"dur": 22946,
 "name": "lfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318182552.500
+"tid": 27572,
+"ts": 107599279550.600
 },{
 "cat": "function",
-"dur": 4695,
+"dur": 63348,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318204385.100
+"tid": 27572,
+"ts": 107599302580.100
 },{
 "cat": "function",
-"dur": 26852,
+"dur": 86587,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318182300.400
+"tid": 27572,
+"ts": 107599279434.800
 },{
 "cat": "function",
-"dur": 26890,
+"dur": 86620,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 38592,
-"ts": 351318182300.100
+"tid": 27572,
+"ts": 107599279434.700
 }]}

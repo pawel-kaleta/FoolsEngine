@@ -134,6 +134,7 @@
     <ClInclude Include="src\FoolsEngine\Core\Time.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\Material.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\OrtographicCamera.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
@@ -198,6 +200,7 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\_projects_of_externals\glfw\glfw.vcxproj">

@@ -3,6 +3,10 @@
 #include "FE_pch.h"
 #include "Buffers.h"
 
+// TO DO
+// Distroy this abomination, as only OpenGL has a concept of VertexArray.
+// On API abstraction level this should not exist.
+
 namespace fe
 {
 	class VertexArray

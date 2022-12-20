@@ -5,31 +5,20 @@ LayerExample::LayerExample()
 {
 	m_Camera = { -1.6f, 1.6f, -0.9f, 0.9f };
 
-
-	fe::BufferLayout triangle_Layout = {
-		{ fe::SDType::Float3, "a_Position" },
-		{ "a_Color", fe::SDPrimitive::Float, 4 }
-	};
-	fe::BufferLayout rectangle_Layout = {
-		{ fe::SDType::Float3, "a_Position" },
-		{ fe::SDType::Float4, "a_Color" }
-	};
 	std::string vSourceTriangle = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
+			uniform vec4 u_Color;
 
-			out vec3 v_Position;
 			out vec4 v_Color;
 
 			void main()
 			{
-				v_Color = a_Color;
-				v_Position = a_Position;
+				v_Color = u_Color;
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
@@ -38,71 +27,49 @@ LayerExample::LayerExample()
 			
 			layout(location = 0) out vec4 o_color;
 
-			in vec3 v_Position;
 			in vec4 v_Color;
 
 			void main()
 			{
-				o_color = vec4(v_Position + 0.5, 1.0);
 				o_color = v_Color;
 			}
 		)";
-	std::string vSourceRectangle = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
 
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
+	m_FlatColorShader.reset(fe::Shader::Create("TestShader", vSourceTriangle, fSourceTriangle));
+	m_FlatColorMaterial.reset(new fe::Material(m_FlatColorShader,
+	{
+		{"u_Color", fe::SDType::Float4}
+	}));
 
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Color = a_Color;
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-	std::string fSourceRectangle = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				o_color = vec4(v_Position + 0.5, 1.0);
-				o_color = v_Color;
-			}
-		)";
-	float triangleVertices[3 * (3 + 4)] = {
-		-0.5f, -0.5f, 0.5f,  1.0f, 0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.5f,  0.0f, 1.0f, 0.0f, 1.0f,
-		 0.0f,  0.5f, 0.5f,  0.0f, 0.0f, 1.0f, 1.0f
+	fe::BufferLayout layout = {
+		{ fe::SDType::Float3, "a_Position" }
 	};
-	float rectangleVertices[4 * (3 + 4)] = {
-		-0.6f, -0.6f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
-		 0.6f, -0.6f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,
-		 0.6f,  0.6f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-		-0.6f,  0.6f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f
+	float triangleVertices[3 * 3] = {
+		-0.5f, -0.5f, 0.5f,
+		 0.5f, -0.5f, 0.5f,
+		 0.0f,  0.5f, 0.5f
+	};
+	float rectangleVertices[4 * 3] = {
+		-0.6f, -0.6f, 0.0f,
+		 0.6f, -0.6f, 0.0f,
+		 0.6f,  0.6f, 0.0f,
+		-0.6f,  0.6f, 0.0f
 	};
 	uint32_t triangleIndecies[3] = { 0, 1, 2 };
-	uint32_t rectangleIndecies[6] = { 0, 1, 2, 2, 3, 0 };
+	uint32_t rectangleIndecies[3*2] = { 0, 1, 2, 2, 3, 0 };
 
-	RenderTestSetup(m_Triangle, triangle_Layout, vSourceTriangle, fSourceTriangle, triangleVertices, 3 * (3 + 4), triangleIndecies, 3);
-	RenderTestSetup(m_Rectangle, rectangle_Layout, vSourceRectangle, fSourceRectangle, rectangleVertices, 4 * (3 + 4), rectangleIndecies, 6);
+	glm::vec4 triangleColor = { 0.8f, 0.1f, 0.1f, 1.0f };
+	glm::vec4 rectangleColor = { 0.1f, 0.8f, 0.1f, 1.0f };
+
+	RenderTestSetup(m_Triangle,  layout, triangleColor,  triangleVertices,  3 * 3, triangleIndecies,  3);
+	RenderTestSetup(m_Rectangle, layout, rectangleColor, rectangleVertices, 4 * 3, rectangleIndecies, 3*2);
 }
 
 void LayerExample::OnUpdate()
 {
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
-
+	
 	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))
 	{
 		m_CameraPosition.x += m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
@@ -147,8 +114,8 @@ void LayerExample::OnUpdate()
 	{
 		FE_LOG_TRACE("RenderTestDraw");
 
-		fe::Renderer::Submit(m_Rectangle.VertexArray, m_Rectangle.Shader, m_Rectangle.Transform);
-		fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.Shader, m_Triangle.Transform);
+		fe::Renderer::Submit(m_Rectangle.VertexArray, m_Rectangle.MaterialInstance, m_Rectangle.Transform);
+		fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.MaterialInstance, m_Triangle.Transform);
 	}
 	fe::Renderer::EndScene();
 }
@@ -169,7 +136,7 @@ bool LayerExample::OnKeyPressedEvent(fe::KeyPressedEvent& event)
 void LayerExample::RenderTestSetup(
 	Sprite& sprite,
 	fe::BufferLayout& layout,
-	std::string& vertexSource, std::string& fragmentSource,
+	glm::vec4 color,
 	float* vertices, uint32_t verticesNum,
 	uint32_t* indecies, uint32_t indeciesNum)
 {
@@ -187,7 +154,8 @@ void LayerExample::RenderTestSetup(
 	sprite.IndexBuffer.reset(fe::IndexBuffer::Create(indecies, indeciesNum));
 	sprite.VertexArray->SetIndexBuffer(sprite.IndexBuffer);
 
-	sprite.Shader.reset(fe::Shader::Create("TestShader", vertexSource, fragmentSource));
+	sprite.MaterialInstance.reset(new fe::MaterialInstance(m_FlatColorMaterial));
+	sprite.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0].GetName(), glm::value_ptr(color));
 
 	FE_LOG_DEBUG("RenderTestSetup end.");
 }

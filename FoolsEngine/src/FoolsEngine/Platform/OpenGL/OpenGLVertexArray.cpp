@@ -48,8 +48,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		static uint8_t columns;
 		static uint8_t rows;
+		static uint8_t columns;
 
 		glBindVertexArray(m_ID);
 		vertexBuffer->Bind();
@@ -99,11 +99,11 @@ namespace fe
 					);
 					m_VertexBufferIndex++;
 					break;
-				case SDStructure::Matrix2:
-				case SDStructure::Matrix3:
-				case SDStructure::Matrix4:
-					columns = (uint8_t)element.Structure - 1;
-					rows = element.ComponentCount / columns;
+				case SDStructure::Matrix:
+					rows = RowsOfMatrix(element.Type);
+					columns = ColumnsOfMatrix(element.Type);
+
+					FE_LOG_CORE_DEBUG("rows: {0}, columns: {1}", rows, columns);
 					for (uint8_t i = 0; i < rows; i++)
 					{
 						glEnableVertexAttribArray(m_VertexBufferIndex);

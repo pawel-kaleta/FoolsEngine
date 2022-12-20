@@ -22,14 +22,23 @@ namespace fe
 
 	void Renderer::Submit(
 		const std::shared_ptr<VertexArray>& vertexArray,
-		const std::shared_ptr<Shader>& shader,
+		const std::shared_ptr<MaterialInstance>& materialInstance,
 		const glm::mat4& transform)
 	{
 		// TO DO: adding into a queue for future collective draw at the end of main loop
-		
+		const std::shared_ptr<Shader>& shader = materialInstance->GetMaterial()->GetShader();
+
 		shader->Bind();
-		shader->UploadUniformMat4("u_ViewProjection", s_SceneData->VPMatrix);
-		shader->UploadUniformMat4("u_Transform", transform);
+		shader->UploadUniform("u_ViewProjection", (void*)glm::value_ptr(s_SceneData->VPMatrix), SDType::Mat4);
+		shader->UploadUniform("u_Transform",      (void*)glm::value_ptr(transform),               SDType::Mat4);
+
+		for (auto uniform : materialInstance->GetMaterial()->GetUniforms())
+		{
+			const std::string& name = uniform.GetName();
+			void* dataPointer = materialInstance->GetUniformValuePtr(name);
+			SDType type = uniform.GetType();
+			shader->UploadUniform(name, dataPointer, type);
+		}
 
 		vertexArray->Bind();
 		RenderCommands::DrawIndexed(vertexArray);

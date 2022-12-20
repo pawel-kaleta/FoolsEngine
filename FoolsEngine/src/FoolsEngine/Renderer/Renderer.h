@@ -2,6 +2,7 @@
 
 #include "RenderCommands.h"
 #include "OrtographicCamera.h"
+#include "Material.h"
 
 namespace fe
 {
@@ -19,7 +20,7 @@ namespace fe
 
 		static void Submit(
 			const std::shared_ptr<VertexArray>& vertexArray,
-			const std::shared_ptr<Shader>& shader,
+			const std::shared_ptr<MaterialInstance>& materialInstance,
 			const glm::mat4& transform = glm::mat4(1.0f)
 		);
 
