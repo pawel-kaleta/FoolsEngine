@@ -43,8 +43,8 @@ namespace fe {
 		FE_LOG_CORE_TRACE(event.GetCategoryFlags());
 
 		EventDispacher dispacher(event);
-		//dispacher.Dispach<WindowCloseEvent>(std::bind(&Application::OnWindowCloseEvent, this, std::placeholders::_1));
 		dispacher.Dispach<WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
+		dispacher.Dispach<KeyPressedEvent>(FE_BIND_EVENT_HANDLER(Application::OnKeyPressedEvent));
 
 	}
 
@@ -53,9 +53,21 @@ namespace fe {
 		FE_PROFILER_FUNC();
 
 		m_Running = false;
+		event.Handled = true;
 		FE_LOG_CORE_INFO("Window Close Event");
 
 		return true;
+	}
+
+	bool Application::OnKeyPressedEvent(KeyPressedEvent& event)
+	{
+		if (event.GetKeyCode() == InputCodes::Escape)
+		{
+			m_Running = false;
+			event.Handled = true;
+			return true;
+		}
+		return false;
 	}
 
 
@@ -65,6 +77,8 @@ namespace fe {
 
 		while (m_Running)
 		{
+			FE_PROFILER_SCOPE("FRAME");
+
 			Time::TimePoint now = Time::Now();
 			m_LastFrameTimeStep = Time::TimeStep(m_LastFrameTimePoint, now);
 			m_LastFrameTimePoint = now;
@@ -98,8 +112,8 @@ namespace fe {
 
 		m_ImGuiLayer->Begin();
 
-		for (std::shared_ptr<Layer> layer : m_LayerStack)
-			layer->OnImGuiRender();
+		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++)
+			(*layer_it)->OnImGuiRender();
 
 		m_ImGuiLayer->End();
 	}

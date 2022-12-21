@@ -19,6 +19,7 @@ public:
 	void OnUpdate() override;
 	void OnEvent(fe::Event& event) override;
 	bool OnKeyPressedEvent(fe::KeyPressedEvent& event);
+	void OnImGuiRender() override;
 
 private:
 	fe::OrtographicCamera m_Camera;

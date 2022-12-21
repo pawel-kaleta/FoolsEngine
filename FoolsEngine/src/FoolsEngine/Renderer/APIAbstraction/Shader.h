@@ -15,9 +15,6 @@ namespace fe
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
-		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
-		virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& values) = 0;
-
 		virtual void UploadUniform(const std::string& name, void* dataPointer, SDType type, uint32_t count = 1, bool transpose = false) = 0;
 
 		virtual const std::string& GetName() const = 0;

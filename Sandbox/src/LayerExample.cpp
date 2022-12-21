@@ -1,10 +1,8 @@
 #include "LayerExample.h"
 
 LayerExample::LayerExample()
-	: Layer("LayerExample")
+	: Layer("LayerExample"), m_Camera({ -1.6f, 1.6f, -0.9f, 0.9f })
 {
-	m_Camera = { -1.6f, 1.6f, -0.9f, 0.9f };
-
 	std::string vSourceTriangle = R"(
 			#version 330 core
 			
@@ -118,6 +116,14 @@ void LayerExample::OnUpdate()
 		fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.MaterialInstance, m_Triangle.Transform);
 	}
 	fe::Renderer::EndScene();
+}
+
+void LayerExample::OnImGuiRender()
+{
+	ImGui::Begin("Settings");
+	ImGui::ColorPicker3("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
+	ImGui::ColorPicker3("Rectangle color", (float*)m_Rectangle.MaterialInstance->GetUniformValuePtr("u_Color"));
+	ImGui::End();
 }
 
 void LayerExample::OnEvent(fe::Event& event)

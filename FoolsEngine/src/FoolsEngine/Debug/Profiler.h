@@ -68,6 +68,7 @@ namespace fe
 
 // some magical determining of best function signature identifier in a given IDE with a given compiler
 // it is expected for the syntax highlighting to not work properly for this!
+// TO DO: it is't really working well :/
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
 	#define FE_FUNC_SIG __PRETTY_FUNCTION__
 #elif defined(__DMC__) && (__DMC__ >= 0x810)

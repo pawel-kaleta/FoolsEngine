@@ -92,7 +92,7 @@ namespace fe
 
 		// Link our program
 		{
-			FE_PROFILER_SCOPE("OpenGL vertexShader compilation");
+			FE_PROFILER_SCOPE("OpenGL Shader linking");
 			glLinkProgram(m_ProgramID);
 		}
 
@@ -146,21 +146,10 @@ namespace fe
         glUseProgram(0);
     }
 
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
-	{
-		GLint location = glGetUniformLocation(m_ProgramID, name.c_str());
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-	}
-
-	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values)
-	{
-		GLint location = glGetUniformLocation(m_ProgramID, name.c_str());
-		glUniform4f(location,values.x, values.y, values.z, values.w);
-	}
-
-
 	void OpenGLShader::UploadUniform(const std::string& name, void* dataPointer, SDType type, uint32_t count, bool transpose)
 	{
+		FE_PROFILER_FUNC();
+
 		FE_CORE_ASSERT(!(transpose && (SDStructureInType(type) != SDStructure::Matrix)), "Only a matrix can be transposed!");
 		
 		if (count <= 0)

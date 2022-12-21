@@ -80,6 +80,7 @@ namespace fe
 	BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
 		: m_Elements(elements)
 	{
+		FE_PROFILER_FUNC();
 		CalculateOffsetsAndStride();
 	}
 
@@ -98,6 +99,7 @@ namespace fe
 
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 	{
+		FE_PROFILER_FUNC();
 		switch (Renderer::GetNativeAPI())
 		{
 		case RendererAPI::NativeAPI::none:
@@ -113,6 +115,7 @@ namespace fe
 	
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
+		FE_PROFILER_FUNC();
 		switch (RendererAPI::GetNativeAPI())
 		{
 		case RendererAPI::NativeAPI::none:

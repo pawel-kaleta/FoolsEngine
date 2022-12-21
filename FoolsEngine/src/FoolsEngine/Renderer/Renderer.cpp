@@ -7,17 +7,18 @@ namespace fe
 
 	void Renderer::Init()
 	{
-		
+		FE_PROFILER_FUNC();
 	}
 
 	void Renderer::BeginScene(OrtographicCamera& camera)
 	{
+		FE_PROFILER_FUNC();
 		s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::EndScene()
 	{
-
+		FE_PROFILER_FUNC();
 	}
 
 	void Renderer::Submit(
@@ -25,6 +26,8 @@ namespace fe
 		const std::shared_ptr<MaterialInstance>& materialInstance,
 		const glm::mat4& transform)
 	{
+		FE_PROFILER_FUNC();
+
 		// TO DO: adding into a queue for future collective draw at the end of main loop
 		const std::shared_ptr<Shader>& shader = materialInstance->GetMaterial()->GetShader();
 

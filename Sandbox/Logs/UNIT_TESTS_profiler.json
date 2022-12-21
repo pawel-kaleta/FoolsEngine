@@ -1,65 +1,65 @@
 {"otherdata": {}, "traceEvents": [ {},{
 "cat": "function",
-"dur": 79068,
+"dur": 86124,
 "name": "void __cdecl fe::profilingTestFunction(int)",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107581493608.500
+"tid": 35360,
+"ts": 159305819416.100
 },{
 "cat": "function",
-"dur": 90509,
+"dur": 88061,
 "name": "Scope_lvl_3()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107581740304.800
+"tid": 35360,
+"ts": 159306097798.800
 },{
 "cat": "function",
-"dur": 258115,
+"dur": 274868,
 "name": "Scope_lvl_2()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107581657315.400
+"tid": 35360,
+"ts": 159306006588.300
 },{
 "cat": "function",
-"dur": 107696,
+"dur": 120714,
 "name": "Scope_lvl_3()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107582138777.400
+"tid": 35360,
+"ts": 159306498593.100
 },{
 "cat": "function",
-"dur": 310146,
+"dur": 354870,
 "name": "Scope_lvl_2()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107582023851.400
+"tid": 35360,
+"ts": 159306378244.400
 },{
 "cat": "function",
-"dur": 84812,
+"dur": 96474,
 "name": "Scope_lvl_3()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107582498557.800
+"tid": 35360,
+"ts": 159306920361.100
 },{
 "cat": "function",
-"dur": 272773,
+"dur": 298852,
 "name": "Scope_lvl_2()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107582414810.800
+"tid": 35360,
+"ts": 159306823554.100
 },{
 "cat": "function",
-"dur": 1233965,
+"dur": 1372033,
 "name": "Scope_lvl_1()",
 "ph": "X",
 "pid": 0,
-"tid": 27572,
-"ts": 107581573122.200
+"tid": 35360,
+"ts": 159305906219.200
 }]}

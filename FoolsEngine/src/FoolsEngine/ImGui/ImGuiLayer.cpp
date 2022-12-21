@@ -14,12 +14,14 @@ namespace fe {
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer")
 	{
-
+		FE_PROFILER_FUNC();
 	}
 
 
 	void ImGuiLayer::OnAttach()
 	{
+		FE_PROFILER_FUNC();
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -51,18 +53,23 @@ namespace fe {
 
 	void ImGuiLayer::OnDetach()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	//void ImGuiLayer::OnImGuiRender()
-	//{
-
-	//}
+	void ImGuiLayer::OnImGuiRender()
+	{
+		//static bool show = true;
+		//ImGui::ShowDemoWindow(&show);
+	}
 
 	void ImGuiLayer::Begin()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -70,6 +77,8 @@ namespace fe {
 
 	void ImGuiLayer::End()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Window& window = Application::Get().GetWindow();
 		io.DisplaySize = ImVec2((float)window.GetWidth(), (float)window.GetHeight());

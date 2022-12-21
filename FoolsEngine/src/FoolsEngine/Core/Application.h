@@ -29,8 +29,7 @@ namespace fe
 		void OnEvent(Event& event) override { m_Callback(event); };
 		void OnImGuiRender() override
 		{
-			static bool show = true;
-			ImGui::ShowDemoWindow(&show);
+			
 		}
 	private:
 		std::function<void(Event&)> m_Callback;
@@ -60,6 +59,7 @@ namespace fe
 		void UpdateImGui();
 		void OnEvent(Event& event);
 		bool OnWindowCloseEvent(WindowCloseEvent& event);
+		bool OnKeyPressedEvent(KeyPressedEvent& event);
 
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;

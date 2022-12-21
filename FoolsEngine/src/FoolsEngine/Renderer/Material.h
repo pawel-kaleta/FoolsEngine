@@ -37,20 +37,24 @@ namespace fe
 	public:
 		MaterialInstance(std::shared_ptr<Material> material)
 		{
+			FE_PROFILER_FUNC();
+
 			m_Material = material;
 			m_UniformsDataSize = 0;
 			for (auto& uniform : m_Material->GetUniforms())
 			{
 				m_UniformsDataSize += SDSizeOfType(uniform.GetType());
 			}
-			m_UniformsData = ::operator new(m_UniformsDataSize);
+			m_UniformsData = operator new(m_UniformsDataSize);
 		}
 
 		void SetUniformValue(const std::string& uniformName, void* dataPointer)
 		{
+			FE_PROFILER_FUNC();
+
 			uint8_t* dest = (uint8_t*)m_UniformsData;
 			
-			size_t uniformSize;
+			size_t uniformSize = 0;
 			for (auto& uniform : m_Material->GetUniforms())
 			{
 				if (uniformName == uniform.GetName())
@@ -65,6 +69,8 @@ namespace fe
 
 		void* GetUniformValuePtr(const std::string& uniformName)
 		{
+			FE_PROFILER_FUNC();
+
 			uint8_t* uniformDataPointer = (uint8_t*)m_UniformsData;
 			for (auto& uniform : m_Material->GetUniforms())
 			{
@@ -79,7 +85,8 @@ namespace fe
 
 		~MaterialInstance()
 		{
-			::operator delete(m_UniformsData, m_UniformsDataSize);
+			FE_PROFILER_FUNC();
+			operator delete(m_UniformsData);
 		}
 
 		std::shared_ptr<Material> GetMaterial() { return m_Material; }

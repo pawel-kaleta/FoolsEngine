@@ -25,13 +25,16 @@ namespace fe
 			for (auto layer_it = layerStack.begin(); layer_it != layerStack.end(); layer_it++) // auto = std::vector< std::shared_ptr< Layer > >::iterator
 			{
 				(*layer_it)->OnEvent(**event_it);
-				if ((*event_it)->Handled)
+				if ((*event_it)->Owned)
 					break;
 			}
-			if (!((*event_it)->Handled))
+#ifdef FE_INTERNAL_BUILD
+			if (!((*event_it)->Owned))
 			{
-				//FE_LOG_CORE_WARN("Unhandled event: {0}", (*event_it)->ToString());
+				//FE_LOG_CORE_WARN("Event not taken into possession: {0}", (*event_it)->ToString());
 			}
+#endif // FE_INTERNAL_BUILD
+
 		}
 		m_eventsQueue.clear();
 		//FE_LOG_CORE_DEBUG("Events dispached!");

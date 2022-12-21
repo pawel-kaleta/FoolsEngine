@@ -47,6 +47,7 @@ namespace fe
 		virtual ~Event() = default;
 
 		bool Handled = false;
+		bool Owned = false;
 
 		virtual EventType GetEventType() const { return GetStaticEventType(); }
 		static EventType GetStaticEventType() { return EventType::None; }
@@ -77,14 +78,14 @@ namespace fe
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.Handled |= func(static_cast<T&>(m_Event));
+				FE_PROFILER_FUNC();
+				m_Event.Owned |= func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;
 		}
 	private:
 		Event& m_Event;
-
 	};
 
 #define FE_BIND_EVENT_HANDLER(fn) std::bind(&fn, this, std::placeholders::_1)
