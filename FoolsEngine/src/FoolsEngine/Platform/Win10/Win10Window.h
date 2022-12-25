@@ -19,7 +19,7 @@ namespace fe
 		unsigned int GetHeight() const override { return m_Data.Height; };
 		std::string GetTitle() const override { return m_Data.Title; };
 
-		void SetEventCallback(const std::function<void(std::shared_ptr<Event>)>& callback) override { m_Data.EventCallback = callback; }
+		void SetEventCallback(const std::function<void(std::shared_ptr<Events::Event>)>& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override { return m_Data.VSync; };
 
@@ -35,7 +35,7 @@ namespace fe
 			unsigned int Width, Height;
 			bool VSync;
 
-			std::function<void(std::shared_ptr<Event>)> EventCallback;
+			std::function<void(std::shared_ptr<Events::Event>)> EventCallback;
 		};
 
 		WinData m_Data;

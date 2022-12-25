@@ -106,7 +106,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return (VertexBuffer*) new OpenGLVertexBuffer(vertices, size);
+			return static_cast<VertexBuffer*>(new OpenGLVertexBuffer(vertices, size));
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");
@@ -122,7 +122,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return (IndexBuffer*) new OpenGLIndexBuffer(indices, count);
+			return static_cast<IndexBuffer*>(new OpenGLIndexBuffer(indices, count));
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");

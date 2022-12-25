@@ -12,7 +12,7 @@
 namespace fe {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer")
+		: Layer("ImGuiLayer"), m_ShowDemo(false)
 	{
 		FE_PROFILER_FUNC();
 	}
@@ -60,10 +60,25 @@ namespace fe {
 		ImGui::DestroyContext();
 	}
 
+	void ImGuiLayer::OnEvent(std::shared_ptr<Events::Event> event)
+	{
+		Events::EventDispacher dispacher(event);
+		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(ImGuiLayer::OnKeyPressedEvent));
+	}
+
+	void ImGuiLayer::OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event)
+	{
+		if (event->GetKeyCode() == InputCodes::I)
+		{
+			m_ShowDemo = !m_ShowDemo;
+			event->Owned = true;
+		}
+	}
+
 	void ImGuiLayer::OnImGuiRender()
 	{
-		//static bool show = true;
-		//ImGui::ShowDemoWindow(&show);
+		if(m_ShowDemo)
+			ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiLayer::Begin()

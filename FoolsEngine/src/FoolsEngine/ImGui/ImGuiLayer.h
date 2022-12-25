@@ -20,11 +20,15 @@ namespace fe {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
+		virtual void OnEvent(std::shared_ptr<Events::Event> event) override;
+		void OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event);
+
 		virtual void OnImGuiRender() override;
 
 		void Begin();
 		void End();
 	private:
 		float m_Time = 0.0f;
+		bool m_ShowDemo = false;
 	};
 }

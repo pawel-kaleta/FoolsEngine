@@ -13,7 +13,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 	#ifdef FE_PLATFORM_WINDOWS
-		return new Win10Window(attr);
+		return static_cast<Window*>(new Win10Window(attr));
 	#else
 		FE_CORE_ASSERT(false, "Unknown platform!");
 		#error

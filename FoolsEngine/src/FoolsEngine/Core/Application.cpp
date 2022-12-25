@@ -26,7 +26,6 @@ namespace fe {
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
 		Renderer::Init();
-
 	}
 
 	Application::~Application()
@@ -34,45 +33,59 @@ namespace fe {
 		FE_PROFILER_FUNC();
 	}
 
-	void Application::OnEvent(Event& event)
+	void Application::OnEvent(std::shared_ptr<Events::Event> event)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_TRACE("Application::OnEvent");
-		FE_LOG_CORE_TRACE(event.GetEventType());
-		FE_LOG_CORE_TRACE(event.GetName());
-		FE_LOG_CORE_TRACE(event.GetCategoryFlags());
+		FE_LOG_CORE_TRACE(event->GetEventType());
+		FE_LOG_CORE_TRACE(event->GetName());
+		FE_LOG_CORE_TRACE(event->GetCategoryFlags());
 
-		EventDispacher dispacher(event);
-		dispacher.Dispach<WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
-		dispacher.Dispach<KeyPressedEvent>(FE_BIND_EVENT_HANDLER(Application::OnKeyPressedEvent));
+		Events::EventDispacher dispacher(event);
+		dispacher.Dispach<Events::WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
+		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(Application::OnKeyPressedEvent));
 
 	}
 
-	bool Application::OnWindowCloseEvent(WindowCloseEvent& event)
+	void Application::OnWindowCloseEvent(std::shared_ptr<Events::WindowCloseEvent> event)
 	{
 		FE_PROFILER_FUNC();
 
 		m_Running = false;
-		event.Handled = true;
+		event->Owned = true;
 		FE_LOG_CORE_INFO("Window Close Event");
-
-		return true;
 	}
 
-	bool Application::OnKeyPressedEvent(KeyPressedEvent& event)
+	void Application::OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event)
 	{
-		if (event.GetKeyCode() == InputCodes::Escape)
+		if (event->GetKeyCode() == InputCodes::Escape)
 		{
 			m_Running = false;
-			event.Handled = true;
-			return true;
+			event->Owned = true;
 		}
-		return false;
+
+#ifdef FE_INTERNAL_BUILD
+		if (event->GetKeyCode() == InputCodes::P)
+		{
+			if (!m_ActiveProfiler)
+			{
+				FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
+				m_ProfilerFramesCount = 0;
+				m_ActiveProfiler = true;
+			}
+		}
+#endif // FE_INTERNAL_BUILD
 	}
 
 
 	void Application::Run()
 	{
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
+		m_ProfilerFramesCount = 0;
+		m_ActiveProfiler = true;
+#endif // FE_INTERNAL_BUILD
+
 		FE_PROFILER_FUNC();
 
 		while (m_Running)
@@ -91,9 +104,16 @@ namespace fe {
 
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 			m_Window->OnUpdate();
+
+#ifdef FE_INTERNAL_BUILD
+			if (m_ActiveProfiler)
+				if (++m_ProfilerFramesCount >= 30)
+				{
+					FE_PROFILER_SESSION_END();
+					m_ActiveProfiler = false;
+				}
+#endif // FE_INTERNAL_BUILD
 		}
-
-
 	}
 
 	void Application::UpdateLayers()
@@ -117,7 +137,4 @@ namespace fe {
 
 		m_ImGuiLayer->End();
 	}
-
-	
-
 }

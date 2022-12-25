@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	class OpenGLVertexBuffer : VertexBuffer
+	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
@@ -26,7 +26,7 @@ namespace fe
 		bool m_LayoutSet = false;
 	};
 
-	class OpenGLIndexBuffer : IndexBuffer
+	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);

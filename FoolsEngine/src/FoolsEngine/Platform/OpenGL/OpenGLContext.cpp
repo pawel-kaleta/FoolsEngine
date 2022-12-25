@@ -25,7 +25,7 @@ namespace fe
 		FE_LOG_CORE_INFO("	Renderer:	{0}", glGetString(GL_RENDERER));
 		FE_LOG_CORE_INFO("	Version:	{0}", glGetString(GL_VERSION));
 
-		Renderer::SetAPI((RendererAPI*)new OpenGLRendererAPI());
+		Renderer::SetAPI(static_cast<RendererAPI*>(new OpenGLRendererAPI()));
 
 		FE_LOG_CORE_INFO("OpenGLRenderAPI initialized.");
 	}

@@ -20,19 +20,16 @@ namespace fe
 	class ApplicationLayer : public Layer
 	{
 	public:
-		ApplicationLayer(std::function<void(Event&)> EventCallback)
+		ApplicationLayer(std::function<void(std::shared_ptr<Events::Event>)> EventCallback)
 			: Layer("ApplicationLayer"), m_Callback(EventCallback)
 		{
 			FE_PROFILER_FUNC();
 		}
 
-		void OnEvent(Event& event) override { m_Callback(event); };
-		void OnImGuiRender() override
-		{
-			
-		}
+		void OnEvent(std::shared_ptr<Events::Event> event) override { m_Callback(event); };
+
 	private:
-		std::function<void(Event&)> m_Callback;
+		std::function<void(std::shared_ptr<Events::Event>)> m_Callback;
 	};
 
 	class Application
@@ -57,9 +54,9 @@ namespace fe
 	private:
 		void UpdateLayers();
 		void UpdateImGui();
-		void OnEvent(Event& event);
-		bool OnWindowCloseEvent(WindowCloseEvent& event);
-		bool OnKeyPressedEvent(KeyPressedEvent& event);
+		void OnEvent(std::shared_ptr<Events::Event> event);
+		void OnWindowCloseEvent(std::shared_ptr<Events::WindowCloseEvent> event);
+		void OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event);
 
 		std::unique_ptr<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
@@ -72,6 +69,12 @@ namespace fe
 		Time::TimeStep m_LastFrameTimeStep;
 
 		static Application* s_Instance;
+
+#ifdef FE_INTERNAL_BUILD
+		bool m_ActiveProfiler = false;
+		uint16_t m_ProfilerFramesCount = 0;
+#endif // FE_INTERNAL_BUILD
+
 	};
 
 	// To be defined in FoolsEngine application (game)

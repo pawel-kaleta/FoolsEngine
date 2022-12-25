@@ -11,9 +11,9 @@ namespace fe
 	public:
 		MainEventDispacher() { FE_PROFILER_FUNC(); }
 
-		void ReceiveEvent(std::shared_ptr<Event> event);
+		void ReceiveEvent(std::shared_ptr<Events::Event> event);
 		void DispachEvents(LayerStack& layerStack);
 	private:
-		std::vector<std::shared_ptr<Event>> m_eventsQueue;
+		std::vector<std::shared_ptr<Events::Event>> m_eventsQueue;
 	};
 }

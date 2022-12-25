@@ -13,7 +13,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return (VertexArray*) new OpenGLVertexArray();
+			return static_cast<VertexArray*>(new OpenGLVertexArray());
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");

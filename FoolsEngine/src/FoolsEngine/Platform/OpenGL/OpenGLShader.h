@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	class OpenGLShader : Shader
+	class OpenGLShader : public Shader
 	{
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);

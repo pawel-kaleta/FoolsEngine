@@ -7,7 +7,7 @@ namespace fe
 	class Uniform
 	{
 	public:
-		Uniform(std::string name, SDType type)
+		Uniform(const std::string& name, SDType type)
 			: m_Name(name), m_Type(type) {}
 
 		const SDType& GetType() const { return m_Type; }
@@ -71,6 +71,9 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
+			if (m_UniformsDataSize == 0)
+				return nullptr;
+
 			uint8_t* uniformDataPointer = (uint8_t*)m_UniformsData;
 			for (auto& uniform : m_Material->GetUniforms())
 			{
@@ -93,6 +96,6 @@ namespace fe
 	private:
 		std::shared_ptr<Material> m_Material;
 		void* m_UniformsData;
-		uint32_t m_UniformsDataSize;
+		size_t m_UniformsDataSize;
 	};
 }

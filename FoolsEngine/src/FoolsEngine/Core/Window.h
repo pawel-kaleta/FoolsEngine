@@ -28,7 +28,7 @@ namespace fe
 		virtual uint32_t GetHeight() const = 0;
 		virtual std::string GetTitle() const = 0;
 
-		virtual void SetEventCallback(const std::function<void(std::shared_ptr<Event>)>& callback) = 0;
+		virtual void SetEventCallback(const std::function<void(std::shared_ptr<Events::Event>)>& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
 

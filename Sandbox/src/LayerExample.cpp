@@ -121,22 +121,22 @@ void LayerExample::OnUpdate()
 void LayerExample::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorPicker3("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
-	ImGui::ColorPicker3("Rectangle color", (float*)m_Rectangle.MaterialInstance->GetUniformValuePtr("u_Color"));
+	ImGui::ColorEdit3("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
+	ImGui::ColorEdit3("Rectangle color", (float*)m_Rectangle.MaterialInstance->GetUniformValuePtr("u_Color"));
 	ImGui::End();
 }
 
-void LayerExample::OnEvent(fe::Event& event)
+void LayerExample::OnEvent(std::shared_ptr<fe::Events::Event> event)
 {
 	FE_LOG_TRACE("{0}", event);
 
-	fe::EventDispacher dispacher(event);
-	dispacher.Dispach<fe::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
+	fe::Events::EventDispacher dispacher(event);
+	dispacher.Dispach<fe::Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
 }
 
-bool LayerExample::OnKeyPressedEvent(fe::KeyPressedEvent& event)
+void LayerExample::OnKeyPressedEvent(std::shared_ptr<fe::Events::KeyPressedEvent> event)
 {
-	return false;
+	
 }
 
 void LayerExample::RenderTestSetup(

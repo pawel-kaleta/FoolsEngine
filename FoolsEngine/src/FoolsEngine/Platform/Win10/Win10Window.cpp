@@ -83,7 +83,7 @@ namespace fe
 			FE_PROFILER_SCOPE("RenderingContext_Retrieval");
 			FE_LOG_CORE_INFO("Creating rendering context");
 			
-			m_RenderingContext.reset((RenderingContext*) new OpenGLContext(m_Window));
+			m_RenderingContext.reset(static_cast<RenderingContext*>(new OpenGLContext(m_Window)));
 			m_RenderingContext->Init();
 
 		}
@@ -106,13 +106,13 @@ namespace fe
 				data.Width = width;
 				data.Height = height;
 
-				FE_NEW_EVENT(data.EventCallback, event, WindowResizeEvent, width, height);
+				FE_NEW_EVENT(data.EventCallback, event, Events::WindowResizeEvent, width, height);
 			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, WindowCloseEvent);
+				FE_NEW_EVENT(data.EventCallback, event, Events::WindowCloseEvent);
 				//FE_LOG_CORE_TRACE("EVENT CREATION");
 				//FE_LOG_CORE_TRACE(event.GetEventType());
 			});
@@ -122,11 +122,11 @@ namespace fe
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				if (focus)
 				{
-					FE_NEW_EVENT(data.EventCallback, event, WindowGainedFocusEvent);
+					FE_NEW_EVENT(data.EventCallback, event, Events::WindowGainedFocusEvent);
 				}
 				else
 				{
-					FE_NEW_EVENT(data.EventCallback, event, WindowLostFocusEvent);
+					FE_NEW_EVENT(data.EventCallback, event, Events::WindowLostFocusEvent);
 				}
 			});
 
@@ -138,17 +138,17 @@ namespace fe
 				{
 					case GLFW_PRESS:
 					{
-						FE_NEW_EVENT(data.EventCallback, event, KeyPressedEvent, key, 0);
+						FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 0);
 						break;
 					}
 					case GLFW_RELEASE:
 					{
-						FE_NEW_EVENT(data.EventCallback, event, KeyReleasedEvent, key);
+						FE_NEW_EVENT(data.EventCallback, event, Events::KeyReleasedEvent, key);
 						break;
 					}
 					case GLFW_REPEAT:
 					{
-						FE_NEW_EVENT(data.EventCallback, event, KeyPressedEvent, key, 1);
+						FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 1);
 						break;
 					}
 				}
@@ -157,7 +157,7 @@ namespace fe
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, KeyTypedEvent, keycode);
+				FE_NEW_EVENT(data.EventCallback, event, Events::KeyTypedEvent, keycode);
 			});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -168,12 +168,12 @@ namespace fe
 				{
 					case GLFW_PRESS:
 					{
-						FE_NEW_EVENT(data.EventCallback, event, MouseButtonPressedEvent, button);
+						FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonPressedEvent, button);
 						break;
 					}
 					case GLFW_RELEASE:
 					{
-						FE_NEW_EVENT(data.EventCallback, event, MouseButtonReleasedEvent, button);
+						FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonReleasedEvent, button);
 						break;
 					}
 				}
@@ -182,13 +182,13 @@ namespace fe
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double x_offset, double y_offset)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, MouseScrolledEvent, (float)x_offset, (float)y_offset);
+				FE_NEW_EVENT(data.EventCallback, event, Events::MouseScrolledEvent, (float)x_offset, (float)y_offset);
 			});
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x_position, double y_position)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, MouseMovedEvent, (float)x_position, (float)y_position);
+				FE_NEW_EVENT(data.EventCallback, event, Events::MouseMovedEvent, (float)x_position, (float)y_position);
 			});
 
 		FE_LOG_CORE_INFO("Events callbacks for Win10Window setted up.");

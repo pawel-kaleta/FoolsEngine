@@ -13,7 +13,7 @@ namespace fe
             FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
             return nullptr;
         case RendererAPI::NativeAPI::OpenGL:
-            return (Shader*) new OpenGLShader(name, vertexSource, fragmentSource);
+            return static_cast<Shader*>(new OpenGLShader(name, vertexSource, fragmentSource));
         }
 
         FE_CORE_ASSERT(false, "Unknown renderer API");

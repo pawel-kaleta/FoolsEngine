@@ -29,68 +29,71 @@
 
 namespace fe
 {
-	class WindowCloseEvent : public Event
+	namespace Events
 	{
-	public:
-		EVENT_CLASS_TYPE(EventType::WindowClose);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
-
-	class WindowResizeEvent : public Event
-	{
-	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
-			: m_Width(width), m_Height(height) {}
-
-		unsigned int GetWidth() const {	return m_Width;	}
-		unsigned int GetHeight() const { return m_Height;  }
-
-		std::string ToString() const override
+		class WindowCloseEvent : public Event
 		{
-			std::stringstream ss;
-			ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
-			return ss.str();
-		}
+		public:
+			EVENT_CLASS_TYPE(EventType::WindowClose);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
 
-		EVENT_CLASS_TYPE(EventType::WindowResize);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
+		class WindowResizeEvent : public Event
+		{
+		public:
+			WindowResizeEvent(unsigned int width, unsigned int height)
+				: m_Width(width), m_Height(height) {}
 
-	private:
-		unsigned int m_Width, m_Height;
-	};
+			unsigned int GetWidth() const {	return m_Width;	}
+			unsigned int GetHeight() const { return m_Height;  }
 
-	class WindowLostFocusEvent : public Event
-	{
-	public:
-		EVENT_CLASS_TYPE(EventType::WindowLostFocus);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+				return ss.str();
+			}
 
-	class WindowGainedFocusEvent : public Event
-	{
-	public:
-		EVENT_CLASS_TYPE(EventType::WindowGainedFocus);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
+			EVENT_CLASS_TYPE(EventType::WindowResize);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
 
-	class AppTickEvent : public Event
-	{
-	public:
-		EVENT_CLASS_TYPE(EventType::AppTick);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
+		private:
+			unsigned int m_Width, m_Height;
+		};
 
-	class AppUpdateEvent : public Event
-	{
-	public:
-		EVENT_CLASS_TYPE(EventType::AppUpdate);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
+		class WindowLostFocusEvent : public Event
+		{
+		public:
+			EVENT_CLASS_TYPE(EventType::WindowLostFocus);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
 
-	class AppRenderEvent : public Event
-	{
-	public:
-		EVENT_CLASS_TYPE(EventType::AppRender);
-		EVENT_CLASS_CATEGORY(EventCategory::App);
-	};
+		class WindowGainedFocusEvent : public Event
+		{
+		public:
+			EVENT_CLASS_TYPE(EventType::WindowGainedFocus);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
+
+		class AppTickEvent : public Event
+		{
+		public:
+			EVENT_CLASS_TYPE(EventType::AppTick);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
+
+		class AppUpdateEvent : public Event
+		{
+		public:
+			EVENT_CLASS_TYPE(EventType::AppUpdate);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
+
+		class AppRenderEvent : public Event
+		{
+		public:
+			EVENT_CLASS_TYPE(EventType::AppRender);
+			EVENT_CLASS_CATEGORY(EventCategory::App);
+		};
+	}
 }

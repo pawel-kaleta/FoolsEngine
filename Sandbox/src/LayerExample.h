@@ -17,8 +17,8 @@ public:
 	};
 
 	void OnUpdate() override;
-	void OnEvent(fe::Event& event) override;
-	bool OnKeyPressedEvent(fe::KeyPressedEvent& event);
+	void OnEvent(std::shared_ptr<fe::Events::Event> event) override;
+	void OnKeyPressedEvent(std::shared_ptr<fe::Events::KeyPressedEvent> event);
 	void OnImGuiRender() override;
 
 private:
@@ -29,9 +29,7 @@ private:
 	float m_TriangleSpeed = 1.2f;
 	std::shared_ptr<fe::Shader> m_FlatColorShader;
 	std::shared_ptr<fe::Material> m_FlatColorMaterial;
-	
 
-	
 	void RenderTestSetup(
 		Sprite& sprite,
 		fe::BufferLayout& layout,
