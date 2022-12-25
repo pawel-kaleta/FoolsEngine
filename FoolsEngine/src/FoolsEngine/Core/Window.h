@@ -34,7 +34,7 @@ namespace fe
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowAttributes& attr = WindowAttributes());
+		static Scope<Window> Create(const WindowAttributes& attr = WindowAttributes());
 	};
 }
 

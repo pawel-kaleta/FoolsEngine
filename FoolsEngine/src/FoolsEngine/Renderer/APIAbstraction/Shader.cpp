@@ -5,7 +5,7 @@
 
 namespace fe
 {
-    Shader* fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+    Ref<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
     {
         switch (RendererAPI::GetNativeAPI())
         {
@@ -13,7 +13,7 @@ namespace fe
             FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
             return nullptr;
         case RendererAPI::NativeAPI::OpenGL:
-            return static_cast<Shader*>(new OpenGLShader(name, vertexSource, fragmentSource));
+            return CreateRef<OpenGLShader>(name, vertexSource, fragmentSource);
         }
 
         FE_CORE_ASSERT(false, "Unknown renderer API");

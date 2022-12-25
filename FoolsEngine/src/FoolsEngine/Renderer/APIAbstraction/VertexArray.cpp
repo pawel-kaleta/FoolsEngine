@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetNativeAPI())
 		{
@@ -13,7 +13,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return static_cast<VertexArray*>(new OpenGLVertexArray());
+			return CreateScope<OpenGLVertexArray>();
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");

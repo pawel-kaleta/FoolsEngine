@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	void MainEventDispacher::ReceiveEvent(std::shared_ptr<Events::Event> event)
+	void MainEventDispacher::ReceiveEvent(Ref<Events::Event> event)
 	{
 		FE_PROFILER_FUNC();
 
@@ -20,9 +20,9 @@ namespace fe
 		if (m_eventsQueue.empty())
 			return;
 
-		for (auto event_it = m_eventsQueue.begin(); event_it != m_eventsQueue.end(); event_it++) // auto = std::vector< std::shared_ptr< Event > >::iterator
+		for (auto event_it = m_eventsQueue.begin(); event_it != m_eventsQueue.end(); event_it++) // auto = std::vector< Ref< Event > >::iterator
 		{
-			for (auto layer_it = layerStack.begin(); layer_it != layerStack.end(); layer_it++) // auto = std::vector< std::shared_ptr< Layer > >::iterator
+			for (auto layer_it = layerStack.begin(); layer_it != layerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 			{
 				(*layer_it)->OnEvent(*event_it);
 				if ((*event_it)->Owned)

@@ -23,6 +23,6 @@ namespace fe {
 		virtual float GetMouseYNative() = 0;
 
 	private:
-		static InputPolling* s_Instance;
+		static Scope<InputPolling> s_Instance;
 	};
 }

@@ -20,8 +20,8 @@ namespace fe {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
-		virtual void OnEvent(std::shared_ptr<Events::Event> event) override;
-		void OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event);
+		virtual void OnEvent(Ref<Events::Event> event) override;
+		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 
 		virtual void OnImGuiRender() override;
 

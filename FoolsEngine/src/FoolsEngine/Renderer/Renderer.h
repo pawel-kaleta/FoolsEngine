@@ -13,7 +13,7 @@ namespace fe
 		inline static RendererAPI::NativeAPI GetNativeAPI() { return RendererAPI::GetNativeAPI(); }
 
 		static void Init();
-		static void SetAPI(RendererAPI* rendererAPI) { RenderCommands::SetAPI(rendererAPI); }
+		static void SetAPI(RendererAPI::NativeAPI nativeAPI) { RenderCommands::SetAPI(nativeAPI); }
 
 		static void BeginScene(OrtographicCamera& camera);
 		static void EndScene();
@@ -30,6 +30,6 @@ namespace fe
 			glm::mat4 VPMatrix;
 		};
 
-		static SceneData* s_SceneData;
+		static Scope<SceneData> s_SceneData;
 	};
 }

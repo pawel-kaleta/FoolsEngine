@@ -60,13 +60,13 @@ namespace fe {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnEvent(std::shared_ptr<Events::Event> event)
+	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
 	{
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(ImGuiLayer::OnKeyPressedEvent));
 	}
 
-	void ImGuiLayer::OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event)
+	void ImGuiLayer::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
 	{
 		if (event->GetKeyCode() == InputCodes::I)
 		{

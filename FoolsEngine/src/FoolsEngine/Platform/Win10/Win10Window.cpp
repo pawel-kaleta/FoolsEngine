@@ -83,7 +83,7 @@ namespace fe
 			FE_PROFILER_SCOPE("RenderingContext_Retrieval");
 			FE_LOG_CORE_INFO("Creating rendering context");
 			
-			m_RenderingContext.reset(static_cast<RenderingContext*>(new OpenGLContext(m_Window)));
+			m_RenderingContext = CreateScope<OpenGLContext>(m_Window);
 			m_RenderingContext->Init();
 
 		}

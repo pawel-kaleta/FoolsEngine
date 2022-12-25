@@ -69,14 +69,14 @@ namespace fe
 		class EventDispacher
 		{
 		public:
-			EventDispacher(std::shared_ptr<Event> e)
+			EventDispacher(Ref<Event> e)
 				: m_Event(e)
 			{
 
 			}
 
 			template<typename T>
-			bool Dispach(const std::function<void(std::shared_ptr<T>)> func)
+			bool Dispach(const std::function<void(Ref<T>)> func)
 			{
 				if (m_Event->GetEventType() == T::GetStaticType())
 				{
@@ -87,7 +87,7 @@ namespace fe
 				return false;
 			}
 		private:
-			std::shared_ptr<Event> m_Event;
+			Ref<Event> m_Event;
 		};
 	}
 
@@ -101,7 +101,7 @@ namespace fe
 	}
 }
 
-#define FE_NEW_EVENT(callback, localName, type, ...) std::shared_ptr<type> localName = std::make_shared<type>(__VA_ARGS__);\
+#define FE_NEW_EVENT(callback, localName, type, ...) fe::Ref<type> localName = fe::CreateRef<type>(__VA_ARGS__);\
                                                      callback(localName);
 
 #include "FoolsEngine\Events\ApplicationEvent.h"

@@ -7,7 +7,7 @@
 namespace fe {
 
 #ifdef FE_PLATFORM_WINDOWS
-    InputPolling* InputPolling::s_Instance = new Win10InputPolling();
+    Scope<InputPolling> InputPolling::s_Instance = CreateScope<Win10InputPolling>();
 #endif
     
     bool Win10InputPolling::IsKeyPressedNative(int keycode)

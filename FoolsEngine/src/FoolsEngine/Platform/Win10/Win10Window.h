@@ -19,7 +19,7 @@ namespace fe
 		unsigned int GetHeight() const override { return m_Data.Height; };
 		std::string GetTitle() const override { return m_Data.Title; };
 
-		void SetEventCallback(const std::function<void(std::shared_ptr<Events::Event>)>& callback) override { m_Data.EventCallback = callback; }
+		void SetEventCallback(const std::function<void(Ref<Events::Event>)>& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override { return m_Data.VSync; };
 
@@ -27,7 +27,7 @@ namespace fe
 
 	private:
 		GLFWwindow* m_Window;
-		std::unique_ptr<RenderingContext> m_RenderingContext;
+		Scope<RenderingContext> m_RenderingContext;
 
 		struct WinData
 		{
@@ -35,7 +35,7 @@ namespace fe
 			unsigned int Width, Height;
 			bool VSync;
 
-			std::function<void(std::shared_ptr<Events::Event>)> EventCallback;
+			std::function<void(Ref<Events::Event>)> EventCallback;
 		};
 
 		WinData m_Data;

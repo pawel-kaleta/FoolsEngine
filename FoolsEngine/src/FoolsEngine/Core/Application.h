@@ -20,16 +20,16 @@ namespace fe
 	class ApplicationLayer : public Layer
 	{
 	public:
-		ApplicationLayer(std::function<void(std::shared_ptr<Events::Event>)> EventCallback)
+		ApplicationLayer(std::function<void(Ref<Events::Event>)> EventCallback)
 			: Layer("ApplicationLayer"), m_Callback(EventCallback)
 		{
 			FE_PROFILER_FUNC();
 		}
 
-		void OnEvent(std::shared_ptr<Events::Event> event) override { m_Callback(event); };
+		void OnEvent(Ref<Events::Event> event) override { m_Callback(event); };
 
 	private:
-		std::function<void(std::shared_ptr<Events::Event>)> m_Callback;
+		std::function<void(Ref<Events::Event>)> m_Callback;
 	};
 
 	class Application
@@ -46,23 +46,23 @@ namespace fe
 
 
 	protected:
-		void PushInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	layer->OnAttach(); }
-		void PushOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushOuterLayer(layer);	layer->OnAttach(); }
-		void PopInnerLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopInnerLayer(layer);	layer->OnDetach(); }
-		void PopOuterLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopOuterLayer(layer);	layer->OnDetach(); }
+		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	layer->OnAttach(); }
+		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack.PushOuterLayer(layer);	layer->OnAttach(); }
+		void PopInnerLayer(Ref<Layer> layer) { m_LayerStack.PopInnerLayer(layer);	layer->OnDetach(); }
+		void PopOuterLayer(Ref<Layer> layer) { m_LayerStack.PopOuterLayer(layer);	layer->OnDetach(); }
 
 	private:
 		void UpdateLayers();
 		void UpdateImGui();
-		void OnEvent(std::shared_ptr<Events::Event> event);
-		void OnWindowCloseEvent(std::shared_ptr<Events::WindowCloseEvent> event);
-		void OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event);
+		void OnEvent(Ref<Events::Event> event);
+		void OnWindowCloseEvent(Ref<Events::WindowCloseEvent> event);
+		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
 		LayerStack m_LayerStack;
-		std::shared_ptr<ApplicationLayer> m_AppLayer;
-		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
+		Ref<ApplicationLayer> m_AppLayer;
+		Ref<ImGuiLayer> m_ImGuiLayer;
 		bool m_Running = true;
 
 		Time::TimePoint m_LastFrameTimePoint;
@@ -82,6 +82,6 @@ namespace fe
 
 	namespace Time
 	{
-		inline Time::TimeStep FrameStep() {	return Application::Get().GetLastFrameTimeStep(); }
+		inline Time::TimeStep FrameStep() { return Application::Get().GetLastFrameTimeStep(); }
 	}
 }

@@ -16,13 +16,13 @@ namespace fe {
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!")
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, & m_MainEventDispacher, std::placeholders::_1));
 
-		m_AppLayer = std::make_shared<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		m_LayerStack.PushOuterLayer(m_AppLayer);
 
-		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
+		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
 		Renderer::Init();
@@ -33,7 +33,7 @@ namespace fe {
 		FE_PROFILER_FUNC();
 	}
 
-	void Application::OnEvent(std::shared_ptr<Events::Event> event)
+	void Application::OnEvent(Ref<Events::Event> event)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_TRACE("Application::OnEvent");
@@ -47,7 +47,7 @@ namespace fe {
 
 	}
 
-	void Application::OnWindowCloseEvent(std::shared_ptr<Events::WindowCloseEvent> event)
+	void Application::OnWindowCloseEvent(Ref<Events::WindowCloseEvent> event)
 	{
 		FE_PROFILER_FUNC();
 
@@ -56,7 +56,7 @@ namespace fe {
 		FE_LOG_CORE_INFO("Window Close Event");
 	}
 
-	void Application::OnKeyPressedEvent(std::shared_ptr<Events::KeyPressedEvent> event)
+	void Application::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
 	{
 		if (event->GetKeyCode() == InputCodes::Escape)
 		{
@@ -120,7 +120,7 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< std::shared_ptr< Layer > >::iterator
+		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 		{
 			(*layer_it)->OnUpdate();
 		}

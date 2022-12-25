@@ -4,126 +4,126 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650831458.100
+"tid": 1636,
+"ts": 16198309602.700
 },{
 "cat": "function",
-"dur": 725,
+"dur": 358,
 "name": "void __cdecl fe::ImGuiLayer::OnDetach(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650831513.000
+"tid": 1636,
+"ts": 16198309655.800
 },{
 "cat": "function",
 "dur": 2,
 "name": "__cdecl fe::OpenGLVertexBuffer::~OpenGLVertexBuffer(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832285.900
+"tid": 1636,
+"ts": 16198310059.700
 },{
 "cat": "function",
 "dur": 3,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832320.300
+"tid": 1636,
+"ts": 16198310094.400
 },{
 "cat": "function",
 "dur": 2,
 "name": "__cdecl fe::OpenGLIndexBuffer::~OpenGLIndexBuffer(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832357.700
-},{
-"cat": "function",
-"dur": 0,
-"name": "__cdecl fe::MaterialInstance::~MaterialInstance(void)",
-"ph": "X",
-"pid": 0,
-"tid": 3396,
-"ts": 650832390.500
+"tid": 1636,
+"ts": 16198310126.100
 },{
 "cat": "function",
 "dur": 1,
+"name": "__cdecl fe::MaterialInstance::~MaterialInstance(void)",
+"ph": "X",
+"pid": 0,
+"tid": 1636,
+"ts": 16198310155.800
+},{
+"cat": "function",
+"dur": 2,
 "name": "__cdecl fe::OpenGLVertexBuffer::~OpenGLVertexBuffer(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832417.200
+"tid": 1636,
+"ts": 16198310181.600
 },{
 "cat": "function",
-"dur": 1,
+"dur": 2,
 "name": "__cdecl fe::OpenGLVertexArray::~OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832446.000
+"tid": 1636,
+"ts": 16198310210.600
 },{
 "cat": "function",
-"dur": 1,
+"dur": 2,
 "name": "__cdecl fe::OpenGLIndexBuffer::~OpenGLIndexBuffer(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832474.300
+"tid": 1636,
+"ts": 16198310239.900
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::MaterialInstance::~MaterialInstance(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832502.400
+"tid": 1636,
+"ts": 16198310267.600
 },{
 "cat": "function",
-"dur": 0,
+"dur": 1,
 "name": "__cdecl fe::OpenGLShader::~OpenGLShader(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832529.400
+"tid": 1636,
+"ts": 16198310294.600
 },{
 "cat": "function",
-"dur": 1047,
+"dur": 680,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650831511.000
+"tid": 1636,
+"ts": 16198309653.900
 },{
 "cat": "function",
-"dur": 8992,
+"dur": 14939,
 "name": "lfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832692.300
+"tid": 1636,
+"ts": 16198310468.500
 },{
 "cat": "function",
-"dur": 8938,
+"dur": 4009,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650841799.400
+"tid": 1636,
+"ts": 16198325485.200
 },{
 "cat": "function",
-"dur": 18227,
+"dur": 19187,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832587.000
+"tid": 1636,
+"ts": 16198310363.600
 },{
 "cat": "function",
-"dur": 18261,
+"dur": 19219,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 3396,
-"ts": 650832586.900
+"tid": 1636,
+"ts": 16198310363.500
 }]}

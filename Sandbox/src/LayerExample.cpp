@@ -33,7 +33,7 @@ LayerExample::LayerExample()
 			}
 		)";
 
-	m_FlatColorShader.reset(fe::Shader::Create("TestShader", vSourceTriangle, fSourceTriangle));
+	m_FlatColorShader = fe::Shader::Create("TestShader", vSourceTriangle, fSourceTriangle);
 	m_FlatColorMaterial.reset(new fe::Material(m_FlatColorShader,
 	{
 		{"u_Color", fe::SDType::Float4}
@@ -126,7 +126,7 @@ void LayerExample::OnImGuiRender()
 	ImGui::End();
 }
 
-void LayerExample::OnEvent(std::shared_ptr<fe::Events::Event> event)
+void LayerExample::OnEvent(fe::Ref<fe::Events::Event> event)
 {
 	FE_LOG_TRACE("{0}", event);
 
@@ -134,7 +134,7 @@ void LayerExample::OnEvent(std::shared_ptr<fe::Events::Event> event)
 	dispacher.Dispach<fe::Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
 }
 
-void LayerExample::OnKeyPressedEvent(std::shared_ptr<fe::Events::KeyPressedEvent> event)
+void LayerExample::OnKeyPressedEvent(fe::Ref<fe::Events::KeyPressedEvent> event)
 {
 	
 }
@@ -150,14 +150,14 @@ void LayerExample::RenderTestSetup(
 
 	sprite.Transform = glm::mat4(1.0f);
 
-	sprite.VertexArray.reset(fe::VertexArray::Create());
+	sprite.VertexArray = fe::VertexArray::Create();
 	sprite.VertexArray->Bind();
 
-	sprite.VertexBuffer.reset(fe::VertexBuffer::Create(vertices, sizeof(float) * verticesNum));
+	sprite.VertexBuffer = fe::VertexBuffer::Create(vertices, sizeof(float) * verticesNum);
 	sprite.VertexBuffer->SetLayout(layout);
 	sprite.VertexArray->AddVertexBuffer(sprite.VertexBuffer);
 
-	sprite.IndexBuffer.reset(fe::IndexBuffer::Create(indecies, indeciesNum));
+	sprite.IndexBuffer = fe::IndexBuffer::Create(indecies, indeciesNum);
 	sprite.VertexArray->SetIndexBuffer(sprite.IndexBuffer);
 
 	sprite.MaterialInstance.reset(new fe::MaterialInstance(m_FlatColorMaterial));

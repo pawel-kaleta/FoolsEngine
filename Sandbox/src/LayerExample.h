@@ -9,16 +9,16 @@ public:
 
 	struct Sprite
 	{
-		std::shared_ptr<fe::MaterialInstance> MaterialInstance;
-		std::shared_ptr<fe::VertexArray> VertexArray;
-		std::shared_ptr<fe::VertexBuffer> VertexBuffer;
-		std::shared_ptr<fe::IndexBuffer> IndexBuffer;
+		fe::Ref<fe::MaterialInstance> MaterialInstance;
+		fe::Ref<fe::VertexArray> VertexArray;
+		fe::Ref<fe::VertexBuffer> VertexBuffer;
+		fe::Ref<fe::IndexBuffer> IndexBuffer;
 		glm::mat4 Transform = glm::mat4(1.0f);
 	};
 
 	void OnUpdate() override;
-	void OnEvent(std::shared_ptr<fe::Events::Event> event) override;
-	void OnKeyPressedEvent(std::shared_ptr<fe::Events::KeyPressedEvent> event);
+	void OnEvent(fe::Ref<fe::Events::Event> event) override;
+	void OnKeyPressedEvent(fe::Ref<fe::Events::KeyPressedEvent> event);
 	void OnImGuiRender() override;
 
 private:
@@ -27,8 +27,8 @@ private:
 	float m_CameraSpeed = 1.0f;
 	glm::vec3 m_TrianglePosition = { 0.0f, 0.0f, 0.0f };
 	float m_TriangleSpeed = 1.2f;
-	std::shared_ptr<fe::Shader> m_FlatColorShader;
-	std::shared_ptr<fe::Material> m_FlatColorMaterial;
+	fe::Ref<fe::Shader> m_FlatColorShader;
+	fe::Ref<fe::Material> m_FlatColorMaterial;
 
 	void RenderTestSetup(
 		Sprite& sprite,

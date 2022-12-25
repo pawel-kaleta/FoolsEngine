@@ -11,6 +11,5 @@ namespace fe
 		virtual void SwapBuffers() = 0;
 		inline static RendererAPI::NativeAPI GetNativeAPI() { return RendererAPI::GetNativeAPI(); }
 
-		
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace fe
 {
-	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
+	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 
 	void Renderer::Init()
 	{
@@ -22,18 +22,18 @@ namespace fe
 	}
 
 	void Renderer::Submit(
-		const std::shared_ptr<VertexArray>& vertexArray,
-		const std::shared_ptr<MaterialInstance>& materialInstance,
+		const Ref<VertexArray>& vertexArray,
+		const Ref<MaterialInstance>& materialInstance,
 		const glm::mat4& transform)
 	{
 		FE_PROFILER_FUNC();
 
 		// TO DO: adding into a queue for future collective draw at the end of main loop
-		const std::shared_ptr<Shader>& shader = materialInstance->GetMaterial()->GetShader();
+		const Ref<Shader>& shader = materialInstance->GetMaterial()->GetShader();
 
 		shader->Bind();
 		shader->UploadUniform("u_ViewProjection", (void*)glm::value_ptr(s_SceneData->VPMatrix), SDType::Mat4);
-		shader->UploadUniform("u_Transform",      (void*)glm::value_ptr(transform),               SDType::Mat4);
+		shader->UploadUniform("u_Transform",      (void*)glm::value_ptr(transform),             SDType::Mat4);
 
 		for (auto uniform : materialInstance->GetMaterial()->GetUniforms())
 		{

@@ -166,5 +166,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp" />
   </ItemGroup>
 </Project>

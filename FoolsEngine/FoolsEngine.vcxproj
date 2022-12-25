@@ -175,6 +175,7 @@
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />

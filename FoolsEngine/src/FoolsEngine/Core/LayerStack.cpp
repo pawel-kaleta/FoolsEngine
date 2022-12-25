@@ -14,7 +14,7 @@ namespace fe
 		m_Layers.clear();
 	}
 
-	void LayerStack::PushInnerLayer(std::shared_ptr<Layer> layer)
+	void LayerStack::PushInnerLayer(Ref<Layer> layer)
 	{
 		FE_PROFILER_FUNC();
 
@@ -26,7 +26,7 @@ namespace fe
 		layer->OnAttach();
 	}
 
-	void LayerStack::PushOuterLayer(std::shared_ptr<Layer> layer)
+	void LayerStack::PushOuterLayer(Ref<Layer> layer)
 	{
 		FE_PROFILER_FUNC();
 
@@ -37,7 +37,7 @@ namespace fe
 		layer->OnAttach();
 	}
 
-	void LayerStack::PopInnerLayer(std::shared_ptr<Layer> layer)
+	void LayerStack::PopInnerLayer(Ref<Layer> layer)
 	{
 		FE_PROFILER_FUNC();
 
@@ -56,7 +56,7 @@ namespace fe
 		}
 	}
 
-	void LayerStack::PopOuterLayer(std::shared_ptr<Layer> layer)
+	void LayerStack::PopOuterLayer(Ref<Layer> layer)
 	{
 		FE_PROFILER_FUNC();
 
