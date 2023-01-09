@@ -42,7 +42,7 @@ namespace fe
 		uint32_t m_Count;
 	};
 
-	static GLenum SDPrimitiveToGLBaseType(SDPrimitive primitive)
+	static GLenum SDPrimitiveToGLBaseType(ShaderData::Primitive primitive)
 	{
 		const static GLenum LookupTable[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
 		return LookupTable[(int)primitive - 1];

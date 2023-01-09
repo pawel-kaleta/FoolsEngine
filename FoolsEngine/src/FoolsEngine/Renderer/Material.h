@@ -4,19 +4,6 @@
 
 namespace fe
 {
-	class Uniform
-	{
-	public:
-		Uniform(const std::string& name, SDType type)
-			: m_Name(name), m_Type(type) {}
-
-		const SDType& GetType() const { return m_Type; }
-		const std::string& GetName() const { return m_Name; }
-	private:
-		std::string m_Name;
-		SDType m_Type;
-	};
-
 	class Material
 	{
 	public:
@@ -25,6 +12,7 @@ namespace fe
 
 		const Ref<Shader> GetShader() const { return m_Shader; }
 		const std::vector<Uniform>& GetUniforms() const { return m_Uniforms; };
+
 	private:
 		Ref<Shader> m_Shader;
 		std::vector<Uniform> m_Uniforms;
@@ -40,8 +28,11 @@ namespace fe
 			operator delete(m_UniformsData);
 		}
 
-		void SetUniformValue(const std::string& uniformName, void* dataPointer);
-		void* GetUniformValuePtr(const std::string& uniformName);
+		void SetUniformValue(const Uniform& uniform, void* dataPointer);
+		void* GetUniformValuePtr(const Uniform& targetUniform);
+
+		void SetUniformValue(const std::string& name, void* dataPointer);
+		void* GetUniformValuePtr(const std::string& name);
 
 		Ref<Material> GetMaterial() { return m_Material; }
 	private:

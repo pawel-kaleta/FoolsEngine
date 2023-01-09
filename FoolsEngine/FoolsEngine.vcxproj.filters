@@ -28,17 +28,18 @@
     <Filter Include="FoolsEngine\Renderer">
       <UniqueIdentifier>{84860EAA-7015-9873-1934-AC6E05A2A819}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Renderer\APIAbstraction">
+      <UniqueIdentifier>{07D3525D-738C-BD07-FCEB-D7E168A47377}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Core.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntryPoint.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\InputCodes.h">
@@ -51,6 +52,9 @@
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\LayerStack.h">
+      <Filter>FoolsEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Core\Time.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Window.h">
@@ -83,10 +87,25 @@
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h">
+      <Filter>FoolsEngine\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h">
@@ -95,24 +114,36 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\Material.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\OrtographicCamera.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Time.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\Material.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\OrtographicCamera.h">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -120,6 +151,9 @@
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp">
+      <Filter>FoolsEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Core\Time.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Window.cpp">
@@ -137,10 +171,25 @@
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp">
       <Filter>FoolsEngine\Events</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp">
+      <Filter>FoolsEngine\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp">
@@ -149,23 +198,35 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\OrtographicCamera.cpp">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -29,6 +29,8 @@ project "FoolsEngine"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
+	externalwarnings "off"
+	externalanglebrackets "on"
 
 	targetdir ("bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -49,6 +51,10 @@ project "FoolsEngine"
 		"glfw",
 		"glad",
 		"imgui"
+	}
+
+	buildoptions {
+		"/analyze:external-",
 	}
 
 	filter "system:windows"
@@ -125,9 +131,10 @@ project "Sandbox"
 		}
 		runtime "Release"
 		optimize "on"
+		symbols "on"
 
 	filter "configurations:Publish"
 		defines "FE_PUBLISH"
 		runtime "Release"
 		optimize "on"
-
+		symbols "on"

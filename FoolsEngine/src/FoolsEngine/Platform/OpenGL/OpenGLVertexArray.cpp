@@ -57,51 +57,56 @@ namespace fe
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-			switch (element.Primitive)
+			ShaderData::Primitive primitive = element.Primitive;
+#pragma warning(disable : 4312)
+			switch (primitive)
 			{
-			case SDPrimitive::Bool:
-			case SDPrimitive::Int:
-			case SDPrimitive::UInt:
+			case ShaderData::Primitive::Bool:
+			case ShaderData::Primitive::Int:
+			case ShaderData::Primitive::UInt:
 				glEnableVertexAttribArray(m_VertexBufferIndex);
 				glVertexAttribIPointer(
 					m_VertexBufferIndex,
 					element.ComponentCount,
-					SDPrimitiveToGLBaseType(element.Primitive),
+					SDPrimitiveToGLBaseType(primitive),
 					layout.GetStride(),
 					(const void*)element.Offset
 				);
 				m_VertexBufferIndex++;
 				break;
-			case SDPrimitive::Double:
+
+			case ShaderData::Primitive::Double:
 				glEnableVertexAttribArray(m_VertexBufferIndex);
 				glVertexAttribLPointer(
 					m_VertexBufferIndex,
 					element.ComponentCount,
-					SDPrimitiveToGLBaseType(element.Primitive),
+					SDPrimitiveToGLBaseType(primitive),
 					layout.GetStride(),
 					(const void*)element.Offset
 				);
 				m_VertexBufferIndex++;
 				break;
-			case SDPrimitive::Float:
+
+			case ShaderData::Primitive::Float:
 				switch (element.Structure)
 				{
-				case SDStructure::Scalar:
-				case SDStructure::Vector:
+				case ShaderData::Structure::Scalar:
+				case ShaderData::Structure::Vector:
 					glEnableVertexAttribArray(m_VertexBufferIndex);
 					glVertexAttribPointer(
 						m_VertexBufferIndex,
 						element.ComponentCount,
-						SDPrimitiveToGLBaseType(element.Primitive),
+						SDPrimitiveToGLBaseType(primitive),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.GetStride(),
 						(const void*)element.Offset
 					);
 					m_VertexBufferIndex++;
 					break;
-				case SDStructure::Matrix:
-					rows = RowsOfMatrix(element.Type);
-					columns = ColumnsOfMatrix(element.Type);
+
+				case ShaderData::Structure::Matrix:
+					rows = ShaderData::RowsOfMatrix(element.Type);
+					columns = ShaderData::ColumnsOfMatrix(element.Type);
 
 					FE_LOG_CORE_DEBUG("rows: {0}, columns: {1}", rows, columns);
 					for (uint8_t i = 0; i < rows; i++)
@@ -110,7 +115,7 @@ namespace fe
 						glVertexAttribPointer(
 							m_VertexBufferIndex,
 							columns,
-							SDPrimitiveToGLBaseType(element.Primitive),
+							SDPrimitiveToGLBaseType(primitive),
 							element.Normalized ? GL_TRUE : GL_FALSE,
 							layout.GetStride(),
 							(const void*)element.Offset
@@ -119,13 +124,16 @@ namespace fe
 						m_VertexBufferIndex++;
 					}
 					break;
+
 				default:
 					FE_CORE_ASSERT(false, "Unknown Shader Data Structure!");
 				}
 				break;
+
 			default:
 				FE_CORE_ASSERT(false, "Unknown Shader Data Primitive!");
 			}
+#pragma warning(default : 4312)
 		}
 
 		

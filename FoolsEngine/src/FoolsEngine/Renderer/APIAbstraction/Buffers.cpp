@@ -6,76 +6,61 @@
 
 namespace fe
 {
-	BufferElement::BufferElement(const std::string& name, SDPrimitive primitive, bool normalized)
-		: Name(name), Primitive(primitive), Structure(SDStructure::Scalar), Offset(0), ComponentCount(1), Normalized(normalized)
+	BufferElement::BufferElement(const std::string& name, ShaderData::Primitive primitive, bool normalized)
+		: Name(name), Primitive(primitive), Structure(ShaderData::Structure::Scalar), Offset(0), ComponentCount(1), Normalized(normalized)
 	{
-		Type = (SDType)(((int)primitive - 1) * 4 + 1);
-		Size = SDSizeOfType(Type);
+		Type = (ShaderData::Type)(((int)primitive - 1) * 4 + 1);
+		Size = ShaderData::SizeOfType(Type);
 	}
-	BufferElement::BufferElement(const std::string& name, SDPrimitive primitive, int count, bool normalized)
+	BufferElement::BufferElement(const std::string& name, ShaderData::Primitive primitive, int count, bool normalized)
 		: Name(name), Primitive(primitive), Offset(0), ComponentCount(count), Normalized(normalized)
 	{
-		Type = (SDType)(((int)primitive - 1) * 4 + count);
-		Size = SDSizeOfType(Type);
-		Structure = SDStructureInType(Type);
+		Type = (ShaderData::Type)(((int)primitive - 1) * 4 + count);
+		Size = ShaderData::SizeOfType(Type);
+		Structure = ShaderData::StructureInType(Type);
 	}
-	BufferElement::BufferElement(const std::string& name, SDPrimitive primitive, uint32_t count, bool normalized)
+	BufferElement::BufferElement(const std::string& name, ShaderData::Primitive primitive, uint32_t count, bool normalized)
 		: Name(name), Primitive(primitive), Offset(0), ComponentCount(count), Normalized(normalized)
 	{
-		Type = (SDType)(((int)primitive - 1) * 4 + count);
-		Size = SDSizeOfType(Type);
-		Structure = SDStructureInType(Type);
+		Type = (ShaderData::Type)(((int)primitive - 1) * 4 + count);
+		Size = ShaderData::SizeOfType(Type);
+		Structure = ShaderData::StructureInType(Type);
 	}
 	BufferElement::BufferElement(const std::string& name, int rows, int columns, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
+		: Name(name), Primitive(ShaderData::Primitive::Float), Offset(0), Normalized(normalized)
 	{
-		//Type = m_SDTypeOfMatrixLookupTable[collumns-2][rows-2];
-		Type = SDTypeOfMatrix(rows, columns);
-		Size = SDSizeOfType(Type);
+		Type = ShaderData::TypeOfMatrix(rows, columns);
+		Size = ShaderData::SizeOfType(Type);
 		ComponentCount =  rows * columns;
-		Structure = SDStructureInType(Type);
-	}
-	BufferElement::BufferElement(const std::string& name, int rows, uint32_t columns, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
-	{
-		//Type = m_SDTypeOfMatrixLookupTable[collumns-2][rows-2];
-		Type = SDTypeOfMatrix(rows, columns);
-		Size = SDSizeOfType(Type);
-		ComponentCount =  rows * columns;
-		Structure = SDStructureInType(Type);
+		Structure = ShaderData::StructureInType(Type);
 	}
 	BufferElement::BufferElement(const std::string& name, int order, bool normalized)
-		: Name(name), Primitive(SDPrimitive::Float), Offset(0), Normalized(normalized)
+		: Name(name), Primitive(ShaderData::Primitive::Float), Offset(0), Normalized(normalized)
 	{
-		//Type = m_SDTypeOfMatrixLookupTable[order-2][order-2];
-		Type = SDTypeOfMatrix(order, order);
-		Size = SDSizeOfType(Type);
+		Type = ShaderData::TypeOfMatrix(order, order);
+		Size = ShaderData::SizeOfType(Type);
 		ComponentCount = order * order;
-		Structure = SDStructureInType(Type);
+		Structure = ShaderData::StructureInType(Type);
 	}
-	BufferElement::BufferElement(const std::string& name, SDType type, bool normalized)
+	BufferElement::BufferElement(const std::string& name, ShaderData::Type type, bool normalized)
 		: Name(name), Type(type), Offset(0), Normalized(normalized)
 	{
-		Primitive = SDPrimitiveInType(Type);
-		Structure = SDStructureInType(Type);
-		Size = SDSizeOfType(Type);
-		if (Primitive == SDPrimitive::Double)
-			ComponentCount = Size / 8;
-		else
-			ComponentCount = Size / 4;
-	}
-	BufferElement::BufferElement(SDType type, const std::string& name, bool normalized)
-		: Name(name), Type(type), Offset(0), Normalized(normalized)
-	{
-		Primitive = SDPrimitiveInType(Type);
-		Structure = SDStructureInType(Type);
-		Size = SDSizeOfType(Type);
-		if (Primitive == SDPrimitive::Double)
-			ComponentCount = Size / 8;
-		else
-			ComponentCount = Size / 4;
-	}
+		Primitive = ShaderData::PrimitiveInType(Type);
+		Structure = ShaderData::StructureInType(Type);
+		Size = ShaderData::SizeOfType(Type);
+		bool ifDouble = Primitive == ShaderData::Primitive::Double;
+		ComponentCount = Size / (4 * (1 + (int)ifDouble) );
 
+	}
+	BufferElement::BufferElement(ShaderData::Type type, const std::string& name, bool normalized)
+		: Name(name), Type(type), Offset(0), Normalized(normalized)
+	{
+		Primitive = ShaderData::PrimitiveInType(Type);
+		Structure = ShaderData::StructureInType(Type);
+		Size = ShaderData::SizeOfType(Type);
+		bool ifDouble = Primitive == ShaderData::Primitive::Double;
+		ComponentCount = Size / (4 * (1 + (int)ifDouble) );
+	}
 
 	BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
 		: m_Elements(elements)

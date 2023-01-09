@@ -32,15 +32,20 @@ namespace fe
 		const Ref<Shader>& shader = materialInstance->GetMaterial()->GetShader();
 
 		shader->Bind();
-		shader->UploadUniform("u_ViewProjection", (void*)glm::value_ptr(s_SceneData->VPMatrix), SDType::Mat4);
-		shader->UploadUniform("u_Transform",      (void*)glm::value_ptr(transform),             SDType::Mat4);
 
-		for (auto uniform : materialInstance->GetMaterial()->GetUniforms())
+		shader->UploadUniform(
+			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
+			(void*)glm::value_ptr(s_SceneData->VPMatrix)
+		);
+		shader->UploadUniform(
+			Uniform("u_Transform", ShaderData::Type::Mat4),
+			(void*)glm::value_ptr(transform)
+		);
+
+		for (auto& uniform : materialInstance->GetMaterial()->GetUniforms())
 		{
-			const std::string& name = uniform.GetName();
-			void* dataPointer = materialInstance->GetUniformValuePtr(name);
-			SDType type = uniform.GetType();
-			shader->UploadUniform(name, dataPointer, type);
+			void* dataPointer = materialInstance->GetUniformValuePtr(uniform);
+			shader->UploadUniform(uniform, dataPointer);
 		}
 
 		vertexArray->Bind();

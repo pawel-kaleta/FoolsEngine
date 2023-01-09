@@ -88,14 +88,15 @@ namespace fe
 #endif
 
 #if FE_INTERNAL_BUILD
-	#define __PROFILER(name, line) fe::Timer timer##line(name);
+	#define PROFILER_EXPANDED_ARGS(name, line) fe::Timer timer##line(name);
+	#define PROFILER(name, line) PROFILER_EXPANDED_ARGS(name, line)
 	///////////////////////////////
 	//   MAKROS FOR PROFILEING   //
 	///////////////////////////////
 	#define FE_PROFILER_SESSION_START(name, filepath) fe::Profiler::Get().StartSession(name, filepath)
 	#define FE_PROFILER_SESSION_END() fe::Profiler::Get().EndSession()
-	#define FE_PROFILER_FUNC() __PROFILER(FE_FUNC_SIG, __LINE__)
-	#define FE_PROFILER_SCOPE(name) __PROFILER(name, __LINE__)
+	#define FE_PROFILER_FUNC() PROFILER(FE_FUNC_SIG, __LINE__)
+	#define FE_PROFILER_SCOPE(name) PROFILER(name, __LINE__)
 	///////////////////////////////
 	
 #else

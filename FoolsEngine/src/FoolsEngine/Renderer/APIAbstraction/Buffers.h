@@ -8,23 +8,22 @@ namespace fe
 	{
 	public:
 		std::string Name;
-		SDPrimitive Primitive;
-		SDStructure Structure;
-		SDType Type;
+		ShaderData::Primitive Primitive;
+		ShaderData::Structure Structure;
+		ShaderData::Type Type;
 		uint32_t Size;
 		uint32_t Offset;
 		uint32_t ComponentCount;
 		bool Normalized;
 
-		BufferElement(const std::string& name,	SDPrimitive primitive,					bool normalized = false);
-		BufferElement(const std::string& name,	SDPrimitive primitive, int count,		bool normalized = false);
-		BufferElement(const std::string& name,	SDPrimitive primitive, uint32_t count,	bool normalized = false);
-		BufferElement(const std::string& name,	int rows, int columns,					bool normalized = false);
-		BufferElement(const std::string& name,	int rows, uint32_t columns,				bool normalized = false);
-		BufferElement(const std::string& name,	int order,								bool normalized = false);
-		BufferElement(const std::string& name,	SDType type,							bool normalized = false);
+		BufferElement(const std::string& name, ShaderData::Primitive primitive,                 bool normalized = false);
+		BufferElement(const std::string& name, ShaderData::Primitive primitive, int count,      bool normalized = false);
+		BufferElement(const std::string& name, ShaderData::Primitive primitive, uint32_t count, bool normalized = false);
+		BufferElement(const std::string& name, int rows, int columns,                           bool normalized = false);
+		BufferElement(const std::string& name, int order,                                       bool normalized = false);
+		BufferElement(const std::string& name, ShaderData::Type type,                           bool normalized = false);
 		
-		BufferElement(SDType type, const std::string& name, bool normalized = false);
+		BufferElement(ShaderData::Type type, const std::string& name, bool normalized = false);
 
 	private:
 

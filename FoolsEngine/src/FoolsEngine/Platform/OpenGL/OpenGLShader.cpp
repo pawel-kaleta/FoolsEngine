@@ -146,11 +146,11 @@ namespace fe
         glUseProgram(0);
     }
 
-	void OpenGLShader::UploadUniform(const std::string& name, void* dataPointer, SDType type, uint32_t count, bool transpose)
+	void OpenGLShader::UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose)
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(!(transpose && (SDStructureInType(type) != SDStructure::Matrix)), "Only a matrix can be transposed!");
+		FE_CORE_ASSERT(!(transpose && (uniform.GetStructure() != ShaderData::Structure::Matrix)), "Only a matrix can be transposed!");
 		
 		if (count <= 0)
 		{
@@ -158,84 +158,84 @@ namespace fe
 			return;
 		}
 
-		GLint location = glGetUniformLocation(m_ProgramID, name.c_str());
+		GLint location = glGetUniformLocation(m_ProgramID, uniform.GetName().c_str());
 
-		switch (type)
+		switch (uniform.GetType())
 		{
-		case fe::SDType::None:
+		case ShaderData::Type::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Type of uniform!");
 			return;
-		case fe::SDType::Bool:
-		case fe::SDType::Int:
+		case ShaderData::Type::Bool:
+		case ShaderData::Type::Int:
 			glUniform1iv(location, count, (GLint*)dataPointer);
 			return;
-		case fe::SDType::Bool2:
-		case fe::SDType::Int2:
+		case ShaderData::Type::Bool2:
+		case ShaderData::Type::Int2:
 			glUniform2iv(location, count, (GLint*)dataPointer);
 			return;
-		case fe::SDType::Bool3:
-		case fe::SDType::Int3:
+		case ShaderData::Type::Bool3:
+		case ShaderData::Type::Int3:
 			glUniform3iv(location, count, (GLint*)dataPointer);
 			return;
-		case fe::SDType::Bool4:
-		case fe::SDType::Int4:
+		case ShaderData::Type::Bool4:
+		case ShaderData::Type::Int4:
 			glUniform4iv(location, count, (GLint*)dataPointer);
 			return;
-		case fe::SDType::UInt:
+		case ShaderData::Type::UInt:
 			glUniform1uiv(location, count, (GLuint*)dataPointer);
 			return;
-		case fe::SDType::UInt2:
+		case ShaderData::Type::UInt2:
 			glUniform2uiv(location, count, (GLuint*)dataPointer);
 			return;
-		case fe::SDType::UInt3:
+		case ShaderData::Type::UInt3:
 			glUniform3uiv(location, count, (GLuint*)dataPointer);
 			return;
-		case fe::SDType::UInt4:
+		case ShaderData::Type::UInt4:
 			glUniform4uiv(location, count, (GLuint*)dataPointer);
 			return;
-		case fe::SDType::Float:
+		case ShaderData::Type::Float:
 			glUniform1fv(location, count, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Float2:
+		case ShaderData::Type::Float2:
 			glUniform2fv(location, count, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Float3:
+		case ShaderData::Type::Float3:
 			glUniform3fv(location, count, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Float4:
+		case ShaderData::Type::Float4:
 			glUniform4fv(location, count, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Double:
-		case fe::SDType::Double2:
-		case fe::SDType::Double3:
-		case fe::SDType::Double4:
+		case ShaderData::Type::Double:
+		case ShaderData::Type::Double2:
+		case ShaderData::Type::Double3:
+		case ShaderData::Type::Double4:
 			FE_CORE_ASSERT(false, "Double precision Shader Data Type of uniform not supported!");
 			return;
-		case fe::SDType::Mat2:
+		case ShaderData::Type::Mat2:
 			glUniformMatrix2fv(location, count,	transpose, (GLfloat*) dataPointer);
 			return;
-		case fe::SDType::Mat2x3:
+		case ShaderData::Type::Mat2x3:
 			glUniformMatrix2x3fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat2x4:
+		case ShaderData::Type::Mat2x4:
 			glUniformMatrix2x4fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat3x2:
+		case ShaderData::Type::Mat3x2:
 			glUniformMatrix3x2fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat3:
+		case ShaderData::Type::Mat3:
 			glUniformMatrix3fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat3x4:
+		case ShaderData::Type::Mat3x4:
 			glUniformMatrix3x4fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat4x2:
+		case ShaderData::Type::Mat4x2:
 			glUniformMatrix4x2fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat4x3:
+		case ShaderData::Type::Mat4x3:
 			glUniformMatrix4x3fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
-		case fe::SDType::Mat4:
+		case ShaderData::Type::Mat4:
 			glUniformMatrix4fv(location, count, transpose, (GLfloat*)dataPointer);
 			return;
 		default:

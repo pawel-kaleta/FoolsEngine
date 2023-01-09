@@ -17,7 +17,7 @@ namespace fe
 		virtual const std::string& GetName() const override { return m_Name; };
 		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
 
-		virtual void UploadUniform(const std::string& name, void* dataPointer, SDType type, uint32_t count = 1, bool transpose = false) override;
+		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
 	private:
 		std::string m_Name;
 		uint32_t m_ProgramID;

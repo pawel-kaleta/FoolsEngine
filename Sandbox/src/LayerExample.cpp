@@ -36,11 +36,11 @@ LayerExample::LayerExample()
 	m_FlatColorShader = fe::Shader::Create("TestShader", vSourceTriangle, fSourceTriangle);
 	m_FlatColorMaterial.reset(new fe::Material(m_FlatColorShader,
 	{
-		{"u_Color", fe::SDType::Float4}
+		{"u_Color", fe::ShaderData::Type::Float4}
 	}));
 
 	fe::BufferLayout layout = {
-		{ fe::SDType::Float3, "a_Position" }
+		{ fe::ShaderData::Type::Float3, "a_Position" }
 	};
 	float triangleVertices[3 * 3] = {
 		-0.5f, -0.5f, 0.5f,
@@ -161,7 +161,7 @@ void LayerExample::RenderTestSetup(
 	sprite.VertexArray->SetIndexBuffer(sprite.IndexBuffer);
 
 	sprite.MaterialInstance.reset(new fe::MaterialInstance(m_FlatColorMaterial));
-	sprite.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0].GetName(), glm::value_ptr(color));
+	sprite.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0], glm::value_ptr(color));
 
 	FE_LOG_DEBUG("RenderTestSetup end.");
 }
