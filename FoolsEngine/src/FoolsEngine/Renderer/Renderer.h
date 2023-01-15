@@ -6,7 +6,6 @@
 
 namespace fe
 {
-
 	class Renderer
 	{
 	public:

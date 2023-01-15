@@ -18,9 +18,13 @@ namespace fe
 		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
 
 		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
+		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) override;
 	private:
 		std::string m_Name;
 		uint32_t m_ProgramID;
+
+
+		// Odziedziczono za poœrednictwem elementu Shader
 
 	};
 }

@@ -244,4 +244,10 @@ namespace fe
 		}
 
 	}
+
+	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot)
+	{
+		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
+		glUniform1i(location, rendererTextureSlot);
+	}
 }

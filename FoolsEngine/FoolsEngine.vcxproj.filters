@@ -105,6 +105,9 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
@@ -124,6 +127,9 @@
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.h">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Texture.h">
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h">
@@ -189,6 +195,9 @@
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>FoolsEngine\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
@@ -208,6 +217,9 @@
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.cpp">
+      <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Texture.cpp">
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp">

@@ -27,15 +27,17 @@ private:
 	float m_CameraSpeed = 1.0f;
 	glm::vec3 m_TrianglePosition = { 0.0f, 0.0f, 0.0f };
 	float m_TriangleSpeed = 1.2f;
-	fe::Ref<fe::Shader> m_FlatColorShader;
 	fe::Ref<fe::Material> m_FlatColorMaterial;
+	fe::Ref<fe::Material> m_TextureMaterial;
 
 	void RenderTestSetup(
 		Sprite& sprite,
 		fe::BufferLayout& layout,
-		glm::vec4 color,
 		float* vertices, uint32_t verticesNum,
 		uint32_t* indecies, uint32_t indeciesNum);
+
+	fe::Ref<fe::Shader> MakeFlatColorShader();
+	fe::Ref<fe::Shader> MakeTextureShader();
 
 	Sprite m_Triangle;
 	Sprite m_Rectangle;

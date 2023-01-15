@@ -34,7 +34,7 @@ namespace fe
 		glBindVertexArray(0);
 	}
 
-	void fe::OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void fe::OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
 		FE_PROFILER_FUNC();
 
@@ -44,7 +44,7 @@ namespace fe
 		m_IndexBuffer = indexBuffer;
 	}
 
-	void fe::OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void fe::OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
 		FE_PROFILER_FUNC();
 

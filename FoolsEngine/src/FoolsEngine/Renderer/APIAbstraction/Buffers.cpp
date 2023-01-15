@@ -82,7 +82,7 @@ namespace fe
 		}
 	}
 
-	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	Scope<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		FE_PROFILER_FUNC();
 		switch (Renderer::GetNativeAPI())
@@ -91,14 +91,14 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return CreateRef<OpenGLVertexBuffer>(vertices, size);
+			return CreateScope<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");
 		return nullptr;
 	}
 	
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Scope<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		FE_PROFILER_FUNC();
 		switch (RendererAPI::GetNativeAPI())
@@ -107,7 +107,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
 			return nullptr;
 		case RendererAPI::NativeAPI::OpenGL:
-			return CreateRef<OpenGLIndexBuffer>(indices, count);
+			return CreateScope<OpenGLIndexBuffer>(indices, count);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown renderer API");

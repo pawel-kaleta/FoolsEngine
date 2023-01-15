@@ -16,7 +16,8 @@ common_includedirs = {
 	"FoolsEngine/externals/glfw/include",
 	"FoolsEngine/externals/glad/include",
 	"FoolsEngine/externals/imgui",
-	"FoolsEngine/externals/glm"
+	"FoolsEngine/externals/glm",
+	"FoolsEngine/externals/stb"
 }
 
 group "Dependencies"
@@ -50,7 +51,8 @@ project "FoolsEngine"
 	links {
 		"glfw",
 		"glad",
-		"imgui"
+		"imgui",
+		"stb"
 	}
 
 	buildoptions {
@@ -80,11 +82,13 @@ project "FoolsEngine"
 		}
 		runtime "Release"
 		optimize "on"
+		symbols "on"
 
 	filter "configurations:Publish"
 		defines "FE_PUBLISH"
 		runtime "Release"
 		optimize "on"
+		symbols "on"
 
 project "Sandbox"
 	location "Sandbox"
