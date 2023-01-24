@@ -1,6 +1,7 @@
 #pragma once
 #include "FE_pch.h"
 #include "FoolsEngine/Events/Event.h"
+#include "FoolsEngine\Renderer\APIAbstraction\RenderingContext.h"
 
 namespace fe
 {
@@ -21,6 +22,9 @@ namespace fe
 	{
 	public:
 		virtual ~Window() = default;
+
+		virtual void CreateRenderingContext(RenderCommands::APItype API) = 0;
+		virtual void MakeRenderingContextCurrent(RenderCommands::APItype API) = 0;
 
 		virtual void OnUpdate() = 0;
 

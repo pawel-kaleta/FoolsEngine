@@ -5,8 +5,6 @@
 
 namespace fe
 {
-	
-
 	class Material
 	{
 	public:

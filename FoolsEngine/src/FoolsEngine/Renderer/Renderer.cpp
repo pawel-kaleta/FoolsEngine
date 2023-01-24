@@ -6,18 +6,46 @@
 namespace fe
 {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
+	std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>> Renderer::s_RenderingAPIs = std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>>();
 
 	void Renderer::Init()
 	{
 		FE_PROFILER_FUNC();
+	}
+
+	void Renderer::SetAPI(RenderCommands::APItype API)
+	{
+		FE_PROFILER_FUNC();
+		
+		if (!s_RenderingAPIs.count(API))
+		{
+			CreateAPI(API);
+		}
+		
+		RenderCommands::SetAPI(s_RenderingAPIs.at(API).get(), API);
 
 		Texture::s_DefaultTexture = Texture2D::Create("assets/textures/Default_Texture.png");
+	}
+
+	void Renderer::CreateAPI(RenderCommands::APItype API)
+	{
+		FE_PROFILER_FUNC();
+
+		if (s_RenderingAPIs.count(API))
+		{
+			FE_CORE_ASSERT(false, "This RendererAPI is already created!");
+			return;
+		}
+		s_RenderingAPIs[API] = RenderCommands::CreateAPI(API);
+		s_RenderingAPIs.at(API)->Init();
 	}
 
 	void Renderer::BeginScene(OrtographicCamera& camera)
 	{
 		FE_PROFILER_FUNC();
 		s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
+		fe::RenderCommands::Clear();
+		fe::RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 	}
 
 	void Renderer::EndScene()

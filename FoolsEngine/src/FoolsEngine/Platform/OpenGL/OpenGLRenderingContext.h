@@ -6,12 +6,14 @@
 
 namespace fe
 {
-	class OpenGLContext : public RenderingContext
+	class OpenGLRenderingContext : public RenderingContext
 	{
 	public:
-		OpenGLContext(GLFWwindow* window);
+		OpenGLRenderingContext(GLFWwindow* window);
+		virtual ~OpenGLRenderingContext() override {};
 
 		virtual void Init() override;
+		virtual void MakeCurrent() override;
 		virtual void SwapBuffers() override;
 	private:
 		GLFWwindow* m_Window;

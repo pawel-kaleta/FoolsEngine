@@ -96,7 +96,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h">
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h">
@@ -186,7 +186,7 @@
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp">
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.cpp">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp">

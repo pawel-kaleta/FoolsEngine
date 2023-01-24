@@ -6,20 +6,27 @@
 
 namespace fe
 {
-	Scope<RendererAPI> RenderCommands::s_RendererAPI = Scope<RendererAPI>(nullptr);
+	RendererAPI* RenderCommands::s_RendererAPI = nullptr;
+	RenderCommands::APItype RenderCommands::s_APItype = RenderCommands::APItype::none;
 
-	void RenderCommands::SetAPI(RendererAPI::NativeAPI nativeAPI)
+	Scope<RendererAPI> RenderCommands::CreateAPI(APItype API)
 	{
-		switch (nativeAPI)
+		switch (API)
 		{
-		case RendererAPI::NativeAPI::none:
+		case RenderCommands::APItype::none:
 			FE_ASSERT(false, "RendererAPI type none!");
-			return;
-		case RendererAPI::NativeAPI::OpenGL:
-			s_RendererAPI = CreateScope<OpenGLRendererAPI>();
-			return;
+			return nullptr;
+		case RenderCommands::APItype::OpenGL:
+			return CreateScope<OpenGLRendererAPI>();
+		default:
+			FE_ASSERT(false, "Unknown RendererAPI type!");
+			return nullptr;
 		}
+	}
 
-		FE_ASSERT(false, "Unknown RendererAPI type!");
+	void RenderCommands::SetAPI(RendererAPI* rendererAPI, APItype API)
+	{
+		s_RendererAPI = rendererAPI;
+		s_APItype = API;
 	}
 }

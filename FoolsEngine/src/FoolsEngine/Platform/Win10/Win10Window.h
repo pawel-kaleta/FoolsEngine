@@ -11,7 +11,10 @@ namespace fe
 	{
 	public:
 		Win10Window(const WindowAttributes& attr);
-		~Win10Window();
+		~Win10Window() override;
+
+		virtual void CreateRenderingContext(RenderCommands::APItype API) override;
+		virtual void MakeRenderingContextCurrent(RenderCommands::APItype API) override;
 
 		virtual void OnUpdate() override;
 
@@ -27,7 +30,8 @@ namespace fe
 
 	private:
 		GLFWwindow* m_Window;
-		Scope<RenderingContext> m_RenderingContext;
+		RenderingContext* m_CurrentRenderingContext;
+		std::unordered_map<RenderCommands::APItype, Scope<RenderingContext>> m_RenderingContexts;
 
 		struct WinData
 		{

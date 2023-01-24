@@ -50,6 +50,18 @@ LayerExample::LayerExample()
 	RenderTestSetup(m_Rectangle, rectangleLayout, rectangleVertices, 4 * (3+2), rectangleIndecies, 3*2);
 	m_Rectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
 	m_Rectangle.MaterialInstance->SetTexture("u_Texture", fe::Texture2D::Create("assets/textures/Default_Texture.png"));
+
+
+	float transparentRectangleVertices[4 * (3 + 2)] = {
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
+		 0.7f, -0.5f, 0.0f,  1.0f, 0.0f,
+		 0.7f,  0.7f, 0.0f,  1.0f, 1.0f,
+		-0.5f,  0.7f, 0.0f,  0.0f, 1.0f
+	};
+	uint32_t transparentRectangleIndecies[3 * 2] = { 0, 1, 2, 2, 3, 0 };
+	RenderTestSetup(m_TransparentRectangle, rectangleLayout, transparentRectangleVertices, 4 * (3 + 2), transparentRectangleIndecies, 3 * 2);
+	m_TransparentRectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
+	m_TransparentRectangle.MaterialInstance->SetTexture("u_Texture", fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 }
 
 void LayerExample::OnUpdate()
@@ -91,9 +103,6 @@ void LayerExample::OnUpdate()
 		m_TrianglePosition.y -= m_TriangleSpeed * fe::Time::FrameStep().GetSeconds();
 	}
 
-	fe::RenderCommands::Clear();
-	fe::RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
-
 	m_Camera.SetPosition(m_CameraPosition);
 	m_Triangle.Transform = glm::translate(glm::mat4(1.0f), m_TrianglePosition);
 
@@ -102,15 +111,17 @@ void LayerExample::OnUpdate()
 		FE_LOG_TRACE("RenderTestDraw");
 
 		fe::Renderer::Submit(m_Rectangle.VertexArray, m_Rectangle.MaterialInstance, m_Rectangle.Transform);
+		fe::Renderer::Submit(m_TransparentRectangle.VertexArray, m_TransparentRectangle.MaterialInstance, m_TransparentRectangle.Transform);
 		fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.MaterialInstance, m_Triangle.Transform);
 	}
 	fe::Renderer::EndScene();
+
 }
 
 void LayerExample::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit3("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
+	ImGui::ColorEdit4("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
 	ImGui::End();
 }
 

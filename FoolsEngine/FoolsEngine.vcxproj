@@ -167,7 +167,7 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.h" />
@@ -201,7 +201,7 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.cpp" />

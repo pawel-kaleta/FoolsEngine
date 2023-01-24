@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\APIAbstraction\Texture.h"
+#include <glad\glad.h>
 
 namespace fe
 {
@@ -21,5 +22,6 @@ namespace fe
 		uint32_t m_Width, m_Height;
 		uint32_t m_ID;
 		std::string m_FilePath;
+		GLenum m_Format, m_InternalFormat;
 	};
 }

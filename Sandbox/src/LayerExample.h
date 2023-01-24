@@ -41,4 +41,5 @@ private:
 
 	Sprite m_Triangle;
 	Sprite m_Rectangle;
+	Sprite m_TransparentRectangle;
 };

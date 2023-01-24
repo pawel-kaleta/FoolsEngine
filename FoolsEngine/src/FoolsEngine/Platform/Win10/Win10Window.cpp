@@ -2,7 +2,7 @@
 #include "Win10Window.h"
 
 #include <glad/glad.h>
-#include "FoolsEngine\Platform\OpenGL\OpenGLContext.h"
+
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Platform\Win10\Win10InputPolling.h"
 
@@ -28,6 +28,30 @@ namespace fe
 		ShutDown();
 	}
 
+	void Win10Window::CreateRenderingContext(RenderCommands::APItype API)
+	{
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Creating rendering context");
+
+		if (m_RenderingContexts.count(API))
+		{
+			FE_CORE_ASSERT(false, "Rendering context of this API was already created for this window!");
+			return;
+		};
+
+		m_RenderingContexts[API] = RenderingContext::Create(RenderCommands::APItype::OpenGL, m_Window);
+		m_CurrentRenderingContext = m_RenderingContexts.at(API).get();
+		m_CurrentRenderingContext->Init();
+
+		SetVSync(true);
+	}
+
+	void Win10Window::MakeRenderingContextCurrent(RenderCommands::APItype API)
+	{
+		FE_PROFILER_FUNC();
+		FE_CORE_ASSERT(false, "Multiple rendering contexts not yet supported. Context is being made current upon creation.");
+	}
+
 	void Win10Window::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
@@ -38,7 +62,7 @@ namespace fe
 			glfwPollEvents();
 		}
 		
-		m_RenderingContext->SwapBuffers();
+		m_CurrentRenderingContext->SwapBuffers();
 	}
 
 	void Win10Window::GLFWErrorCallback(int error, const char* msg)
@@ -63,9 +87,7 @@ namespace fe
 			{
 				FE_CORE_ASSERT(false, "GLFW initialization failed!");
 			}
-			//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-			//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
@@ -76,20 +98,9 @@ namespace fe
 			FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
 
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
-		}
-
-		// rendering context creation
-		{
-			FE_PROFILER_SCOPE("RenderingContext_Retrieval");
-			FE_LOG_CORE_INFO("Creating rendering context");
-			
-			m_RenderingContext = CreateScope<OpenGLContext>(m_Window);
-			m_RenderingContext->Init();
-
-		}
+		}		
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
 
 		SetGLFWEventsCallbacks();
 	}
@@ -200,7 +211,7 @@ namespace fe
 		FE_LOG_CORE_INFO("Closing Window.");
 
 		{
-			FE_PROFILER_SCOPE("lfwDestroyWindow()");
+			FE_PROFILER_SCOPE("glfwDestroyWindow()");
 			glfwDestroyWindow(m_Window);
 		}
 

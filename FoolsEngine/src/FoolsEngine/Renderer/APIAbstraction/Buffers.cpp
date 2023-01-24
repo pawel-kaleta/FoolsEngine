@@ -85,12 +85,12 @@ namespace fe
 	Scope<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetNativeAPI())
+		switch (Renderer::GetAPItype())
 		{
-		case RendererAPI::NativeAPI::none:
-			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
+		case RenderCommands::APItype::none:
+			FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
 			return nullptr;
-		case RendererAPI::NativeAPI::OpenGL:
+		case RenderCommands::APItype::OpenGL:
 			return CreateScope<OpenGLVertexBuffer>(vertices, size);
 		}
 
@@ -101,12 +101,12 @@ namespace fe
 	Scope<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		FE_PROFILER_FUNC();
-		switch (RendererAPI::GetNativeAPI())
+		switch (Renderer::GetAPItype())
 		{
-		case RendererAPI::NativeAPI::none:
-			FE_CORE_ASSERT(false, "Renderer::NativeAPI::none currently not supported!");
+		case RenderCommands::APItype::none:
+			FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
 			return nullptr;
-		case RendererAPI::NativeAPI::OpenGL:
+		case RenderCommands::APItype::OpenGL:
 			return CreateScope<OpenGLIndexBuffer>(indices, count);
 		}
 

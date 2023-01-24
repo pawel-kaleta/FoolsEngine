@@ -7,8 +7,17 @@ namespace fe
 	class RenderCommands
 	{
 	public:
-		static void SetAPI(RendererAPI::NativeAPI nativeAPI);
-		inline static RendererAPI::NativeAPI GetNativeAPI() { return RendererAPI::GetNativeAPI(); }
+		enum class APItype
+		{
+			none = 0,
+			OpenGL = 1
+		};
+
+		inline static APItype GetAPItype() { return s_APItype; }
+
+		static Scope<RendererAPI> CreateAPI(APItype API);
+		static void SetAPI(RendererAPI* rendererAPI, APItype API);
+		inline static void InitAPI() { s_RendererAPI->Init(); }
 
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 
@@ -17,7 +26,8 @@ namespace fe
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray) { s_RendererAPI->DrawIndexed(vertexArray); }
 
 	private:
-		static Scope<RendererAPI> s_RendererAPI;
+		static RendererAPI* s_RendererAPI;
+		static APItype s_APItype;
 	};
 
 }

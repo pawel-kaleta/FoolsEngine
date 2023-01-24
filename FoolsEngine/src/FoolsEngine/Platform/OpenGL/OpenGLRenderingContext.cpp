@@ -1,11 +1,11 @@
 #include "FE_pch.h"
 #include <glad/glad.h>
-#include "OpenGLContext.h"
+#include "OpenGLRenderingContext.h"
 #include "OpenGLRendererAPI.h"
 
 namespace fe
 {
-	OpenGLContext::OpenGLContext(GLFWwindow* window)
+	OpenGLRenderingContext::OpenGLRenderingContext(GLFWwindow* window)
 		: m_Window(window)
 	{
 		FE_PROFILER_FUNC();
@@ -26,7 +26,7 @@ namespace fe
 			type, severity, message);
 	}
 
-	void OpenGLContext::Init()
+	void OpenGLRenderingContext::Init()
 	{
 		FE_PROFILER_FUNC();
 
@@ -43,12 +43,15 @@ namespace fe
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(MessageCallback, 0);
 
-		Renderer::SetAPI(RendererAPI::NativeAPI::OpenGL);
-
-		FE_LOG_CORE_INFO("OpenGLRenderAPI initialized.");
+		FE_LOG_CORE_INFO("OpenGL Rendering Context created.");
 	}
 
-	void OpenGLContext::SwapBuffers()
+	void OpenGLRenderingContext::MakeCurrent()
+	{
+		FE_CORE_ASSERT(false, "Multiple rendering contexts not supported!");
+	}
+
+	void OpenGLRenderingContext::SwapBuffers()
 	{
 		FE_PROFILER_FUNC();
 

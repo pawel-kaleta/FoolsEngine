@@ -9,10 +9,11 @@ namespace fe
 	class Renderer
 	{
 	public:
-		inline static RendererAPI::NativeAPI GetNativeAPI() { return RendererAPI::GetNativeAPI(); }
+		inline static RenderCommands::APItype GetAPItype() { return RenderCommands::GetAPItype(); }
 
 		static void Init();
-		static void SetAPI(RendererAPI::NativeAPI nativeAPI) { RenderCommands::SetAPI(nativeAPI); }
+		static void SetAPI(RenderCommands::APItype API);
+		static void CreateAPI(RenderCommands::APItype API);
 
 		static void BeginScene(OrtographicCamera& camera);
 		static void EndScene();
@@ -30,5 +31,6 @@ namespace fe
 		};
 
 		static Scope<SceneData> s_SceneData;
+		static std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>> s_RenderingAPIs;
 	};
 }

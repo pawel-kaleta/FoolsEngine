@@ -10,12 +10,12 @@ namespace fe
 
 	Scope<Texture> Texture2D::Create(const std::string& filePath)
 	{
-		switch (Renderer::GetNativeAPI())
+		switch (Renderer::GetAPItype())
 		{
-		case RendererAPI::NativeAPI::none:
+		case RenderCommands::APItype::none:
 			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
 			return nullptr;
-		case RendererAPI::NativeAPI::OpenGL:
+		case RenderCommands::APItype::OpenGL:
 			return CreateScope<OpenGLTexture2D>(filePath);
 		}
 

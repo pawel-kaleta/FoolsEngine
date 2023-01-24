@@ -7,7 +7,8 @@ namespace fe
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:
-		OpenGLRendererAPI() { s_NativeAPI = NativeAPI::OpenGL; }
+		OpenGLRendererAPI() { FE_LOG_CORE_DEBUG("OpenGLRendererAPI creation!"); };
+		virtual void Init() override;
 
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;

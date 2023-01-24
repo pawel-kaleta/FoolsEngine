@@ -24,9 +24,9 @@ namespace fe
 
 		m_ViewMatrix = glm::inverse(transformationMatrix);
 
-		switch (Renderer::GetNativeAPI())
+		switch (Renderer::GetAPItype())
 		{
-		case RendererAPI::NativeAPI::OpenGL:
+		case RenderCommands::APItype::OpenGL:
 			m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 			break;
 		default:
