@@ -55,6 +55,8 @@ namespace fe
 		virtual const uint32_t& GetProgramID() const = 0;
 
 		static Scope<Shader> Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
+		static Scope<Shader> Create(const std::string& name, const std::string& shaderSource);
+		static Scope<Shader> Create(const std::string& filePath);
 	private:
 
 	};

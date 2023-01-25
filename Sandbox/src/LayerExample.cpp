@@ -5,7 +5,7 @@ LayerExample::LayerExample()
 {
 	m_FlatColorMaterial.reset(
 		new fe::Material(
-			MakeFlatColorShader(),
+			fe::Shader::Create("assets/shaders/Flat_Color_Shader.glsl"),
 			{
 				{"u_Color", fe::ShaderData::Type::Float4}
 			},
@@ -29,7 +29,7 @@ LayerExample::LayerExample()
 
 	m_TextureMaterial.reset(
 		new fe::Material(
-			MakeTextureShader(),
+			fe::Shader::Create("assets/shaders/Basic_Texture_Shader.glsl"),
 			{},
 			{
 				{ "u_Texture", fe::TextureType::Texture2D }
@@ -161,71 +161,3 @@ void LayerExample::RenderTestSetup(
 	FE_LOG_DEBUG("RenderTestSetup end.");
 }
 
-fe::Ref<fe::Shader> LayerExample::MakeFlatColorShader()
-{
-	std::string vSource = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			void main()
-			{
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-	std::string fSource = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;
-
-			uniform vec4 u_Color;
-
-			void main()
-			{
-				o_color = u_Color;
-			}
-		)";
-
-
-	return fe::Shader::Create("FlatColorShader", vSource, fSource);
-}
-
-fe::Ref<fe::Shader> LayerExample::MakeTextureShader()
-{
-	std::string vSource = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-	std::string fSource = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;
-
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				o_color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-	return fe::Shader::Create("TextureShader", vSource, fSource);
-}

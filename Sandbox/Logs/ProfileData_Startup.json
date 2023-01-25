@@ -4,630 +4,678 @@
 "name": "__cdecl fe::MainEventDispacher::MainEventDispacher(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990563.700
+"tid": 60636,
+"ts": 116354567875.300
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::LayerStack::LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990576.300
+"tid": 60636,
+"ts": 116354567947.000
 },{
 "cat": "function",
-"dur": 40304,
+"dur": 69682,
 "name": "GLFW_Initialization",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990594.500
+"tid": 60636,
+"ts": 116354568049.300
 },{
 "cat": "function",
-"dur": 192059,
+"dur": 194860,
 "name": "GLFW_CreateWindow",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866030924.900
+"tid": 60636,
+"ts": 116354637818.700
 },{
 "cat": "function",
-"dur": 25,
+"dur": 3293,
 "name": "void __cdecl fe::Win10Window::SetGLFWEventsCallbacks(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866223011.300
+"tid": 60636,
+"ts": 116354832772.900
 },{
 "cat": "function",
-"dur": 232450,
+"dur": 268063,
 "name": "void __cdecl fe::Win10Window::Init(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990594.400
+"tid": 60636,
+"ts": 116354568048.900
 },{
 "cat": "function",
-"dur": 232457,
+"dur": 268095,
 "name": "__cdecl fe::Win10Window::Win10Window(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990593.400
+"tid": 60636,
+"ts": 116354568046.600
 },{
 "cat": "function",
-"dur": 232466,
+"dur": 268171,
 "name": "class std::unique_ptr<class fe::Window,struct std::default_delete<class fe::Window> > __cdecl fe::Window::Create(const struct fe::WindowAttributes &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990590.400
+"tid": 60636,
+"ts": 116354568004.700
 },{
 "cat": "function",
-"dur": 1,
+"dur": 0,
 "name": "__cdecl fe::OpenGLRenderingContext::OpenGLRenderingContext(struct GLFWwindow *)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866223100.400
+"tid": 60636,
+"ts": 116354837314.300
 },{
 "cat": "function",
-"dur": 2801,
+"dur": 4364,
 "name": "void __cdecl fe::OpenGLRenderingContext::Init(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866223117.200
+"tid": 60636,
+"ts": 116354837374.700
 },{
 "cat": "function",
-"dur": 429,
+"dur": 1521,
 "name": "void __cdecl fe::Win10Window::SetVSync(bool)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866225929.100
+"tid": 60636,
+"ts": 116354841781.700
 },{
 "cat": "function",
-"dur": 3289,
+"dur": 7118,
 "name": "void __cdecl fe::Win10Window::CreateRenderingContext(enum fe::RenderCommands::APItype)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866223078.500
+"tid": 60636,
+"ts": 116354836225.100
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226376.000
+"tid": 60636,
+"ts": 116354843395.200
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::ApplicationLayer::ApplicationLayer(class std::function<void __cdecl(class std::shared_ptr<class fe::Events::Event>)>)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226383.500
+"tid": 60636,
+"ts": 116354843427.900
 },{
 "cat": "function",
-"dur": 9,
+"dur": 452,
 "name": "void __cdecl fe::LayerStack::PushOuterLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226389.200
+"tid": 60636,
+"ts": 116354843460.300
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226404.500
+"tid": 60636,
+"ts": 116354843959.300
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::ImGuiLayer::ImGuiLayer(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226409.900
+"tid": 60636,
+"ts": 116354843989.400
 },{
 "cat": "function",
-"dur": 395,
+"dur": 206,
 "name": "void __cdecl fe::ImGuiLayer::OnAttach(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226422.000
+"tid": 60636,
+"ts": 116354845356.700
 },{
 "cat": "function",
-"dur": 414,
+"dur": 1589,
 "name": "void __cdecl fe::LayerStack::PushOuterLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226415.300
+"tid": 60636,
+"ts": 116354844016.600
 },{
 "cat": "function",
 "dur": 0,
 "name": "void __cdecl fe::Renderer::Init(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226836.200
+"tid": 60636,
+"ts": 116354845634.500
 },{
 "cat": "function",
-"dur": 26,
+"dur": 448,
 "name": "void __cdecl fe::Renderer::CreateAPI(enum fe::RenderCommands::APItype)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226842.000
+"tid": 60636,
+"ts": 116354845668.200
 },{
 "cat": "function",
-"dur": 242,
+"dur": 1189,
 "name": "void __cdecl fe::Renderer::SetAPI(enum fe::RenderCommands::APItype)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866226842.000
+"tid": 60636,
+"ts": 116354845667.400
 },{
 "cat": "function",
-"dur": 236512,
+"dur": 278907,
 "name": "__cdecl fe::Application::Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73865990583.100
+"tid": 60636,
+"ts": 116354567995.700
 },{
 "cat": "function",
 "dur": 0,
 "name": "__cdecl fe::Layer::Layer(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866227138.200
+"tid": 60636,
+"ts": 116354846972.400
 },{
 "cat": "function",
-"dur": 1,
+"dur": 25,
 "name": "void __cdecl fe::OrtographicCamera::RecalculateViewMatrix(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866227151.700
+"tid": 60636,
+"ts": 116354847025.400
 },{
 "cat": "function",
-"dur": 7,
+"dur": 70,
 "name": "__cdecl fe::OrtographicCamera::OrtographicCamera(float,float,float,float)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866227151.600
+"tid": 60636,
+"ts": 116354847014.800
 },{
 "cat": "function",
-"dur": 24837,
-"name": "OpenGL vertexShader compilation",
+"dur": 23237,
+"name": "OpenGL shader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866227221.300
+"tid": 60636,
+"ts": 116354847355.600
 },{
 "cat": "function",
-"dur": 343,
-"name": "OpenGL fragmentShader compilation",
+"dur": 23374,
+"name": "Shader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866252105.800
+"tid": 60636,
+"ts": 116354847301.000
 },{
 "cat": "function",
-"dur": 1418,
+"dur": 304,
+"name": "OpenGL shader compilation",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354870718.000
+},{
+"cat": "function",
+"dur": 357,
+"name": "Shader compilation",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354870707.900
+},{
+"cat": "function",
+"dur": 1107,
 "name": "OpenGL Shader linking",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866252479.500
+"tid": 60636,
+"ts": 116354871104.500
 },{
 "cat": "function",
-"dur": 26768,
-"name": "__cdecl fe::OpenGLShader::OpenGLShader(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
+"dur": 24961,
+"name": "void __cdecl fe::OpenGLShader::Compile(const class std::unordered_map<unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,struct std::hash<unsigned int>,struct std::equal_to<unsigned int>,class std::allocator<struct std::pair<unsigned int const ,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > > > &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866227164.900
+"tid": 60636,
+"ts": 116354847299.400
 },{
 "cat": "function",
-"dur": 0,
+"dur": 25169,
+"name": "__cdecl fe::OpenGLShader::OpenGLShader(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354847127.500
+},{
+"cat": "function",
+"dur": 1,
 "name": "__cdecl fe::BufferLayout::BufferLayout(const class std::initializer_list<class fe::BufferElement> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866253967.200
+"tid": 60636,
+"ts": 116354872359.600
 },{
 "cat": "function",
-"dur": 24,
+"dur": 10,
 "name": "__cdecl fe::OpenGLVertexArray::OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254010.000
+"tid": 60636,
+"ts": 116354872989.900
 },{
 "cat": "function",
-"dur": 7,
+"dur": 4,
 "name": "void __cdecl fe::OpenGLVertexArray::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254048.600
+"tid": 60636,
+"ts": 116354873043.500
 },{
 "cat": "function",
-"dur": 22,
+"dur": 18,
 "name": "__cdecl fe::OpenGLVertexBuffer::OpenGLVertexBuffer(float *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254067.200
+"tid": 60636,
+"ts": 116354873087.700
 },{
 "cat": "function",
-"dur": 35,
+"dur": 60,
 "name": "class std::unique_ptr<class fe::VertexBuffer,struct std::default_delete<class fe::VertexBuffer> > __cdecl fe::VertexBuffer::Create(float *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254066.900
+"tid": 60636,
+"ts": 116354873077.700
 },{
 "cat": "function",
-"dur": 0,
+"dur": 3,
 "name": "void __cdecl fe::OpenGLVertexBuffer::SetLayout(const class fe::BufferLayout &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254111.300
+"tid": 60636,
+"ts": 116354873166.900
 },{
 "cat": "function",
-"dur": 0,
+"dur": 1,
 "name": "void __cdecl fe::OpenGLVertexBuffer::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254121.000
+"tid": 60636,
+"ts": 116354873201.800
 },{
 "cat": "function",
 "dur": 0,
 "name": "const class fe::BufferLayout &__cdecl fe::OpenGLVertexBuffer::GetLayout(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254129.500
+"tid": 60636,
+"ts": 116354873230.600
 },{
 "cat": "function",
-"dur": 32,
+"dur": 69,
 "name": "void __cdecl fe::OpenGLVertexArray::AddVertexBuffer(const class std::shared_ptr<class fe::VertexBuffer> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254120.700
+"tid": 60636,
+"ts": 116354873201.200
 },{
 "cat": "function",
 "dur": 2,
 "name": "__cdecl fe::OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254162.200
+"tid": 60636,
+"ts": 116354873300.400
 },{
 "cat": "function",
-"dur": 12,
+"dur": 29,
 "name": "class std::unique_ptr<class fe::IndexBuffer,struct std::default_delete<class fe::IndexBuffer> > __cdecl fe::IndexBuffer::Create(unsigned int *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254161.900
+"tid": 60636,
+"ts": 116354873300.000
 },{
 "cat": "function",
 "dur": 0,
 "name": "void __cdecl fe::OpenGLIndexBuffer::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254184.000
+"tid": 60636,
+"ts": 116354873360.400
 },{
 "cat": "function",
-"dur": 8,
+"dur": 31,
 "name": "void __cdecl fe::OpenGLVertexArray::SetIndexBuffer(const class std::shared_ptr<class fe::IndexBuffer> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254183.800
+"tid": 60636,
+"ts": 116354873359.900
 },{
 "cat": "function",
-"dur": 0,
+"dur": 5,
 "name": "__cdecl fe::MaterialInstance::MaterialInstance(class std::shared_ptr<class fe::Material>)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254216.700
+"tid": 60636,
+"ts": 116354873592.000
 },{
 "cat": "function",
 "dur": 0,
 "name": "void __cdecl fe::MaterialInstance::SetUniformValue(const class fe::Uniform &,void *)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254231.300
+"tid": 60636,
+"ts": 116354873637.100
 },{
 "cat": "function",
-"dur": 675,
-"name": "OpenGL vertexShader compilation",
+"dur": 350,
+"name": "OpenGL shader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254252.600
+"tid": 60636,
+"ts": 116354873816.100
 },{
 "cat": "function",
-"dur": 502,
-"name": "OpenGL fragmentShader compilation",
+"dur": 403,
+"name": "Shader compilation",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254954.000
+"tid": 60636,
+"ts": 116354873807.800
 },{
 "cat": "function",
-"dur": 1496,
+"dur": 322,
+"name": "OpenGL shader compilation",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354874244.100
+},{
+"cat": "function",
+"dur": 371,
+"name": "Shader compilation",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354874237.600
+},{
+"cat": "function",
+"dur": 950,
 "name": "OpenGL Shader linking",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866255486.500
+"tid": 60636,
+"ts": 116354874639.400
 },{
 "cat": "function",
-"dur": 2762,
-"name": "__cdecl fe::OpenGLShader::OpenGLShader(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
+"dur": 1829,
+"name": "void __cdecl fe::OpenGLShader::Compile(const class std::unordered_map<unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,struct std::hash<unsigned int>,struct std::equal_to<unsigned int>,class std::allocator<struct std::pair<unsigned int const ,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > > > &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866254241.900
+"tid": 60636,
+"ts": 116354873806.500
 },{
 "cat": "function",
-"dur": 0,
+"dur": 2001,
+"name": "__cdecl fe::OpenGLShader::OpenGLShader(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354873668.800
+},{
+"cat": "function",
+"dur": 1,
 "name": "__cdecl fe::BufferLayout::BufferLayout(const class std::initializer_list<class fe::BufferElement> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257025.400
+"tid": 60636,
+"ts": 116354875704.900
 },{
 "cat": "function",
-"dur": 3,
+"dur": 2,
 "name": "__cdecl fe::OpenGLVertexArray::OpenGLVertexArray(void)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257050.700
+"tid": 60636,
+"ts": 116354875830.100
 },{
 "cat": "function",
 "dur": 0,
 "name": "void __cdecl fe::OpenGLVertexArray::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257064.400
-},{
-"cat": "function",
-"dur": 2,
-"name": "__cdecl fe::OpenGLVertexBuffer::OpenGLVertexBuffer(float *,unsigned int)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257073.500
-},{
-"cat": "function",
-"dur": 12,
-"name": "class std::unique_ptr<class fe::VertexBuffer,struct std::default_delete<class fe::VertexBuffer> > __cdecl fe::VertexBuffer::Create(float *,unsigned int)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257073.200
-},{
-"cat": "function",
-"dur": 0,
-"name": "void __cdecl fe::OpenGLVertexBuffer::SetLayout(const class fe::BufferLayout &)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257094.100
-},{
-"cat": "function",
-"dur": 0,
-"name": "void __cdecl fe::OpenGLVertexBuffer::Bind(void) const",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257103.200
-},{
-"cat": "function",
-"dur": 0,
-"name": "const class fe::BufferLayout &__cdecl fe::OpenGLVertexBuffer::GetLayout(void) const",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257111.800
-},{
-"cat": "function",
-"dur": 17,
-"name": "void __cdecl fe::OpenGLVertexArray::AddVertexBuffer(const class std::shared_ptr<class fe::VertexBuffer> &)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257103.000
-},{
-"cat": "function",
-"dur": 2,
-"name": "__cdecl fe::OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int *,unsigned int)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257127.700
-},{
-"cat": "function",
-"dur": 9,
-"name": "class std::unique_ptr<class fe::IndexBuffer,struct std::default_delete<class fe::IndexBuffer> > __cdecl fe::IndexBuffer::Create(unsigned int *,unsigned int)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257127.600
-},{
-"cat": "function",
-"dur": 0,
-"name": "void __cdecl fe::OpenGLIndexBuffer::Bind(void) const",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257146.100
-},{
-"cat": "function",
-"dur": 9,
-"name": "void __cdecl fe::OpenGLVertexArray::SetIndexBuffer(const class std::shared_ptr<class fe::IndexBuffer> &)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257145.900
-},{
-"cat": "function",
-"dur": 1,
-"name": "__cdecl fe::MaterialInstance::MaterialInstance(class std::shared_ptr<class fe::Material>)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257172.400
-},{
-"cat": "function",
-"dur": 1,
-"name": "void __cdecl fe::MaterialInstance::SetTexture(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class std::shared_ptr<class fe::Texture>)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257340.700
-},{
-"cat": "function",
-"dur": 3,
-"name": "__cdecl fe::OpenGLVertexArray::OpenGLVertexArray(void)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257371.800
-},{
-"cat": "function",
-"dur": 1,
-"name": "void __cdecl fe::OpenGLVertexArray::Bind(void) const",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257386.700
+"tid": 60636,
+"ts": 116354875877.000
 },{
 "cat": "function",
 "dur": 3,
 "name": "__cdecl fe::OpenGLVertexBuffer::OpenGLVertexBuffer(float *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257396.600
+"tid": 60636,
+"ts": 116354875915.900
 },{
 "cat": "function",
-"dur": 12,
+"dur": 32,
 "name": "class std::unique_ptr<class fe::VertexBuffer,struct std::default_delete<class fe::VertexBuffer> > __cdecl fe::VertexBuffer::Create(float *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257396.400
+"tid": 60636,
+"ts": 116354875915.000
 },{
 "cat": "function",
-"dur": 0,
+"dur": 2,
 "name": "void __cdecl fe::OpenGLVertexBuffer::SetLayout(const class fe::BufferLayout &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257416.800
+"tid": 60636,
+"ts": 116354875974.600
 },{
 "cat": "function",
-"dur": 0,
+"dur": 1,
 "name": "void __cdecl fe::OpenGLVertexBuffer::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257426.100
+"tid": 60636,
+"ts": 116354876003.700
 },{
 "cat": "function",
 "dur": 0,
 "name": "const class fe::BufferLayout &__cdecl fe::OpenGLVertexBuffer::GetLayout(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257435.300
+"tid": 60636,
+"ts": 116354876029.400
 },{
 "cat": "function",
-"dur": 19,
+"dur": 52,
 "name": "void __cdecl fe::OpenGLVertexArray::AddVertexBuffer(const class std::shared_ptr<class fe::VertexBuffer> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257425.800
+"tid": 60636,
+"ts": 116354876003.300
 },{
 "cat": "function",
 "dur": 2,
 "name": "__cdecl fe::OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257453.800
+"tid": 60636,
+"ts": 116354876084.600
 },{
 "cat": "function",
-"dur": 11,
+"dur": 31,
 "name": "class std::unique_ptr<class fe::IndexBuffer,struct std::default_delete<class fe::IndexBuffer> > __cdecl fe::IndexBuffer::Create(unsigned int *,unsigned int)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257453.600
+"tid": 60636,
+"ts": 116354876084.200
 },{
 "cat": "function",
 "dur": 0,
 "name": "void __cdecl fe::OpenGLIndexBuffer::Bind(void) const",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257473.800
+"tid": 60636,
+"ts": 116354876144.100
 },{
 "cat": "function",
-"dur": 9,
+"dur": 27,
 "name": "void __cdecl fe::OpenGLVertexArray::SetIndexBuffer(const class std::shared_ptr<class fe::IndexBuffer> &)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257473.500
-},{
-"cat": "function",
-"dur": 0,
-"name": "__cdecl fe::MaterialInstance::MaterialInstance(class std::shared_ptr<class fe::Material>)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257501.000
-},{
-"cat": "function",
-"dur": 0,
-"name": "void __cdecl fe::MaterialInstance::SetTexture(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class std::shared_ptr<class fe::Texture>)",
-"ph": "X",
-"pid": 0,
-"tid": 36696,
-"ts": 73866257751.700
+"tid": 60636,
+"ts": 116354876143.700
 },{
 "cat": "function",
 "dur": 14,
+"name": "__cdecl fe::MaterialInstance::MaterialInstance(class std::shared_ptr<class fe::Material>)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354876285.000
+},{
+"cat": "function",
+"dur": 3,
+"name": "void __cdecl fe::MaterialInstance::SetTexture(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class std::shared_ptr<class fe::Texture>)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354876638.900
+},{
+"cat": "function",
+"dur": 3,
+"name": "__cdecl fe::OpenGLVertexArray::OpenGLVertexArray(void)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354876962.500
+},{
+"cat": "function",
+"dur": 0,
+"name": "void __cdecl fe::OpenGLVertexArray::Bind(void) const",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877002.000
+},{
+"cat": "function",
+"dur": 3,
+"name": "__cdecl fe::OpenGLVertexBuffer::OpenGLVertexBuffer(float *,unsigned int)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877029.600
+},{
+"cat": "function",
+"dur": 31,
+"name": "class std::unique_ptr<class fe::VertexBuffer,struct std::default_delete<class fe::VertexBuffer> > __cdecl fe::VertexBuffer::Create(float *,unsigned int)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877028.800
+},{
+"cat": "function",
+"dur": 2,
+"name": "void __cdecl fe::OpenGLVertexBuffer::SetLayout(const class fe::BufferLayout &)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877087.200
+},{
+"cat": "function",
+"dur": 0,
+"name": "void __cdecl fe::OpenGLVertexBuffer::Bind(void) const",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877116.000
+},{
+"cat": "function",
+"dur": 0,
+"name": "const class fe::BufferLayout &__cdecl fe::OpenGLVertexBuffer::GetLayout(void) const",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877141.800
+},{
+"cat": "function",
+"dur": 53,
+"name": "void __cdecl fe::OpenGLVertexArray::AddVertexBuffer(const class std::shared_ptr<class fe::VertexBuffer> &)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877115.600
+},{
+"cat": "function",
+"dur": 2,
+"name": "__cdecl fe::OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int *,unsigned int)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877194.900
+},{
+"cat": "function",
+"dur": 28,
+"name": "class std::unique_ptr<class fe::IndexBuffer,struct std::default_delete<class fe::IndexBuffer> > __cdecl fe::IndexBuffer::Create(unsigned int *,unsigned int)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877194.500
+},{
+"cat": "function",
+"dur": 1,
+"name": "void __cdecl fe::OpenGLIndexBuffer::Bind(void) const",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877250.900
+},{
+"cat": "function",
+"dur": 27,
+"name": "void __cdecl fe::OpenGLVertexArray::SetIndexBuffer(const class std::shared_ptr<class fe::IndexBuffer> &)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877250.500
+},{
+"cat": "function",
+"dur": 3,
+"name": "__cdecl fe::MaterialInstance::MaterialInstance(class std::shared_ptr<class fe::Material>)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877390.300
+},{
+"cat": "function",
+"dur": 2,
+"name": "void __cdecl fe::MaterialInstance::SetTexture(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class std::shared_ptr<class fe::Texture>)",
+"ph": "X",
+"pid": 0,
+"tid": 60636,
+"ts": 116354877922.400
+},{
+"cat": "function",
+"dur": 1745,
 "name": "void __cdecl fe::LayerStack::PushInnerLayer(class std::shared_ptr<class fe::Layer>)",
 "ph": "X",
 "pid": 0,
-"tid": 36696,
-"ts": 73866257770.100
+"tid": 60636,
+"ts": 116354878019.000
 }]}

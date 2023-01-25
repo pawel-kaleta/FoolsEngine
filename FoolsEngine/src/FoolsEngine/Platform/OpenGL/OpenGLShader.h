@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 
+#include <glad\glad.h>
 
 namespace fe
 {
@@ -9,7 +10,9 @@ namespace fe
 	{
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		virtual ~OpenGLShader();
+		OpenGLShader(const std::string& name, const std::string& shaderSource);
+		OpenGLShader(const std::string& filepath);
+		virtual ~OpenGLShader() override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
@@ -20,11 +23,13 @@ namespace fe
 		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
 		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) override;
 	private:
-		std::string m_Name;
 		uint32_t m_ProgramID;
+		std::string m_Name;
 
+		static std::string ReadFile(const std::string& filePath);
+		static GLenum ShaderTypeFromString(const std::string& type);
+		static std::unordered_map<GLenum, std::string> PreProcess(const std::string& shaderSource);
 
-		// Odziedziczono za poœrednictwem elementu Shader
-
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	};
 }

@@ -20,4 +20,33 @@ namespace fe
         return nullptr;
     }
 
+    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource)
+    {
+        switch (Renderer::GetAPItype())
+        {
+        case RenderCommands::APItype::none:
+            FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+            return nullptr;
+        case RenderCommands::APItype::OpenGL:
+            return CreateScope<OpenGLShader>(name, shaderSource);
+        }
+
+        FE_CORE_ASSERT(false, "Unknown renderer API");
+        return nullptr;
+    }
+
+    Scope<Shader> fe::Shader::Create(const std::string& filePath)
+    {
+        switch (Renderer::GetAPItype())
+        {
+        case RenderCommands::APItype::none:
+            FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+            return nullptr;
+        case RenderCommands::APItype::OpenGL:
+            return CreateScope<OpenGLShader>(filePath);
+        }
+
+        FE_CORE_ASSERT(false, "Unknown renderer API");
+        return nullptr;
+    }
 }

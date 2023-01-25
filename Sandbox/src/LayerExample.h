@@ -36,9 +36,6 @@ private:
 		float* vertices, uint32_t verticesNum,
 		uint32_t* indecies, uint32_t indeciesNum);
 
-	fe::Ref<fe::Shader> MakeFlatColorShader();
-	fe::Ref<fe::Shader> MakeTextureShader();
-
 	Sprite m_Triangle;
 	Sprite m_Rectangle;
 	Sprite m_TransparentRectangle;
