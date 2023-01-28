@@ -1,22 +1,15 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\APIAbstraction\RendererAPI.h"
+#include "GDIType.h"
 
 namespace fe
 {
 	class RenderCommands
 	{
 	public:
-		enum class APItype
-		{
-			none = 0,
-			OpenGL = 1
-		};
-
-		inline static APItype GetAPItype() { return s_APItype; }
-
-		static Scope<RendererAPI> CreateAPI(APItype API);
-		static void SetAPI(RendererAPI* rendererAPI, APItype API);
+		static Scope<RendererAPI> CreateAPI(GDIType GDI);
+		static void SetAPI(RendererAPI* rendererAPI);
 		inline static void InitAPI() { s_RendererAPI->Init(); }
 
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
@@ -27,7 +20,6 @@ namespace fe
 
 	private:
 		static RendererAPI* s_RendererAPI;
-		static APItype s_APItype;
 	};
 
 }

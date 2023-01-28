@@ -24,13 +24,13 @@ namespace fe
 
 		m_ViewMatrix = glm::inverse(transformationMatrix);
 
-		switch (Renderer::GetAPItype())
+		switch (Renderer::GetGDItype())
 		{
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 			break;
 		default:
-			FE_CORE_ASSERT(false, "Unkown RendererAPI!");
+			FE_CORE_ASSERT(false, "Unkown GDI!");
 			return;
 		}
 

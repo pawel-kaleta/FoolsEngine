@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GDIType.h"
 #include "RenderCommands.h"
 #include "OrtographicCamera.h"
 #include "Material.h"
@@ -9,11 +10,11 @@ namespace fe
 	class Renderer
 	{
 	public:
-		inline static RenderCommands::APItype GetAPItype() { return RenderCommands::GetAPItype(); }
+		inline const static GDIType GetGDItype() { return s_ActiveGDI; }
 
 		static void Init();
-		static void SetAPI(RenderCommands::APItype API);
-		static void CreateAPI(RenderCommands::APItype API);
+		static void SetAPI(GDIType GDI);
+		static void CreateAPI(GDIType GDI);
 
 		static void BeginScene(OrtographicCamera& camera);
 		static void EndScene();
@@ -31,6 +32,9 @@ namespace fe
 		};
 
 		static Scope<SceneData> s_SceneData;
-		static std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>> s_RenderingAPIs;
+
+		static GDIType s_ActiveGDI;
+		static std::unordered_map<GDIType, Scope<RendererAPI>> s_RenderingAPIs;
+		static std::unordered_map<GDIType, Scope<ShaderLibrary>> s_ShaderLibs;
 	};
 }

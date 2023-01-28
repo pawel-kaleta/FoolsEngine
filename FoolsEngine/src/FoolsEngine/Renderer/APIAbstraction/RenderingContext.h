@@ -11,7 +11,7 @@ namespace fe
 		virtual void MakeCurrent() = 0;
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
-		inline static RenderCommands::APItype GetAPItype() { return RenderCommands::GetAPItype(); }
-		static Scope<RenderingContext> Create(RenderCommands::APItype API, void* nativeWindow);
+		inline static GDIType GetGDItype() { return Renderer::GetGDItype(); }
+		static Scope<RenderingContext> Create(GDIType GDI, void* nativeWindow);
 	};
 }

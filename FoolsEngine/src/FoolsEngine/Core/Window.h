@@ -23,8 +23,8 @@ namespace fe
 	public:
 		virtual ~Window() = default;
 
-		virtual void CreateRenderingContext(RenderCommands::APItype API) = 0;
-		virtual void MakeRenderingContextCurrent(RenderCommands::APItype API) = 0;
+		virtual void CreateRenderingContext(GDIType GDI) = 0;
+		virtual void MakeRenderingContextCurrent(GDIType GDI) = 0;
 
 		virtual void OnUpdate() = 0;
 

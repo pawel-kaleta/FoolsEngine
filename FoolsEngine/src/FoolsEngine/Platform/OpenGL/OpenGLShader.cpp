@@ -28,9 +28,16 @@ namespace fe
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filePath)
-		: m_Name(filePath), m_ProgramID(0)
+		: m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
+
+		// Extract name from filepath
+		auto lastSlash = filePath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filePath.rfind('.');
+		auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filePath.substr(lastSlash, count);
 
 		std::string shaderSource = ReadFile(filePath);
 		auto shaderSources = PreProcess(shaderSource);
@@ -223,8 +230,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		std::vector<GLuint> shaders;
-		shaders.reserve(shaderSources.size());
+		FE_CORE_ASSERT(shaderSources.size() <= 2, "No support for more then 2 shaders!");
+
+		std::array<GLuint, 2> shaders;
+		int shadersCount = 0;
 
 		for (auto& keyValue : shaderSources)
 		{
@@ -233,7 +242,7 @@ namespace fe
 			const std::string& source = keyValue.second;
 
 			GLuint shader = glCreateShader(type);
-			shaders.push_back(shader);
+			shaders[shadersCount++] = shader;
 
 			const GLchar* sourceCStr = (const GLchar*)source.c_str();
 			glShaderSource(shader, 1, &sourceCStr, 0);
@@ -253,8 +262,8 @@ namespace fe
 				std::vector<GLchar> infoLog(maxLength);
 				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
 
-				for (auto& compiledShader : shaders)
-					glDeleteShader(compiledShader);
+				for (int i = 0; i < shadersCount; i++)
+					glDeleteShader(shaders[i]);
 
 				FE_LOG_CORE_ERROR("{0}", infoLog.data());
 				FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
@@ -265,8 +274,8 @@ namespace fe
 
 		GLuint programID = glCreateProgram();
 
-		for (auto& compiledShader : shaders)
-			glAttachShader(programID, compiledShader);
+		for (int i = 0; i < shadersCount; i++)
+			glAttachShader(programID, shaders[i]);
 
 		{
 			FE_PROFILER_SCOPE("OpenGL Shader linking");
@@ -285,16 +294,16 @@ namespace fe
 
 			glDeleteProgram(programID);
 
-			for (auto& compiledShader : shaders)
-				glDeleteShader(compiledShader);
+			for (int i = 0; i < shadersCount; i++)
+				glDeleteShader(shaders[i]);
 
 			FE_LOG_CORE_ERROR("{0}", infoLog.data());
 			FE_CORE_ASSERT(false, "OpenGL shader program linking failed!");
 			return;
 		}
 
-		for (auto& compiledShader : shaders)
-			glDetachShader(programID, compiledShader);
+		for (int i = 0; i < shadersCount; i++)
+			glDetachShader(programID, shaders[i]);
 
 		m_ProgramID = programID;
 	}

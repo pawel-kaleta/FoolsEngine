@@ -6,38 +6,44 @@
 namespace fe
 {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
-	std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>> Renderer::s_RenderingAPIs = std::unordered_map<RenderCommands::APItype, Scope<RendererAPI>>();
+	GDIType Renderer::s_ActiveGDI = GDIType::none;
+	std::unordered_map<GDIType, Scope<RendererAPI>> Renderer::s_RenderingAPIs = std::unordered_map<GDIType, Scope<RendererAPI>>();
+	std::unordered_map<GDIType, Scope<ShaderLibrary>> Renderer::s_ShaderLibs = std::unordered_map<GDIType, Scope<ShaderLibrary>>();
 
 	void Renderer::Init()
 	{
 		FE_PROFILER_FUNC();
 	}
 
-	void Renderer::SetAPI(RenderCommands::APItype API)
+	void Renderer::SetAPI(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 		
-		if (!s_RenderingAPIs.count(API))
+		if (!s_RenderingAPIs.count(GDI))
 		{
-			CreateAPI(API);
+			CreateAPI(GDI);
 		}
 		
-		RenderCommands::SetAPI(s_RenderingAPIs.at(API).get(), API);
+		s_ActiveGDI = GDI;
+
+		RenderCommands::SetAPI(s_RenderingAPIs.at(GDI).get());
+		ShaderLibrary::SetActiveInstance(s_ShaderLibs.at(GDI).get());
 
 		Texture::s_DefaultTexture = Texture2D::Create("assets/textures/Default_Texture.png");
 	}
 
-	void Renderer::CreateAPI(RenderCommands::APItype API)
+	void Renderer::CreateAPI(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 
-		if (s_RenderingAPIs.count(API))
+		if (s_RenderingAPIs.count(GDI))
 		{
 			FE_CORE_ASSERT(false, "This RendererAPI is already created!");
 			return;
 		}
-		s_RenderingAPIs[API] = RenderCommands::CreateAPI(API);
-		s_RenderingAPIs.at(API)->Init();
+		s_RenderingAPIs[GDI] = RenderCommands::CreateAPI(GDI);
+		s_RenderingAPIs.at(GDI)->Init();
+		s_ShaderLibs[GDI] = CreateScope<ShaderLibrary>();
 	}
 
 	void Renderer::BeginScene(OrtographicCamera& camera)

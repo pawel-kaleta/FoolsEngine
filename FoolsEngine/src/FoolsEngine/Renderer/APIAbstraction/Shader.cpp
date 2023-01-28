@@ -5,48 +5,77 @@
 
 namespace fe
 {
+    ShaderLibrary* ShaderLibrary::s_ActiveInstance = nullptr;
+
     Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
     {
-        switch (Renderer::GetAPItype())
+        switch (Renderer::GetGDItype())
         {
-        case RenderCommands::APItype::none:
-            FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "GDItype::none currently not supported!");
             return nullptr;
-        case RenderCommands::APItype::OpenGL:
+        case GDIType::OpenGL:
             return CreateScope<OpenGLShader>(name, vertexSource, fragmentSource);
         }
 
-        FE_CORE_ASSERT(false, "Unknown renderer API");
+        FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
 
     Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource)
     {
-        switch (Renderer::GetAPItype())
+        switch (Renderer::GetGDItype())
         {
-        case RenderCommands::APItype::none:
-            FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
             return nullptr;
-        case RenderCommands::APItype::OpenGL:
+        case GDIType::OpenGL:
             return CreateScope<OpenGLShader>(name, shaderSource);
         }
 
-        FE_CORE_ASSERT(false, "Unknown renderer API");
+        FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
 
     Scope<Shader> fe::Shader::Create(const std::string& filePath)
     {
-        switch (Renderer::GetAPItype())
+        switch (Renderer::GetGDItype())
         {
-        case RenderCommands::APItype::none:
-            FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
             return nullptr;
-        case RenderCommands::APItype::OpenGL:
+        case GDIType::OpenGL:
             return CreateScope<OpenGLShader>(filePath);
         }
 
-        FE_CORE_ASSERT(false, "Unknown renderer API");
+        FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
+
+
+    void ShaderLibrary::IAdd(const Ref<Shader>& shader)
+    {
+        const std::string& name = shader->GetName();
+        FE_CORE_ASSERT(!IExist(name), "Shader already in library!");
+        m_Shaders[name] = shader;
+    }
+
+    Ref<Shader> ShaderLibrary::ILoad(const std::string& filePath)
+    {
+        Ref<Shader> shader = Shader::Create(filePath);
+        IAdd(shader);
+        return shader;
+    }
+
+    bool ShaderLibrary::IExist(const std::string& name) const
+    {
+        return m_Shaders.find(name) != m_Shaders.end();
+    }
+
+    Ref<Shader> ShaderLibrary::IGet(const std::string& name)
+    {
+        FE_CORE_ASSERT(IExist(name), "Shader not found!");
+        return m_Shaders[name];
+    }
+
 }

@@ -5,17 +5,17 @@
 
 namespace fe
 {
-	Scope<RenderingContext> RenderingContext::Create(RenderCommands::APItype API, void* nativeWindow)
+	Scope<RenderingContext> RenderingContext::Create(GDIType GDI, void* nativeWindow)
 	{
-		switch (API)
+		switch (GDI)
 		{
-		case RenderCommands::APItype::none:
-			FE_CORE_ASSERT(false, "Cannot create API-less rendering context!");
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "Cannot create GDI-less rendering context!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLRenderingContext>((GLFWwindow*)nativeWindow);
 		default:
-			FE_ASSERT(false, "Unknown RendererAPI type!");
+			FE_ASSERT(false, "Unknown GDI type!");
 			return nullptr;
 		}
 	}

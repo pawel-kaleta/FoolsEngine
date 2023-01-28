@@ -3,9 +3,11 @@
 LayerExample::LayerExample()
 	: Layer("LayerExample"), m_Camera({ -1.6f, 1.6f, -0.9f, 0.9f })
 {
+	fe::ShaderLibrary::Load("assets/shaders/Flat_Color_Shader.glsl");
+
 	m_FlatColorMaterial.reset(
 		new fe::Material(
-			fe::Shader::Create("assets/shaders/Flat_Color_Shader.glsl"),
+			fe::ShaderLibrary::Get("Flat_Color_Shader"),
 			{
 				{"u_Color", fe::ShaderData::Type::Float4}
 			},
@@ -26,10 +28,11 @@ LayerExample::LayerExample()
 	glm::vec4 triangleColor = { 0.8f, 0.1f, 0.1f, 1.0f };
 	m_Triangle.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0], glm::value_ptr(triangleColor));
 
+	fe::ShaderLibrary::Load("assets/shaders/Basic_Texture_Shader.glsl");
 
 	m_TextureMaterial.reset(
 		new fe::Material(
-			fe::Shader::Create("assets/shaders/Basic_Texture_Shader.glsl"),
+			fe::ShaderLibrary::Get("Basic_Texture_Shader"),
 			{},
 			{
 				{ "u_Texture", fe::TextureType::Texture2D }

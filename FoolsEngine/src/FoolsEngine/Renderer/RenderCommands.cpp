@@ -7,26 +7,24 @@
 namespace fe
 {
 	RendererAPI* RenderCommands::s_RendererAPI = nullptr;
-	RenderCommands::APItype RenderCommands::s_APItype = RenderCommands::APItype::none;
 
-	Scope<RendererAPI> RenderCommands::CreateAPI(APItype API)
+	Scope<RendererAPI> RenderCommands::CreateAPI(GDIType GDI)
 	{
-		switch (API)
+		switch (GDI)
 		{
-		case RenderCommands::APItype::none:
-			FE_ASSERT(false, "RendererAPI type none!");
+		case GDIType::none:
+			FE_ASSERT(false, "Cannot create RendererAPI for GDIType::none!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLRendererAPI>();
 		default:
-			FE_ASSERT(false, "Unknown RendererAPI type!");
+			FE_ASSERT(false, "Unknown GDIType!");
 			return nullptr;
 		}
 	}
 
-	void RenderCommands::SetAPI(RendererAPI* rendererAPI, APItype API)
+	void RenderCommands::SetAPI(RendererAPI* rendererAPI)
 	{
 		s_RendererAPI = rendererAPI;
-		s_APItype = API;
 	}
 }

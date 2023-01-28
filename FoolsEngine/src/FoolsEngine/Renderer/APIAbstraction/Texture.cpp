@@ -10,16 +10,16 @@ namespace fe
 
 	Scope<Texture> Texture2D::Create(const std::string& filePath)
 	{
-		switch (Renderer::GetAPItype())
+		switch (Renderer::GetGDItype())
 		{
-		case RenderCommands::APItype::none:
-			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLTexture2D>(filePath);
 		}
 
-		FE_CORE_ASSERT(false, "Unknown renderer API");
+		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
 }

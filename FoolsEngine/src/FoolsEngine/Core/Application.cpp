@@ -15,7 +15,7 @@ namespace fe {
 		s_Instance = this;
 
 		m_Window = Window::Create();
-		m_Window->CreateRenderingContext(RenderCommands::APItype::OpenGL);
+		m_Window->CreateRenderingContext(GDIType::OpenGL);
 		m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, & m_MainEventDispacher, std::placeholders::_1));
 
 		m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
@@ -25,7 +25,7 @@ namespace fe {
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
 		Renderer::Init();
-		Renderer::SetAPI(RenderCommands::APItype::OpenGL);
+		Renderer::SetAPI(GDIType::OpenGL);
 	}
 
 	Application::~Application()

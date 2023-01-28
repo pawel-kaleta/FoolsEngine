@@ -9,6 +9,10 @@ workspace "FoolsEngine"
 
 	startproject "Sandbox"
 
+	flags {
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
 common_includedirs = {
 	"FoolsEngine/src",

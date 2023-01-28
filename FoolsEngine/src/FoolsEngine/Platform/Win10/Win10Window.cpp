@@ -28,25 +28,25 @@ namespace fe
 		ShutDown();
 	}
 
-	void Win10Window::CreateRenderingContext(RenderCommands::APItype API)
+	void Win10Window::CreateRenderingContext(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Creating rendering context");
 
-		if (m_RenderingContexts.count(API))
+		if (m_RenderingContexts.count(GDI))
 		{
-			FE_CORE_ASSERT(false, "Rendering context of this API was already created for this window!");
+			FE_CORE_ASSERT(false, "Rendering context of this GDI was already created for this window!");
 			return;
 		};
 
-		m_RenderingContexts[API] = RenderingContext::Create(RenderCommands::APItype::OpenGL, m_Window);
-		m_CurrentRenderingContext = m_RenderingContexts.at(API).get();
+		m_RenderingContexts[GDI] = RenderingContext::Create(GDIType::OpenGL, m_Window);
+		m_CurrentRenderingContext = m_RenderingContexts.at(GDI).get();
 		m_CurrentRenderingContext->Init();
 
 		SetVSync(true);
 	}
 
-	void Win10Window::MakeRenderingContextCurrent(RenderCommands::APItype API)
+	void Win10Window::MakeRenderingContextCurrent(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(false, "Multiple rendering contexts not yet supported. Context is being made current upon creation.");

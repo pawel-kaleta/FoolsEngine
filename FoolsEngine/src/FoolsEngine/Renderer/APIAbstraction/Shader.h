@@ -61,4 +61,25 @@ namespace fe
 
 	};
 
+	class ShaderLibrary
+	{
+	public:
+		inline static void Add(const Ref<Shader>& shader) { s_ActiveInstance->IAdd(shader); }
+		inline static Ref<Shader> Load(const std::string& filePath) { return s_ActiveInstance->ILoad(filePath); }
+
+		inline static bool Exist(const std::string& name) { return s_ActiveInstance->IExist(name); }
+		inline static Ref<Shader> Get(const std::string& name) { return s_ActiveInstance->IGet(name); }
+
+		inline static void SetActiveInstance(ShaderLibrary* shaderLib) { s_ActiveInstance = shaderLib; }
+
+		void IAdd(const Ref<Shader>& shader);
+		Ref<Shader> ILoad(const std::string& filePath);
+
+		bool IExist(const std::string& name) const;
+		Ref<Shader> IGet(const std::string& name);
+	
+	private:
+		static ShaderLibrary* s_ActiveInstance;
+		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
+	};
 }

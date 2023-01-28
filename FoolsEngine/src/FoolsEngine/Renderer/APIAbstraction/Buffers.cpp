@@ -85,32 +85,32 @@ namespace fe
 	Scope<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetAPItype())
+		switch (Renderer::GetGDItype())
 		{
-		case RenderCommands::APItype::none:
-			FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLVertexBuffer>(vertices, size);
 		}
 
-		FE_CORE_ASSERT(false, "Unknown renderer API");
+		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
 	
 	Scope<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetAPItype())
+		switch (Renderer::GetGDItype())
 		{
-		case RenderCommands::APItype::none:
-			FE_CORE_ASSERT(false, "Renderer::APItype::none currently not supported!");
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLIndexBuffer>(indices, count);
 		}
 
-		FE_CORE_ASSERT(false, "Unknown renderer API");
+		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
 

@@ -7,6 +7,9 @@ namespace fe {
 	class InputPolling
 	{
 	public:
+		InputPolling(const InputPolling&) = delete;
+		InputPolling& operator=(const InputPolling&) = delete;
+
 		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedNative(keycode); };
 
 		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedNative(button); };
@@ -15,6 +18,7 @@ namespace fe {
 		inline static float GetMouseY() { return s_Instance->GetMouseYNative(); };
 
 	protected:
+		InputPolling() = default;
 		virtual bool IsKeyPressedNative(int keycode) = 0;
 
 		virtual bool IsMouseButtonPressedNative(int button) = 0;

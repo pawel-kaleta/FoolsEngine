@@ -7,16 +7,16 @@ namespace fe
 {
 	Scope<VertexArray> VertexArray::Create()
 	{
-		switch (Renderer::GetAPItype())
+		switch (Renderer::GetGDItype())
 		{
-		case RenderCommands::APItype::none:
-			FE_CORE_ASSERT(false, "Renderer::RendererAPI::none currently not supported!");
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
-		case RenderCommands::APItype::OpenGL:
+		case GDIType::OpenGL:
 			return CreateScope<OpenGLVertexArray>();
 		}
 
-		FE_CORE_ASSERT(false, "Unknown renderer API");
+		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
 }
