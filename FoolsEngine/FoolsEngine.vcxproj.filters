@@ -135,6 +135,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h">
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\GDIType.h">
+      <Filter>FoolsEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\Material.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
@@ -150,7 +153,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\GDIType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

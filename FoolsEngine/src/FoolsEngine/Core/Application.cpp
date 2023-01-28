@@ -37,9 +37,7 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_TRACE("Application::OnEvent");
-		FE_LOG_CORE_TRACE(event->GetEventType());
 		FE_LOG_CORE_TRACE(event->GetName());
-		FE_LOG_CORE_TRACE(event->GetCategoryFlags());
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));

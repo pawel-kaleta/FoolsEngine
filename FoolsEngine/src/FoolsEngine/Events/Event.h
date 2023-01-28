@@ -25,7 +25,6 @@ namespace fe
 		// GetEventType()  - base Event class forces this implementation, also need a way to read type from unknown instance							   
 		// GetName()       - base Event class forces this implementation, also need a way to read name from unknown instance
 	
-
 		enum EventCategory
 		{
 			None        = 0,

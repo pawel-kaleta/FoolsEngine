@@ -35,9 +35,9 @@ namespace fe
 		FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
 
 		FE_LOG_CORE_INFO("Rendering platform info:");
-		FE_LOG_CORE_INFO("	Vendor:		{0}", glGetString(GL_VENDOR));
-		FE_LOG_CORE_INFO("	Renderer:	{0}", glGetString(GL_RENDERER));
-		FE_LOG_CORE_INFO("	Version:	{0}", glGetString(GL_VERSION));
+		FE_LOG_CORE_INFO("	Vendor:		{0}", (const char*)glGetString(GL_VENDOR));
+		FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
+		FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
 
 		// During init, enable debug output
 		glEnable(GL_DEBUG_OUTPUT);
