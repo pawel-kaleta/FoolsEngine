@@ -85,7 +85,7 @@ namespace fe
 	Scope<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetGDItype())
+		switch (Renderer::GetActiveGDItype())
 		{
 		case GDIType::none:
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
@@ -101,7 +101,7 @@ namespace fe
 	Scope<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetGDItype())
+		switch (Renderer::GetActiveGDItype())
 		{
 		case GDIType::none:
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");

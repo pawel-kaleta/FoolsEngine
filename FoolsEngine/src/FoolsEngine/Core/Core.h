@@ -1,6 +1,7 @@
 #pragma once
 
-#include<memory>
+#include <memory>
+#include <string>
 
 #ifdef FE_PLATFORM_WINDOWS
 #else
@@ -28,4 +29,7 @@ namespace fe
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	std::string FileNameFromFilepath(const std::string& filepath);
+	
 }

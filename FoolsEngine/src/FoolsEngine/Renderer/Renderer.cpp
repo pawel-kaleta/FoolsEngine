@@ -7,8 +7,7 @@ namespace fe
 {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 	GDIType Renderer::s_ActiveGDI = GDIType::none;
-	std::unordered_map<GDIType, Scope<RendererAPI>> Renderer::s_RenderingAPIs = std::unordered_map<GDIType, Scope<RendererAPI>>();
-	std::unordered_map<GDIType, Scope<ShaderLibrary>> Renderer::s_ShaderLibs = std::unordered_map<GDIType, Scope<ShaderLibrary>>();
+	std::unordered_map<GDIType, Renderer::GDIFixedSystems> Renderer::s_GDIFixedSystems = std::unordered_map<GDIType, Renderer::GDIFixedSystems>();
 
 	void Renderer::Init()
 	{
@@ -19,31 +18,79 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		if (!s_RenderingAPIs.count(GDI))
-		{
-			CreateAPI(GDI);
-		}
+		FE_CORE_ASSERT(s_GDIFixedSystems.find(GDI) != s_GDIFixedSystems.end(), "API not created!");
 		
 		s_ActiveGDI = GDI;
 
-		RenderCommands::SetAPI(s_RenderingAPIs.at(GDI).get());
-		ShaderLibrary::SetActiveInstance(s_ShaderLibs.at(GDI).get());
+		GDIFixedSystems& systems = s_GDIFixedSystems.at(GDI);
 
-		Texture::s_DefaultTexture = Texture2D::Create("assets/textures/Default_Texture.png");
+		RenderCommands::SetAPI(systems.RendererAPI.get());
+		ShaderLibrary::SetActiveInstance(systems.ShaderLib.get());
+		TextureLibrary::SetActiveInstance(systems.TextureLib.get());
+		MaterialLibrary::SetActiveInstance(systems.MaterialLib.get());
 	}
 
 	void Renderer::CreateAPI(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 
-		if (s_RenderingAPIs.count(GDI))
+		FE_CORE_ASSERT(s_GDIFixedSystems.find(GDI) == s_GDIFixedSystems.end(), "API already created!");
+		
+		GDIFixedSystems& systems = s_GDIFixedSystems[GDI];
+
+		systems.GDI = GDI;
+		systems.RendererAPI = RenderCommands::CreateAPI(GDI);
+		systems.ShaderLib.reset(new ShaderLibrary());
+		systems.TextureLib.reset(new TextureLibrary());
+		systems.MaterialLib.reset(new MaterialLibrary());
+	}
+
+	void Renderer::InitAPI(GDIType GDI)
+	{
+		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(s_GDIFixedSystems.find(GDI) != s_GDIFixedSystems.end(), "API not created!");
+
+		GDIFixedSystems& systems = s_GDIFixedSystems.at(GDI);
+
+		systems.RendererAPI->Init();
+
+		switch (GDI)
 		{
-			FE_CORE_ASSERT(false, "This RendererAPI is already created!");
-			return;
+		case GDIType::OpenGL:
+			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Flat_Color_Shader.glsl", GDI));
+			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Basic_Texture_Shader.glsl", GDI));
+			break;
 		}
-		s_RenderingAPIs[GDI] = RenderCommands::CreateAPI(GDI);
-		s_RenderingAPIs.at(GDI)->Init();
-		s_ShaderLibs[GDI] = CreateScope<ShaderLibrary>();
+
+		systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI));
+
+		systems.MaterialLib->IAdd(
+			Ref<Material>(
+				new Material(
+					"Flat_Color_Material",
+					systems.ShaderLib->IGet("Flat_Color_Shader"),
+					{
+						{ "u_Color", ShaderData::Type::Float4 }
+					},
+					{}
+				)
+			)
+		);
+
+		systems.MaterialLib->IAdd(
+			Ref<Material>(
+				new fe::Material(
+					"Basic_Texture_Material",
+					systems.ShaderLib->IGet("Basic_Texture_Shader"),
+					{},
+					{
+						{ "u_Texture", TextureType::Texture2D }
+					}
+				)
+			)
+		);
+
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -102,7 +149,7 @@ namespace fe
 				if (!texture.get())
 				{
 					FE_CORE_ASSERT(false, "Uninitialized texture!");
-					Texture::s_DefaultTexture->Bind(rendererTextureSlot++);
+					TextureLibrary::Get("Default_Texture")->Bind(rendererTextureSlot++);
 					continue;
 				}
 

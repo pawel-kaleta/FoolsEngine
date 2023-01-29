@@ -9,7 +9,12 @@ namespace fe
 
     Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
     {
-        switch (Renderer::GetGDItype())
+        return Create(name, vertexSource, fragmentSource, Renderer::GetActiveGDItype());
+    }
+
+    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
+    {
+        switch (GDI)
         {
         case GDIType::none:
             FE_CORE_ASSERT(false, "GDItype::none currently not supported!");
@@ -24,7 +29,12 @@ namespace fe
 
     Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource)
     {
-        switch (Renderer::GetGDItype())
+        return Create(name, shaderSource, Renderer::GetActiveGDItype());
+    }
+
+    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource, GDIType GDI)
+    {
+        switch (GDI)
         {
         case GDIType::none:
             FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
@@ -39,7 +49,12 @@ namespace fe
 
     Scope<Shader> fe::Shader::Create(const std::string& filePath)
     {
-        switch (Renderer::GetGDItype())
+        return Create(filePath, Renderer::GetActiveGDItype());
+    }
+
+    Scope<Shader> fe::Shader::Create(const std::string& filePath, GDIType GDI)
+    {
+        switch (GDI)
         {
         case GDIType::none:
             FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
@@ -53,7 +68,7 @@ namespace fe
     }
 
 
-    void ShaderLibrary::IAdd(const Ref<Shader>& shader)
+    void ShaderLibrary::IAdd(const Ref<Shader> shader)
     {
         const std::string& name = shader->GetName();
         FE_CORE_ASSERT(!IExist(name), "Shader already in library!");

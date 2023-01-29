@@ -6,7 +6,7 @@
 namespace fe
 {
 	OpenGLRenderingContext::OpenGLRenderingContext(GLFWwindow* window)
-		: m_Window(window)
+		: m_Window(window), m_GDI(GDIType::OpenGL)
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(window, "Window pointer is null during OpenGLContext construction!");
@@ -38,6 +38,13 @@ namespace fe
 		FE_LOG_CORE_INFO("	Vendor:		{0}", (const char*)glGetString(GL_VENDOR));
 		FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
 		FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
+
+		int versionMajor;
+		int versionMinor;
+		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+
+		FE_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Minimal required OpenGL version is 4.5!");
 
 		// During init, enable debug output
 		glEnable(GL_DEBUG_OUTPUT);

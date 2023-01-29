@@ -10,11 +10,12 @@ namespace fe
 	class Renderer
 	{
 	public:
-		inline const static GDIType GetGDItype() { return s_ActiveGDI; }
+		inline const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
 
 		static void Init();
 		static void SetAPI(GDIType GDI);
 		static void CreateAPI(GDIType GDI);
+		static void InitAPI(GDIType GDI);
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
@@ -33,10 +34,17 @@ namespace fe
 			glm::mat4 VPMatrix;
 		};
 
-		static Scope<SceneData> s_SceneData;
+		struct GDIFixedSystems
+		{
+			GDIType GDI;
+			Scope<RendererAPI> RendererAPI;
+			Scope<ShaderLibrary> ShaderLib;
+			Scope<TextureLibrary> TextureLib;
+			Scope<MaterialLibrary> MaterialLib;
+		};
 
+		static Scope<SceneData> s_SceneData;
 		static GDIType s_ActiveGDI;
-		static std::unordered_map<GDIType, Scope<RendererAPI>> s_RenderingAPIs;
-		static std::unordered_map<GDIType, Scope<ShaderLibrary>> s_ShaderLibs;
+		static std::unordered_map<GDIType, GDIFixedSystems> s_GDIFixedSystems;
 	};
 }

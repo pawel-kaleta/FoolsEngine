@@ -10,6 +10,8 @@ namespace fe
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath)
 		: m_FilePath(filePath), m_Format(0), m_InternalFormat(0)
 	{
+		m_Name = FileNameFromFilepath(filePath);
+
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
@@ -38,7 +40,6 @@ namespace fe
 		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		glTextureSubImage2D(m_ID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
-
 
 		stbi_image_free(data);
 	}

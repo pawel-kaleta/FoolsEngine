@@ -197,6 +197,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
+    <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />

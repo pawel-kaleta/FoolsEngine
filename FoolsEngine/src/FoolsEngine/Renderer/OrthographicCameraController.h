@@ -26,9 +26,10 @@ namespace fe
 		bool m_Rotation;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+		//in radians
 		float m_CameraRotation = 0.0f;
 		float m_CameraTranslationSpeed = 5.0f;
-		float m_CameraRotationSpeed = 180.0f;
+		float m_CameraRotationSpeed = 1.0f;
 
 		void OnMouseScrolled(Ref<Events::MouseScrolledEvent> event);
 		void OnWindowResized(Ref<Events::WindowResizeEvent> event);

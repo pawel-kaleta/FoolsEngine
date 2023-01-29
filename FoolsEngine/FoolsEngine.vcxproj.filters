@@ -245,5 +245,6 @@
       <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
   </ItemGroup>
 </Project>

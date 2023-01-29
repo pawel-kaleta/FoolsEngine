@@ -32,12 +32,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		// Extract name from filepath
-		auto lastSlash = filePath.find_last_of("/\\");
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = filePath.rfind('.');
-		auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
-		m_Name = filePath.substr(lastSlash, count);
+		m_Name = FileNameFromFilepath(filePath);
 
 		std::string shaderSource = ReadFile(filePath);
 		auto shaderSources = PreProcess(shaderSource);
@@ -216,11 +211,10 @@ namespace fe
 			FE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
 
 			size_t nextLinePos = shaderSource.find_first_not_of("\r\n", eol);
+			FE_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 			pos = shaderSource.find(typeToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = shaderSource.substr(
-				nextLinePos,
-				pos - (nextLinePos == std::string::npos ? shaderSource.size() - 1 : nextLinePos)
-			);
+
+			shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? shaderSource.substr(nextLinePos) : shaderSource.substr(nextLinePos, pos - nextLinePos);
 		}
 
 		return shaderSources;
@@ -303,7 +297,10 @@ namespace fe
 		}
 
 		for (int i = 0; i < shadersCount; i++)
+		{
 			glDetachShader(programID, shaders[i]);
+			glDeleteShader(shaders[i]);
+		}
 
 		m_ProgramID = programID;
 	}

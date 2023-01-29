@@ -10,12 +10,14 @@ namespace fe
 	{
 	public:
 		OpenGLRenderingContext(GLFWwindow* window);
-		virtual ~OpenGLRenderingContext() override {};
+		virtual ~OpenGLRenderingContext() override = default;
 
 		virtual void Init() override;
 		virtual void MakeCurrent() override;
 		virtual void SwapBuffers() override;
+		virtual const GDIType GetGDItype() const override { return m_GDI; }
 	private:
 		GLFWwindow* m_Window;
+		GDIType m_GDI;
 	};
 }

@@ -30,7 +30,7 @@ namespace fe
 
 		m_ViewMatrix = glm::inverse(transformationMatrix);
 
-		switch (Renderer::GetGDItype())
+		switch (Renderer::GetActiveGDItype())
 		{
 		case GDIType::OpenGL:
 			m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;

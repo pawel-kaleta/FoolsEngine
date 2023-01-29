@@ -7,6 +7,7 @@
 [submodule "FoolsEngine/externals/imgui"]
 	path = FoolsEngine/externals/imgui
 	url = https://github.com/ocornut/imgui
+	branch = docking
 [submodule "FoolsEngine/externals/glm"]
 	path = FoolsEngine/externals/glm
 	url = https://github.com/g-truc/glm

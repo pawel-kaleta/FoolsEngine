@@ -25,6 +25,8 @@ namespace fe {
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
 		Renderer::Init();
+		Renderer::CreateAPI(GDIType::OpenGL);
+		Renderer::InitAPI(GDIType::OpenGL);
 		Renderer::SetAPI(GDIType::OpenGL);
 	}
 

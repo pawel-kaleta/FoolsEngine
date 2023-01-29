@@ -13,18 +13,33 @@ namespace fe
 	{
 		auto dt = Time::DeltaTime();
 
-		m_CameraPosition.x += (InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A)) * m_CameraTranslationSpeed * dt;
-		m_CameraPosition.y += (InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S)) * m_CameraTranslationSpeed * dt;
-
-		m_Camera.SetPosition(m_CameraPosition);
-
 		if (m_Rotation)
 		{
+			int horizontalDir = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
+			m_CameraPosition.x += horizontalDir * cos(m_CameraRotation) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += horizontalDir * sin(m_CameraRotation) * m_CameraTranslationSpeed * dt;
+			
+			int verticalDir = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
+			m_CameraPosition.x += verticalDir * -sin(m_CameraRotation) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += verticalDir * cos(m_CameraRotation) * m_CameraTranslationSpeed * dt;
+
+
 			m_CameraRotation += (InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q)) * m_CameraRotationSpeed * dt;
+
+			if (m_CameraRotation > 180.0f)
+				m_CameraRotation -= 360.0f;
+			else if (m_CameraRotation <= -180.0f)
+				m_CameraRotation += 360.0f;
 
 			m_Camera.SetRotation(m_CameraRotation);
 		}
+		else
+		{
+			m_CameraPosition.x += (InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += (InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S)) * m_CameraTranslationSpeed * dt;
+		}
 
+		m_Camera.SetPosition(m_CameraPosition);
 		m_CameraTranslationSpeed = m_ZoomLevel;
 	}
 

@@ -7,7 +7,7 @@ namespace fe
 {
 	Scope<VertexArray> VertexArray::Create()
 	{
-		switch (Renderer::GetGDItype())
+		switch (Renderer::GetActiveGDItype())
 		{
 		case GDIType::none:
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");

@@ -1,19 +1,8 @@
 #include "LayerExample.h"
 
 LayerExample::LayerExample()
-	: Layer("LayerExample"), m_CameraController(1280.0f / 720.0f)
+	: Layer("LayerExample"), m_CameraController(1280.0f / 720.0f, true)
 {
-	fe::ShaderLibrary::Load("assets/shaders/Flat_Color_Shader.glsl");
-
-	m_FlatColorMaterial.reset(
-		new fe::Material(
-			fe::ShaderLibrary::Get("Flat_Color_Shader"),
-			{
-				{"u_Color", fe::ShaderData::Type::Float4}
-			},
-			{}
-		)
-	);
 	fe::BufferLayout triangleLayout = {
 		{ fe::ShaderData::Type::Float3, "a_Position" }
 	};
@@ -24,21 +13,13 @@ LayerExample::LayerExample()
 	};
 	uint32_t triangleIndecies[3] = { 0, 1, 2 };
 	RenderTestSetup(m_Triangle, triangleLayout, triangleVertices,  3 * 3, triangleIndecies,  3);
+
+	m_FlatColorMaterial = fe::MaterialLibrary::Get("Flat_Color_Material");
 	m_Triangle.MaterialInstance.reset(new fe::MaterialInstance(m_FlatColorMaterial));
 	glm::vec4 triangleColor = { 0.8f, 0.1f, 0.1f, 1.0f };
 	m_Triangle.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0], glm::value_ptr(triangleColor));
 
-	fe::ShaderLibrary::Load("assets/shaders/Basic_Texture_Shader.glsl");
 
-	m_TextureMaterial.reset(
-		new fe::Material(
-			fe::ShaderLibrary::Get("Basic_Texture_Shader"),
-			{},
-			{
-				{ "u_Texture", fe::TextureType::Texture2D }
-			}
-		)
-	);
 	fe::BufferLayout rectangleLayout = {
 		{ fe::ShaderData::Type::Float3, "a_Position" },
 		{ fe::ShaderData::Type::Float2, "a_TexCoord" }
@@ -51,8 +32,10 @@ LayerExample::LayerExample()
 	};
 	uint32_t rectangleIndecies[3*2] = { 0, 1, 2, 2, 3, 0 };
 	RenderTestSetup(m_Rectangle, rectangleLayout, rectangleVertices, 4 * (3+2), rectangleIndecies, 3*2);
+
+	m_TextureMaterial = fe::MaterialLibrary::Get("Basic_Texture_Material");
 	m_Rectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
-	m_Rectangle.MaterialInstance->SetTexture("u_Texture", fe::Texture2D::Create("assets/textures/Default_Texture.png"));
+	m_Rectangle.MaterialInstance->SetTexture(m_TextureMaterial->GetTextureSlots()[0], fe::TextureLibrary::Get("Default_Texture"));
 
 
 	float transparentRectangleVertices[4 * (3 + 2)] = {
@@ -63,8 +46,10 @@ LayerExample::LayerExample()
 	};
 	uint32_t transparentRectangleIndecies[3 * 2] = { 0, 1, 2, 2, 3, 0 };
 	RenderTestSetup(m_TransparentRectangle, rectangleLayout, transparentRectangleVertices, 4 * (3 + 2), transparentRectangleIndecies, 3 * 2);
+
 	m_TransparentRectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
-	m_TransparentRectangle.MaterialInstance->SetTexture("u_Texture", fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+	fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+	m_TransparentRectangle.MaterialInstance->SetTexture(m_TextureMaterial->GetTextureSlots()[0], fe::TextureLibrary::Get("Texture_with_Transparency"));
 }
 
 void LayerExample::OnUpdate()
@@ -80,7 +65,7 @@ void LayerExample::OnUpdate()
 	{
 		m_TrianglePosition.x -= m_TriangleSpeed * fe::Time::DeltaTime();
 	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
+	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
 	{
 		m_TrianglePosition.y += m_TriangleSpeed * fe::Time::DeltaTime();
 	}
