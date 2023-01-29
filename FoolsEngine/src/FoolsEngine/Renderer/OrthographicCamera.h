@@ -4,11 +4,13 @@
 
 namespace fe
 {
-	class OrtographicCamera
+	class OrthographicCamera
 	{
 	public:
 		//OrtographicCamera() = default;
-		OrtographicCamera(float left, float right, float bottom, float top);
+		OrthographicCamera(float left, float right, float bottom, float top);
+
+		void SetProjection(float left, float right, float bottom, float top);
 
 		void SetPosition(const glm::vec3& position) { m_Position = position; m_VMatrixInvalid = true; }
 		void SetRotation(const float& rotation) { m_Rotation = rotation; m_VMatrixInvalid = true; }

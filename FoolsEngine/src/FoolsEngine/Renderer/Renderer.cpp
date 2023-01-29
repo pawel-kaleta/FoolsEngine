@@ -46,12 +46,17 @@ namespace fe
 		s_ShaderLibs[GDI] = CreateScope<ShaderLibrary>();
 	}
 
-	void Renderer::BeginScene(OrtographicCamera& camera)
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		RenderCommands::SetViewport(0, 0, width, height);
+	}
+
+	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		FE_PROFILER_FUNC();
 		s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
-		fe::RenderCommands::Clear();
-		fe::RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
+		RenderCommands::Clear();
+		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 	}
 
 	void Renderer::EndScene()

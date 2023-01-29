@@ -42,7 +42,7 @@ namespace fe {
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(Application::OnKeyPressedEvent));
-
+		dispacher.Dispach<Events::WindowResizeEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowResize));
 	}
 
 	void Application::OnWindowCloseEvent(Ref<Events::WindowCloseEvent> event)
@@ -75,6 +75,19 @@ namespace fe {
 #endif // FE_INTERNAL_BUILD
 	}
 
+	void Application::OnWindowResize(Ref<Events::WindowResizeEvent> event)
+	{
+		event->Handled = true;
+		
+		if (event->GetWidth() == 0 || event->GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return;
+		}
+
+		m_Minimized = false;
+		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
+	}
 
 	void Application::Run()
 	{
@@ -97,8 +110,11 @@ namespace fe {
 			FE_LOG_CORE_TRACE("m_LastFrameTimeStep: {0}", m_LastFrameTimeStep.GetSeconds());
 			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
 
-			UpdateLayers();
-			UpdateImGui();
+			if (!m_Minimized)
+			{
+				UpdateLayers();
+				UpdateImGui();
+			}
 
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 			m_Window->OnUpdate();

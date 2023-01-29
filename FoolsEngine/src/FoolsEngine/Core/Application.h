@@ -8,7 +8,7 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
-#include "FoolsEngine\Renderer\OrtographicCamera.h"
+#include "FoolsEngine\Renderer\OrthographicCamera.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
 #include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"
@@ -57,6 +57,7 @@ namespace fe
 		void OnEvent(Ref<Events::Event> event);
 		void OnWindowCloseEvent(Ref<Events::WindowCloseEvent> event);
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
+		void OnWindowResize(Ref<Events::WindowResizeEvent> event);
 
 		Scope<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
@@ -64,6 +65,7 @@ namespace fe
 		Ref<ApplicationLayer> m_AppLayer;
 		Ref<ImGuiLayer> m_ImGuiLayer;
 		bool m_Running = true;
+		bool m_Minimized = false;
 
 		Time::TimePoint m_LastFrameTimePoint;
 		Time::TimeStep m_LastFrameTimeStep;
@@ -82,6 +84,6 @@ namespace fe
 
 	namespace Time
 	{
-		inline Time::TimeStep FrameStep() { return Application::Get().GetLastFrameTimeStep(); }
+		inline float DeltaTime() { return Application::Get().GetLastFrameTimeStep().GetSeconds(); }
 	}
 }

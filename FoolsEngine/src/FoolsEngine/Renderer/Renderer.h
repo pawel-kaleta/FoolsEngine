@@ -2,7 +2,7 @@
 
 #include "GDIType.h"
 #include "RenderCommands.h"
-#include "OrtographicCamera.h"
+#include "OrthographicCamera.h"
 #include "Material.h"
 
 namespace fe
@@ -16,7 +16,9 @@ namespace fe
 		static void SetAPI(GDIType GDI);
 		static void CreateAPI(GDIType GDI);
 
-		static void BeginScene(OrtographicCamera& camera);
+		static void OnWindowResize(uint32_t width, uint32_t height);
+
+		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
 		static void Submit(

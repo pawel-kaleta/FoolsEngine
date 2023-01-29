@@ -1,7 +1,7 @@
 #include "LayerExample.h"
 
 LayerExample::LayerExample()
-	: Layer("LayerExample"), m_Camera({ -1.6f, 1.6f, -0.9f, 0.9f })
+	: Layer("LayerExample"), m_CameraController(1280.0f / 720.0f)
 {
 	fe::ShaderLibrary::Load("assets/shaders/Flat_Color_Shader.glsl");
 
@@ -71,45 +71,29 @@ void LayerExample::OnUpdate()
 {
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
-	
+
 	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))
 	{
-		m_CameraPosition.x += m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
+		m_TrianglePosition.x += m_TriangleSpeed * fe::Time::DeltaTime();
 	}
 	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))
 	{
-		m_CameraPosition.x -= m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
+		m_TrianglePosition.x -= m_TriangleSpeed * fe::Time::DeltaTime();
 	}
 	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
 	{
-		m_CameraPosition.y += m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
+		m_TrianglePosition.y += m_TriangleSpeed * fe::Time::DeltaTime();
 	}
 	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))
 	{
-		m_CameraPosition.y -= m_CameraSpeed * fe::Time::FrameStep().GetSeconds();
+		m_TrianglePosition.y -= m_TriangleSpeed * fe::Time::DeltaTime();
 	}
 
-	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::D))
-	{
-		m_TrianglePosition.x += m_TriangleSpeed * fe::Time::FrameStep().GetSeconds();
-	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::A))
-	{
-		m_TrianglePosition.x -= m_TriangleSpeed * fe::Time::FrameStep().GetSeconds();
-	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::W))
-	{
-		m_TrianglePosition.y += m_TriangleSpeed * fe::Time::FrameStep().GetSeconds();
-	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::S))
-	{
-		m_TrianglePosition.y -= m_TriangleSpeed * fe::Time::FrameStep().GetSeconds();
-	}
-
-	m_Camera.SetPosition(m_CameraPosition);
 	m_Triangle.Transform = glm::translate(glm::mat4(1.0f), m_TrianglePosition);
 
-	fe::Renderer::BeginScene(m_Camera);
+	m_CameraController.OnUpdate();
+
+	fe::Renderer::BeginScene(m_CameraController.GetCamera());
 	{
 		FE_LOG_TRACE("RenderTestDraw");
 
@@ -131,6 +115,8 @@ void LayerExample::OnImGuiRender()
 void LayerExample::OnEvent(fe::Ref<fe::Events::Event> event)
 {
 	FE_LOG_TRACE("{0}", event);
+
+	m_CameraController.OnEvent(event);
 
 	fe::Events::EventDispacher dispacher(event);
 	dispacher.Dispach<fe::Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));

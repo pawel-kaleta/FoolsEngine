@@ -1,12 +1,12 @@
 #include "FE_pch.h"
-#include "OrtographicCamera.h"
+#include "OrthographicCamera.h"
 #include <glm\gtc\matrix_transform.hpp>
 
 #include "Renderer.h"
 
 namespace fe
 {
-	OrtographicCamera::OrtographicCamera(float left, float right, float bottom, float top)
+	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
 		: m_ViewMatrix(1.0f), m_VMatrixInvalid(false)
 	{
 		FE_PROFILER_FUNC();
@@ -14,7 +14,13 @@ namespace fe
 		RecalculateViewMatrix();
 	}
 
-	void fe::OrtographicCamera::RecalculateViewMatrix()
+	void OrthographicCamera::SetProjection(float left, float right, float bottom, float top)
+	{
+		m_ProjectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+		m_VMatrixInvalid = true;
+	}
+
+	void fe::OrthographicCamera::RecalculateViewMatrix()
 	{
 		FE_PROFILER_FUNC();
 		glm::mat4 transformationMatrix =

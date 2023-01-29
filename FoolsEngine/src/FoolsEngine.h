@@ -15,6 +15,7 @@
 #include "FoolsEngine\Core\InputPolling.h"
 #include "FoolsEngine\Renderer\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
+#include "FoolsEngine\Renderer\OrthographicCameraController.h"
 
 
 #ifdef FE_INTERNAL_BUILD
