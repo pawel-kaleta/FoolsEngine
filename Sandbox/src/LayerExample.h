@@ -27,7 +27,6 @@ private:
 	glm::vec3 m_TrianglePosition = { 0.0f, 0.0f, 0.0f };
 	float m_TriangleSpeed = 1.2f;
 	fe::Ref<fe::Material> m_FlatColorMaterial;
-	fe::Ref<fe::Material> m_TextureMaterial;
 
 	void RenderTestSetup(
 		Sprite& sprite,
@@ -36,6 +35,10 @@ private:
 		uint32_t* indecies, uint32_t indeciesNum);
 
 	Sprite m_Triangle;
-	Sprite m_Rectangle;
-	Sprite m_TransparentRectangle;
+
+	fe::Renderer2D::Quad m_QuadColor;
+	fe::Renderer2D::Quad m_QuadTexture;
+	fe::Renderer2D::Quad m_QuadTextureTint;
+	fe::Renderer2D::Quad m_QuadMaterial;
+
 };

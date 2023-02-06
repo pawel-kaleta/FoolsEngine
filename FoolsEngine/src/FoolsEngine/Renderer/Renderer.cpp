@@ -28,6 +28,7 @@ namespace fe
 		ShaderLibrary::SetActiveInstance(systems.ShaderLib.get());
 		TextureLibrary::SetActiveInstance(systems.TextureLib.get());
 		MaterialLibrary::SetActiveInstance(systems.MaterialLib.get());
+		Renderer2D::Init();
 	}
 
 	void Renderer::CreateAPI(GDIType GDI)
@@ -61,6 +62,8 @@ namespace fe
 			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Flat_Color_Shader.glsl", GDI));
 			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Basic_Texture_Shader.glsl", GDI));
 			break;
+		default:
+			FE_CORE_ASSERT(false, "Uknown GDIType!");
 		}
 
 		systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI));
@@ -90,7 +93,6 @@ namespace fe
 				)
 			)
 		);
-
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -111,21 +113,21 @@ namespace fe
 		FE_PROFILER_FUNC();
 	}
 
-	void Renderer::Submit(
+	void Renderer::Draw(
 		const Ref<VertexArray>& vertexArray,
 		const Ref<MaterialInstance>& materialInstance,
-		const glm::mat4& transform)
+		const glm::mat4& transform,
+		const glm::mat4& VPMatrix)
 	{
 		FE_PROFILER_FUNC();
 
-		// TO DO: adding into a queue for future collective draw at the end of main loop
 		const Ref<Shader>& shader = materialInstance->GetMaterial()->GetShader();
 
 		shader->Bind();
 
 		shader->UploadUniform(
 			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-			(void*)glm::value_ptr(s_SceneData->VPMatrix)
+			(void*)glm::value_ptr(VPMatrix)
 		);
 		shader->UploadUniform(
 			Uniform("u_Transform", ShaderData::Type::Mat4),
@@ -142,13 +144,13 @@ namespace fe
 			uint32_t rendererTextureSlot = 0;
 			auto shaderTextureSlotsIt = materialInstance->GetMaterial()->GetTextureSlots().begin();
 
-			for each (auto texture in materialInstance->GetTextures())
+			for (auto& texture : materialInstance->GetTextures())
 			{
 				shader->BindTextureSlot(*shaderTextureSlotsIt++, rendererTextureSlot);
-				//shader->UploadUniform(Uniform(textureSlotsIt++->GetName(), ShaderData::Type::Int), &);
+				
 				if (!texture.get())
 				{
-					FE_CORE_ASSERT(false, "Uninitialized texture!");
+					//FE_CORE_ASSERT(false, "Uninitialized texture!");
 					TextureLibrary::Get("Default_Texture")->Bind(rendererTextureSlot++);
 					continue;
 				}

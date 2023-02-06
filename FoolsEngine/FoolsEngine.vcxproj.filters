@@ -154,6 +154,7 @@
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCameraController.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -246,5 +247,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

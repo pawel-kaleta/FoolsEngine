@@ -8,7 +8,7 @@ class SandboxApp : public fe::Application
 public:
 	SandboxApp()
 	{
-		PushInnerLayer(std::make_shared<LayerExample>());
+		PushInnerLayer(fe::CreateScope<LayerExample>());
 	}
 
 	~SandboxApp()

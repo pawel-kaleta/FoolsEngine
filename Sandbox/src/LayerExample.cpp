@@ -20,73 +20,77 @@ LayerExample::LayerExample()
 	m_Triangle.MaterialInstance->SetUniformValue(m_FlatColorMaterial->GetUniforms()[0], glm::value_ptr(triangleColor));
 
 
-	fe::BufferLayout rectangleLayout = {
-		{ fe::ShaderData::Type::Float3, "a_Position" },
-		{ fe::ShaderData::Type::Float2, "a_TexCoord" }
-	};
-	float rectangleVertices[4 * (3+2)] = {
-		-0.6f, -0.6f, 0.0f,  0.0f, 0.0f,
-		 0.6f, -0.6f, 0.0f,  1.0f, 0.0f,
-		 0.6f,  0.6f, 0.0f,  1.0f, 1.0f,
-		-0.6f,  0.6f, 0.0f,  0.0f, 1.0f
-	};
-	uint32_t rectangleIndecies[3*2] = { 0, 1, 2, 2, 3, 0 };
-	RenderTestSetup(m_Rectangle, rectangleLayout, rectangleVertices, 4 * (3+2), rectangleIndecies, 3*2);
+	m_QuadColor.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+	m_QuadColor.Position = glm::vec2(-0.2f, -0.3f);
+	m_QuadColor.Size = glm::vec2(0.4f, 0.3f);
+	m_QuadColor.Layer = fe::Renderer2D::Layer::L_1;
 
-	m_TextureMaterial = fe::MaterialLibrary::Get("Basic_Texture_Material");
-	m_Rectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
-	m_Rectangle.MaterialInstance->SetTexture(m_TextureMaterial->GetTextureSlots()[0], fe::TextureLibrary::Get("Default_Texture"));
-
-
-	float transparentRectangleVertices[4 * (3 + 2)] = {
-		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-		 0.7f, -0.5f, 0.0f,  1.0f, 0.0f,
-		 0.7f,  0.7f, 0.0f,  1.0f, 1.0f,
-		-0.5f,  0.7f, 0.0f,  0.0f, 1.0f
-	};
-	uint32_t transparentRectangleIndecies[3 * 2] = { 0, 1, 2, 2, 3, 0 };
-	RenderTestSetup(m_TransparentRectangle, rectangleLayout, transparentRectangleVertices, 4 * (3 + 2), transparentRectangleIndecies, 3 * 2);
-
-	m_TransparentRectangle.MaterialInstance.reset(new fe::MaterialInstance(m_TextureMaterial));
 	fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-	m_TransparentRectangle.MaterialInstance->SetTexture(m_TextureMaterial->GetTextureSlots()[0], fe::TextureLibrary::Get("Texture_with_Transparency"));
+	m_QuadTexture.Texture(fe::TextureLibrary::Get("Texture_with_Transparency"));
+	m_QuadTexture.Position = glm::vec2(0.5f, -0.4f);
+	m_QuadTexture.Size = glm::vec2(0.6f, 0.5f);
+	m_QuadTexture.Layer = fe::Renderer2D::Layer::L0;
+
+	m_QuadTextureTint.Texture(fe::TextureLibrary::Get("Default_Texture"));
+	m_QuadTextureTint.Color = glm::vec4(0.8f, 0.8f, 1.0f, 0.4f);
+	m_QuadTextureTint.Position = glm::vec2(0.4f, 0.5f);
+	m_QuadTextureTint.Size = glm::vec2(0.8f, 0.9f);
+	m_QuadTextureTint.Layer = fe::Renderer2D::Layer::L0;
+	m_QuadTextureTint.TextureTilingFactor = 3;
+
+	fe::Ref<fe::MaterialInstance> MI;
+	MI.reset(new fe::MaterialInstance(fe::MaterialLibrary::Get("Basic_Texture_Material")));
+	m_QuadMaterial.Material(MI);
+	m_QuadMaterial.Size = glm::vec2(0.1f, 0.1f);
+	m_QuadMaterial.Layer = fe::Renderer2D::Layer::L0;
 }
 
 void LayerExample::OnUpdate()
 {
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
+	float dt = fe::Time::DeltaTime();
 
 	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))
 	{
-		m_TrianglePosition.x += m_TriangleSpeed * fe::Time::DeltaTime();
+		m_TrianglePosition.x += m_TriangleSpeed * dt;
+		m_QuadTexture.Position.x += m_TriangleSpeed * dt;
 	}
 	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))
 	{
-		m_TrianglePosition.x -= m_TriangleSpeed * fe::Time::DeltaTime();
+		m_TrianglePosition.x -= m_TriangleSpeed * dt;
+		m_QuadTexture.Position.x -= m_TriangleSpeed * dt;
 	}
 	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
 	{
-		m_TrianglePosition.y += m_TriangleSpeed * fe::Time::DeltaTime();
+		m_TrianglePosition.y += m_TriangleSpeed * dt;
+		m_QuadTexture.Position.y += m_TriangleSpeed * dt;
 	}
 	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))
 	{
-		m_TrianglePosition.y -= m_TriangleSpeed * fe::Time::DeltaTime();
+		m_TrianglePosition.y -= m_TriangleSpeed * dt;
+		m_QuadTexture.Position.y -= m_TriangleSpeed * dt;
 	}
 
 	m_Triangle.Transform = glm::translate(glm::mat4(1.0f), m_TrianglePosition);
 
 	m_CameraController.OnUpdate();
 
-	fe::Renderer::BeginScene(m_CameraController.GetCamera());
+	fe::Renderer2D::BeginScene(m_CameraController.GetCamera());
 	{
 		FE_LOG_TRACE("RenderTestDraw");
 
-		fe::Renderer::Submit(m_Rectangle.VertexArray, m_Rectangle.MaterialInstance, m_Rectangle.Transform);
-		fe::Renderer::Submit(m_TransparentRectangle.VertexArray, m_TransparentRectangle.MaterialInstance, m_TransparentRectangle.Transform);
-		fe::Renderer::Submit(m_Triangle.VertexArray, m_Triangle.MaterialInstance, m_Triangle.Transform);
+		fe::Renderer2D::DrawQuad(m_QuadColor);
+		fe::Renderer2D::DrawQuad(m_QuadTextureTint);
+		fe::Renderer2D::DrawQuad(m_QuadMaterial);
+		fe::Renderer2D::DrawQuad(m_QuadTexture);
+
 	}
-	fe::Renderer::EndScene();
+	fe::Renderer2D::EndScene();
+	
+	//fe::Renderer::BeginScene(m_CameraController.GetCamera());
+	//fe::Renderer::Draw(m_Triangle.VertexArray, m_Triangle.MaterialInstance, m_Triangle.Transform);
+	//fe::Renderer::EndScene();
 
 }
 

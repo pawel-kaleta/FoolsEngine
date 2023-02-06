@@ -4,6 +4,7 @@
 #include "RenderCommands.h"
 #include "OrthographicCamera.h"
 #include "Material.h"
+#include "Renderer2D.h"
 
 namespace fe
 {
@@ -13,6 +14,7 @@ namespace fe
 		inline const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
 
 		static void Init();
+		static void Shutdown() {}
 		static void SetAPI(GDIType GDI);
 		static void CreateAPI(GDIType GDI);
 		static void InitAPI(GDIType GDI);
@@ -22,10 +24,19 @@ namespace fe
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
-		static void Submit(
-			const std::shared_ptr<VertexArray>& vertexArray,
-			const std::shared_ptr<MaterialInstance>& materialInstance,
-			const glm::mat4& transform = glm::mat4(1.0f)
+		inline static void Draw(
+			const Ref<VertexArray>& vertexArray,
+			const Ref<MaterialInstance>& materialInstance,
+			const glm::mat4& transform)
+		{
+			Draw(vertexArray, materialInstance, transform, s_SceneData->VPMatrix);
+		}
+
+		static void Draw(
+			const Ref<VertexArray>& vertexArray,
+			const Ref<MaterialInstance>& materialInstance,
+			const glm::mat4& transform,
+			const glm::mat4& VPMatrix
 		);
 
 	private:

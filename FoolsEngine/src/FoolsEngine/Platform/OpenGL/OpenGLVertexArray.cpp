@@ -136,6 +136,6 @@ namespace fe
 #pragma warning(default : 4312)
 		}
 
-		
+		m_VertexBuffers.push_back(vertexBuffer);
 	}
 }

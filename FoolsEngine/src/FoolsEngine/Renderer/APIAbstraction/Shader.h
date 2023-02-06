@@ -30,6 +30,8 @@ namespace fe
 	class ShaderTextureSlot
 	{
 	public:
+		ShaderTextureSlot()
+			: m_Type(TextureType::None) {}
 		ShaderTextureSlot(const std::string& name, TextureType type)
 			: m_Name(name), m_Type(type) {}
 
