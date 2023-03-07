@@ -9,10 +9,10 @@ namespace fe
 	{
 		FE_LOG_CORE_INFO("OpenGLRendererAPI Initialization.");
 
+		glEnable(GL_DEPTH_TEST);
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		glEnable(GL_DEPTH_TEST);
 
 	}
 
@@ -34,7 +34,17 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		uint32_t indexCount = vertexArray->GetIndexBuffer()->GetCount();
+		DrawIndexed(vertexArray, indexCount);
+	}
+
+	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount)
+	{
+		FE_PROFILER_FUNC();
+
+		if (indexCount == 0)
+			return;
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

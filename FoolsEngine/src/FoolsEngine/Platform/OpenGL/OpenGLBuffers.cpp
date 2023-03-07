@@ -5,6 +5,16 @@
 
 namespace fe
 {
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+		: m_Size(size)
+	{
+		FE_PROFILER_FUNC();
+
+		glCreateBuffers(1, &m_ID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
+		glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 		: m_Size(size)
 	{
@@ -31,6 +41,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		FE_CORE_ASSERT(size <= m_Size, "Too much data for this VertexBuffer!");
+		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	uint32_t OpenGLVertexBuffer::GetSize() const

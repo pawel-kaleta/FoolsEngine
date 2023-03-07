@@ -49,5 +49,7 @@ namespace fe
 		void ShutDown();
 
 		static void GLFWErrorCallback(int error, const char* msg);
+		static uint16_t s_GLFWWindowCount;
+		static bool s_GLFWInitialized;
 	};
 }

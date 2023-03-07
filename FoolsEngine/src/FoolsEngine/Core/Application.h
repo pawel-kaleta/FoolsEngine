@@ -15,6 +15,8 @@
 
 #include "Time.h"
 
+int main(int argc, char** argv);
+
 namespace fe
 {
 	class ApplicationLayer : public Layer
@@ -38,7 +40,6 @@ namespace fe
 		Application();
 		virtual ~Application();
 
-		void Run();
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
@@ -52,6 +53,8 @@ namespace fe
 		void PopOuterLayer(Ref<Layer> layer) { m_LayerStack.PopOuterLayer(layer);	layer->OnDetach(); }
 
 	private:
+		friend int ::main(int argc, char** argv);
+		void Run();
 		void UpdateLayers();
 		void UpdateImGui();
 		void OnEvent(Ref<Events::Event> event);

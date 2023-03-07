@@ -5,25 +5,29 @@
 
 namespace fe
 {
+	void OpenGLMessageCallback(
+		GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam)
+	{
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:         FE_LOG_CORE_FATAL(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR(message); return;
+		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(message); return;
+		}
+	}
+
 	OpenGLRenderingContext::OpenGLRenderingContext(GLFWwindow* window)
 		: m_Window(window), m_GDI(GDIType::OpenGL)
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(window, "Window pointer is null during OpenGLContext construction!");
-	}
-
-	void GLAPIENTRY
-		MessageCallback(GLenum source,
-			GLenum type,
-			GLuint id,
-			GLenum severity,
-			GLsizei length,
-			const GLchar* message,
-			const void* userParam)
-	{
-		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-			type, severity, message);
 	}
 
 	void OpenGLRenderingContext::Init()
@@ -38,6 +42,7 @@ namespace fe
 		FE_LOG_CORE_INFO("	Vendor:		{0}", (const char*)glGetString(GL_VENDOR));
 		FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
 		FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
+		
 
 		int versionMajor;
 		int versionMinor;
@@ -46,9 +51,12 @@ namespace fe
 
 		FE_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Minimal required OpenGL version is 4.5!");
 
-		// During init, enable debug output
+#ifdef FE_INTERNAL_BUILD
 		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(MessageCallback, 0);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE); 
+#endif // FE_INTERNAL_BUILD
 
 		FE_LOG_CORE_INFO("OpenGL Rendering Context created.");
 	}

@@ -11,8 +11,8 @@
 
 namespace fe
 {
-	static bool s_GLFWInitialized = false;
-	// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
+	bool Win10Window::s_GLFWInitialized = false;
+	uint16_t Win10Window::s_GLFWWindowCount = 0;
 
 	Win10Window::Win10Window(const WindowAttributes& attr)
 	{
@@ -43,7 +43,7 @@ namespace fe
 		m_CurrentRenderingContext = m_RenderingContexts.at(GDI).get();
 		m_CurrentRenderingContext->Init();
 
-		SetVSync(true);
+		SetVSync(false);
 	}
 
 	void Win10Window::MakeRenderingContextCurrent(GDIType GDI)
@@ -98,6 +98,7 @@ namespace fe
 			FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
 
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
+			s_GLFWWindowCount++;
 		}		
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -213,9 +214,11 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("glfwDestroyWindow()");
 			glfwDestroyWindow(m_Window);
+			s_GLFWWindowCount--;
 		}
 
 		// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
+		if (s_GLFWWindowCount == 0)
 		{
 			FE_PROFILER_SCOPE("glfwTerminate()");
 			glfwTerminate();

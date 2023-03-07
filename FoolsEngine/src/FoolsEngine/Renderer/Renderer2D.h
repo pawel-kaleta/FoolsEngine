@@ -5,13 +5,19 @@
 
 namespace fe
 {
-
-
 	class Renderer2D
 	{
 	public:
 		enum Layer
 		{
+			L_9 = -9,
+			L_8 = -8,
+			L_7 = -7,
+			L_6 = -6,
+			L_5 = -5,
+			L_4 = -4,
+			L_3 = -3,
+			L_2 = -2,
 			L_1 = -1,
 			L0 = 0,
 			L1 = 1,
@@ -28,27 +34,16 @@ namespace fe
 		class Quad
 		{
 		public:
-			Layer Layer = Layer::L0;
+			Layer Layer        = Layer::L0;
 			glm::vec2 Position = { 0.0f, 0.0f };
-			glm::vec2 Size = { 1.0f, 1.0f };
+			glm::vec2 Size     = { 1.0f, 1.0f };
+			glm::vec4 Color    = { 1.0f, 1.0f, 1.0f, 1.0f };
+			//in degrees
+			float Rotation = 0.0f;
+			//for optimization, can be left default
+			bool Transparency = true;
 			float TextureTilingFactor = 1.0f;
-			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
-			//in degrees
-			void Rotation(float rotation) { m_Rotation = rotation; m_RotationActive = true; }
-			void RotationOFF() { m_RotationActive = false; }
-			void Texture(Ref<fe::Texture> texture) { m_Texture = texture; m_TextureActive = true; m_MaterialActive = false; }
-			void TextureOFF() { m_TextureActive = false; }
-			void Material(Ref<fe::MaterialInstance> materialInstance) { m_MaterialInstance = materialInstance; m_TextureActive = false; m_MaterialActive = true; }
-			void MaterialOFF() { m_MaterialActive = false; }
-		private:
-			friend Renderer2D;
-			bool m_RotationActive = false;
-			bool m_TextureActive = false;
-			bool m_MaterialActive = false;
-			//in degrees
-			float m_Rotation = 0.0f;
-			Ref<fe::Texture> m_Texture;
-			Ref<fe::MaterialInstance> m_MaterialInstance;
+			Ref<fe::Texture> Texture = TextureLibrary::Get("Base2DTexture");
 		};
 
 		static void Init();
@@ -58,31 +53,60 @@ namespace fe
 		static void EndScene();
 
 		static void DrawQuad(const Quad& quad);
-		//static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const uint32_t layer = 0);
-		//static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture> texture, const uint32_t layer = 0);
-		//static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<MaterialInstance> materialInstance, const uint32_t layer = 0);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<fe::Texture> texture);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<MaterialInstance> materialInstance);
 
 	private:
+		struct ConstLimits {
+			const static uint32_t QuadsInBatch = 10000;
+			const static uint32_t MaxVeritices = QuadsInBatch * 4;
+			const static uint32_t MaxIndices = QuadsInBatch * 6;
+			const static uint32_t RendererTextureSlotsCount = 32;
+			const static uint32_t LayersCount = 19;
+		};
+
+		struct QuadVertex
+		{
+			glm::vec3 Position;
+			glm::vec4 Color;
+			glm::vec2 TexCoord;
+			float TilingFactor;
+			uint32_t TextureSampler;
+		};
+		
+		using QuadVerticesBatch = std::array<QuadVertex, ConstLimits::MaxVeritices>;
+		//using QuadIndicesBatch  = ;
+
+		struct BatchData
+		{
+			Ref<QuadVerticesBatch> QuadVertices = CreateRef<QuadVerticesBatch>();
+			QuadVerticesBatch::iterator QuadVeriticesIt;
+			uint32_t QuadIndexCount = 0;
+
+			std::array<Ref<Texture>, ConstLimits::RendererTextureSlotsCount> Textures;
+			uint32_t TexturesCount = 1;
+		};
+
 		struct Renderer2DData
 		{
-			Ref<VertexArray> QuadVertexArray;
 			glm::mat4 VPMatrix;
 
-			std::vector<Quad> UniqueQuads;
+			Ref<VertexArray>  QuadVertexArray;
+			Ref<VertexBuffer> QuadVertexBuffer;
+
+			BatchData OpaqueBatch;
+			BatchData TransparentBatches[19];
 
 			Ref<Shader> BaseShader;
 			ShaderTextureSlot BaseShaderTextureSlot;
-			Ref<Texture> WhiteTexture;
-
-			Ref<MaterialInstance> FlatColorMaterialInstance;
-			Ref<MaterialInstance> BasicTextureMaterialInstance;
+			int32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 		};
 		
 		static Scope<Renderer2DData> s_Data;
 
-		static void DrawUniqueQuad(const Quad& quad);
+		static void BatchQuadDrawCall(const Quad& quad, BatchData& batch);
+		static void Flush(BatchData& batch, bool transparency);
+
+		static bool QuadsLayersCompare(int i, int j) { return (i < j); }
 	};
+
+
 }

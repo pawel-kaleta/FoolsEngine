@@ -159,7 +159,14 @@ namespace fe
 
 	}
 
-	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot)
+	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, int32_t* rendererTextureSlot, uint32_t count)
+	{
+
+		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
+		glUniform1iv(location, count, (GLint*)rendererTextureSlot);
+	}
+
+	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, int32_t rendererTextureSlot)
 	{
 		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
 		glUniform1i(location, rendererTextureSlot);
@@ -223,6 +230,7 @@ namespace fe
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		FE_PROFILER_FUNC();
+
 
 		FE_CORE_ASSERT(shaderSources.size() <= 2, "No support for more then 2 shaders!");
 

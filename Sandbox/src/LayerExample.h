@@ -28,17 +28,12 @@ private:
 	float m_TriangleSpeed = 1.2f;
 	fe::Ref<fe::Material> m_FlatColorMaterial;
 
-	void RenderTestSetup(
-		Sprite& sprite,
-		fe::BufferLayout& layout,
-		float* vertices, uint32_t verticesNum,
-		uint32_t* indecies, uint32_t indeciesNum);
+	void RenderTestSetup();
 
 	Sprite m_Triangle;
 
 	fe::Renderer2D::Quad m_QuadColor;
 	fe::Renderer2D::Quad m_QuadTexture;
 	fe::Renderer2D::Quad m_QuadTextureTint;
-	fe::Renderer2D::Quad m_QuadMaterial;
-
+	float m_QuadMoveSpeed = 1.1f;
 };
