@@ -34,9 +34,7 @@ int main(int argc, char** argv)
 	fe::Log::SetClientLoggingLevel(spdlog::level::debug);
 	fe::Log::SetCoreLoggingLevel(spdlog::level::debug);
 
-	//FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
 	app->Run();
-	//FE_PROFILER_SESSION_END();
 
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 	FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");

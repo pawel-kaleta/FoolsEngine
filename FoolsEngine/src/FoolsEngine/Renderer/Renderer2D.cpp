@@ -2,9 +2,13 @@
 #include "Renderer2D.h"
 #include "Renderer.h"
 
+#include <glad\glad.h>
+
 namespace fe
 {
 	Scope<Renderer2D::Renderer2DData> Renderer2D::s_Data = nullptr;
+	Renderer2D::RenderStats Renderer2D::s_Stats;
+	Time::TimePoint Renderer2D::m_RenderStartTimePoint;
 
 	void Renderer2D::Init()
 	{
@@ -82,6 +86,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		s_Stats.Quads = 0;
+		s_Stats.DrawCalls = 0;
+		m_RenderStartTimePoint = Time::Now();
+
 		s_Data->BaseShader->Bind();
 		s_Data->BaseShader->UploadUniform(
 			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
@@ -94,6 +102,8 @@ namespace fe
 		{
 			Flush(s_Data->TransparentBatches[i], true);
 		}
+
+		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
 	void Renderer2D::DrawQuad(const Quad& quad)
@@ -173,6 +183,9 @@ namespace fe
 
 	void Renderer2D::Flush(BatchData& batch, bool transparency)
 	{
+		if (batch.QuadIndexCount == 0)
+			return;
+
 		// propably C-style array would look cleaner here then std::array
 		uint32_t dataSize = (uint32_t)((uint8_t*)batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)batch.QuadVertices.get());
 
@@ -186,6 +199,9 @@ namespace fe
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(s_Data->QuadVertexArray, batch.QuadIndexCount);
+
+		s_Stats.Quads += batch.QuadIndexCount / 3 / 2;
+		s_Stats.DrawCalls++;
 	}
 
  }

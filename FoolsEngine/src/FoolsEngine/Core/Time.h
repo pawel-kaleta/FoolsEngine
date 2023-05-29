@@ -64,7 +64,8 @@ namespace fe
 		};
 	
 		TimePoint Now();
+
 		//defined in Application.h to avoid "include loop"
-		//inline TimeStep FrameStep();
+		//inline TimeStep DeltaTime();
 	}
 }

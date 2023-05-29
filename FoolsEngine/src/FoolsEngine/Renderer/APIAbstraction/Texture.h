@@ -23,6 +23,7 @@ namespace fe
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
 		virtual TextureType GetType() const = 0;
+		virtual uint32_t GetID() const = 0;
 
 		virtual const std::string& GetName() const = 0;
 	};

@@ -161,7 +161,6 @@ namespace fe
 
 	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, int32_t* rendererTextureSlot, uint32_t count)
 	{
-
 		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
 		glUniform1iv(location, count, (GLint*)rendererTextureSlot);
 	}

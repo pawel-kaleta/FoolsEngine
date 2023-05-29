@@ -155,6 +155,8 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -248,5 +250,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.cpp" />
   </ItemGroup>
 </Project>

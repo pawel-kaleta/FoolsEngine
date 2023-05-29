@@ -148,6 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -194,6 +196,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

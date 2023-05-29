@@ -19,7 +19,7 @@ namespace fe
 			m_CameraPosition.x += horizontalDir * cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
 			m_CameraPosition.y += horizontalDir * sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
 			
-			int verticalDir = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
+			int verticalDir = InputPolling::IsKeyPressed(InputCodes::S) - InputPolling::IsKeyPressed(InputCodes::W);
 			m_CameraPosition.x += verticalDir * -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
 			m_CameraPosition.y += verticalDir * cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
 

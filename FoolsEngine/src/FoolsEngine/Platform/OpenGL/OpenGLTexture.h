@@ -21,6 +21,7 @@ namespace fe
 		virtual void Bind(uint32_t slot = 0) const override;
 
 		virtual const std::string& GetName() const { return m_Name; }
+		virtual uint32_t GetID() const { return m_ID; }
 
 		inline const std::string& GetFilePath() const { return m_FilePath; }
 	private:

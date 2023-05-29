@@ -2,12 +2,21 @@
 #include "RenderCommands.h"
 #include "OrthographicCamera.h"
 #include "Material.h"
+#include "FoolsEngine\Core\Time.h"
 
 namespace fe
 {
+
 	class Renderer2D
 	{
 	public:
+		struct RenderStats
+		{
+			uint32_t Quads;
+			uint32_t DrawCalls;
+			Time::TimeStep RenderTime;
+		};
+
 		enum Layer
 		{
 			L_9 = -9,
@@ -54,6 +63,8 @@ namespace fe
 
 		static void DrawQuad(const Quad& quad);
 
+		inline static RenderStats GetStats() { return s_Stats; }
+
 	private:
 		struct ConstLimits {
 			const static uint32_t QuadsInBatch = 10000;
@@ -73,7 +84,6 @@ namespace fe
 		};
 		
 		using QuadVerticesBatch = std::array<QuadVertex, ConstLimits::MaxVeritices>;
-		//using QuadIndicesBatch  = ;
 
 		struct BatchData
 		{
@@ -105,7 +115,8 @@ namespace fe
 		static void BatchQuadDrawCall(const Quad& quad, BatchData& batch);
 		static void Flush(BatchData& batch, bool transparency);
 
-		static bool QuadsLayersCompare(int i, int j) { return (i < j); }
+		static RenderStats s_Stats;
+		static Time::TimePoint m_RenderStartTimePoint;
 	};
 
 

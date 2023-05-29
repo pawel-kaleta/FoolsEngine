@@ -4,6 +4,7 @@
 #include "RenderCommands.h"
 #include "OrthographicCamera.h"
 #include "Material.h"
+#include "APIAbstraction\Framebuffer.h"
 #include "Renderer2D.h"
 
 namespace fe
