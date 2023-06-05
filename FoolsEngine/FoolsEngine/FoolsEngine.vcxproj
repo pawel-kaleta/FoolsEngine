@@ -54,20 +54,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\Debug_windows_x86_64\FoolsEngine\</OutDir>
-    <IntDir>..\bin-int\Debug_windows_x86_64\FoolsEngine\</IntDir>
+    <OutDir>..\..\bin\Debug_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\..\bin-int\Debug_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\Release_windows_x86_64\FoolsEngine\</OutDir>
-    <IntDir>..\bin-int\Release_windows_x86_64\FoolsEngine\</IntDir>
+    <OutDir>..\..\bin\Release_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\..\bin-int\Release_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
-    <OutDir>..\bin\Publish_windows_x86_64\FoolsEngine\</OutDir>
-    <IntDir>..\bin-int\Publish_windows_x86_64\FoolsEngine\</IntDir>
+    <OutDir>..\..\bin\Publish_windows_x86_64\FoolsEngine\</OutDir>
+    <IntDir>..\..\bin-int\Publish_windows_x86_64\FoolsEngine\</IntDir>
     <TargetName>FoolsEngine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src;..\externals\spdlog\include;..\externals\glfw\include;..\externals\glad\include;..\externals\imgui;..\externals\glm;..\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src;..\externals\spdlog\include;..\externals\glfw\include;..\externals\glad\include;..\externals\imgui;..\externals\glm;..\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -126,7 +126,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src;..\externals\spdlog\include;..\externals\glfw\include;..\externals\glad\include;..\externals\imgui;..\externals\glm;..\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -148,103 +148,103 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\EntryPoint.h" />
-    <ClInclude Include="src\FE_pch.h" />
-    <ClInclude Include="src\FoolsEngine.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Application.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Core.h" />
-    <ClInclude Include="src\FoolsEngine\Core\InputCodes.h" />
-    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Layer.h" />
-    <ClInclude Include="src\FoolsEngine\Core\LayerStack.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Time.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Window.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\Asserts.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\Log.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\Profiler.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
-    <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\FoolsEngine\Events\Event.h" />
-    <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
-    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h" />
-    <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
-    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
-    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Texture.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\GDIType.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\Material.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCameraController.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h" />
+    <ClInclude Include="..\src\EntryPoint.h" />
+    <ClInclude Include="..\src\FE_pch.h" />
+    <ClInclude Include="..\src\FoolsEngine.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\Application.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\Core.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\InputCodes.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\InputPolling.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\Layer.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\LayerStack.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\Time.h" />
+    <ClInclude Include="..\src\FoolsEngine\Core\Window.h" />
+    <ClInclude Include="..\src\FoolsEngine\Debug\Asserts.h" />
+    <ClInclude Include="..\src\FoolsEngine\Debug\Log.h" />
+    <ClInclude Include="..\src\FoolsEngine\Debug\Profiler.h" />
+    <ClInclude Include="..\src\FoolsEngine\Debug\UnitTests.h" />
+    <ClInclude Include="..\src\FoolsEngine\Events\ApplicationEvent.h" />
+    <ClInclude Include="..\src\FoolsEngine\Events\Event.h" />
+    <ClInclude Include="..\src\FoolsEngine\Events\KeyEvent.h" />
+    <ClInclude Include="..\src\FoolsEngine\Events\MainEventDispacher.h" />
+    <ClInclude Include="..\src\FoolsEngine\Events\MouseEvent.h" />
+    <ClInclude Include="..\src\FoolsEngine\ImGui\ImGuiBackend.h" />
+    <ClInclude Include="..\src\FoolsEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
+    <ClInclude Include="..\src\FoolsEngine\Platform\Win10\Win10Window.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\Buffers.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\Shader.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\Texture.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\GDIType.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\Material.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\OrthographicCameraController.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\RenderCommands.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\Renderer.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\Renderer2D.h" />
+    <ClInclude Include="..\src\FoolsEngine\Renderer\ShaderData.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\FE_pch.cpp">
+    <ClCompile Include="..\src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />
-    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
-    <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
-    <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
-    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Shader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Texture.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCamera.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Core\Application.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Core\Core.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Core\LayerStack.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Core\Time.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Core\Window.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Debug\Log.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Debug\Profiler.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Debug\UnitTests.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Events\MainEventDispacher.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLBuffers.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLRenderingContext.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\Buffers.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\RendererAPI.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\RenderingContext.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\Shader.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\Texture.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\Material.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\RenderCommands.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="..\src\FoolsEngine\Renderer\ShaderData.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="externals\_projects_of_externals\glfw\glfw.vcxproj">
+    <ProjectReference Include="..\externals\_projects_of_externals\glfw\glfw.vcxproj">
       <Project>{9563977C-819A-980D-2A87-7E10169D140F}</Project>
     </ProjectReference>
-    <ProjectReference Include="externals\_projects_of_externals\glad\glad.vcxproj">
+    <ProjectReference Include="..\externals\_projects_of_externals\glad\glad.vcxproj">
       <Project>{DD62977C-C999-980D-7286-7E105E9C140F}</Project>
     </ProjectReference>
-    <ProjectReference Include="externals\_projects_of_externals\imgui\imgui.vcxproj">
+    <ProjectReference Include="..\externals\_projects_of_externals\imgui\imgui.vcxproj">
       <Project>{0098A80F-6CAC-D0C0-352E-7420A101CDF1}</Project>
     </ProjectReference>
-    <ProjectReference Include="externals\_projects_of_externals\stb\stb.vcxproj">
+    <ProjectReference Include="..\externals\_projects_of_externals\stb\stb.vcxproj">
       <Project>{6EAB880B-DAB4-887C-6330-9F7CCF38947C}</Project>
     </ProjectReference>
   </ItemGroup>

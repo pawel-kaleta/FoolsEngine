@@ -25,6 +25,4 @@ private:
 	fe::Renderer2D::Quad m_QuadTexture;
 	fe::Renderer2D::Quad m_QuadTextureTint;
 	float m_QuadMoveSpeed = 1.1f;
-
-	fe::Ref<fe::Framebuffer> m_Framebuffer;
 };

@@ -9,8 +9,9 @@ namespace fe
         OpenGLFramebuffer(const FramebufferSpecification& spec);
         virtual ~OpenGLFramebuffer() override;
 
-        void Recreate(const FramebufferSpecification& spec);
-        void Recreate();
+        virtual void Recreate(const FramebufferSpecification& spec) override;
+        virtual void Recreate() override;
+        virtual void Resize(uint32_t width, uint32_t height) override;
                 
         virtual void Bind() override;
         virtual void Unbind() override;
@@ -23,6 +24,9 @@ namespace fe
         uint32_t m_ID;
         uint32_t m_ColorAttachment, m_DepthAttachment;
         FramebufferSpecification m_Specification;
+
+        void Create();
+        void Delete();
     };
 
 

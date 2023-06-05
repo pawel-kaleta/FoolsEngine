@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug_windows_x86_64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Debug_windows_x86_64\Sandbox\</IntDir>
+    <OutDir>..\..\bin\Debug_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\..\bin-int\Debug_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release_windows_x86_64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Release_windows_x86_64\Sandbox\</IntDir>
+    <OutDir>..\..\bin\Release_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\..\bin-int\Release_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Publish_windows_x86_64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Publish_windows_x86_64\Sandbox\</IntDir>
+    <OutDir>..\..\bin\Publish_windows_x86_64\Sandbox\</OutDir>
+    <IntDir>..\..\bin-int\Publish_windows_x86_64\Sandbox\</IntDir>
     <TargetName>Sandbox</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\FoolsEngine\src;..\..\FoolsEngine\externals\spdlog\include;..\..\FoolsEngine\externals\glfw\include;..\..\FoolsEngine\externals\glad\include;..\..\FoolsEngine\externals\imgui;..\..\FoolsEngine\externals\glm;..\..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\FoolsEngine\src;..\..\FoolsEngine\externals\spdlog\include;..\..\FoolsEngine\externals\glfw\include;..\..\FoolsEngine\externals\glad\include;..\..\FoolsEngine\externals\imgui;..\..\FoolsEngine\externals\glm;..\..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -122,7 +122,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\FoolsEngine\src;..\..\FoolsEngine\externals\spdlog\include;..\..\FoolsEngine\externals\glfw\include;..\..\FoolsEngine\externals\glad\include;..\..\FoolsEngine\externals\imgui;..\..\FoolsEngine\externals\glm;..\..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -142,19 +142,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\LayerExample.h" />
+    <ClInclude Include="..\src\LayerExample.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\LayerExample.cpp" />
-    <ClCompile Include="src\SandboxApp.cpp" />
+    <ClCompile Include="..\src\LayerExample.cpp" />
+    <ClCompile Include="..\src\SandboxApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">
+    <ProjectReference Include="..\..\FoolsEngine\FoolsEngine\FoolsEngine.vcxproj">
       <Project>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\Base2DShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

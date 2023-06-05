@@ -12,7 +12,7 @@
 namespace fe {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer"), m_ShowDemo(false)
+		: Layer("ImGuiLayer")
 	{
 		FE_PROFILER_FUNC();
 	}
@@ -62,23 +62,15 @@ namespace fe {
 
 	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
 	{
-		Events::EventDispacher dispacher(event);
-		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(ImGuiLayer::OnKeyPressedEvent));
+		ImGuiIO& io = ImGui::GetIO();
+		event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;
+		event->Handled |= event->IsInCategory(Events::Keyboard) & io.WantCaptureKeyboard;
 	}
 
-	void ImGuiLayer::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
-	{
-		if (event->GetKeyCode() == InputCodes::I)
-		{
-			m_ShowDemo = !m_ShowDemo;
-			event->Owned = true;
-		}
-	}
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		if(m_ShowDemo)
-			ImGui::ShowDemoWindow();
+		
 	}
 
 	void ImGuiLayer::Begin()

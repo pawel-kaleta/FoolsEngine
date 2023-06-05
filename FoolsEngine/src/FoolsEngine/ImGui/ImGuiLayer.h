@@ -21,7 +21,6 @@ namespace fe {
 		virtual void OnDetach() override;
 
 		virtual void OnEvent(Ref<Events::Event> event) override;
-		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 
 		virtual void OnImGuiRender() override;
 
@@ -29,6 +28,5 @@ namespace fe {
 		void End();
 	private:
 		float m_Time = 0.0f;
-		bool m_ShowDemo = false;
 	};
 }
