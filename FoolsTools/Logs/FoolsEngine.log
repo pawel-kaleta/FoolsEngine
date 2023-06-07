@@ -1,82 +1,82 @@
-23:42:45:415093 | FE  | info     | Logging innitialized!
-23:42:45:416157 | App | info     | Logging innitialized!
-23:42:45:416283 | FE  | debug    | ////////////////////////////////////////////////////////
-23:42:45:416412 | FE  | debug    | ////////////////////// UNIT TESTS //////////////////////
-23:42:45:416584 | FE  | debug    | ////////////////////////////////////////////////////////
-23:42:45:416686 | FE  | debug    | ----------------------Logging tests---------------------
-23:42:45:416790 | FE  | info     | Logging level set to 0 - all.
-23:42:45:416895 | App | info     | Logging level set to 0 - all.
-23:42:45:416997 | FE  | critical | Fatal test
-23:42:45:417098 | App | critical | Fatal test
-23:42:45:417227 | FE  | error    | Error test
-23:42:45:417328 | App | error    | Error test
-23:42:45:417430 | FE  | warning  | Warn test
-23:42:45:417532 | App | warning  | Warn test
-23:42:45:417629 | FE  | info     | Info test
-23:42:45:417702 | App | info     | Info test
-23:42:45:417787 | FE  | debug    | Debug test
-23:42:45:417874 | App | debug    | Debug test
-23:42:45:417947 | FE  | trace    | Trace test
-23:42:45:418099 | App | trace    | Trace test
-23:42:45:418181 | FE  | info     | Logging level set to 5 - fatal error or higher.
-23:42:45:418312 | FE  | error    | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
-23:42:45:418429 | App | info     | Logging level set to 4 - error or higher.
-23:42:45:418518 | App | error    | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
-23:42:45:418649 | FE  | info     | Logging level set to 1 - debug or higher.
-23:42:45:418756 | App | info     | Logging level set to 1 - debug or higher.
-23:42:45:418853 | FE  | debug    | ////////////////////////////////////////////////////////
-23:42:45:418944 | FE  | debug    | ---------------------Profiler tests---------------------
-23:42:45:419339 | FE  | info     | Profiler session 'TEST' started.
-23:42:45:419438 | FE  | info     | Profiler Start Session: PASSED
-23:42:45:419527 | FE  | info     | Profiler Scope Function Begin: PASSED
-23:42:45:496422 | FE  | info     | Profiler Timer Stop: PASSED
-23:42:45:496827 | FE  | info     | Profiler Scope Name Begin: PASSED
-23:42:46:614729 | FE  | info     | Profiler session 'TEST' closed.
-23:42:46:615025 | FE  | info     | Profiler End Session: PASSED
-23:42:46:615457 | FE  | info     | Profiler: PASSED
-23:42:46:615777 | FE  | debug    | ////////////////////////////////////////////////////////
-23:42:46:616421 | FE  | debug    | --------------------Assertion Tests--------------------
-23:42:46:616761 | FE  | info     | Skipping core assertion testing due to core assertion break enabled.
-23:42:46:617077 | FE  | info     | Skipping assertion testing due to assertion break enabled.
-23:42:46:617431 | FE  | debug    | ////////////////////////////////////////////////////////
-23:42:46:617745 | FE  | info     | /////////////////////////////////////////////////////
-23:42:46:618201 | FE  | info     | ////////////////////// STARTUP //////////////////////
-23:42:46:618628 | FE  | info     | /////////////////////////////////////////////////////
-23:42:46:618971 | App | info     | Logging level set to 0 - all.
-23:42:46:619280 | FE  | info     | Logging level set to 0 - all.
-23:42:46:619769 | FE  | info     | Profiler session 'Startup' started.
-23:42:46:620138 | FE  | info     | Initializing GLFW
-23:42:46:653340 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
-23:42:46:826019 | FE  | debug    | Setting events callbacks for window.
-23:42:46:826201 | FE  | info     | Events callbacks for Win10Window setted up.
-23:42:46:827403 | FE  | info     | Creating rendering context
-23:42:46:830666 | FE  | info     | Rendering platform info:
-23:42:46:830784 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-23:42:46:831117 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-23:42:46:832000 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.5.1.230512
-23:42:46:832440 | FE  | info     | OpenGL Rendering Context created.
-23:42:46:832839 | FE  | info     | VSync disabled.
-23:42:46:833263 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-23:42:46:833505 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-23:42:46:834585 | FE  | debug    | OpenGLRendererAPI creation!
-23:42:46:836087 | FE  | info     | OpenGLRendererAPI Initialization.
-23:42:46:895516 | FE  | info     | Channels: 3
-23:42:46:912351 | FE  | info     | Channels: 4
-23:42:46:912558 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-23:42:46:913460 | FE  | info     | Profiler session 'Startup' closed.
-23:42:46:913717 | FE  | info     | /////////////////////////////////////////////////////
-23:42:46:914203 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-23:42:46:914690 | FE  | info     | /////////////////////////////////////////////////////
-23:42:46:915167 | App | info     | Logging level set to 1 - debug or higher.
-23:42:46:915728 | FE  | info     | Logging level set to 1 - debug or higher.
-23:42:46:916485 | FE  | info     | Profiler session 'Runtime' started.
-23:42:46:992015 | FE  | info     | Profiler session 'Runtime' closed.
-23:42:49:241644 | FE  | info     | Window Close Event
-23:42:49:242596 | FE  | info     | /////////////////////////////////////////////////////
-23:42:49:243329 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-23:42:49:244009 | FE  | info     | /////////////////////////////////////////////////////
-23:42:49:244541 | App | info     | Logging level set to 0 - all.
-23:42:49:245045 | FE  | info     | Logging level set to 0 - all.
-23:42:49:245648 | FE  | info     | Profiler session 'Shutdown' started.
-23:42:49:246576 | FE  | info     | Closing Window.
-23:42:49:297304 | FE  | info     | Profiler session 'Shutdown' closed.
+00:03:32:978071 | FE  | info     | Logging innitialized!
+00:03:32:979169 | App | info     | Logging innitialized!
+00:03:32:979271 | FE  | debug    | ////////////////////////////////////////////////////////
+00:03:32:979372 | FE  | debug    | ////////////////////// UNIT TESTS //////////////////////
+00:03:32:979467 | FE  | debug    | ////////////////////////////////////////////////////////
+00:03:32:979565 | FE  | debug    | ----------------------Logging tests---------------------
+00:03:32:979706 | FE  | info     | Logging level set to 0 - all.
+00:03:32:979805 | App | info     | Logging level set to 0 - all.
+00:03:32:979883 | FE  | critical | Fatal test
+00:03:32:979963 | App | critical | Fatal test
+00:03:32:980037 | FE  | error    | Error test
+00:03:32:980111 | App | error    | Error test
+00:03:32:980186 | FE  | warning  | Warn test
+00:03:32:980259 | App | warning  | Warn test
+00:03:32:980331 | FE  | info     | Info test
+00:03:32:980403 | App | info     | Info test
+00:03:32:980474 | FE  | debug    | Debug test
+00:03:32:980545 | App | debug    | Debug test
+00:03:32:980616 | FE  | trace    | Trace test
+00:03:32:980687 | App | trace    | Trace test
+00:03:32:980760 | FE  | info     | Logging level set to 5 - fatal error or higher.
+00:03:32:980874 | FE  | error    | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=10
+00:03:32:980971 | App | info     | Logging level set to 4 - error or higher.
+00:03:32:981061 | App | error    | Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl=11
+00:03:32:981158 | FE  | info     | Logging level set to 1 - debug or higher.
+00:03:32:981260 | App | info     | Logging level set to 1 - debug or higher.
+00:03:32:981351 | FE  | debug    | ////////////////////////////////////////////////////////
+00:03:32:981476 | FE  | debug    | ---------------------Profiler tests---------------------
+00:03:32:981894 | FE  | info     | Profiler session 'TEST' started.
+00:03:32:982000 | FE  | info     | Profiler Start Session: PASSED
+00:03:32:982098 | FE  | info     | Profiler Scope Function Begin: PASSED
+00:03:33:057699 | FE  | info     | Profiler Timer Stop: PASSED
+00:03:33:057940 | FE  | info     | Profiler Scope Name Begin: PASSED
+00:03:34:236733 | FE  | info     | Profiler session 'TEST' closed.
+00:03:34:236981 | FE  | info     | Profiler End Session: PASSED
+00:03:34:237436 | FE  | info     | Profiler: PASSED
+00:03:34:237763 | FE  | debug    | ////////////////////////////////////////////////////////
+00:03:34:238064 | FE  | debug    | --------------------Assertion Tests--------------------
+00:03:34:238369 | FE  | info     | Skipping core assertion testing due to core assertion break enabled.
+00:03:34:238694 | FE  | info     | Skipping assertion testing due to assertion break enabled.
+00:03:34:239008 | FE  | debug    | ////////////////////////////////////////////////////////
+00:03:34:239323 | FE  | info     | /////////////////////////////////////////////////////
+00:03:34:239672 | FE  | info     | ////////////////////// STARTUP //////////////////////
+00:03:34:240085 | FE  | info     | /////////////////////////////////////////////////////
+00:03:34:240482 | App | info     | Logging level set to 0 - all.
+00:03:34:240787 | FE  | info     | Logging level set to 0 - all.
+00:03:34:241259 | FE  | info     | Profiler session 'Startup' started.
+00:03:34:241584 | FE  | info     | Initializing GLFW
+00:03:34:274635 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
+00:03:34:400908 | FE  | debug    | Setting events callbacks for window.
+00:03:34:401168 | FE  | info     | Events callbacks for Win10Window setted up.
+00:03:34:402345 | FE  | info     | Creating rendering context
+00:03:34:405466 | FE  | info     | Rendering platform info:
+00:03:34:405576 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+00:03:34:407024 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+00:03:34:407772 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.5.1.230512
+00:03:34:408137 | FE  | info     | OpenGL Rendering Context created.
+00:03:34:408540 | FE  | info     | VSync disabled.
+00:03:34:408921 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+00:03:34:409179 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+00:03:34:409845 | FE  | debug    | OpenGLRendererAPI creation!
+00:03:34:410004 | FE  | info     | OpenGLRendererAPI Initialization.
+00:03:34:468672 | FE  | info     | Channels: 3
+00:03:34:480565 | FE  | info     | Channels: 4
+00:03:34:480715 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+00:03:34:481298 | FE  | info     | Profiler session 'Startup' closed.
+00:03:34:481394 | FE  | info     | /////////////////////////////////////////////////////
+00:03:34:481720 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+00:03:34:482041 | FE  | info     | /////////////////////////////////////////////////////
+00:03:34:482354 | App | info     | Logging level set to 1 - debug or higher.
+00:03:34:482673 | FE  | info     | Logging level set to 1 - debug or higher.
+00:03:34:483147 | FE  | info     | Profiler session 'Runtime' started.
+00:03:34:551897 | FE  | info     | Profiler session 'Runtime' closed.
+00:03:37:753849 | FE  | info     | Window Close Event
+00:03:37:754236 | FE  | info     | /////////////////////////////////////////////////////
+00:03:37:754873 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+00:03:37:755182 | FE  | info     | /////////////////////////////////////////////////////
+00:03:37:755499 | App | info     | Logging level set to 0 - all.
+00:03:37:755811 | FE  | info     | Logging level set to 0 - all.
+00:03:37:756325 | FE  | info     | Profiler session 'Shutdown' started.
+00:03:37:756962 | FE  | info     | Closing Window.
+00:03:37:777954 | FE  | info     | Profiler session 'Shutdown' closed.

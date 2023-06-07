@@ -154,28 +154,3 @@ project "stb"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
-
-project "entt"
-	location "_projects_of_externals/entt"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++17"
-
-	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
-	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
-
-	files {
-		"%{prj.name}/single_include/entt/**.hpp"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-		staticruntime "on"
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"

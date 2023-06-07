@@ -18,13 +18,6 @@ project "FoolsEngine"
 	}
 
 	includedirs	{
-		--"src",
-		--"externals/spdlog/include",
-		--"externals/glfw/include",
-		--"externals/glad/include",
-		--"externals/imgui",
-		--"externals/glm",
-		--"externals/stb"
 		common_includedirs
 	}
 

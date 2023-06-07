@@ -1,5 +1,7 @@
 #include "FE_pch.h"
 
+#include <entt.hpp>
+
 namespace fe
 {
 	std::string FileNameFromFilepath(const std::string& filepath)
@@ -10,4 +12,7 @@ namespace fe
 		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
 		return filepath.substr(lastSlash, count);
 	}
+
+	//entt test
+	entt::registry registry;
 }

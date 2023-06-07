@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <iostream>
 #include <fstream>
 
@@ -20,6 +21,8 @@
 #include <unordered_set>
 
 #ifdef FE_PLATFORM_WINDOWS
+	#define NOMINMAX
+	// max() macro collides with entt library
 	#include <Windows.h>
 #endif
 

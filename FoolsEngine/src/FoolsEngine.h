@@ -23,6 +23,7 @@
 #include "FoolsEngine\Debug\UnitTests.h"
 #endif // INTERNAL_BUILD
 
+#include <entt.hpp>
 
 //---------Entry Point---------
 //#include "FoolsEngine\Core\EntryPoint.h"
