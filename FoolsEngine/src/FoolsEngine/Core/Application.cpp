@@ -7,14 +7,15 @@ namespace fe {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
+		: m_Name(name)
 	{
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!")
 		s_Instance = this;
 
-		m_Window = Window::Create();
+		m_Window = Window::Create(m_Name);
 		m_Window->CreateRenderingContext(GDIType::OpenGL);
 		m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, & m_MainEventDispacher, std::placeholders::_1));
 

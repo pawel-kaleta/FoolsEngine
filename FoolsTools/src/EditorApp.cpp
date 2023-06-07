@@ -8,9 +8,10 @@ namespace fe
 	class EditorApp : public Application
 	{
 	public:
-		EditorApp()
+		EditorApp(const std::string& name)
+			: Application(name)
 		{
-			PushInnerLayer(CreateScope<EditorLayer>());
+			PushOuterLayer(CreateScope<EditorLayer>());
 		}
 
 		~EditorApp()
@@ -22,6 +23,6 @@ namespace fe
 
 	Application* CreateApplication()
 	{
-		return new EditorApp();
+		return new EditorApp("FoolsTools - FoolsEngine Editor");
 	}
 }

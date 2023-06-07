@@ -50,6 +50,12 @@ namespace fe
 		dispacher.Dispach<Events::WindowResizeEvent>(FE_BIND_EVENT_HANDLER(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::Resize(float width, float hight)
+	{
+		m_AspectRatio = width / hight;
+		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	}
+
 	void OrthographicCameraController::OnMouseScrolled(Ref<Events::MouseScrolledEvent> event)
 	{
 		m_ZoomLevel -= event->GetOffsetY() * 0.25f;
@@ -61,8 +67,7 @@ namespace fe
 
 	void OrthographicCameraController::OnWindowResized(Ref<Events::WindowResizeEvent> event)
 	{
-		m_AspectRatio = (float)event->GetWidth() / (float)event->GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		Resize((float)event->GetWidth(), (float)event->GetHeight());
 
 		event->Handled = true;
 	}

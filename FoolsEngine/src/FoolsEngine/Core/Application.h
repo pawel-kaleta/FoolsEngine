@@ -37,7 +37,7 @@ namespace fe
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Fools Engine Application");
 		virtual ~Application();
 
 		inline void Close() { m_Running = false; }
@@ -45,6 +45,7 @@ namespace fe
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 		inline Time::TimeStep GetLastFrameTimeStep() { return m_LastFrameTimeStep; }
+		ImGuiLayer* GetImguiLayer() { return m_ImGuiLayer.get(); }
 
 
 	protected:
@@ -63,6 +64,7 @@ namespace fe
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 		void OnWindowResize(Ref<Events::WindowResizeEvent> event);
 
+		std::string m_Name;
 		Scope<Window> m_Window;
 		MainEventDispacher m_MainEventDispacher;
 		LayerStack m_LayerStack;

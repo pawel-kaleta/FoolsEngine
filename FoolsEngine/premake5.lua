@@ -1,5 +1,4 @@
 project "FoolsEngine"
-	location "FoolsEngine"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"

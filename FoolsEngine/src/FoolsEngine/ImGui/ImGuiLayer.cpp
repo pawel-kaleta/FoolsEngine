@@ -62,15 +62,13 @@ namespace fe {
 
 	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;
-		event->Handled |= event->IsInCategory(Events::Keyboard) & io.WantCaptureKeyboard;
-	}
-
-
-	void ImGuiLayer::OnImGuiRender()
-	{
-		
+		if (m_BlockEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;
+			event->Handled |= event->IsInCategory(Events::Keyboard) & io.WantCaptureKeyboard;
+			event->Owned = true;
+		}
 	}
 
 	void ImGuiLayer::Begin()
@@ -95,16 +93,14 @@ namespace fe {
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			// disconnecting ImGui from applications window creates a new platform window
+			// disconnecting ImGui window from applications window creates a new platform window
 			// updating and rendering them will change glfw context
-			// so it needs to be backed and restored
+			// so it needs to be backed up and restored
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-
-		//glfwSwapBuffers(static_cast<GLFWwindow*>(window.GetNativeWindow()));
 	}
 	
 }

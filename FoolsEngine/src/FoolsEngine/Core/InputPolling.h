@@ -2,6 +2,9 @@
 
 #include <vector>
 
+// TO DO
+// change virtualization to choosing implementation based on makros
+
 namespace fe {
 
 	class InputPolling

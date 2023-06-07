@@ -15,6 +15,7 @@ namespace fe
 
 		float GetZoomLevel() const { return m_ZoomLevel; }
 		float SetZoomLevel(float lvl) { m_ZoomLevel = lvl; }
+		void Resize(float width, float hight);
 		
 		OrthographicCamera& GetCamera() { return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }

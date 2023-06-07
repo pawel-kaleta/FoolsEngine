@@ -18,7 +18,12 @@ namespace fe
 		void OnImGuiRender() override;
 
 	private:
+		glm::vec2 m_ViewportSize = { 0, 0 };
+		Ref<Framebuffer> m_Framebuffer;
 		OrthographicCameraController m_CameraController;
+
+		bool m_VieportFocus = false;
+		bool m_VieportHover = false;
 
 		glm::vec3 m_TrianglePosition = { 0.0f, 0.0f, 0.0f };
 		float m_TriangleSpeed = 1.2f;
@@ -29,7 +34,6 @@ namespace fe
 		Renderer2D::Quad m_QuadTextureTint;
 		float m_QuadMoveSpeed = 1.1f;
 
-		Ref<Framebuffer> m_Framebuffer;
 	};
 
 }

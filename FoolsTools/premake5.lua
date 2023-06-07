@@ -1,5 +1,4 @@
 project "FoolsTools"
-	location "FoolsTools"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

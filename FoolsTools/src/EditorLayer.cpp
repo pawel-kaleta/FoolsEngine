@@ -38,26 +38,18 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
-		float dt = Time::DeltaTime();
 
-		if (InputPolling::IsKeyPressed(InputCodes::Right))
+		if (m_VieportFocus)
 		{
-			m_QuadTexture.Position.x += m_QuadMoveSpeed * dt;
-		}
-		else if (InputPolling::IsKeyPressed(InputCodes::Left))
-		{
-			m_QuadTexture.Position.x -= m_QuadMoveSpeed * dt;
-		}
-		if (InputPolling::IsKeyPressed(InputCodes::Up))
-		{
-			m_QuadTexture.Position.y += m_QuadMoveSpeed * dt;
-		}
-		else if (InputPolling::IsKeyPressed(InputCodes::Down))
-		{
-			m_QuadTexture.Position.y -= m_QuadMoveSpeed * dt;
-		}
+			float moveDistance = Time::DeltaTime() * m_QuadMoveSpeed;
 
-		m_CameraController.OnUpdate();
+				 if (InputPolling::IsKeyPressed(InputCodes::Right))	m_QuadTexture.Position.x += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Left))	m_QuadTexture.Position.x -= moveDistance;
+				 if (InputPolling::IsKeyPressed(InputCodes::Up))	m_QuadTexture.Position.y += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Down))	m_QuadTexture.Position.y -= moveDistance;
+
+			m_CameraController.OnUpdate();
+		}
 
 		m_Framebuffer->Bind();
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
@@ -102,7 +94,6 @@ namespace fe
 			windowFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	
 		ImGui::Begin("Dockspace Test", &dockspaceOpen, windowFlags);
 		{
 			ImGui::PopStyleVar();
@@ -132,7 +123,6 @@ namespace fe
 
 			ImGui::Begin("Settings");
 			{
-				//ImGui::ColorEdit4("Triangle color", (float*)m_Triangle.MaterialInstance->GetUniformValuePtr("u_Color"));
 				ImGui::ColorEdit4("Quad color", &m_QuadColor.Color.r);
 
 				ImGui::Text("Stats:");
@@ -145,11 +135,27 @@ namespace fe
 			}
 			ImGui::End();
 
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			ImGui::Begin("Vieport");
 			{
+				ImGui::PopStyleVar();
+
+				m_VieportFocus = ImGui::IsWindowFocused();
+				m_VieportHover = ImGui::IsWindowHovered();
+				Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus && m_VieportHover));
+
+				auto& windowSize = ImGui::GetContentRegionAvail();
+				glm::vec2 newViewPortSize = { windowSize.x, windowSize.y };
+				
+				if (m_ViewportSize != newViewPortSize)
+				{
+					m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
+					m_ViewportSize = newViewPortSize;
+					m_CameraController.Resize(newViewPortSize.x, newViewPortSize.y);
+				}
+
 				uint32_t fbID = m_Framebuffer->GetColorAttachmentID();
-				ImVec2 res = { (float)m_Framebuffer->GetSpecification().Width, (float)m_Framebuffer->GetSpecification().Height };
-				ImGui::Image((void*)fbID, res, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::Image((void*)fbID, windowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 			ImGui::End();
 
@@ -161,7 +167,9 @@ namespace fe
 	{
 		FE_LOG_TRACE("{0}", event);
 
-		m_CameraController.OnEvent(event);
+		// OnImguRender() is handling viewport resizing
+		if (event->GetEventType() != Events::EventType::WindowResize)
+			m_CameraController.OnEvent(event);
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));
