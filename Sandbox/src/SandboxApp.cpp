@@ -6,7 +6,8 @@
 class SandboxApp : public fe::Application
 {
 public:
-	SandboxApp()
+	SandboxApp(const std::string& name)
+		:Application(name)
 	{
 		PushInnerLayer(fe::CreateScope<LayerExample>());
 	}
@@ -20,5 +21,5 @@ public:
 
 fe::Application* fe::CreateApplication()
 {
-	return new SandboxApp();
+	return new SandboxApp("Sandbox - FoolsEngine Application");
 }

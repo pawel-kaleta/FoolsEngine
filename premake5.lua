@@ -22,7 +22,7 @@ common_includedirs = {
 	"../FoolsEngine/externals/imgui",
 	"../FoolsEngine/externals/glm",
 	"../FoolsEngine/externals/stb",
-
+	"../FoolsEngine/externals/EnTT/single_include/entt"
 }
 
 group "Dependencies"

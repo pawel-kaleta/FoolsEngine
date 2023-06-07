@@ -11,3 +11,6 @@
 [submodule "FoolsEngine/externals/glm"]
 	path = FoolsEngine/externals/glm
 	url = https://github.com/g-truc/glm
+[submodule "FoolsEngine/externals/EnTT"]
+	path = FoolsEngine/externals/EnTT
+	url = https://github.com/skypjack/entt

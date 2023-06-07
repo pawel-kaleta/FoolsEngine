@@ -5,7 +5,7 @@
 
 // TO DO
 // Distroy this abomination, as only OpenGL has a concept of VertexArray.
-// On API abstraction level this should not exist.
+// at GDI agnostic level this should not exist.
 
 namespace fe
 {

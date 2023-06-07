@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -122,7 +122,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
