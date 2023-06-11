@@ -49,10 +49,10 @@ namespace fe
 
 
 	protected:
-		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	layer->OnAttach(); }
-		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack.PushOuterLayer(layer);	layer->OnAttach(); }
-		void PopInnerLayer(Ref<Layer> layer) { m_LayerStack.PopInnerLayer(layer);	layer->OnDetach(); }
-		void PopOuterLayer(Ref<Layer> layer) { m_LayerStack.PopOuterLayer(layer);	layer->OnDetach(); }
+		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	}
+		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack.PushOuterLayer(layer);	}
+		void PopInnerLayer(Ref<Layer> layer) { m_LayerStack.PopInnerLayer(layer); }
+		void PopOuterLayer(Ref<Layer> layer) { m_LayerStack.PopOuterLayer(layer); }
 
 	private:
 		friend int ::main(int argc, char** argv);

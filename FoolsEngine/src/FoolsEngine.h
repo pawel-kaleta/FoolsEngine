@@ -16,6 +16,9 @@
 #include "FoolsEngine\Renderer\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Renderer\OrthographicCameraController.h"
+#include "FoolsEngine\Scene\Scene.h"
+#include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine\Scene\Set.h"
 
 
 #ifdef FE_INTERNAL_BUILD

@@ -5,25 +5,6 @@ namespace fe
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f, true)
 	{
-		m_QuadTextureTint.Texture = TextureLibrary::Get("Default_Texture");
-		m_QuadTextureTint.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
-		m_QuadTextureTint.Position = glm::vec2(0.0f, -0.0f);
-		m_QuadTextureTint.Size = glm::vec2(0.8f, 0.8f);
-		m_QuadTextureTint.Layer = Renderer2D::Layer::L_2;
-		m_QuadTextureTint.TextureTilingFactor = 3;
-		m_QuadTextureTint.Transparency = false;
-		m_QuadTextureTint.Rotation = 20.0f;
-
-		m_QuadColor.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
-		m_QuadColor.Position = glm::vec2(-0.1f, -0.1f);
-		m_QuadColor.Size = glm::vec2(0.4f, 0.4f);
-		m_QuadColor.Layer = Renderer2D::Layer::L_1;
-
-		TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-		m_QuadTexture.Texture = TextureLibrary::Get("Texture_with_Transparency");
-		m_QuadTexture.Position = glm::vec2(0.0f, 0.0f);
-		m_QuadTexture.Size = glm::vec2(0.6f, 0.6f);
-		m_QuadTexture.Layer = Renderer2D::Layer::L0;
 	}
 
 	void EditorLayer::OnAttach()
@@ -32,6 +13,46 @@ namespace fe
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
+
+		m_Scene = CreateScope<Scene>();
+
+		Set tintedTextureQuad = m_Scene->CreateSet();
+		{
+			auto& quad = tintedTextureQuad.Emplace<Renderer2D::Quad>();
+			quad.Texture = TextureLibrary::Get("Default_Texture");
+			quad.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
+			quad.Layer = Renderer2D::Layer::L_2;
+			quad.TextureTilingFactor = 3;
+			quad.Transparency = false;
+
+			auto& transform = tintedTextureQuad.Emplace<CTransform>();
+			transform.Scale = glm::vec3(0.8f, 0.8f, 1.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+		}
+
+		m_ColorQuad = m_Scene->CreateSet();
+		{
+			auto& quad = m_ColorQuad.Emplace<Renderer2D::Quad>();
+			quad.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+			quad.Layer = Renderer2D::Layer::L_1;
+
+			auto& transform = m_ColorQuad.Emplace<CTransform>();
+			transform.Position = glm::vec3(-0.1f, -0.1f, 0.0f);
+			transform.Scale = glm::vec3(0.4f, 0.4f, 1.0f);
+		}
+
+		m_Target = m_Scene->CreateSet();
+		{
+			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+
+			auto& quad = m_Target.Emplace<Renderer2D::Quad>();
+			quad.Layer = Renderer2D::Layer::L0;
+			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
+
+			auto& transform = m_Target.Emplace<CTransform>();
+			transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
+			transform.Scale = glm::vec3(0.6f, 0.6f, 1.0f);
+		}
 	}
 
 	void EditorLayer::OnUpdate()
@@ -41,24 +62,20 @@ namespace fe
 
 		if (m_VieportFocus)
 		{
-			float moveDistance = Time::DeltaTime() * m_QuadMoveSpeed;
+			float moveDistance = Time::DeltaTime() * m_TargetMoveSpeed;
 
-				 if (InputPolling::IsKeyPressed(InputCodes::Right))	m_QuadTexture.Position.x += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Left))	m_QuadTexture.Position.x -= moveDistance;
-				 if (InputPolling::IsKeyPressed(InputCodes::Up))	m_QuadTexture.Position.y += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Down))	m_QuadTexture.Position.y -= moveDistance;
+			auto& targetPosition = m_Target.Get<CTransform>().Position;
+
+				 if (InputPolling::IsKeyPressed(InputCodes::Right))	targetPosition.x += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Left))	targetPosition.x -= moveDistance;
+				 if (InputPolling::IsKeyPressed(InputCodes::Up))	targetPosition.y += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Down))	targetPosition.y -= moveDistance;
 
 			m_CameraController.OnUpdate();
 		}
 
 		m_Framebuffer->Bind();
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-		{
-			Renderer2D::DrawQuad(m_QuadTexture);
-			Renderer2D::DrawQuad(m_QuadColor);
-			Renderer2D::DrawQuad(m_QuadTextureTint);
-		}
-		Renderer2D::EndScene();
+		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera());
 		m_Framebuffer->Unbind();
 	}
 
@@ -123,7 +140,8 @@ namespace fe
 
 			ImGui::Begin("Settings");
 			{
-				ImGui::ColorEdit4("Quad color", &m_QuadColor.Color.r);
+				auto& colref = m_ColorQuad.Get<Renderer2D::Quad>().Color;
+				ImGui::ColorEdit4("Quad color", (float*)&colref);
 
 				ImGui::Text("Stats:");
 				auto& stats = Renderer2D::GetStats();
@@ -154,7 +172,7 @@ namespace fe
 					m_CameraController.Resize(newViewPortSize.x, newViewPortSize.y);
 				}
 
-				uint32_t fbID = m_Framebuffer->GetColorAttachmentID();
+				auto fbID = m_Framebuffer->GetColorAttachmentID();
 				ImGui::Image((void*)fbID, windowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 			ImGui::End();

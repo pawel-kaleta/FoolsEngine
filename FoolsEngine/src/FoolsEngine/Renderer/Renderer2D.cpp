@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 #include "Renderer2D.h"
 #include "Renderer.h"
+#include "FoolsEngine\Scene\Set.h"
 
 #include <glad\glad.h>
 
@@ -82,6 +83,26 @@ namespace fe
 		}
 	}
 
+	void Renderer2D::RenderScene(const Scene& scene, OrthographicCamera& camera)
+	{
+		FE_PROFILER_FUNC();
+
+		BeginScene(camera);
+		auto& quadStorage = scene.GetRegistry().storage<Quad>();
+		auto& transformStorage = scene.GetRegistry().storage<CTransform>();
+
+		auto& view = View(std::forward_as_tuple(quadStorage, transformStorage), std::forward_as_tuple());
+
+		for (auto ID : view)
+		{
+			auto& quad = view.get<Quad>(ID);
+			auto& transform = view.get<CTransform>(ID);
+			DrawQuad(quad, transform);
+		}
+
+		EndScene();
+	}
+
 	void Renderer2D::EndScene()
 	{
 		FE_PROFILER_FUNC();
@@ -106,7 +127,7 @@ namespace fe
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
-	void Renderer2D::DrawQuad(const Quad& quad)
+	void Renderer2D::DrawQuad(const Quad& quad, const CTransform& transform)
 	{
 		BatchData* batch = &(s_Data->OpaqueBatch);
 
@@ -115,10 +136,10 @@ namespace fe
 			batch = &(s_Data->TransparentBatches[quad.Layer+9]);
 		}
 
-		BatchQuadDrawCall(quad, *batch);
+		BatchQuadDrawCall(quad, transform, *batch);
 	}
 
-	void Renderer2D::BatchQuadDrawCall(const Quad& quad, BatchData& batch)
+	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const CTransform& transform, BatchData& batch)
 	{
 		auto& VIt = batch.QuadVeriticesIt;
 
@@ -163,14 +184,16 @@ namespace fe
 
 		float depth = (float)quad.Layer / 10.0f;
 
-		glm::mat4 transform =
-			  glm::translate(glm::mat4(1.0f), { quad.Position, depth })
-			* glm::rotate   (glm::mat4(1.0f), glm::radians(quad.Rotation), { 0.0f, 0.0f, 1.0f })
-			* glm::scale    (glm::mat4(1.0f), { quad.Size.x, quad.Size.y, 1.0f });
+		auto tmp = transform;
+		tmp.Position.z = depth;
+		glm::mat4 transformMatrix = tmp.GetTransform();
+			//  glm::translate(glm::mat4(1.0f), { quad.Position, depth })
+			//* glm::rotate   (glm::mat4(1.0f), glm::radians(quad.Rotation), { 0.0f, 0.0f, 1.0f })
+			//* glm::scale    (glm::mat4(1.0f), { quad.Size.x, quad.Size.y, 1.0f });
 
 		for (int i = 0; i < 4; i++)
 		{
-			VIt->Position = transform * QuadVertexPositions[i];
+			VIt->Position = transformMatrix * QuadVertexPositions[i];
 			VIt->Color = quad.Color;
 			VIt->TexCoord = TextureCoord[i];
 			VIt->TilingFactor = quad.TextureTilingFactor;

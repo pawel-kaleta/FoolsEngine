@@ -55,31 +55,31 @@ namespace fe
 		switch (lvl)
 		{
 			case 0:
-				FE_LOG_CORE_INFO("Logging level set to 0 - all.");
+				FE_LOG_CORE_INFO("Logging level Set to 0 - all.");
 				s_CoreLogger->set_level(spdlog::level::trace);
 				break;
 			case 1:
-				FE_LOG_CORE_INFO("Logging level set to 1 - debug or higher.");
+				FE_LOG_CORE_INFO("Logging level Set to 1 - debug or higher.");
 				s_CoreLogger->set_level(spdlog::level::debug);
 				break;
 			case 2:
-				FE_LOG_CORE_INFO("Logging level set to 2 - info or higher.");
+				FE_LOG_CORE_INFO("Logging level Set to 2 - info or higher.");
 				s_CoreLogger->set_level(spdlog::level::info);
 				break;
 			case 3:
-				FE_LOG_CORE_INFO("Logging level set to 3 - warning or higher.");
+				FE_LOG_CORE_INFO("Logging level Set to 3 - warning or higher.");
 				s_CoreLogger->set_level(spdlog::level::warn);
 				break;
 			case 4:
-				FE_LOG_CORE_INFO("Logging level set to 4 - error or higher.");
+				FE_LOG_CORE_INFO("Logging level Set to 4 - error or higher.");
 				s_CoreLogger->set_level(spdlog::level::err);
 				break;
 			case 5:
-				FE_LOG_CORE_INFO("Logging level set to 5 - fatal error or higher.");
+				FE_LOG_CORE_INFO("Logging level Set to 5 - fatal error or higher.");
 				s_CoreLogger->set_level(spdlog::level::critical);
 				break;
 			case 6:
-				FE_LOG_CORE_INFO("Logging level set to 6 - nothing.");
+				FE_LOG_CORE_INFO("Logging level Set to 6 - nothing.");
 				s_CoreLogger->set_level(spdlog::level::off);
 				break;
 			default:
@@ -96,31 +96,31 @@ namespace fe
 		switch (lvl)
 		{
 		case 0:
-			FE_LOG_INFO("Logging level set to 0 - all.");
+			FE_LOG_INFO("Logging level Set to 0 - all.");
 			s_ClientLogger->set_level(spdlog::level::trace);
 			break;
 		case 1:
-			FE_LOG_INFO("Logging level set to 1 - debug or higher.");
+			FE_LOG_INFO("Logging level Set to 1 - debug or higher.");
 			s_ClientLogger->set_level(spdlog::level::debug);
 			break;
 		case 2:
-			FE_LOG_INFO("Logging level set to 2 - info or higher.");
+			FE_LOG_INFO("Logging level Set to 2 - info or higher.");
 			s_ClientLogger->set_level(spdlog::level::info);
 			break;
 		case 3:
-			FE_LOG_INFO("Logging level set to 3 - warning or higher.");
+			FE_LOG_INFO("Logging level Set to 3 - warning or higher.");
 			s_ClientLogger->set_level(spdlog::level::warn);
 			break;
 		case 4:
-			FE_LOG_INFO("Logging level set to 4 - error or higher.");
+			FE_LOG_INFO("Logging level Set to 4 - error or higher.");
 			s_ClientLogger->set_level(spdlog::level::err);
 			break;
 		case 5:
-			FE_LOG_INFO("Logging level set to 5 - fatal error or higher.");
+			FE_LOG_INFO("Logging level Set to 5 - fatal error or higher.");
 			s_ClientLogger->set_level(spdlog::level::critical);
 			break;
 		case 6:
-			FE_LOG_INFO("Logging level set to 6 - nothing.");
+			FE_LOG_INFO("Logging level Set to 6 - nothing.");
 			s_ClientLogger->set_level(spdlog::level::off);
 			break;
 		default:

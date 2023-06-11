@@ -3,6 +3,11 @@
 #include "OrthographicCamera.h"
 #include "Material.h"
 #include "FoolsEngine\Core\Time.h"
+#include "FoolsEngine\Scene\Scene.h"
+#include "FoolsEngine\Scene\Component.h"
+
+
+#include <entt.hpp>
 
 namespace fe
 {
@@ -40,15 +45,10 @@ namespace fe
 			L9 = 9
 		};
 
-		class Quad
+		struct Quad : Component
 		{
-		public:
 			Layer Layer        = Layer::L0;
-			glm::vec2 Position = { 0.0f, 0.0f };
-			glm::vec2 Size     = { 1.0f, 1.0f };
 			glm::vec4 Color    = { 1.0f, 1.0f, 1.0f, 1.0f };
-			//in degrees
-			float Rotation = 0.0f;
 			//for optimization, can be left default
 			bool Transparency = true;
 			float TextureTilingFactor = 1.0f;
@@ -59,9 +59,10 @@ namespace fe
 		static void Shutdown() {}
 
 		static void BeginScene(OrthographicCamera& camera);
+		static void RenderScene(const Scene& scene, OrthographicCamera& camera);
 		static void EndScene();
 
-		static void DrawQuad(const Quad& quad);
+		static void DrawQuad(const Quad& quad, const CTransform& transform);
 
 		inline static RenderStats GetStats() { return s_Stats; }
 
@@ -112,7 +113,7 @@ namespace fe
 		
 		static Scope<Renderer2DData> s_Data;
 
-		static void BatchQuadDrawCall(const Quad& quad, BatchData& batch);
+		static void BatchQuadDrawCall(const Quad& quad, const CTransform& transform, BatchData& batch);
 		static void Flush(BatchData& batch, bool transparency);
 
 		static RenderStats s_Stats;

@@ -148,6 +148,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Set.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -196,6 +200,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Set.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

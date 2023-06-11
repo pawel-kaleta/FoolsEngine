@@ -165,6 +165,10 @@
     <ClInclude Include="src\FoolsEngine\Renderer\ShaderData.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Set.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -270,5 +274,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\ShaderData.cpp">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Set.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
   </ItemGroup>
 </Project>
