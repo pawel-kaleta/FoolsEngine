@@ -8,7 +8,6 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
-#include "FoolsEngine\Renderer\OrthographicCamera.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\APIAbstraction\Buffers.h"
 #include "FoolsEngine\Renderer\APIAbstraction\VertexArray.h"

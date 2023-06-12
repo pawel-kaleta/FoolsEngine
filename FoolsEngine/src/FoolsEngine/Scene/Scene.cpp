@@ -12,7 +12,7 @@ namespace fe
 		FE_CORE_ASSERT(set && (root == 0), "Failed to create root Set in a Scene");
 
 		set.Emplace<CName>("root");
-		set.Emplace<CCommonTags>(CommonTags::Root);
+		set.Emplace<CCommonTags>(CCommonTags::Root);
 		set.Emplace<CTransform>();
 	}
 

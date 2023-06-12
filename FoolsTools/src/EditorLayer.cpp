@@ -3,7 +3,7 @@
 namespace fe
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f, true)
+		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f)
 	{
 	}
 
@@ -26,7 +26,7 @@ namespace fe
 			quad.Transparency = false;
 
 			auto& transform = tintedTextureQuad.Emplace<CTransform>();
-			transform.Scale = glm::vec3(0.8f, 0.8f, 1.0f);
+			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 		}
 
@@ -38,7 +38,7 @@ namespace fe
 
 			auto& transform = m_ColorQuad.Emplace<CTransform>();
 			transform.Position = glm::vec3(-0.1f, -0.1f, 0.0f);
-			transform.Scale = glm::vec3(0.4f, 0.4f, 1.0f);
+			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
 		}
 
 		m_Target = m_Scene->CreateSet();
@@ -51,7 +51,7 @@ namespace fe
 
 			auto& transform = m_Target.Emplace<CTransform>();
 			transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
-			transform.Scale = glm::vec3(0.6f, 0.6f, 1.0f);
+			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 		}
 	}
 
@@ -75,7 +75,7 @@ namespace fe
 		}
 
 		m_Framebuffer->Bind();
-		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera());
+		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera(), m_CameraController.GetTransform());
 		m_Framebuffer->Unbind();
 	}
 
@@ -162,8 +162,8 @@ namespace fe
 				m_VieportHover = ImGui::IsWindowHovered();
 				Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus && m_VieportHover));
 
-				auto& windowSize = ImGui::GetContentRegionAvail();
-				glm::vec2 newViewPortSize = { windowSize.x, windowSize.y };
+				auto& vidgetSize = ImGui::GetContentRegionAvail();
+				glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y };
 				
 				if (m_ViewportSize != newViewPortSize)
 				{
@@ -173,7 +173,7 @@ namespace fe
 				}
 
 				auto fbID = m_Framebuffer->GetColorAttachmentID();
-				ImGui::Image((void*)fbID, windowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::Image((void*)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 			ImGui::End();
 
@@ -185,9 +185,7 @@ namespace fe
 	{
 		FE_LOG_TRACE("{0}", event);
 
-		// OnImguRender() is handling viewport resizing
-		if (event->GetEventType() != Events::EventType::WindowResize)
-			m_CameraController.OnEvent(event);
+		m_CameraController.OnEvent(event);
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));

@@ -143,10 +143,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\EditorCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\EditorCameraController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">

@@ -192,8 +192,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\GDIType.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Material.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Renderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\Renderer2D.h" />
@@ -234,8 +232,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\APIAbstraction\VertexArray.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCamera.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\Renderer2D.cpp" />

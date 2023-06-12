@@ -62,14 +62,22 @@ namespace fe
 		batch.Textures[0] = whiteTexture;
 	}
 
-	void Renderer2D::BeginScene(OrthographicCamera& camera)
+	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view)
 	{
 		FE_PROFILER_FUNC();
 
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 
-		s_Data->VPMatrix = camera.GetViewProjectionMatrix();
+		switch (Renderer::GetActiveGDItype())
+		{
+		case GDIType::OpenGL:
+			s_Data->VPMatrix = projection * glm::inverse(view);
+			break;
+		default:
+			FE_CORE_ASSERT(false, "Unkown GDI!");
+			return;
+		}
 
 		s_Data->OpaqueBatch.TexturesCount = 1;
 		s_Data->OpaqueBatch.QuadIndexCount = 0;
@@ -83,11 +91,18 @@ namespace fe
 		}
 	}
 
-	void Renderer2D::RenderScene(const Scene& scene, OrthographicCamera& camera)
+	void Renderer2D::RenderScene(const Scene& scene, Set cameraSet)
+	{
+		auto& projectionMatrix = cameraSet.Get<CCamera>();
+		auto& viewMatrix = cameraSet.Get<CTransform>();
+		RenderScene(scene, projectionMatrix, viewMatrix);
+	}
+
+	void Renderer2D::RenderScene(const Scene& scene, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
 	{
 		FE_PROFILER_FUNC();
 
-		BeginScene(camera);
+		BeginScene(projectionMatrix, viewMatrix);
 		auto& quadStorage = scene.GetRegistry().storage<Quad>();
 		auto& transformStorage = scene.GetRegistry().storage<CTransform>();
 
@@ -175,6 +190,7 @@ namespace fe
 			{  0.5f,  0.5f, 0.0f, 1.0f },
 			{ -0.5f,  0.5f, 0.0f, 1.0f }
 		};
+
 		constexpr glm::vec2 TextureCoord[] = {
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
@@ -187,10 +203,7 @@ namespace fe
 		auto tmp = transform;
 		tmp.Position.z = depth;
 		glm::mat4 transformMatrix = tmp.GetTransform();
-			//  glm::translate(glm::mat4(1.0f), { quad.Position, depth })
-			//* glm::rotate   (glm::mat4(1.0f), glm::radians(quad.Rotation), { 0.0f, 0.0f, 1.0f })
-			//* glm::scale    (glm::mat4(1.0f), { quad.Size.x, quad.Size.y, 1.0f });
-
+		
 		for (int i = 0; i < 4; i++)
 		{
 			VIt->Position = transformMatrix * QuadVertexPositions[i];

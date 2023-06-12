@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FoolsEngine.h>
+#include "EditorCameraController.h"
 
 namespace fe
 {
@@ -19,8 +20,8 @@ namespace fe
 
 	private:
 		glm::vec2 m_ViewportSize = { 0, 0 };
-		Ref<Framebuffer> m_Framebuffer;
-		OrthographicCameraController m_CameraController;
+		Scope<Framebuffer> m_Framebuffer;
+		EditorCameraController m_CameraController;
 
 		bool m_VieportFocus = false;
 		bool m_VieportHover = false;
@@ -28,7 +29,7 @@ namespace fe
 		Scope<Scene> m_Scene;
 
 		Set m_Target;
-		float m_TargetMoveSpeed = 1.1f;
 		Set m_ColorQuad;
+		float m_TargetMoveSpeed = 0.8f;
 	};
 }

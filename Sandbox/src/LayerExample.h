@@ -15,14 +15,9 @@ public:
 	void OnImGuiRender() override;
 
 private:
-	fe::OrthographicCameraController m_CameraController;
+	fe::Scope<fe::Scene> m_Scene;
 
-	glm::vec3 m_TrianglePosition = { 0.0f, 0.0f, 0.0f };
-	float m_TriangleSpeed = 1.2f;
-	fe::Ref<fe::Material> m_FlatColorMaterial;
-
-	fe::Renderer2D::Quad m_QuadColor;
-	fe::Renderer2D::Quad m_QuadTexture;
-	fe::Renderer2D::Quad m_QuadTextureTint;
-	float m_QuadMoveSpeed = 1.1f;
+	float m_TargetMoveSpeed = 1.1f;
+	fe::Set m_Target;
+	fe::Set m_ColorQuad;
 };

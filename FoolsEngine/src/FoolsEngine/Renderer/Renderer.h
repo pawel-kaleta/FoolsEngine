@@ -2,7 +2,6 @@
 
 #include "GDIType.h"
 #include "RenderCommands.h"
-#include "OrthographicCamera.h"
 #include "Material.h"
 #include "APIAbstraction\Framebuffer.h"
 #include "Renderer2D.h"
@@ -22,7 +21,7 @@ namespace fe
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(CCamera& camera);
 		static void EndScene();
 
 		inline static void Draw(

@@ -1,13 +1,11 @@
 #pragma once
 #include "RenderCommands.h"
-#include "OrthographicCamera.h"
 #include "Material.h"
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine\Scene\Set.h"
 
-
-#include <entt.hpp>
 
 namespace fe
 {
@@ -58,9 +56,9 @@ namespace fe
 		static void Init();
 		static void Shutdown() {}
 
-		static void BeginScene(OrthographicCamera& camera);
-		static void RenderScene(const Scene& scene, OrthographicCamera& camera);
-		static void EndScene();
+		static void RenderScene(const Scene& scene, Set cameraSet);
+		static void RenderScene(const Scene& scene, const glm::mat4& projection, const glm::mat4& view);
+
 
 		static void DrawQuad(const Quad& quad, const CTransform& transform);
 
@@ -113,8 +111,10 @@ namespace fe
 		
 		static Scope<Renderer2DData> s_Data;
 
+		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void BatchQuadDrawCall(const Quad& quad, const CTransform& transform, BatchData& batch);
 		static void Flush(BatchData& batch, bool transparency);
+		static void EndScene();
 
 		static RenderStats s_Stats;
 		static Time::TimePoint m_RenderStartTimePoint;

@@ -147,12 +147,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\Material.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCamera.h">
-      <Filter>FoolsEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\OrthographicCameraController.h">
-      <Filter>FoolsEngine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\RenderCommands.h">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClInclude>
@@ -254,12 +248,6 @@
       <Filter>FoolsEngine\Renderer\APIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\Material.cpp">
-      <Filter>FoolsEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCamera.cpp">
-      <Filter>FoolsEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\OrthographicCameraController.cpp">
       <Filter>FoolsEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\RenderCommands.cpp">

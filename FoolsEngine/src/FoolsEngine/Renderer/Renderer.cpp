@@ -100,10 +100,11 @@ namespace fe
 		RenderCommands::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(OrthographicCamera& camera)
+	void Renderer::BeginScene(CCamera& camera)
 	{
 		FE_PROFILER_FUNC();
-		s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
+		FE_CORE_ASSERT(false, "3D rendering not supported yet!");
+		//s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 	}

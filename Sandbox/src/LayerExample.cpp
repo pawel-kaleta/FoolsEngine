@@ -1,75 +1,79 @@
 #include "LayerExample.h"
 
 LayerExample::LayerExample()
-	: Layer("LayerExample"), m_CameraController(1280.0f / 720.0f, true)
-{
-	m_QuadTextureTint.Texture = fe::TextureLibrary::Get("Default_Texture");
-	m_QuadTextureTint.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
-	m_QuadTextureTint.Position = glm::vec2(0.0f, -0.0f);
-	m_QuadTextureTint.Size = glm::vec2(0.8f, 0.8f);
-	m_QuadTextureTint.Layer = fe::Renderer2D::Layer::L_2;
-	m_QuadTextureTint.TextureTilingFactor = 3;
-	m_QuadTextureTint.Transparency = false;
-	m_QuadTextureTint.Rotation = 20.0f;
-
-	m_QuadColor.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
-	m_QuadColor.Position = glm::vec2(-0.1f, -0.1f);
-	m_QuadColor.Size = glm::vec2(0.4f, 0.4f);
-	m_QuadColor.Layer = fe::Renderer2D::Layer::L_1;
-
-	fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-	m_QuadTexture.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
-	m_QuadTexture.Position = glm::vec2(0.0f, 0.0f);
-	m_QuadTexture.Size = glm::vec2(0.6f, 0.6f);
-	m_QuadTexture.Layer = fe::Renderer2D::Layer::L0;
-}
+	: fe::Layer("LayerExample")
+{ }
 
 void LayerExample::OnAttach()
 {
-	fe::FramebufferSpecification fbSpec;
-	fbSpec.Width = 1280;
-	fbSpec.Height = 720;
+	m_Scene = fe::CreateScope<fe::Scene>();
+
+	auto camera = m_Scene->CreateSet();
+	camera.Emplace<fe::CTransform>();
+	camera.Emplace<fe::CCamera>(fe::CCamera::Orthographic, 1280.0f / 720.0f);
+	m_Scene->SetPrimaryCameraSet(camera);
+
+	fe::Set tintedTextureQuad = m_Scene->CreateSet();
+	{
+		auto& quad = tintedTextureQuad.Emplace<fe::Renderer2D::Quad>();
+		quad.Texture = fe::TextureLibrary::Get("Default_Texture");
+		quad.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
+		quad.Layer = fe::Renderer2D::Layer::L_2;
+		quad.TextureTilingFactor = 3;
+		quad.Transparency = false;
+
+		auto& transform = tintedTextureQuad.Emplace<fe::CTransform>();
+		transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
+		transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+	}
+
+	m_ColorQuad = m_Scene->CreateSet();
+	{
+		auto& quad = m_ColorQuad.Emplace<fe::Renderer2D::Quad>();
+		quad.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+		quad.Layer = fe::Renderer2D::Layer::L_1;
+
+		auto& transform = m_ColorQuad.Emplace<fe::CTransform>();
+		transform.Position = glm::vec3(-0.1f, -0.1f, 0.0f);
+		transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
+	}
+
+	m_Target = m_Scene->CreateSet();
+	{
+		fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+
+		auto& quad = m_Target.Emplace<fe::Renderer2D::Quad>();
+		quad.Layer = fe::Renderer2D::Layer::L0;
+		quad.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
+
+		auto& transform = m_Target.Emplace<fe::CTransform>();
+		transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
+		transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
+	}
 }
 
 void LayerExample::OnUpdate()
 {
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
-	float dt = fe::Time::DeltaTime();
 
-	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))
-	{
-		m_QuadTexture.Position.x += m_QuadMoveSpeed * dt;
-	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))
-	{
-		m_QuadTexture.Position.x -= m_QuadMoveSpeed * dt;
-	}
-	if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))
-	{
-		m_QuadTexture.Position.y += m_QuadMoveSpeed * dt;
-	}
-	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))
-	{
-		m_QuadTexture.Position.y -= m_QuadMoveSpeed * dt;
-	}
+	float moveDistance = fe::Time::DeltaTime() * m_TargetMoveSpeed;
 
-	m_CameraController.OnUpdate();
+	auto& targetPosition = m_Target.Get<fe::CTransform>().Position;
 
-	fe::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	{
-		fe::Renderer2D::DrawQuad(m_QuadTexture);
-		fe::Renderer2D::DrawQuad(m_QuadColor);
-		fe::Renderer2D::DrawQuad(m_QuadTextureTint);
-	}
-	fe::Renderer2D::EndScene();
+	     if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Right))	targetPosition.x += moveDistance;
+	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Left))	targetPosition.x -= moveDistance;
+	     if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Up))	targetPosition.y += moveDistance;
+	else if (fe::InputPolling::IsKeyPressed(fe::InputCodes::Down))	targetPosition.y -= moveDistance;
+
+	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetSetWithPrimaryCamera());
 }
 
 void LayerExample::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-
-	ImGui::ColorEdit4("Quad color", &m_QuadColor.Color.r);
+	
+	ImGui::ColorEdit4("Quad color", (float *)& m_ColorQuad.Get<fe::Renderer2D::Quad>().Color);
 
 	ImGui::Text("Stats:");
 	auto& stats = fe::Renderer2D::GetStats();
@@ -85,8 +89,6 @@ void LayerExample::OnImGuiRender()
 void LayerExample::OnEvent(fe::Ref<fe::Events::Event> event)
 {
 	FE_LOG_TRACE("{0}", event);
-
-	m_CameraController.OnEvent(event);
 
 	fe::Events::EventDispacher dispacher(event);
 	dispacher.Dispach<fe::Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
