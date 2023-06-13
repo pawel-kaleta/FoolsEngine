@@ -4,7 +4,6 @@
 #include <glad/glad.h>
 
 #include "FoolsEngine\Events\Event.h"
-#include "FoolsEngine\Platform\Win10\Win10InputPolling.h"
 
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
@@ -17,7 +16,7 @@ namespace fe
 	Win10Window::Win10Window(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
-
+		
 		Init(attr);
 	}
 

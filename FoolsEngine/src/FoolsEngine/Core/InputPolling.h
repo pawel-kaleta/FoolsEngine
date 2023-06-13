@@ -1,35 +1,21 @@
 #pragma once
 
-#include <vector>
-
-// TO DO
-// change virtualization to choosing implementation based on makros
+#include <glm/glm.hpp>
 
 namespace fe {
 
 	class InputPolling
 	{
 	public:
+		InputPolling() = delete;
 		InputPolling(const InputPolling&) = delete;
 		InputPolling& operator=(const InputPolling&) = delete;
 
-		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedNative(keycode); };
+		static bool IsKeyPressed(int keycode);
 
-		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedNative(button); };
-		inline static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionNative(); };
-		inline static float GetMouseX() { return s_Instance->GetMouseXNative(); };
-		inline static float GetMouseY() { return s_Instance->GetMouseYNative(); };
-
-	protected:
-		InputPolling() = default;
-		virtual bool IsKeyPressedNative(int keycode) = 0;
-
-		virtual bool IsMouseButtonPressedNative(int button) = 0;
-		virtual std::pair<float, float> GetMousePositionNative() = 0;
-		virtual float GetMouseXNative() = 0;
-		virtual float GetMouseYNative() = 0;
-
-	private:
-		static Scope<InputPolling> s_Instance;
+		static bool IsMouseButtonPressed(int button);
+		static glm::vec2 GetMousePosition();
+		static float GetMouseX();
+		static float GetMouseY();
 	};
 }

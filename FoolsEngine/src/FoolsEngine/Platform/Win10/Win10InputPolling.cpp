@@ -1,30 +1,30 @@
+#pragma once
+
 #include "FE_pch.h"
-#include "Win10InputPolling.h"
+#include "FoolsEngine\Core\InputPolling.h"
 
 #include "FoolsEngine\Core\Application.h"
 #include <GLFW\glfw3.h>
 
-namespace fe {
-
 #ifdef FE_PLATFORM_WINDOWS
-    Scope<InputPolling> InputPolling::s_Instance = CreateScope<Win10InputPolling>();
-#endif
-    
-    bool Win10InputPolling::IsKeyPressedNative(int keycode)
+
+namespace fe
+{
+    bool InputPolling::IsKeyPressed(int keycode)
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         auto state = glfwGetKey(window, keycode);
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool Win10InputPolling::IsMouseButtonPressedNative(int button)
+    bool InputPolling::IsMouseButtonPressed(int button)
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         auto state = glfwGetMouseButton(window, button);
         return state == GLFW_PRESS;
     }
 
-    std::pair<float, float> Win10InputPolling::GetMousePositionNative()
+    glm::vec2 InputPolling::GetMousePosition()
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         double x, y;
@@ -32,17 +32,17 @@ namespace fe {
         return { (float)x, (float)y };
     }
 
-    float Win10InputPolling::GetMouseXNative()
+    float InputPolling::GetMouseX()
     {
-        auto[x, y] = GetMousePositionNative();
-        return x;
+        return GetMousePosition().x;
     }
 
-    float Win10InputPolling::GetMouseYNative()
+    float InputPolling::GetMouseY()
     {
-        auto[x, y] = GetMousePositionNative();
-        return y;
+        return GetMousePosition().y;
     }
-
 }
+
+#endif
+
 

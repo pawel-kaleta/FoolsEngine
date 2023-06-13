@@ -123,12 +123,11 @@ namespace fe
 				return glm::ortho(left, right, bottom, top, NearClip, FarClip);
 			case Isometric:
 				FE_CORE_ASSERT(false, "Isometric camera mode not supported yet");
-				return glm::ortho(left, right, bottom, top, NearClip, FarClip);
 			case Perspective:
 				FE_CORE_ASSERT(false, "Perspective camera mode not supported yet");
-				return glm::ortho(left, right, bottom, top, NearClip, FarClip);
 			}
 
+			return glm::ortho(left, right, bottom, top, NearClip, FarClip);
 		};
 	};
 

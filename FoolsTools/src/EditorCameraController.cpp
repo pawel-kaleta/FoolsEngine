@@ -1,8 +1,8 @@
 #include "FE_pch.h"
 
+#include <FoolsEngine.h>
+
 #include "EditorCameraController.h"
-#include "FoolsEngine\Core\InputPolling.h"
-#include "FoolsEngine\Core\Application.h"
 
 namespace fe
 {
@@ -11,6 +11,8 @@ namespace fe
 
 	void EditorCameraController::OnUpdate()
 	{
+		FE_PROFILER_FUNC();
+
 		auto dt = Time::DeltaTime();
 
 		glm::vec3& position = m_Transform.Position;

@@ -13,6 +13,8 @@ namespace fe
 
 	void Renderer2D::Init()
 	{
+		FE_PROFILER_FUNC();
+
 		s_Data = CreateScope<Renderer2DData>();
 
 		s_Data->QuadVertexArray = VertexArray::Create();
@@ -106,12 +108,12 @@ namespace fe
 		auto& quadStorage = scene.GetRegistry().storage<Quad>();
 		auto& transformStorage = scene.GetRegistry().storage<CTransform>();
 
-		auto& view = View(std::forward_as_tuple(quadStorage, transformStorage), std::forward_as_tuple());
+		auto& querry = ComponentsQuerry(std::forward_as_tuple(quadStorage, transformStorage), std::forward_as_tuple());
 
-		for (auto ID : view)
+		for (auto ID : querry)
 		{
-			auto& quad = view.get<Quad>(ID);
-			auto& transform = view.get<CTransform>(ID);
+			auto& quad = querry.get<Quad>(ID);
+			auto& transform = querry.get<CTransform>(ID);
 			DrawQuad(quad, transform);
 		}
 
@@ -219,6 +221,8 @@ namespace fe
 
 	void Renderer2D::Flush(BatchData& batch, bool transparency)
 	{
+		FE_PROFILER_FUNC();
+
 		if (batch.QuadIndexCount == 0)
 			return;
 

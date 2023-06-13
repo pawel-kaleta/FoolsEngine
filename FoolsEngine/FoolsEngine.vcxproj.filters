@@ -114,9 +114,6 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>FoolsEngine\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h">
-      <Filter>FoolsEngine\Platform\Win10</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>

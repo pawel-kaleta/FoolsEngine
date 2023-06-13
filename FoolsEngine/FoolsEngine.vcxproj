@@ -181,7 +181,6 @@
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\FoolsEngine\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Buffers.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\APIAbstraction\Framebuffer.h" />

@@ -12,10 +12,11 @@ namespace fe
 	using ECS_handle = entt::basic_handle<Registry>;
 	using const_ECS_handle = entt::basic_handle<const Registry>;
 
+	// std::forward_as_tuple(list of pointers to storages)
 	template<typename T, typename U>
-	decltype(auto) View(T t, U u)
+	decltype(auto) ComponentsQuerry(T get, U exclude)
 	{
-		return entt::basic_view(t, u);
+		return entt::basic_view(get, exclude);
 	}
 /*
 	auto view = entt::basic_view(

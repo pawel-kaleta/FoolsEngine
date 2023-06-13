@@ -9,6 +9,8 @@ namespace fe
 
 	void EditorLayer::OnAttach()
 	{
+		FE_PROFILER_FUNC();
+
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
@@ -81,6 +83,8 @@ namespace fe
 
 	void EditorLayer::OnImGuiRender()
 	{
+		FE_PROFILER_FUNC();
+
 		static bool dockspaceOpen = true;
 		static bool constFullscreenOpt = true;
 		bool fullscreenOpt = constFullscreenOpt;
