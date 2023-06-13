@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\NativeScript.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Set.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
     <ClInclude Include="src\EntryPoint.h" />

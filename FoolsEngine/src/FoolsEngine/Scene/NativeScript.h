@@ -1,19 +1,22 @@
 #pragma once
-#include "FoolsEngine\Debug\Asserts.h"
-#include "Scene.h"
-#include "NativeScript.h"
-#include <entt.hpp>
+#include "ECS.h"
+#include "Set.h"
+#include "Component.h"
 
 namespace fe
 {
-	class Set
+	struct NativeScript
 	{
 	public:
-		Set(SetID setID, Scene* scene)
-			: m_Scene(scene), m_Handle(ECS_handle(scene->m_Registry, setID)) { }	
-		Set(const Set& other) = default;
-		Set() = default;
+		NativeScript() = default;
+		NativeScript(NativeScript& other) = delete;
+		virtual ~NativeScript() = default;
 
+		virtual void OnCreate()  {};
+		virtual void OnUpdate()  {};
+		virtual void OnDestroy() {};
+
+	protected:
 		//In default storage pool only!
 		template<typename... Components>
 		bool AllOf()
@@ -88,17 +91,13 @@ namespace fe
 			return m_Handle.remove<Components...>();
 		}
 
-		// all pools :)
-		void Destroy()
-		{
-			m_Handle.destroy();
-		}
-
-		// all pools :)
-		bool IsEmpty()
-		{
-			return m_Handle.orphan();
-		}
+		// Destruction should be scaduled, as it would delete also object that we are inside of now
+		//
+		//all pools :)
+		//void Destroy()
+		//{
+		//	m_Handle.destroy(); 
+		//}
 
 		//all pools :)
 		auto& Storages()
@@ -106,41 +105,42 @@ namespace fe
 			return m_Handle.storage();
 		}
 
-		const SetID ID()
+		SetID GetSetID()
 		{
 			return m_Handle.entity();
 		}
-		operator SetID() const
-		{
-			return m_Handle.operator entt::id_type();
-		}
-		operator bool() const
-		{
-			return m_Handle.operator bool() && m_Scene;
-		}
 
-		//In default storage pool only!
+	private:
+		friend struct CNativeScript;
+		ECS_handle m_Handle;
+		Scene* m_Scene = nullptr;
+	};
+
+	struct CNativeScript
+	{
+		//call Instantiate<Script>() immediately after;
+		CNativeScript() = default;
+		CNativeScript(CNativeScript& other) = delete;
+
+		//should be immediately called after construction!
 		template<typename Script, typename... Args>
-		Script& AddScript(Args&&... args)
+		Script& Instantiate(SetID setID, Scene* scene, Args&&... args)
 		{
-			FE_CORE_ASSERT(!AnyOf<CNativeScript>(), "This Set already have script component");
-			auto& scriptComponent = m_Handle.emplace<CNativeScript>();
-			scriptComponent.Instantiate<Script>(ID(), m_Scene, std::forward<Args>(args)...);
-			return (Script&) scriptComponent.m_Instance;
+			m_Instance = static_cast<NativeScript*>(new Script(std::forward<Args>(args)...));
+			m_Instance->m_Handle = ECS_handle(scene->m_Registry, setID);
+			m_Instance->m_Scene = scene;
+			return (Script&)m_Instance;
 		}
 
-		//In default storage pool only!
-		template<typename Script>
-		Script& GetScript()
+		~CNativeScript()
 		{
-			FE_CORE_ASSERT(AnyOf<CNativeScript>(), "This Set does not have script component");
-			auto& scriptComponent = m_Handle.get<CNativeScript>();
-			return (Script&)scriptComponent.m_Instance;
+			m_Instance->OnDestroy();
+			delete m_Instance;
 		}
 
 	private:
+		friend class Set;
 		friend class Scene;
-		ECS_handle m_Handle;
-		Scene* m_Scene = nullptr;
+		NativeScript* m_Instance = nullptr;
 	};
 }

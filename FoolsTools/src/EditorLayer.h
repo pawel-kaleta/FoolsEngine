@@ -28,8 +28,6 @@ namespace fe
 
 		Scope<Scene> m_Scene;
 
-		Set m_Target;
 		Set m_ColorQuad;
-		float m_TargetMoveSpeed = 0.8f;
 	};
 }

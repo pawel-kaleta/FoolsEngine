@@ -160,6 +160,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\Set.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\NativeScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

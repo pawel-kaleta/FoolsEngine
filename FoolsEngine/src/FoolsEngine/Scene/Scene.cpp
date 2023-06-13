@@ -1,4 +1,5 @@
 #include "FE_pch.h"
+#include "ECS.h"
 #include "Scene.h"
 #include "Set.h"
 
@@ -60,5 +61,16 @@ namespace fe
 	{
 		Set set(id, this);
 		SetPrimaryCameraSet(set);
+	}
+
+	void Scene::UpdateScripts()
+	{
+		auto& scriptComponentsStorage = m_Registry.storage<CNativeScript>();
+		auto& querry = ComponentsQuerry(std::forward_as_tuple(scriptComponentsStorage), std::forward_as_tuple());
+		for (auto setID : querry)
+		{
+			CNativeScript& script = querry.get<CNativeScript>(setID);
+			script.m_Instance->OnUpdate();
+		}
 	}
 }

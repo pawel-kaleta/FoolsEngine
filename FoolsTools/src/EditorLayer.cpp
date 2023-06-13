@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "FoolsEngine\Scene\NativeScript.h"
 
 namespace fe
 {
@@ -6,6 +7,23 @@ namespace fe
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f)
 	{
 	}
+
+	struct TargetBehaviourScript : NativeScript
+	{
+		float MoveSpeed = 0.5f;
+
+		void OnUpdate() override
+		{
+			auto& position = Get<CTransform>().Position;
+
+			float moveDistance = Time::DeltaTime() * MoveSpeed;
+
+			     if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
+			     if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
+			else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.y -= moveDistance;
+		}
+	};
 
 	void EditorLayer::OnAttach()
 	{
@@ -43,17 +61,19 @@ namespace fe
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
 		}
 
-		m_Target = m_Scene->CreateSet();
+		Set target = m_Scene->CreateSet();
 		{
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-			auto& quad = m_Target.Emplace<Renderer2D::Quad>();
+			auto& quad = target.Emplace<Renderer2D::Quad>();
 			quad.Layer = Renderer2D::Layer::L0;
 			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
-			auto& transform = m_Target.Emplace<CTransform>();
+			auto& transform = target.Emplace<CTransform>();
 			transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
+
+			target.AddScript<TargetBehaviourScript>();
 		}
 	}
 
@@ -64,15 +84,7 @@ namespace fe
 
 		if (m_VieportFocus)
 		{
-			float moveDistance = Time::DeltaTime() * m_TargetMoveSpeed;
-
-			auto& targetPosition = m_Target.Get<CTransform>().Position;
-
-				 if (InputPolling::IsKeyPressed(InputCodes::Right))	targetPosition.x += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Left))	targetPosition.x -= moveDistance;
-				 if (InputPolling::IsKeyPressed(InputCodes::Up))	targetPosition.y += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Down))	targetPosition.y -= moveDistance;
-
+			m_Scene->UpdateScripts();
 			m_CameraController.OnUpdate();
 		}
 
@@ -80,6 +92,8 @@ namespace fe
 		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera(), m_CameraController.GetTransform());
 		m_Framebuffer->Unbind();
 	}
+
+	
 
 	void EditorLayer::OnImGuiRender()
 	{

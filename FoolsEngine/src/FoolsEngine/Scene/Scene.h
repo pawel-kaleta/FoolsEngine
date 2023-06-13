@@ -21,8 +21,10 @@ namespace fe
 		void SetPrimaryCameraSet(Set set);
 		void SetPrimaryCameraSet(SetID id);
 
+		void UpdateScripts();
 	private:
 		friend class Set;
+		friend struct CNativeScript;
 		Registry m_Registry;
 		SetID m_PrimaryCameraSetID;
 	};
