@@ -2,6 +2,7 @@
 #include "Renderer2D.h"
 #include "Renderer.h"
 #include "FoolsEngine\Scene\Set.h"
+#include "FoolsEngine\Scene\Hierarchy.h"
 
 #include <glad\glad.h>
 
@@ -93,28 +94,25 @@ namespace fe
 		}
 	}
 
-	void Renderer2D::RenderScene(const Scene& scene, Set cameraSet)
+	void Renderer2D::RenderScene(Scene& scene, Set cameraSet)
 	{
 		auto& projectionMatrix = cameraSet.Get<CCamera>();
-		auto& viewMatrix = cameraSet.Get<CTransform>();
+		auto& viewMatrix = scene.GetRegistry().get<CTransform>(cameraSet).Global;
 		RenderScene(scene, projectionMatrix, viewMatrix);
 	}
 
-	void Renderer2D::RenderScene(const Scene& scene, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
+	void Renderer2D::RenderScene(Scene& scene, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
 	{
 		FE_PROFILER_FUNC();
 
 		BeginScene(projectionMatrix, viewMatrix);
-		auto& quadStorage = scene.GetRegistry().storage<Quad>();
-		auto& transformStorage = scene.GetRegistry().storage<CTransform>();
 
-		auto& querry = ComponentsQuerry(std::forward_as_tuple(quadStorage, transformStorage), std::forward_as_tuple());
+		auto& view = scene.GetRegistry().view<Quad, CTransform>();
 
-		for (auto ID : querry)
+		for (auto ID : view)
 		{
-			auto& quad = querry.get<Quad>(ID);
-			auto& transform = querry.get<CTransform>(ID);
-			DrawQuad(quad, transform);
+			auto [quad, transform] = view.get(ID);
+			DrawQuad(quad, transform.Global);
 		}
 
 		EndScene();
@@ -144,7 +142,7 @@ namespace fe
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
-	void Renderer2D::DrawQuad(const Quad& quad, const CTransform& transform)
+	void Renderer2D::DrawQuad(const Quad& quad, Transform& transform)
 	{
 		BatchData* batch = &(s_Data->OpaqueBatch);
 
@@ -156,7 +154,7 @@ namespace fe
 		BatchQuadDrawCall(quad, transform, *batch);
 	}
 
-	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const CTransform& transform, BatchData& batch)
+	void Renderer2D::BatchQuadDrawCall(const Quad& quad, Transform& transform, BatchData& batch)
 	{
 		auto& VIt = batch.QuadVeriticesIt;
 
@@ -202,9 +200,8 @@ namespace fe
 
 		float depth = (float)quad.Layer / 10.0f;
 
-		auto tmp = transform;
-		tmp.Position.z = depth;
-		glm::mat4 transformMatrix = tmp.GetTransform();
+		transform.Position.z = depth;
+		glm::mat4 transformMatrix = transform.GetTransform();
 		
 		for (int i = 0; i < 4; i++)
 		{

@@ -19,11 +19,11 @@ namespace fe
 		
 		      CCamera&    GetCamera()          { return m_Camera; }
 		const CCamera&    GetCamera()    const { return m_Camera; }
-		      CTransform& GetTransform()       { return m_Transform; }
-		const CTransform& GetTransform() const { return m_Transform; }
+		      Transform& GetTransform()       { return m_Transform; }
+		const Transform& GetTransform() const { return m_Transform; }
 	private:
 		CCamera m_Camera;
-		CTransform m_Transform;
+		Transform m_Transform;
 
 		float m_TranslationSpeed = 0.5f;
 		float m_RotationSpeed = 30.0f;

@@ -18,6 +18,8 @@
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\Set.h"
+#include "FoolsEngine\Scene\Hierarchy.h"
+#include "FoolsEngine\Scene\NativeScript.h"
 
 
 #ifdef FE_INTERNAL_BUILD

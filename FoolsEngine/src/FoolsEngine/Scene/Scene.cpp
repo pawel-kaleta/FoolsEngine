@@ -1,30 +1,41 @@
 #include "FE_pch.h"
 #include "ECS.h"
 #include "Scene.h"
+
 #include "Set.h"
+#include "Hierarchy.h"
+#include "NativeScript.h"
 
 namespace fe
 {
 	Scene::Scene()
-		: m_PrimaryCameraSetID(0)
+		: m_PrimaryCameraSetID(NullSetID)
 	{
-		auto root = m_Registry.create(0);
-		Set set(root, this);
-		FE_CORE_ASSERT(set && (root == 0), "Failed to create root Set in a Scene");
+		auto root = m_Registry.create(RootID);
+		ECS_handle handle(m_Registry, RootID);
+		
+		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Set in a Scene");
 
-		set.Emplace<CName>("root");
-		set.Emplace<CCommonTags>(CCommonTags::Root);
-		set.Emplace<CTransform>();
+		handle.emplace<CName>("root");
+		handle.emplace<CTransform>();
+		handle.emplace<CTags>();
+		handle.emplace<CHierarchyNode>().Parent = NullSetID;
+
+		m_SceneHierarchy = CreateScope<SceneHierarchy>(m_Registry);
 	}
 
-	Set Scene::CreateSet()
+	Set Scene::CreateSet(SetID parent, const std::string& name)
 	{
-		return Set(m_Registry.create(), this);
+		Set set(m_Registry.create(), this);
+		
+		m_SceneHierarchy->CreateNode(set, parent, name);
+
+		return set;
 	}
 
 	const Set Scene::Root()
 	{
-		return Set(0, this);
+		return Set(RootID, this);
 	}
 
 	Set Scene::GetSetWithPrimaryCamera() {

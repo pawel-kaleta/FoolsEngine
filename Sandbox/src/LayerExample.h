@@ -17,7 +17,5 @@ public:
 private:
 	fe::Scope<fe::Scene> m_Scene;
 
-	float m_TargetMoveSpeed = 1.1f;
-	fe::Set m_Target;
 	fe::Set m_ColorQuad;
 };

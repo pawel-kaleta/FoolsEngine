@@ -1,10 +1,14 @@
 #pragma once
 #include "ECS.h"
-#include "Set.h"
 #include "Component.h"
 
 namespace fe
 {
+	class SceneHierarchy;
+	template <typename Component, typename DataStruct>
+	class HierarchicalComponentHandle;
+	class Scene;
+
 	struct NativeScript
 	{
 	public:
@@ -35,6 +39,8 @@ namespace fe
 		template<typename Component, typename... Args>
 		Component& Emplace(Args&&... args)
 		{
+			static_assert(!std::is_base_of_v<CHierarchicalBase, Component> && !std::is_base_of_v<CHierarchyNode, Component>, "Cannot emplace Hierarchical components!");
+
 			FE_CORE_ASSERT(!AnyOf<Component>(), "This Set already have this component");
 			return m_Handle.emplace<Component>(args...);
 		}
@@ -43,6 +49,8 @@ namespace fe
 		template<typename Component, typename... Args>
 		Component& Replace(Args&&... args)
 		{
+			static_assert(!std::is_base_of_v<CHierarchicalBase, Component> && !std::is_base_of_v<CHierarchyNode, Component>, "Cannot replace Hierarchical components!");
+
 			FE_CORE_ASSERT(AllOf<Component>(), "This Set does not have this component yet");
 			return m_Handle.replace<Component>(std::forward<Args>(args)...);
 		}
@@ -51,21 +59,29 @@ namespace fe
 		template<typename Component, typename... Args>
 		Component& EmplaceOrReplace(Args&&... args)
 		{
-			return m_Handle.emplace_or_replace<Component>(std::forward<Args>(args)...);
+			static_assert(!std::is_base_of_v<CHierarchicalBase, Component> && !std::is_base_of_v<CHierarchyNode, Component>, "Cannot emplace Hierarchical components!");
+			return m_Handle.emplace_or_replace<TComponent>(std::forward<Args>(args)...);
 		}
 
 		//In default storage pool only!
 		template<typename... Components>
 		auto& Get()
 		{
+			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
+			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Hierarchy modyfications not yet implemented");
 			FE_CORE_ASSERT(AllOf<Components...>(), "This Set does not have all of this components");
 			return m_Handle.get<Components...>();
 		}
+
+		HierarchicalComponentHandle<CTransform, Transform> GetTransformHandle();
+		HierarchicalComponentHandle<CTags, TagsBase> GetTagsHandle();
 
 		//In default storage pool only!
 		template<typename Component, typename... Args>
 		auto& GetOrEmplace(Args&&... args)
 		{
+			static_assert(!std::is_base_of_v<CHierarchicalBase, Component>, "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
+			static_assert(!std::is_base_of_v<CHierarchyNode, Component>, "Hierarchy modyfications not yet implemented");
 			return m_Handle.get_or_emplace<Component>(std::forward<Args>(args)...);
 		}
 
@@ -73,6 +89,8 @@ namespace fe
 		template<typename... Components>
 		auto& GetIfExist()
 		{
+			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
+			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Hierarchy modyfications not yet implemented");
 			return m_Handle.try_get<Components...>();
 		}
 
@@ -80,6 +98,9 @@ namespace fe
 		template<typename... Components>
 		void Remove()
 		{
+			static_assert(!std::is_base_of_v<CHierarchicalBase, Components> && ..., "Cannot remove Hierarchical components!");
+			static_assert(!std::is_base_of_v<CHierarchyNode, Components> && ..., "Cannot remove Hierarchical components!");
+
 			FE_CORE_ASSERT(AllOf<Components...>(), "This Set does not have all of this components");
 			m_Handle.erase<Components...>();
 		}
@@ -88,6 +109,9 @@ namespace fe
 		template<typename... Components>
 		auto& RemoveIfExist()
 		{
+			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "Cannot remove Hierarchical components!");
+			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Cannot remove Hierarchical components!");
+
 			return m_Handle.remove<Components...>();
 		}
 
@@ -124,12 +148,12 @@ namespace fe
 
 		//should be immediately called after construction!
 		template<typename Script, typename... Args>
-		Script& Instantiate(SetID setID, Scene* scene, Args&&... args)
+		void Instantiate(SetID setID, Scene* scene, Args&&... args)
 		{
 			m_Instance = static_cast<NativeScript*>(new Script(std::forward<Args>(args)...));
 			m_Instance->m_Handle = ECS_handle(scene->m_Registry, setID);
 			m_Instance->m_Scene = scene;
-			return (Script&)m_Instance;
+			m_Instance->OnCreate();
 		}
 
 		~CNativeScript()

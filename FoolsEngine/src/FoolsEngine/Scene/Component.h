@@ -1,35 +1,34 @@
 #pragma once
 
+#include "ECS.h"
+
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\quaternion.hpp>
 
 namespace fe
 {
-	class Component
-	{
-	};
+	class Scene;
+	
+	struct ComponentBase {};
 
-	struct CName : Component
+	struct CName : ComponentBase
 	{
 		CName(const std::string& name)
 			: Name(name) {}
-		CName(const CName&) = default;
-		CName() = default;
 
 		std::string Name = std::string();
 
-		operator       std::string& () { if (Name.empty()) Name = "Set"; return Name; }
-		operator const std::string& () { if (Name.empty()) Name = "Set"; return Name; }
+		operator       std::string& () { return Name; }
+		operator const std::string& () { return Name; }
 	};
 
-	struct CTags
+	struct TagsBase
 	{
 		uint32_t TagBitFlags = 0;
 
-		CTags() = default;
-		CTags(const CTags&) = default;
-		CTags(uint32_t tags)
+		TagsBase() = default;
+		TagsBase(uint32_t tags)
 			: TagBitFlags(tags) {};
 
 		operator       uint32_t& ()       { return TagBitFlags; }
@@ -47,43 +46,128 @@ namespace fe
 		{
 			TagBitFlags |= tag;
 		}
+
+		TagsBase operator+ (const TagsBase& other) const
+		{
+			return this->TagBitFlags | other.TagBitFlags;
+		}
+		TagsBase operator- (const TagsBase& other) const
+		{
+			return this->TagBitFlags & ~other.TagBitFlags;
+		}
+		bool operator==(const TagsBase& other) const
+		{
+			return TagBitFlags == other.TagBitFlags;
+		}
+
 	};
 
-	struct CCommonTags : CTags
+	struct CommonTags : public TagsBase
 	{
-		//You can add your own tag to definition and/or make your own component with your own list
-		enum CommonTags : uint32_t
+		enum List : uint32_t
 		{
 			Error = BIT_FLAG(0),
-			Root = BIT_FLAG(1)
+			Player = BIT_FLAG(1)
 		};
 	};
+	struct InternalTags : public TagsBase
+	{};
+	struct Tags
+	{
+		CommonTags Common;
+		InternalTags Internal;
 
-	struct CTransform : Component
+		Tags operator+ (const Tags& other) const
+		{
+			Tags newTags;
+			(TagsBase)newTags.Common   = Common   + other.Common;
+			(TagsBase)newTags.Internal = Internal + other.Internal;
+			return newTags;
+		}
+		Tags operator- (const Tags& other) const
+		{
+			Tags newTags;
+			(TagsBase)newTags.Common   = Common   - other.Common;
+			(TagsBase)newTags.Internal = Internal - other.Internal;
+			return newTags;
+		}
+		bool operator==(const Tags& other) const
+		{
+			return Common == other.Common && Internal == other.Internal;
+		}
+	};
+
+	struct CHierarchyNode : ComponentBase
+	{
+		SetID Parent = RootID;
+
+		uint32_t HierarchyLvl = 0; // = parent.HierarchyLvl + 1;
+		
+		SetID PreviousSibling = NullSetID;
+		SetID NextSibling = NullSetID;
+
+		uint32_t Children = 0;
+		SetID FirstChild = NullSetID;
+	};
+
+	struct Transform
 	{
 		glm::vec3 Position = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 
-		CTransform() = default;
-		CTransform(const CTransform&) = default;
-		CTransform(const glm::vec3& translation, const glm::vec3& rotation = {0.0f, 0.0f, 0.0f}, const glm::vec3& scale = { 1.0f, 1.0f, 1.0f })
-			: Position(translation), Rotation(rotation), Scale(scale) {};
-		
 		glm::mat4 GetTransform() const
 		{
 			auto trans = glm::translate(glm::mat4(1.0f), Position);
 			auto rot = glm::toMat4(glm::quat(glm::radians(Rotation)));
 			auto scale = glm::scale(glm::mat4(1.0f), Scale);
-
 			return trans * rot * scale;
 		}
 
-		operator       glm::mat4 ()       { return GetTransform(); }
-		operator const glm::mat4 () const { return GetTransform(); }
+		operator       glm::mat4()       { return GetTransform(); }
+		operator const glm::mat4() const { return GetTransform(); }
+
+		Transform operator+ (const Transform& other) const
+		{
+			Transform newTransform;
+			newTransform.Position = this->Position + this->Scale * glm::rotate(glm::quat(glm::radians(this->Rotation)), other.Position);
+			newTransform.Rotation = this->Rotation + other.Rotation;
+			newTransform.Scale = this->Scale * other.Scale;
+			return newTransform;
+		}
+		Transform operator- (const Transform& other) const
+		{
+			Transform newTransform;
+			newTransform.Position = glm::rotate(glm::quat(-1.0f * other.Rotation), (this->Position - other.Position));
+			newTransform.Rotation = this->Rotation - other.Rotation;
+			newTransform.Scale = this->Scale / other.Scale;
+			return newTransform;
+		}
+		bool operator==(const Transform& other) const
+		{
+			return Position == other.Position && Rotation == other.Rotation && Scale == other.Scale;
+		}
 	};
 
-	struct CCamera : Component
+	struct CHierarchicalBase : ComponentBase {};
+
+	template<typename DataStruct> //DataStruct needs to implement +,-,== operators
+	struct CHierarchical : CHierarchicalBase
+	{
+		CHierarchical() = default;
+		CHierarchical(const CHierarchical&) = default;
+
+		DataStruct Global;
+		DataStruct Local;	
+
+		operator const DataStruct() const { return Global; }
+	};
+
+	using CTransform = CHierarchical<Transform>;
+	
+	using CTags = CHierarchical<Tags>;
+
+	struct CCamera : ComponentBase
 	{
 		enum CameraMode
 		{
@@ -93,13 +177,11 @@ namespace fe
 		};
 
 		CameraMode Mode = CameraMode::Orthographic;
-		float AspectRatio;
-		float Zoom;
-		float NearClip;
-		float FarClip;
+		float AspectRatio = 1280.0f / 720.0f;
+		float Zoom = 1.0f;
+		float NearClip = -1.0f;
+		float FarClip = 1.0f;
 
-		CCamera() = default;
-		CCamera(const CCamera& other) = default;
 		CCamera(CameraMode mode, float aspectRatio, float zoom = 1.0f, float nearClip = -1.0f, float farClip = 1.0f)
 			: Mode(mode), AspectRatio(aspectRatio), Zoom(zoom), NearClip(nearClip), FarClip(farClip) {};
 

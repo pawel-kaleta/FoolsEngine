@@ -49,7 +49,6 @@ project "FoolsTools"
 	filter "configurations:Publish"
 		defines {
 			"FE_PUBLISH",
-			"FE_INTERNAL_BUILD",
 			"FE_EDITOR"
 		}
 		runtime "Release"

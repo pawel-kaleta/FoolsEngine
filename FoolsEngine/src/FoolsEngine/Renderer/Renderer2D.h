@@ -4,11 +4,11 @@
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
-#include "FoolsEngine\Scene\Set.h"
 
 
 namespace fe
 {
+	class Set;
 
 	class Renderer2D
 	{
@@ -43,7 +43,7 @@ namespace fe
 			L9 = 9
 		};
 
-		struct Quad : Component
+		struct Quad : ComponentBase
 		{
 			Layer Layer        = Layer::L0;
 			glm::vec4 Color    = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -56,21 +56,21 @@ namespace fe
 		static void Init();
 		static void Shutdown() {}
 
-		static void RenderScene(const Scene& scene, Set cameraSet);
-		static void RenderScene(const Scene& scene, const glm::mat4& projection, const glm::mat4& view);
+		static void RenderScene(Scene& scene, Set cameraSet);
+		static void RenderScene(Scene& scene, const glm::mat4& projection, const glm::mat4& view);
 
 
-		static void DrawQuad(const Quad& quad, const CTransform& transform);
+		static void DrawQuad(const Quad& quad, Transform& transform);
 
 		inline static RenderStats GetStats() { return s_Stats; }
 
 	private:
 		struct ConstLimits {
-			const static uint32_t QuadsInBatch = 10000;
-			const static uint32_t MaxVeritices = QuadsInBatch * 4;
-			const static uint32_t MaxIndices = QuadsInBatch * 6;
-			const static uint32_t RendererTextureSlotsCount = 32;
-			const static uint32_t LayersCount = 19;
+			constexpr static uint32_t QuadsInBatch = 10000;
+			constexpr static uint32_t MaxVeritices = QuadsInBatch * 4;
+			constexpr static uint32_t MaxIndices = QuadsInBatch * 6;
+			constexpr static uint32_t RendererTextureSlotsCount = 32;
+			constexpr static uint32_t LayersCount = 19;
 		};
 
 		struct QuadVertex
@@ -112,7 +112,7 @@ namespace fe
 		static Scope<Renderer2DData> s_Data;
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
-		static void BatchQuadDrawCall(const Quad& quad, const CTransform& transform, BatchData& batch);
+		static void BatchQuadDrawCall(const Quad& quad, Transform& transform, BatchData& batch);
 		static void Flush(BatchData& batch, bool transparency);
 		static void EndScene();
 

@@ -1,33 +1,35 @@
 #pragma once
 #include "ECS.h"
-#include "Component.h"
-
-
 
 namespace fe
 {
+	using namespace entt::literals;
 	class Set;
+	class SceneHierarchy;
+
 	class Scene
 	{
 	public:
 		Scene();
 		~Scene() = default;
 
-		Set CreateSet();
+		Set CreateSet(SetID parent = RootID, const std::string& name = "set");
 		const Set Root();
 
-		const Registry& GetRegistry() const { return m_Registry; }
 		Set GetSetWithPrimaryCamera();
 		void SetPrimaryCameraSet(Set set);
 		void SetPrimaryCameraSet(SetID id);
 
 		void UpdateScripts();
+
+		Registry& GetRegistry() { return m_Registry; }
+		SceneHierarchy& GetHierarchy() { return *m_SceneHierarchy.get(); }
 	private:
 		friend class Set;
 		friend struct CNativeScript;
+
 		Registry m_Registry;
 		SetID m_PrimaryCameraSetID;
+		Scope<SceneHierarchy> m_SceneHierarchy;
 	};
-
-	
 }

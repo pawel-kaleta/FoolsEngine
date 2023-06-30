@@ -14,14 +14,29 @@ namespace fe
 
 		void OnUpdate() override
 		{
-			auto& position = Get<CTransform>().Position;
+			auto transform = GetTransformHandle();
+			auto newTransform = transform.Global();
+			auto& position = newTransform.Position;
+			auto& rotation = newTransform.Rotation;
+			auto& scale = newTransform.Scale;
+
 
 			float moveDistance = Time::DeltaTime() * MoveSpeed;
+			float rotSpeed = Time::DeltaTime() * 80.0f;
+			float scaleSpeed = Time::DeltaTime() * 0.2f;
 
-			     if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
+				 if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleSpeed;
+			else if (InputPolling::IsKeyPressed(InputCodes::KP3))	scale += scaleSpeed;
+
+			     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.z -= rotSpeed;
+			else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.z += rotSpeed;
+
+				 if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
 			else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
-			     if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
+				 if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
 			else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.y -= moveDistance;
+
+			transform = newTransform;
 		}
 	};
 
@@ -44,21 +59,23 @@ namespace fe
 			quad.Layer = Renderer2D::Layer::L_2;
 			quad.TextureTilingFactor = 3;
 			quad.Transparency = false;
-
-			auto& transform = tintedTextureQuad.Emplace<CTransform>();
+			 
+			Transform transform;
 			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+			tintedTextureQuad.GetTransformHandle() = transform;
 		}
 
 		m_ColorQuad = m_Scene->CreateSet();
 		{
-			auto& quad = m_ColorQuad.Emplace<Renderer2D::Quad>();
-			quad.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
-			quad.Layer = Renderer2D::Layer::L_1;
+			auto& quad2 = m_ColorQuad.Emplace<Renderer2D::Quad>();
+			quad2.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+			quad2.Layer = Renderer2D::Layer::L_1;
 
-			auto& transform = m_ColorQuad.Emplace<CTransform>();
+			Transform transform;
 			transform.Position = glm::vec3(-0.1f, -0.1f, 0.0f);
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
+			m_ColorQuad.GetTransformHandle() = transform;
 		}
 
 		Set target = m_Scene->CreateSet();
@@ -66,14 +83,29 @@ namespace fe
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
 			auto& quad = target.Emplace<Renderer2D::Quad>();
-			quad.Layer = Renderer2D::Layer::L0;
+			quad.Layer = Renderer2D::Layer::L1;
 			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
-			auto& transform = target.Emplace<CTransform>();
+			Transform transform;
 			transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
+			target.GetTransformHandle() = transform;
 
 			target.AddScript<TargetBehaviourScript>();
+		}
+
+		Set targetChild_1 = m_Scene->CreateSet(target);
+		{
+			auto& quad = targetChild_1.Emplace<Renderer2D::Quad>();
+			quad.Layer = Renderer2D::Layer::L0;
+			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			quad.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
+
+			Transform transform;
+			transform.Position = glm::vec3(0.8f, 0.8f, 0.8f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
+			targetChild_1.GetTransformHandle().SetLocal(transform);
 		}
 	}
 
@@ -86,6 +118,7 @@ namespace fe
 		{
 			m_Scene->UpdateScripts();
 			m_CameraController.OnUpdate();
+			m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 		}
 
 		m_Framebuffer->Bind();
@@ -191,7 +224,7 @@ namespace fe
 				}
 
 				auto fbID = m_Framebuffer->GetColorAttachmentID();
-				ImGui::Image((void*)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 			ImGui::End();
 
