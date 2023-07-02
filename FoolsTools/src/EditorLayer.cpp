@@ -53,7 +53,7 @@ namespace fe
 
 		Set tintedTextureQuad = m_Scene->CreateSet();
 		{
-			auto& quad = tintedTextureQuad.Emplace<Renderer2D::Quad>();
+			auto& quad = tintedTextureQuad.Emplace<Renderer2D::CQuad>();
 			quad.Texture = TextureLibrary::Get("Default_Texture");
 			quad.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
 			quad.Layer = Renderer2D::Layer::L_2;
@@ -68,7 +68,7 @@ namespace fe
 
 		m_ColorQuad = m_Scene->CreateSet();
 		{
-			auto& quad2 = m_ColorQuad.Emplace<Renderer2D::Quad>();
+			auto& quad2 = m_ColorQuad.Emplace<Renderer2D::CQuad>();
 			quad2.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 			quad2.Layer = Renderer2D::Layer::L_1;
 
@@ -82,7 +82,7 @@ namespace fe
 		{
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-			auto& quad = target.Emplace<Renderer2D::Quad>();
+			auto& quad = target.Emplace<Renderer2D::CQuad>();
 			quad.Layer = Renderer2D::Layer::L1;
 			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
@@ -92,11 +92,15 @@ namespace fe
 			target.GetTransformHandle() = transform;
 
 			target.AddScript<TargetBehaviourScript>();
+
+			auto tags = target.GetTagsHandle().Local();
+			tags.Common.Add(CommonTags::Player);
+			target.GetTagsHandle().SetLocal(tags);
 		}
 
 		Set targetChild_1 = m_Scene->CreateSet(target);
 		{
-			auto& quad = targetChild_1.Emplace<Renderer2D::Quad>();
+			auto& quad = targetChild_1.Emplace<Renderer2D::CQuad>();
 			quad.Layer = Renderer2D::Layer::L0;
 			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
 			quad.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
@@ -118,6 +122,7 @@ namespace fe
 		{
 			m_Scene->UpdateScripts();
 			m_CameraController.OnUpdate();
+			m_Scene->DestroyFlaggedSets();
 			m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 		}
 
@@ -191,8 +196,8 @@ namespace fe
 
 			ImGui::Begin("Settings");
 			{
-				auto& colref = m_ColorQuad.Get<Renderer2D::Quad>().Color;
-				ImGui::ColorEdit4("Quad color", (float*)&colref);
+				auto& colref = m_ColorQuad.Get<Renderer2D::CQuad>().Color;
+				ImGui::ColorEdit4("CQuad color", (float*)&colref);
 
 				ImGui::Text("Stats:");
 				auto& stats = Renderer2D::GetStats();

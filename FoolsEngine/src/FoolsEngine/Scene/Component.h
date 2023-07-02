@@ -158,7 +158,7 @@ namespace fe
 		CHierarchical(const CHierarchical&) = default;
 
 		DataStruct Global;
-		DataStruct Local;	
+		DataStruct Local;
 
 		operator const DataStruct() const { return Global; }
 	};
@@ -213,4 +213,6 @@ namespace fe
 		};
 	};
 
+	struct CDestroyFlag : ComponentBase
+	{};
 }

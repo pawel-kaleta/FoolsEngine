@@ -27,10 +27,23 @@ namespace fe
 		m_Registry.group<CHierarchyNode, CTransform, CTags, CName>().sort(Compare, Sort);
 		m_SafeOrder = true;
 	}
+	void SceneHierarchy::DestroyFlagged()
+	{
+		auto view = m_Registry.view<CDestroyFlag>();
+
+		for (auto setID : view)
+		{
+			m_Registry.destroy(setID);
+		}
+
+		m_SafeOrder = false;
+	}
 	void SceneHierarchy::CreateNode(Set set, SetID parentID, const std::string& name)
 	{
 		set.m_Handle.emplace<CTags>();
+		set.m_Handle.emplace<CDirtyFlag<CTags>>();
 		set.m_Handle.emplace<CTransform>();
+		set.m_Handle.emplace<CDirtyFlag<CTransform>>();
 		set.m_Handle.emplace<CName>(name);
 		auto& node = set.m_Handle.emplace<CHierarchyNode>();
 		auto& parentNode = m_Registry.get<CHierarchyNode>(parentID);
@@ -61,5 +74,6 @@ namespace fe
 		}
 
 		m_SafeOrder = false;
+
 	}
 }

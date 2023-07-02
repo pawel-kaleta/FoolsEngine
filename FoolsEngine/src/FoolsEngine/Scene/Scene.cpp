@@ -21,14 +21,14 @@ namespace fe
 		handle.emplace<CTags>();
 		handle.emplace<CHierarchyNode>().Parent = NullSetID;
 
-		m_SceneHierarchy = CreateScope<SceneHierarchy>(m_Registry);
+		m_Hierarchy = CreateScope<SceneHierarchy>(m_Registry);
 	}
 
 	Set Scene::CreateSet(SetID parent, const std::string& name)
 	{
 		Set set(m_Registry.create(), this);
 		
-		m_SceneHierarchy->CreateNode(set, parent, name);
+		m_Hierarchy->CreateNode(set, parent, name);
 
 		return set;
 	}
@@ -83,5 +83,9 @@ namespace fe
 			CNativeScript& script = querry.get<CNativeScript>(setID);
 			script.m_Instance->OnUpdate();
 		}
+	}
+	void Scene::DestroyFlaggedSets()
+	{
+		m_Hierarchy->DestroyFlagged();
 	}
 }

@@ -43,7 +43,7 @@ namespace fe
 			L9 = 9
 		};
 
-		struct Quad : ComponentBase
+		struct CQuad : ComponentBase
 		{
 			Layer Layer        = Layer::L0;
 			glm::vec4 Color    = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -60,7 +60,7 @@ namespace fe
 		static void RenderScene(Scene& scene, const glm::mat4& projection, const glm::mat4& view);
 
 
-		static void DrawQuad(const Quad& quad, Transform& transform);
+		static void DrawQuad(const CQuad& quad, Transform& transform);
 
 		inline static RenderStats GetStats() { return s_Stats; }
 
@@ -112,7 +112,7 @@ namespace fe
 		static Scope<Renderer2DData> s_Data;
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
-		static void BatchQuadDrawCall(const Quad& quad, Transform& transform, BatchData& batch);
+		static void BatchQuadDrawCall(const CQuad& quad, Transform& transform, BatchData& batch);
 		static void Flush(BatchData& batch, bool transparency);
 		static void EndScene();
 

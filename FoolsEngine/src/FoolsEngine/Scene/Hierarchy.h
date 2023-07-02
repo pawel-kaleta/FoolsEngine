@@ -121,7 +121,7 @@ namespace fe
 			}
 		}
 
-		const DataStruct const GetGlobal()
+		const DataStruct GetGlobal()
 		{
 			if (!m_ParentRoot)
 				Inherit(m_SetID);
@@ -257,9 +257,6 @@ namespace fe
 
 		void MakeHierarchyCurrent();
 
-		// amortized sorting to optimize cache locality when traversing hierarchy
-		void SortStep();
-
 	private:
 		friend class Scene;
 		template <typename Component, typename DataStruct>
@@ -351,12 +348,6 @@ namespace fe
 
 		void CreateNode(Set set, SetID parentID, const std::string& name);
 
-		void DestroyNode(SetID setID)
-		{
-			FE_LOG_CORE_ERROR("Not implemented yet");
-			m_SafeOrder = false;
-		}
-
 		template <typename Component>
 		void MakeGlobalsCurrent()
 		{
@@ -388,6 +379,12 @@ namespace fe
 
 			m_Registry.storage<CDirtyFlag<Component>>().clear();
 		}
+
+		// amortized sorting to optimize cache locality when traversing hierarchy
+		void SortStep();
+
+		void DestroyFlagged();
+
 	};
 	
 }

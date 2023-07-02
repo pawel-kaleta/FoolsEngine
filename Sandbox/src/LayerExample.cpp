@@ -46,7 +46,7 @@ void LayerExample::OnAttach()
 
 	fe::Set tintedTextureQuad = m_Scene->CreateSet();
 	{
-		auto& quad = tintedTextureQuad.Emplace<fe::Renderer2D::Quad>();
+		auto& quad = tintedTextureQuad.Emplace<fe::Renderer2D::CQuad>();
 		quad.Texture = fe::TextureLibrary::Get("Default_Texture");
 		quad.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
 		quad.Layer = fe::Renderer2D::Layer::L_2;
@@ -61,7 +61,7 @@ void LayerExample::OnAttach()
 
 	m_ColorQuad = m_Scene->CreateSet();
 	{
-		auto& quad = m_ColorQuad.Emplace<fe::Renderer2D::Quad>();
+		auto& quad = m_ColorQuad.Emplace<fe::Renderer2D::CQuad>();
 		quad.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 		quad.Layer = fe::Renderer2D::Layer::L_1;
 
@@ -75,7 +75,7 @@ void LayerExample::OnAttach()
 	{
 		fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-		auto& quad = target.Emplace<fe::Renderer2D::Quad>();
+		auto& quad = target.Emplace<fe::Renderer2D::CQuad>();
 		quad.Layer = fe::Renderer2D::Layer::L0;
 		quad.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 
@@ -89,7 +89,7 @@ void LayerExample::OnAttach()
 
 	fe::Set targetChild_1 = m_Scene->CreateSet(target);
 	{
-		auto& quad = targetChild_1.Emplace<fe::Renderer2D::Quad>();
+		auto& quad = targetChild_1.Emplace<fe::Renderer2D::CQuad>();
 		quad.Layer = fe::Renderer2D::Layer::L0;
 		quad.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 		quad.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
@@ -108,7 +108,7 @@ void LayerExample::OnUpdate()
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
 
 	m_Scene->UpdateScripts();
-
+	m_Scene->DestroyFlaggedSets();
 	m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetSetWithPrimaryCamera());
 }
@@ -117,7 +117,7 @@ void LayerExample::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
 	
-	ImGui::ColorEdit4("Quad color", (float *)& m_ColorQuad.Get<fe::Renderer2D::Quad>().Color);
+	ImGui::ColorEdit4("CQuad color", (float *)& m_ColorQuad.Get<fe::Renderer2D::CQuad>().Color);
 
 	ImGui::Text("Stats:");
 	auto& stats = fe::Renderer2D::GetStats();

@@ -2,6 +2,8 @@
 #include "ECS.h"
 #include "Component.h"
 
+#include <queue>
+
 namespace fe
 {
 	class SceneHierarchy;
@@ -74,7 +76,7 @@ namespace fe
 		}
 
 		HierarchicalComponentHandle<CTransform, Transform> GetTransformHandle();
-		HierarchicalComponentHandle<CTags, TagsBase> GetTagsHandle();
+		HierarchicalComponentHandle<CTags, Tags> GetTagsHandle();
 
 		//In default storage pool only!
 		template<typename Component, typename... Args>
@@ -115,13 +117,8 @@ namespace fe
 			return m_Handle.remove<Components...>();
 		}
 
-		// Destruction should be scaduled, as it would delete also object that we are inside of now
-		//
-		//all pools :)
-		//void Destroy()
-		//{
-		//	m_Handle.destroy(); 
-		//}
+		// Destruction is scheduled
+		void Destroy();
 
 		//all pools :)
 		auto& Storages()
@@ -140,7 +137,7 @@ namespace fe
 		Scene* m_Scene = nullptr;
 	};
 
-	struct CNativeScript
+	struct CNativeScript : ComponentBase
 	{
 		//call Instantiate<Script>() immediately after;
 		CNativeScript() = default;

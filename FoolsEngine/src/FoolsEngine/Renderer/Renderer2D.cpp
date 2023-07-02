@@ -107,7 +107,7 @@ namespace fe
 
 		BeginScene(projectionMatrix, viewMatrix);
 
-		auto& view = scene.GetRegistry().view<Quad, CTransform>();
+		auto& view = scene.GetRegistry().view<CQuad, CTransform>();
 
 		for (auto ID : view)
 		{
@@ -142,7 +142,7 @@ namespace fe
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
-	void Renderer2D::DrawQuad(const Quad& quad, Transform& transform)
+	void Renderer2D::DrawQuad(const CQuad& quad, Transform& transform)
 	{
 		BatchData* batch = &(s_Data->OpaqueBatch);
 
@@ -154,7 +154,7 @@ namespace fe
 		BatchQuadDrawCall(quad, transform, *batch);
 	}
 
-	void Renderer2D::BatchQuadDrawCall(const Quad& quad, Transform& transform, BatchData& batch)
+	void Renderer2D::BatchQuadDrawCall(const CQuad& quad, Transform& transform, BatchData& batch)
 	{
 		auto& VIt = batch.QuadVeriticesIt;
 

@@ -3,10 +3,12 @@
 #include "ECS.h"
 #include "Component.h"
 
+#include <queue>
+
 namespace fe
 {
-	class NativeScript;
-	class CNativeScript;
+	struct NativeScript;
+	struct CNativeScript;
 	class Scene;
 	template <typename Component, typename DataStruct>
 	class HierarchicalComponentHandle;
@@ -38,7 +40,9 @@ namespace fe
 		template<typename Component, typename... Args>
 		Component& Emplace(Args&&... args)
 		{
+			static_assert(std::is_base_of_v<ComponentBase, Component>, "This is not a component!");
 			static_assert(!std::is_base_of_v<CHierarchicalBase, Component> && !std::is_base_of_v<CHierarchyNode, Component>, "Cannot emplace Hierarchical components!");
+			static_assert(!std::is_base_of_v<CNativeScript, Component>, "For script component use AddScript()");
 			
 			FE_CORE_ASSERT(!AnyOf<Component>(), "This Set already have this component");
 			SetID setID = m_Handle.entity();
@@ -73,7 +77,7 @@ namespace fe
 		}
 
 		HierarchicalComponentHandle<CTransform, Transform> GetTransformHandle();
-		HierarchicalComponentHandle<CTags, TagsBase> GetTagsHandle();
+		HierarchicalComponentHandle<CTags, Tags> GetTagsHandle();
 
 		//In default storage pool only!
 		template<typename Component, typename... Args>
@@ -114,12 +118,8 @@ namespace fe
 			return m_Handle.remove<Components...>();
 		}
 
-		// all pools :)
-		void Destroy()
-		{
-			FE_LOG_CORE_ERROR("Not implemented yet!");
-			//m_Handle.destroy();
-		}
+		// destruction is scheduled 
+		void Destroy();
 
 		// all pools :)
 		bool IsEmpty()
@@ -151,6 +151,7 @@ namespace fe
 		template<typename Script, typename... Args>
 		Script& AddScript(Args&&... args)
 		{
+			static_assert(std::is_base_of_v<NativeScript, Script>, "Script has to inherit from NativeScript class");
 			FE_CORE_ASSERT(!AnyOf<CNativeScript>(), "This Set already have script component");
 			auto& scriptComponent = m_Handle.emplace<CNativeScript>();
 			scriptComponent.Instantiate<Script>(ID(), m_Scene, std::forward<Args>(args)...);

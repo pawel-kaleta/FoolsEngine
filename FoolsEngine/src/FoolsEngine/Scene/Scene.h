@@ -21,15 +21,16 @@ namespace fe
 		void SetPrimaryCameraSet(SetID id);
 
 		void UpdateScripts();
+		void DestroyFlaggedSets();
 
 		Registry& GetRegistry() { return m_Registry; }
-		SceneHierarchy& GetHierarchy() { return *m_SceneHierarchy.get(); }
+		SceneHierarchy& GetHierarchy() { return *m_Hierarchy.get(); }
 	private:
 		friend class Set;
 		friend struct CNativeScript;
 
 		Registry m_Registry;
 		SetID m_PrimaryCameraSetID;
-		Scope<SceneHierarchy> m_SceneHierarchy;
+		Scope<SceneHierarchy> m_Hierarchy;
 	};
 }
