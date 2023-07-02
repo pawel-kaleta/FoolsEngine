@@ -199,16 +199,17 @@ namespace fe
 
 	class ChildrenList
 	{
+	public:
 		ChildrenList(ChildrenList&) = default;
-		ChildrenList(SetID parentID, Registry::storage_for_type<CHierarchyNode>& nodesStorage)
+		ChildrenList(SetID parentID, Registry& registry)
 		{
-			auto& parentNode = nodesStorage.get(parentID);
+			auto& parentNode = registry.get<CHierarchyNode>(parentID);
 			m_Children = std::vector<SetID>(parentNode.Children);
 			SetID currentChild = parentNode.FirstChild;
 			for (auto it = m_Children.begin(); it != m_Children.end(); it++)
 			{
 				*it = currentChild;
-				currentChild = nodesStorage.get(currentChild).NextSibling;
+				currentChild = registry.get<CHierarchyNode>(currentChild).NextSibling;
 			}
 		}
 		
@@ -257,6 +258,16 @@ namespace fe
 
 		void MakeHierarchyCurrent();
 
+		bool IsOrderSafe()
+		{
+			return m_SafeOrder;
+		}
+
+		void EnforceSafeOrder()
+		{
+			if (!m_SafeOrder)
+				SortStep();
+		}
 	private:
 		friend class Scene;
 		template <typename Component, typename DataStruct>
@@ -282,6 +293,7 @@ namespace fe
 			uint32_t step = 1;
 			It partition_pivot(It begin, It end, uint32_t pivot)
 			{
+				FE_PROFILER_FUNC();
 				auto l = begin;
 				auto r = end;
 
@@ -300,6 +312,7 @@ namespace fe
 			}
 			void bigSort(It begin, It end, uint32_t pivot)
 			{
+				FE_PROFILER_FUNC();
 				while (end - begin > TRESHOLD)
 				{
 					auto cut = partition_pivot(begin, end, ++pivot);
@@ -310,6 +323,7 @@ namespace fe
 			}
 			void smallSort(It begin, It end)
 			{
+				FE_PROFILER_FUNC();
 				uint32_t length = end - begin;
 				uint32_t start = length % step;
 				
@@ -329,6 +343,7 @@ namespace fe
 			}
 			void tailSort(It begin, It end)
 			{
+				FE_PROFILER_FUNC();
 				std::sort(begin, --end, [&](SetID l, SetID r) {
 					const auto& cl = reg.get<CHierarchyNode>(l);
 					const auto& cr = reg.get<CHierarchyNode>(r);
@@ -351,9 +366,13 @@ namespace fe
 		template <typename Component>
 		void MakeGlobalsCurrent()
 		{
+			FE_PROFILER_FUNC();
+
 			bool manyUpdates = (m_Registry.size() / 2) < m_Registry.storage<CDirtyFlag<CTransform>>().size();
 			if (manyUpdates)
 			{
+				FE_PROFILER_SCOPE("manyUpdates");
+
 				if (!m_SafeOrder)
 					SortStep();
 				auto& group = m_Registry.group<CHierarchyNode, CTransform, CTags, CName>();
@@ -363,9 +382,16 @@ namespace fe
 					auto& parent = group.get<Component>(node.Parent);
 					component.Global = parent.Global + component.Local;
 				}
+
+				m_Registry.storage<CDirtyFlag<Component>>().clear();
+
+				return;
 			}
 
-			m_Registry.sort<CDirtyFlag<Component>>(Compare);
+			{
+				FE_PROFILER_SCOPE("std::sort");
+				m_Registry.sort<CDirtyFlag<Component>>(Compare);
+			}
 
 			auto& view = m_Registry.view<CDirtyFlag<Component>>();
 			

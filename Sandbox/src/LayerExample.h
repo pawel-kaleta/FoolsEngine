@@ -15,7 +15,7 @@ public:
 	void OnImGuiRender() override;
 
 private:
-	fe::Scope<fe::Scene> m_Scene;
+	fe::Ref<fe::Scene> m_Scene;
 
 	fe::Set m_ColorQuad;
 };

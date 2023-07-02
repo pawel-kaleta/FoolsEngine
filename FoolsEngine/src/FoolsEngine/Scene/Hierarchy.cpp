@@ -22,13 +22,19 @@ namespace fe
 	}
 	void SceneHierarchy::SortStep()
 	{
+		FE_PROFILER_FUNC();
+
 		FE_LOG_CORE_WARN("TO DO: Test sorting!");
 		//Compare not really used, but entt api requires
-		m_Registry.group<CHierarchyNode, CTransform, CTags, CName>().sort(Compare, Sort);
+		auto group = m_Registry.group<CHierarchyNode, CTransform, CTags, CName>();
+		//group.
+		group.sort(Compare, Sort);
 		m_SafeOrder = true;
 	}
 	void SceneHierarchy::DestroyFlagged()
 	{
+		FE_PROFILER_FUNC();
+
 		auto view = m_Registry.view<CDestroyFlag>();
 
 		for (auto setID : view)
@@ -40,11 +46,16 @@ namespace fe
 	}
 	void SceneHierarchy::CreateNode(Set set, SetID parentID, const std::string& name)
 	{
+		FE_PROFILER_FUNC();
+
 		set.m_Handle.emplace<CTags>();
 		set.m_Handle.emplace<CDirtyFlag<CTags>>();
+
 		set.m_Handle.emplace<CTransform>();
 		set.m_Handle.emplace<CDirtyFlag<CTransform>>();
+
 		set.m_Handle.emplace<CName>(name);
+
 		auto& node = set.m_Handle.emplace<CHierarchyNode>();
 		auto& parentNode = m_Registry.get<CHierarchyNode>(parentID);
 

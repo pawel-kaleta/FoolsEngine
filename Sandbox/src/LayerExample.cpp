@@ -38,7 +38,7 @@ struct TargetBehaviourScript : fe::NativeScript
 
 void LayerExample::OnAttach()
 {
-	m_Scene = fe::CreateScope<fe::Scene>();
+	m_Scene = fe::CreateRef<fe::Scene>();
 
 	auto camera = m_Scene->CreateSet();
 	camera.Emplace<fe::CCamera>(fe::CCamera::Orthographic, 1280.0f / 720.0f);

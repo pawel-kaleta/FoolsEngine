@@ -76,6 +76,8 @@ namespace fe
 
 	void Scene::UpdateScripts()
 	{
+		FE_PROFILER_FUNC();
+
 		auto& scriptComponentsStorage = m_Registry.storage<CNativeScript>();
 		auto& querry = ComponentsQuerry(std::forward_as_tuple(scriptComponentsStorage), std::forward_as_tuple());
 		for (auto setID : querry)

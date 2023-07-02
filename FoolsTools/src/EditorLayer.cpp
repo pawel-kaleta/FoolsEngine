@@ -1,5 +1,4 @@
 #include "EditorLayer.h"
-#include "FoolsEngine\Scene\NativeScript.h"
 
 namespace fe
 {
@@ -49,7 +48,8 @@ namespace fe
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
-		m_Scene = CreateScope<Scene>();
+		m_Scene = CreateRef<Scene>();
+		m_SceneHierarchyPanel.SetScene(m_Scene);
 
 		Set tintedTextureQuad = m_Scene->CreateSet();
 		{
@@ -78,7 +78,7 @@ namespace fe
 			m_ColorQuad.GetTransformHandle() = transform;
 		}
 
-		Set target = m_Scene->CreateSet();
+		Set target = m_Scene->CreateSet(RootID, "Target");
 		{
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
@@ -98,10 +98,10 @@ namespace fe
 			target.GetTagsHandle().SetLocal(tags);
 		}
 
-		Set targetChild_1 = m_Scene->CreateSet(target);
+		Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
 		{
 			auto& quad = targetChild_1.Emplace<Renderer2D::CQuad>();
-			quad.Layer = Renderer2D::Layer::L0;
+			quad.Layer = Renderer2D::Layer::L1;
 			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
 			quad.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
@@ -194,12 +194,17 @@ namespace fe
 				ImGui::EndMenuBar();
 			}
 
+			m_SceneHierarchyPanel.OnImGuiRender();
+
 			ImGui::Begin("Settings");
 			{
 				auto& colref = m_ColorQuad.Get<Renderer2D::CQuad>().Color;
 				ImGui::ColorEdit4("CQuad color", (float*)&colref);
+			}
+			ImGui::End();
 
-				ImGui::Text("Stats:");
+			ImGui::Begin("RenderStats");
+			{
 				auto& stats = Renderer2D::GetStats();
 				ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 				ImGui::Text("Quads: %d", stats.Quads);

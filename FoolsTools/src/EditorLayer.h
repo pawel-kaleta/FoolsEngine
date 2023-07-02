@@ -2,6 +2,7 @@
 
 #include <FoolsEngine.h>
 #include "EditorCameraController.h"
+#include "Panels\SceneHierarchyPanel.h"
 
 namespace fe
 {
@@ -22,11 +23,12 @@ namespace fe
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		Scope<Framebuffer> m_Framebuffer;
 		EditorCameraController m_CameraController;
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 
 		bool m_VieportFocus = false;
 		bool m_VieportHover = false;
 
-		Scope<Scene> m_Scene;
+		Ref<Scene> m_Scene;
 
 		Set m_ColorQuad;
 	};
