@@ -50,44 +50,54 @@ namespace fe
 
 		m_Scene = CreateRef<Scene>();
 		m_SceneHierarchyPanel.SetScene(m_Scene);
+		m_SetInspector.SetScene(m_Scene);
 
-		Set tintedTextureQuad = m_Scene->CreateSet();
+		Set tintedTextureTile = m_Scene->CreateSet();
 		{
-			auto& quad = tintedTextureQuad.Emplace<Renderer2D::CQuad>();
-			quad.Texture = TextureLibrary::Get("Default_Texture");
-			quad.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
-			quad.Layer = Renderer2D::Layer::L_2;
-			quad.TextureTilingFactor = 3;
-			quad.Transparency = false;
+			auto& tile = tintedTextureTile.Emplace<Renderer2D::CTile>();
+			tile.Texture = TextureLibrary::Get("Default_Texture");
+			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
+			tile.TextureTilingFactor = 3;
 			 
 			Transform transform;
 			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
-			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
-			tintedTextureQuad.GetTransformHandle() = transform;
+			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
+			transform.Position = glm::vec3(0.0f, 0.2f, 0.0f);
+			tintedTextureTile.GetTransformHandle() = transform;
 		}
 
-		m_ColorQuad = m_Scene->CreateSet();
+		Set flatTile = m_Scene->CreateSet();
 		{
-			auto& quad2 = m_ColorQuad.Emplace<Renderer2D::CQuad>();
-			quad2.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
-			quad2.Layer = Renderer2D::Layer::L_1;
+			auto& tile = flatTile.Emplace<Renderer2D::CTile>();
+			tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
+			tile.TextureTilingFactor = 3;
 
 			Transform transform;
-			transform.Position = glm::vec3(-0.1f, -0.1f, 0.0f);
+			transform.Scale = glm::vec3(0.4f, 0.3f, 1.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+			flatTile.GetTransformHandle() = transform;
+		}
+
+		m_ColorSprite = m_Scene->CreateSet();
+		{
+			auto& sprite = m_ColorSprite.Emplace<Renderer2D::CSprite>();
+			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+
+			Transform transform;
+			transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
-			m_ColorQuad.GetTransformHandle() = transform;
+			m_ColorSprite.GetTransformHandle() = transform;
 		}
 
 		Set target = m_Scene->CreateSet(RootID, "Target");
 		{
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-			auto& quad = target.Emplace<Renderer2D::CQuad>();
-			quad.Layer = Renderer2D::Layer::L1;
-			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			auto& sprite = target.Emplace<Renderer2D::CSprite>();
+			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
 			Transform transform;
-			transform.Position = glm::vec3(0.0f, 0.0f, 0.0f);
+			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 			target.GetTransformHandle() = transform;
 
@@ -100,13 +110,12 @@ namespace fe
 
 		Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
 		{
-			auto& quad = targetChild_1.Emplace<Renderer2D::CQuad>();
-			quad.Layer = Renderer2D::Layer::L1;
-			quad.Texture = TextureLibrary::Get("Texture_with_Transparency");
-			quad.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
+			auto& sprite = targetChild_1.Emplace<Renderer2D::CSprite>();
+			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;
-			transform.Position = glm::vec3(0.8f, 0.8f, 0.8f);
+			transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
 			targetChild_1.GetTransformHandle().SetLocal(transform);
@@ -122,9 +131,10 @@ namespace fe
 		{
 			m_Scene->UpdateScripts();
 			m_CameraController.OnUpdate();
-			m_Scene->DestroyFlaggedSets();
-			m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 		}
+
+		m_Scene->DestroyFlaggedSets();
+		m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 
 		m_Framebuffer->Bind();
 		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera(), m_CameraController.GetTransform());
@@ -167,7 +177,7 @@ namespace fe
 			windowFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("Dockspace Test", &dockspaceOpen, windowFlags);
+		ImGui::Begin("Dockspace", &dockspaceOpen, windowFlags);
 		{
 			ImGui::PopStyleVar();
 
@@ -194,14 +204,12 @@ namespace fe
 				ImGui::EndMenuBar();
 			}
 
+			m_SceneHierarchyPanel.SetSelection(m_SelectedSetID);
 			m_SceneHierarchyPanel.OnImGuiRender();
+			m_SelectedSetID = m_SceneHierarchyPanel.GetSelection();
 
-			ImGui::Begin("Settings");
-			{
-				auto& colref = m_ColorQuad.Get<Renderer2D::CQuad>().Color;
-				ImGui::ColorEdit4("CQuad color", (float*)&colref);
-			}
-			ImGui::End();
+			m_SetInspector.OpenSet(m_SelectedSetID);
+			m_SetInspector.OnImGuiRender();
 
 			ImGui::Begin("RenderStats");
 			{

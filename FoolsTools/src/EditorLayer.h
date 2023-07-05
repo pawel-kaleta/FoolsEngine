@@ -3,6 +3,7 @@
 #include <FoolsEngine.h>
 #include "EditorCameraController.h"
 #include "Panels\SceneHierarchyPanel.h"
+#include "Panels\SetInspector.h"
 
 namespace fe
 {
@@ -24,12 +25,14 @@ namespace fe
 		Scope<Framebuffer> m_Framebuffer;
 		EditorCameraController m_CameraController;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		SetID m_SelectedSetID = NullSetID;
+		SetInspector m_SetInspector;
 
 		bool m_VieportFocus = false;
 		bool m_VieportHover = false;
 
 		Ref<Scene> m_Scene;
 
-		Set m_ColorQuad;
+		Set m_ColorSprite;
 	};
 }

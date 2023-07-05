@@ -117,8 +117,8 @@ namespace fe
 			else if (!IsDirty(m_SetID))
 			{
 				SetDirty(m_SetID);
-				MarkDescendantsDirty();
 			}
+			MarkDescendantsDirty();
 		}
 
 		const DataStruct GetGlobal()
@@ -128,7 +128,6 @@ namespace fe
 			return m_Component.Global;
 		}
 	private:
-
 		void MarkDescendantsDirty()
 		{
 			std::queue<SetID> toMark;

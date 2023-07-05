@@ -12,12 +12,14 @@ namespace fe
 			: m_Scene(scene) {}
 
 		void SetScene(const Ref<Scene>& scene);
+		SetID GetSelection() { return m_SelectedSetID; }
+		void SetSelection(SetID setID) { m_SelectedSetID = setID; }
 
 		void OnImGuiRender();
 	private:
 		Ref<Scene> m_Scene;
 		SetID m_SelectedSetID = NullSetID;
 		
-		void DrawSet(SetID setID);
+		bool DrawSet(SetID setID);
 	};
 }

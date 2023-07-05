@@ -13,7 +13,6 @@ namespace fe
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
@@ -50,6 +49,14 @@ namespace fe
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 		glViewport(x, y, width, height);
+	}
+
+	void OpenGLRendererAPI::SetDepthTest(bool depthTets)
+	{
+		if (depthTets)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
 	}
 
 

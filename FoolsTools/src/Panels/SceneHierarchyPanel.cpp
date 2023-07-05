@@ -13,6 +13,8 @@ namespace fe
 
 		ImGui::Begin("Scene Hierarchy");
 
+		bool nodeClicked = false;
+
 		//m_Scene->GetHierarchy().EnforceSafeOrder();
 		auto group = m_Scene->GetRegistry().group<CHierarchyNode, CTransform, CTags, CName>();
 
@@ -20,21 +22,25 @@ namespace fe
 		auto node = group.get<CHierarchyNode>(group[current]);
 		while (node.HierarchyLvl == 1)
 		{
-			DrawSet(group[current++]);
+			nodeClicked |= DrawSet(group[current++]);
 			node = group.get<CHierarchyNode>(group[current]);
 		}
+
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered() && !nodeClicked)
+			m_SelectedSetID = NullSetID;
+
 
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::DrawSet(SetID setID)
+	bool SceneHierarchyPanel::DrawSet(SetID setID)
 	{
 		auto& [node, name] = m_Scene->GetRegistry().group<CHierarchyNode, CTransform, CTags, CName>().get<CHierarchyNode, CName>(setID);
 
 		ImGuiTreeNodeFlags flags = 0;
 
 		if (node.Children)
-			flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+			flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		else
 			flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet;
 
@@ -43,8 +49,14 @@ namespace fe
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)setID, flags, name.Name.c_str());
 
-		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-			m_SelectedSetID = setID;
+		bool nodeClicked = false;
+		if (ImGui::IsItemClicked())
+		{
+			nodeClicked = true;
+
+			if(!ImGui::IsItemToggledOpen())
+				m_SelectedSetID = setID;
+		}
 
 		if (opened && node.Children)
 		{
@@ -52,9 +64,11 @@ namespace fe
 
 			auto child = children.Begin();
 			while (child != children.End())
-				DrawSet(*child++);
+				nodeClicked |= DrawSet(*child++);
 
 			ImGui::TreePop();
 		}
+
+		return nodeClicked;
 	}
 }

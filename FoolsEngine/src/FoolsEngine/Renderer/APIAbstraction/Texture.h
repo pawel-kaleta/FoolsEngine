@@ -43,6 +43,8 @@ namespace fe
 		bool IExist(const std::string& name) const;
 		Ref<Texture> IGet(const std::string& name);
 
+		inline static const std::unordered_map<std::string, Ref<Texture>>& GetAll() { return s_ActiveInstance->IGetAll(); }
+		const std::unordered_map<std::string, Ref<Texture>>& IGetAll() { return m_Textures; }
 	private:
 		static TextureLibrary* s_ActiveInstance;
 		std::unordered_map<std::string, Ref<Texture>> m_Textures;

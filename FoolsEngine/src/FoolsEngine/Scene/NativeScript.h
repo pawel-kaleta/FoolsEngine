@@ -71,7 +71,7 @@ namespace fe
 		{
 			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
 			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Hierarchy modyfications not yet implemented");
-			FE_CORE_ASSERT(AllOf<Components...>(), "This Set does not have all of this components");
+			FE_CORE_ASSERT(AllOf<Components...>(), "This Set does not have all of those components");
 			return m_Handle.get<Components...>();
 		}
 
@@ -80,7 +80,7 @@ namespace fe
 
 		//In default storage pool only!
 		template<typename Component, typename... Args>
-		auto& GetOrEmplace(Args&&... args)
+		Component& GetOrEmplace(Args&&... args)
 		{
 			static_assert(!std::is_base_of_v<CHierarchicalBase, Component>, "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
 			static_assert(!std::is_base_of_v<CHierarchyNode, Component>, "Hierarchy modyfications not yet implemented");
@@ -89,7 +89,7 @@ namespace fe
 
 		//In default storage pool only!
 		template<typename... Components>
-		auto& GetIfExist()
+		auto GetIfExist()
 		{
 			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "This is a hierarchy managable component. Use GetTransformHandle() or GetTagsHandle()");
 			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Hierarchy modyfications not yet implemented");
@@ -109,7 +109,7 @@ namespace fe
 
 		//In default storage pool only!
 		template<typename... Components>
-		auto& RemoveIfExist()
+		auto RemoveIfExist()
 		{
 			static_assert(!(std::is_base_of_v<CHierarchicalBase, Components> || ...), "Cannot remove Hierarchical components!");
 			static_assert(!(std::is_base_of_v<CHierarchyNode, Components> || ...), "Cannot remove Hierarchical components!");
@@ -121,7 +121,7 @@ namespace fe
 		void Destroy();
 
 		//all pools :)
-		auto& Storages()
+		auto Storages()
 		{
 			return m_Handle.storage();
 		}

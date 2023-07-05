@@ -27,7 +27,6 @@ namespace fe
 		FE_LOG_CORE_WARN("TO DO: Test sorting!");
 		//Compare not really used, but entt api requires
 		auto group = m_Registry.group<CHierarchyNode, CTransform, CTags, CName>();
-		//group.
 		group.sort(Compare, Sort);
 		m_SafeOrder = true;
 	}

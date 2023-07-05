@@ -23,6 +23,19 @@ namespace fe
 		operator const std::string& () { return Name; }
 	};
 
+	struct CHierarchyNode : ComponentBase
+	{
+		SetID Parent = RootID;
+
+		uint32_t HierarchyLvl = 0; // = parent.HierarchyLvl + 1;
+		
+		SetID PreviousSibling = NullSetID;
+		SetID NextSibling = NullSetID;
+
+		uint32_t Children = 0;
+		SetID FirstChild = NullSetID;
+	};
+	
 	struct TagsBase
 	{
 		uint32_t TagBitFlags = 0;
@@ -49,15 +62,15 @@ namespace fe
 
 		TagsBase operator+ (const TagsBase& other) const
 		{
-			return this->TagBitFlags | other.TagBitFlags;
+			return TagsBase(this->TagBitFlags | other.TagBitFlags);
 		}
 		TagsBase operator- (const TagsBase& other) const
 		{
-			return this->TagBitFlags & ~other.TagBitFlags;
+			return TagsBase(this->TagBitFlags & ~other.TagBitFlags);
 		}
 		bool operator==(const TagsBase& other) const
 		{
-			return TagBitFlags == other.TagBitFlags;
+			return TagsBase(TagBitFlags == other.TagBitFlags);
 		}
 
 	};
@@ -80,8 +93,8 @@ namespace fe
 		Tags operator+ (const Tags& other) const
 		{
 			Tags newTags;
-			(TagsBase)newTags.Common   = Common   + other.Common;
-			(TagsBase)newTags.Internal = Internal + other.Internal;
+			newTags.Common.TagBitFlags   = Common.TagBitFlags | other.Common.TagBitFlags;
+			newTags.Internal.TagBitFlags = Internal.TagBitFlags | other.Internal.TagBitFlags;
 			return newTags;
 		}
 		Tags operator- (const Tags& other) const
@@ -95,19 +108,6 @@ namespace fe
 		{
 			return Common == other.Common && Internal == other.Internal;
 		}
-	};
-
-	struct CHierarchyNode : ComponentBase
-	{
-		SetID Parent = RootID;
-
-		uint32_t HierarchyLvl = 0; // = parent.HierarchyLvl + 1;
-		
-		SetID PreviousSibling = NullSetID;
-		SetID NextSibling = NullSetID;
-
-		uint32_t Children = 0;
-		SetID FirstChild = NullSetID;
 	};
 
 	struct Transform
@@ -164,7 +164,6 @@ namespace fe
 	};
 
 	using CTransform = CHierarchical<Transform>;
-	
 	using CTags = CHierarchical<Tags>;
 
 	struct CCamera : ComponentBase

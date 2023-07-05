@@ -4,54 +4,54 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552643.200
+"tid": 48796,
+"ts": 65896985528.300
 },{
 "cat": "function",
-"dur": 254,
+"dur": 376,
 "name": "void __cdecl fe::ImGuiLayer::OnDetach(void)",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552659.100
+"tid": 48796,
+"ts": 65896985587.100
 },{
 "cat": "function",
-"dur": 277,
+"dur": 669,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552658.900
+"tid": 48796,
+"ts": 65896985584.600
 },{
 "cat": "function",
-"dur": 30218,
+"dur": 15253,
 "name": "glfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552952.100
+"tid": 48796,
+"ts": 65896986411.900
 },{
 "cat": "function",
-"dur": 20299,
+"dur": 10569,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398583199.800
+"tid": 48796,
+"ts": 65897001769.900
 },{
 "cat": "function",
-"dur": 50582,
+"dur": 26097,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552943.100
+"tid": 48796,
+"ts": 65896986303.100
 },{
 "cat": "function",
-"dur": 50590,
+"dur": 26133,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 165508,
-"ts": 848398552943.100
+"tid": 48796,
+"ts": 65896986303.000
 }]}

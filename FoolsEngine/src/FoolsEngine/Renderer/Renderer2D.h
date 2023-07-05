@@ -20,47 +20,26 @@ namespace fe
 			Time::TimeStep RenderTime;
 		};
 
-		enum Layer
+		struct Quad
 		{
-			L_9 = -9,
-			L_8 = -8,
-			L_7 = -7,
-			L_6 = -6,
-			L_5 = -5,
-			L_4 = -4,
-			L_3 = -3,
-			L_2 = -2,
-			L_1 = -1,
-			L0 = 0,
-			L1 = 1,
-			L2 = 2,
-			L3 = 3,
-			L4 = 4,
-			L5 = 5,
-			L6 = 6,
-			L7 = 7,
-			L8 = 8,
-			L9 = 9
-		};
-
-		struct CQuad : ComponentBase
-		{
-			Layer Layer        = Layer::L0;
-			glm::vec4 Color    = { 1.0f, 1.0f, 1.0f, 1.0f };
-			//for optimization, can be left default
-			bool Transparency = true;
+			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float TextureTilingFactor = 1.0f;
 			Ref<fe::Texture> Texture = TextureLibrary::Get("Base2DTexture");
 		};
+
+		struct CTile : Quad, ComponentBase
+		{};
+		struct CSprite : Quad, ComponentBase
+		{};
 
 		static void Init();
 		static void Shutdown() {}
 
 		static void RenderScene(Scene& scene, Set cameraSet);
-		static void RenderScene(Scene& scene, const glm::mat4& projection, const glm::mat4& view);
+		static void RenderScene(Scene& scene, const CCamera& camera, const Transform& cameraTransform);
 
+		
 
-		static void DrawQuad(const CQuad& quad, Transform& transform);
 
 		inline static RenderStats GetStats() { return s_Stats; }
 
@@ -81,7 +60,7 @@ namespace fe
 			float TilingFactor;
 			uint32_t TextureSampler;
 		};
-		
+
 		using QuadVerticesBatch = std::array<QuadVertex, ConstLimits::MaxVeritices>;
 
 		struct BatchData
@@ -101,19 +80,19 @@ namespace fe
 			Ref<VertexArray>  QuadVertexArray;
 			Ref<VertexBuffer> QuadVertexBuffer;
 
-			BatchData OpaqueBatch;
-			BatchData TransparentBatches[19];
+			BatchData Batch;
 
 			Ref<Shader> BaseShader;
 			ShaderTextureSlot BaseShaderTextureSlot;
 			int32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 		};
-		
+
 		static Scope<Renderer2DData> s_Data;
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
-		static void BatchQuadDrawCall(const CQuad& quad, Transform& transform, BatchData& batch);
-		static void Flush(BatchData& batch, bool transparency);
+		static void ClearBatch();
+		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform);
+		static void Flush();
 		static void EndScene();
 
 		static RenderStats s_Stats;

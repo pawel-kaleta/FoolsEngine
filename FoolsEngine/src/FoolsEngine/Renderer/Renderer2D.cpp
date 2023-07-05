@@ -27,13 +27,13 @@ namespace fe
 			{ ShaderData::Type::Float2, "a_TexCoord" },
 			{ ShaderData::Type::Float,  "a_TilingFactor" },
 			{ ShaderData::Type::UInt,   "a_TextureSampler" }
-		});
+			});
 		s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
-		
+
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quadIndices = new QuadsIndexBufferData();
 		uint32_t offset = 0;
-		for(auto indicesPtr = quadIndices->begin(); indicesPtr != quadIndices->end(); )
+		for (auto indicesPtr = quadIndices->begin(); indicesPtr != quadIndices->end(); )
 		{
 			*(indicesPtr++) = offset + 0;
 			*(indicesPtr++) = offset + 1;
@@ -60,15 +60,14 @@ namespace fe
 		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 		TextureLibrary::Add(whiteTexture);
 
-		s_Data->OpaqueBatch.Textures[0] = whiteTexture;
-		for (auto& batch : s_Data->TransparentBatches)
-		batch.Textures[0] = whiteTexture;
+		s_Data->Batch.Textures[0] = whiteTexture;
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view)
 	{
 		FE_PROFILER_FUNC();
 
+		RenderCommands::SetDepthTest(true);
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 
@@ -82,45 +81,7 @@ namespace fe
 			return;
 		}
 
-		s_Data->OpaqueBatch.TexturesCount = 1;
-		s_Data->OpaqueBatch.QuadIndexCount = 0;
-		s_Data->OpaqueBatch.QuadVeriticesIt = s_Data->OpaqueBatch.QuadVertices->begin();
-
-		for (auto& batch : s_Data->TransparentBatches)
-		{
-			batch.TexturesCount = 1;
-			batch.QuadIndexCount = 0;
-			batch.QuadVeriticesIt = batch.QuadVertices->begin();
-		}
-	}
-
-	void Renderer2D::RenderScene(Scene& scene, Set cameraSet)
-	{
-		auto& projectionMatrix = cameraSet.Get<CCamera>();
-		auto& viewMatrix = scene.GetRegistry().get<CTransform>(cameraSet).Global;
-		RenderScene(scene, projectionMatrix, viewMatrix);
-	}
-
-	void Renderer2D::RenderScene(Scene& scene, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
-	{
-		FE_PROFILER_FUNC();
-
-		BeginScene(projectionMatrix, viewMatrix);
-
-		auto& view = scene.GetRegistry().view<CQuad, CTransform>();
-
-		for (auto ID : view)
-		{
-			auto [quad, transform] = view.get(ID);
-			DrawQuad(quad, transform.Global);
-		}
-
-		EndScene();
-	}
-
-	void Renderer2D::EndScene()
-	{
-		FE_PROFILER_FUNC();
+		ClearBatch();
 
 		s_Stats.Quads = 0;
 		s_Stats.DrawCalls = 0;
@@ -132,33 +93,85 @@ namespace fe
 			(void*)glm::value_ptr(s_Data->VPMatrix)
 		);
 		s_Data->BaseShader->BindTextureSlot(s_Data->BaseShaderTextureSlot, s_Data->BaseShaderSamplers, ConstLimits::RendererTextureSlotsCount);
+	}
 
-		Flush(s_Data->OpaqueBatch, false);
-		for (int i = 0; i < 19; i++)
+	void Renderer2D::ClearBatch()
+	{
+		s_Data->Batch.TexturesCount = 1;
+		s_Data->Batch.QuadIndexCount = 0;
+		s_Data->Batch.QuadVeriticesIt = s_Data->Batch.QuadVertices->begin();
+	}
+
+	void Renderer2D::RenderScene(Scene& scene, Set cameraSet)
+	{
+		auto& projectionMatrix = cameraSet.Get<CCamera>();
+		auto& cameraTransform = scene.GetRegistry().get<CTransform>(cameraSet).Global;
+		RenderScene(scene, projectionMatrix, cameraTransform);
+	}
+
+	void Renderer2D::RenderScene(Scene& scene, const CCamera& camera, const Transform& cameraTransform)
+	{
+		FE_PROFILER_FUNC();
+
+		BeginScene(camera, cameraTransform);
+
+		auto& viewTiles = scene.GetRegistry().view<CTile, CTransform>();
+
+		for (auto ID : viewTiles)
 		{
-			Flush(s_Data->TransparentBatches[i], true);
+			auto [tile, transform] = viewTiles.get(ID);
+			BatchQuadDrawCall(tile, transform.Global);
 		}
+
+		Flush();
+
+		if (camera.Mode == CCamera::CameraMode::Orthographic)
+			scene.GetRegistry().sort<CSprite>([&](const SetID l, const SetID r) {
+				auto& lz = scene.GetRegistry().get<CTransform>(l).Global.Position.z;
+				auto& rz = scene.GetRegistry().get<CTransform>(r).Global.Position.z;
+
+				return lz < rz;
+			});
+		else
+			scene.GetRegistry().sort<CSprite>([&](const SetID l, const SetID r) {
+				const auto& lPosition = scene.GetRegistry().get<CTransform>(l).Global.Position;
+				const auto& rPosition = scene.GetRegistry().get<CTransform>(r).Global.Position;
+
+				auto lDistance = glm::distance(lPosition, cameraTransform.Position);
+				auto rDistance = glm::distance(rPosition, cameraTransform.Position);
+
+				return lDistance < rDistance;
+			});
+
+		auto& viewSprites = scene.GetRegistry().view<CSprite, CTransform>();
+
+		for (auto ID : viewSprites)
+		{
+			auto [sprite, transform] = viewSprites.get(ID);
+			BatchQuadDrawCall(sprite, transform.Global);
+			Flush();
+		}
+
+		EndScene();
+	}
+
+	void Renderer2D::EndScene()
+	{
+		FE_PROFILER_FUNC();
 
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
-	void Renderer2D::DrawQuad(const CQuad& quad, Transform& transform)
+	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform)
 	{
-		BatchData* batch = &(s_Data->OpaqueBatch);
+		auto& batch = s_Data->Batch;
 
-		if (quad.Transparency)
-		{
-			batch = &(s_Data->TransparentBatches[quad.Layer+9]);
-		}
-
-		BatchQuadDrawCall(quad, transform, *batch);
-	}
-
-	void Renderer2D::BatchQuadDrawCall(const CQuad& quad, Transform& transform, BatchData& batch)
-	{
 		auto& VIt = batch.QuadVeriticesIt;
 
-		FE_CORE_ASSERT(VIt < batch.QuadVertices->end(), "Renderer2D batch capacity exceeded!");
+		if (&*VIt > &batch.QuadVertices->back())
+		{
+			Flush();
+		}
 
 		uint32_t textureSampler = 0;
 
@@ -198,11 +211,8 @@ namespace fe
 			{ 0.0f, 1.0f }
 		};
 
-		float depth = (float)quad.Layer / 10.0f;
-
-		transform.Position.z = depth;
 		glm::mat4 transformMatrix = transform.GetTransform();
-		
+
 		for (int i = 0; i < 4; i++)
 		{
 			VIt->Position = transformMatrix * QuadVertexPositions[i];
@@ -216,9 +226,11 @@ namespace fe
 		batch.QuadIndexCount += 6;
 	}
 
-	void Renderer2D::Flush(BatchData& batch, bool transparency)
+	void Renderer2D::Flush()
 	{
 		FE_PROFILER_FUNC();
+
+		auto& batch = s_Data->Batch;
 
 		if (batch.QuadIndexCount == 0)
 			return;
@@ -239,6 +251,8 @@ namespace fe
 
 		s_Stats.Quads += batch.QuadIndexCount / 3 / 2;
 		s_Stats.DrawCalls++;
+
+		ClearBatch();
 	}
 
- }
+}
