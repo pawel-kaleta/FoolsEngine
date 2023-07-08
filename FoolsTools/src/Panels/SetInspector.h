@@ -24,5 +24,6 @@ namespace fe
 		void RenderTagsTable(uint32_t* tagsInherited, uint32_t* tagsLocal, uint32_t* tagsGlobal, const char* const* tagLabels);
 		void RenderCTagsWidget(Set set);
 		void RenderQuadWidget(Renderer2D::Quad& quad, bool transparency);
+		void RenderCameraWidget(Set set, CCamera& camera);
 	};
 }

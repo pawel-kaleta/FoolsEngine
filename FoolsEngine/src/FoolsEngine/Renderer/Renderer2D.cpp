@@ -125,7 +125,7 @@ namespace fe
 
 		Flush();
 
-		if (camera.Mode == CCamera::CameraMode::Orthographic)
+		if (camera.GetProjectionType() == CCamera::ProjectionType::Orthographic)
 			scene.GetRegistry().sort<CSprite>([&](const SetID l, const SetID r) {
 				auto& lz = scene.GetRegistry().get<CTransform>(l).Global.Position.z;
 				auto& rz = scene.GetRegistry().get<CTransform>(r).Global.Position.z;
@@ -137,10 +137,10 @@ namespace fe
 				const auto& lPosition = scene.GetRegistry().get<CTransform>(l).Global.Position;
 				const auto& rPosition = scene.GetRegistry().get<CTransform>(r).Global.Position;
 
-				auto lDistance = glm::distance(lPosition, cameraTransform.Position);
-				auto rDistance = glm::distance(rPosition, cameraTransform.Position);
+				auto lDistance = glm::distance(cameraTransform.Position, lPosition);
+				auto rDistance = glm::distance(cameraTransform.Position, rPosition);
 
-				return lDistance < rDistance;
+				return lDistance > rDistance;
 			});
 
 		auto& viewSprites = scene.GetRegistry().view<CSprite, CTransform>();

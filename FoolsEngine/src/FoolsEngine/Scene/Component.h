@@ -5,6 +5,7 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace fe
 {
@@ -149,7 +150,8 @@ namespace fe
 		}
 	};
 
-	struct CHierarchicalBase : ComponentBase {};
+	struct CHierarchicalBase : ComponentBase
+	{};
 
 	template<typename DataStruct> //DataStruct needs to implement +,-,== operators
 	struct CHierarchical : CHierarchicalBase
@@ -168,48 +170,57 @@ namespace fe
 
 	struct CCamera : ComponentBase
 	{
-		enum CameraMode
+		enum ProjectionType
 		{
 			Orthographic,
-			Isometric,
 			Perspective
 		};
 
-		CameraMode Mode = CameraMode::Orthographic;
-		float AspectRatio = 1280.0f / 720.0f;
-		float Zoom = 1.0f;
-		float NearClip = -1.0f;
-		float FarClip = 1.0f;
+		CCamera() {	CalculateProjection(); }
+		~CCamera() = default;
 
-		CCamera(CameraMode mode, float aspectRatio, float zoom = 1.0f, float nearClip = -1.0f, float farClip = 1.0f)
-			: Mode(mode), AspectRatio(aspectRatio), Zoom(zoom), NearClip(nearClip), FarClip(farClip) {};
+		glm::mat4 GetProjectionMatrix() const { return m_Projection; };
+		operator       glm::mat4()       { return m_Projection; }
+		operator const glm::mat4() const { return m_Projection; }
 
-		void SetViewportSize(uint32_t width, uint32_t hight) { AspectRatio = (float)width / (float)hight; };
+		void SetOrthographic(float zoom, float nearClip, float farClip);
+		void SetPerspective(float verticalFOV, float nearClip, float farClip);
 
-		glm::mat4 ProjectionMatrix() { return CalculateProjection(); };
-		operator       glm::mat4()       { return CalculateProjection(); }
-		operator const glm::mat4() const { return CalculateProjection(); }
+		void SetViewportSize(uint32_t width, uint32_t hight) { m_AspectRatio = (float)width / (float)hight; CalculateProjection(); }
+
+		//radians
+		float GetPerspectiveFOV() const { return m_PerspectiveFOV; }
+		//radians
+		void SetPerspectiveFOV(float FOV) { m_PerspectiveFOV = FOV; CalculateProjection(); }
+		float GetPerspectiveNearClip() const { return m_PerspectiveNearClip; }
+		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNearClip = nearClip; CalculateProjection(); }
+		float GetPerspectiveFarClip() const { return m_PerspectiveFarClip; }
+		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFarClip = farClip; CalculateProjection(); }
+
+		float GetOrthographicZoom() const { return m_OrthographicZoom; }
+		void SetOrthographicZoom(float zoom) { m_OrthographicZoom = zoom; CalculateProjection(); }
+		float GetOrthographicNearClip() const { return m_OrthographicNearClip; }
+		void SetOrthographicNearClip(float nearClip) { m_OrthographicNearClip = nearClip; CalculateProjection(); }
+		float GetOrthographicFarClip() const { return m_OrthographicFarClip; }
+		void SetOrthographicFarClip(float farClip) { m_OrthographicFarClip = farClip; CalculateProjection(); }
+
+		ProjectionType GetProjectionType() const { return m_ProjectionType; }
+		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; CalculateProjection(); }
 
 	private:
-		glm::mat4 CalculateProjection() const
-		{
-			float top    = Zoom *  0.5f;
-			float bottom = Zoom * -0.5f;
-			float right  = AspectRatio * top;
-			float left   = AspectRatio * bottom;
+		glm::mat4 m_Projection = glm::mat4(1.0f);
+		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
+		float m_AspectRatio = 1280.0f / 720.0f;
 
-			switch (Mode)
-			{
-			case Orthographic:
-				return glm::ortho(left, right, bottom, top, NearClip, FarClip);
-			case Isometric:
-				FE_CORE_ASSERT(false, "Isometric camera mode not supported yet");
-			case Perspective:
-				FE_CORE_ASSERT(false, "Perspective camera mode not supported yet");
-			}
+		float m_PerspectiveFOV = glm::radians(45.0f);
+		float m_PerspectiveNearClip = 0.01f;
+		float m_PerspectiveFarClip = 1000.0f;
 
-			return glm::ortho(left, right, bottom, top, NearClip, FarClip);
-		};
+		float m_OrthographicZoom = 1.0f;
+		float m_OrthographicNearClip = -1.0f;
+		float m_OrthographicFarClip = 1.0f;
+
+		void CalculateProjection();
 	};
 
 	struct CDestroyFlag : ComponentBase

@@ -3,7 +3,7 @@
 namespace fe
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f)
+		: Layer("EditorLayer"), m_CameraController(1280.0f, 720.0f)
 	{
 	}
 
@@ -52,7 +52,7 @@ namespace fe
 		m_SceneHierarchyPanel.SetScene(m_Scene);
 		m_SetInspector.SetScene(m_Scene);
 
-		Set tintedTextureTile = m_Scene->CreateSet();
+		Set tintedTextureTile = m_Scene->CreateSet(RootID, "Test Set");
 		{
 			auto& tile = tintedTextureTile.Emplace<Renderer2D::CTile>();
 			tile.Texture = TextureLibrary::Get("Default_Texture");
@@ -64,6 +64,9 @@ namespace fe
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
 			transform.Position = glm::vec3(0.0f, 0.2f, 0.0f);
 			tintedTextureTile.GetTransformHandle() = transform;
+
+			tintedTextureTile.Emplace<CCamera>();
+			m_Scene->SetPrimaryCameraSet(tintedTextureTile);
 		}
 
 		Set flatTile = m_Scene->CreateSet();
@@ -219,6 +222,72 @@ namespace fe
 				ImGui::Text("Render Time: %F", stats.RenderTime.GetMilliseconds());
 				ImGui::Text("Frame Time: %F", Time::DeltaTime() * 1000);
 				ImGui::Text("FPS: %F", 1.0f / Time::DeltaTime());
+			}
+			ImGui::End();
+
+			ImGui::Begin("Settings");
+			{
+				if (ImGui::CollapsingHeader("Editor Camera", ImGuiTreeNodeFlags_None))
+				{
+					auto& transform = m_CameraController.GetTransform();
+
+					ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f);
+					ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.1f);
+					ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f);
+
+					auto& camera = m_CameraController.GetCamera();
+					constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
+					const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
+
+					if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+					{
+						for (int i = 0; i < 2; i++)
+						{
+							bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+							if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+							{
+								currentProjectionTypeString = projectionTypeStrings[i];
+								camera.SetProjectionType((CCamera::ProjectionType)i);
+							}
+
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+
+						ImGui::EndCombo();
+					}
+
+					if (camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+					{
+						float verticalFov = glm::degrees(camera.GetPerspectiveFOV());
+						if (ImGui::DragFloat("Field of View", &verticalFov))
+							camera.SetPerspectiveFOV(glm::radians(verticalFov));
+
+						float orthoNear = camera.GetPerspectiveNearClip();
+						if (ImGui::DragFloat("Near Clip", &orthoNear))
+							camera.SetPerspectiveNearClip(orthoNear);
+
+						float orthoFar = camera.GetPerspectiveFarClip();
+						if (ImGui::DragFloat("Far Clip", &orthoFar))
+							camera.SetPerspectiveFarClip(orthoFar);
+					}
+					else
+					{
+						float zoom = camera.GetOrthographicZoom();
+						if (ImGui::DragFloat("Zoom", &zoom))
+							camera.SetOrthographicZoom(zoom);
+
+						float orthoNear = camera.GetOrthographicNearClip();
+						if (ImGui::DragFloat("Near Clip", &orthoNear))
+							camera.SetOrthographicNearClip(orthoNear);
+
+						float orthoFar = camera.GetOrthographicFarClip();
+						if (ImGui::DragFloat("Far Clip", &orthoFar))
+							camera.SetOrthographicFarClip(orthoFar);
+					}
+
+					
+				}
 			}
 			ImGui::End();
 

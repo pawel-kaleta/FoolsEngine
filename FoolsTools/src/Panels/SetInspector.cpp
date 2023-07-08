@@ -39,6 +39,8 @@ namespace fe
         auto tile = set.GetIfExist<Renderer2D::CTile>();
         if (tile) RenderQuadWidget(*tile, false);
         
+        auto camera = set.GetIfExist<CCamera>();
+        if (camera) RenderCameraWidget(set, *camera);
 
 		ImGui::End();
 	}
@@ -48,7 +50,7 @@ namespace fe
         auto& name = set.Get<CName>();
         static char buffer[256];
         memset(buffer, 0, sizeof(buffer));
-        strcpy_s(buffer, sizeof(buffer), name.Name.c_str());
+        std::strncpy(buffer, name.Name.c_str(), sizeof(buffer));
         if (ImGui::InputText("Name", buffer, sizeof(buffer)))
         {
             name.Name = std::string(buffer);
@@ -81,7 +83,7 @@ namespace fe
         if (ImGui::BeginTable("split", 4, flags, ImVec2(0, 150)))
         {
             ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
-            ImGui::TableSetupColumn("#1", ImGuiTableColumnFlags_None);
+            ImGui::TableSetupColumn("##1", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Parent", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Local", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Global", ImGuiTableColumnFlags_None);
@@ -245,7 +247,7 @@ namespace fe
             
             auto item_current = quad.Texture;
             const char* combo_preview_value = item_current->GetName().c_str();
-            if (ImGui::BeginCombo("Texture", combo_preview_value, 0))
+            if (ImGui::BeginCombo("Texture", combo_preview_value))
             {
                 for (auto it = textures.begin(); it != textures.end(); ++it)
                 {
@@ -269,6 +271,68 @@ namespace fe
                 ImGui::ColorEdit3("Tint Color", glm::value_ptr(quad.Color));
             
             ImGui::PopID();
+        }
+    }
+
+    void SetInspector::RenderCameraWidget(Set set, CCamera& camera)
+    {
+        if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_None))
+        {
+            bool primary = set.ID() == m_Scene->GetSetWithPrimaryCamera().ID();
+
+            if (ImGui::Checkbox("Primary", &primary))
+                if(primary)
+                    m_Scene->SetPrimaryCameraSet(set);
+
+            constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
+            const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
+
+            if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+                    if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+                    {
+                        currentProjectionTypeString = projectionTypeStrings[i];
+                        camera.SetProjectionType((CCamera::ProjectionType)i);
+                    }
+
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+
+                ImGui::EndCombo();
+            }
+        
+            if (camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+            {
+                float verticalFov = glm::degrees(camera.GetPerspectiveFOV());
+                if (ImGui::DragFloat("Field of View", &verticalFov))
+                    camera.SetPerspectiveFOV(glm::radians(verticalFov));
+
+                float orthoNear = camera.GetPerspectiveNearClip();
+                if (ImGui::DragFloat("Near Clip", &orthoNear))
+                    camera.SetPerspectiveNearClip(orthoNear);
+
+                float orthoFar = camera.GetPerspectiveFarClip();
+                if (ImGui::DragFloat("Far Clip", &orthoFar))
+                    camera.SetPerspectiveFarClip(orthoFar);
+            }
+            else
+            {
+                float zoom = camera.GetOrthographicZoom();
+                if (ImGui::DragFloat("Zoom", &zoom))
+                    camera.SetOrthographicZoom(zoom);
+
+                float orthoNear = camera.GetOrthographicNearClip();
+                if (ImGui::DragFloat("Near Clip", &orthoNear))
+                    camera.SetOrthographicNearClip(orthoNear);
+
+                float orthoFar = camera.GetOrthographicFarClip();
+                if (ImGui::DragFloat("Far Clip", &orthoFar))
+                    camera.SetOrthographicFarClip(orthoFar);
+            }
         }
     }
 

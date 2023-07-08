@@ -6,41 +6,33 @@
 
 namespace fe
 {
-	EditorCameraController::EditorCameraController(float aspectRatio)
-		: m_Camera(CCamera::Orthographic, aspectRatio) { }
+	EditorCameraController::EditorCameraController(float width, float hight)
+		: m_ViewportSize({width, hight})
+	{
+		m_Camera.SetViewportSize(width, hight);
+	}
 
 	void EditorCameraController::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
 
-		auto dt = Time::DeltaTime();
+		int inputAxisDA = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
+		int inputAxisWS = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
+		int inputAxisEQ = InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q);
+		bool ctrl = InputPolling::IsKeyPressed(InputCodes::LeftControl);
 
-		glm::vec3& position = m_Transform.Position;
-		float& rotation = m_Transform.Rotation.z;
-		float rotationInRadians = glm::radians(rotation);
-		
-		int horizontalDir = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
-		float distance = horizontalDir * m_TranslationSpeed * m_Camera.Zoom * dt;
+		if (!(inputAxisDA || inputAxisWS || inputAxisEQ))
+			return;
 
-		position.x += distance * cos(rotationInRadians);
-		position.y += distance * sin(rotationInRadians);
-			
-		int verticalDir = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
-		distance = verticalDir * m_TranslationSpeed * m_Camera.Zoom * dt;
-
-		position.x += distance * -sin(rotationInRadians);
-		position.y += distance * cos(rotationInRadians);
-
-		float angle = (InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q)) * m_RotationSpeed * dt;
-		rotation += angle;
-
-		if (rotation > 180.0f)
-			rotation -= 360.0f;
-		else if (rotation < -180.0f)
-			rotation += 360.0f;
-
-		if (!angle && -3.0f < rotation && rotation < 3.0f)
-			rotation = 0.0f;
+		if (ctrl)
+			Rotate(inputAxisDA, inputAxisWS, inputAxisEQ);
+		else
+		{
+			if (m_Camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+				Move(inputAxisDA, inputAxisEQ, inputAxisWS);
+			else
+				Move(inputAxisDA, inputAxisWS, inputAxisEQ);
+		}
 	}
 
 	void EditorCameraController::OnEvent(Ref<Events::Event> event)
@@ -56,9 +48,80 @@ namespace fe
 
 	void EditorCameraController::OnMouseScrolled(Ref<Events::MouseScrolledEvent> event)
 	{
-		m_Camera.Zoom -= event->GetOffsetY() * 0.25f;
-		m_Camera.Zoom = std::max(m_Camera.Zoom, 0.25f);
+		auto delta = event->GetOffsetY();
+
+		Zoom(delta);
 
 		event->Handled = true;
 	}
+
+	void EditorCameraController::Rotate(int headingDir, int pitchDir, int bankDir)
+	{
+		auto angleDelta = Time::DeltaTime() * m_RotationSpeed;
+
+		float headingDelta = -headingDir * angleDelta;
+		float pitchDelta = pitchDir * angleDelta;
+		float bankDelta = bankDir * angleDelta;
+
+		auto orientationHeadingDelta = glm::angleAxis(glm::radians(headingDelta), GetDirectionUp());
+		auto orientationPitchDelta = glm::angleAxis(glm::radians(pitchDelta), GetDirectionRight());
+		auto orientationBankDelta = glm::angleAxis(glm::radians(bankDelta), GetDirectionForward());
+
+		auto newOrientation = orientationBankDelta * orientationPitchDelta * orientationHeadingDelta * GetOrientation();
+
+		m_Transform.Rotation = glm::degrees(glm::eulerAngles(newOrientation));
+	}
+
+	void EditorCameraController::Move(int horizontalDir, int verticalDir, int viewDir)
+	{
+		auto step = Time::DeltaTime() * m_MoveSpeed;
+
+		float horizontalStep = horizontalDir * step;
+		float verticalStep = verticalDir * step;
+		float viewStep = viewDir * step;
+
+		m_Transform.Position += verticalStep * GetDirectionUp();
+		m_Transform.Position += horizontalStep * GetDirectionRight();
+		m_Transform.Position += viewStep * GetDirectionForward();
+	}
+
+	void EditorCameraController::Zoom(float delta)
+	{
+		if (m_Camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+		{
+			auto FOV = m_Camera.GetPerspectiveFOV();
+			FOV -= delta * 0.05f;
+			FOV = std::clamp(FOV, glm::radians(10.0f), glm::radians(160.0f));
+			m_Camera.SetPerspectiveFOV(FOV);
+		}
+		else
+		{
+			auto zoom = m_Camera.GetOrthographicZoom();
+			zoom -= delta * 0.25f;
+			zoom = std::max(zoom, 0.25f);
+			m_Camera.SetOrthographicZoom(zoom);
+		}
+	}
+
+	glm::vec3 EditorCameraController::GetDirectionUp() const
+	{
+		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	glm::vec3 EditorCameraController::GetDirectionRight() const
+	{
+		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+
+	glm::vec3 EditorCameraController::GetDirectionForward() const
+	{
+		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+	}
+
+	glm::quat EditorCameraController::GetOrientation() const
+	{
+		return glm::quat(glm::radians(m_Transform.Rotation));
+	}
+
+	
 }
