@@ -22,6 +22,7 @@ namespace fe
 
 		void UpdateScripts();
 		void DestroyFlaggedSets();
+		void OptimiseStorageOrder();
 
 		Registry& GetRegistry() { return m_Registry; }
 		SceneHierarchy& GetHierarchy() { return *m_Hierarchy.get(); }

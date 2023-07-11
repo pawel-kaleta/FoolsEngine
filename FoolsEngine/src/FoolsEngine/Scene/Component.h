@@ -35,6 +35,7 @@ namespace fe
 
 		uint32_t Children = 0;
 		SetID FirstChild = NullSetID;
+		SetID LastChild = NullSetID;
 	};
 	
 	struct TagsBase
@@ -209,7 +210,7 @@ namespace fe
 
 	private:
 		glm::mat4 m_Projection = glm::mat4(1.0f);
-		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
+		ProjectionType m_ProjectionType = ProjectionType::Perspective;
 		float m_AspectRatio = 1280.0f / 720.0f;
 
 		float m_PerspectiveFOV = glm::radians(45.0f);

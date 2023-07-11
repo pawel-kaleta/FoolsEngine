@@ -10,6 +10,13 @@ namespace fe
 		Texture2D
 	};
 
+	enum class TextureFormat
+	{
+		None = 0,
+		RGB = 1,
+		RGBA = 2
+	};
+
 	class Texture
 	{
 	public:
@@ -17,7 +24,7 @@ namespace fe
 
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
-		//virtual TextureFormat GetFormat() const = 0;
+		virtual TextureFormat GetFormat() const = 0;
 
 		virtual void SetData(void* data, uint32_t size) = 0;
 

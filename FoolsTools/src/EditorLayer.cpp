@@ -3,11 +3,11 @@
 namespace fe
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f, 720.0f)
+		: Layer("EditorLayer")
 	{
 	}
 
-	struct TargetBehaviourScript : NativeScript
+	struct TargetBehaviourScriptExample : NativeScript
 	{
 		float MoveSpeed = 0.5f;
 
@@ -48,81 +48,13 @@ namespace fe
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
+		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
+
 		m_Scene = CreateRef<Scene>();
 		m_SceneHierarchyPanel.SetScene(m_Scene);
 		m_SetInspector.SetScene(m_Scene);
 
-		Set tintedTextureTile = m_Scene->CreateSet(RootID, "Test Set");
-		{
-			auto& tile = tintedTextureTile.Emplace<Renderer2D::CTile>();
-			tile.Texture = TextureLibrary::Get("Default_Texture");
-			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
-			tile.TextureTilingFactor = 3;
-			 
-			Transform transform;
-			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
-			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
-			transform.Position = glm::vec3(0.0f, 0.2f, 0.0f);
-			tintedTextureTile.GetTransformHandle() = transform;
-
-			tintedTextureTile.Emplace<CCamera>();
-			m_Scene->SetPrimaryCameraSet(tintedTextureTile);
-		}
-
-		Set flatTile = m_Scene->CreateSet();
-		{
-			auto& tile = flatTile.Emplace<Renderer2D::CTile>();
-			tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
-			tile.TextureTilingFactor = 3;
-
-			Transform transform;
-			transform.Scale = glm::vec3(0.4f, 0.3f, 1.0f);
-			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
-			flatTile.GetTransformHandle() = transform;
-		}
-
-		m_ColorSprite = m_Scene->CreateSet();
-		{
-			auto& sprite = m_ColorSprite.Emplace<Renderer2D::CSprite>();
-			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
-
-			Transform transform;
-			transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
-			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
-			m_ColorSprite.GetTransformHandle() = transform;
-		}
-
-		Set target = m_Scene->CreateSet(RootID, "Target");
-		{
-			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-
-			auto& sprite = target.Emplace<Renderer2D::CSprite>();
-			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
-
-			Transform transform;
-			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
-			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
-			target.GetTransformHandle() = transform;
-
-			target.AddScript<TargetBehaviourScript>();
-
-			auto tags = target.GetTagsHandle().Local();
-			tags.Common.Add(CommonTags::Player);
-			target.GetTagsHandle().SetLocal(tags);
-		}
-
-		Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
-		{
-			auto& sprite = targetChild_1.Emplace<Renderer2D::CSprite>();
-			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
-			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
-
-			Transform transform;
-			transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
-			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
-			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
-			targetChild_1.GetTransformHandle().SetLocal(transform);
-		}
+		SpawnTestSets();
 	}
 
 	void EditorLayer::OnUpdate()
@@ -133,18 +65,17 @@ namespace fe
 		if (m_VieportFocus)
 		{
 			m_Scene->UpdateScripts();
-			m_CameraController.OnUpdate();
+			m_CameraController->OnUpdate();
 		}
 
 		m_Scene->DestroyFlaggedSets();
+		m_Scene->OptimiseStorageOrder();
 		m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
 
 		m_Framebuffer->Bind();
-		Renderer2D::RenderScene(*m_Scene, m_CameraController.GetCamera(), m_CameraController.GetTransform());
+		Renderer2D::RenderScene(*m_Scene, m_CameraController->GetCamera(), m_CameraController->GetTransform());
 		m_Framebuffer->Unbind();
 	}
-
-	
 
 	void EditorLayer::OnImGuiRender()
 	{
@@ -188,11 +119,15 @@ namespace fe
 				ImGui::PopStyleVar(2);
 
 			ImGuiIO& io = ImGui::GetIO();
+			ImGuiStyle& style = ImGui::GetStyle();
+			float minWinSizeX = style.WindowMinSize.x;
+			style.WindowMinSize.x = 300.0f;
 			if (io.ConfigFlags & ImGuiConfigFlags_::ImGuiConfigFlags_DockingEnable)
 			{
 				ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
 				ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), dockspaceFlags);
 			}
+			style.WindowMinSize.x = minWinSizeX;
 
 			if (ImGui::BeginMenuBar())
 			{
@@ -227,15 +162,17 @@ namespace fe
 
 			ImGui::Begin("Settings");
 			{
-				if (ImGui::CollapsingHeader("Editor Camera", ImGuiTreeNodeFlags_None))
+				if (ImGui::CollapsingHeader("Editor Camera", ImGuiTreeNodeFlags_DefaultOpen))
 				{
-					auto& transform = m_CameraController.GetTransform();
+					ImGui::PushItemWidth(-ImGui::GetContentRegionAvail().x * 0.5f);
+
+					auto& transform = m_CameraController->GetTransform();
 
 					ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f);
 					ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.1f);
 					ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f);
 
-					auto& camera = m_CameraController.GetCamera();
+					auto& camera = m_CameraController->GetCamera();
 					constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
 					const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
 
@@ -307,7 +244,7 @@ namespace fe
 				{
 					m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
 					m_ViewportSize = newViewPortSize;
-					m_CameraController.Resize(newViewPortSize.x, newViewPortSize.y);
+					m_CameraController->Resize(newViewPortSize.x, newViewPortSize.y);
 				}
 
 				auto fbID = m_Framebuffer->GetColorAttachmentID();
@@ -319,11 +256,86 @@ namespace fe
 		ImGui::End();	
 	}
 
+	void EditorLayer::SpawnTestSets()
+	{
+		Set tintedTextureTile = m_Scene->CreateSet(RootID, "Test Set");
+		{
+			auto& tile = tintedTextureTile.Emplace<Renderer2D::CTile>();
+			tile.Texture = TextureLibrary::Get("Default_Texture");
+			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
+			tile.TextureTilingFactor = 3;
+
+			Transform transform;
+			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
+			transform.Position = glm::vec3(0.0f, 0.2f, -0.1f);
+			tintedTextureTile.GetTransformHandle() = transform;
+
+			tintedTextureTile.Emplace<CCamera>();
+			m_Scene->SetPrimaryCameraSet(tintedTextureTile);
+		}
+
+		Set flatTile = m_Scene->CreateSet();
+		{
+			auto& tile = flatTile.Emplace<Renderer2D::CTile>();
+			tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
+			tile.TextureTilingFactor = 3;
+
+			Transform transform;
+			transform.Scale = glm::vec3(0.4f, 0.3f, 1.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+			flatTile.GetTransformHandle() = transform;
+		}
+
+		m_ColorSprite = m_Scene->CreateSet();
+		{
+			auto& sprite = m_ColorSprite.Emplace<Renderer2D::CSprite>();
+			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
+
+			Transform transform;
+			transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
+			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
+			m_ColorSprite.GetTransformHandle() = transform;
+		}
+
+		Set target = m_Scene->CreateSet(RootID, "Target");
+		{
+			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+
+			auto& sprite = target.Emplace<Renderer2D::CSprite>();
+			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
+
+			Transform transform;
+			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
+			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
+			target.GetTransformHandle() = transform;
+
+			target.AddScript<TargetBehaviourScriptExample>();
+
+			auto tags = target.GetTagsHandle().Local();
+			tags.Common.Add(CommonTags::Player);
+			target.GetTagsHandle().SetLocal(tags);
+		}
+
+		Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
+		{
+			auto& sprite = targetChild_1.Emplace<Renderer2D::CSprite>();
+			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
+
+			Transform transform;
+			transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
+			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
+			targetChild_1.GetTransformHandle().SetLocal(transform);
+		}
+	}
+
 	void EditorLayer::OnEvent(Ref<Events::Event> event)
 	{
 		FE_LOG_TRACE("{0}", event);
 
-		m_CameraController.OnEvent(event);
+		m_CameraController->OnEvent(event);
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));

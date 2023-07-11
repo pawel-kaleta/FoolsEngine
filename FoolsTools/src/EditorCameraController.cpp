@@ -10,6 +10,7 @@ namespace fe
 		: m_ViewportSize({width, hight})
 	{
 		m_Camera.SetViewportSize(width, hight);
+		m_Transform.Position.z = 2.0f;
 	}
 
 	void EditorCameraController::OnUpdate()

@@ -7,6 +7,8 @@
 
 namespace fe
 {
+	uint32_t SceneHierarchy::sort::m_AStep = 0;
+
 	void SceneHierarchy::MakeGlobalTagsCurrent()
 	{
 		MakeGlobalsCurrent<CTags>();
@@ -24,7 +26,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_WARN("TO DO: Test sorting!");
 		//Compare not really used, but entt api requires
 		auto group = m_Registry.group<CHierarchyNode, CTransform, CTags, CName>();
 		group.sort(Compare, Sort);
@@ -34,18 +35,55 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto view = m_Registry.view<CDestroyFlag>();
+		auto& storage = m_Registry.storage<CDestroyFlag>();
+		
+		if (storage.size() == 0)
+			return;
 
-		for (auto setID : view)
+		storage.sort(Compare);
+
+		auto view = m_Registry.view<CDestroyFlag, CHierarchyNode>();
+
+		for (auto it = storage.begin(); it != storage.end(); ++it)
 		{
-			m_Registry.destroy(setID);
-		}
+			auto& node = view.get<CHierarchyNode>(*it);
 
-		m_SafeOrder = false;
+			if (!storage.contains(node.Parent))
+			{
+				if (node.PreviousSibling != NullSetID)
+				{
+					auto& prev = view.get<CHierarchyNode>(node.PreviousSibling);
+					prev.NextSibling = node.NextSibling;
+				}
+				if (node.NextSibling != NullSetID)
+				{
+					auto& next = view.get<CHierarchyNode>(node.NextSibling);
+					next.PreviousSibling = node.PreviousSibling;
+				}
+				
+				auto& parentNode = view.get<CHierarchyNode>(node.Parent);
+				
+				if (parentNode.FirstChild == *it)
+					parentNode.FirstChild = node.NextSibling;
+				if (parentNode.LastChild == *it)
+					parentNode.LastChild = node.PreviousSibling;
+				if (parentNode.FirstChild == NullSetID)
+					parentNode.FirstChild = parentNode.LastChild;
+				if (parentNode.LastChild == NullSetID)
+					parentNode.LastChild = parentNode.FirstChild;
+
+				--parentNode.Children;
+			}
+
+			m_Registry.destroy(*it);
+		}
 	}
+
 	void SceneHierarchy::CreateNode(Set set, SetID parentID, const std::string& name)
 	{
 		FE_PROFILER_FUNC();
+
+		m_SafeOrder = false;
 
 		set.m_Handle.emplace<CTags>();
 		set.m_Handle.emplace<CDirtyFlag<CTags>>();
@@ -62,28 +100,43 @@ namespace fe
 		node.HierarchyLvl = parentNode.HierarchyLvl + 1;
 		parentNode.Children++;
 
-		if (parentNode.FirstChild != NullSetID)
+		if (parentNode.FirstChild == NullSetID)
 		{
-			SetID nextChild = parentNode.FirstChild;
-			SetID currentChild;
-			CHierarchyNode* currentChildNode;
+			parentNode.FirstChild = set.ID();
+			return;
+		}
 
-			do
-			{
-				currentChild = nextChild;
-				currentChildNode = &m_Registry.get<CHierarchyNode>(currentChild);
-				nextChild = currentChildNode->NextSibling;
-			} while (nextChild != NullSetID && nextChild > set.ID());
+		SetID currentChild = parentNode.FirstChild;
+		CHierarchyNode* currentChildNode = &m_Registry.get<CHierarchyNode>(currentChild);
 
+		if (currentChild > set.ID())
+		{
+			parentNode.FirstChild = set.ID();
+			node.NextSibling = currentChild;
+			currentChildNode->PreviousSibling = set.ID();
+			return;
+		}
+
+		SetID nextChild = currentChildNode->NextSibling;
+		while (nextChild != NullSetID && nextChild < set.ID())
+		{
+			currentChild = nextChild;
+			currentChildNode = &m_Registry.get<CHierarchyNode>(currentChild);
+			nextChild = currentChildNode->NextSibling;
+		} 
+
+		if (nextChild != NullSetID)
+		{
 			currentChildNode->NextSibling = set.ID();
+			node.PreviousSibling = currentChild;
 			node.NextSibling = nextChild;
+			m_Registry.get<CHierarchyNode>(nextChild).PreviousSibling = set.ID();
 		}
 		else
 		{
-			parentNode.FirstChild = set.ID();
+			currentChildNode->NextSibling = set.ID();
+			node.PreviousSibling = currentChild;
+			node.NextSibling = nextChild;
 		}
-
-		m_SafeOrder = false;
-
 	}
 }

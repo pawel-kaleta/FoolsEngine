@@ -4,7 +4,7 @@ LayerExample::LayerExample()
 	: fe::Layer("LayerExample")
 { }
 
-struct TargetBehaviourScript : fe::NativeScript
+struct TargetBehaviourScriptExample : fe::NativeScript
 {
 	float MoveSpeed = 0.5f;
 
@@ -93,7 +93,7 @@ void LayerExample::OnAttach()
 		transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 		target.GetTransformHandle() = transform;
 
-		target.AddScript<TargetBehaviourScript>();
+		target.AddScript<TargetBehaviourScriptExample>();
 
 		auto tags = target.GetTagsHandle().Local();
 		tags.Common.Add(fe::CommonTags::Player);

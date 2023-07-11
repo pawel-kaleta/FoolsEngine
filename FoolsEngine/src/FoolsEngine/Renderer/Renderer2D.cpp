@@ -125,7 +125,7 @@ namespace fe
 
 		Flush();
 
-		if (camera.GetProjectionType() == CCamera::ProjectionType::Orthographic)
+		if (camera.GetProjectionType() == CCamera::ProjectionType::Orthographic && cameraTransform.Rotation.x == 0 && cameraTransform.Rotation.y == 0)
 			scene.GetRegistry().sort<CSprite>([&](const SetID l, const SetID r) {
 				auto& lz = scene.GetRegistry().get<CTransform>(l).Global.Position.z;
 				auto& rz = scene.GetRegistry().get<CTransform>(r).Global.Position.z;

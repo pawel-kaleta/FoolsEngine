@@ -90,4 +90,9 @@ namespace fe
 	{
 		m_Hierarchy->DestroyFlagged();
 	}
+
+	void Scene::OptimiseStorageOrder()
+	{
+		m_Hierarchy->SortStep();
+	}
 }

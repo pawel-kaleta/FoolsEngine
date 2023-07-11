@@ -21,7 +21,8 @@ namespace fe
 	void Set::Destroy()
 	{
 		std::queue<SetID> toMark;
-		toMark.push(ID());
+		m_Scene->m_Registry.emplace<CDestroyFlag>(ID());
+		toMark.push(m_Handle.get<CHierarchyNode>().FirstChild);
 
 		SetID current;
 		while (!toMark.empty())

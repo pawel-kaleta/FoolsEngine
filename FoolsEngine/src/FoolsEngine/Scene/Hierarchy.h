@@ -204,11 +204,13 @@ namespace fe
 		{
 			auto& parentNode = registry.get<CHierarchyNode>(parentID);
 			m_Children = std::vector<SetID>(parentNode.Children);
+
 			SetID currentChild = parentNode.FirstChild;
-			for (auto it = m_Children.begin(); it != m_Children.end(); it++)
+			for (auto it = m_Children.begin(); it < m_Children.end(); ++it)
 			{
 				*it = currentChild;
-				currentChild = registry.get<CHierarchyNode>(currentChild).NextSibling;
+				auto& node = registry.get<CHierarchyNode>(currentChild);
+				currentChild = node.NextSibling;
 			}
 		}
 		
@@ -252,21 +254,11 @@ namespace fe
 		}
 
 		void MakeGlobalTagsCurrent();
-
 		void MakeGlobalTransformsCurrent();
-
 		void MakeHierarchyCurrent();
 
-		bool IsOrderSafe()
-		{
-			return m_SafeOrder;
-		}
-
-		void EnforceSafeOrder()
-		{
-			if (!m_SafeOrder)
-				SortStep();
-		}
+		bool IsOrderSafe() { return m_SafeOrder; }
+		void EnforceSafeOrder()	{ if (!m_SafeOrder)	SortStep(); }
 	private:
 		friend class Scene;
 		template <typename Component, typename DataStruct>
@@ -274,88 +266,137 @@ namespace fe
 		Registry& m_Registry;
 		bool m_SafeOrder = true;	
 
+		// used for sorting flag components acordingly to hierarchy order for safe operations (destruction, update, etc.)
+		// produces reversed order!
 		struct compare {
-			const Registry& reg;
+			const Registry& m_Reg;
 			bool operator() (const SetID left, const SetID right) {
-				const auto& cl = reg.get<CHierarchyNode>(left);
-				const auto& cr = reg.get<CHierarchyNode>(right);
+				const auto& cl = m_Reg.get<CHierarchyNode>(left);
+				const auto& cr = m_Reg.get<CHierarchyNode>(right);
 
-				return cl.HierarchyLvl < cr.HierarchyLvl;
+				return cl.HierarchyLvl > cr.HierarchyLvl;
 			}
 		} Compare{m_Registry};
 		
-		// amortized sorting to optimize cache locality when traversing hierarchy
+		// sorting ensures parent sets is always after a child in a storage (requirement of overall scene architecture model)
+		// additionally improves cache locality when traversing a hierarchy - this part is mostly amortized
 		struct sort {
 			using It = std::reverse_iterator<std::vector<SetID>::iterator>;
-			constexpr static int TRESHOLD = 128;
-			const Registry& reg;
-			uint32_t step = 1;
-			It partition_pivot(It begin, It end, uint32_t pivot)
+			constexpr static int TRESHOLD = 32;
+			const Registry& m_Reg;
+			static uint32_t m_AStep; // amortization step
+
+			//returns last ungrouped
+			It groupByLvl(It first, It last, uint32_t level)
 			{
 				FE_PROFILER_FUNC();
-				auto l = begin;
-				auto r = end;
+				auto l = first;
+				auto r = last;
+
+				// when there is only 1 level in scope to partition --r in for loop would go out of scope of array, this is a fix for that
+				// only first search for *r to swap is guarded, if we prove --r to be safe, we transition to unguarded version to impove performance
+				// ++l is safe because of root (root.HierarchyLvl = 0 while smallest value of level argument is 1)
+				{
+					while (m_Reg.get<CHierarchyNode>(*l).HierarchyLvl > level)
+						++l;
+				
+					if (l == first) //if l>first, then we found higher HierarchyLvl in scope, r-- is proven safe
+						while (m_Reg.get<CHierarchyNode>(*r).HierarchyLvl <= level && l < r)
+							--r;
+					else
+						while (m_Reg.get<CHierarchyNode>(*r).HierarchyLvl <= level)
+							--r;
+
+					if (l < r) 
+						std::swap(*l, *r); //if swaping, then we found higher HierarchyLvl in scope, r-- is proven safe
+					else
+						return l;
+				}
 
 				for (;;)
 				{
-					while (pivot >= reg.get<CHierarchyNode>(*(++l)).HierarchyLvl);
-					while (pivot < reg.get<CHierarchyNode>(*(--r)).HierarchyLvl);
+					while (m_Reg.get<CHierarchyNode>(*l).HierarchyLvl > level)
+						++l;
 
+					while (m_Reg.get<CHierarchyNode>(*r).HierarchyLvl <= level)
+						--r;
+				
 					if (l < r)
 						std::swap(*l, *r);
 					else
 						break;
 				}
-
-				return l;
+				
+				return r;
 			}
-			void bigSort(It begin, It end, uint32_t pivot)
+			void sortMainBody(It first, It last, uint32_t level)
 			{
 				FE_PROFILER_FUNC();
-				while (end - begin > TRESHOLD)
+				auto length = last - first;
+				while (length > TRESHOLD)
 				{
-					auto cut = partition_pivot(begin, end, ++pivot);
-					smallSort(begin, cut);
-					begin = cut;
+					auto cut = groupByLvl(first, last, level);
+					groupByParent(cut, last);
+					last = cut;
+					++level;
+					length = last - first;
 				}
-				tailSort(begin, end);
+				tailSort(first, last);
 			}
-			void smallSort(It begin, It end)
+			void groupByParent(It first, It last)
 			{
 				FE_PROFILER_FUNC();
-				uint32_t length = end - begin;
-				uint32_t start = length % step;
+				uint32_t length = last - first;
+				uint32_t start = m_AStep % length;
 				
-				const It l = begin + start;
-				const It r = l + 1;
+				It l = first + start;
+				It r = l + 1;
+				if (r > last)
+					r = first;
 				
-				const auto& cl = reg.get<CHierarchyNode>(*l);
-				const auto& cr = reg.get<CHierarchyNode>(*r);
+				const auto& cl = m_Reg.get<CHierarchyNode>(*l);
+				const auto& cr = m_Reg.get<CHierarchyNode>(*r);
 
 				if (cl.Parent == cr.Parent)
-					if (*l > *r)
+				{
+					if (*l < *r) // additionally ordering by ID to get exact order of a linked list of siblings
 						std::swap(*l, *r);
+				}
 				else
-					if (cl.Parent > cr.Parent)
+				{
+					if (cl.Parent < cr.Parent)
 						std::swap(*l, *r);
-				
+				}
 			}
-			void tailSort(It begin, It end)
+
+			// the deepest part of the hierarchy is possible to hove a long chain of individual nodes
+			// groupByParent() is highly unoptimal for that
+			// TO DO: consider increasing TRESHOLD and using amortization for tail sort
+			void tailSort(It first, It last)
 			{
 				FE_PROFILER_FUNC();
-				std::sort(begin, --end, [&](SetID l, SetID r) {
-					const auto& cl = reg.get<CHierarchyNode>(l);
-					const auto& cr = reg.get<CHierarchyNode>(r);
+
+				if (first >= last)
+					return;
+				std::sort(first, last, [&](SetID l, SetID r) {
+					const auto& cl = m_Reg.get<CHierarchyNode>(l);
+					const auto& cr = m_Reg.get<CHierarchyNode>(r);
 
 					if (cl.HierarchyLvl == cr.HierarchyLvl)
-						return cl.Parent < cr.Parent;
+						return cl.Parent > cr.Parent;
 					else
-						return cl.HierarchyLvl < cr.HierarchyLvl;
+						return cl.HierarchyLvl > cr.HierarchyLvl;
 				});
 			}
+			// underlying entt library expects this oerator to perform sorting on a sigle array
+			// actual storages are then synced to this reference array in linear time with in-place swaps (only the necessary ones)
 			void operator() (It begin, It end, compare Comp) {
-				bigSort(partition_pivot(--begin, end, 1), end, 1);
-				++step;
+				if (end - begin < 3)
+					return;
+				--end; // need last, not end
+				auto first_cut = groupByLvl(begin, end, 1); // there are no siblings on 1st lvl, so no need for
+				sortMainBody(begin, first_cut, 2);
+				m_AStep += 1;
 			}
 		} Sort{m_Registry};
 
@@ -367,17 +408,19 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
-			bool manyUpdates = (m_Registry.size() / 2) < m_Registry.storage<CDirtyFlag<CTransform>>().size();
+			auto dirtyCount = m_Registry.storage<CDirtyFlag<CTransform>>().size();
+			bool manyUpdates = (m_Registry.size() / 2) < dirtyCount; // "/2" is just arbitrary, would need to measure
 			if (manyUpdates)
 			{
 				FE_PROFILER_SCOPE("manyUpdates");
 
-				if (!m_SafeOrder)
-					SortStep();
+				EnforceSafeOrder();
+
 				auto& group = m_Registry.group<CHierarchyNode, CTransform, CTags, CName>();
-				for (auto set : group)
+				
+				for (auto it = group.rbegin(); it < group.rend(); it++)
 				{
-					auto [node, component] = group.get<CHierarchyNode, Component>(set); 
+					auto [node, component] = group.get<CHierarchyNode, Component>(*it);
 					auto& parent = group.get<Component>(node.Parent);
 					component.Global = parent.Global + component.Local;
 				}
@@ -392,9 +435,9 @@ namespace fe
 				m_Registry.sort<CDirtyFlag<Component>>(Compare);
 			}
 
-			auto& view = m_Registry.view<CDirtyFlag<Component>>();
+			auto& view = m_Registry.view<CDirtyFlag<Component>>();			
 			
-			for(auto& setID : view)
+			for (auto& setID : view)
 			{
 				auto& component = m_Registry.get<Component>(setID);
 				auto& node = m_Registry.get<CHierarchyNode>(setID);
@@ -405,11 +448,9 @@ namespace fe
 			m_Registry.storage<CDirtyFlag<Component>>().clear();
 		}
 
-		// amortized sorting to optimize cache locality when traversing hierarchy
 		void SortStep();
 
 		void DestroyFlagged();
-
 	};
 	
 }

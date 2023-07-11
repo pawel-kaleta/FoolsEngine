@@ -68,6 +68,18 @@ namespace fe
 		glDeleteTextures(1, &m_ID);
 	}
 
+	TextureFormat OpenGLTexture2D::GetFormat() const
+	{
+		switch (m_Format)
+		{
+		case GL_RGB:
+			return TextureFormat::RGB;
+		case GL_RGBA:
+			return TextureFormat::RGBA;
+		}
+		return TextureFormat::None;
+	}
+
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
 		// bytes per pixel
