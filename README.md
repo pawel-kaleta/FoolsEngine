@@ -8,13 +8,14 @@
 'FoolsEngine' is a prototype engine that is being developed in my spare time and as such there will likely be bugs. It is not intended as a stable production tech, but as a relativelly simple and clear framework for learning about how to build certain pieces of tech as well as for experimentation.
 If your goal is to make a game, you are better of using off-the-shelf, fully featured, production ready game engine like Unreal/Unity/Godot.
 
-* [Features](#Features)
-* [Getting Started](#Getting-Started)
-* [Language and project structure](#Language-and-project-structure)
-* [Documentation](#Documentation)
-* [Profiling data](#Profiling)
-* [Technologies](#Technologies)
-* [Sources](#Sources)
+## Table of content
+* [Features](#features)
+* [Getting Started](#getting-started)
+* [Language and project structure](#project-structure)
+* [Documentation](#documentation)
+* [Profiling data](#profiling)
+* [Technologies](#technologies)
+* [Sources](#sources)
 
 ## Features
 - Window creation and handling
