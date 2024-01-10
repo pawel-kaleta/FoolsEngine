@@ -9,7 +9,7 @@ namespace fe
 	EditorCameraController::EditorCameraController(float width, float hight)
 		: m_ViewportSize({width, hight})
 	{
-		m_Camera.SetViewportSize(width, hight);
+		m_Camera.SetViewportSize((uint32_t)width, (uint32_t)hight);
 		m_Transform.Position.z = 2.0f;
 	}
 
@@ -29,7 +29,7 @@ namespace fe
 			Rotate(inputAxisDA, inputAxisWS, inputAxisEQ);
 		else
 		{
-			if (m_Camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+			if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
 				Move(inputAxisDA, inputAxisEQ, inputAxisWS);
 			else
 				Move(inputAxisDA, inputAxisWS, inputAxisEQ);
@@ -88,7 +88,7 @@ namespace fe
 
 	void EditorCameraController::Zoom(float delta)
 	{
-		if (m_Camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+		if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
 		{
 			auto FOV = m_Camera.GetPerspectiveFOV();
 			FOV -= delta * 0.05f;

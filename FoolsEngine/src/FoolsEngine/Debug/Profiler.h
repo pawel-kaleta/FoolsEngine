@@ -7,28 +7,25 @@ namespace fe
 {
 	struct ProfileResult
 	{
-		const char* name;
-		std::thread::id ThreadID;
+		const char*		Name;
+		std::thread::id	ThreadID;
 
-		std::chrono::duration<double, std::micro> Start;
-		std::chrono::microseconds DurationElapsed;
+		std::chrono::duration<double, std::micro>	Start;
+		std::chrono::microseconds					DurationElapsed;
 	};
 
 	class Timer
 	{
 	public:
 		Timer(const char* name)
-			: m_Name(name), m_Stopped(false)
-		{
-			m_StartTimepoint = std::chrono::high_resolution_clock::now();
-		}
+			: m_Name(name), m_Stopped(false) { m_StartTimepoint = std::chrono::high_resolution_clock::now(); }
 		~Timer();
 		
 		void Stop();
 
 	private:
-		const char* m_Name;
-		bool m_Stopped;
+		const char*	m_Name;
+		bool		m_Stopped;
 		std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
 	};
 
@@ -44,21 +41,19 @@ namespace fe
 		void WriteProfile(const ProfileResult& result);
 		void EndSession();
 	
-		Profiler(const Profiler&) = delete;
-		Profiler(Profiler&&) = delete;
+		Profiler(const Profiler&)	= delete;
+		Profiler(Profiler&&)		= delete;
 
 	private:
 		Profiler()
-			: m_ActiveSession(false), m_SessionName(nullptr)
-		{}
-		~Profiler() {
-			if(m_ActiveSession) EndSession();
-		}
+			: m_ActiveSession(false), m_SessionName(nullptr) {}
+		~Profiler()
+			{ if(m_ActiveSession) EndSession(); }
 
-		bool m_ActiveSession;
-		const char* m_SessionName;
-		std::ofstream m_OutputStream;
-		std::mutex m_Mutex;
+		bool			m_ActiveSession;
+		const char*		m_SessionName;
+		std::ofstream	m_OutputStream; // guarded by m_Mutex
+		std::mutex		m_Mutex;
 
 		void WriteHeader();
 		void WriteFooter();

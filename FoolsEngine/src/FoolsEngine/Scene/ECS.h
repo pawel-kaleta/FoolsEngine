@@ -1,14 +1,15 @@
 #pragma once
-#include "FE_pch.h"
+
+#include <memory>
+
 #include <entt.hpp>
 
 namespace fe
 {
-	using SetID = uint32_t;
-	inline constexpr entt::null_t NullSetID{};
-	using Registry = entt::basic_registry<SetID>;
-	inline constexpr SetID RootID{0};
-
+	using EntityID = uint32_t;
+	inline constexpr entt::null_t NullEntityID{};
+	using Registry = entt::basic_registry<EntityID>;
+	inline constexpr EntityID RootID{0};
 
 	using ECS_handle = entt::basic_handle<Registry>;
 	using const_ECS_handle = entt::basic_handle<const Registry>;

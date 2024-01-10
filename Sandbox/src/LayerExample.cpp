@@ -4,13 +4,16 @@ LayerExample::LayerExample()
 	: fe::Layer("LayerExample")
 { }
 
-struct TargetBehaviourScriptExample : fe::NativeScript
+/*
+struct MovementSystem : fe::Behavior
 {
 	float MoveSpeed = 0.5f;
 
-	void OnUpdate() override
+
+	void OnUpdate_Physics() override
 	{
-		auto transform = GetTransformHandle();
+		auto entity = fe::Entity(GetHeadEntityID(), GetScene());
+		auto transform = entity.GetTransformHandle();
 		auto newTransform = transform.Global();
 		auto& position = newTransform.Position;
 		auto& rotation = newTransform.Rotation;
@@ -34,19 +37,24 @@ struct TargetBehaviourScriptExample : fe::NativeScript
 
 		transform = newTransform;
 	}
-};
+};*/
 
 void LayerExample::OnAttach()
 {
 	m_Scene = fe::CreateRef<fe::Scene>();
 
-	auto camera = m_Scene->CreateSet();
-	camera.Emplace<fe::CCamera>(fe::CCamera::Orthographic, 1280.0f / 720.0f);
-	m_Scene->SetPrimaryCameraSet(camera);
-
-	fe::Set tintedTextureTile = m_Scene->CreateSet();
+	auto camera = m_Scene->CreateEntity();
 	{
-		auto& tile = tintedTextureTile.Emplace<fe::Renderer2D::CTile>();
+		camera.Emplace<fe::CCamera>();
+		fe::Transform transform;
+		transform.Position = glm::vec3(0.0f, 0.0f, 2.0f);
+		camera.GetTransformHandle() = transform;
+	}
+	m_Scene->SetPrimaryCameraEntity(camera);
+
+	fe::Entity tintedTextureTile = m_Scene->CreateEntity();
+	{
+		auto& tile = tintedTextureTile.Emplace<fe::CTile>().Tile;
 		tile.Texture = fe::TextureLibrary::Get("Default_Texture");
 		tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 		tile.TextureTilingFactor = 3;
@@ -58,9 +66,9 @@ void LayerExample::OnAttach()
 		tintedTextureTile.GetTransformHandle() = transform;
 	}
 
-	fe::Set flatTile = m_Scene->CreateSet();
+	fe::Entity flatTile = m_Scene->CreateEntity();
 	{
-		auto& tile = flatTile.Emplace<fe::Renderer2D::CTile>();
+		auto& tile = flatTile.Emplace<fe::CTile>().Tile;
 		tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
 		tile.TextureTilingFactor = 3;
 
@@ -70,9 +78,9 @@ void LayerExample::OnAttach()
 		flatTile.GetTransformHandle() = transform;
 	}
 
-	m_ColorSprite = m_Scene->CreateSet();
+	m_ColorSprite = m_Scene->CreateEntity();
 	{
-		auto& sprite = m_ColorSprite.Emplace<fe::Renderer2D::CSprite>();
+		auto& sprite = m_ColorSprite.Emplace<fe::CSprite>().Sprite;
 		sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 
 		fe::Transform transform;
@@ -81,11 +89,11 @@ void LayerExample::OnAttach()
 		m_ColorSprite.GetTransformHandle() = transform;
 	}
 
-	fe::Set target = m_Scene->CreateSet(fe::RootID, "Target");
+	fe::Entity target = m_Scene->CreateEntity(fe::RootID, "Target");
 	{
 		fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-		auto& sprite = target.Emplace<fe::Renderer2D::CSprite>();
+		auto& sprite = target.Emplace<fe::CSprite>().Sprite;
 		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 
 		fe::Transform transform;
@@ -93,16 +101,16 @@ void LayerExample::OnAttach()
 		transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 		target.GetTransformHandle() = transform;
 
-		target.AddScript<TargetBehaviourScriptExample>();
+		//target.AddGOController<MovementSystem>();
 
 		auto tags = target.GetTagsHandle().Local();
-		tags.Common.Add(fe::CommonTags::Player);
+		tags.Add(fe::Tags::Player);
 		target.GetTagsHandle().SetLocal(tags);
 	}
 
-	fe::Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
+	fe::Entity targetChild_1 = m_Scene->CreateEntity(target, "TargetChild");
 	{
-		auto& sprite = targetChild_1.Emplace<fe::Renderer2D::CSprite>();
+		auto& sprite = targetChild_1.Emplace<fe::CSprite>().Sprite;
 		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 		sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
@@ -119,10 +127,8 @@ void LayerExample::OnUpdate()
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
 
-	m_Scene->UpdateScripts();
-	m_Scene->DestroyFlaggedSets();
 	m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
-	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetSetWithPrimaryCamera());
+	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetEntityWithPrimaryCamera());
 }
 
 void LayerExample::OnImGuiRender()

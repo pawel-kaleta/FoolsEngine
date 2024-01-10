@@ -9,6 +9,7 @@
 #endif
 
 #define BIT_FLAG(x) (1 << x)
+#define WIDE_BIT_FLAG(x) ((uint64_t)1 << x)
 
 namespace fe
 {

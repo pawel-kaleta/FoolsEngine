@@ -8,8 +8,8 @@ namespace fe {
 	class Asserts
 	{
 	public:
-		inline static bool EnableAssertionBreak = true;
-		inline static bool EnableCoreAssertionBreak = true;
+		static bool EnableAssertionBreak;
+		static bool EnableCoreAssertionBreak;
 	};
 }
 

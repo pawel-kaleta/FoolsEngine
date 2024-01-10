@@ -13,7 +13,7 @@ namespace fe
 		std::chrono::microseconds highResEnd = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch();
 
 		ProfileResult result;
-		result.name = m_Name;
+		result.Name = m_Name;
 		result.ThreadID = std::this_thread::get_id();
 		result.Start = std::chrono::duration<double, std::micro>{ m_StartTimepoint.time_since_epoch() };
 		result.DurationElapsed = highResEnd - highResStart;
@@ -93,20 +93,21 @@ namespace fe
 	{
 		if (m_ActiveSession)
 		{
-			std::lock_guard lock(m_Mutex);
-
 			std::stringstream buffer;
 			buffer << std::setprecision(3) << std::fixed;
 			buffer << ",{\n"
 				<< "\"cat\": \"function\",\n"
 				<< "\"dur\": " << result.DurationElapsed.count() << ",\n"
-				<< "\"name\": \"" << result.name << "\",\n"
+				<< "\"name\": \"" << result.Name << "\",\n"
 				<< "\"ph\": \"X\",\n"
 				<< "\"pid\": 0,\n"
 				<< "\"tid\": " << result.ThreadID << ",\n"
-				<< "\"ts\": " << result.Start.count() << "\n"
+				<< "\"ts\": " << result.Start.count() << ",\n"
+				<< "\"args\":{}"
 				<< "}";
 			
+			std::lock_guard lock(m_Mutex);
+
 			m_OutputStream << buffer.str();
 			m_OutputStream.flush();
 		}

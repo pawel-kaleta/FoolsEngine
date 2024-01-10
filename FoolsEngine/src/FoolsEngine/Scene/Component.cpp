@@ -1,41 +1,169 @@
 #include "FE_pch.h"
 #include "Component.h"
-#include "Set.h"
+#include "Entity.h"
+#include "World.h"
+#include "Scene.h"
 
 namespace fe
 {
-	void CCamera::SetOrthographic(float zoom, float nearClip, float farClip)
+	ComponentTypesRegistry ComponentTypesRegistry::s_Registry = ComponentTypesRegistry();
+	void DataComponent::DrawInspectorWidget(BaseEntity entity) {}
+
+
+	void ComponentTypesRegistry::RegisterComponents()
 	{
-		m_ProjectionType = ProjectionType::Orthographic;
-		m_OrthographicZoom = zoom;
-		m_OrthographicNearClip = nearClip;
-		m_OrthographicFarClip = farClip;
-		CalculateProjection();
+		RegisterDataComponent<CCamera>();
+		RegisterDataComponent<CTile>();
+		RegisterDataComponent<CSprite>();
 	}
 
-	void CCamera::SetPerspective(float verticalFOV, float nearClip, float farClip)
+	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{
-		m_ProjectionType = ProjectionType::Perspective;
-		m_PerspectiveFOV = verticalFOV;
-		m_PerspectiveNearClip = nearClip;
-		m_PerspectiveFarClip = farClip;
-		CalculateProjection();
-	}
+		auto* scene = entity.GetWorld()->GetScene();
 
-	void CCamera::CalculateProjection()
-	{
-		if (m_ProjectionType == ProjectionType::Perspective)
+		bool primary = entity.ID() == scene->GetEntityWithPrimaryCamera().ID();
+
+		if (ImGui::Checkbox("Primary", &primary))
+			if (primary)
+				scene->SetPrimaryCameraEntity(Entity(entity));
+
+		constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
+		const char* currentProjectionTypeString = projectionTypeStrings[(int)Camera.GetProjectionType()];
+
+		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 		{
-			m_Projection = glm::perspective(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNearClip, m_PerspectiveFarClip);
+			for (int i = 0; i < 2; i++)
+			{
+				bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+				if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+				{
+					currentProjectionTypeString = projectionTypeStrings[i];
+					Camera.SetProjectionType((Camera::ProjectionType)i);
+				}
+
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		if (Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
+		{
+			float verticalFov = glm::degrees(Camera.GetPerspectiveFOV());
+			if (ImGui::DragFloat("Field of View", &verticalFov))
+				Camera.SetPerspectiveFOV(glm::radians(verticalFov));
+
+			float orthoNear = Camera.GetPerspectiveNearClip();
+			if (ImGui::DragFloat("Near Clip", &orthoNear))
+				Camera.SetPerspectiveNearClip(orthoNear);
+
+			float orthoFar = Camera.GetPerspectiveFarClip();
+			if (ImGui::DragFloat("Far Clip", &orthoFar))
+				Camera.SetPerspectiveFarClip(orthoFar);
 		}
 		else
 		{
-			float top = m_OrthographicZoom * 0.5f;
-			float bottom = m_OrthographicZoom * -0.5f;
-			float right = m_AspectRatio * top;
-			float left = m_AspectRatio * bottom;
+			float zoom = Camera.GetOrthographicZoom();
+			if (ImGui::DragFloat("Zoom", &zoom))
+				Camera.SetOrthographicZoom(zoom);
 
-			m_Projection = glm::ortho(left, right, bottom, top, m_OrthographicNearClip, m_OrthographicFarClip);
+			float orthoNear = Camera.GetOrthographicNearClip();
+			if (ImGui::DragFloat("Near Clip", &orthoNear))
+				Camera.SetOrthographicNearClip(orthoNear);
+
+			float orthoFar = Camera.GetOrthographicFarClip();
+			if (ImGui::DragFloat("Far Clip", &orthoFar))
+				Camera.SetOrthographicFarClip(orthoFar);
+		}
+	}
+
+	void CTile::DrawInspectorWidget(BaseEntity entity)
+	{
+		auto& textures = TextureLibrary::GetAll();
+		auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+
+		auto item_current = Tile.Texture;
+		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
+		if (ImGui::BeginCombo("Texture", combo_preview_value))
+		{
+			bool is_selected = (item_current->GetID() == flat_color_texture->GetID());
+
+			if (ImGui::Selectable("None", is_selected))
+				item_current = flat_color_texture;
+
+			for (auto it = textures.begin(); it != textures.end(); ++it)
+			{
+				if (it->second->GetFormat() != TextureData::Format::RGB)
+					continue;
+
+				if (it->second->GetID() == flat_color_texture->GetID())
+					continue;
+
+				is_selected = (item_current->GetID() == it->second.get()->GetID());
+				if (ImGui::Selectable(it->first.c_str(), is_selected))
+					item_current = it->second;
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+
+		Tile.Texture = item_current;
+
+		if (item_current->GetID() == flat_color_texture->GetID())
+		{
+			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
+		}
+		else
+		{
+			ImGui::DragFloat("Tiling Factor", &Tile.TextureTilingFactor, 0.1f);
+
+			ImGui::ColorEdit3("Tint Color", glm::value_ptr(Tile.Color));
+		}
+	}
+
+	void CSprite::DrawInspectorWidget(BaseEntity entity)
+	{
+		auto& textures = TextureLibrary::GetAll();
+		auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+
+		auto item_current = Sprite.Texture;
+		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
+		if (ImGui::BeginCombo("Texture", combo_preview_value))
+		{
+			bool is_selected = (item_current->GetID() == flat_color_texture->GetID());
+
+			if (ImGui::Selectable("None", is_selected))
+				item_current = flat_color_texture;
+
+			for (auto it = textures.begin(); it != textures.end(); ++it)
+			{
+				if (it->second->GetID() == flat_color_texture->GetID())
+					continue;
+
+				is_selected = (item_current->GetID() == it->second.get()->GetID());
+				if (ImGui::Selectable(it->first.c_str(), is_selected))
+					item_current = it->second;
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+
+		Sprite.Texture = item_current;
+
+		if (item_current->GetID() == flat_color_texture->GetID())
+		{
+			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));
+		}
+		else
+		{
+			ImGui::DragFloat("Tiling Factor", &Sprite.TextureTilingFactor, 0.1f);
+
+			ImGui::ColorEdit4("Tint Color", glm::value_ptr(Sprite.Color));
 		}
 	}
 }

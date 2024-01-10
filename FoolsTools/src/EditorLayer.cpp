@@ -1,4 +1,7 @@
 #include "EditorLayer.h"
+#include "FoolsEngine\Scene\Behavior.h"
+#include "FoolsEngine\Scene\Actor.h"
+#include "FoolsEngine\Scene\CompPtr.h"
 
 namespace fe
 {
@@ -7,43 +10,83 @@ namespace fe
 	{
 	}
 
-	struct TargetBehaviourScriptExample : NativeScript
+	struct CPlayerMovement : DataComponent
 	{
-		float MoveSpeed = 0.5f;
+		struct TargetMovement {
+			float MoveSpeed = 0.5f;
+			float RotationSpeed = 80.0f;
+			float ScaleStepSpeed = 0.2f;
 
-		void OnUpdate() override
+			Transform CalculateNewTransform(Transform transform)
+			{
+				auto& position = transform.Position;
+				auto& rotation = transform.Rotation;
+				auto& scale    = transform.Scale;
+
+				float moveDistance = Time::DeltaTime() * MoveSpeed;
+				float rotAngle     = Time::DeltaTime() * RotationSpeed;
+				float scaleStep    = Time::DeltaTime() * ScaleStepSpeed;
+
+					 if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleStep;
+				else if (InputPolling::IsKeyPressed(InputCodes::KP3))	scale += scaleStep;
+
+					 if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.z -= rotAngle;
+				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.z += rotAngle;
+
+					 if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
+				else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
+					 if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
+				else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.y -= moveDistance;
+
+				return transform;
+			}
+		} PlayerMovement;
+
+		FE_COMPONENT_SETUP(CPlayerMovement, "PlayerMovement");
+		virtual void DrawInspectorWidget(BaseEntity entity) override
 		{
-			auto transform = GetTransformHandle();
-			auto newTransform = transform.Global();
-			auto& position = newTransform.Position;
-			auto& rotation = newTransform.Rotation;
-			auto& scale = newTransform.Scale;
+			ImGui::DragFloat("MoveSpeed"     , &PlayerMovement.MoveSpeed     , 0.01f);
+			ImGui::DragFloat("RotationSpeed" , &PlayerMovement.RotationSpeed , 0.1f);
+			ImGui::DragFloat("ScaleStepSpeed", &PlayerMovement.ScaleStepSpeed, 0.01f);
+		}
+	};
 
-
-			float moveDistance = Time::DeltaTime() * MoveSpeed;
-			float rotSpeed = Time::DeltaTime() * 80.0f;
-			float scaleSpeed = Time::DeltaTime() * 0.2f;
-
-				 if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleSpeed;
-			else if (InputPolling::IsKeyPressed(InputCodes::KP3))	scale += scaleSpeed;
-
-			     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.z -= rotSpeed;
-			else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.z += rotSpeed;
-
-				 if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
-				 if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
-			else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.y -= moveDistance;
-
+	class PlayerMovementBehavior : public Behavior
+	{
+	public:
+		//PlayerMovementBehavior() = default;
+		virtual ~PlayerMovementBehavior() override = default;
+	
+		virtual void OnUpdate_PrePhysics() override
+		{
+			auto transform = m_Player.GetTransformHandle();
+			auto newTransform = m_Movement.Get()->PlayerMovement.CalculateNewTransform(transform.Global());
 			transform = newTransform;
 		}
+
+		virtual void OnInitialize() override
+		{
+			RegisterForUpdate<SimulationStages::PrePhysics>();
+		}
+
+		virtual void DrawInspectorWidget() const override 
+		{
+			DrawCompPtr(m_Movement, "Movement Component");
+			DrawEntity(m_Player, "Player's root");
+		}
+
+		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
+
+		CompPtr<CPlayerMovement> m_Movement;
+		Entity m_Player;
 	};
 
 	void EditorLayer::OnAttach()
 	{
 		FE_PROFILER_FUNC();
+		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		FramebufferSpecification fbSpec;
+		FramebufferData::Specification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
@@ -52,9 +95,9 @@ namespace fe
 
 		m_Scene = CreateRef<Scene>();
 		m_SceneHierarchyPanel.SetScene(m_Scene);
-		m_SetInspector.SetScene(m_Scene);
+		m_EntityInspector.SetScene(m_Scene);
 
-		SpawnTestSets();
+		TestSceneSetup();
 	}
 
 	void EditorLayer::OnUpdate()
@@ -64,13 +107,13 @@ namespace fe
 
 		if (m_VieportFocus)
 		{
-			m_Scene->UpdateScripts();
+			m_Scene->SimulationUpdate();
+
 			m_CameraController->OnUpdate();
 		}
+		m_Scene->PostFrameUpdate();
 
-		m_Scene->DestroyFlaggedSets();
-		m_Scene->OptimiseStorageOrder();
-		m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
+		m_Scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
 
 		m_Framebuffer->Bind();
 		Renderer2D::RenderScene(*m_Scene, m_CameraController->GetCamera(), m_CameraController->GetTransform());
@@ -142,12 +185,12 @@ namespace fe
 				ImGui::EndMenuBar();
 			}
 
-			m_SceneHierarchyPanel.SetSelection(m_SelectedSetID);
+			m_SceneHierarchyPanel.SetSelection(m_SelectedEntityID);
 			m_SceneHierarchyPanel.OnImGuiRender();
-			m_SelectedSetID = m_SceneHierarchyPanel.GetSelection();
+			m_SelectedEntityID = m_SceneHierarchyPanel.GetSelection();
 
-			m_SetInspector.OpenSet(m_SelectedSetID);
-			m_SetInspector.OnImGuiRender();
+			m_EntityInspector.OpenEntity(m_SelectedEntityID);
+			m_EntityInspector.OnImGuiRender();
 
 			ImGui::Begin("RenderStats");
 			{
@@ -184,7 +227,7 @@ namespace fe
 							if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
 							{
 								currentProjectionTypeString = projectionTypeStrings[i];
-								camera.SetProjectionType((CCamera::ProjectionType)i);
+								camera.SetProjectionType((Camera::ProjectionType)i);
 							}
 
 							if (isSelected)
@@ -194,7 +237,7 @@ namespace fe
 						ImGui::EndCombo();
 					}
 
-					if (camera.GetProjectionType() == CCamera::ProjectionType::Perspective)
+					if (camera.GetProjectionType() == Camera::ProjectionType::Perspective)
 					{
 						float verticalFov = glm::degrees(camera.GetPerspectiveFOV());
 						if (ImGui::DragFloat("Field of View", &verticalFov))
@@ -256,11 +299,16 @@ namespace fe
 		ImGui::End();	
 	}
 
-	void EditorLayer::SpawnTestSets()
+	void EditorLayer::TestSceneSetup()
 	{
-		Set tintedTextureTile = m_Scene->CreateSet(RootID, "Test Set");
+		FE_PROFILER_FUNC();
+		FE_LOG_INFO("Test Entities Spawn");
+
+		Actor enviroActor = m_Scene->GetGameplayWorld()->CreateActor("Enviro");
+		
+		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");
 		{
-			auto& tile = tintedTextureTile.Emplace<Renderer2D::CTile>();
+			auto& tile = tintedTextureTile.Emplace<CTile>().Tile;
 			tile.Texture = TextureLibrary::Get("Default_Texture");
 			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 			tile.TextureTilingFactor = 3;
@@ -272,12 +320,12 @@ namespace fe
 			tintedTextureTile.GetTransformHandle() = transform;
 
 			tintedTextureTile.Emplace<CCamera>();
-			m_Scene->SetPrimaryCameraSet(tintedTextureTile);
+			m_Scene->SetPrimaryCameraEntity(tintedTextureTile);
 		}
 
-		Set flatTile = m_Scene->CreateSet();
+		Entity flatTile = enviroActor.CreateChildEntity();
 		{
-			auto& tile = flatTile.Emplace<Renderer2D::CTile>();
+			auto& tile = flatTile.Emplace<CTile>().Tile;
 			tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
 			tile.TextureTilingFactor = 3;
 
@@ -287,39 +335,59 @@ namespace fe
 			flatTile.GetTransformHandle() = transform;
 		}
 
-		m_ColorSprite = m_Scene->CreateSet();
+		Actor childActor = enviroActor.CreateAttachedActor("TestChildActor");
 		{
-			auto& sprite = m_ColorSprite.Emplace<Renderer2D::CSprite>();
+			auto& tile = childActor.Emplace<CTile>().Tile;
+			tile.Color = glm::vec4(0.8f, 0.8f, 0.1f, 1.0f);
+			tile.TextureTilingFactor = 2;
+
+			Transform transform;
+			transform.Position = glm::vec3(0.3f, -0.2f, 0.19f);
+			transform.Scale = glm::vec3(0.2f, 0.4f, 1.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, -40.0f);
+			childActor.GetTransformHandle() = transform;
+		}
+
+		Entity childOfChildActor = childActor.CreateChildEntity();
+
+		Entity colorSprite = enviroActor.CreateChildEntity();
+		{
+			auto& sprite = colorSprite.Emplace<CSprite>().Sprite;
 			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 
 			Transform transform;
 			transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
-			m_ColorSprite.GetTransformHandle() = transform;
+			colorSprite.GetTransformHandle() = transform;
 		}
 
-		Set target = m_Scene->CreateSet(RootID, "Target");
+		Actor playerActor = m_Scene->GetGameplayWorld()->CreateActor("Player");
 		{
 			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
-			auto& sprite = target.Emplace<Renderer2D::CSprite>();
+			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
 			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
 			Transform transform;
 			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
-			target.GetTransformHandle() = transform;
+			playerActor.GetTransformHandle() = transform;
 
-			target.AddScript<TargetBehaviourScriptExample>();
+			auto tags = playerActor.GetTagsHandle();
+			tags.Add(Tags::Player);
+			playerActor.GetTagsHandle().SetLocal(tags);
 
-			auto tags = target.GetTagsHandle().Local();
-			tags.Common.Add(CommonTags::Player);
-			target.GetTagsHandle().SetLocal(tags);
+			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
+			movement->m_Player = Entity(playerActor);
+			movement->m_Movement.Set(Entity(playerActor));
+
+			playerActor.Emplace<CPlayerMovement>();
+			ComponentTypesRegistry::s_Registry.RegisterDataComponent<CPlayerMovement>();
 		}
 
-		Set targetChild_1 = m_Scene->CreateSet(target, "TargetChild");
+		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
 		{
-			auto& sprite = targetChild_1.Emplace<Renderer2D::CSprite>();
+			auto& sprite = testChild_1.Emplace<CSprite>().Sprite;
 			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
@@ -327,7 +395,20 @@ namespace fe
 			transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
-			targetChild_1.GetTransformHandle().SetLocal(transform);
+			testChild_1.GetTransformHandle().SetLocal(transform);
+		}
+
+		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
+		{
+			auto& sprite = testCild_2.Emplace<CSprite>().Sprite;
+			sprite.Texture = TextureLibrary::Get("Default_Texture");
+			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
+
+			Transform transform;
+			transform.Position = glm::vec3(-0.8f, -0.8f, 0.0f);
+			transform.Rotation = glm::vec3(0.0f, 0.0f, -20.0f);
+			transform.Scale = glm::vec3(0.7f, 0.4f, 1.0f);
+			testCild_2.GetTransformHandle().SetLocal(transform);
 		}
 	}
 

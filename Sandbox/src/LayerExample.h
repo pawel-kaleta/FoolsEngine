@@ -17,5 +17,5 @@ public:
 private:
 	fe::Ref<fe::Scene> m_Scene;
 
-	fe::Set m_ColorSprite;
+	fe::Entity m_ColorSprite;
 };

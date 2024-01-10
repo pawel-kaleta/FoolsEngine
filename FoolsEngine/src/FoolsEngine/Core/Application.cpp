@@ -1,7 +1,9 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine\Core\Application.h"
-#include "FoolsEngine\Renderer\Renderer.h"
+
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Scene\Component.h"
 
 namespace fe {
 
@@ -25,10 +27,14 @@ namespace fe {
 		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 
+		GDIType gdi = GDIType::OpenGL;
+
 		Renderer::Init();
-		Renderer::CreateAPI(GDIType::OpenGL);
-		Renderer::InitAPI(GDIType::OpenGL);
-		Renderer::SetAPI(GDIType::OpenGL);
+		Renderer::CreateAPI(gdi);
+		Renderer::InitAPI(gdi);
+		Renderer::SetAPI(gdi);
+
+		ComponentTypesRegistry::s_Registry.RegisterComponents();
 	}
 
 	Application::~Application()
@@ -113,14 +119,16 @@ namespace fe {
 			FE_LOG_CORE_TRACE("m_LastFrameTimeStep: {0}", m_LastFrameTimeStep.GetSeconds());
 			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
 
+			m_FrameCount++;
+
+			m_Window->OnUpdate();
+			m_MainEventDispacher.DispachEvents(m_LayerStack);
+
 			if (!m_Minimized)
 			{
 				UpdateLayers();
 				UpdateImGui();
 			}
-
-			m_MainEventDispacher.DispachEvents(m_LayerStack);
-			m_Window->OnUpdate();
 
 #ifdef FE_INTERNAL_BUILD
 			if (m_ActiveProfiler)

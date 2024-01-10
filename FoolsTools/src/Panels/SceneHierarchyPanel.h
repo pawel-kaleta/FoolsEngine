@@ -11,15 +11,15 @@ namespace fe
 		SceneHierarchyPanel(const Ref<Scene>& scene)
 			: m_Scene(scene) {}
 
-		void SetScene(const Ref<Scene>& scene);
-		SetID GetSelection() { return m_SelectedSetID; }
-		void SetSelection(SetID setID) { m_SelectedSetID = setID; }
+		void		SetScene(const Ref<Scene>& scene);
+		EntityID	GetSelection()					{ return m_SelectedEntityID; }
+		void		SetSelection(EntityID entityID)	{ m_SelectedEntityID = entityID; }
 
 		void OnImGuiRender();
 	private:
-		Ref<Scene> m_Scene;
-		SetID m_SelectedSetID = NullSetID;
+		Ref<Scene>	m_Scene;
+		EntityID	m_SelectedEntityID = NullEntityID;
 		
-		bool DrawSet(SetID setID);
+		bool DrawEntity(EntityID entityID);
 	};
 }

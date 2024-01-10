@@ -1,11 +1,13 @@
 #pragma once
 #include "ECS.h"
+#include "Component.h"
+#include "SimulationStages.h"
+#include "World.h"
 
 namespace fe
 {
-	using namespace entt::literals;
-	class Set;
-	class SceneHierarchy;
+	class Entity;
+	class UUID;
 
 	class Scene
 	{
@@ -13,25 +15,25 @@ namespace fe
 		Scene();
 		~Scene() = default;
 
-		Set CreateSet(SetID parent = RootID, const std::string& name = "set");
-		const Set Root();
+		Entity	GetEntityWithPrimaryCamera();
+		void	SetPrimaryCameraEntity(Entity entity);
+		void	SetPrimaryCameraEntity(EntityID id);
 
-		Set GetSetWithPrimaryCamera();
-		void SetPrimaryCameraSet(Set set);
-		void SetPrimaryCameraSet(SetID id);
+		void SimulationUpdate();
+		void PostFrameUpdate();
 
-		void UpdateScripts();
-		void DestroyFlaggedSets();
-		void OptimiseStorageOrder();
+		GameplayWorld* GetGameplayWorld() { return m_GameplayWorld.get(); }
 
-		Registry& GetRegistry() { return m_Registry; }
-		SceneHierarchy& GetHierarchy() { return *m_Hierarchy.get(); }
 	private:
-		friend class Set;
-		friend struct CNativeScript;
+		Scope<GameplayWorld>	m_GameplayWorld;
+		EntityID				m_PrimaryCameraEntityID;
+		
+		template <typename tnSimulationStage>
+		void Update();
 
-		Registry m_Registry;
-		SetID m_PrimaryCameraSetID;
-		Scope<SceneHierarchy> m_Hierarchy;
+		
+		
 	};
+
+
 }

@@ -4,54 +4,78 @@
 "name": "__cdecl fe::Application::~Application(void)",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972310863.300
-},{
+"tid": 7896,
+"ts": 52505650909.100,
+"args":{}},{
 "cat": "function",
-"dur": 1768,
+"dur": 2286,
 "name": "void __cdecl fe::ImGuiLayer::OnDetach(void)",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972310913.600
-},{
+"tid": 7896,
+"ts": 52505650961.200,
+"args":{}},{
 "cat": "function",
-"dur": 1898,
+"dur": 98,
+"name": "__cdecl fe::CActorData::~CActorData(void)",
+"ph": "X",
+"pid": 0,
+"tid": 7896,
+"ts": 52505653382.700,
+"args":{}},{
+"cat": "function",
+"dur": 333,
+"name": "__cdecl fe::CActorData::~CActorData(void)",
+"ph": "X",
+"pid": 0,
+"tid": 7896,
+"ts": 52505653538.300,
+"args":{}},{
+"cat": "function",
+"dur": 289,
+"name": "__cdecl fe::CActorData::~CActorData(void)",
+"ph": "X",
+"pid": 0,
+"tid": 7896,
+"ts": 52505653910.800,
+"args":{}},{
+"cat": "function",
+"dur": 3359,
 "name": "__cdecl fe::LayerStack::~LayerStack(void)",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972310911.900
-},{
+"tid": 7896,
+"ts": 52505650959.700,
+"args":{}},{
 "cat": "function",
-"dur": 14101,
+"dur": 16216,
 "name": "glfwDestroyWindow()",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972312960.600
-},{
+"tid": 7896,
+"ts": 52505654520.800,
+"args":{}},{
 "cat": "function",
-"dur": 5776,
+"dur": 5565,
 "name": "glfwTerminate()",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972327115.400
-},{
+"tid": 7896,
+"ts": 52505670805.400,
+"args":{}},{
 "cat": "function",
-"dur": 20110,
+"dur": 22066,
 "name": "void __cdecl fe::Win10Window::ShutDown(void)",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972312848.800
-},{
+"tid": 7896,
+"ts": 52505654360.900,
+"args":{}},{
 "cat": "function",
-"dur": 20145,
+"dur": 22096,
 "name": "__cdecl fe::Win10Window::~Win10Window(void)",
 "ph": "X",
 "pid": 0,
-"tid": 119864,
-"ts": 214972312848.600
-}]}
+"tid": 7896,
+"ts": 52505654360.800,
+"args":{}}]}

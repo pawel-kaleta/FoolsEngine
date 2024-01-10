@@ -2,97 +2,104 @@
 #include "ECS.h"
 #include "Scene.h"
 
-#include "Set.h"
-#include "Hierarchy.h"
-#include "NativeScript.h"
+#include "Entity.h"
+#include "FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h"
+#include "FoolsEngine\Core\UUID.h"
+#include "Component.h"
+#include "SimulationStages.h"
+#include "Actor.h"
 
 namespace fe
 {
 	Scene::Scene()
-		: m_PrimaryCameraSetID(NullSetID)
+		: m_PrimaryCameraEntityID(NullEntityID)
 	{
-		auto root = m_Registry.create(RootID);
-		ECS_handle handle(m_Registry, RootID);
-		
-		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Set in a Scene");
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Scene creation");
 
-		handle.emplace<CName>("root");
-		handle.emplace<CTransform>();
-		handle.emplace<CTags>();
-		handle.emplace<CHierarchyNode>().Parent = NullSetID;
-
-		m_Hierarchy = CreateScope<SceneHierarchy>(m_Registry);
+		m_GameplayWorld = CreateScope<GameplayWorld>(this);
 	}
 
-	Set Scene::CreateSet(SetID parent, const std::string& name)
-	{
-		Set set(m_Registry.create(), this);
-		
-		m_Hierarchy->CreateNode(set, parent, name);
-
-		return set;
+	Entity Scene::GetEntityWithPrimaryCamera() {
+		Entity entity(m_PrimaryCameraEntityID, (GameplayWorld*)m_GameplayWorld.get());
+		FE_CORE_ASSERT(entity, "Entity with primary camera was deleted");
+		FE_CORE_ASSERT(entity.AllOf<CCamera>(), "Primary camera was removed from its Entity");
+		return entity;
 	}
 
-	const Set Scene::Root()
+	void Scene::SetPrimaryCameraEntity(Entity entity)
 	{
-		return Set(RootID, this);
-	}
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Primary Camera Set.");
 
-	Set Scene::GetSetWithPrimaryCamera() {
-		Set set(m_PrimaryCameraSetID, this);
-		FE_CORE_ASSERT(set, "Set with primary m_Scene camera was deleted");
-		FE_CORE_ASSERT(set.AllOf<CCamera>(), "Primary camera was removed from its Set");
-		return set;
-	}
-
-	void Scene::SetPrimaryCameraSet(Set set)
-	{
-		if (!(set))
+		if (!(entity))
 		{
-			FE_CORE_ASSERT(false, "This is not a valid set");
+			FE_CORE_ASSERT(false, "This is not a valid entity");
 			return;
 		}
 
-		if (!set.AllOf<CCamera>())
+		if (!entity.AllOf<CCamera>())
 		{
-			FE_CORE_ASSERT(false, "This set does not have a CCamera component");
+			FE_CORE_ASSERT(false, "This entity does not have a CCamera component");
 			return;
 		}
 
-		if (set.m_Scene != this)
+		if (entity.m_World != (GameplayWorld*)m_GameplayWorld.get())
 		{
-			FE_CORE_ASSERT(false, "This set does not belong to this Scene");
+			FE_CORE_ASSERT(false, "This entity does not belong to GameplayWorld of this Scene");
 			return;
 		}
 
-		m_PrimaryCameraSetID = set.ID();
+		m_PrimaryCameraEntityID = entity.ID();
 	}
 
-	void Scene::SetPrimaryCameraSet(SetID id)
+	void Scene::SetPrimaryCameraEntity(EntityID id)
 	{
-		Set set(id, this);
-		SetPrimaryCameraSet(set);
+		Entity entity(id, (GameplayWorld*)m_GameplayWorld.get());
+		SetPrimaryCameraEntity(entity);
 	}
 
-	void Scene::UpdateScripts()
+	template <typename tnSimulationStage>
+	void Scene::Update()
 	{
 		FE_PROFILER_FUNC();
 
-		auto& scriptComponentsStorage = m_Registry.storage<CNativeScript>();
-		auto& querry = ComponentsQuerry(std::forward_as_tuple(scriptComponentsStorage), std::forward_as_tuple());
-		for (auto setID : querry)
-		{
-			CNativeScript& script = querry.get<CNativeScript>(setID);
-			script.m_Instance->OnUpdate();
-		}
-	}
-	void Scene::DestroyFlaggedSets()
-	{
-		m_Hierarchy->DestroyFlagged();
+		//m_GameplayWorld->UpdateActors(SimulationStages::EnumFromType<tnSimulationStage>());
+		m_GameplayWorld->Update<tnSimulationStage>();
+
+		//auto view = m_GameplayWorld->GetRegistry().view<CActorData, CUpdateEnrollFlag<tnSimulationStage>>();
+
+		//for (auto ID : view)
+		//{
+		//	Actor(ID, m_GameplayWorld.get()).UpdateBehaviors(SimulationStages::EnumFromType<tnSimulationStage>());
+		//}
 	}
 
-	void Scene::OptimiseStorageOrder()
+	template void Scene::Update<SimulationStages::FrameStart  >();
+	template void Scene::Update<SimulationStages::PrePhysics  >();
+	template void Scene::Update<SimulationStages::Physics     >();
+	template void Scene::Update<SimulationStages::PostPhysics >();
+	template void Scene::Update<SimulationStages::FrameEnd    >();
+
+	void Scene::SimulationUpdate()
 	{
-		m_Hierarchy->SortStep();
+		FE_PROFILER_FUNC();
+
+		Update<SimulationStages::FrameStart  >();
+		Update<SimulationStages::PrePhysics  >();
+		Update<SimulationStages::Physics     >();
+		Update<SimulationStages::PostPhysics >();
+		Update<SimulationStages::FrameEnd    >();
+	}
+
+	void Scene::PostFrameUpdate()
+	{
+		FE_PROFILER_FUNC();
+
+		m_GameplayWorld->DestroyScheduledComponents();
+		m_GameplayWorld->GetHierarchy().DestroyFlagged();
+
+		m_GameplayWorld->GetHierarchy().RecreateStorageOrder();
+		m_GameplayWorld->GetHierarchy().MakeGlobalTransformsCurrent();
 	}
 }

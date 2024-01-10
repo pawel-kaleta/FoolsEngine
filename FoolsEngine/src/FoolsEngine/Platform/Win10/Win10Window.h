@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FoolsEngine/Core/Window.h"
-#include "FoolsEngine\Renderer\APIAbstraction\RenderingContext.h"
+#include "FoolsEngine\Core\Window.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

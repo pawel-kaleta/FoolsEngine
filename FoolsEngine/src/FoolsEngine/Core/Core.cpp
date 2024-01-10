@@ -1,7 +1,5 @@
 #include "FE_pch.h"
 
-#include <entt.hpp>
-
 namespace fe
 {
 	std::string FileNameFromFilepath(const std::string& filepath)

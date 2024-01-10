@@ -3,7 +3,7 @@
 #include <FoolsEngine.h>
 #include "EditorCameraController.h"
 #include "Panels\SceneHierarchyPanel.h"
-#include "Panels\SetInspector.h"
+#include "Panels\Inspector.h"
 
 namespace fe
 {
@@ -12,28 +12,27 @@ namespace fe
 	public:
 		EditorLayer();
 
-		virtual void OnAttach() override;
+		virtual void OnAttach()							override;
+		virtual void OnUpdate()							override;
+		virtual void OnImGuiRender()					override;
+		virtual void OnEvent(Ref<Events::Event> event)	override;
 
-		void OnUpdate() override;
-		void OnEvent(Ref<Events::Event> event) override;
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
-		void OnImGuiRender() override;
 
 	private:
-		glm::vec2 m_ViewportSize = { 0, 0 };
-		Scope<Framebuffer> m_Framebuffer;
-		SceneHierarchyPanel m_SceneHierarchyPanel;
-		SetID m_SelectedSetID = NullSetID;
-		SetInspector m_SetInspector;
-
-		bool m_VieportFocus = false;
-		bool m_VieportHover = false;
-
-		Scope<EditorCameraController> m_CameraController;
 		Ref<Scene> m_Scene;
 
-		Set m_ColorSprite;
+		Scope<EditorCameraController>	m_CameraController;
+		Scope<Framebuffer>				m_Framebuffer;
+		
+		glm::vec2	m_ViewportSize = { 0, 0 };
+		bool		m_VieportFocus = false;
+		bool		m_VieportHover = false;
+		
+		SceneHierarchyPanel	m_SceneHierarchyPanel;
+		Inspector		m_EntityInspector;
+		EntityID			m_SelectedEntityID	= NullEntityID;
 
-		void SpawnTestSets();
+		void TestSceneSetup();
 	};
 }

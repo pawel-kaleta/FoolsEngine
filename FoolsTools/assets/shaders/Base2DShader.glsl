@@ -1,18 +1,18 @@
 #type vertex
 #version 450 core
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 2) in vec2 a_TexCoord;
-layout(location = 3) in float a_TilingFactor;
-layout(location = 4) in uint a_TextureSampler;
+layout (location = 0) in vec3 a_Position;
+layout (location = 1) in vec4 a_Color;
+layout (location = 2) in vec2 a_TexCoord;
+layout (location = 3) in float a_TilingFactor;
+layout (location = 4) in uint a_TextureSampler;
 
 uniform mat4 u_ViewProjection;
 
-out vec4 v_Color;
-out vec2 v_TexCoord;
-out float v_TilingFactor;
-out uint v_TextureSampler;
+layout (location = 0) out vec4 v_Color;
+layout (location = 1) out vec2 v_TexCoord;
+layout (location = 2) out flat float v_TilingFactor;
+layout (location = 3) out flat uint v_TextureSampler;
 
 void main()
 {
@@ -29,17 +29,17 @@ void main()
 
 layout(location = 0) out vec4 o_color;
 
-in vec4 v_Color; 
-in vec2 v_TexCoord;
-in float v_TilingFactor;
-flat in uint v_TextureSampler;
+layout (location = 0) in vec4 v_Color; 
+layout (location = 1) in vec2 v_TexCoord;
+layout (location = 2) in flat float v_TilingFactor;
+layout (location = 3) in flat uint v_TextureSampler;
 
 uniform sampler2D u_Texture[32];
 
 void main()
 {
 	o_color = v_Color;
-
+	
 	switch(v_TextureSampler)
 	{
 		case  0: o_color *= texture(u_Texture[ 0], v_TexCoord * v_TilingFactor); break;
@@ -74,5 +74,9 @@ void main()
 		case 29: o_color *= texture(u_Texture[29], v_TexCoord * v_TilingFactor); break;
 		case 30: o_color *= texture(u_Texture[30], v_TexCoord * v_TilingFactor); break;
 		case 31: o_color *= texture(u_Texture[31], v_TexCoord * v_TilingFactor); break;
+	
 	}
+	
+	if (o_color.w < 0.25)
+		discard;
 }

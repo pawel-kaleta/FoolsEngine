@@ -2,228 +2,219 @@
 
 #include "ECS.h"
 
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtx\quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "FoolsEngine\Core\UUID.h"
+#include "Tags.h"
+#include "FoolsEngine\Renderer\3 - Representation\Transform.h"
+#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+#include "FoolsEngine\ImGui\ImGuiLayer.h"
 
 namespace fe
 {
-	class Scene;
-	
-	struct ComponentBase {};
+	class BaseEntity;
+	class Entity;
+	struct DataComponent;
 
-	struct CName : ComponentBase
+	class ComponentTypesRegistry
 	{
-		CName(const std::string& name)
-			: Name(name) {}
-
-		std::string Name = std::string();
-
-		operator       std::string& () { return Name; }
-		operator const std::string& () { return Name; }
-	};
-
-	struct CHierarchyNode : ComponentBase
-	{
-		SetID Parent = RootID;
-
-		uint32_t HierarchyLvl = 0; // = parent.HierarchyLvl + 1;
-		
-		SetID PreviousSibling = NullSetID;
-		SetID NextSibling = NullSetID;
-
-		uint32_t Children = 0;
-		SetID FirstChild = NullSetID;
-		SetID LastChild = NullSetID;
-	};
-	
-	struct TagsBase
-	{
-		uint32_t TagBitFlags = 0;
-
-		TagsBase() = default;
-		TagsBase(uint32_t tags)
-			: TagBitFlags(tags) {};
-
-		operator       uint32_t& ()       { return TagBitFlags; }
-		operator const uint32_t& () const { return TagBitFlags; }
-
-		bool Contains(uint32_t tag)
+	public:
+		struct DataComponentRegistryItem
 		{
-			return TagBitFlags & tag;
-		}
-		void Remove(uint32_t tag)
-		{
-			TagBitFlags &= ~tag;
-		}
-		void Add(uint32_t tag)
-		{
-			TagBitFlags |= tag;
-		}
-
-		TagsBase operator+ (const TagsBase& other) const
-		{
-			return TagsBase(this->TagBitFlags | other.TagBitFlags);
-		}
-		TagsBase operator- (const TagsBase& other) const
-		{
-			return TagsBase(this->TagBitFlags & ~other.TagBitFlags);
-		}
-		bool operator==(const TagsBase& other) const
-		{
-			return TagsBase(TagBitFlags == other.TagBitFlags);
-		}
-
-	};
-
-	struct CommonTags : public TagsBase
-	{
-		enum List : uint32_t
-		{
-			Error = BIT_FLAG(0),
-			Player = BIT_FLAG(1)
+			DataComponent* (BaseEntity::* Getter              )();
+			void           (    Entity::* DestructionScheduler)();
+			bool           (BaseEntity::* Checker             )();
+			void           (BaseEntity::* Emplacer            )();
 		};
-	};
-	struct InternalTags : public TagsBase
-	{};
-	struct Tags
-	{
-		CommonTags Common;
-		InternalTags Internal;
+		std::vector<DataComponentRegistryItem> DataItems;
 
-		Tags operator+ (const Tags& other) const
+		struct FlagComponentRegistryItem
 		{
-			Tags newTags;
-			newTags.Common.TagBitFlags   = Common.TagBitFlags | other.Common.TagBitFlags;
-			newTags.Internal.TagBitFlags = Internal.TagBitFlags | other.Internal.TagBitFlags;
-			return newTags;
-		}
-		Tags operator- (const Tags& other) const
-		{
-			Tags newTags;
-			(TagsBase)newTags.Common   = Common   - other.Common;
-			(TagsBase)newTags.Internal = Internal - other.Internal;
-			return newTags;
-		}
-		bool operator==(const Tags& other) const
-		{
-			return Common == other.Common && Internal == other.Internal;
-		}
-	};
-
-	struct Transform
-	{
-		glm::vec3 Position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
-
-		glm::mat4 GetTransform() const
-		{
-			auto trans = glm::translate(glm::mat4(1.0f), Position);
-			auto rot = glm::toMat4(glm::quat(glm::radians(Rotation)));
-			auto scale = glm::scale(glm::mat4(1.0f), Scale);
-			return trans * rot * scale;
-		}
-
-		operator       glm::mat4()       { return GetTransform(); }
-		operator const glm::mat4() const { return GetTransform(); }
-
-		Transform operator+ (const Transform& other) const
-		{
-			Transform newTransform;
-			newTransform.Position = this->Position + this->Scale * glm::rotate(glm::quat(glm::radians(this->Rotation)), other.Position);
-			newTransform.Rotation = this->Rotation + other.Rotation;
-			newTransform.Scale = this->Scale * other.Scale;
-			return newTransform;
-		}
-		Transform operator- (const Transform& other) const
-		{
-			Transform newTransform;
-			newTransform.Position = glm::rotate(glm::quat(-1.0f * other.Rotation), (this->Position - other.Position));
-			newTransform.Rotation = this->Rotation - other.Rotation;
-			newTransform.Scale = this->Scale / other.Scale;
-			return newTransform;
-		}
-		bool operator==(const Transform& other) const
-		{
-			return Position == other.Position && Rotation == other.Rotation && Scale == other.Scale;
-		}
-	};
-
-	struct CHierarchicalBase : ComponentBase
-	{};
-
-	template<typename DataStruct> //DataStruct needs to implement +,-,== operators
-	struct CHierarchical : CHierarchicalBase
-	{
-		CHierarchical() = default;
-		CHierarchical(const CHierarchical&) = default;
-
-		DataStruct Global;
-		DataStruct Local;
-
-		operator const DataStruct() const { return Global; }
-	};
-
-	using CTransform = CHierarchical<Transform>;
-	using CTags = CHierarchical<Tags>;
-
-	struct CCamera : ComponentBase
-	{
-		enum ProjectionType
-		{
-			Orthographic,
-			Perspective
+			bool (BaseEntity::* Checker)();
+			void (BaseEntity::* Flagger)();
+			void (BaseEntity::* Remover)();
 		};
+		std::vector<FlagComponentRegistryItem> FlagItems;
 
-		CCamera() {	CalculateProjection(); }
-		~CCamera() = default;
+		static ComponentTypesRegistry s_Registry;
 
-		glm::mat4 GetProjectionMatrix() const { return m_Projection; };
-		operator       glm::mat4()       { return m_Projection; }
-		operator const glm::mat4() const { return m_Projection; }
+		void RegisterComponents();
 
-		void SetOrthographic(float zoom, float nearClip, float farClip);
-		void SetPerspective(float verticalFOV, float nearClip, float farClip);
+		template <typename tnComponent>
+		void RegisterDataComponent()
+		{
+			DataItems.push_back(
+				DataComponentRegistryItem{
+					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
+					&    Entity::RemoveIfExist<tnComponent>,
+					&BaseEntity::AllOf<tnComponent>,
+					&BaseEntity::DefaultEmplace<tnComponent>
+				}
+			);
+		}
 
-		void SetViewportSize(uint32_t width, uint32_t hight) { m_AspectRatio = (float)width / (float)hight; CalculateProjection(); }
+		template <typename tnFlagComponent>
+		void RegisterFlagComponent()
+		{
+			FlagItems.push_back(
+				FlagComponentRegistryItem{
+					&BaseEntity::AllOf<tnFlagComponent>,
+					&BaseEntity::Flag<tnFlagComponent>,
+					&BaseEntity::UnFlag<tnFlagComponent>
+				}
+			);
+		}
+	};
 
-		//radians
-		float GetPerspectiveFOV() const { return m_PerspectiveFOV; }
-		//radians
-		void SetPerspectiveFOV(float FOV) { m_PerspectiveFOV = FOV; CalculateProjection(); }
-		float GetPerspectiveNearClip() const { return m_PerspectiveNearClip; }
-		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNearClip = nearClip; CalculateProjection(); }
-		float GetPerspectiveFarClip() const { return m_PerspectiveFarClip; }
-		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFarClip = farClip; CalculateProjection(); }
+#define EDITOR
 
-		float GetOrthographicZoom() const { return m_OrthographicZoom; }
-		void SetOrthographicZoom(float zoom) { m_OrthographicZoom = zoom; CalculateProjection(); }
-		float GetOrthographicNearClip() const { return m_OrthographicNearClip; }
-		void SetOrthographicNearClip(float nearClip) { m_OrthographicNearClip = nearClip; CalculateProjection(); }
-		float GetOrthographicFarClip() const { return m_OrthographicFarClip; }
-		void SetOrthographicFarClip(float farClip) { m_OrthographicFarClip = farClip; CalculateProjection(); }
+#ifdef FE_INTERNAL_BUILD
+	#ifdef EDITOR
+		#define FE_COMPONENT_SETUP(type, name) \
+			virtual std::string GetComponentName() const override { return name; };
+	#else
+		#define FE_COMPONENT_SETUP(type, name) \
+			virtual std::string GetComponentName() const override { return name; } 
+	#endif // EDITOR
+#else
+	FE_COMPONENT_SETUP(type, name) \
+		static void RegisterComponent(ComponentTypesRegistry& reg) { reg.getters.push_back(&BaseEntity::GetAsDataComponentIfExist<type>); };
+#endif // FE_INTERNAL_BUILD
 
-		ProjectionType GetProjectionType() const { return m_ProjectionType; }
-		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; CalculateProjection(); }
+	struct Component {};
+
+	struct FlagComponent : Component {};
+
+	struct DataComponent : Component
+	{
+	#ifdef FE_INTERNAL_BUILD
+		virtual std::string GetComponentName() const { return ""; }
+	#endif // FE_INTERNAL_BUILD
+
+#ifdef EDITOR
+		virtual void DrawInspectorWidget(BaseEntity entity);
+#endif
+	};
+
+	struct SpatialComponent : DataComponent
+	{
+		Transform Offset;
+	};
+
+	struct ProtectedComponent : DataComponent {};
+
+	struct CUUID final : ProtectedComponent
+	{
+		UUID UUID;
+
+		FE_COMPONENT_SETUP(CUUID, "Camera");
+	};
+
+	struct CEntityName final : DataComponent
+	{
+		CEntityName(const std::string& name)
+			: EntityName(name) {}
+
+		std::string EntityName = std::string();
+
+		operator       std::string& () { return EntityName; }
+		operator const std::string& () { return EntityName; }
+
+		FE_COMPONENT_SETUP(CEntityName, "Name");
+	};
+
+	struct HierarchyNode : ProtectedComponent
+	{
+		EntityID Parent				= RootID;
+		uint32_t HierarchyLvl		= 0;
+
+		EntityID PreviousSibling	= NullEntityID;
+		EntityID NextSibling		= NullEntityID;
+
+		uint32_t ChildrenCount		= 0;
+		EntityID FirstChild			= NullEntityID;
+	};
+
+	struct CEntityNode final : HierarchyNode
+	{
+		FE_COMPONENT_SETUP(CEntityNode, "EntityNode");
+	};
+
+	struct CActorNode final : HierarchyNode
+	{
+		FE_COMPONENT_SETUP(CActorNode, "ActorNode");
+	};
+
+	struct CHeadEntity final : ProtectedComponent
+	{
+		EntityID HeadEntity = NullEntityID;
+
+		FE_COMPONENT_SETUP(CHeadEntity, "HeadEntity");
+	};
+
+	struct CTags final : ProtectedComponent
+	{
+		operator const Tags& () const { return Global; }
+
+		FE_COMPONENT_SETUP(CTags, "Tags");
 
 	private:
-		glm::mat4 m_Projection = glm::mat4(1.0f);
-		ProjectionType m_ProjectionType = ProjectionType::Perspective;
-		float m_AspectRatio = 1280.0f / 720.0f;
-
-		float m_PerspectiveFOV = glm::radians(45.0f);
-		float m_PerspectiveNearClip = 0.01f;
-		float m_PerspectiveFarClip = 1000.0f;
-
-		float m_OrthographicZoom = 1.0f;
-		float m_OrthographicNearClip = -1.0f;
-		float m_OrthographicFarClip = 1.0f;
-
-		void CalculateProjection();
+		friend class TagsHandle;
+		friend class EntitiesHierarchy;
+		Tags Global;
+		Tags Local;
 	};
 
-	struct CDestroyFlag : ComponentBase
-	{};
+	struct TransformComponent : ProtectedComponent
+	{
+	public:
+		      Transform  GetCopy() { return Transform; }
+		const Transform& GetRef()  { return Transform; }
+	private:
+		friend class TransformHandle;
+		friend class EntitiesHierarchy;
+
+		Transform Transform;
+	};
+
+	struct CTransformLocal final : public TransformComponent
+	{
+		FE_COMPONENT_SETUP(CTransformLocal, "TransformLocal");
+	};
+
+	struct CTransformGlobal final : public TransformComponent
+	{
+		FE_COMPONENT_SETUP(CTransformGlobal, "TransformGlobal");
+	};
+
+	struct CCamera final : SpatialComponent
+	{
+		Camera Camera;
+
+		FE_COMPONENT_SETUP(CCamera, "Camera");
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
+	};
+
+	struct CTile final : SpatialComponent
+	{
+		Renderer2D::Quad Tile;
+
+		FE_COMPONENT_SETUP(CTile, "Tile");
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
+	};
+
+	struct CSprite final : SpatialComponent
+	{
+		Renderer2D::Quad Sprite;
+
+		FE_COMPONENT_SETUP(CSprite, "Sprite");
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
+	};
+
+	struct CDestroyFlag final : FlagComponent {};
+
+	template <typename tnComponent>
+	struct CDirtyFlag final : FlagComponent {};
+
+	template <typename tnSimStage>
+	struct CUpdateEnrollFlag final : FlagComponent {};
 }

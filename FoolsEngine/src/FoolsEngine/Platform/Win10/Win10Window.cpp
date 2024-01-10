@@ -1,10 +1,9 @@
 #include "FE_pch.h"
 #include "Win10Window.h"
 
-#include <glad/glad.h>
-
 #include "FoolsEngine\Events\Event.h"
 
+#include <glad/glad.h>
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
 
@@ -54,9 +53,11 @@ namespace fe
 	void Win10Window::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
+		FE_LOG_CORE_TRACE("Win10Window::OnUpdate()");
 
 		// events polling
 		{
+			FE_LOG_CORE_TRACE("GLFW events polling");
 			FE_PROFILER_SCOPE("GLFW events polling");
 			glfwPollEvents();
 		}
