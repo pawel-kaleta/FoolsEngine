@@ -2,7 +2,7 @@
 
 'FoolsEngine' is meant to be a lightwaight, but fairly powerful C++ game engine beeing written mostly as part of a game engine development learning process. It can be used as a technology demonstrator, an educational tool or a R&D framework.
 
-![FoolsTools - FoolsEngine's editor](./documentation/FoolsTools.jpg)
+![FoolsTools - FoolsEngine's editor](./Documentation/FoolsTools.jpg)
 
 ## Disclamer
 'FoolsEngine' is a prototype engine that is being developed in my spare time and as such there will likely be bugs. It is not intended as a stable production tech, but as a relativelly simple and clear framework for learning about how to build certain pieces of tech as well as for experimentation.
@@ -74,7 +74,7 @@ Program structure isolates engine and application into separate exe/dll files.
 
 ## Documentation
 
-`FoolsEngine` architectual design is documented in `./documentation` folder.
+`FoolsEngine` architectual design is documented in `./Documentation` folder.
 - Event system
 - Scene representation model
 - Rendering (mostly planned)
@@ -85,7 +85,7 @@ Build-in solution is an intrusive logging of profiling data into `.json` files. 
 
 There are automatic dedicated profiling sessions for startup, shutdown and first 30 frames of runtime. Additionall 30 frames long runtime session can be launched with `P` keybord shortcut.
 
-![FoolsTools - FoolsEngine's editor](./documentation/Profiler.jpg)
+![FoolsTools - FoolsEngine's editor](./Documentation/Profiler.jpg)
 
 ## Technologies
 - C++17
@@ -103,12 +103,12 @@ There are automatic dedicated profiling sessions for startup, shutdown and first
 
 ## Sources
 `FoolsEngine` development is inspired by and draws from various projects and tutorials of other people:
-[![Youtube](https://img.shields.io/badge/The_Cherno_—_Game_Engine_Series--red.svg?style=social&logo=youtube)](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
-[![Youtube](https://img.shields.io/badge/Travis_Vroman_—_Vulkan_Game_Engine_Series_Written_in_C_(Kohi_Game_Engine)--red.svg?style=social&logo=youtube)](https://www.youtube.com/playlist?list=PLv8Ddw9K0JPg1BEO-RS-0MYs423cvLVtj)
-[![Youtube](https://img.shields.io/badge/Bobby_Anguelov_—_Esoterica_(previously_Kruger)--red.svg?style=social&logo=youtube](https://www.youtube.com/@BobbyAnguelov/streams)
-[![Youtube](https://img.shields.io/badge/Cem_Yuksel_—_Interactive_Computer_Graphics--red.svg?style=social&logo=youtube](https://www.youtube.com/playlist?list=PLplnkTzzqsZS3R5DjmCQsqupu43oS9CFN)
-[![Youtube](https://img.shields.io/badge/Game_Engine_Series_—_Primal_Engine--red.svg?style=social&logo=youtube](www.youtube.com/@GameEngineSeries)
-[![Youtube](https://img.shields.io/badge/Molly_Rocket_—_Handmade_Hero--red.svg?style=social&logo=youtube](https://www.youtube.com/@MollyRocket/featured)
-[Learn OpenGL](https://learnopengl.com/)
-[BitSquid blog] (https://bitsquid.blogspot.com/)
-[VulkanGuide](https://vkguide.dev/)
+- [![Youtube](https://img.shields.io/badge/The_Cherno_—_Game_Engine_Series--red.svg?style=social&logo=youtube)](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
+- [![Youtube](https://img.shields.io/badge/Travis_Vroman_—_Vulkan_Game_Engine_Series_Written_in_C_(Kohi_Game_Engine)--red.svg?style=social&logo=youtube)](https://www.youtube.com/playlist?list=PLv8Ddw9K0JPg1BEO-RS-0MYs423cvLVtj)
+- [![Youtube](https://img.shields.io/badge/Bobby_Anguelov_—_Esoterica_(previously_Kruger)--red.svg?style=social&logo=youtube)](https://www.youtube.com/@BobbyAnguelov/streams)
+- [![Youtube](https://img.shields.io/badge/Cem_Yuksel_—_Interactive_Computer_Graphics--red.svg?style=social&logo=youtube)](https://www.youtube.com/playlist?list=PLplnkTzzqsZS3R5DjmCQsqupu43oS9CFN)
+- [![Youtube](https://img.shields.io/badge/Game_Engine_Series_—_Primal_Engine--red.svg?style=social&logo=youtube)](www.youtube.com/@GameEngineSeries)
+- [![Youtube](https://img.shields.io/badge/Molly_Rocket_—_Handmade_Hero--red.svg?style=social&logo=youtube)](https://www.youtube.com/@MollyRocket/featured)
+- [Learn OpenGL](https://learnopengl.com/)
+- [BitSquid blog](https://bitsquid.blogspot.com/)
+- [VulkanGuide](https://vkguide.dev/)
