@@ -25,29 +25,35 @@
     <Filter Include="FoolsEngine\Renderer">
       <UniqueIdentifier>{84860EAA-7015-9873-1934-AC6E05A2A819}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\GDIAbstraction">
-      <UniqueIdentifier>{C1BA5F08-2D74-CAB2-B6D3-E48C228C8022}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\1 - Primitives">
+      <UniqueIdentifier>{7DF5D0EA-E9AE-3B95-720E-566FDEC6F104}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\GDIAbstraction\OpenGL">
-      <UniqueIdentifier>{D5A028DC-C108-EFA9-2A74-03C016FB0596}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\2 - GDIAbstraction">
+      <UniqueIdentifier>{80076F10-EC96-30FB-F592-111361A16B07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\GDIIsolation">
-      <UniqueIdentifier>{793144B2-E59F-9931-2E89-54319A368FCD}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL">
+      <UniqueIdentifier>{B440A82D-A0BE-F8C6-89B6-B65E75D33AEF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\GDIPrimitives">
-      <UniqueIdentifier>{1389B078-FFC4-B3E2-68D7-CBD954325CFD}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\3 - Representation">
+      <UniqueIdentifier>{86E2E2ED-F271-A4D8-FB6D-85F0677CDFE4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\LowLevelRendering">
-      <UniqueIdentifier>{5B547817-47A6-4F07-30C5-8C171CB668F0}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\4 - GDIIsolation">
+      <UniqueIdentifier>{3A8EB534-A652-B424-6FB8-E4EEDB3B505A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\RenderingFlowControl">
-      <UniqueIdentifier>{4A591C57-B673-7FF8-FF95-8F8C6BEFA6FF}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\6 - Resources">
+      <UniqueIdentifier>{51606694-3D9C-69FE-A6AE-81F592091219}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\Resources">
-      <UniqueIdentifier>{EEA0DC41-DAC6-A6A8-C30C-2C74AFD1CB74}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\8 - Render">
+      <UniqueIdentifier>{F8CC1001-64B0-1F41-6DB3-4D7DD915E691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Renderer\9 - Integration">
+      <UniqueIdentifier>{3D7791A9-295E-53A1-D2AE-B9BEBE74CC07}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Scene">
       <UniqueIdentifier>{BB6C119A-2783-0F30-70FA-9A51DC4FE0B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Scene\Hierarchy">
+      <UniqueIdentifier>{091F3382-752C-6168-FE12-5D536A1F2D1F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +79,9 @@
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Time.h">
+      <Filter>FoolsEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Core\UUID.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Window.h">
@@ -114,125 +123,145 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRendererAPI.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLTexture.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexArray.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RendererAPI.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.h">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\GDIType.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\TextureData.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\Uniform.h">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h">
-      <Filter>FoolsEngine\Renderer\LowLevelRendering</Filter>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h">
-      <Filter>FoolsEngine\Renderer\RenderingFlowControl</Filter>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRendererAPI.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLTexture.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexArray.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RendererAPI.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h">
+      <Filter>FoolsEngine\Renderer\4 - GDIIsolation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.h">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.h">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\Component.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h">
+      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h">
+      <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Actor.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\ECS.h">
-      <Filter>FoolsEngine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h">
+    <ClInclude Include="src\FoolsEngine\Scene\ActorData.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\Behavior.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
+    <ClInclude Include="src\FoolsEngine\Scene\CompPtr.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Component.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\ComponentDestructionManager.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\ECS.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\Entity.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\UUID.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\ActorData.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Actor.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\World.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\CompPtr.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Tags.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\ChildrenList.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\ComponentDestructionManager.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\ChildrenList.h">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.h">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.h">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Tags.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\World.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\System.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -246,6 +275,9 @@
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp">
+      <Filter>FoolsEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Core\UUID.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Window.cpp">
@@ -278,99 +310,111 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRendererAPI.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLTexture.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexArray.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RendererAPI.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Shader.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.cpp">
-      <Filter>FoolsEngine\Renderer\GDIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp">
-      <Filter>FoolsEngine\Renderer\GDIIsolation</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp">
-      <Filter>FoolsEngine\Renderer\GDIPrimitives</Filter>
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp">
-      <Filter>FoolsEngine\Renderer\LowLevelRendering</Filter>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp">
-      <Filter>FoolsEngine\Renderer\RenderingFlowControl</Filter>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLTexture.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RendererAPI.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Shader.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp">
+      <Filter>FoolsEngine\Renderer\4 - GDIIsolation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.cpp">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.cpp">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.cpp">
-      <Filter>FoolsEngine\Renderer\Resources</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp">
+      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp">
+      <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Actor.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\ActorData.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Behavior.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\ComponentDestructionManager.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Entity.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\UUID.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\ActorData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Actor.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\ComponentDestructionManager.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.cpp">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.cpp">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.cpp">
+      <Filter>FoolsEngine\Scene\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\System.cpp" />
   </ItemGroup>
 </Project>

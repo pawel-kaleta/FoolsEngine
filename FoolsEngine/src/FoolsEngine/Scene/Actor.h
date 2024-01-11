@@ -35,16 +35,16 @@ namespace fe
 		void UpdateBehaviors(SimulationStages::Stages stage);
 
 		template<typename tnSimulationStage>
-		void EnrollForUpdate(Behavior* localSystem, void (Behavior::* onUpdateFuncPtr)())
+		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)())
 		{
-			FE_LOG_CORE_DEBUG("Actor: local system EnrollForUpdate");
+			FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
 
 			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
 			if (m_Data.Get()->m_UpdateEnrolls[stage].size() == 0)
 			{
 				Flag<CUpdateEnrollFlag<tnSimulationStage>>();
 			}
-			m_Data.GetCashed()->m_UpdateEnrolls[stage].push_back(CActorData::UpdateEnroll{ localSystem, onUpdateFuncPtr });
+			m_Data.GetCashed()->m_UpdateEnrolls[stage].push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr });
 		}
 
 	private:

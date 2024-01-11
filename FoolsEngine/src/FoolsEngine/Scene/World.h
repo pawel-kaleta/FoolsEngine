@@ -3,6 +3,7 @@
 #include "Hierarchy\EntitiesHierarchy.h"
 #include "ComponentDestructionManager.h"
 #include "SimulationStages.h"
+#include "System.h"
 
 #include <stack>
 
@@ -93,6 +94,27 @@ namespace fe
 		{
 			const static auto& storage = m_Registry.storage<CUpdateEnrollFlag<tnSimulationStage>>();
 			return storage.contains(actor);
+		}
+
+		using Systems = std::vector<std::unique_ptr<System>>;
+
+		struct SystemUpdateEnroll
+		{
+			System* System;
+			void (System::* OnUpdateFuncPtr)();
+		};
+		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, (int)SimulationStages::Stages::StagesCount>;
+
+		Systems             m_Systems;
+		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
+
+		template<typename tnSimulationStage>
+		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)())
+		{
+			FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
+
+			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
+			m_SystemUpdateEnrolls[stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr });
 		}
 	};
 }

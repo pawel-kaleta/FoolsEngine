@@ -57,7 +57,7 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
-			FE_LOG_CORE_DEBUG("LocalSystem Update Register");
+			FE_LOG_CORE_DEBUG("Behavior Update Register");
 
 			void (Behavior:: * onUpdateFuncPtr)() = nullptr;
 			if (std::is_same_v<tnSimulationStage, SimulationStages::FrameStart	>) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;

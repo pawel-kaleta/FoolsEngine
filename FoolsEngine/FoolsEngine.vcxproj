@@ -148,9 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FoolsEngine\Scene\ComponentDestructionManager.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Actor.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\ActorData.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -175,6 +172,13 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\GDIType.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\TextureData.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\Uniform.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.h" />
@@ -191,38 +195,32 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\GDIType.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\TextureData.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\Uniform.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Actor.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\ActorData.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Behavior.h" />
     <ClInclude Include="src\FoolsEngine\Scene\CompPtr.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\ComponentDestructionManager.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Entity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\ChildrenList.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Behavior.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Entity.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\System.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Tags.h" />
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FoolsEngine\Scene\ComponentDestructionManager.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Actor.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\ActorData.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -241,6 +239,8 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.cpp" />
@@ -258,20 +258,22 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Actor.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\ActorData.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Behavior.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\ComponentDestructionManager.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Entity.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TagsHandle.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Hierarchy\TransformHandle.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Entity.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\System.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
   </ItemGroup>
   <ItemGroup>
