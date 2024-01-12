@@ -1,7 +1,7 @@
 #include "EditorLayer.h"
-#include "FoolsEngine\Scene\Behavior.h"
-#include "FoolsEngine\Scene\Actor.h"
-#include "FoolsEngine\Scene\CompPtr.h"
+#include "FoolsEngine\Scene\GameplayWorld\Behavior.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
 
 namespace fe
 {
@@ -54,7 +54,7 @@ namespace fe
 	class PlayerMovementBehavior : public Behavior
 	{
 	public:
-		//PlayerMovementBehavior() = default;
+		PlayerMovementBehavior() = default;
 		virtual ~PlayerMovementBehavior() override = default;
 	
 		virtual void OnUpdate_PrePhysics() override
@@ -66,10 +66,10 @@ namespace fe
 
 		virtual void OnInitialize() override
 		{
-			RegisterForUpdate<SimulationStages::PrePhysics>();
+			RegisterForUpdate<SimulationStages::PrePhysics>(10);
 		}
 
-		virtual void DrawInspectorWidget() const override 
+		virtual void DrawInspectorWidget() override 
 		{
 			DrawCompPtr(m_Movement, "Movement Component");
 			DrawEntity(m_Player, "Player's root");
@@ -79,6 +79,38 @@ namespace fe
 
 		CompPtr<CPlayerMovement> m_Movement;
 		Entity m_Player;
+	};
+
+	class TestBehavior : public Behavior
+	{
+	public:
+		TestBehavior() = default;
+		virtual ~TestBehavior() override = default;
+
+		virtual void OnUpdate_PrePhysics() override	{ }
+
+		virtual void OnInitialize() override
+		{
+			RegisterForUpdate<SimulationStages::PrePhysics>(9);
+		}
+
+		FE_BEHAVIOR_SETUP(TestBehavior, "TestBehavior");
+	};
+
+	class TestBehavior2 : public Behavior
+	{
+	public:
+		TestBehavior2() = default;
+		virtual ~TestBehavior2() override = default;
+
+		virtual void OnUpdate_PrePhysics() override { }
+
+		virtual void OnInitialize() override
+		{
+			RegisterForUpdate<SimulationStages::PrePhysics>(11);
+		}
+
+		FE_BEHAVIOR_SETUP(TestBehavior2, "TestBehavior2");
 	};
 
 	void EditorLayer::OnAttach()
@@ -380,6 +412,11 @@ namespace fe
 			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
+
+			//playerActor.CreateBehavior<TestBehavior>();
+			//playerActor.CreateBehavior<TestBehavior2>();
+			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior>();
+			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior2>();
 
 			playerActor.Emplace<CPlayerMovement>();
 			ComponentTypesRegistry::s_Registry.RegisterDataComponent<CPlayerMovement>();

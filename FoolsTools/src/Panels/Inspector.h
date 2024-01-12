@@ -28,7 +28,7 @@ namespace fe
 		static void DrawCTagsWidget(Entity entity);
 
 		static void DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity);
-		static void DrawBehaviorWidget(const Behavior* behavior);
+		static void DrawBehaviorWidget(Behavior* behavior);
 
 		void DrawActorInspector();
 		void DrawEntityInspector();

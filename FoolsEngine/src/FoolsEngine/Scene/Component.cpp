@@ -1,21 +1,15 @@
 #include "FE_pch.h"
+
 #include "Component.h"
-#include "Entity.h"
+
+#include "BaseEntity.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "World.h"
 #include "Scene.h"
 
 namespace fe
 {
-	ComponentTypesRegistry ComponentTypesRegistry::s_Registry = ComponentTypesRegistry();
-	void DataComponent::DrawInspectorWidget(BaseEntity entity) {}
-
-
-	void ComponentTypesRegistry::RegisterComponents()
-	{
-		RegisterDataComponent<CCamera>();
-		RegisterDataComponent<CTile>();
-		RegisterDataComponent<CSprite>();
-	}
+	void DataComponent::DrawInspectorWidget(BaseEntity entity) { }
 
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{

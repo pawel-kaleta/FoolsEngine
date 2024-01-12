@@ -3,7 +3,5 @@
 
 namespace fe
 {
-	void BehaviorsRegistry::RegisterBehaviors()
-	{
-	}
+	
 }

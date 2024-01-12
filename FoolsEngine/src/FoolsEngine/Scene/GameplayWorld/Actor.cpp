@@ -14,4 +14,14 @@ namespace fe
 			(updateEnroll.Behavior->*(updateEnroll.OnUpdateFuncPtr))();
 		}
 	}
+
+	void Actor::SortUpdateEnrolls(int stage)
+	{
+		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+		std::sort(
+			updateEnrolls.begin(),
+			updateEnrolls.end(),
+			[](CActorData::UpdateEnroll& a, CActorData::UpdateEnroll& b) { return a.Priority < b.Priority; }
+		);
+	}
 }

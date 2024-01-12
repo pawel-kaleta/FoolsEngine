@@ -3,8 +3,8 @@
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 
-#include "FoolsEngine\Scene\Entity.h"
-//#include "FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+//#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
 

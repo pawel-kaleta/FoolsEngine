@@ -54,8 +54,8 @@ If you want to regenerate project files (e.g. after making changes to build conf
 
 Open `FoolsEngine.sln` VisualStudio solution file and press F5 to compile and run the editor.
 
-Use (Ctrl+) Q,W,E,A,S,D) for controlling the camera.
-Use arrow keys and numpad 1,3,4,6 keys to controll player's character representing test actor.
+Use `(Ctrl+) Q,W,E,A,S,D` for controlling the camera.
+Use arrow keys and numpad `1,3,4,6` keys to controll player's character representing test actor.
 
 ## Project structure
 'FoolsEngine' is beeing developed in C++ with a cross-platfrom architecture design abstracting platform specific implementations and using only cross-platform external librarys. Currently only Windows and OpenGL implementations are being worked on.

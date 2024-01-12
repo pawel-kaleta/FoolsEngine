@@ -3,7 +3,7 @@
 #include "FoolsEngine\Core\Application.h"
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
-#include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 
 namespace fe {
 

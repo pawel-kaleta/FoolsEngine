@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "ActorData.h"
 #include "CompPtr.h"
+#include "GameplayWorld.h"
 
 namespace fe
 {
@@ -16,40 +17,55 @@ namespace fe
 		Actor(const CActorData& actorData, GameplayWorld* world)
 			: Entity(world->ComponentToEntity(actorData), world), m_Data(Entity(world->ComponentToEntity(actorData), world)) {};
 		
-		template <typename tnBahavior>
-		tnBahavior* CreateBehavior()
+		template <typename tnBehavior>
+		tnBehavior* CreateBehavior()
 		{
 			FE_PROFILER_FUNC();
 			FE_LOG_CORE_DEBUG("Behavior creation");
-			static_assert(std::is_base_of_v<Behavior, tnBahavior>, "This is not a behavior!");
+			static_assert(std::is_base_of_v<Behavior, tnBehavior>, "This is not a behavior!");
 
-			tnBahavior* behavior = new tnBahavior();
+			tnBehavior* behavior = new tnBehavior();
 			behavior->m_HeadEntity = Entity(*this);
 			behavior->OnInitialize();
 
-			std::unique_ptr<Behavior> up(behavior);
-			m_Data.Get()->m_Behaviors.push_back(std::move(up));
+			{
+				std::unique_ptr<Behavior> up(behavior);
+				m_Data.Get()->m_Behaviors.push_back(std::move(up));
+			}
+
 			return behavior;
 		}
 
 		void UpdateBehaviors(SimulationStages::Stages stage);
 
 		template<typename tnSimulationStage>
-		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)())
+		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 		{
 			FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
 
 			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			if (m_Data.Get()->m_UpdateEnrolls[stage].size() == 0)
+			auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+			if (updateEnrolls.size() == 0)
 			{
 				Flag<CUpdateEnrollFlag<tnSimulationStage>>();
 			}
-			m_Data.GetCashed()->m_UpdateEnrolls[stage].push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr });
+			updateEnrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
+			SortUpdateEnrolls(stage);
 		}
 
 	private:
 		friend class Inspector;
+		friend class BehaviorsRegistry;
 
 		CompPtr<CActorData> m_Data;
+
+		void SortUpdateEnrolls(int stage);
+
+		template <typename tnBehavior>
+		Behavior* CreateBehaviorAsBase()
+		{
+			auto behavior = CreateBehavior<tnBehavior>();
+			return (Behavior*)behavior;
+		}
 	};
 }

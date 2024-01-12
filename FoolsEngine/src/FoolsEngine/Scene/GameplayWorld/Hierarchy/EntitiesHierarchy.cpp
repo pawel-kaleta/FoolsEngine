@@ -2,7 +2,7 @@
 #include "EntitiesHierarchy.h"
 
 #include "FoolsEngine\Scene\Component.h"
-#include "FoolsEngine\Scene\Entity.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\World.h"
 

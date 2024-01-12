@@ -1,16 +1,13 @@
 #include "FE_pch.h"
+
 #include "Entity.h"
 
-
-#include "ActorData.h"
-#include "World.h"
 #include "Actor.h"
+#include "GameplayWorld.h"
+
 
 namespace fe
 {
-	BaseEntity::BaseEntity(EntityID entityID, World* world)
-		: m_World(world), m_Handle(ECS_handle(world->GetRegistry(), entityID)) { }
-
 	Entity::Entity(const BaseEntity& other)
 		: BaseEntity(other)
 	{
@@ -61,5 +58,4 @@ namespace fe
 			}
 		}
 	}
-
 }

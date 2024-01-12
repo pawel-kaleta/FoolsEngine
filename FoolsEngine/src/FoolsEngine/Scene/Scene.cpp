@@ -1,13 +1,13 @@
 #include "FE_pch.h"
-#include "ECS.h"
 #include "Scene.h"
 
-#include "Entity.h"
-#include "FoolsEngine\Scene\Hierarchy\EntitiesHierarchy.h"
+#include "ECS.h"
 #include "FoolsEngine\Core\UUID.h"
 #include "Component.h"
-#include "SimulationStages.h"
-#include "Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\SimulationStages.h"
+#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.h"
 
 namespace fe
 {

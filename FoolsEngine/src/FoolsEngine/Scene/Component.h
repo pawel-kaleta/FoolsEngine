@@ -3,7 +3,7 @@
 #include "ECS.h"
 
 #include "FoolsEngine\Core\UUID.h"
-#include "Tags.h"
+#include "FoolsEngine\Scene\GameplayWorld\Tags.h"
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
@@ -12,72 +12,21 @@
 namespace fe
 {
 	class BaseEntity;
-	class Entity;
-	struct DataComponent;
-
-	class ComponentTypesRegistry
-	{
-	public:
-		struct DataComponentRegistryItem
-		{
-			DataComponent* (BaseEntity::* Getter              )();
-			void           (    Entity::* DestructionScheduler)();
-			bool           (BaseEntity::* Checker             )();
-			void           (BaseEntity::* Emplacer            )();
-		};
-		std::vector<DataComponentRegistryItem> DataItems;
-
-		struct FlagComponentRegistryItem
-		{
-			bool (BaseEntity::* Checker)();
-			void (BaseEntity::* Flagger)();
-			void (BaseEntity::* Remover)();
-		};
-		std::vector<FlagComponentRegistryItem> FlagItems;
-
-		static ComponentTypesRegistry s_Registry;
-
-		void RegisterComponents();
-
-		template <typename tnComponent>
-		void RegisterDataComponent()
-		{
-			DataItems.push_back(
-				DataComponentRegistryItem{
-					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
-					&    Entity::RemoveIfExist<tnComponent>,
-					&BaseEntity::AllOf<tnComponent>,
-					&BaseEntity::DefaultEmplace<tnComponent>
-				}
-			);
-		}
-
-		template <typename tnFlagComponent>
-		void RegisterFlagComponent()
-		{
-			FlagItems.push_back(
-				FlagComponentRegistryItem{
-					&BaseEntity::AllOf<tnFlagComponent>,
-					&BaseEntity::Flag<tnFlagComponent>,
-					&BaseEntity::UnFlag<tnFlagComponent>
-				}
-			);
-		}
-	};
 
 #define EDITOR
 
 #ifdef FE_INTERNAL_BUILD
 	#ifdef EDITOR
 		#define FE_COMPONENT_SETUP(type, name) \
-			virtual std::string GetComponentName() const override { return name; };
+			virtual std::string GetComponentName() const override { return name; } \
+			static std::string GetName() { return name; }
 	#else
 		#define FE_COMPONENT_SETUP(type, name) \
 			virtual std::string GetComponentName() const override { return name; } 
 	#endif // EDITOR
 #else
 	FE_COMPONENT_SETUP(type, name) \
-		static void RegisterComponent(ComponentTypesRegistry& reg) { reg.getters.push_back(&BaseEntity::GetAsDataComponentIfExist<type>); };
+		
 #endif // FE_INTERNAL_BUILD
 
 	struct Component {};
@@ -88,6 +37,7 @@ namespace fe
 	{
 	#ifdef FE_INTERNAL_BUILD
 		virtual std::string GetComponentName() const { return ""; }
+		static std::string GetName() { return ""; }
 	#endif // FE_INTERNAL_BUILD
 
 #ifdef EDITOR

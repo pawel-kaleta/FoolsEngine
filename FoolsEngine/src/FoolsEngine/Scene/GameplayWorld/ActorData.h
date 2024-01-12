@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ECS.h"
+#include "FoolsEngine\Scene\ECS.h"
+#include "FoolsEngine\Scene\Component.h"
 #include "SimulationStages.h"
-#include "Component.h"
 
 #include "Behavior.h"
 
@@ -36,6 +36,7 @@ namespace fe
 		{
 			Behavior* Behavior;
 			void (Behavior::* OnUpdateFuncPtr)();
+			uint32_t Priority;
 		};
 		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, (int)SimulationStages::Stages::StagesCount>;
 

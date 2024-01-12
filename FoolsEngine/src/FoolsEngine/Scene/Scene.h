@@ -1,8 +1,9 @@
 #pragma once
 #include "ECS.h"
-#include "Component.h"
-#include "SimulationStages.h"
+
+#include "FoolsEngine\Scene\GameplayWorld\SimulationStages.h"
 #include "World.h"
+#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
 namespace fe
 {

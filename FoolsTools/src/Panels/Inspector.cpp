@@ -18,15 +18,13 @@ namespace fe
 
     void Inspector::DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity)
     {
-        auto getter = item.Getter;
+        auto& getter = item.Getter;
         DataComponent* component = (entity.*getter)();
 
         if (component == nullptr)
             return;
 
         auto name = component->GetComponentName();
-
-        ImGui::PushID(name.c_str());
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
@@ -68,15 +66,11 @@ namespace fe
                 FE_CORE_ASSERT(false, "Destruction of components from worlds other then GameplayWorld is not yet implemented!");
             }
         }
-
-        ImGui::PopID();
     }
 
-    void Inspector::DrawBehaviorWidget(const Behavior* behavior)
+    void Inspector::DrawBehaviorWidget(Behavior* behavior)
     {
-        auto name = behavior->GetName();
-
-        ImGui::PushID(name.c_str());
+        auto name = behavior->GetBehaviorName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
@@ -109,8 +103,6 @@ namespace fe
         {
             FE_LOG_CORE_ERROR("Behavior removal not yet implemented");
         }
-
-        ImGui::PopID();
     }
 
     void Inspector::DrawActorInspector()
@@ -128,12 +120,11 @@ namespace fe
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
         {
+            EntityID headEntity = m_Scene->GetGameplayWorld()->GetRegistry().get<CHeadEntity>(m_OpenedEntityID).HeadEntity;
+            Actor actor(headEntity, m_Scene->GetGameplayWorld());
+
             if (ImGui::BeginTabItem("Behaviors"))
             {
-                EntityID headEntity = m_Scene->GetGameplayWorld()->GetRegistry().get<CHeadEntity>(m_OpenedEntityID).HeadEntity;
-
-                Actor actor(headEntity, m_Scene->GetGameplayWorld());
-
                 ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
 
                 DrawCNameWidget(actor);
@@ -147,9 +138,12 @@ namespace fe
                 AddBehaviorPopupMenu(actor);
 
                 auto& behaviors = actor.m_Data.Get()->m_Behaviors;
+                int uniqueIdWrap = 0;
                 for (const auto& behavior : behaviors)
                 {
+                    ImGui::PushID(++uniqueIdWrap);
                     DrawBehaviorWidget(behavior.get());
+                    ImGui::PopID();
                 }
 
                 ImGui::EndTabItem();
@@ -158,11 +152,30 @@ namespace fe
             {                
                 constexpr int stagesCount = (int)SimulationStages::Stages::StagesCount;
                 
-                for (int n = 0; n < stagesCount; n++)
+                for (int stage = 0; stage < stagesCount; stage++)
                 {
-                    if (ImGui::CollapsingHeader(SimulationStages::Names[n], ImGuiTreeNodeFlags_None))
+                    if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
                     {
-                        ImGui::Text("UI representation not implemented yet");
+                        auto& updateEnrolls = actor.m_Data.Get()->m_UpdateEnrolls[stage];
+                        if (updateEnrolls.size() == 0)
+                        {
+                            ImGui::Text("None");
+                            continue;
+                        }
+
+                        ImGui::PushItemWidth(75.0f);
+                        
+                        int uniqueIdWrap = 0;
+                        for (auto& updateEnroll : updateEnrolls)
+                        {
+                            ImGui::PushID(++uniqueIdWrap);
+                            if (ImGui::InputInt(updateEnroll.Behavior->GetBehaviorName().c_str(), (int*)&updateEnroll.Priority))
+                            {
+                                actor.SortUpdateEnrolls(stage);
+                            }
+                            ImGui::PopID();
+                        }
+                        ImGui::PopItemWidth();
                     }
                 }
                 
@@ -249,27 +262,21 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddComponent"))
         {
-            if (!entity.AllOf<CCamera>())
+            auto& compReg = ComponentTypesRegistry::s_Registry;
+            for (const auto& item : compReg.DataItems)
             {
-                if (ImGui::MenuItem("Camera"))
-                {
-                    entity.Emplace<CCamera>();
-                }
-            }
+                auto& getter = item.Getter;
+                DataComponent* component = (entity.*getter)();
 
-            if (!entity.AllOf<CSprite>())
-            {
-                if (ImGui::MenuItem("Sprite"))
+                if (!component)
                 {
-                    entity.Emplace<CSprite>();
-                }
-            }
-
-            if (!entity.AllOf<CTile>())
-            {
-                if (ImGui::MenuItem("Tile"))
-                {
-                    entity.Emplace<CTile>();
+                    auto& getName = item.Name;
+                    std::string name = (compReg.*getName)();
+                    if (ImGui::MenuItem(name.c_str()))
+                    {
+                        auto& emplacer = item.Emplacer;
+                        (entity.*emplacer)();
+                    }
                 }
             }
 
@@ -281,7 +288,18 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
-            
+            auto& behReg = BehaviorsRegistry::s_Registry;
+            for (const auto& item : behReg.Items)
+            {
+                auto& getName = item.Name;
+                std::string name = (behReg.*getName)();
+                if (ImGui::MenuItem(name.c_str()))
+                {
+                    auto& create = item.Create;
+                    (actor.*create)();
+                }
+            }
+
             ImGui::EndPopup();
         }
     }
@@ -450,6 +468,8 @@ namespace fe
         {
             auto& node = entity.Get<CEntityNode>();
 
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+
             ImGui::BeginDisabled();
             ImGui::DragInt("Parent",          (int*)&node.Parent);
             ImGui::DragInt("HierarchyLvl",    (int*)&node.HierarchyLvl);
@@ -458,6 +478,8 @@ namespace fe
             ImGui::DragInt("NextSibling",     (int*)&node.NextSibling);
             ImGui::DragInt("PreviousSibling", (int*)&node.PreviousSibling);
             ImGui::EndDisabled();
+
+            ImGui::PopItemWidth();
         }
     }
 }

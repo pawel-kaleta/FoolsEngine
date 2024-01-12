@@ -1,36 +1,10 @@
 #pragma once
-#include "Scene.h"
+
 #include "Entity.h"
 #include "CompPtr.h"
 
 namespace fe
 {
-	struct CActorData;
-
-	class BehaviorsRegistry
-	{
-	public:
-		struct BehaviorsRegistryItem
-		{
-			
-		};
-		std::vector<BehaviorsRegistryItem> Items;
-
-		static BehaviorsRegistry s_Registry;
-
-		void RegisterBehaviors();
-
-		template <typename tnBehavior>
-		void RegisterBehavior()
-		{
-			Items.push_back(
-				BehaviorsRegistryItem{
-					
-				}
-			);
-		}
-	};
-
 	class Behavior
 	{
 	public:
@@ -47,13 +21,14 @@ namespace fe
 
 		virtual void OnShutdown() {};
 
-		virtual void DrawInspectorWidget() const {};
+		virtual void DrawInspectorWidget() {};
 
-		virtual std::string GetName() const { return ""; }
+		virtual std::string GetBehaviorName() const { return ""; }
+		static std::string GetName() { return ""; }
 
 	protected:
 		template<typename tnSimulationStage>
-		void RegisterForUpdate()
+		void RegisterForUpdate(uint32_t priority)
 		{
 			FE_PROFILER_FUNC();
 
@@ -68,7 +43,7 @@ namespace fe
 
 			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 			
-			Actor(m_HeadEntity).EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr);
+			Actor(m_HeadEntity).EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
 		}
 
 		static void DrawEntity(Entity entity, const std::string& name)
@@ -82,7 +57,15 @@ namespace fe
 		}
 		
 		template<typename tnComponent>
-		static void DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name);
+		static void DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)
+		{
+			//placeholder implementation
+
+			ImGui::BeginDisabled();
+			EntityID entityID = compPtr.GetEntity().ID();
+			ImGui::DragInt(name.c_str(), (int*)&entityID);
+			ImGui::EndDisabled();
+		}
 	private:
 		friend class Actor;
 		
@@ -90,18 +73,9 @@ namespace fe
 		UUID	m_UUID;
 	};
 
-	template<typename tnComponent>
-	void Behavior::DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)
-	{
-		//placeholder implementation
-
-		ImGui::BeginDisabled();
-		EntityID entityID = compPtr.GetEntity().ID();
-		ImGui::DragInt(name.c_str(), (int*)&entityID);
-		ImGui::EndDisabled();
-	}
 
 #define FE_BEHAVIOR_SETUP(type, name) \
-	virtual std::string GetName() const override { return name; }
+	virtual std::string GetBehaviorName() const override { return name; } \
+	static std::string GetName() { return name; }
 
 }
