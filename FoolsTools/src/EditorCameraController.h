@@ -28,6 +28,8 @@ namespace fe
 		glm::vec3 GetDirectionForward() const;
 		glm::quat GetOrientation() const;
 
+		void RenderWidget();
+
 	private:
 		Camera m_Camera;
 		Transform m_Transform;

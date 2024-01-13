@@ -1,29 +1,30 @@
-#include "Inspector.h"
+#include "EntityInspector.h"
 
-#include <imgui_internal.h>
-
-#include <glm\gtc\type_ptr.hpp>
+#include "imgui_internal.h"
 
 namespace fe
 {
-    void Inspector::SetScene(const Ref<Scene>& scene)
+    void EntityInspector::SetScene(const Ref<Scene>& scene)
     {
         m_Scene = scene;
     }
 
-    void Inspector::OpenEntity(EntityID entityID)
-	{
-		m_OpenedEntityID = entityID;
-	}
-
-    void Inspector::DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity)
+    void EntityInspector::OpenEntity(EntityID entityID)
     {
+        m_OpenedEntityID = entityID;
+    }
+
+    void EntityInspector::DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity)
+    {
+        FE_PROFILER_FUNC();
+
         auto& getter = item.Getter;
         DataComponent* component = (entity.*getter)();
 
         if (component == nullptr)
             return;
 
+        ImGui::PushID(component);
         auto name = component->GetComponentName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
@@ -33,20 +34,41 @@ namespace fe
 
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
 
-        static bool settings_button;
-        ImGuiDir button_arrow_dir = settings_button ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
-        settings_button = ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight));
+        static bool popup_open;
+        // popup_open is common for all widgets, so wee need to check if it is applicable to this particular widget
+        // simply component* is not good, because it is not stable across frames
+        static DataComponent* (BaseEntity::* getter_of_component_of_popup)() = nullptr;
+        bool widget_of_popup = getter_of_component_of_popup == getter;
+
+        ImGuiDir button_arrow_dir = widget_of_popup && popup_open ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
+        bool open_new_popup = false;
+        if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
+        {
+            open_new_popup = true;
+            getter_of_component_of_popup = getter;
+            widget_of_popup = true;
+        }
+        else
+        {
+            if (widget_of_popup)
+            {
+                popup_open = false;
+            }
+        }
 
         if (widget_open)
             component->DrawInspectorWidget(entity);
 
-        if (settings_button)
-            ImGui::OpenPopup("ComponentSettings");
+        if (widget_of_popup)
+        {
+            if (popup_open || open_new_popup)
+                ImGui::OpenPopup("ComponentSettings");
+        }
 
         bool removeComponent = false;
         if (ImGui::BeginPopup("ComponentSettings"))
         {
-            settings_button = true;
+            popup_open = true;
             if (ImGui::MenuItem("Remove component"))
                 removeComponent = true;
 
@@ -66,129 +88,14 @@ namespace fe
                 FE_CORE_ASSERT(false, "Destruction of components from worlds other then GameplayWorld is not yet implemented!");
             }
         }
+
+        ImGui::PopID();
     }
 
-    void Inspector::DrawBehaviorWidget(Behavior* behavior)
+    void EntityInspector::OnImGuiRender()
     {
-        auto name = behavior->GetBehaviorName();
+        FE_PROFILER_FUNC();
 
-        ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
-
-        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-
-        ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
-
-        static bool settings_button;
-        ImGuiDir button_arrow_dir = settings_button ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
-        settings_button = ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight));
-
-        if (widget_open)
-            behavior->DrawInspectorWidget();
-
-        if (settings_button)
-            ImGui::OpenPopup("BehaviorSettings");
-
-        bool removeBehavior = false;
-        if (ImGui::BeginPopup("BehaviorSettings"))
-        {
-            settings_button = true;
-            if (ImGui::MenuItem("Remove behavior"))
-                removeBehavior = true;
-
-            ImGui::EndPopup();
-        }
-
-        if (removeBehavior)
-        {
-            FE_LOG_CORE_ERROR("Behavior removal not yet implemented");
-        }
-    }
-
-    void Inspector::DrawActorInspector()
-    {
-        // Most likely gonna crash with Non-GameplayWorld entity selected
-
-        ImGui::Begin("Actor Inspector");
-
-        if (m_OpenedEntityID == NullEntityID || m_Scene == nullptr)
-        {
-            ImGui::End();
-            return;
-        }
-        
-        ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-        if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
-        {
-            EntityID headEntity = m_Scene->GetGameplayWorld()->GetRegistry().get<CHeadEntity>(m_OpenedEntityID).HeadEntity;
-            Actor actor(headEntity, m_Scene->GetGameplayWorld());
-
-            if (ImGui::BeginTabItem("Behaviors"))
-            {
-                ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-
-                DrawCNameWidget(actor);
-
-                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-                ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
-
-                if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))
-                    ImGui::OpenPopup("AddBehavior");
-
-                AddBehaviorPopupMenu(actor);
-
-                auto& behaviors = actor.m_Data.Get()->m_Behaviors;
-                int uniqueIdWrap = 0;
-                for (const auto& behavior : behaviors)
-                {
-                    ImGui::PushID(++uniqueIdWrap);
-                    DrawBehaviorWidget(behavior.get());
-                    ImGui::PopID();
-                }
-
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("Updates"))
-            {                
-                constexpr int stagesCount = (int)SimulationStages::Stages::StagesCount;
-                
-                for (int stage = 0; stage < stagesCount; stage++)
-                {
-                    if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
-                    {
-                        auto& updateEnrolls = actor.m_Data.Get()->m_UpdateEnrolls[stage];
-                        if (updateEnrolls.size() == 0)
-                        {
-                            ImGui::Text("None");
-                            continue;
-                        }
-
-                        ImGui::PushItemWidth(75.0f);
-                        
-                        int uniqueIdWrap = 0;
-                        for (auto& updateEnroll : updateEnrolls)
-                        {
-                            ImGui::PushID(++uniqueIdWrap);
-                            if (ImGui::InputInt(updateEnroll.Behavior->GetBehaviorName().c_str(), (int*)&updateEnroll.Priority))
-                            {
-                                actor.SortUpdateEnrolls(stage);
-                            }
-                            ImGui::PopID();
-                        }
-                        ImGui::PopItemWidth();
-                    }
-                }
-                
-                ImGui::EndTabItem();
-            }
-            ImGui::EndTabBar();
-        }
-
-        ImGui::End();
-    }
-
-    void Inspector::DrawEntityInspector()
-    {
         ImGui::Begin("Entity Inspector");
 
         if (m_OpenedEntityID == NullEntityID || m_Scene == nullptr)
@@ -201,7 +108,7 @@ namespace fe
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
         {
             Entity entity(m_OpenedEntityID, m_Scene->GetGameplayWorld());
-            
+
             if (ImGui::BeginTabItem("Components"))
             {
                 ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
@@ -237,28 +144,16 @@ namespace fe
             }
             if (ImGui::BeginTabItem("Debug"))
             {
-                DrawNodeWidget(entity);
+                DrawDebugTab(entity);
                 ImGui::EndTabItem();
             }
 
             ImGui::EndTabBar();
         }
-
-
-        
-
         ImGui::End();
     }
 
-	void Inspector::OnImGuiRender()
-	{
-		FE_PROFILER_FUNC();
-
-        DrawActorInspector();
-        DrawEntityInspector();
-	}
-
-    void Inspector::AddComponentPopupMenu(BaseEntity entity)
+    void EntityInspector::AddComponentPopupMenu(BaseEntity entity)
     {
         if (ImGui::BeginPopup("AddComponent"))
         {
@@ -284,28 +179,10 @@ namespace fe
         }
     }
 
-    void Inspector::AddBehaviorPopupMenu(Actor actor)
+    void EntityInspector::DrawCNameWidget(Entity entity)
     {
-        if (ImGui::BeginPopup("AddBehavior"))
-        {
-            auto& behReg = BehaviorsRegistry::s_Registry;
-            for (const auto& item : behReg.Items)
-            {
-                auto& getName = item.Name;
-                std::string name = (behReg.*getName)();
-                if (ImGui::MenuItem(name.c_str()))
-                {
-                    auto& create = item.Create;
-                    (actor.*create)();
-                }
-            }
+        FE_PROFILER_FUNC();
 
-            ImGui::EndPopup();
-        }
-    }
-
-    void Inspector::DrawCNameWidget(Entity entity)
-    {
         auto& name = entity.Get<CEntityName>();
         static char buffer[256];
         memset(buffer, 0, sizeof(buffer));
@@ -316,22 +193,26 @@ namespace fe
         }
     }
 
-    void Inspector::DrawCTransformWidget(Entity entity)
+    void EntityInspector::DrawCTransformWidget(Entity entity)
     {
+        FE_PROFILER_FUNC();
+
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_None))
         {
             auto transform = entity.GetTransformHandle().Local();
 
             ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f, 0, 0, "%.2f");
             ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f, 0, 0, "%.2f");
-            ImGui::DragFloat3("Scale"   , glm::value_ptr(transform.Scale)   , 0.01f, 0, 0, "%.2f");
+            ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
 
             entity.GetTransformHandle().SetLocal(transform);
         }
     }
 
-    void Inspector::DrawCTagsWidget(Entity entity)
+    void EntityInspector::DrawCTagsWidget(Entity entity)
     {
+        FE_PROFILER_FUNC();
+
         constexpr char* tagLabels[64] = {
             "Error",
             "Player",
@@ -422,10 +303,10 @@ namespace fe
         if (ImGui::BeginTable("split", 5, flags))//, ImVec2(0, 150)
         {
             ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
-            ImGui::TableSetupColumn("Parent"  , ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("Local"   , ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("Global"  , ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("ID"      , ImGuiTableColumnFlags_WidthFixed, 14.0f);
+            ImGui::TableSetupColumn("Parent", ImGuiTableColumnFlags_WidthFixed, 19.0f);
+            ImGui::TableSetupColumn("Local", ImGuiTableColumnFlags_WidthFixed, 19.0f);
+            ImGui::TableSetupColumn("Global", ImGuiTableColumnFlags_WidthFixed, 19.0f);
+            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_WidthFixed, 14.0f);
             ImGui::TableSetupColumn("Tag Name", ImGuiTableColumnFlags_None);
             ImGui::TableHeadersRow();
 
@@ -462,8 +343,10 @@ namespace fe
         tagsHandle.SetLocal(tagsLocal);
     }
 
-    void Inspector::DrawNodeWidget(Entity entity)
+    void EntityInspector::DrawDebugTab(Entity entity)
     {
+        FE_PROFILER_FUNC();
+
         if (ImGui::CollapsingHeader("Node Component", ImGuiTreeNodeFlags_None))
         {
             auto& node = entity.Get<CEntityNode>();
@@ -471,11 +354,11 @@ namespace fe
             ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
 
             ImGui::BeginDisabled();
-            ImGui::DragInt("Parent",          (int*)&node.Parent);
-            ImGui::DragInt("HierarchyLvl",    (int*)&node.HierarchyLvl);
-            ImGui::DragInt("ChildrenCount",   (int*)&node.ChildrenCount);
-            ImGui::DragInt("FirstChild",      (int*)&node.FirstChild);
-            ImGui::DragInt("NextSibling",     (int*)&node.NextSibling);
+            ImGui::DragInt("Parent", (int*)&node.Parent);
+            ImGui::DragInt("HierarchyLvl", (int*)&node.HierarchyLvl);
+            ImGui::DragInt("ChildrenCount", (int*)&node.ChildrenCount);
+            ImGui::DragInt("FirstChild", (int*)&node.FirstChild);
+            ImGui::DragInt("NextSibling", (int*)&node.NextSibling);
             ImGui::DragInt("PreviousSibling", (int*)&node.PreviousSibling);
             ImGui::EndDisabled();
 

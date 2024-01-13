@@ -5,9 +5,9 @@
 #include "FoolsEngine\Core\UUID.h"
 #include "Component.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\GameplayWorld\Actor.h"
-#include "FoolsEngine\Scene\GameplayWorld\SimulationStages.h"
-#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 
 namespace fe
 {
@@ -64,15 +64,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		//m_GameplayWorld->UpdateActors(SimulationStages::EnumFromType<tnSimulationStage>());
 		m_GameplayWorld->Update<tnSimulationStage>();
-
-		//auto view = m_GameplayWorld->GetRegistry().view<CActorData, CUpdateEnrollFlag<tnSimulationStage>>();
-
-		//for (auto ID : view)
-		//{
-		//	Actor(ID, m_GameplayWorld.get()).UpdateBehaviors(SimulationStages::EnumFromType<tnSimulationStage>());
-		//}
 	}
 
 	template void Scene::Update<SimulationStages::FrameStart  >();

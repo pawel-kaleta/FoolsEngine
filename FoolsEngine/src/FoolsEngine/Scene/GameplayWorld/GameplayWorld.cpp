@@ -2,7 +2,7 @@
 #include "GameplayWorld.h"
 
 #include "Entity.h"
-#include "Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
 
 
 namespace fe
@@ -10,9 +10,17 @@ namespace fe
 	GameplayWorld::GameplayWorld(Scene* scene)
 		: World(scene, true)
 	{
-		m_Hierarchy = CreateScope<EntitiesHierarchy>(this);
+		FE_PROFILER_FUNC();
 
+		m_Hierarchy = CreateScope<HierarchyDirector>(this);
+		m_SystemsDirector = CreateScope<SystemsDirector>();
+
+		auto root = m_Registry.create(RootID);
 		ECS_handle handle(m_Registry, RootID);
+
+		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Entity in a GameplayWorld");
+
+		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = handle.entity();
 
 		handle.emplace<CEntityName>("WorldRoot");
 		handle.emplace<CTransformLocal>();
@@ -24,6 +32,8 @@ namespace fe
 
 	Entity GameplayWorld::CreateEntity(EntityID parentEntity, const std::string& name)
 	{
+		FE_PROFILER_FUNC();
+
 		FE_CORE_ASSERT(parentEntity != NullEntityID, "Cannot create a loose entity");
 		FE_CORE_ASSERT(parentEntity != RootID, "Cannot attach entity to Root, Create an Actor isnstead");
 
@@ -121,25 +131,5 @@ namespace fe
 					} while (current != firstSibling && current != NullEntityID);
 			}
 		}
-	}
-
-	void GameplayWorld::UpdateSystems(SimulationStages::Stages stage)
-	{
-		FE_PROFILER_FUNC();
-
-		for (auto& updateEnroll : m_SystemUpdateEnrolls[(int)stage])
-		{
-			(updateEnroll.System->*(updateEnroll.OnUpdateFuncPtr))();
-		}
-	}
-
-	void GameplayWorld::SortSystemUpdateEnrolls(int stage)
-	{
-		auto& enrolls = m_SystemUpdateEnrolls[stage];
-		std::sort(
-			enrolls.begin(),
-			enrolls.end(),
-			[](SystemUpdateEnroll& a, SystemUpdateEnroll& b) { return a.Priority < b.Priority; }
-		);
 	}
 }

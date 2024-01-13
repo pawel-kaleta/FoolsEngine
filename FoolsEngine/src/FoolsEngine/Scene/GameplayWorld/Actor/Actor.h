@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Entity.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "ActorData.h"
-#include "CompPtr.h"
-#include "GameplayWorld.h"
+#include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
+#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
 namespace fe
 {
@@ -36,6 +36,8 @@ namespace fe
 			return behavior;
 		}
 
+		void RemoveBehavior(Behavior* behavior);
+
 		void UpdateBehaviors(SimulationStages::Stages stage);
 
 		template<typename tnSimulationStage>
@@ -54,7 +56,7 @@ namespace fe
 		}
 
 	private:
-		friend class Inspector;
+		friend class ActorInspector;
 		friend class BehaviorsRegistry;
 
 		CompPtr<CActorData> m_Data;

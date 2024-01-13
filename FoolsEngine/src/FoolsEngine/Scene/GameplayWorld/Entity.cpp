@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-#include "Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
 #include "GameplayWorld.h"
 
 
@@ -37,6 +37,8 @@ namespace fe
 
 	void Entity::Entity::Destroy()
 	{
+		FE_PROFILER_FUNC();
+
 		std::queue<EntityID> toMark;
 		m_World->GetRegistry().emplace<CDestroyFlag>(ID());
 		toMark.push(m_Handle.get<CEntityNode>().FirstChild);

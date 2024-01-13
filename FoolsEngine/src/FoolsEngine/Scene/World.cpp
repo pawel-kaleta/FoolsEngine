@@ -9,14 +9,7 @@ namespace fe
 		: m_Scene(scene), m_IsGameplayWorld(isGameplayWorld)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("GameplayWorld Creation");
-
-		auto root = m_Registry.create(RootID);
-		ECS_handle handle(m_Registry, RootID);
-
-		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Entity in a GameplayWorld");
-
-		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = handle.entity();
+		FE_LOG_CORE_INFO("World Creation");
 	}
 
 	BaseEntity World::CreateEntity()

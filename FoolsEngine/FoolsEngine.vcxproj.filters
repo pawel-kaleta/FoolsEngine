@@ -213,13 +213,13 @@
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h">
       <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\ActorData.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Behavior.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\CompPtr.h">
@@ -240,7 +240,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\ChildrenList.h">
       <Filter>FoolsEngine\Scene\Hierarchy</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h">
       <Filter>FoolsEngine\Scene\Hierarchy</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TagsHandle.h">
@@ -252,20 +252,22 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\SimulationStages.h">
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Tags.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\System.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\GameplayWorld.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Entity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ComponentTypesRegistry.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\BehaviorsRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -386,13 +388,13 @@
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp">
       <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\ActorData.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Behavior.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp">
@@ -404,7 +406,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.cpp">
       <Filter>FoolsEngine\Scene\Hierarchy</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TagsHandle.cpp">
@@ -419,10 +421,12 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\GameplayWorld.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Entity.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\BehaviorsRegistry.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.cpp" />
   </ItemGroup>
 </Project>

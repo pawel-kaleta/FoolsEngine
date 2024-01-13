@@ -2,7 +2,7 @@
 
 #include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\Component.h"
-#include "SimulationStages.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
 
 #include "Behavior.h"
 
@@ -13,7 +13,7 @@ namespace fe
 	public:
 		CActorData() = default;
 		CActorData(CActorData& other) :
-			m_Behaviors	(std::move(other.m_Behaviors)),
+			m_Behaviors	    (std::move(other.m_Behaviors)),
 			m_UpdateEnrolls	(std::move(other.m_UpdateEnrolls))
 		{  };
 		~CActorData()
@@ -28,7 +28,7 @@ namespace fe
 	
 	private:
 		friend class Actor;
-		friend class Inspector;
+		friend class ActorInspector;
 		
 		using Behaviors = std::vector<std::unique_ptr<Behavior>>;
 		

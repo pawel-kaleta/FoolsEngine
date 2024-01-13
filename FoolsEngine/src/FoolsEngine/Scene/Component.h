@@ -3,11 +3,12 @@
 #include "ECS.h"
 
 #include "FoolsEngine\Core\UUID.h"
-#include "FoolsEngine\Scene\GameplayWorld\Tags.h"
+#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
+#include "SimulationStages.h"
 
 namespace fe
 {
@@ -109,7 +110,8 @@ namespace fe
 
 	private:
 		friend class TagsHandle;
-		friend class EntitiesHierarchy;
+		friend class HierarchyDirector;
+
 		Tags Global;
 		Tags Local;
 	};
@@ -121,7 +123,7 @@ namespace fe
 		const Transform& GetRef()  { return Transform; }
 	private:
 		friend class TransformHandle;
-		friend class EntitiesHierarchy;
+		friend class HierarchyDirector;
 
 		Transform Transform;
 	};

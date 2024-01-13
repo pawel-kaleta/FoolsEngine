@@ -142,17 +142,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Panels\EntityInspector.h" />
     <ClInclude Include="src\EditorCameraController.h" />
     <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Panels\Inspector.h" />
+    <ClInclude Include="src\Panels\ActorInspector.h" />
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
+    <ClInclude Include="src\Panels\SystemsInspector.h" />
+    <ClInclude Include="src\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Panels\EntityInspector.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Panels\Inspector.cpp" />
+    <ClCompile Include="src\Panels\ActorInspector.cpp" />
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
+    <ClCompile Include="src\Panels\SystemsInspector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">

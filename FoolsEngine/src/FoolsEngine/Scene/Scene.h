@@ -1,7 +1,7 @@
 #pragma once
 #include "ECS.h"
 
-#include "FoolsEngine\Scene\GameplayWorld\SimulationStages.h"
+#include "SimulationStages.h"
 #include "World.h"
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
@@ -26,15 +26,10 @@ namespace fe
 		GameplayWorld* GetGameplayWorld() { return m_GameplayWorld.get(); }
 
 	private:
-		Scope<GameplayWorld>	m_GameplayWorld;
-		EntityID				m_PrimaryCameraEntityID;
+		Scope<GameplayWorld> m_GameplayWorld;
+		EntityID             m_PrimaryCameraEntityID;
 		
 		template <typename tnSimulationStage>
 		void Update();
-
-		
-		
 	};
-
-
 }

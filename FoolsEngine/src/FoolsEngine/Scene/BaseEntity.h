@@ -118,8 +118,8 @@ namespace fe
 
 	protected:
 		friend class EditorLayer;
-		friend class EntitiesHierarchy;
-		friend class Inspector;
+		friend class HierarchyDirector;
+		friend class ActorInspector;
 		friend class SceneHierarchyPanel;
 		friend class Scene;
 		friend class World;

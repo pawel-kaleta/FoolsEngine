@@ -20,6 +20,8 @@ namespace fe
 
 	void TransformHandle::SetLocal(const Transform& other)
 	{
+		FE_PROFILER_FUNC();
+
 		m_Local.Transform = other;
 		if (m_ParentRoot)
 		{
@@ -34,6 +36,8 @@ namespace fe
 
 	void TransformHandle::SetGlobal(const Transform& other)
 	{
+		FE_PROFILER_FUNC();
+
 		if (!IsDirty())
 		{
 			if (other == m_Global.Transform)
@@ -58,6 +62,8 @@ namespace fe
 
 	void TransformHandle::MarkDescendantsDirty()
 	{
+		FE_PROFILER_FUNC();
+
 		std::queue<EntityID> toMark;
 		toMark.push(m_Node.FirstChild);
 
@@ -81,6 +87,8 @@ namespace fe
 
 	void TransformHandle::Inherit(EntityID entityID)
 	{
+		FE_PROFILER_FUNC();
+
 		if (!IsDirty(entityID))
 			return;
 

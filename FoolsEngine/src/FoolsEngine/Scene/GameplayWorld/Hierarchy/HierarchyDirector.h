@@ -9,12 +9,12 @@ namespace fe
 	class Entity;
 	class GameplayWorld;
 
-	class EntitiesHierarchy
+	class HierarchyDirector
 	{
 	public:
 		auto Group() { return m_Registry->group<CEntityNode, CTransformLocal, CTransformGlobal, CTags>(); }
 		
-		EntitiesHierarchy(GameplayWorld* world);
+		HierarchyDirector(GameplayWorld* world);
 
 		void MakeGlobalTransformsCurrent();
 

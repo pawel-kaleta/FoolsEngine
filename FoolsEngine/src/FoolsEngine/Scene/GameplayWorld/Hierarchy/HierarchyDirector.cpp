@@ -1,5 +1,5 @@
 #include "FE_pch.h"
-#include "EntitiesHierarchy.h"
+#include "HierarchyDirector.h"
 
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
@@ -8,14 +8,16 @@
 
 namespace fe
 {
-	EntitiesHierarchy::EntitiesHierarchy(GameplayWorld* world)
+	HierarchyDirector::HierarchyDirector(GameplayWorld* world)
 		: m_World(world), m_Registry(&world->GetRegistry())
 	{
+		FE_PROFILER_FUNC();
+
 		auto group = Group();
 		FE_CORE_ASSERT(group, "");
 	}
 
-	void EntitiesHierarchy::CreateNode(EntityID entityID, EntityID parentID)
+	void HierarchyDirector::CreateNode(EntityID entityID, EntityID parentID)
 	{
 		FE_PROFILER_FUNC();
 
@@ -78,7 +80,7 @@ namespace fe
 		}
 	}
 
-	void EntitiesHierarchy::MakeGlobalTransformsCurrent()
+	void HierarchyDirector::MakeGlobalTransformsCurrent()
 	{
 		FE_PROFILER_FUNC();
 
@@ -100,7 +102,7 @@ namespace fe
 		m_Registry->storage<CDirtyFlag<CTransformGlobal>>().clear();
 	}
 
-	void EntitiesHierarchy::RecreateStorageOrder()
+	void HierarchyDirector::RecreateStorageOrder()
 	{
 		FE_PROFILER_FUNC();
 
@@ -110,7 +112,7 @@ namespace fe
 		m_SafeOrder = true;
 	}
 
-	void EntitiesHierarchy::DestroyFlagged()
+	void HierarchyDirector::DestroyFlagged()
 	{
 		FE_PROFILER_FUNC();
 
@@ -144,8 +146,6 @@ namespace fe
 				
 				if (parentNode.FirstChild == *it)
 					parentNode.FirstChild = node.NextSibling;
-				//if (parentNode.FirstChild == NullEntityID)
-				//	parentNode.FirstChild = parentNode.LastChild;
 
 				--parentNode.ChildrenCount;
 			}

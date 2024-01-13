@@ -26,6 +26,8 @@ namespace fe
 
 	void TagsHandle::UpdateTags()
 	{
+		FE_PROFILER_FUNC();
+
 		std::queue<EntityID> toUpdate;
 		toUpdate.push(m_EntityID);
 

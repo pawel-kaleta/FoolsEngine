@@ -17,14 +17,15 @@
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\GameplayWorld\Actor.h"
-#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\EntitiesHierarchy.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
+#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\TagsHandle.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\TransformHandle.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\ChildrenList.h"
-#include "FoolsEngine\Scene\GameplayWorld\Behavior.h"
-#include "FoolsEngine\Scene\GameplayWorld\BehaviorsRegistry.h"
-#include "FoolsEngine\Scene\GameplayWorld\ActorData.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Behavior.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
+#include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 
 
 #ifdef FE_INTERNAL_BUILD

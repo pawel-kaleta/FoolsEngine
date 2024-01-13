@@ -2,11 +2,11 @@
 
 #include "FoolsEngine\Scene\World.h"
 
-#include "SimulationStages.h"
-#include "Hierarchy\EntitiesHierarchy.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
+#include "Hierarchy\HierarchyDirector.h"
 #include "ComponentDestructionManager.h"
-
-#include "System.h"
+#include "System\SystemsRegistry.h"
+#include "System\SystemsDirector.h"
 
 namespace fe
 {
@@ -15,7 +15,8 @@ namespace fe
 	public:
 		GameplayWorld(Scene* scene);
 
-		EntitiesHierarchy& GetHierarchy() { return *m_Hierarchy.get(); }
+		HierarchyDirector& GetHierarchy() { return *m_Hierarchy.get(); }
+		SystemsDirector& GetSystems()     { return *m_SystemsDirector.get(); }
 
 		Entity CreateEntity(EntityID parentEntity, const std::string& name = "Entity");
 		Actor CreateActor(EntityID attachmentEntityID = RootID, const std::string& name = "Actor");
@@ -36,34 +37,19 @@ namespace fe
 		template <typename tnSimulationStage>
 		void Update()
 		{
+			FE_PROFILER_FUNC();
+
 			auto stage = SimulationStages::EnumFromType<tnSimulationStage>();
 			UpdateActors(stage, &GameplayWorld::IsActorUpdateEnrolled<tnSimulationStage>);
-			UpdateSystems(stage);
-		}
-
-		template <typename tnSystem>
-		tnSystem* CreateSystem()
-		{
-			FE_PROFILER_FUNC();
-			FE_LOG_CORE_DEBUG("System creation");
-			static_assert(std::is_base_of_v<System, tnSystem>, "This is not a behavior!");
-
-			tnSystem* system = new tnSystem();
-			system->m_GameplayWorld = this;
-			system->OnInitialize();
-
-			{
-				std::unique_ptr<System> up(system);
-				m_Systems.push_back(std::move(up));
-			}
-			return system;
+			m_SystemsDirector->UpdateSystems(stage);
 		}
 
 	private:
 		friend class Entity;
 		friend class System;
 
-		Scope<EntitiesHierarchy>	m_Hierarchy;
+		Scope<HierarchyDirector>	m_Hierarchy;
+		Scope<SystemsDirector>      m_SystemsDirector;
 		ComponentDestructionManager m_DestructionManager;
 
 		template <typename tnComponent>
@@ -80,31 +66,5 @@ namespace fe
 		}
 
 		void UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID));
-		void UpdateSystems(SimulationStages::Stages stage);
-
-		using Systems = std::vector<std::unique_ptr<System>>;
-
-		struct SystemUpdateEnroll
-		{
-			System* System;
-			void (System::* OnUpdateFuncPtr)();
-			uint32_t Priority;
-		};
-		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, (int)SimulationStages::Stages::StagesCount>;
-
-		Systems             m_Systems;
-		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
-
-		template<typename tnSimulationStage>
-		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority)
-		{
-			FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
-
-			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			m_SystemUpdateEnrolls[stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
-			SortSystemUpdateEnrolls(stage);
-		}
-
-		void SortSystemUpdateEnrolls(int stage);
 	};
 }

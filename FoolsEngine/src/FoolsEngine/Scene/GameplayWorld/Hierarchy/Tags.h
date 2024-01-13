@@ -32,7 +32,7 @@ namespace fe
 		bool operator==(Tags other)    const { return TagBitFlags == other.TagBitFlags; }
 
 	private:
-		friend class Inspector;
+		friend class EntityInspector;
 
 		uint64_t TagBitFlags = 0;
 	};

@@ -3,7 +3,9 @@
 #include <FoolsEngine.h>
 #include "EditorCameraController.h"
 #include "Panels\SceneHierarchyPanel.h"
-#include "Panels\Inspector.h"
+#include "Panels\ActorInspector.h"
+#include "Panels\EntityInspector.h"
+#include "Panels\SystemsInspector.h"
 
 namespace fe
 {
@@ -17,8 +19,6 @@ namespace fe
 		virtual void OnImGuiRender()					override;
 		virtual void OnEvent(Ref<Events::Event> event)	override;
 
-		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
-
 	private:
 		Ref<Scene> m_Scene;
 
@@ -30,9 +30,12 @@ namespace fe
 		bool		m_VieportHover = false;
 		
 		SceneHierarchyPanel	m_SceneHierarchyPanel;
-		Inspector		m_EntityInspector;
-		EntityID			m_SelectedEntityID	= NullEntityID;
+		ActorInspector		m_ActorInspector;
+		EntityInspector		m_EntityInspector;
+		SystemsInspector	m_SystemsInspector;
+		EntityID			m_SelectedEntityID = NullEntityID;
 
-		void TestSceneSetup();
+		void RenderViewport();
+		void RenderPanels();
 	};
 }

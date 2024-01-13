@@ -86,6 +86,8 @@ namespace fe {
 
 	void Application::OnWindowResize(Ref<Events::WindowResizeEvent> event)
 	{
+		FE_PROFILER_FUNC();
+
 		event->Handled = true;
 		
 		if (event->GetWidth() == 0 || event->GetHeight() == 0)

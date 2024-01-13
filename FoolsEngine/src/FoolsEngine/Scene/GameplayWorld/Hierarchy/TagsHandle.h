@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Scene\Component.h"
+#include "Tags.h"
 
 #include <queue>
 
@@ -32,7 +33,7 @@ namespace fe
 		void Remove(Tags::TagList tag)	{ Remove((Tags)tag); }
 
 	private:
-		friend class EntitiesHierarchy;
+		friend class HierarchyDirector;
 
 		CTags&			m_CTags;
 		CEntityNode&	m_Node;

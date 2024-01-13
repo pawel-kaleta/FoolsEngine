@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	class GameplayWorld;
+	class SystemsDirector;
 
 	class System
 	{
@@ -24,7 +24,8 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		virtual std::string GetName() const { return ""; }
+		const std::string& GetName() const { return m_Name; }
+		void SetName(std::string& name) { m_Name = name; }
 
 	protected:
 		template<typename tnSimulationStage>
@@ -43,13 +44,14 @@ namespace fe
 
 			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 
-			m_GameplayWorld->EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
+			m_SystemsDirector->EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
 		}
 
 	private:
 		UUID m_UUID;
-		GameplayWorld* m_GameplayWorld;
+		SystemsDirector* m_SystemsDirector;
+		std::string m_Name = "System";
 
-		friend class GameplayWorld;
+		friend class SystemsDirector;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
-#include "CompPtr.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
 
 namespace fe
 {
