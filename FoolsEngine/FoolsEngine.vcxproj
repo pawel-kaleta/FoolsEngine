@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -126,7 +126,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -202,29 +202,29 @@
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ComponentTypesRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\CompPtr.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\ComponentDestructionManager.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Entity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\GameplayWorld.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\ChildrenList.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TagsHandle.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TransformHandle.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\System.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\World.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp">
@@ -269,24 +269,24 @@
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\ComponentDestructionManager.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Entity.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\GameplayWorld.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TagsHandle.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TransformHandle.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\_projects_of_externals\glfw\glfw.vcxproj">
@@ -300,6 +300,9 @@
     </ProjectReference>
     <ProjectReference Include="externals\_projects_of_externals\stb\stb.vcxproj">
       <Project>{6EAB880B-DAB4-887C-6330-9F7CCF38947C}</Project>
+    </ProjectReference>
+    <ProjectReference Include="externals\_projects_of_externals\yaml-cpp\yaml-cpp.vcxproj">
+      <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -25,7 +25,8 @@ project "FoolsEngine"
 		"glfw",
 		"glad",
 		"imgui",
-		"stb"
+		"stb",
+		"yaml-cpp"
 	}
 
 	buildoptions {

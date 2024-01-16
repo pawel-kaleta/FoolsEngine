@@ -11,11 +11,15 @@
     <ClInclude Include="src\Panels\ActorInspector.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="src\Panels\EntityInspector.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\EntityInspector.h" />
-    <ClInclude Include="src\Panels\SystemsInspector.h" />
+    <ClInclude Include="src\Panels\SystemsInspector.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
     <ClInclude Include="src\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -25,10 +29,14 @@
     <ClCompile Include="src\Panels\ActorInspector.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\Panels\EntityInspector.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\EntityInspector.cpp" />
-    <ClCompile Include="src\Panels\SystemsInspector.cpp" />
+    <ClCompile Include="src\Panels\SystemsInspector.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

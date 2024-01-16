@@ -14,3 +14,6 @@
 [submodule "FoolsEngine/externals/EnTT"]
 	path = FoolsEngine/externals/EnTT
 	url = https://github.com/skypjack/entt
+[submodule "FoolsEngine/externals/yaml-cpp"]
+	path = FoolsEngine/externals/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
