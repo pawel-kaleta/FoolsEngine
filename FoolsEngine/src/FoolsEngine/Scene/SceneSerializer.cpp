@@ -7,8 +7,8 @@
 
 #include <fstream>
 
-namespace YAML {
-
+namespace YAML
+{
 	template<>
 	struct convert<glm::vec3>
 	{
@@ -86,7 +86,7 @@ namespace fe
 		return out;
 	}
 
-	void SceneSerializer::SerializeYAML(const Ref<Scene> scene, const std::string& filepath)
+	void SceneSerializerYAML::Serialize(const Ref<Scene> scene, const std::string& filepath)
 	{
 		YAML::Emitter emitter;
 		emitter << YAML::BeginMap;
@@ -108,118 +108,167 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	void SceneSerializer::SerializeBinary(const Ref<Scene> scene, const std::string& filepath)
-	{
-		FE_CORE_ASSERT(false, "Not implemented yet");
-	}
-
-	void SceneSerializer::DeserializeYAML(const Ref<Scene> scene, const std::string& filepath)
+	void SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& filepath)
 	{
 
 	}
 
-	void SceneSerializer::DeserializeBinary(const Ref<Scene> scene, const std::string& filepath)
+	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
 	{
-		FE_CORE_ASSERT(false, "Not implemented yet");
+		emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
+
+		emitter << YAML::Key << "World Properies" << YAML::Value << YAML::BeginMap;
+		{
+			emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
+		}
+		emitter << YAML::EndMap;
+		
+		SerializeSystems(world, emitter);
+		SerializeActors(world, emitter);
+		
+		emitter << YAML::EndMap;
 	}
 
-	void SceneSerializer::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Systems" << YAML::Value << YAML::BeginSeq;
+		{
+			for (auto& system : world->GetSystems().m_Systems)
+			{
+				emitter << YAML::BeginMap;
+
+				emitter << YAML::Key << "System" << YAML::Value << system->GetName();
+				emitter << YAML::Key << "UUID" << YAML::Value << system->GetUUID();
+
+				system->Serialize(emitter);
+
+				emitter << YAML::EndMap;
+			}
+		}
+		emitter << YAML::EndSeq;
+		emitter << YAML::Key << "System Updates" << YAML::Value << YAML::BeginMap;
+		{
+			for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
+			{
+				emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
+				for (auto& updateEnroll : world->GetSystems().m_SystemUpdateEnrolls[i])
+				{
+					emitter << YAML::BeginMap;
+					emitter << YAML::Key << "System" << YAML::Value << updateEnroll.System->GetUUID();
+					emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
+					emitter << YAML::EndMap;
+				}
+				emitter << YAML::EndSeq;
+			}
+		}
+		emitter << YAML::EndMap;
+	}
+
+	void SceneSerializerYAML::SerializeActors(GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		auto& reg = world->GetRegistry();
 		auto& UUIDstorage = reg.storage<CUUID>();
 		auto& nameStorage = reg.storage<CEntityName>();
 		auto& actorStorage = reg.storage<CActorData>();
-		auto& nodeStorage = reg.storage<CEntityNode>();
 
-		emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
-		emitter << YAML::Key <<  "World Properies" << YAML::Value << YAML::BeginMap;
-		{
-			emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
-		}
-		emitter << YAML::EndMap;
-		emitter << YAML::Key <<  "Actors" << YAML::Value << YAML::BeginSeq;
+		emitter << YAML::Key << "Actors" << YAML::Value << YAML::BeginSeq;
 		for (auto& [actorID, actorData] : actorStorage.each())
 		{
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Actor" << YAML::Value << nameStorage.get(actorID).EntityName.c_str();
-			emitter << YAML::Key << "UUID"  << YAML::Value << UUIDstorage.get(actorID).UUID;
-			emitter << YAML::Key << "Behaviors" << YAML::Value << YAML::BeginSeq;
-			{
-				for (auto& behavior : actorData.m_Behaviors)
-				{
-					emitter << YAML::BeginMap;
-					emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
-					emitter << YAML::Key << "UUID"     << YAML::Value << behavior->GetUUID();
-					behavior->Serialize(emitter);
-					emitter << YAML::EndMap;
-				}
-			}
-			emitter << YAML::EndSeq;
-			emitter << YAML::Key << "Updates" << YAML::Value << YAML::BeginMap;
-			{
-				for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
-				{
-					emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
-					for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
-					{
-						emitter << YAML::BeginMap;
-						emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->GetUUID();
-						emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
-						emitter << YAML::EndMap;
-					}
-					emitter << YAML::EndSeq;
-				}
-			}
+			emitter << YAML::Key << "UUID" << YAML::Value << UUIDstorage.get(actorID).UUID;
+			
+			SerializeBehaviors(actorData, emitter);
+			SerializeActorEntities(actorID, world, emitter);
+			
 			emitter << YAML::EndMap;
-			emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-			{
-				std::stack<EntityID> toSerialize;
-
-				//head entity
-				{
-					SerializeEntity(Entity(actorID, world), emitter);
-
-					EntityID firstSibling = nodeStorage.get(actorID).FirstChild;
-					EntityID current = firstSibling;
-
-					if (current != NullEntityID)
-						do
-						{
-							toSerialize.push(current);
-							current = nodeStorage.get(current).NextSibling;
-						} while (current != firstSibling && current != NullEntityID);
-				}
-
-				EntityID entityToSerialize;
-				while (toSerialize.size())
-				{
-					entityToSerialize = toSerialize.top();
-					toSerialize.pop();
-
-					if (actorStorage.contains(entityToSerialize))
-						continue;
-
-					SerializeEntity(Entity(entityToSerialize, world), emitter);
-
-					EntityID firstSibling = nodeStorage.get(entityToSerialize).FirstChild;
-					EntityID current = firstSibling;
-
-					if (current != NullEntityID)
-						do
-						{
-							toSerialize.push(current);
-							current = nodeStorage.get(current).NextSibling;
-						} while (current != firstSibling && current != NullEntityID);
-				}	
-			}
-			emitter << YAML::EndSeq; //actor's entities
-			emitter << YAML::EndMap; //actor
 		}
-		emitter << YAML::EndSeq; //actors
-		emitter << YAML::EndMap; //GameplayWorld
+		emitter << YAML::EndSeq;
 	}
 
-	void SceneSerializer::SerializeEntity(Entity entity, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeBehaviors(CActorData& actorData, YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Behaviors" << YAML::Value << YAML::BeginSeq;
+		{
+			for (auto& behavior : actorData.m_Behaviors)
+			{
+				emitter << YAML::BeginMap;
+				emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
+				emitter << YAML::Key << "UUID" << YAML::Value << behavior->GetUUID();
+				behavior->Serialize(emitter);
+				emitter << YAML::EndMap;
+			}
+		}
+		emitter << YAML::EndSeq;
+
+		emitter << YAML::Key << "Updates" << YAML::Value << YAML::BeginMap;
+		{
+			for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
+			{
+				emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
+				for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
+				{
+					emitter << YAML::BeginMap;
+					emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->GetUUID();
+					emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
+					emitter << YAML::EndMap;
+				}
+				emitter << YAML::EndSeq;
+			}
+		}
+		emitter << YAML::EndMap;
+	}
+
+	void SceneSerializerYAML::SerializeActorEntities(EntityID actorID, GameplayWorld* world, YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+		
+		std::stack<EntityID> toSerialize;
+		auto& reg = world->GetRegistry();
+		auto& nodeStorage = world->GetRegistry().storage<CEntityNode>();
+		auto& actorStorage = reg.storage<CActorData>();
+
+		//head entity
+		{
+			SerializeEntity(Entity(actorID, world), emitter);
+
+			EntityID firstSibling = nodeStorage.get(actorID).FirstChild;
+			EntityID current = firstSibling;
+
+			if (current != NullEntityID)
+				do
+				{
+					toSerialize.push(current);
+					current = nodeStorage.get(current).NextSibling;
+				} while (current != firstSibling && current != NullEntityID);
+		}
+
+		EntityID entityToSerialize;
+		while (toSerialize.size())
+		{
+			entityToSerialize = toSerialize.top();
+			toSerialize.pop();
+
+			if (actorStorage.contains(entityToSerialize))
+				continue;
+
+			SerializeEntity(Entity(entityToSerialize, world), emitter);
+
+			EntityID firstSibling = nodeStorage.get(entityToSerialize).FirstChild;
+			EntityID current = firstSibling;
+
+			if (current != NullEntityID)
+				do
+				{
+					toSerialize.push(current);
+					current = nodeStorage.get(current).NextSibling;
+				} while (current != firstSibling && current != NullEntityID);
+		}
+		
+		emitter << YAML::EndSeq;
+	}
+
+	void SceneSerializerYAML::SerializeEntity(Entity entity, YAML::Emitter& emitter)
 	{
 		emitter << YAML::BeginMap;
 
@@ -241,7 +290,7 @@ namespace fe
 		emitter << YAML::EndMap;
 	}
 
-	void SceneSerializer::SerializeEntityNode(Entity entity, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeEntityNode(Entity entity, YAML::Emitter& emitter)
 	{
 		auto& node = entity.Get<CEntityNode>();
 		auto* world = entity.GetWorld();
@@ -254,14 +303,14 @@ namespace fe
 		emitter << YAML::Key << "FirstChild"      << YAML::Value << Entity(node.FirstChild, world);
 	}
 
-	void SceneSerializer::SerializeTransform(Transform transform, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeTransform(Transform transform, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Position" << YAML::Value << transform.Position;
 		emitter << YAML::Key << "Rotation" << YAML::Value << transform.Rotation;
 		emitter << YAML::Key << "Scale"    << YAML::Value << transform.Scale;
 	}
 
-	void SceneSerializer::SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter)
 	{
 		auto& regItems = ComponentTypesRegistry::GetInstance().DataItems;
 

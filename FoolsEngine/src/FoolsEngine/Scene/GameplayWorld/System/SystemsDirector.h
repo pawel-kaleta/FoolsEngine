@@ -53,6 +53,7 @@ namespace fe
 	private:
 		friend class SystemsInspector;
 		friend class SystemsRegistry;
+		friend class SceneSerializerYAML;
 
 		using Systems = std::vector<std::unique_ptr<System>>;
 

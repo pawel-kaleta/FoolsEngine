@@ -112,7 +112,7 @@ namespace fe
 					if (ImGui::MenuItem("Serialize"))
 					{
 						FE_LOG_CORE_INFO("SERIALIZING");
-						SceneSerializer::SerializeYAML(m_Scene, "assets/scenes/Example.fescene.yaml");
+						SceneSerializerYAML::Serialize(m_Scene, "assets/scenes/Example.fescene.yaml");
 					}
 					ImGui::EndMenu();
 				}

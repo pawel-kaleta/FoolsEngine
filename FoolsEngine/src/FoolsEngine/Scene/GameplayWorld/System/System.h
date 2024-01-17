@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <yaml-cpp\yaml.h>
+
 namespace fe
 {
 	class SystemsDirector;
@@ -26,6 +28,8 @@ namespace fe
 
 		const std::string& GetName() const { return m_Name; }
 		void SetName(std::string& name) { m_Name = name; }
+		UUID GetUUID() const { return m_UUID; }
+		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", m_Name); }
 
 	protected:
 		template<typename tnSimulationStage>
@@ -53,5 +57,6 @@ namespace fe
 		std::string m_Name = "System";
 
 		friend class SystemsDirector;
+
 	};
 }

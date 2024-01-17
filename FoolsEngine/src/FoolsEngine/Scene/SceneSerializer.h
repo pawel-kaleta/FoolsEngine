@@ -7,17 +7,20 @@
 
 namespace fe
 {
-	class SceneSerializer
+	struct CActorData;
+
+	class SceneSerializerYAML
 	{
 	public:
-		static void SerializeYAML(const Ref<Scene> scene, const std::string& filepath);
-		static void SerializeBinary(const Ref<Scene> scene, const std::string& filepath);
-
-		static void DeserializeYAML(const Ref<Scene> scene, const std::string& filepath);
-		static void DeserializeBinary(const Ref<Scene> scene, const std::string& filepath);
+		static void Serialize(const Ref<Scene> scene, const std::string& filepath);
+		static void Deserialize(const Ref<Scene> scene, const std::string& filepath);
 
 	private:
 		static void SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeActors(GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeBehaviors(CActorData& actorData, YAML::Emitter& emitter);
+		static void SerializeActorEntities(EntityID actorID, GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeEntity(Entity entity, YAML::Emitter& emitter);
 		static void SerializeEntityNode(Entity entity, YAML::Emitter& emitter);
 		static void SerializeTransform(Transform transform, YAML::Emitter& emitter);
