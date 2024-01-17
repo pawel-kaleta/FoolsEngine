@@ -7,9 +7,19 @@
 #include "World.h"
 #include "Scene.h"
 
+#include "SceneSerializer.h"
+
 namespace fe
 {
-	void DataComponent::DrawInspectorWidget(BaseEntity entity) { }
+	void DataComponent::DrawInspectorWidget(BaseEntity entity)
+	{
+		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetComponentName());
+	}
+
+	void DataComponent::Serialize(YAML::Emitter& emitter)
+	{
+		FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetComponentName());
+	}
 
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{
@@ -72,6 +82,19 @@ namespace fe
 		}
 	}
 
+	void CCamera::Serialize(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "ProjectionType"   << YAML::Value << Camera.GetProjectionType();
+
+		emitter << YAML::Key << "PerspectiveNear"  << YAML::Value << Camera.GetPerspectiveNearClip();
+		emitter << YAML::Key << "PerspectiveFar"   << YAML::Value << Camera.GetPerspectiveFarClip();
+		emitter << YAML::Key << "PerspectiveFOV"   << YAML::Value << Camera.GetPerspectiveFOV();
+
+		emitter << YAML::Key << "OrthographicNear" << YAML::Value << Camera.GetOrthographicNearClip();
+		emitter << YAML::Key << "OrthographicFar"  << YAML::Value << Camera.GetOrthographicFarClip();
+		emitter << YAML::Key << "OrthographicZoom" << YAML::Value << Camera.GetOrthographicZoom();
+	}
+
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
 		auto& textures = TextureLibrary::GetAll();
@@ -118,6 +141,13 @@ namespace fe
 		}
 	}
 
+	void CTile::Serialize(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Color"   << YAML::Value << Tile.Color;
+		emitter << YAML::Key << "Texture" << YAML::Value << Tile.Texture->GetName().c_str();
+		emitter << YAML::Key << "Tiling"  << YAML::Value << Tile.TextureTilingFactor;
+	}
+
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
 		auto& textures = TextureLibrary::GetAll();
@@ -159,5 +189,12 @@ namespace fe
 
 			ImGui::ColorEdit4("Tint Color", glm::value_ptr(Sprite.Color));
 		}
+	}
+
+	void CSprite::Serialize(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Color"   << YAML::Value << Sprite.Color;
+		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture->GetName().c_str();
+		emitter << YAML::Key << "Tiling"  << YAML::Value << Sprite.TextureTilingFactor;
 	}
 }

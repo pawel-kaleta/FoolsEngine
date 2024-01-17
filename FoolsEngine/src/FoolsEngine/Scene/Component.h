@@ -10,25 +10,16 @@
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "SimulationStages.h"
 
+#include <yaml-cpp\yaml.h>
+
 namespace fe
 {
 	class BaseEntity;
 
-#define EDITOR
 
-#ifdef FE_INTERNAL_BUILD
-	#ifdef EDITOR
-		#define FE_COMPONENT_SETUP(type, name) \
-			virtual std::string GetComponentName() const override { return name; } \
-			static std::string GetName() { return name; }
-	#else
-		#define FE_COMPONENT_SETUP(type, name) \
-			virtual std::string GetComponentName() const override { return name; } 
-	#endif // EDITOR
-#else
-	FE_COMPONENT_SETUP(type, name) \
-		
-#endif // FE_INTERNAL_BUILD
+#define FE_COMPONENT_SETUP(type, name) \
+	virtual std::string GetComponentName() const override { return name; } \
+	static std::string GetName() { return name; } 
 
 	struct Component {};
 
@@ -36,14 +27,11 @@ namespace fe
 
 	struct DataComponent : Component
 	{
-	#ifdef FE_INTERNAL_BUILD
 		virtual std::string GetComponentName() const { return ""; }
 		static std::string GetName() { return ""; }
-	#endif // FE_INTERNAL_BUILD
 
-#ifdef EDITOR
 		virtual void DrawInspectorWidget(BaseEntity entity);
-#endif
+		virtual void Serialize(YAML::Emitter& emitter);
 	};
 
 	struct SpatialComponent : DataComponent
@@ -57,7 +45,7 @@ namespace fe
 	{
 		UUID UUID;
 
-		FE_COMPONENT_SETUP(CUUID, "Camera");
+		FE_COMPONENT_SETUP(CUUID, "UUID");
 	};
 
 	struct CEntityName final : DataComponent
@@ -70,7 +58,7 @@ namespace fe
 		operator       std::string& () { return EntityName; }
 		operator const std::string& () { return EntityName; }
 
-		FE_COMPONENT_SETUP(CEntityName, "Name");
+		FE_COMPONENT_SETUP(CEntityName, "EntityName");
 	};
 
 	struct HierarchyNode : ProtectedComponent
@@ -144,6 +132,7 @@ namespace fe
 
 		FE_COMPONENT_SETUP(CCamera, "Camera");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
 	};
 
 	struct CTile final : SpatialComponent
@@ -152,6 +141,7 @@ namespace fe
 
 		FE_COMPONENT_SETUP(CTile, "Tile");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
 	};
 
 	struct CSprite final : SpatialComponent
@@ -160,6 +150,7 @@ namespace fe
 
 		FE_COMPONENT_SETUP(CSprite, "Sprite");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
 	};
 
 	struct CDestroyFlag final : FlagComponent {};

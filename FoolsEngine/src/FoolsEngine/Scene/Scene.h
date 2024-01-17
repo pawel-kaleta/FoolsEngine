@@ -16,18 +16,20 @@ namespace fe
 		Scene();
 		~Scene() = default;
 
-		Entity	GetEntityWithPrimaryCamera();
+		Entity	GetEntityWithPrimaryCamera() const;
 		void	SetPrimaryCameraEntity(Entity entity);
 		void	SetPrimaryCameraEntity(EntityID id);
 
 		void SimulationUpdate();
 		void PostFrameUpdate();
 
-		GameplayWorld* GetGameplayWorld() { return m_GameplayWorld.get(); }
+		GameplayWorld* GetGameplayWorld() const { return m_GameplayWorld.get(); }
 
+		const std::string& GetName() const { return m_Name; }
 	private:
 		Scope<GameplayWorld> m_GameplayWorld;
 		EntityID             m_PrimaryCameraEntityID;
+		std::string          m_Name = "Untitled Scene";
 		
 		template <typename tnSimulationStage>
 		void Update();

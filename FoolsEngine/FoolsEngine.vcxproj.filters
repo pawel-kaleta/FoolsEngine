@@ -285,6 +285,9 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\SceneSerializer.h">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
@@ -460,6 +463,9 @@
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">
+      <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\SceneSerializer.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">

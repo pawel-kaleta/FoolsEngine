@@ -3,6 +3,8 @@ project "FoolsTools"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
+	externalwarnings "off"
+	externalanglebrackets "on"
 
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")

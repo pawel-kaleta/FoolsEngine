@@ -46,7 +46,7 @@ namespace fe
 
 				if (enrolls[i].size() == 0)
 				{
-					constexpr static std::array<void (Actor::*)(), (int)SimulationStages::Stages::StagesCount> unFlagPtrs = 
+					static std::array<void (Actor::*)() const, (int)SimulationStages::Stages::StagesCount> unFlagPtrs = 
 					{
 						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::Physics    >>,
 						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::PostPhysics>>,

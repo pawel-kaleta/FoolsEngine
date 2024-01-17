@@ -43,6 +43,13 @@ namespace fe
 			ImGui::DragFloat("RotationSpeed", &PlayerMovement.RotationSpeed, 0.1f);
 			ImGui::DragFloat("ScaleStepSpeed", &PlayerMovement.ScaleStepSpeed, 0.01f);
 		}
+
+		virtual void Serialize(YAML::Emitter& emitter) override
+		{
+			emitter << YAML::Key << "MoveSpeed"      << YAML::Value << PlayerMovement.MoveSpeed;
+			emitter << YAML::Key << "RotationSpeed"  << YAML::Value << PlayerMovement.RotationSpeed;
+			emitter << YAML::Key << "ScaleStepSpeed" << YAML::Value << PlayerMovement.ScaleStepSpeed;
+		};
 	};
 
 	class PlayerMovementBehavior : public Behavior
@@ -115,6 +122,11 @@ namespace fe
 		virtual void OnInitialize() override
 		{
 			RegisterForUpdate<SimulationStages::PostPhysics>(9);
+		}
+
+		virtual void DrawInspectorWidget() override
+		{
+			ImGui::Text("Test System content");
 		}
 	};
 
@@ -201,13 +213,13 @@ namespace fe
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
 
-			//playerActor.CreateBehavior<TestBehavior>();
-			//playerActor.CreateBehavior<TestBehavior2>();
 			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior>();
 			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior2>();
+			playerActor.CreateBehavior<TestBehavior>();
+			playerActor.CreateBehavior<TestBehavior2>();
 
 			playerActor.Emplace<CPlayerMovement>();
-			ComponentTypesRegistry::s_Registry.RegisterDataComponent<CPlayerMovement>();
+			ComponentTypesRegistry::GetInstance().RegisterDataComponent<CPlayerMovement>();
 		}
 
 		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");

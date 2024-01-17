@@ -34,7 +34,7 @@ namespace fe {
 		Renderer::InitAPI(gdi);
 		Renderer::SetAPI(gdi);
 
-		ComponentTypesRegistry::s_Registry.RegisterComponents();
+		ComponentTypesRegistry::GetInstance().RegisterComponents();
 	}
 
 	Application::~Application()

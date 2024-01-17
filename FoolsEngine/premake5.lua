@@ -33,6 +33,8 @@ project "FoolsEngine"
 		"/analyze:external-",
 	}
 
+	defines "YAML_CPP_STATIC_DEFINE"
+
 	filter "system:windows"
 		systemversion "latest"
 

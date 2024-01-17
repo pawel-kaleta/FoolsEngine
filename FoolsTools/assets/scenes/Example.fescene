@@ -1,0 +1,198 @@
+Scene Properties:
+  Scene Name: Untitled Scene
+  Primary Camera: 15817100340157273786
+Worlds:
+  GameplayWorld:
+    World Properies:
+      RootID: 8827396456267716143
+    Actors:
+      - Actor: Player
+        UUID: 16028661536849734436
+        Behaviors:
+          []
+        Entities:
+          - Entity: Player
+            UUID: 16028661536849734436
+            Head: 16028661536849734436
+            Tags: 2
+            Node:
+              Parent: 8827396456267716143
+              HierarchyLvl: 1
+              PreviousSibling: 16683735755128127144
+              NextSibling: 0
+              ChildrenCount: 2
+              FirstChild: 16336108705019253646
+            Transform:
+              Position: [0, 0, 0.200000003]
+              Rotation: [0, 0, 0]
+              Scale: [0.300000012, 0.300000012, 1]
+            Sprite:
+              Color: [1, 1, 1, 1]
+              Texture: Texture_with_Transparency
+              Tiling: 1
+            PlayerMovement:
+              MoveSpeed: 0.5
+              RotationSpeed: 80
+              ScaleStepSpeed: 0.200000003
+          - Entity: ChildEntity_2
+            UUID: 8171669420808493611
+            Head: 16028661536849734436
+            Tags: 0
+            Node:
+              Parent: 16028661536849734436
+              HierarchyLvl: 2
+              PreviousSibling: 16336108705019253646
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [-0.800000012, -0.800000012, 0]
+              Rotation: [0, 0, -20]
+              Scale: [0.699999988, 0.400000006, 1]
+            Sprite:
+              Color: [1, 1, 1, 0.5]
+              Texture: Default_Texture
+              Tiling: 1
+          - Entity: ChildEntity_1
+            UUID: 16336108705019253646
+            Head: 16028661536849734436
+            Tags: 0
+            Node:
+              Parent: 16028661536849734436
+              HierarchyLvl: 2
+              PreviousSibling: 0
+              NextSibling: 8171669420808493611
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0.800000012, 0.800000012, 0.300000012]
+              Rotation: [0, 0, 20]
+              Scale: [0.5, 0.5, 1]
+            Sprite:
+              Color: [1, 1, 1, 0.5]
+              Texture: Texture_with_Transparency
+              Tiling: 1
+      - Actor: TestChildActor
+        UUID: 6284459802591780293
+        Behaviors:
+          []
+        Entities:
+          - Entity: TestChildActor
+            UUID: 6284459802591780293
+            Head: 6284459802591780293
+            Tags: 0
+            Node:
+              Parent: 16683735755128127144
+              HierarchyLvl: 2
+              PreviousSibling: 4486591695495313583
+              NextSibling: 5581614652604583047
+              ChildrenCount: 1
+              FirstChild: 1356161353004501992
+            Transform:
+              Position: [0.300000012, -0.200000003, 0.189999998]
+              Rotation: [0, 0, -40]
+              Scale: [0.200000003, 0.400000006, 1]
+            Tile:
+              Color: [0.800000012, 0.800000012, 0.100000001, 1]
+              Texture: Base2DTexture
+              Tiling: 2
+          - Entity: Entity
+            UUID: 1356161353004501992
+            Head: 6284459802591780293
+            Tags: 0
+            Node:
+              Parent: 6284459802591780293
+              HierarchyLvl: 3
+              PreviousSibling: 0
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+      - Actor: Enviro
+        UUID: 16683735755128127144
+        Behaviors:
+          []
+        Entities:
+          - Entity: Enviro
+            UUID: 16683735755128127144
+            Head: 16683735755128127144
+            Tags: 0
+            Node:
+              Parent: 8827396456267716143
+              HierarchyLvl: 1
+              PreviousSibling: 0
+              NextSibling: 16028661536849734436
+              ChildrenCount: 4
+              FirstChild: 15817100340157273786
+            Transform:
+              Position: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+          - Entity: Entity
+            UUID: 5581614652604583047
+            Head: 16683735755128127144
+            Tags: 0
+            Node:
+              Parent: 16683735755128127144
+              HierarchyLvl: 2
+              PreviousSibling: 6284459802591780293
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [-0.100000001, -0.100000001, 0.100000001]
+              Rotation: [0, 0, 0]
+              Scale: [0.300000012, 0.200000003, 1]
+            Sprite:
+              Color: [0.899999976, 0.200000003, 0.899999976, 0.800000012]
+              Texture: Base2DTexture
+              Tiling: 1
+          - Entity: Entity
+            UUID: 4486591695495313583
+            Head: 16683735755128127144
+            Tags: 0
+            Node:
+              Parent: 16683735755128127144
+              HierarchyLvl: 2
+              PreviousSibling: 15817100340157273786
+              NextSibling: 6284459802591780293
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0, 0, 0]
+              Rotation: [0, 0, 20]
+              Scale: [0.400000006, 0.300000012, 1]
+            Tile:
+              Color: [0.100000001, 0.100000001, 1, 1]
+              Texture: Base2DTexture
+              Tiling: 3
+          - Entity: TestEntity
+            UUID: 15817100340157273786
+            Head: 16683735755128127144
+            Tags: 0
+            Node:
+              Parent: 16683735755128127144
+              HierarchyLvl: 2
+              PreviousSibling: 0
+              NextSibling: 4486591695495313583
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0, 0.200000003, -0.100000001]
+              Rotation: [0, 0, -30]
+              Scale: [0.600000024, 0.400000006, 1]
+            Camera:
+              ProjectionType: 1
+              PerspectiveNear: 0.00999999978
+              PerspectiveFar: 1000
+              PerspectiveFOV: 0.785398185
+              OrthographicNear: -1
+              OrthographicFar: 1
+              OrthographicZoom: 1
+            Tile:
+              Color: [0.200000003, 0.699999988, 0.300000012, 1]
+              Texture: Default_Texture
+              Tiling: 3

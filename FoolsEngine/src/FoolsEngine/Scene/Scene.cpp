@@ -9,6 +9,8 @@
 #include "FoolsEngine\Scene\SimulationStages.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 
+#include "SceneSerializer.h"
+
 namespace fe
 {
 	Scene::Scene()
@@ -20,7 +22,8 @@ namespace fe
 		m_GameplayWorld = CreateScope<GameplayWorld>(this);
 	}
 
-	Entity Scene::GetEntityWithPrimaryCamera() {
+	Entity Scene::GetEntityWithPrimaryCamera() const
+	{
 		Entity entity(m_PrimaryCameraEntityID, (GameplayWorld*)m_GameplayWorld.get());
 		FE_CORE_ASSERT(entity, "Entity with primary camera was deleted");
 		FE_CORE_ASSERT(entity.AllOf<CCamera>(), "Primary camera was removed from its Entity");

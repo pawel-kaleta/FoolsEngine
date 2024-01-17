@@ -26,6 +26,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
+#include "FoolsEngine\Scene\SceneSerializer.h"
 
 
 #ifdef FE_INTERNAL_BUILD
@@ -34,6 +35,7 @@
 #endif // INTERNAL_BUILD
 
 #include <entt.hpp>
+#include <yaml-cpp\yaml.h>
 
 //---------Entry Point---------
 //#include "FoolsEngine\Core\EntryPoint.h"

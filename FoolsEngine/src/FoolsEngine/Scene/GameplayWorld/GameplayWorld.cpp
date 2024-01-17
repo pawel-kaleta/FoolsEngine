@@ -86,6 +86,8 @@ namespace fe
 
 		auto& actorStorage = m_Registry.storage<CActorData>();
 		auto& nodeStorage = m_Registry.storage<CEntityNode>();
+		// should use CActorNode, but CActorNode is not yet mantained
+		// because of updateEnrollCheck it is safe to use all entities for traversal
 
 		std::stack<EntityID> toUpdate;
 		// some data about entites in underlying hierarchy of just updated actor
@@ -94,7 +96,7 @@ namespace fe
 
 		// initializing vector with actors attached to root
 		{
-			EntityID firstActor = m_Registry.get<CEntityNode>(RootID).FirstChild;
+			EntityID firstActor = nodeStorage.get(RootID).FirstChild;
 			EntityID currentActor = firstActor;
 
 			if (currentActor != NullEntityID)

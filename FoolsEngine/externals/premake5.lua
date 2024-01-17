@@ -78,7 +78,7 @@ project "glad"
 	}
 
 	includedirs	{
-		"glad/include"
+		"%{prj.name}/include"
 	}
 
 
@@ -165,19 +165,17 @@ project "yaml-cpp"
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
 	files {
-		"src/**.h",
-		"src/**.cpp",
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
 
-		"include/**.h"
+		"%{prj.name}/include/yaml-cpp/**.h"
 	}
 
 	includedirs	{
-		"include"
+		"%{prj.name}/include"
 	}
 
-	defines {
-		"YAML_CPP_STATIC_DEFINE"
-	}
+	defines "YAML_CPP_STATIC_DEFINE"
 
 	filter "system:windows"
 		systemversion "latest"

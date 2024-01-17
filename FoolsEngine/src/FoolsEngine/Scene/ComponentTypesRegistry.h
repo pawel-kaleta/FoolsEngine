@@ -12,10 +12,12 @@ namespace fe
 	class ComponentTypesRegistry
 	{
 	public:
+		static ComponentTypesRegistry& GetInstance() { return s_Registry; }
+
 		struct DataComponentRegistryItem
 		{
-			DataComponent* (BaseEntity::* Getter)();
-			void           (BaseEntity::* Emplacer)();
+			DataComponent* (BaseEntity::* Getter)() const;
+			void           (BaseEntity::* Emplacer)() const;
 			void           (Entity::* DestructionScheduler)();
 			std::string    (ComponentTypesRegistry::* Name)();
 		};
@@ -29,13 +31,18 @@ namespace fe
 		};
 		std::vector<FlagComponentRegistryItem> FlagItems;
 
-		static ComponentTypesRegistry s_Registry;
-
 		void RegisterComponents();
 
 		template <typename tnComponent>
 		void RegisterDataComponent()
 		{
+			auto a1 = &BaseEntity::GetAsDataComponentIfExist<tnComponent>;
+			auto a2 = &BaseEntity::DefaultEmplace<tnComponent>;
+			auto a3 = &Entity::RemoveIfExist<tnComponent>;
+			auto a4 = &ComponentTypesRegistry::GetName<tnComponent>;
+
+
+
 			DataItems.push_back(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
@@ -59,6 +66,9 @@ namespace fe
 		}
 
 	private:
+		ComponentTypesRegistry() {};
+		static ComponentTypesRegistry s_Registry;
+
 		template <typename tnComponent>
 		std::string GetName()
 		{

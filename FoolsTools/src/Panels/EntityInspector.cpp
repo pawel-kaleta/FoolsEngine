@@ -37,7 +37,7 @@ namespace fe
         static bool popup_open;
         // popup_open is common for all widgets, so wee need to check if it is applicable to this particular widget
         // simply component* is not good, because it is not stable across frames
-        static DataComponent* (BaseEntity::* getter_of_component_of_popup)() = nullptr;
+        static DataComponent* (BaseEntity::* getter_of_component_of_popup)() const = nullptr;
         bool widget_of_popup = getter_of_component_of_popup == getter;
 
         ImGuiDir button_arrow_dir = widget_of_popup && popup_open ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
@@ -125,7 +125,7 @@ namespace fe
 
                 DrawCTransformWidget(entity);
 
-                for (const auto& item : ComponentTypesRegistry::s_Registry.DataItems)
+                for (const auto& item : ComponentTypesRegistry::GetInstance().DataItems)
                 {
                     DrawComponentWidget(item, entity);
                 }
@@ -157,7 +157,7 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddComponent"))
         {
-            auto& compReg = ComponentTypesRegistry::s_Registry;
+            auto& compReg = ComponentTypesRegistry::GetInstance();
             for (const auto& item : compReg.DataItems)
             {
                 auto& getter = item.Getter;

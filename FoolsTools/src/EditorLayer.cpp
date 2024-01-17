@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
 #include "TestScene.h"
 
+
+
 #include <string>
 
 namespace fe
@@ -107,7 +109,11 @@ namespace fe
 				{
 					if (ImGui::MenuItem("Exit"))
 						Application::Get().Close();
-
+					if (ImGui::MenuItem("Serialize"))
+					{
+						FE_LOG_CORE_DEBUG("SERIALIZING");
+						SceneSerializer::SerializeYAML(m_Scene, "assets/scenes/Example.fescene");
+					}
 					ImGui::EndMenu();
 				}
 
