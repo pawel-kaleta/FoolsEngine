@@ -175,7 +175,7 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
-            auto& behReg = BehaviorsRegistry::s_Registry;
+            auto& behReg = BehaviorsRegistry::GetInstance();
             for (const auto& item : behReg.Items)
             {
                 auto& getName = item.Name;

@@ -26,7 +26,9 @@ namespace fe
 		GameplayWorld* GetGameplayWorld() const { return m_GameplayWorld.get(); }
 
 		const std::string& GetName() const { return m_Name; }
+		const UUID GetUUID() const { return m_UUID; }
 	private:
+		UUID m_UUID;
 		Scope<GameplayWorld> m_GameplayWorld;
 		EntityID             m_PrimaryCameraEntityID;
 		std::string          m_Name = "Untitled Scene";

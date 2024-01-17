@@ -76,6 +76,12 @@ namespace fe
 			DrawEntity(m_Player, "Player's root");
 		}
 
+		virtual void Serialize(YAML::Emitter& emitter) const override 
+		{
+			emitter << YAML::Key << "MovementComponent" << YAML::Value << m_Movement.GetEntity();
+			emitter << YAML::Key << "Player Root entity" << YAML::Value << m_Player;
+		}
+
 		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
 
 		CompPtr<CPlayerMovement> m_Movement;
@@ -213,8 +219,8 @@ namespace fe
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
 
-			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior>();
-			BehaviorsRegistry::s_Registry.RegisterBehavior<TestBehavior2>();
+			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
+			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
 			playerActor.CreateBehavior<TestBehavior>();
 			playerActor.CreateBehavior<TestBehavior2>();
 

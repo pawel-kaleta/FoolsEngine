@@ -16,7 +16,6 @@ namespace fe
 {
 	class BaseEntity;
 
-
 #define FE_COMPONENT_SETUP(type, name) \
 	virtual std::string GetComponentName() const override { return name; } \
 	static std::string GetName() { return name; } 

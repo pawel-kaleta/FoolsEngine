@@ -111,8 +111,8 @@ namespace fe
 						Application::Get().Close();
 					if (ImGui::MenuItem("Serialize"))
 					{
-						FE_LOG_CORE_DEBUG("SERIALIZING");
-						SceneSerializer::SerializeYAML(m_Scene, "assets/scenes/Example.fescene");
+						FE_LOG_CORE_INFO("SERIALIZING");
+						SceneSerializer::SerializeYAML(m_Scene, "assets/scenes/Example.fescene.yaml");
 					}
 					ImGui::EndMenu();
 				}

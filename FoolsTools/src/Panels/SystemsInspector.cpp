@@ -196,7 +196,7 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddSystem"))
         {
-            //auto& behReg = BehaviorsRegistry::s_Registry;
+            //auto& behReg = BehaviorsRegistry::s_Instance;
             //for (const auto& item : behReg.Items)
             //{
             //    auto& getName = item.Name;

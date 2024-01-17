@@ -88,12 +88,12 @@ namespace fe
 
 	void SceneSerializer::SerializeYAML(const Ref<Scene> scene, const std::string& filepath)
 	{
-		FE_LOG_CORE_DEBUG("SerializeYAML");
 		YAML::Emitter emitter;
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
 			emitter << YAML::Key << "Scene Name" << YAML::Value << scene->GetName();
+			emitter << YAML::Key << "UUID" << YAML::Value << scene->GetUUID();
 			emitter << YAML::Key << "Primary Camera" << YAML::Value << scene->GetEntityWithPrimaryCamera();
 		}
 		emitter << YAML::EndMap; //Scene Properties
@@ -145,9 +145,32 @@ namespace fe
 			emitter << YAML::Key << "UUID"  << YAML::Value << UUIDstorage.get(actorID).UUID;
 			emitter << YAML::Key << "Behaviors" << YAML::Value << YAML::BeginSeq;
 			{
-				//behaviors
+				for (auto& behavior : actorData.m_Behaviors)
+				{
+					emitter << YAML::BeginMap;
+					emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
+					emitter << YAML::Key << "UUID"     << YAML::Value << behavior->GetUUID();
+					behavior->Serialize(emitter);
+					emitter << YAML::EndMap;
+				}
 			}
 			emitter << YAML::EndSeq;
+			emitter << YAML::Key << "Updates" << YAML::Value << YAML::BeginMap;
+			{
+				for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
+				{
+					emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
+					for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
+					{
+						emitter << YAML::BeginMap;
+						emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->GetUUID();
+						emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
+						emitter << YAML::EndMap;
+					}
+					emitter << YAML::EndSeq;
+				}
+			}
+			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 			{
 				std::stack<EntityID> toSerialize;

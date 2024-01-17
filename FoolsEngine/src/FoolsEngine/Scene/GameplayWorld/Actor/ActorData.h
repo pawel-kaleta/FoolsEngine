@@ -29,6 +29,7 @@ namespace fe
 	private:
 		friend class Actor;
 		friend class ActorInspector;
+		friend class SceneSerializer;
 		
 		using Behaviors = std::vector<std::unique_ptr<Behavior>>;
 		

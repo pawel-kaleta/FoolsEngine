@@ -3,6 +3,8 @@
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
 
+#include <yaml-cpp\yaml.h>
+
 namespace fe
 {
 	class Behavior
@@ -23,8 +25,10 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		virtual std::string GetBehaviorName() const { return ""; }
-		static std::string GetName() { return ""; }
+		virtual std::string GetBehaviorName() const { FE_LOG_CORE_ERROR("Unnamed Behavior"); return "Unnamed Behavior"; }
+		static std::string GetName() { return "Base Behavior"; }
+		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetBehaviorName()); }
+		UUID GetUUID() const { return m_UUID; }
 
 	protected:
 		template<typename tnSimulationStage>

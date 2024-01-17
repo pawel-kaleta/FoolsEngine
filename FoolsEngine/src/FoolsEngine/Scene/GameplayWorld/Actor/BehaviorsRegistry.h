@@ -8,14 +8,14 @@ namespace fe
 	class BehaviorsRegistry
 	{
 	public:
+		static BehaviorsRegistry& GetInstance() { return s_Instance; }
+
 		struct BehaviorsRegistryItem
 		{
 			Behavior*   (Actor::* Create)();
 			std::string (BehaviorsRegistry::* Name)();
 		};
 		std::vector<BehaviorsRegistryItem> Items;
-
-		static BehaviorsRegistry s_Registry;
 
 		void RegisterBehaviors();
 
@@ -31,6 +31,9 @@ namespace fe
 		}
 
 	private:
+		BehaviorsRegistry() = default;
+		static BehaviorsRegistry s_Instance;
+
 		template <typename tnBehavior>
 		std::string GetName()
 		{

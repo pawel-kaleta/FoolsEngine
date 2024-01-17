@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	BehaviorsRegistry BehaviorsRegistry::s_Registry = BehaviorsRegistry();
+	BehaviorsRegistry BehaviorsRegistry::s_Instance = BehaviorsRegistry();
 
 	void BehaviorsRegistry::RegisterBehaviors()
 	{
