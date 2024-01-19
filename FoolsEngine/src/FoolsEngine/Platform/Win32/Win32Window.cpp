@@ -1,5 +1,5 @@
 #include "FE_pch.h"
-#include "Win10Window.h"
+#include "Win32Window.h"
 
 #include "FoolsEngine\Events\Event.h"
 
@@ -9,24 +9,24 @@
 
 namespace fe
 {
-	bool Win10Window::s_GLFWInitialized = false;
-	uint16_t Win10Window::s_GLFWWindowCount = 0;
+	bool Win32Window::s_GLFWInitialized = false;
+	uint16_t Win32Window::s_GLFWWindowCount = 0;
 
-	Win10Window::Win10Window(const WindowAttributes& attr)
+	Win32Window::Win32Window(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
 		
 		Init(attr);
 	}
 
-	Win10Window::~Win10Window()
+	Win32Window::~Win32Window()
 	{
 		FE_PROFILER_FUNC();
 
 		ShutDown();
 	}
 
-	void Win10Window::CreateRenderingContext(GDIType GDI)
+	void Win32Window::CreateRenderingContext(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Creating rendering context");
@@ -44,13 +44,13 @@ namespace fe
 		SetVSync(false);
 	}
 
-	void Win10Window::MakeRenderingContextCurrent(GDIType GDI)
+	void Win32Window::MakeRenderingContextCurrent(GDIType GDI)
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(false, "Multiple rendering contexts not yet supported. Context is being made current upon creation.");
 	}
 
-	void Win10Window::OnUpdate()
+	void Win32Window::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_TRACE("Win10Window::OnUpdate()");
@@ -65,12 +65,12 @@ namespace fe
 		m_CurrentRenderingContext->SwapBuffers();
 	}
 
-	void Win10Window::GLFWErrorCallback(int error, const char* msg)
+	void Win32Window::GLFWErrorCallback(int error, const char* msg)
 	{
 		FE_LOG_CORE_ERROR("GLFW Error ({0}): {1}", error, msg);
 	}
 
-	void Win10Window::Init(const WindowAttributes& attr)
+	void Win32Window::Init(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
 
@@ -106,7 +106,7 @@ namespace fe
 		SetGLFWEventsCallbacks();
 	}
 
-	void Win10Window::SetGLFWEventsCallbacks()
+	void Win32Window::SetGLFWEventsCallbacks()
 	{
 		FE_PROFILER_FUNC();
 
@@ -206,7 +206,7 @@ namespace fe
 		FE_LOG_CORE_INFO("Events callbacks for Win10Window setted up.");
 	}
 
-	void Win10Window::ShutDown()
+	void Win32Window::ShutDown()
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Closing Window.");
@@ -225,7 +225,7 @@ namespace fe
 		}
 	}
 
-	void Win10Window::SetVSync(bool enabled)
+	void Win32Window::SetVSync(bool enabled)
 	{
 		FE_PROFILER_FUNC();
 

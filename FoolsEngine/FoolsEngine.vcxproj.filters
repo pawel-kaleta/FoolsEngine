@@ -129,7 +129,7 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h">
@@ -294,6 +294,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -336,10 +337,10 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp">
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp">
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win10</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp">
@@ -453,6 +454,9 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TransformHandle.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\Hierarchy</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp">
+      <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
@@ -468,6 +472,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
   </ItemGroup>
 </Project>

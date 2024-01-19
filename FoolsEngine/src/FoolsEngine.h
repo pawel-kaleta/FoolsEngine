@@ -27,6 +27,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 #include "FoolsEngine\Scene\SceneSerializer.h"
+#include "FoolsEngine\Platform\FileDialogs.h"
 
 
 #ifdef FE_INTERNAL_BUILD

@@ -116,6 +116,10 @@ namespace fe
 					}
 					if (ImGui::MenuItem("Deserialize"))
 					{
+						std::string filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene.yaml)\0*.fescene.yaml\0");
+						if (!filepath.empty())
+						{
+
 						m_Scene = CreateRef<Scene>();
 
 						m_SceneHierarchyPanel.SetScene(m_Scene);
@@ -123,7 +127,10 @@ namespace fe
 						m_ActorInspector.SetScene(m_Scene);
 						m_SystemsInspector.SetScene(m_Scene);
 
-						SceneSerializerYAML::Deserialize(m_Scene, "assets/scenes/Example.fescene.yaml");
+						//SceneSerializerYAML::Deserialize(m_Scene, "assets/scenes/Example.fescene.yaml");
+						SceneSerializerYAML::Deserialize(m_Scene, filepath);
+
+						}
 					}
 					ImGui::EndMenu();
 				}

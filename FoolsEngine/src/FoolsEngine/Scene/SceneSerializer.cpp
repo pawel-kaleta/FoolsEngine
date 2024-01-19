@@ -8,8 +8,6 @@
 
 #include <fstream>
 
-
-
 namespace fe
 {
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Entity& entity)
@@ -278,12 +276,7 @@ namespace fe
 
 	void SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& filepath)
 	{
-		std::ifstream stream(filepath);
-		std::stringstream strStream;
-
-		strStream << stream.rdbuf();
-
-		YAML::Node data = YAML::Load(strStream.str());
+		YAML::Node data = YAML::LoadFile(filepath);
 
 		auto& sceneProps = data["Scene Properties"];
 		if (!sceneProps)
@@ -298,15 +291,13 @@ namespace fe
 
 		auto& worlds = data["Worlds"];
 		DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]);
-
-		//Serialize(scene, "assets/scenes/ExampleTest.fescene.yaml");
 	}
 
 	void SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data)
 	{
 		auto& props = data["Properties"];
 
-		UUID rootUUID = props["RootID"].as<uint64_t>();
+		UUID rootUUID = props["RootID"].as<UUID>();
 		world->m_Registry.get<CUUID>(RootID).UUID = rootUUID;
 		world->m_PersistentToTransientIDsMap[rootUUID] = RootID;
 
@@ -314,8 +305,8 @@ namespace fe
 		DeserializeEntityNode(rootNode, world->m_Registry.get<CEntityNode>(RootID), world);
 		
 
-		//auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<uint64_t>());
-		//world->m_PrimaryCameraEntityID = cameraEntity.ID();
+		auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
+		world->m_PrimaryCameraEntityID = cameraEntity.ID();
 
 		auto& systems = data["Systems"];
 		auto* director = world->m_SystemsDirector.get();

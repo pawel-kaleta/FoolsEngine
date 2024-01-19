@@ -7,11 +7,11 @@
 
 namespace fe
 {
-	class Win10Window : public Window
+	class Win32Window : public Window
 	{
 	public:
-		Win10Window(const WindowAttributes& attr);
-		~Win10Window() override;
+		Win32Window(const WindowAttributes& attr);
+		~Win32Window() override;
 
 		virtual void CreateRenderingContext(GDIType GDI) override;
 		virtual void MakeRenderingContextCurrent(GDIType GDI) override;

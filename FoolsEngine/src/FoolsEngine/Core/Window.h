@@ -18,6 +18,8 @@ namespace fe
 		{ }
 	};
 
+	// TO DO: get rid of virtualisation and make a compile time decision about choosing implementation with a macro
+
 	class Window
 	{
 	public:

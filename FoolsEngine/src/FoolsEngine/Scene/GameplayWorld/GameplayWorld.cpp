@@ -8,7 +8,7 @@
 namespace fe
 {
 	GameplayWorld::GameplayWorld(Scene* scene)
-		: World(scene, true)
+		: World(scene, true), m_PrimaryCameraEntityID(NullEntityID)
 	{
 		FE_PROFILER_FUNC();
 
@@ -138,8 +138,16 @@ namespace fe
 	Entity GameplayWorld::GetEntityWithPrimaryCamera() const
 	{
 		Entity entity(m_PrimaryCameraEntityID, this);
-		FE_CORE_ASSERT(entity, "Entity with primary camera was deleted");
-		FE_CORE_ASSERT(entity.AllOf<CCamera>(), "Primary camera was removed from its Entity");
+		if (!entity)
+		{
+			FE_LOG_CORE_ERROR("Entity with primary camera was deleted");
+			return entity;
+		}
+		if (!entity.AllOf<CCamera>())
+		{
+			FE_LOG_CORE_ERROR("Primary camera was removed from entity");
+			return Entity();
+		}
 		return entity;
 	}
 

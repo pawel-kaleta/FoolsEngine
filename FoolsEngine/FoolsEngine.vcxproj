@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -171,7 +172,7 @@
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Win10\Win10Window.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\GDIType.h" />
@@ -244,8 +245,9 @@
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10InputPolling.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\Win10\Win10Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp" />

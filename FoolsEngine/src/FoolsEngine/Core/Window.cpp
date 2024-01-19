@@ -2,7 +2,7 @@
 #include "Window.h"
 
 #ifdef FE_PLATFORM_WINDOWS
-	#include "FoolsEngine/Platform/Win10/Win10Window.h"
+	#include "FoolsEngine/Platform/Win32/Win32Window.h"
 #endif // FE_PLATFORM_WINDOWS
 
 
@@ -13,7 +13,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 	#ifdef FE_PLATFORM_WINDOWS
-		return CreateScope<Win10Window>(attr);
+		return CreateScope<Win32Window>(attr);
 	#else
 		FE_CORE_ASSERT(false, "Unknown platform!");
 		#error
