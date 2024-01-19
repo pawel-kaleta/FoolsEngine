@@ -4,61 +4,11 @@
 #include "GameplayWorld\Actor\Actor.h"
 #include "Component.h"
 #include "ComponentTypesRegistry.h"
+#include "GameplayWorld\Actor\BehaviorsRegistry.h"
 
 #include <fstream>
 
-namespace YAML
-{
-	template<>
-	struct convert<glm::vec3>
-	{
-		static Node encode(const glm::vec3& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
-			return node;
-		}
 
-		static bool decode(const Node& node, glm::vec3& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 3)
-				return false;
-
-			rhs.x = node[0].as<float>();
-			rhs.y = node[1].as<float>();
-			rhs.z = node[2].as<float>();
-			return true;
-		}
-	};
-
-	template<>
-	struct convert<glm::vec4>
-	{
-		static Node encode(const glm::vec4& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
-			node.push_back(rhs.w);
-			return node;
-		}
-
-		static bool decode(const Node& node, glm::vec4& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 4)
-				return false;
-
-			rhs.x = node[0].as<float>();
-			rhs.y = node[1].as<float>();
-			rhs.z = node[2].as<float>();
-			rhs.w = node[3].as<float>();
-			return true;
-		}
-	};
-}
 
 namespace fe
 {
@@ -92,9 +42,8 @@ namespace fe
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
-			emitter << YAML::Key << "Scene Name" << YAML::Value << scene->GetName();
+			emitter << YAML::Key << "Name" << YAML::Value << scene->GetName();
 			emitter << YAML::Key << "UUID" << YAML::Value << scene->GetUUID();
-			emitter << YAML::Key << "Primary Camera" << YAML::Value << scene->GetEntityWithPrimaryCamera();
 		}
 		emitter << YAML::EndMap; //Scene Properties
 		emitter << YAML::Key << "Worlds" << YAML::Value << YAML::BeginMap;
@@ -108,18 +57,18 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	void SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& filepath)
-	{
-
-	}
-
 	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
 
-		emitter << YAML::Key << "World Properies" << YAML::Value << YAML::BeginMap;
+		emitter << YAML::Key << "Properties" << YAML::Value << YAML::BeginMap;
 		{
 			emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
+			emitter << YAML::Key << "RootNode" << YAML::Value << YAML::BeginMap;
+			SerializeEntityNode(Entity(RootID, world), emitter);
+			emitter << YAML::EndMap;
+
+			emitter << YAML::Key << "Primary Camera" << YAML::Value << world->GetEntityWithPrimaryCamera();
 		}
 		emitter << YAML::EndMap;
 		
@@ -137,7 +86,7 @@ namespace fe
 			{
 				emitter << YAML::BeginMap;
 
-				emitter << YAML::Key << "System" << YAML::Value << system->GetName();
+				emitter << YAML::Key << "System" << YAML::Value << system->GetSystemName();
 				emitter << YAML::Key << "UUID" << YAML::Value << system->GetUUID();
 
 				system->Serialize(emitter);
@@ -325,5 +274,168 @@ namespace fe
 				emitter << YAML::EndMap;
 			}
 		}
+	}
+
+	void SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& filepath)
+	{
+		std::ifstream stream(filepath);
+		std::stringstream strStream;
+
+		strStream << stream.rdbuf();
+
+		YAML::Node data = YAML::Load(strStream.str());
+
+		auto& sceneProps = data["Scene Properties"];
+		if (!sceneProps)
+		{
+			FE_CORE_ASSERT(false, "Deserialization failed");
+			FE_LOG_CORE_ERROR("Deserialization failed");
+			return;
+		}
+
+		scene->m_Name = sceneProps["Name"].as<std::string>();
+		scene->m_UUID = sceneProps["UUID"].as<uint64_t>();
+
+		auto& worlds = data["Worlds"];
+		DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]);
+
+		//Serialize(scene, "assets/scenes/ExampleTest.fescene.yaml");
+	}
+
+	void SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data)
+	{
+		auto& props = data["Properties"];
+
+		UUID rootUUID = props["RootID"].as<uint64_t>();
+		world->m_Registry.get<CUUID>(RootID).UUID = rootUUID;
+		world->m_PersistentToTransientIDsMap[rootUUID] = RootID;
+
+		auto& rootNode = props["RootNode"];
+		DeserializeEntityNode(rootNode, world->m_Registry.get<CEntityNode>(RootID), world);
+		
+
+		//auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<uint64_t>());
+		//world->m_PrimaryCameraEntityID = cameraEntity.ID();
+
+		auto& systems = data["Systems"];
+		auto* director = world->m_SystemsDirector.get();
+		for (auto& system : systems)
+		{
+			auto systemType = system["System"].as<std::string>();
+			
+			System* newSystem = director->CreateSystemFromName(systemType);
+
+			if (!newSystem)
+			{
+				//FE_CORE_ASSERT(false, "Deserialization failed");
+				FE_LOG_CORE_ERROR("Deserialization of {0} failed", systemType);
+				continue;
+			}
+			newSystem->m_UUID = system["UUID"].as<uint64_t>();
+			newSystem->Deserialize((YAML::Node)system, world);
+		}
+
+		auto& systemUpdates = data["System Updates"];
+		DeserializeSystemUpdates<SimulationStages::FrameStart >(systemUpdates["FrameStart" ], director);
+		DeserializeSystemUpdates<SimulationStages::PrePhysics >(systemUpdates["PrePhysics" ], director);
+		DeserializeSystemUpdates<SimulationStages::Physics    >(systemUpdates["Physics"    ], director);
+		DeserializeSystemUpdates<SimulationStages::PostPhysics>(systemUpdates["PostPhysics"], director);
+		DeserializeSystemUpdates<SimulationStages::FrameEnd	  >(systemUpdates["FrameEnd"   ], director);
+
+		auto& actors = data["Actors"];
+		for (auto& actor : actors)
+		{
+			BaseEntity newActorHead = world->CreateOrGetEntityWithUUID(actor["UUID"].as<UUID>());
+			auto& actorData = world->m_Registry.emplace<CActorData>(newActorHead.ID());
+			Actor newActor(actorData, world);
+
+			auto& behaviors = actor["Behaviors"];
+			for (auto& behavior : behaviors)
+			{
+				auto behaviorType = behavior["Behavior"].as<std::string>();
+				auto* item = BehaviorsRegistry::GetInstance().GetItemFromName(behaviorType);
+				if (!item)
+				{
+					//FE_CORE_ASSERT(false, "Deserialization failed");
+					FE_LOG_CORE_ERROR("Deserialization of {0} failed", behaviorType);
+					continue;
+				}
+				auto& createFunkPtr = item->Create;
+				Behavior* newBehavior = (newActor.*createFunkPtr)();
+				newBehavior->m_UUID = behavior["UUID"].as<UUID>();
+				newBehavior->Deserialize((YAML::Node)behavior, world);
+			}
+
+			auto& behaviorUpdates = actor["Updates"];
+			DeserializeBehaviorUpdates<SimulationStages::FrameStart >(behaviorUpdates["FrameStart" ], newActor);
+			DeserializeBehaviorUpdates<SimulationStages::PrePhysics >(behaviorUpdates["PrePhysics" ], newActor);
+			DeserializeBehaviorUpdates<SimulationStages::Physics    >(behaviorUpdates["Physics"    ], newActor);
+			DeserializeBehaviorUpdates<SimulationStages::PostPhysics>(behaviorUpdates["PostPhysics"], newActor);
+			DeserializeBehaviorUpdates<SimulationStages::FrameEnd	>(behaviorUpdates["FrameEnd"   ], newActor);
+
+			auto& entities = actor["Entities"];
+			for (auto& entity : entities)
+			{
+				// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as its prohibited and will be made impossible in future
+				BaseEntity newEntity = world->CreateOrGetEntityWithUUID(entity["UUID"].as<UUID>());
+				newEntity.Emplace<CEntityName>(entity["Entity"].as<std::string>());
+				
+				auto head = world->CreateOrGetEntityWithUUID(entity["Head"].as<UUID>());
+				newEntity.Emplace<CHeadEntity>().HeadEntity = head.ID();
+
+				newEntity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
+
+				auto& node = newEntity.Emplace<CEntityNode>();
+				DeserializeEntityNode((YAML::Node)entity["Node"], node, world);
+
+				newEntity.Emplace<CTransformGlobal>();
+				newEntity.Flag<CDirtyFlag<CTransformGlobal>>();
+				auto& transform = newEntity.Emplace<CTransformLocal>();
+				DeserializeTransform((YAML::Node)entity["Transform"], transform.Transform);
+
+				auto& compReg = ComponentTypesRegistry::GetInstance();
+				for (auto& item : compReg.DataItems)
+				{
+					auto& nameFunkPtr = item.Name;
+					auto compName = (compReg.*nameFunkPtr)();
+
+					auto compData = entity[compName];
+					if (compData)
+					{
+						auto& createFunkPtr = item.Emplacer;
+						(newEntity.*createFunkPtr)();
+						auto& getFunkPtr = item.Getter;
+						DataComponent* component = (newEntity.*getFunkPtr)();
+						component->Deserialize(compData);
+					}
+				}
+			}
+		}
+
+		world->GetHierarchy().EnforceSafeOrder();
+		world->GetHierarchy().MakeGlobalTransformsCurrent();
+		EntityID current = world->GetRegistry().get<CEntityNode>(RootID).FirstChild;
+		while (current != NullEntityID)
+		{
+			TagsHandle(current, &world->GetRegistry()).UpdateTags();
+			current = world->GetRegistry().get<CEntityNode>(current).FirstChild;
+		}
+	}
+
+	void SceneSerializerYAML::DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world)
+	{
+		node.Parent          = world->CreateOrGetEntityWithUUID(data["Parent"].as<UUID>());
+		node.HierarchyLvl    = data["HierarchyLvl"].as<uint32_t>();
+		node.PreviousSibling = world->CreateOrGetEntityWithUUID(data["PreviousSibling"].as<UUID>());
+		node.NextSibling     = world->CreateOrGetEntityWithUUID(data["NextSibling"].as<UUID>());
+		node.ChildrenCount   = data["ChildrenCount"].as<uint32_t>();
+		node.FirstChild      = world->CreateOrGetEntityWithUUID(data["FirstChild"].as<UUID>());
+	}
+
+	void SceneSerializerYAML::DeserializeTransform(YAML::Node& data, Transform& transform)
+	{
+		transform.Position = data["Position"].as<glm::vec3>();
+		transform.Rotation = data["Rotation"].as<glm::vec3>();
+		transform.Scale    = data["Scale"   ].as<glm::vec3>();
 	}
 }

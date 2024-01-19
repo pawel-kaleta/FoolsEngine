@@ -77,6 +77,18 @@ namespace fe
 		}
 	}
 
+	Behavior* Actor::GetBehaviorFromUUID(UUID uuid)
+	{
+		for (auto& behavior : m_Data.Get()->m_Behaviors)
+		{
+			if (behavior->m_UUID == uuid)
+			{
+				return behavior.get();
+			}
+		}
+		return nullptr;
+	}
+
 	void Actor::SortUpdateEnrolls(int stage)
 	{
 		FE_PROFILER_FUNC();

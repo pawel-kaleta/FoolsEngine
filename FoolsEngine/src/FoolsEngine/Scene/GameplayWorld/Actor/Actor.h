@@ -26,7 +26,7 @@ namespace fe
 
 			tnBehavior* behavior = new tnBehavior();
 			behavior->m_HeadEntity = Entity(*this);
-			behavior->OnInitialize();
+			//behavior->OnInitialize();
 
 			{
 				std::unique_ptr<Behavior> up(behavior);
@@ -39,6 +39,8 @@ namespace fe
 		void RemoveBehavior(Behavior* behavior);
 
 		void UpdateBehaviors(SimulationStages::Stages stage);
+
+		Behavior* GetBehaviorFromUUID(UUID uuid);
 
 		template<typename tnSimulationStage>
 		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)

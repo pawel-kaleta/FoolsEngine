@@ -16,7 +16,7 @@ namespace fe
 	class Entity : public BaseEntity
 	{
 	public:
-		Entity(EntityID entityID, GameplayWorld* world)
+		Entity(EntityID entityID, const GameplayWorld* world)
 			: BaseEntity(entityID, (World*)world) {	}
 		Entity(const Entity& other) = default;
 		Entity(const BaseEntity& other);

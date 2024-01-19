@@ -114,6 +114,17 @@ namespace fe
 						FE_LOG_CORE_INFO("SERIALIZING");
 						SceneSerializerYAML::Serialize(m_Scene, "assets/scenes/Example.fescene.yaml");
 					}
+					if (ImGui::MenuItem("Deserialize"))
+					{
+						m_Scene = CreateRef<Scene>();
+
+						m_SceneHierarchyPanel.SetScene(m_Scene);
+						m_EntityInspector.SetScene(m_Scene);
+						m_ActorInspector.SetScene(m_Scene);
+						m_SystemsInspector.SetScene(m_Scene);
+
+						SceneSerializerYAML::Deserialize(m_Scene, "assets/scenes/Example.fescene.yaml");
+					}
 					ImGui::EndMenu();
 				}
 

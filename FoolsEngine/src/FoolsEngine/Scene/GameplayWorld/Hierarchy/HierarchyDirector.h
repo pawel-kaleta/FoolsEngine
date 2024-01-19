@@ -42,7 +42,7 @@ namespace fe
 				const auto& cl = m_Reg->get<CEntityNode>(left);
 				const auto& cr = m_Reg->get<CEntityNode>(right);
 
-				return cl.HierarchyLvl > cr.HierarchyLvl;
+				return cl.HierarchyLvl < cr.HierarchyLvl;
 			}
 		} m_Compare{m_Registry};
 		

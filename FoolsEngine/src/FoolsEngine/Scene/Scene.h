@@ -16,9 +16,7 @@ namespace fe
 		Scene();
 		~Scene() = default;
 
-		Entity	GetEntityWithPrimaryCamera() const;
-		void	SetPrimaryCameraEntity(Entity entity);
-		void	SetPrimaryCameraEntity(EntityID id);
+
 
 		void SimulationUpdate();
 		void PostFrameUpdate();
@@ -26,11 +24,14 @@ namespace fe
 		GameplayWorld* GetGameplayWorld() const { return m_GameplayWorld.get(); }
 
 		const std::string& GetName() const { return m_Name; }
+		void SetName(const std::string& name) { m_Name = name; }
 		const UUID GetUUID() const { return m_UUID; }
 	private:
+		friend class SceneSerializerYAML;
+
 		UUID m_UUID;
 		Scope<GameplayWorld> m_GameplayWorld;
-		EntityID             m_PrimaryCameraEntityID;
+		
 		std::string          m_Name = "Untitled Scene";
 		
 		template <typename tnSimulationStage>

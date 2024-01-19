@@ -201,11 +201,14 @@ namespace fe
         {
             auto transform = entity.GetTransformHandle().Local();
 
-            ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f, 0, 0, "%.2f");
-            ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f, 0, 0, "%.2f");
-            ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
+            bool change = false;
 
-            entity.GetTransformHandle().SetLocal(transform);
+            change = change || ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f, 0, 0, "%.2f");
+            change = change || ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f, 0, 0, "%.2f");
+            change = change || ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
+
+            if (change)
+                entity.GetTransformHandle().SetLocal(transform);
         }
     }
 

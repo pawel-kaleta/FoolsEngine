@@ -34,6 +34,7 @@ namespace fe
 
 	private:
 		friend class HierarchyDirector;
+		friend class SceneSerializerYAML;
 
 		CTags&			m_CTags;
 		CEntityNode&	m_Node;

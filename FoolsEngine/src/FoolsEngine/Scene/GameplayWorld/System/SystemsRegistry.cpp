@@ -15,13 +15,14 @@ namespace fe
 	{
 		for (auto& item : Items)
 		{
-			if (item.SystemTypeName == name)
+			auto& nameFunkPtr = item.Name;
+			if ((this->*nameFunkPtr)().compare(name) == 0)
 			{
 				return &item;
 			}
 		}
 
-		FE_CORE_ASSERT(false, "System not found in registry");
+		//FE_CORE_ASSERT(false, "System not found in registry");
 
 		return nullptr;
 	}

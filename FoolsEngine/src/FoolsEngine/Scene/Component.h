@@ -31,6 +31,7 @@ namespace fe
 
 		virtual void DrawInspectorWidget(BaseEntity entity);
 		virtual void Serialize(YAML::Emitter& emitter);
+		virtual void Deserialize(YAML::Node& data);
 	};
 
 	struct SpatialComponent : DataComponent
@@ -95,10 +96,6 @@ namespace fe
 
 		FE_COMPONENT_SETUP(CTags, "Tags");
 
-	private:
-		friend class TagsHandle;
-		friend class HierarchyDirector;
-
 		Tags Global;
 		Tags Local;
 	};
@@ -111,6 +108,7 @@ namespace fe
 	private:
 		friend class TransformHandle;
 		friend class HierarchyDirector;
+		friend class SceneSerializerYAML;
 
 		Transform Transform;
 	};
@@ -128,10 +126,12 @@ namespace fe
 	struct CCamera final : SpatialComponent
 	{
 		Camera Camera;
+		bool IsPrimary = false;
 
 		FE_COMPONENT_SETUP(CCamera, "Camera");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
 	};
 
 	struct CTile final : SpatialComponent
@@ -141,6 +141,7 @@ namespace fe
 		FE_COMPONENT_SETUP(CTile, "Tile");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
 	};
 
 	struct CSprite final : SpatialComponent
@@ -150,6 +151,7 @@ namespace fe
 		FE_COMPONENT_SETUP(CSprite, "Sprite");
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
 	};
 
 	struct CDestroyFlag final : FlagComponent {};

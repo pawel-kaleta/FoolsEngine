@@ -49,7 +49,14 @@ namespace fe
 			emitter << YAML::Key << "MoveSpeed"      << YAML::Value << PlayerMovement.MoveSpeed;
 			emitter << YAML::Key << "RotationSpeed"  << YAML::Value << PlayerMovement.RotationSpeed;
 			emitter << YAML::Key << "ScaleStepSpeed" << YAML::Value << PlayerMovement.ScaleStepSpeed;
-		};
+		}
+
+		virtual void Deserialize(YAML::Node& data) override
+		{
+			PlayerMovement.MoveSpeed      = data["MoveSpeed"     ].as<float>();
+			PlayerMovement.RotationSpeed  = data["RotationSpeed" ].as<float>();
+			PlayerMovement.ScaleStepSpeed = data["ScaleStepSpeed"].as<float>();
+		}
 	};
 
 	class PlayerMovementBehavior : public Behavior
@@ -80,6 +87,14 @@ namespace fe
 		{
 			emitter << YAML::Key << "MovementComponent" << YAML::Value << m_Movement.GetEntity();
 			emitter << YAML::Key << "Player Root entity" << YAML::Value << m_Player;
+		}
+
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) override
+		{
+			m_Player = world->CreateOrGetEntityWithUUID(data["Player Root entity"].as<UUID>());
+			
+			auto movementEntity = world->CreateOrGetEntityWithUUID(data["MovementComponent"].as<UUID>());
+			m_Movement.Set(movementEntity);
 		}
 
 		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
@@ -123,8 +138,6 @@ namespace fe
 	class TestSystem : public System
 	{
 	public:
-		TestSystem() { SetName(std::string("TestSystem")); }
-
 		virtual void OnInitialize() override
 		{
 			RegisterForUpdate<SimulationStages::PostPhysics>(9);
@@ -134,6 +147,24 @@ namespace fe
 		{
 			ImGui::Text("Test System content");
 		}
+
+		FE_SYSTEM_SETUP(TestSystem, "TestSystem");
+	};
+
+	class TestSystem2 : public System
+	{
+	public:
+		virtual void OnInitialize() override
+		{
+			RegisterForUpdate<SimulationStages::PostPhysics>(10);
+		}
+
+		virtual void DrawInspectorWidget() override
+		{
+			ImGui::Text("Test System 2 content");
+		}
+
+		FE_SYSTEM_SETUP(TestSystem2, "TestSystem2");
 	};
 
 
@@ -158,7 +189,7 @@ namespace fe
 			tintedTextureTile.GetTransformHandle() = transform;
 
 			tintedTextureTile.Emplace<CCamera>();
-			scene->SetPrimaryCameraEntity(tintedTextureTile);
+			scene->GetGameplayWorld()->SetPrimaryCameraEntity(tintedTextureTile);
 		}
 
 		Entity flatTile = enviroActor.CreateChildEntity();
@@ -215,14 +246,16 @@ namespace fe
 			tags.Add(Tags::Player);
 			playerActor.GetTagsHandle().SetLocal(tags);
 
+			BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
 			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
+			movement->OnInitialize();
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
 
 			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
 			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
-			playerActor.CreateBehavior<TestBehavior>();
-			playerActor.CreateBehavior<TestBehavior2>();
+			playerActor.CreateBehavior<TestBehavior>()->OnInitialize();
+			playerActor.CreateBehavior<TestBehavior2>()->OnInitialize();
 
 			playerActor.Emplace<CPlayerMovement>();
 			ComponentTypesRegistry::GetInstance().RegisterDataComponent<CPlayerMovement>();
@@ -254,11 +287,12 @@ namespace fe
 			testCild_2.GetTransformHandle().SetLocal(transform);
 		}
 
-		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>("TestSystem");
+		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
+		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>();
 
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>()->SetName(std::string("testSystem1"));
-		scene->GetGameplayWorld()->GetSystems().CreateSystemFromName("TestSystem")->SetName(std::string("testSystem2"));
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>()->SetName(std::string("testSystem3"));
+		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
+		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem2>();
 
+		scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
 	}
 }

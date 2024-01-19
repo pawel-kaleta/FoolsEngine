@@ -11,7 +11,7 @@ namespace fe
 		m_EntityID(ID),
 		m_Registry(registry)
 	{
-		FE_CORE_ASSERT(m_Node.Parent != NullEntityID, "Node does not have a parent!");
+		//FE_CORE_ASSERT(m_Node.Parent != NullEntityID, "Node does not have a parent!");
 	}
 
 	void TagsHandle::SetLocal(const Tags& other)
@@ -28,11 +28,11 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		auto& nodeStorage = m_Registry->storage<CEntityNode>();
+		auto& tagsStorage = m_Registry->storage<CTags>();
+
 		std::queue<EntityID> toUpdate;
 		toUpdate.push(m_EntityID);
-
-		auto& tagsStorage = m_Registry->storage<CTags>();
-		auto& nodeStorage = m_Registry->storage<CEntityNode>();
 
 		EntityID current;
 		EntityID firstSibling;

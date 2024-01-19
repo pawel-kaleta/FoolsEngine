@@ -21,15 +21,26 @@ namespace fe
 		FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetComponentName());
 	}
 
+	void DataComponent::Deserialize(YAML::Node& data)
+	{
+		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetComponentName());
+	}
+
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto* scene = entity.GetWorld()->GetScene();
+		auto* world = entity.GetWorld();
 
-		bool primary = entity.ID() == scene->GetEntityWithPrimaryCamera().ID();
+		if (world->IsGameplayWorld())
+		{
+			if (entity.ID() == ((GameplayWorld*)world)->GetEntityWithPrimaryCamera().ID())
+			{
+				IsPrimary = true;
+			}
 
-		if (ImGui::Checkbox("Primary", &primary))
-			if (primary)
-				scene->SetPrimaryCameraEntity(Entity(entity));
+			if (ImGui::Checkbox("Primary", &IsPrimary))
+				if (IsPrimary)
+					((GameplayWorld*)world)->SetPrimaryCameraEntity(Entity(entity));
+		}
 
 		constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
 		const char* currentProjectionTypeString = projectionTypeStrings[(int)Camera.GetProjectionType()];
@@ -84,6 +95,8 @@ namespace fe
 
 	void CCamera::Serialize(YAML::Emitter& emitter)
 	{
+		emitter << YAML::Key << "IsPrimary"        << YAML::Value << IsPrimary;
+
 		emitter << YAML::Key << "ProjectionType"   << YAML::Value << Camera.GetProjectionType();
 
 		emitter << YAML::Key << "PerspectiveNear"  << YAML::Value << Camera.GetPerspectiveNearClip();
@@ -93,6 +106,21 @@ namespace fe
 		emitter << YAML::Key << "OrthographicNear" << YAML::Value << Camera.GetOrthographicNearClip();
 		emitter << YAML::Key << "OrthographicFar"  << YAML::Value << Camera.GetOrthographicFarClip();
 		emitter << YAML::Key << "OrthographicZoom" << YAML::Value << Camera.GetOrthographicZoom();
+	}
+
+	void CCamera::Deserialize(YAML::Node& data)
+	{
+		IsPrimary = data["IsPrimary"].as<bool>();
+
+		Camera.SetProjectionType((Camera::ProjectionType)data["ProjectionType"].as<int>());
+			   
+		Camera.SetPerspectiveNearClip( data["PerspectiveNear" ].as<float>());
+		Camera.SetPerspectiveFarClip(  data["PerspectiveFar"  ].as<float>());
+		Camera.SetPerspectiveFOV(      data["PerspectiveFOV"  ].as<float>());
+								   
+		Camera.SetOrthographicNearClip(data["OrthographicNear"].as<float>());
+		Camera.SetOrthographicFarClip( data["OrthographicFar" ].as<float>());
+		Camera.SetOrthographicZoom(    data["OrthographicZoom"].as<float>());
 	}
 
 	void CTile::DrawInspectorWidget(BaseEntity entity)
@@ -148,6 +176,13 @@ namespace fe
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Tile.TextureTilingFactor;
 	}
 
+	void CTile::Deserialize(YAML::Node& data)
+	{
+		Tile.Color = data["Color"].as<glm::vec4>();
+		Tile.Texture = TextureLibrary::Get(data["Texture"].as<std::string>());
+		Tile.TextureTilingFactor = data["Tiling"].as<float>();
+	}
+
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
 		auto& textures = TextureLibrary::GetAll();
@@ -196,5 +231,12 @@ namespace fe
 		emitter << YAML::Key << "Color"   << YAML::Value << Sprite.Color;
 		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture->GetName().c_str();
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Sprite.TextureTilingFactor;
+	}
+
+	void CSprite::Deserialize(YAML::Node& data)
+	{
+		Sprite.Color = data["Color"].as<glm::vec4>();
+		Sprite.Texture = TextureLibrary::Get(data["Texture"].as<std::string>());
+		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 }

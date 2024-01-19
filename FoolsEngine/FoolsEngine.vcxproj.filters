@@ -453,9 +453,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Hierarchy\TransformHandle.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\Hierarchy</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp">
-      <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
@@ -471,5 +468,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp" />
   </ItemGroup>
 </Project>

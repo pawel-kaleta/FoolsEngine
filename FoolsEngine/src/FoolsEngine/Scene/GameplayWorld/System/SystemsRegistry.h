@@ -11,20 +11,20 @@ namespace fe
 	public:
 		struct Item
 		{
-			System* (SystemsDirector::* Create)();
-			std::string SystemTypeName;
+			System*     (SystemsDirector::* Create)();
+			std::string (SystemsRegistry::* Name)() const;
 		};
 		std::vector<Item> Items;
 
 		void RegisterSystems();
 
 		template <typename tnSystem>
-		void RegisterSystem(const std::string& systemTypeName)
+		void RegisterSystem()
 		{
 			Items.push_back(
 				Item{
 					&SystemsDirector::CreateSystemAsBase<tnSystem>,
-					systemTypeName
+					&SystemsRegistry::GetName<tnSystem>
 				}
 			);
 		}
@@ -35,5 +35,11 @@ namespace fe
 	private:
 		friend class SystemsDirector;
 		static SystemsRegistry m_Instance;
+
+		template <typename tnSystem>
+		std::string GetName() const
+		{
+			return tnSystem::GetName();
+		}
 	};
 }

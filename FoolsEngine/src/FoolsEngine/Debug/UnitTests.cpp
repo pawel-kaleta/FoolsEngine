@@ -62,10 +62,10 @@ namespace fe
 
 		TestEvent event = TestEvent(99);
 
-		if ( "Custom" == (event.GetName()) )
-			FE_LOG_CORE_INFO("event.GetName() test: PASSED" );
+		if ( "Custom" == (event.GetSystemName()) )
+			FE_LOG_CORE_INFO("event.GetSystemName() test: PASSED" );
 		else
-			FE_LOG_CORE_ERROR("event.GetName() test: FAILED");
+			FE_LOG_CORE_ERROR("event.GetSystemName() test: FAILED");
 
 		if (event.GetEventType() == EventType::Custom)
 			FE_LOG_CORE_INFO("event.GetEventType() test: PASSED");

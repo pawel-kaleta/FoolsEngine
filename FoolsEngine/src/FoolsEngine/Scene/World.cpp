@@ -37,9 +37,25 @@ namespace fe
 		return entity;
 	}
 
+	BaseEntity World::CreateOrGetEntityWithUUID(UUID uuid)
+	{
+		if (0 == uuid)
+		{
+			return BaseEntity();
+		}
+		EntityID id = TranslateID(uuid);
+		if (id == NullEntityID)
+		{
+			return CreateEntityWithUUID(uuid);
+		}
+		return BaseEntity(id, this);
+	}
+
 	EntityID World::TranslateID(UUID uuid)
 	{
-		FE_CORE_ASSERT(m_PersistentToTransientIDsMap.find(uuid) != m_PersistentToTransientIDsMap.end(), "UUID not found in Entity UUID to EntityID map");
+		if (m_PersistentToTransientIDsMap.find(uuid) == m_PersistentToTransientIDsMap.end())
+			return NullEntityID;
+
 		return m_PersistentToTransientIDsMap.at(uuid);
 	}
 }

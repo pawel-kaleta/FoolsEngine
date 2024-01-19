@@ -74,7 +74,7 @@ namespace fe
                             ImGui::PushID(++uniqueIdWrap);
                             auto& sys = updateEnroll.System;
 
-                            if (ImGui::InputInt(sys->GetName().c_str(), (int*)&updateEnroll.Priority))
+                            if (ImGui::InputInt(sys->GetSystemName().c_str(), (int*)&updateEnroll.Priority))
                             {
                                 systemsDirector.SortSystemUpdateEnrolls(stage);
                             }
@@ -102,7 +102,7 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        auto& name = system->GetName();
+        auto& name = system->GetSystemName();
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
@@ -133,36 +133,6 @@ namespace fe
 
         if (widget_open)
         {
-            static char buffer[256];
-
-            if (ImGui::Button("Change name"))
-            {
-                memset(buffer, 0, sizeof(buffer));
-                strncpy_s(buffer, name.c_str(), sizeof(buffer));
-
-                ImGui::OpenPopup("Change systems name");
-            }
-
-            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-            if (ImGui::BeginPopupModal("Change systems name", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-            {               
-                ImGui::InputText("New Name", buffer, sizeof(buffer));
-                
-                if (ImGui::Button("OK", ImVec2(120, 0)))
-                {
-                    system->SetName(std::string(buffer));
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::SetItemDefaultFocus();
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel", ImVec2(120, 0)))
-                {
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::EndPopup();
-            }
             system->DrawInspectorWidget();
         }
 

@@ -2,6 +2,7 @@
 
 #include "System.h"
 #include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
@@ -29,7 +30,7 @@ namespace fe
 
 			tnSystem* system = new tnSystem();
 			system->m_SystemsDirector = this;
-			system->OnInitialize();
+			//system->OnInitialize();
 
 			{
 				std::unique_ptr<System> up(system);
@@ -40,15 +41,18 @@ namespace fe
 
 		System* CreateSystemFromName(const std::string& systemTypeName);
 
-		System& GetSystemFromName(const std::string& name)
+		System* GetSystemFromName(const std::string& name);
+
+		System* GetSystemFromUUID(UUID uuid) const
 		{
 			for (auto& system : m_Systems)
 			{
-				if (system->GetName() == name)
+				if (uuid == system->m_UUID)
 				{
-					return *system.get();
+					return system.get();
 				}
 			}
+			return nullptr;
 		}
 	private:
 		friend class SystemsInspector;

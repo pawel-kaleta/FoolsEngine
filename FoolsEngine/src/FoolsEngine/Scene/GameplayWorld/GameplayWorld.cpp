@@ -134,4 +134,44 @@ namespace fe
 			}
 		}
 	}
+
+	Entity GameplayWorld::GetEntityWithPrimaryCamera() const
+	{
+		Entity entity(m_PrimaryCameraEntityID, this);
+		FE_CORE_ASSERT(entity, "Entity with primary camera was deleted");
+		FE_CORE_ASSERT(entity.AllOf<CCamera>(), "Primary camera was removed from its Entity");
+		return entity;
+	}
+
+	void GameplayWorld::SetPrimaryCameraEntity(Entity entity)
+	{
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Primary Camera Set.");
+
+		if (!(entity))
+		{
+			FE_CORE_ASSERT(false, "This is not a valid entity");
+			return;
+		}
+
+		if (!entity.AllOf<CCamera>())
+		{
+			FE_CORE_ASSERT(false, "This entity does not have a CCamera component");
+			return;
+		}
+
+		if (entity.m_World != (World*)this)
+		{
+			FE_CORE_ASSERT(false, "This entity does not belong to GameplayWorld of this Scene");
+			return;
+		}
+
+		m_PrimaryCameraEntityID = entity.ID();
+	}
+
+	void GameplayWorld::SetPrimaryCameraEntity(EntityID id)
+	{
+		Entity entity(id, this);
+		SetPrimaryCameraEntity(entity);
+	}
 }

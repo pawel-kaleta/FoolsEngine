@@ -23,7 +23,7 @@ namespace fe
 									   virtual const char* GetName() const override { return #type; }
 		// GetStaticType() - do not need an instance to read a type
 		// GetEventType()  - base Event class forces this implementation, also need a way to read type from unknown instance							   
-		// GetName()       - base Event class forces this implementation, also need a way to read name from unknown instance
+		// GetSystemName()       - base Event class forces this implementation, also need a way to read name from unknown instance
 	
 		enum EventCategory
 		{

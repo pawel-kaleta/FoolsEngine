@@ -44,10 +44,16 @@ namespace fe
 			m_SystemsDirector->UpdateSystems(stage);
 		}
 
+		Entity	GetEntityWithPrimaryCamera() const;
+		void	SetPrimaryCameraEntity(Entity entity);
+		void	SetPrimaryCameraEntity(EntityID id);
+
 	private:
 		friend class Entity;
 		friend class System;
+		friend class SceneSerializerYAML;
 
+		EntityID					m_PrimaryCameraEntityID;
 		Scope<HierarchyDirector>	m_Hierarchy;
 		Scope<SystemsDirector>      m_SystemsDirector;
 		ComponentDestructionManager m_DestructionManager;
@@ -61,7 +67,7 @@ namespace fe
 		template <typename tnSimulationStage>
 		bool IsActorUpdateEnrolled(EntityID actor)
 		{
-			const static auto& storage = m_Registry.storage<CUpdateEnrollFlag<tnSimulationStage>>();
+			const auto& storage = m_Registry.storage<CUpdateEnrollFlag<tnSimulationStage>>();
 			return storage.contains(actor);
 		}
 

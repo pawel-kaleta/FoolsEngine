@@ -16,7 +16,7 @@ namespace fe
 		virtual void OnInitialize() {};
 
 		virtual void OnUpdate_FrameStart()	{};
-		virtual void OnUpdate_PrePhysics()	{};
+		virtual void OnUpdate_PrePhysics()  { FE_LOG_CORE_ERROR("Base OnUpdate!"); };
 		virtual void OnUpdate_Physics()		{};
 		virtual void OnUpdate_PostPhysics()	{};
 		virtual void OnUpdate_FrameEnd()	{};
@@ -28,6 +28,7 @@ namespace fe
 		virtual std::string GetBehaviorName() const { FE_LOG_CORE_ERROR("Unnamed Behavior"); return "Unnamed Behavior"; }
 		static std::string GetName() { return "Base Behavior"; }
 		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetBehaviorName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetBehaviorName()); }
 		UUID GetUUID() const { return m_UUID; }
 
 	protected:
@@ -72,6 +73,7 @@ namespace fe
 		}
 	private:
 		friend class Actor;
+		friend class SceneSerializerYAML;
 		
 		Entity	m_HeadEntity;
 		UUID	m_UUID;

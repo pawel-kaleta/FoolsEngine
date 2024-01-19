@@ -27,6 +27,9 @@ namespace fe
 		{
 			return entt::to_entity(m_Registry, component);
 		}
+
+		// Use only when deserializing
+		BaseEntity CreateOrGetEntityWithUUID(UUID uuid);
 	protected:
 		friend class Entity;
 		friend class Actor;

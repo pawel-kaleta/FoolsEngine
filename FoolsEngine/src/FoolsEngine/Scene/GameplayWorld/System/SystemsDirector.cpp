@@ -17,8 +17,25 @@ namespace fe
 
 	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
 	{
-		auto& createPtr = SystemsRegistry::GetInstance().GetItem(systemTypeName)->Create;
-		return (this->*createPtr)();
+		auto* item = SystemsRegistry::GetInstance().GetItem(systemTypeName);
+		if (item)
+		{
+			auto& createPtr = item->Create;
+			return (this->*createPtr)();
+		}
+		return nullptr;
+	}
+
+	System* SystemsDirector::GetSystemFromName(const std::string& name)
+	{
+		for (auto& system : m_Systems)
+		{
+			if (system->GetSystemName() == name)
+			{
+				return system.get();
+			}
+		}
+		return nullptr;
 	}
 
 	void SystemsDirector::SortSystemUpdateEnrolls(int stage)

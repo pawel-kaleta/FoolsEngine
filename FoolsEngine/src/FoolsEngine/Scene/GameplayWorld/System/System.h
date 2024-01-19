@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine\Core\UUID.h"
+
 #include <string>
 
 #include <yaml-cpp\yaml.h>
@@ -7,6 +9,7 @@
 namespace fe
 {
 	class SystemsDirector;
+	class GameplayWorld;
 
 	class System
 	{
@@ -26,10 +29,11 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		const std::string& GetName() const { return m_Name; }
-		void SetName(std::string& name) { m_Name = name; }
+		virtual std::string GetSystemName() const { return "BaseSystem"; }
 		UUID GetUUID() const { return m_UUID; }
-		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", m_Name); }
+		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetSystemName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world);
+		static std::string GetName() { return "BaseSystem"; }
 
 	protected:
 		template<typename tnSimulationStage>
@@ -54,9 +58,12 @@ namespace fe
 	private:
 		UUID m_UUID;
 		SystemsDirector* m_SystemsDirector;
-		std::string m_Name = "System";
 
 		friend class SystemsDirector;
-
+		friend class SceneSerializerYAML;
 	};
+
+#define FE_SYSTEM_SETUP(type, name) \
+	static std::string GetName() { return name; } \
+	virtual std::string GetSystemName() const override { return name; }
 }

@@ -41,8 +41,6 @@ namespace fe
 			auto a3 = &Entity::RemoveIfExist<tnComponent>;
 			auto a4 = &ComponentTypesRegistry::GetName<tnComponent>;
 
-
-
 			DataItems.push_back(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,

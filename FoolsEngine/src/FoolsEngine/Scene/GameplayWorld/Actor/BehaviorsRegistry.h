@@ -10,12 +10,11 @@ namespace fe
 	public:
 		static BehaviorsRegistry& GetInstance() { return s_Instance; }
 
-		struct BehaviorsRegistryItem
+		struct Item
 		{
 			Behavior*   (Actor::* Create)();
 			std::string (BehaviorsRegistry::* Name)();
 		};
-		std::vector<BehaviorsRegistryItem> Items;
 
 		void RegisterBehaviors();
 
@@ -23,16 +22,23 @@ namespace fe
 		void RegisterBehavior()
 		{
 			Items.push_back(
-				BehaviorsRegistryItem{
+				Item{
 					&Actor::CreateBehaviorAsBase<tnBehavior>,
 					&BehaviorsRegistry::GetName<tnBehavior>
 				}
 			);
 		}
 
+		const Item* GetItemFromName(const std::string& name);
+
 	private:
+		friend class ActorInspector;
+
 		BehaviorsRegistry() = default;
 		static BehaviorsRegistry s_Instance;
+		
+		std::vector<Item> Items;
+
 
 		template <typename tnBehavior>
 		std::string GetName()
