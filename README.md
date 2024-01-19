@@ -34,7 +34,8 @@ If your goal is to make a game, you are better of using off-the-shelf, fully fea
 	- Performance stats
 	- Scene hierarchy vidget
 	- Actor inspector
-	- Entity inspector 
+	- Entity inspector
+ - Serialization
 
 ## Getting Started
 `FoolsEngine` uses PreMake and Visual Studio 2022 for its build system.
