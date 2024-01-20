@@ -10,7 +10,7 @@
 
 namespace fe
 {
-	std::string FileDialogs::OpenFile(const char* filter)
+	std::filesystem::path FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
@@ -22,11 +22,32 @@ namespace fe
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-		if (GetOpenFileNameA(&ofn) == true)
+		if (GetOpenFileNameA(&ofn) == TRUE)
 		{
 			return ofn.lpstrFile;
 		}
 
-		return std::string();
+		return std::filesystem::path();
+	}
+
+	std::filesystem::path FileDialogs::SaveFile(const char* defaultpath, const char* filter)
+	{
+		OPENFILENAMEA ofn;
+		CHAR szFile[260] = { 0 };
+		ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		strncpy_s(szFile, defaultpath, sizeof(szFile));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow());
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		if (GetSaveFileNameA(&ofn) == TRUE)
+		{
+			return ofn.lpstrFile;
+		}
+
+		return std::filesystem::path();
 	}
 }

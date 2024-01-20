@@ -9,18 +9,21 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		FE_LOG_CORE_TRACE("NEW EVENT: {0}", event->ToString());
-		m_eventsQueue.push_back(event);
-		FE_LOG_CORE_TRACE("SAVED EVENT: {0}", m_eventsQueue.back()->ToString());
+		m_InputBuffer.push_back(event);
 	}
 
 	void MainEventDispacher::DispachEvents(LayerStack& layerStack)
 	{
 		FE_PROFILER_FUNC();
 
-		if (m_eventsQueue.empty())
+		FE_CORE_ASSERT(m_OutputBuffer.empty(), "Secondary events buffer not empty!");
+
+		m_OutputBuffer.swap(m_InputBuffer);
+
+		if (m_OutputBuffer.empty())
 			return;
 
-		for (auto event_it = m_eventsQueue.begin(); event_it != m_eventsQueue.end(); event_it++) // auto = std::vector< Ref< Event > >::iterator
+		for (auto event_it = m_OutputBuffer.begin(); event_it != m_OutputBuffer.end(); event_it++) // auto = std::vector< Ref< Event > >::iterator
 		{
 			for (auto layer_it = layerStack.begin(); layer_it != layerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 			{
@@ -28,16 +31,9 @@ namespace fe
 				if ((*event_it)->Owned)
 					break;
 			}
-#ifdef FE_INTERNAL_BUILD
-			if (!((*event_it)->Owned))
-			{
-				//FE_LOG_CORE_WARN("Event not taken into possession: {0}", (*event_it)->ToString());
-			}
-#endif // FE_INTERNAL_BUILD
-
 		}
-		m_eventsQueue.clear();
-		//FE_LOG_CORE_DEBUG("Events dispached!");
+		m_OutputBuffer.clear();
+		FE_LOG_CORE_TRACE("Events dispached!");
 	}
 }
 

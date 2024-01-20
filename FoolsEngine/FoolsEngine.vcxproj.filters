@@ -105,9 +105,6 @@
     <ClInclude Include="src\FoolsEngine\Debug\Profiler.h">
       <Filter>FoolsEngine\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h">
-      <Filter>FoolsEngine\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
@@ -295,6 +292,7 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
+    <ClInclude Include="src\FoolsEngine\Debug\SceneTesting.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -323,9 +321,6 @@
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp">
-      <Filter>FoolsEngine\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp">

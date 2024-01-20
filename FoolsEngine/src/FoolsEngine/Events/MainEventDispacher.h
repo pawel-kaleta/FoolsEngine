@@ -14,6 +14,7 @@ namespace fe
 		void ReceiveEvent(Ref<Events::Event> event);
 		void DispachEvents(LayerStack& layerStack);
 	private:
-		std::vector<Ref<Events::Event>> m_eventsQueue;
+		std::vector<Ref<Events::Event>> m_InputBuffer;
+		std::vector<Ref<Events::Event>> m_OutputBuffer;
 	};
 }

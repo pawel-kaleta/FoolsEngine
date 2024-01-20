@@ -1,9 +1,7 @@
 #include "EditorLayer.h"
-#include "TestScene.h"
-
-
 
 #include <string>
+#include <filesystem>
 
 namespace fe
 {
@@ -25,12 +23,9 @@ namespace fe
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 
 		m_Scene = CreateRef<Scene>();
-		m_SceneHierarchyPanel.SetScene(m_Scene);
-		m_EntityInspector.SetScene(m_Scene);
-		m_ActorInspector.SetScene(m_Scene);
-		m_SystemsInspector.SetScene(m_Scene);
+		SetSceneContext(m_Scene);
 
-		TestSceneSetup(m_Scene.get()); //TestScene.h
+		//TestSceneSetup(m_Scene.get()); //TestScene.h
 	}
 
 	void EditorLayer::OnUpdate()
@@ -103,40 +98,7 @@ namespace fe
 			}
 			style.WindowMinSize.x = minWinSizeX;
 
-			if (ImGui::BeginMenuBar())
-			{
-				if (ImGui::BeginMenu("File"))
-				{
-					if (ImGui::MenuItem("Exit"))
-						Application::Get().Close();
-					if (ImGui::MenuItem("Serialize"))
-					{
-						FE_LOG_CORE_INFO("SERIALIZING");
-						SceneSerializerYAML::Serialize(m_Scene, "assets/scenes/Example.fescene.yaml");
-					}
-					if (ImGui::MenuItem("Deserialize"))
-					{
-						std::string filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene.yaml)\0*.fescene.yaml\0");
-						if (!filepath.empty())
-						{
-
-						m_Scene = CreateRef<Scene>();
-
-						m_SceneHierarchyPanel.SetScene(m_Scene);
-						m_EntityInspector.SetScene(m_Scene);
-						m_ActorInspector.SetScene(m_Scene);
-						m_SystemsInspector.SetScene(m_Scene);
-
-						//SceneSerializerYAML::Deserialize(m_Scene, "assets/scenes/Example.fescene.yaml");
-						SceneSerializerYAML::Deserialize(m_Scene, filepath);
-
-						}
-					}
-					ImGui::EndMenu();
-				}
-
-				ImGui::EndMenuBar();
-			}
+			RenderMainMenu();
 
 			RenderPanels();
 			RenderViewport();
@@ -213,11 +175,128 @@ namespace fe
 		ImGui::End();
 	}
 
+	void EditorLayer::RenderMainMenu()
+	{
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("New Scene", "Ctrl + N"))
+				{
+					NewScene();
+				}
+				if (ImGui::MenuItem("Open...", "Ctrl + O"))
+				{
+					OpenScene();
+				}
+				if (!m_SceneFilepath.empty())
+				{
+					if (ImGui::MenuItem("Save", "Ctrl + S"))
+					{
+						SaveScene(m_SceneFilepath);
+					}
+				}
+				if (ImGui::MenuItem("Save As...", "Ctrl + Shift + S"))
+				{
+					SaveSceneAs();
+				}
+				if (ImGui::MenuItem("Exit"))
+					Application::Get().Close();
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
+		}
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_Scene = CreateRef<Scene>();
+		m_SceneFilepath.clear();
+		SetSceneContext(m_Scene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene.yaml)\0*.fescene.yaml\0");
+		if (filepath.empty())
+			return;
+
+		Ref<Scene> newScene = CreateRef<Scene>();
+
+		if (SceneSerializerYAML::Deserialize(newScene, filepath))
+		{
+			m_Scene = newScene;
+			m_SceneFilepath = filepath;
+			SetSceneContext(m_Scene);
+			m_Scene->SetName(filepath.filename().string());
+		}
+		else
+		{
+			FE_LOG_CORE_ERROR("Deserialization of a scene failed: {0}", filepath.string());
+		}
+	}
+
+	void EditorLayer::SaveScene(const std::filesystem::path& path)
+	{
+		SceneSerializerYAML::Serialize(m_Scene, path);
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene.yaml", "FoolsEngine Scene (*.fescene.yaml)\0 * .fescene.yaml\0");
+		if (!filepath.empty())
+		{
+			m_SceneFilepath = filepath;
+			SaveScene(filepath);
+		}
+	}
+
+	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
+	{
+		m_SceneHierarchyPanel.SetScene(scene);
+		m_EntityInspector.SetScene(scene);
+		m_ActorInspector.SetScene(scene);
+		m_SystemsInspector.SetScene(scene);
+	}
+
 	void EditorLayer::OnEvent(Ref<Events::Event> event)
 	{
 		FE_LOG_TRACE("{0}", event);
 
 		m_CameraController->OnEvent(event);
+
+		Events::EventDispacher dispacher(event);
+		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));
 	}
 
+	void EditorLayer::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
+	{
+		if (event->GetRepeatCount() == 0)
+		{
+			bool control = InputPolling::IsKeyPressed(InputCodes::LeftControl) || InputPolling::IsKeyPressed(InputCodes::RightControl);
+			bool shift   = InputPolling::IsKeyPressed(InputCodes::LeftShift  ) || InputPolling::IsKeyPressed(InputCodes::RightShift  );
+
+			switch (event->GetKeyCode())
+			{
+			case InputCodes::N:
+				if (control)
+					NewScene();
+				break;
+			case InputCodes::O:
+				if (control)
+					OpenScene();
+				break;
+			case InputCodes::S:
+				if (control)
+				{
+					if (shift)
+						SaveSceneAs();
+					else
+						SaveScene(m_SceneFilepath);
+				}
+				break;
+			}
+		}
+	}
 }

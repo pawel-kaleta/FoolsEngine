@@ -2,20 +2,15 @@
 
 #ifdef FE_PLATFORM_WINDOWS
 
-namespace fe {
-
+namespace fe
+{
 	extern Application* CreateApplication();
 }
-//extern fe::Application* fe::CreateApplication();
 
 int main(int argc, char** argv)
 {
 	fe::Log::Init();
 	
-#ifdef FE_INTERNAL_BUILD
-	fe::Tester::Test();
-#endif // FE_INTERNAL_BUILD
-
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 	FE_LOG_CORE_INFO("////////////////////// STARTUP //////////////////////");
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");

@@ -84,7 +84,7 @@ namespace fe
 
 			if (found)
 			{
-				for (int last = enrolls[i].size() - 1; enrollPos < last; ++enrollPos)
+				for (size_t last = enrolls[i].size() - 1; enrollPos < last; ++enrollPos)
 				{
 					std::swap(enrolls[i][enrollPos], enrolls[i][enrollPos + 1]);
 				}

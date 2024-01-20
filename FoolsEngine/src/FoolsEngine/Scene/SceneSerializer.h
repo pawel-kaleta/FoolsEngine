@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "GameplayWorld\Entity.h"
 
+#include <filesystem>
 #include <yaml-cpp\yaml.h>
 
 namespace fe
@@ -12,8 +13,8 @@ namespace fe
 	class SceneSerializerYAML
 	{
 	public:
-		static void Serialize(const Ref<Scene> scene, const std::string& filepath);
-		static void Deserialize(const Ref<Scene> scene, const std::string& filepath);
+		static void Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
+		static bool Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
 
 	private:
 		static void SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter);
@@ -26,18 +27,24 @@ namespace fe
 		static void SerializeTransform(Transform transform, YAML::Emitter& emitter);
 		static void SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter);
 
-		static void DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeSystems(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeActors(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeBehaviors(Actor& actor, YAML::Node& data);
+		static bool DeserializeEntities(GameplayWorld* world, YAML::Node& data);
 
 		template <typename tnSimStage>
-		static void DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director)
+		static bool DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director)
 		{
+			if (!stageUpdates)
+				return false;
+
 			for (auto& update : stageUpdates)
 			{
-				FE_LOG_CORE_DEBUG("SimStage: {0}", SimulationStages::Names[(int)SimulationStages::EnumFromType<tnSimStage>()]);
-				auto& node = update["System"];
+				if (!update["System"] || !update["Priority"])
+					return false;
 
-				UUID uuid = node.as<UUID>();
-				System* system = director->GetSystemFromUUID(uuid);
+				System* system = director->GetSystemFromUUID(update["System"].as<UUID>());
 				if (!system)
 				{
 					FE_CORE_ASSERT(false, "Deserialization of system update enrollment failed");
@@ -45,13 +52,21 @@ namespace fe
 				}
 				system->RegisterForUpdate<tnSimStage>(update["Priority"].as<uint32_t>());
 			}
+
+			return true;
 		}
 
 		template <typename tnSimStage>
-		static void DeserializeBehaviorUpdates(const YAML::Node& stageUpdates, Actor& actor)
+		static bool DeserializeBehaviorUpdates(const YAML::Node& stageUpdates, Actor& actor)
 		{
+			if (!stageUpdates)
+				return false;
+
 			for (auto& update : stageUpdates)
 			{
+				if (!update["Behavior"] || !update["Priority"])
+					return false;
+
 				Behavior* behavior = actor.GetBehaviorFromUUID(update["Behavior"].as<UUID>());
 				if (!behavior)
 				{
@@ -60,10 +75,12 @@ namespace fe
 				}
 				behavior->RegisterForUpdate<tnSimStage>(update["Priority"].as<uint32_t>());
 			}
+
+			return true;
 		}
 
-		static void DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world);
-		static void DeserializeTransform(YAML::Node& data, Transform& transform);
+		static bool DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world);
+		static bool DeserializeTransform(YAML::Node& data, Transform& transform);
 	};
 
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Entity& entity);

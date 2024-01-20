@@ -20,7 +20,6 @@
     <ClInclude Include="src\Panels\SystemsInspector.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp" />

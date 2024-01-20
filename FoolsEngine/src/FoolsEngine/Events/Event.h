@@ -79,7 +79,6 @@ namespace fe
 			{
 				if (m_Event->GetEventType() == T::GetStaticType())
 				{
-					FE_PROFILER_FUNC();
 					func(std::static_pointer_cast<T>(m_Event));
 					return true;
 				}

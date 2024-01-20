@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 namespace fe
 {
 	class FileDialogs
 	{
 	public:
-		static std::string OpenFile(const char* filter) ;
-		static std::string SaveFile(const char* filter) {};
+		static std::filesystem::path OpenFile(const char* filter);
+		static std::filesystem::path SaveFile(const char* defaultpath, const char* filter);
 	};
 }

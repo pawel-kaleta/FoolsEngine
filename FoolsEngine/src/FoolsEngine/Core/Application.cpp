@@ -4,6 +4,7 @@
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
+#include "FoolsEngine\Debug\SceneTesting.h"
 
 namespace fe {
 
@@ -35,6 +36,10 @@ namespace fe {
 		Renderer::SetAPI(gdi);
 
 		ComponentTypesRegistry::GetInstance().RegisterComponents();
+		BehaviorsRegistry::GetInstance().RegisterBehaviors();
+		SystemsRegistry::GetInstance().RegisterSystems();
+
+		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
 	Application::~Application()
@@ -123,7 +128,6 @@ namespace fe {
 
 			m_FrameCount++;
 
-			m_Window->OnUpdate();
 			m_MainEventDispacher.DispachEvents(m_LayerStack);
 
 			if (!m_Minimized)
@@ -131,6 +135,7 @@ namespace fe {
 				UpdateLayers();
 				UpdateImGui();
 			}
+			m_Window->OnUpdate();
 
 #ifdef FE_INTERNAL_BUILD
 			if (m_ActiveProfiler)

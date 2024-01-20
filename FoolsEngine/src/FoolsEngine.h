@@ -32,7 +32,6 @@
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"
-#include "FoolsEngine\Debug\UnitTests.h"
 #endif // INTERNAL_BUILD
 
 #include <entt.hpp>

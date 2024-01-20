@@ -149,6 +149,9 @@ namespace fe
 		}
 
 		FE_SYSTEM_SETUP(TestSystem, "TestSystem");
+
+		virtual void Serialize(YAML::Emitter& emitter) const override {	}
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) override { }
 	};
 
 	class TestSystem2 : public System
@@ -167,11 +170,21 @@ namespace fe
 		FE_SYSTEM_SETUP(TestSystem2, "TestSystem2");
 	};
 
+	void RegisterAndLoadStuff()
+	{
+		TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
+		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
+		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
+		ComponentTypesRegistry::GetInstance().RegisterDataComponent<CPlayerMovement>();
+		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
+		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
+	}
 
-	void TestSceneSetup(Scene* scene)
+	void TestSceneSetup(Ref<Scene> scene)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_INFO("Test Entities Spawn");
+		FE_LOG_INFO("Test Scene Setup");
 
 		Actor enviroActor = scene->GetGameplayWorld()->CreateActor("Enviro");
 
@@ -232,8 +245,6 @@ namespace fe
 
 		Actor playerActor = scene->GetGameplayWorld()->CreateActor("Player");
 		{
-			TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-
 			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
 			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
@@ -246,19 +257,16 @@ namespace fe
 			tags.Add(Tags::Player);
 			playerActor.GetTagsHandle().SetLocal(tags);
 
-			BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
+			
 			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
 			movement->OnInitialize();
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
 
-			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
-			BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
 			playerActor.CreateBehavior<TestBehavior>()->OnInitialize();
 			playerActor.CreateBehavior<TestBehavior2>()->OnInitialize();
 
 			playerActor.Emplace<CPlayerMovement>();
-			ComponentTypesRegistry::GetInstance().RegisterDataComponent<CPlayerMovement>();
 		}
 
 		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
@@ -287,10 +295,7 @@ namespace fe
 			testCild_2.GetTransformHandle().SetLocal(transform);
 		}
 
-		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
 		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>();
-
-		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
 		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem2>();
 
 		scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();

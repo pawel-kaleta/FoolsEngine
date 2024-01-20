@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Debug\SceneTesting.h" />
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -164,7 +165,6 @@
     <ClInclude Include="src\FoolsEngine\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Profiler.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\UnitTests.h" />
     <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\FoolsEngine\Events\Event.h" />
     <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h" />
@@ -241,7 +241,6 @@
     <ClCompile Include="src\FoolsEngine\Debug\Asserts.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
-    <ClCompile Include="src\FoolsEngine\Debug\UnitTests.cpp" />
     <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />

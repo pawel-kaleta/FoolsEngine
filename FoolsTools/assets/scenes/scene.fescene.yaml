@@ -1,23 +1,23 @@
 Scene Properties:
-  Name: Untitled Scene
-  UUID: 88634776804776009
+  Name: TestScene.fescene.yaml
+  UUID: 12268284265699400708
 Worlds:
   GameplayWorld:
     Properties:
-      RootID: 3074065561005217593
+      RootID: 448316668513982633
       RootNode:
         Parent: 0
         HierarchyLvl: 0
         PreviousSibling: 0
         NextSibling: 0
         ChildrenCount: 2
-        FirstChild: 6761766878289007467
-      Primary Camera: 12205573010244984761
+        FirstChild: 42103417029007238
+      Primary Camera: 7665636042884949725
     Systems:
       - System: TestSystem
-        UUID: 10156373532385608870
+        UUID: 2545713288165125141
       - System: TestSystem2
-        UUID: 368545335271792971
+        UUID: 12748286466773092360
     System Updates:
       FrameStart:
         []
@@ -31,7 +31,7 @@ Worlds:
         []
     Actors:
       - Actor: Enviro
-        UUID: 6761766878289007467
+        UUID: 42103417029007238
         Behaviors:
           []
         Updates:
@@ -47,28 +47,28 @@ Worlds:
             []
         Entities:
           - Entity: Enviro
-            UUID: 6761766878289007467
-            Head: 6761766878289007467
+            UUID: 42103417029007238
+            Head: 42103417029007238
             Tags: 0
             Node:
-              Parent: 3074065561005217593
+              Parent: 448316668513982633
               HierarchyLvl: 1
               PreviousSibling: 0
-              NextSibling: 1136679311294322321
+              NextSibling: 6103191370965196154
               ChildrenCount: 4
-              FirstChild: 12205573010244984761
+              FirstChild: 7665636042884949725
             Transform:
               Position: [0, 0, 0]
               Rotation: [0, 0, 0]
               Scale: [1, 1, 1]
           - Entity: Entity
-            UUID: 1644016761629805704
-            Head: 6761766878289007467
+            UUID: 17328647746014556347
+            Head: 42103417029007238
             Tags: 0
             Node:
-              Parent: 6761766878289007467
+              Parent: 42103417029007238
               HierarchyLvl: 2
-              PreviousSibling: 6810360731216239355
+              PreviousSibling: 6357207676787157416
               NextSibling: 0
               ChildrenCount: 0
               FirstChild: 0
@@ -81,14 +81,14 @@ Worlds:
               Texture: Base2DTexture
               Tiling: 1
           - Entity: Entity
-            UUID: 12795109708310043864
-            Head: 6761766878289007467
+            UUID: 7756981301198778894
+            Head: 42103417029007238
             Tags: 0
             Node:
-              Parent: 6761766878289007467
+              Parent: 42103417029007238
               HierarchyLvl: 2
-              PreviousSibling: 12205573010244984761
-              NextSibling: 6810360731216239355
+              PreviousSibling: 7665636042884949725
+              NextSibling: 6357207676787157416
               ChildrenCount: 0
               FirstChild: 0
             Transform:
@@ -100,14 +100,14 @@ Worlds:
               Texture: Base2DTexture
               Tiling: 3
           - Entity: TestEntity
-            UUID: 12205573010244984761
-            Head: 6761766878289007467
+            UUID: 7665636042884949725
+            Head: 42103417029007238
             Tags: 0
             Node:
-              Parent: 6761766878289007467
+              Parent: 42103417029007238
               HierarchyLvl: 2
               PreviousSibling: 0
-              NextSibling: 12795109708310043864
+              NextSibling: 7756981301198778894
               ChildrenCount: 0
               FirstChild: 0
             Transform:
@@ -128,7 +128,7 @@ Worlds:
               Texture: Default_Texture
               Tiling: 3
       - Actor: TestChildActor
-        UUID: 6810360731216239355
+        UUID: 6357207676787157416
         Behaviors:
           []
         Updates:
@@ -144,16 +144,16 @@ Worlds:
             []
         Entities:
           - Entity: TestChildActor
-            UUID: 6810360731216239355
-            Head: 6810360731216239355
+            UUID: 6357207676787157416
+            Head: 6357207676787157416
             Tags: 0
             Node:
-              Parent: 6761766878289007467
+              Parent: 42103417029007238
               HierarchyLvl: 2
-              PreviousSibling: 12795109708310043864
-              NextSibling: 1644016761629805704
+              PreviousSibling: 7756981301198778894
+              NextSibling: 17328647746014556347
               ChildrenCount: 1
-              FirstChild: 1029228901430649297
+              FirstChild: 5722106537116506144
             Transform:
               Position: [0.300000012, -0.200000003, 0.189999998]
               Rotation: [0, 0, -40]
@@ -163,11 +163,11 @@ Worlds:
               Texture: Base2DTexture
               Tiling: 2
           - Entity: Entity
-            UUID: 1029228901430649297
-            Head: 6810360731216239355
+            UUID: 5722106537116506144
+            Head: 6357207676787157416
             Tags: 0
             Node:
-              Parent: 6810360731216239355
+              Parent: 6357207676787157416
               HierarchyLvl: 3
               PreviousSibling: 0
               NextSibling: 0
@@ -178,25 +178,25 @@ Worlds:
               Rotation: [0, 0, 0]
               Scale: [1, 1, 1]
       - Actor: Player
-        UUID: 1136679311294322321
+        UUID: 6103191370965196154
         Behaviors:
           - Behavior: PlayerMovement
-            UUID: 3541072024769491454
-            MovementComponent: 1136679311294322321
-            Player Root entity: 1136679311294322321
+            UUID: 15645621368381243089
+            MovementComponent: 6103191370965196154
+            Player Root entity: 6103191370965196154
           - Behavior: TestBehavior
-            UUID: 17618983829878378566
+            UUID: 5559411269126873
           - Behavior: TestBehavior2
-            UUID: 7315268671353732545
+            UUID: 5575563081752488728
         Updates:
           FrameStart:
             []
           PrePhysics:
-            - Behavior: 17618983829878378566
+            - Behavior: 5559411269126873
               Priority: 9
-            - Behavior: 3541072024769491454
+            - Behavior: 15645621368381243089
               Priority: 10
-            - Behavior: 7315268671353732545
+            - Behavior: 5575563081752488728
               Priority: 11
           Physics:
             []
@@ -206,18 +206,18 @@ Worlds:
             []
         Entities:
           - Entity: Player
-            UUID: 1136679311294322321
-            Head: 1136679311294322321
+            UUID: 6103191370965196154
+            Head: 6103191370965196154
             Tags: 2
             Node:
-              Parent: 3074065561005217593
+              Parent: 448316668513982633
               HierarchyLvl: 1
-              PreviousSibling: 6761766878289007467
+              PreviousSibling: 42103417029007238
               NextSibling: 0
               ChildrenCount: 2
-              FirstChild: 12159281289352080691
+              FirstChild: 14797656041617042239
             Transform:
-              Position: [-0.255310059, -0.275806427, 0.200000003]
+              Position: [0, 0, 0.200000003]
               Rotation: [0, 0, 0]
               Scale: [0.300000012, 0.300000012, 1]
             Sprite:
@@ -229,13 +229,13 @@ Worlds:
               RotationSpeed: 80
               ScaleStepSpeed: 0.200000003
           - Entity: ChildEntity_2
-            UUID: 3530105385273425950
-            Head: 1136679311294322321
+            UUID: 8844481296150007212
+            Head: 6103191370965196154
             Tags: 0
             Node:
-              Parent: 1136679311294322321
+              Parent: 6103191370965196154
               HierarchyLvl: 2
-              PreviousSibling: 12159281289352080691
+              PreviousSibling: 14797656041617042239
               NextSibling: 0
               ChildrenCount: 0
               FirstChild: 0
@@ -248,14 +248,14 @@ Worlds:
               Texture: Default_Texture
               Tiling: 1
           - Entity: ChildEntity_1
-            UUID: 12159281289352080691
-            Head: 1136679311294322321
+            UUID: 14797656041617042239
+            Head: 6103191370965196154
             Tags: 0
             Node:
-              Parent: 1136679311294322321
+              Parent: 6103191370965196154
               HierarchyLvl: 2
               PreviousSibling: 0
-              NextSibling: 3530105385273425950
+              NextSibling: 8844481296150007212
               ChildrenCount: 0
               FirstChild: 0
             Transform:
