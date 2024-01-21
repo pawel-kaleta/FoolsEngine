@@ -151,6 +151,7 @@
     <ClInclude Include="src\Panels\EntityInspector.h" />
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
     <ClInclude Include="src\Panels\SystemsInspector.h" />
+    <ClInclude Include="src\SceneTesting.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp" />

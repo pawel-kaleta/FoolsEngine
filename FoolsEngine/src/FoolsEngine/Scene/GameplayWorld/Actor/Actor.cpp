@@ -20,49 +20,22 @@ namespace fe
 
 		FE_CORE_ASSERT(found, "This behavior does not belong to this actor");
 
-		auto& enrolls = m_Data.GetCashed()->m_UpdateEnrolls;
-		for (int i = 0; i < enrolls.size(); ++i)
+		if (found)
 		{
-			found = false; //reusing foud
-			int enrollPos;
-			for (int j = 0; j < enrolls[i].size(); ++j)
-			{
-				if (enrolls[i][j].Behavior == behavior)
-				{
-					found = true;
-					enrollPos = j;
-					break;
-				}
-			}
+			RemoveUpdateEnroll<SimulationStages::Physics    >(behavior);
+			RemoveUpdateEnroll<SimulationStages::PostPhysics>(behavior);
+			RemoveUpdateEnroll<SimulationStages::PrePhysics >(behavior);
+			RemoveUpdateEnroll<SimulationStages::FrameStart >(behavior);
+			RemoveUpdateEnroll<SimulationStages::FrameEnd   >(behavior);
 
-			if (found)
-			{
-				for (size_t last = enrolls[i].size() - 1; enrollPos < last; ++enrollPos)
-				{
-					std::swap(enrolls[i][enrollPos], enrolls[i][enrollPos + 1]);
-				}
-
-				enrolls[i].pop_back();
-
-				if (enrolls[i].size() == 0)
-				{
-					static std::array<void (Actor::*)() const, (int)SimulationStages::Stages::StagesCount> unFlagPtrs = 
-					{
-						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::Physics    >>,
-						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::PostPhysics>>,
-						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::PrePhysics >>,
-						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::FrameStart >>,
-						&Actor::UnFlag<CUpdateEnrollFlag<SimulationStages::FrameEnd   >>
-					};
-
-					(this->*unFlagPtrs[i])();
-				}
-			}
+			std::swap(behaviors[position], behaviors.back());
+			if (behavior->m_Active)
+				behavior->Deactivate();
+			behavior->Shutdown();
+			behaviors.pop_back();
 		}
 
-		std::swap(behaviors[position], behaviors.back());
-		behavior->OnShutdown();
-		behaviors.pop_back();
+		return;
 	}
 
 	void Actor::UpdateBehaviors(SimulationStages::Stages stage)
@@ -73,7 +46,9 @@ namespace fe
 		
 		for (auto& updateEnroll : m_Data.GetCashed()->m_UpdateEnrolls[(int)stage])
 		{
-			(updateEnroll.Behavior->*(updateEnroll.OnUpdateFuncPtr))();
+			auto& beahavior = updateEnroll.Behavior;
+			auto& funkPtr   = updateEnroll.OnUpdateFuncPtr;
+			(beahavior->*funkPtr)();
 		}
 	}
 

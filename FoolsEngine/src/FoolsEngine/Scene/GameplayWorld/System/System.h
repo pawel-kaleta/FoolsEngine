@@ -17,7 +17,23 @@ namespace fe
 		System() = default;
 		virtual ~System() = default;
 
+		void Initialize();
+		void Activate();
+		void Deactivate();
+		void Shutdown();
+
+		virtual void DrawInspectorWidget() {};
+
+		virtual std::string GetSystemName() const { return "BaseSystem"; }
+		UUID GetUUID() const { return m_UUID; }
+		bool IsActive() const { return m_Active; }
+		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetSystemName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world);
+		static std::string GetName() { return "BaseSystem"; }
+
+	protected:
 		virtual void OnInitialize() {};
+		virtual void OnActivate() {};
 
 		virtual void OnUpdate_FrameStart()  {};
 		virtual void OnUpdate_PrePhysics()  {};
@@ -25,17 +41,9 @@ namespace fe
 		virtual void OnUpdate_PostPhysics() {};
 		virtual void OnUpdate_FrameEnd()    {};
 
+		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
-
-		virtual void DrawInspectorWidget() {};
-
-		virtual std::string GetSystemName() const { return "BaseSystem"; }
-		UUID GetUUID() const { return m_UUID; }
-		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetSystemName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world);
-		static std::string GetName() { return "BaseSystem"; }
-
-	protected:
+		
 		template<typename tnSimulationStage>
 		void RegisterForUpdate(uint32_t priority)
 		{
@@ -55,9 +63,20 @@ namespace fe
 			m_SystemsDirector->EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
 		}
 
+		template<typename tnSimulationStage>
+		void UnregisterFromUpdate()
+		{
+			FE_PROFILER_FUNC();
+
+			FE_LOG_CORE_DEBUG("Behavior Update Unregister");
+
+			m_SystemsDirector->RemoveUpdateEnroll<tnSimulationStage>(this);
+		}
+
 	private:
 		UUID m_UUID;
 		SystemsDirector* m_SystemsDirector;
+		bool m_Active = false;
 
 		friend class SystemsDirector;
 		friend class SceneSerializerYAML;

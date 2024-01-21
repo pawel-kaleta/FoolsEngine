@@ -4,7 +4,8 @@
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
-#include "FoolsEngine\Debug\SceneTesting.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
+
 
 namespace fe {
 
@@ -39,7 +40,7 @@ namespace fe {
 		BehaviorsRegistry::GetInstance().RegisterBehaviors();
 		SystemsRegistry::GetInstance().RegisterSystems();
 
-		RegisterAndLoadStuff(); //SceneTesting.h
+		
 	}
 
 	Application::~Application()

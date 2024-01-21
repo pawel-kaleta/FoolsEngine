@@ -183,7 +183,9 @@ namespace fe
                 if (ImGui::MenuItem(name.c_str()))
                 {
                     auto& create = item.Create;
-                    (actor.*create)();
+                    Behavior* behavior = (actor.*create)();
+                    behavior->Initialize();
+                    behavior->Activate();
                 }
             }
 

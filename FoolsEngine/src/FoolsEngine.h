@@ -29,7 +29,6 @@
 #include "FoolsEngine\Scene\SceneSerializer.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
 
-
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"
 #endif // INTERNAL_BUILD

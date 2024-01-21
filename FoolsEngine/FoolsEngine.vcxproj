@@ -148,7 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FoolsEngine\Debug\SceneTesting.h" />
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />

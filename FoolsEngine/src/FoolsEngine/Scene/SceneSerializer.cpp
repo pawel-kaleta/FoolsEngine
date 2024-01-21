@@ -86,7 +86,8 @@ namespace fe
 				emitter << YAML::BeginMap;
 
 				emitter << YAML::Key << "System" << YAML::Value << system->GetSystemName();
-				emitter << YAML::Key << "UUID" << YAML::Value << system->GetUUID();
+				emitter << YAML::Key << "UUID"   << YAML::Value << system->GetUUID();
+				emitter << YAML::Key << "Active" << YAML::Value << system->IsActive();
 
 				system->Serialize(emitter);
 
@@ -143,6 +144,7 @@ namespace fe
 				emitter << YAML::BeginMap;
 				emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
 				emitter << YAML::Key << "UUID" << YAML::Value << behavior->GetUUID();
+				emitter << YAML::Key << "Active" << YAML::Value << behavior->IsActive();
 				behavior->Serialize(emitter);
 				emitter << YAML::EndMap;
 			}
@@ -310,12 +312,13 @@ namespace fe
 		auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
 		world->m_PrimaryCameraEntityID = cameraEntity.ID();
 
-		DeserializeSystems(world, data);
-
 		auto& actors = data["Actors"];
 		if (actors)
 			DeserializeActors(world, actors);
 		else
+			return false;
+
+		if (!DeserializeSystems(world, data))
 			return false;
 		
 		// global transforms and global tags init
@@ -351,7 +354,9 @@ namespace fe
 				continue;
 			}
 			newSystem->m_UUID = system["UUID"].as<uint64_t>();
+			newSystem->m_Active = system["Active"].as<bool>();
 			newSystem->Deserialize((YAML::Node)system, world);
+			newSystem->Initialize();
 		}
 
 		auto& systemUpdates = data["System Updates"];
@@ -374,13 +379,13 @@ namespace fe
 			auto& actorData = world->m_Registry.emplace<CActorData>(newActorHead.ID());
 			Actor newActor(actorData, world);
 
-			if (!DeserializeBehaviors(newActor, actor))
-				return false;
-
 			auto& entities = actor["Entities"];
 			if (entities)
 				DeserializeEntities(world, entities);
 			else
+				return false;
+			
+			if (!DeserializeBehaviors(newActor, actor))
 				return false;
 		}
 
@@ -411,7 +416,9 @@ namespace fe
 			auto& createFunkPtr = item->Create;
 			Behavior* newBehavior = (actor.*createFunkPtr)();
 			newBehavior->m_UUID = behavior["UUID"].as<UUID>();
+			newBehavior->m_Active = behavior["Active"].as<bool>();
 			newBehavior->Deserialize((YAML::Node)behavior, actor.GetWorld());
+			newBehavior->Initialize();
 		}
 
 		auto& behaviorUpdates = data["Updates"];

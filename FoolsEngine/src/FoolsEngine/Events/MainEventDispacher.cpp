@@ -15,8 +15,7 @@ namespace fe
 	void MainEventDispacher::DispachEvents(LayerStack& layerStack)
 	{
 		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(m_OutputBuffer.empty(), "Secondary events buffer not empty!");
+		FE_LOG_CORE_TRACE("Dispaching events");
 
 		m_OutputBuffer.swap(m_InputBuffer);
 
@@ -33,7 +32,6 @@ namespace fe
 			}
 		}
 		m_OutputBuffer.clear();
-		FE_LOG_CORE_TRACE("Events dispached!");
 	}
 }
 

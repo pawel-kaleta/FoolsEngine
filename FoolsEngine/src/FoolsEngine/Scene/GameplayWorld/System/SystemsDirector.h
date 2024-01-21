@@ -19,6 +19,35 @@ namespace fe
 			SortSystemUpdateEnrolls(stage);
 		}
 
+		template<typename tnSimulationStage>
+		void RemoveUpdateEnroll(System* system)
+		{
+			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
+			auto& enrolls = m_SystemUpdateEnrolls[stage];
+
+			int found = false;
+			int enrollPos;
+			for (int j = 0; j < enrolls.size(); ++j)
+			{
+				if (enrolls[j].System == system)
+				{
+					found = true;
+					enrollPos = j;
+					break;
+				}
+			}
+
+			if (found)
+			{
+				for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+				{
+					std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+				}
+
+				enrolls.pop_back();
+			}
+		}
+
 		void UpdateSystems(SimulationStages::Stages stage);
 
 		template <typename tnSystem>
@@ -29,17 +58,13 @@ namespace fe
 			static_assert(std::is_base_of_v<System, tnSystem>, "This is not a system!");
 
 			tnSystem* system = new tnSystem();
+			m_Systems.emplace_back((System*)system);
+			
 			system->m_SystemsDirector = this;
-			//system->OnInitialize();
+			system->OnInitialize();
 
-			{
-				std::unique_ptr<System> up(system);
-				m_Systems.push_back(std::move(up));
-			}
 			return system;
 		}
-
-		System* CreateSystemFromName(const std::string& systemTypeName);
 
 		System* GetSystemFromName(const std::string& name);
 
@@ -75,10 +100,9 @@ namespace fe
 		void SortSystemUpdateEnrolls(int stage);
 		void RemoveSystem(System* system);
 
+		System* CreateSystemFromName(const std::string& systemTypeName);
+		
 		template <typename tnSystem>
-		System* CreateSystemAsBase()
-		{
-			return CreateSystem<tnSystem>();
-		}
+		System* CreateSystemAsBase() { return CreateSystem<tnSystem>(); }
 	};
 }

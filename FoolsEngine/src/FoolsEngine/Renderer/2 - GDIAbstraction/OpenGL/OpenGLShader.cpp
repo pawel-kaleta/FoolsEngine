@@ -72,6 +72,7 @@ namespace fe
 			return;
 		}
 
+		//maybe cash this?
 		GLint location = glGetUniformLocation(m_ProgramID, uniform.GetName().c_str());
 
 		switch (uniform.GetType())

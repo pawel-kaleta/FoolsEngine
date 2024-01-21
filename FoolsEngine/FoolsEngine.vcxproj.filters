@@ -292,7 +292,6 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
-    <ClInclude Include="src\FoolsEngine\Debug\SceneTesting.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

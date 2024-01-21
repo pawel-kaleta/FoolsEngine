@@ -14,6 +14,7 @@ namespace fe
 		void ReceiveEvent(Ref<Events::Event> event);
 		void DispachEvents(LayerStack& layerStack);
 	private:
+		// double buffering to handle events creation during dispaching
 		std::vector<Ref<Events::Event>> m_InputBuffer;
 		std::vector<Ref<Events::Event>> m_OutputBuffer;
 	};

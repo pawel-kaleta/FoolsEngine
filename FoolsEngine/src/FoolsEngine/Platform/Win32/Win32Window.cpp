@@ -57,8 +57,8 @@ namespace fe
 
 		// events polling
 		{
-			FE_LOG_CORE_TRACE("GLFW events polling");
 			FE_PROFILER_SCOPE("GLFW events polling");
+			FE_LOG_CORE_TRACE("GLFW events polling");
 			glfwPollEvents();
 		}
 		

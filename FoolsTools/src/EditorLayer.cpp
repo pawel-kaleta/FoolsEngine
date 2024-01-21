@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "SceneTesting.h"
 
 #include <string>
 #include <filesystem>
@@ -8,6 +9,7 @@ namespace fe
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer")
 	{
+		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
 	void EditorLayer::OnAttach()
@@ -181,22 +183,26 @@ namespace fe
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New Scene", "Ctrl + N"))
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 				{
 					NewScene();
 				}
-				if (ImGui::MenuItem("Open...", "Ctrl + O"))
+				if (ImGui::MenuItem("Spawn Test Scene Objects"))
+				{
+					TestSceneSetup(m_Scene);
+				}
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
 					OpenScene();
 				}
 				if (!m_SceneFilepath.empty())
 				{
-					if (ImGui::MenuItem("Save", "Ctrl + S"))
+					if (ImGui::MenuItem("Save", "Ctrl+S"))
 					{
 						SaveScene(m_SceneFilepath);
 					}
 				}
-				if (ImGui::MenuItem("Save As...", "Ctrl + Shift + S"))
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 				{
 					SaveSceneAs();
 				}

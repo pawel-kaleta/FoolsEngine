@@ -72,7 +72,7 @@ namespace fe
 			transform = newTransform;
 		}
 
-		virtual void OnInitialize() override
+		virtual void OnActivate() override
 		{
 			RegisterForUpdate<SimulationStages::PrePhysics>(10);
 		}
@@ -99,6 +99,8 @@ namespace fe
 
 		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
 
+
+
 		CompPtr<CPlayerMovement> m_Movement;
 		Entity m_Player;
 	};
@@ -111,7 +113,7 @@ namespace fe
 
 		virtual void OnUpdate_PrePhysics() override { }
 
-		virtual void OnInitialize() override
+		virtual void OnActivate() override
 		{
 			RegisterForUpdate<SimulationStages::PrePhysics>(9);
 		}
@@ -127,7 +129,7 @@ namespace fe
 
 		virtual void OnUpdate_PrePhysics() override { }
 
-		virtual void OnInitialize() override
+		virtual void OnActivate() override
 		{
 			RegisterForUpdate<SimulationStages::PrePhysics>(11);
 		}
@@ -138,7 +140,7 @@ namespace fe
 	class TestSystem : public System
 	{
 	public:
-		virtual void OnInitialize() override
+		virtual void OnActivate() override
 		{
 			RegisterForUpdate<SimulationStages::PostPhysics>(9);
 		}
@@ -157,7 +159,7 @@ namespace fe
 	class TestSystem2 : public System
 	{
 	public:
-		virtual void OnInitialize() override
+		virtual void OnActivate() override
 		{
 			RegisterForUpdate<SimulationStages::PostPhysics>(10);
 		}
@@ -259,12 +261,12 @@ namespace fe
 
 			
 			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
-			movement->OnInitialize();
 			movement->m_Player = Entity(playerActor);
 			movement->m_Movement.Set(Entity(playerActor));
+			movement->Activate();
 
-			playerActor.CreateBehavior<TestBehavior>()->OnInitialize();
-			playerActor.CreateBehavior<TestBehavior2>()->OnInitialize();
+			playerActor.CreateBehavior<TestBehavior>()->Activate();
+			playerActor.CreateBehavior<TestBehavior2>()->Activate();
 
 			playerActor.Emplace<CPlayerMovement>();
 		}
@@ -295,8 +297,8 @@ namespace fe
 			testCild_2.GetTransformHandle().SetLocal(transform);
 		}
 
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>();
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem2>();
+		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>()->Activate();
+		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem2>()->Activate();
 
 		scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
 	}

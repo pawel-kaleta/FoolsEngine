@@ -25,14 +25,10 @@ namespace fe
 			static_assert(std::is_base_of_v<Behavior, tnBehavior>, "This is not a behavior!");
 
 			tnBehavior* behavior = new tnBehavior();
+			m_Data.Get()->m_Behaviors.emplace_back((Behavior*)behavior);
+
 			behavior->m_HeadEntity = Entity(*this);
-			//behavior->OnInitialize();
-
-			{
-				std::unique_ptr<Behavior> up(behavior);
-				m_Data.Get()->m_Behaviors.push_back(std::move(up));
-			}
-
+			behavior->Initialize();
 			return behavior;
 		}
 
@@ -57,6 +53,40 @@ namespace fe
 			SortUpdateEnrolls(stage);
 		}
 
+		template<typename tnSimulationStage>
+		void RemoveUpdateEnroll(Behavior* behavior)
+		{
+			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
+			auto& enrolls =  m_Data.Get()->m_UpdateEnrolls[stage];
+
+			int found = false;
+			int enrollPos;
+			for (int j = 0; j < enrolls.size(); ++j)
+			{
+				if (enrolls[j].Behavior == behavior)
+				{
+					found = true;
+					enrollPos = j;
+					break;
+				}
+			}
+
+			if (found)
+			{
+				for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+				{
+					std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+				}
+
+				enrolls.pop_back();
+
+				if (enrolls.size() == 0)
+				{
+					UnFlag<CUpdateEnrollFlag<tnSimulationStage>>();
+				}
+			}
+		}
+
 	private:
 		friend class ActorInspector;
 		friend class BehaviorsRegistry;
@@ -68,8 +98,7 @@ namespace fe
 		template <typename tnBehavior>
 		Behavior* CreateBehaviorAsBase()
 		{
-			auto behavior = CreateBehavior<tnBehavior>();
-			return (Behavior*)behavior;
+			return (Behavior*)CreateBehavior<tnBehavior>();
 		}
 	};
 }
