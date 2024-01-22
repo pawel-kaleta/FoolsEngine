@@ -38,11 +38,11 @@ namespace fe
 		return nullptr;
 	}
 
-	void SystemsDirector::SortSystemUpdateEnrolls(int stage)
+	void SystemsDirector::SortSystemUpdateEnrolls(SimulationStages::Stages stage)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& enrolls = m_SystemUpdateEnrolls[stage];
+		auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
 		std::sort(
 			enrolls.begin(),
 			enrolls.end(),

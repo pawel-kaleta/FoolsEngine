@@ -34,7 +34,7 @@ namespace fe
 		
 		std::string          m_Name = "Untitled Scene";
 		
-		template <typename tnSimulationStage>
+		template <SimulationStages::Stages stage>
 		void Update();
 	};
 }

@@ -16,32 +16,13 @@ namespace fe
 			StagesCount
 		};
 
-		struct FrameStart	{};
-		struct PrePhysics	{};
-		struct Physics		{};
-		struct PostPhysics	{};
-		struct FrameEnd		{};
+		inline constexpr size_t Count = (size_t)Stages::StagesCount;
 
-		template <typename SimulationStage>
-		inline constexpr Stages EnumFromType()
-		{
-			if (std::is_same_v<SimulationStage, FrameStart	>) return Stages::FrameStart;
-			if (std::is_same_v<SimulationStage, PrePhysics	>) return Stages::PrePhysics;
-			if (std::is_same_v<SimulationStage, Physics		>) return Stages::Physics;
-			if (std::is_same_v<SimulationStage, PostPhysics	>) return Stages::PostPhysics;
-			if (std::is_same_v<SimulationStage, FrameEnd	>) return Stages::FrameEnd;
 
-			static_assert(
-				std::is_same_v<SimulationStage, FrameStart	> ||
-				std::is_same_v<SimulationStage, PrePhysics	> ||
-				std::is_same_v<SimulationStage, Physics		> ||
-				std::is_same_v<SimulationStage, PostPhysics	> ||
-				std::is_same_v<SimulationStage, FrameEnd	>,
-				"Did not recognise Simulation Stage!");
-
-			return Stages::StagesCount;
-		}
+		//struct FrameStart	{};
+		//struct PrePhysics	{};
+		//struct Physics		{};
+		//struct PostPhysics	{};
+		//struct FrameEnd		{};
 	};
-
-
 }

@@ -39,7 +39,7 @@ namespace fe
 			void (Behavior::* OnUpdateFuncPtr)();
 			uint32_t Priority;
 		};
-		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, (int)SimulationStages::Stages::StagesCount>;
+		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, SimulationStages::Count>;
 
 		Behaviors		m_Behaviors;
 		UpdateEnrolls	m_UpdateEnrolls;

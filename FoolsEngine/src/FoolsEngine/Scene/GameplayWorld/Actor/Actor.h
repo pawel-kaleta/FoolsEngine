@@ -38,26 +38,24 @@ namespace fe
 
 		Behavior* GetBehaviorFromUUID(UUID uuid);
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 		{
 			FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
 
-			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+			auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
 			if (updateEnrolls.size() == 0)
 			{
-				Flag<CUpdateEnrollFlag<tnSimulationStage>>();
+				Flag<CUpdateEnrollFlag<stage>>();
 			}
 			updateEnrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
 			SortUpdateEnrolls(stage);
 		}
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void RemoveUpdateEnroll(Behavior* behavior)
 		{
-			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			auto& enrolls =  m_Data.Get()->m_UpdateEnrolls[stage];
+			auto& enrolls =  m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
 
 			int found = false;
 			int enrollPos;
@@ -82,7 +80,7 @@ namespace fe
 
 				if (enrolls.size() == 0)
 				{
-					UnFlag<CUpdateEnrollFlag<tnSimulationStage>>();
+					UnFlag<CUpdateEnrollFlag<stage>>();
 				}
 			}
 		}
@@ -93,7 +91,7 @@ namespace fe
 
 		CompPtr<CActorData> m_Data;
 
-		void SortUpdateEnrolls(int stage);
+		void SortUpdateEnrolls(SimulationStages::Stages stage);
 
 		template <typename tnBehavior>
 		Behavior* CreateBehaviorAsBase()

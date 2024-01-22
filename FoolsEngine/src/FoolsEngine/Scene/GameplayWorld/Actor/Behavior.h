@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
 
 #include <yaml-cpp\yaml.h>
 
@@ -41,7 +42,7 @@ namespace fe
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void RegisterForUpdate(uint32_t priority)
 		{
 			FE_PROFILER_FUNC();
@@ -49,25 +50,26 @@ namespace fe
 			FE_LOG_CORE_DEBUG("Behavior Update Register");
 
 			void (Behavior:: * onUpdateFuncPtr)() = nullptr;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::FrameStart	>) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::PrePhysics	>) onUpdateFuncPtr = &Behavior::OnUpdate_PrePhysics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::Physics		>) onUpdateFuncPtr = &Behavior::OnUpdate_Physics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::PostPhysics	>) onUpdateFuncPtr = &Behavior::OnUpdate_PostPhysics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::FrameEnd	>) onUpdateFuncPtr = &Behavior::OnUpdate_FrameEnd;
 
+			if constexpr (stage == SimulationStages::Stages::FrameStart ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;
+			if constexpr (stage == SimulationStages::Stages::PrePhysics ) onUpdateFuncPtr = &Behavior::OnUpdate_PrePhysics;
+			if constexpr (stage == SimulationStages::Stages::Physics    ) onUpdateFuncPtr = &Behavior::OnUpdate_Physics;
+			if constexpr (stage == SimulationStages::Stages::PostPhysics) onUpdateFuncPtr = &Behavior::OnUpdate_PostPhysics;
+			if constexpr (stage == SimulationStages::Stages::FrameEnd   ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameEnd;
+			
 			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 			
-			Actor(m_HeadEntity).EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
+			Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
 		}
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void UnregisterFromUpdate()
 		{
 			FE_PROFILER_FUNC();
 
 			FE_LOG_CORE_DEBUG("Behavior Update Unregister");
 
-			Actor(m_HeadEntity).RemoveUpdateEnroll<tnSimulationStage>(this);
+			Actor(m_HeadEntity).RemoveUpdateEnroll<stage>(this);
 		}
 
 		static void DrawEntity(Entity entity, const std::string& name)

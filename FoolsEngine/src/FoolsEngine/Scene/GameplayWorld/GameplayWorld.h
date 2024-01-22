@@ -34,13 +34,12 @@ namespace fe
 
 		void DestroyScheduledComponents() { m_DestructionManager.DestroyComponents(m_Registry); }
 
-		template <typename tnSimulationStage>
+		template <SimulationStages::Stages stage>
 		void Update()
 		{
 			FE_PROFILER_FUNC();
 
-			auto stage = SimulationStages::EnumFromType<tnSimulationStage>();
-			UpdateActors(stage, &GameplayWorld::IsActorUpdateEnrolled<tnSimulationStage>);
+			UpdateActors(stage, &GameplayWorld::IsActorUpdateEnrolled<stage>);
 			m_SystemsDirector->UpdateSystems(stage);
 		}
 
@@ -64,10 +63,10 @@ namespace fe
 			m_DestructionManager.ScheduleDestructionUnsafe<tnComponent>(entityID);
 		}
 
-		template <typename tnSimulationStage>
+		template <SimulationStages::Stages stage>
 		bool IsActorUpdateEnrolled(EntityID actor)
 		{
-			const auto& storage = m_Registry.storage<CUpdateEnrollFlag<tnSimulationStage>>();
+			const auto& storage = m_Registry.storage<CUpdateEnrollFlag<stage>>();
 			return storage.contains(actor);
 		}
 

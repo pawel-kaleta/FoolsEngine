@@ -33,7 +33,7 @@ namespace fe
 		static bool DeserializeBehaviors(Actor& actor, YAML::Node& data);
 		static bool DeserializeEntities(GameplayWorld* world, YAML::Node& data);
 
-		template <typename tnSimStage>
+		template <SimulationStages::Stages stage>
 		static bool DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director)
 		{
 			if (!stageUpdates)
@@ -50,13 +50,13 @@ namespace fe
 					FE_CORE_ASSERT(false, "Deserialization of system update enrollment failed");
 					continue;
 				}
-				system->RegisterForUpdate<tnSimStage>(update["Priority"].as<uint32_t>());
+				system->RegisterForUpdate<stage>(update["Priority"].as<uint32_t>());
 			}
 
 			return true;
 		}
 
-		template <typename tnSimStage>
+		template <SimulationStages::Stages stage>
 		static bool DeserializeBehaviorUpdates(const YAML::Node& stageUpdates, Actor& actor)
 		{
 			if (!stageUpdates)
@@ -73,7 +73,7 @@ namespace fe
 					FE_CORE_ASSERT(false, "Deserialization of system update enrollment failed");
 					continue;
 				}
-				behavior->RegisterForUpdate<tnSimStage>(update["Priority"].as<uint32_t>());
+				behavior->RegisterForUpdate<stage>(update["Priority"].as<uint32_t>());
 			}
 
 			return true;

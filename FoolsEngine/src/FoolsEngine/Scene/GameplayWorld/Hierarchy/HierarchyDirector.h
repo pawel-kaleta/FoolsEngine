@@ -47,7 +47,7 @@ namespace fe
 		} m_Compare{m_Registry};
 		
 		// sorting ensures parent entities is always after a child in a storage (requirement of overall scene architecture model)
-		// additionally improves cache locality when traversing a hierarchy - this part is mostly amortized
+		// additionally improves cache locality when traversing a hierarchy - this part can be amortized
 		struct sort {
 			using It = std::reverse_iterator<std::vector<EntityID>::iterator>;
 			constexpr static int TRESHOLD = 32;
@@ -58,8 +58,8 @@ namespace fe
 			It groupByLvl(It first, It last, uint32_t level)
 			{
 				FE_PROFILER_FUNC();
-				auto l = first;
-				auto r = last;
+				auto& l = first;
+				auto& r = last;
 
 				// when there is only 1 level in scope to partition --r in for loop would go out of scope of array, this is a fix for that
 				// only first search for *r to swap is guarded, if we prove --r to be safe, we transition to unguarded version

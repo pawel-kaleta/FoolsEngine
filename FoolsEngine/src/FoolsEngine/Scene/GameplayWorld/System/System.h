@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Core\UUID.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
 
 #include <string>
 
@@ -44,7 +45,7 @@ namespace fe
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 		
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void RegisterForUpdate(uint32_t priority)
 		{
 			FE_PROFILER_FUNC();
@@ -52,25 +53,26 @@ namespace fe
 			FE_LOG_CORE_DEBUG("System Update Register");
 
 			void (System::* onUpdateFuncPtr)() = nullptr;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::FrameStart	>) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::PrePhysics	>) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::Physics		>) onUpdateFuncPtr = &System::OnUpdate_Physics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::PostPhysics	>) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
-			if (std::is_same_v<tnSimulationStage, SimulationStages::FrameEnd	>) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
 
+			if constexpr (stage == SimulationStages::Stages::FrameStart ) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
+			if constexpr (stage == SimulationStages::Stages::PrePhysics ) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
+			if constexpr (stage == SimulationStages::Stages::Physics    ) onUpdateFuncPtr = &System::OnUpdate_Physics;
+			if constexpr (stage == SimulationStages::Stages::PostPhysics) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
+			if constexpr (stage == SimulationStages::Stages::FrameEnd   ) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
+			
 			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 
-			m_SystemsDirector->EnrollForUpdate<tnSimulationStage>(this, onUpdateFuncPtr, priority);
+			m_SystemsDirector->EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
 		}
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void UnregisterFromUpdate()
 		{
 			FE_PROFILER_FUNC();
 
 			FE_LOG_CORE_DEBUG("Behavior Update Unregister");
 
-			m_SystemsDirector->RemoveUpdateEnroll<tnSimulationStage>(this);
+			m_SystemsDirector->RemoveUpdateEnroll<stage>(this);
 		}
 
 	private:

@@ -53,9 +53,7 @@ namespace fe
             }
             if (ImGui::BeginTabItem("Updates"))
             {
-                constexpr int stagesCount = (int)SimulationStages::Stages::StagesCount;
-
-                for (int stage = 0; stage < stagesCount; stage++)
+                for (int stage = 0; stage < SimulationStages::Count; stage++)
                 {
                     if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
                     {
@@ -76,7 +74,7 @@ namespace fe
 
                             if (ImGui::InputInt(sys->GetSystemName().c_str(), (int*)&updateEnroll.Priority))
                             {
-                                systemsDirector.SortSystemUpdateEnrolls(stage);
+                                systemsDirector.SortSystemUpdateEnrolls((SimulationStages::Stages)stage);
                             }
                             ImGui::PopID();
                         }

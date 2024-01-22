@@ -97,13 +97,13 @@ namespace fe
 		emitter << YAML::EndSeq;
 		emitter << YAML::Key << "System Updates" << YAML::Value << YAML::BeginMap;
 		{
-			for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
+			for (int i = 0; i < SimulationStages::Count; i++)
 			{
 				emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
 				for (auto& updateEnroll : world->GetSystems().m_SystemUpdateEnrolls[i])
 				{
 					emitter << YAML::BeginMap;
-					emitter << YAML::Key << "System" << YAML::Value << updateEnroll.System->GetUUID();
+					emitter << YAML::Key << "System"   << YAML::Value << updateEnroll.System->GetUUID();
 					emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
 					emitter << YAML::EndMap;
 				}
@@ -153,7 +153,7 @@ namespace fe
 
 		emitter << YAML::Key << "Updates" << YAML::Value << YAML::BeginMap;
 		{
-			for (int i = 0; i < (int)SimulationStages::Stages::StagesCount; i++)
+			for (int i = 0; i < (int)SimulationStages::Count; i++)
 			{
 				emitter << YAML::Key << SimulationStages::Names[i] << YAML::Value << YAML::BeginSeq;
 				for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
@@ -361,11 +361,11 @@ namespace fe
 
 		auto& systemUpdates = data["System Updates"];
 		bool success = true;
-		success &= DeserializeSystemUpdates<SimulationStages::FrameStart >(systemUpdates["FrameStart" ], director);
-		success &= DeserializeSystemUpdates<SimulationStages::PrePhysics >(systemUpdates["PrePhysics" ], director);
-		success &= DeserializeSystemUpdates<SimulationStages::Physics    >(systemUpdates["Physics"    ], director);
-		success &= DeserializeSystemUpdates<SimulationStages::PostPhysics>(systemUpdates["PostPhysics"], director);
-		success &= DeserializeSystemUpdates<SimulationStages::FrameEnd	 >(systemUpdates["FrameEnd"   ], director);
+		success &= DeserializeSystemUpdates<SimulationStages::Stages::FrameStart >(systemUpdates["FrameStart" ], director);
+		success &= DeserializeSystemUpdates<SimulationStages::Stages::PrePhysics >(systemUpdates["PrePhysics" ], director);
+		success &= DeserializeSystemUpdates<SimulationStages::Stages::Physics    >(systemUpdates["Physics"    ], director);
+		success &= DeserializeSystemUpdates<SimulationStages::Stages::PostPhysics>(systemUpdates["PostPhysics"], director);
+		success &= DeserializeSystemUpdates<SimulationStages::Stages::FrameEnd	 >(systemUpdates["FrameEnd"   ], director);
 		return success;
 	}
 
@@ -424,11 +424,11 @@ namespace fe
 		auto& behaviorUpdates = data["Updates"];
 		if (!behaviorUpdates) return false;
 		bool success = true;
-		success &= DeserializeBehaviorUpdates<SimulationStages::FrameStart >(behaviorUpdates["FrameStart" ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStages::PrePhysics >(behaviorUpdates["PrePhysics" ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStages::Physics    >(behaviorUpdates["Physics"    ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStages::PostPhysics>(behaviorUpdates["PostPhysics"], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStages::FrameEnd   >(behaviorUpdates["FrameEnd"   ], actor);
+		success &= DeserializeBehaviorUpdates<SimulationStages::Stages::FrameStart >(behaviorUpdates["FrameStart" ], actor);
+		success &= DeserializeBehaviorUpdates<SimulationStages::Stages::PrePhysics >(behaviorUpdates["PrePhysics" ], actor);
+		success &= DeserializeBehaviorUpdates<SimulationStages::Stages::Physics    >(behaviorUpdates["Physics"    ], actor);
+		success &= DeserializeBehaviorUpdates<SimulationStages::Stages::PostPhysics>(behaviorUpdates["PostPhysics"], actor);
+		success &= DeserializeBehaviorUpdates<SimulationStages::Stages::FrameEnd   >(behaviorUpdates["FrameEnd"   ], actor);
 		return success;
 	}
 

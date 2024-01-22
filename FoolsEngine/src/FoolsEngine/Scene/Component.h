@@ -159,6 +159,6 @@ namespace fe
 	template <typename tnComponent>
 	struct CDirtyFlag final : FlagComponent {};
 
-	template <typename tnSimStage>
+	template <SimulationStages::Stages stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 }

@@ -22,11 +22,11 @@ namespace fe
 
 		if (found)
 		{
-			RemoveUpdateEnroll<SimulationStages::Physics    >(behavior);
-			RemoveUpdateEnroll<SimulationStages::PostPhysics>(behavior);
-			RemoveUpdateEnroll<SimulationStages::PrePhysics >(behavior);
-			RemoveUpdateEnroll<SimulationStages::FrameStart >(behavior);
-			RemoveUpdateEnroll<SimulationStages::FrameEnd   >(behavior);
+			RemoveUpdateEnroll<SimulationStages::Stages::Physics    >(behavior);
+			RemoveUpdateEnroll<SimulationStages::Stages::PostPhysics>(behavior);
+			RemoveUpdateEnroll<SimulationStages::Stages::PrePhysics >(behavior);
+			RemoveUpdateEnroll<SimulationStages::Stages::FrameStart >(behavior);
+			RemoveUpdateEnroll<SimulationStages::Stages::FrameEnd   >(behavior);
 
 			std::swap(behaviors[position], behaviors.back());
 			if (behavior->m_Active)
@@ -64,11 +64,11 @@ namespace fe
 		return nullptr;
 	}
 
-	void Actor::SortUpdateEnrolls(int stage)
+	void Actor::SortUpdateEnrolls(SimulationStages::Stages stage)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
 		std::sort(
 			updateEnrolls.begin(),
 			updateEnrolls.end(),

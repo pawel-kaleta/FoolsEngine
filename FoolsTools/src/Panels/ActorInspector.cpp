@@ -126,9 +126,7 @@ namespace fe
             }
             if (ImGui::BeginTabItem("Updates"))
             {
-                constexpr int stagesCount = (int)SimulationStages::Stages::StagesCount;
-
-                for (int stage = 0; stage < stagesCount; stage++)
+                for (int stage = 0; stage < SimulationStages::Count; stage++)
                 {
                     if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
                     {
@@ -149,7 +147,7 @@ namespace fe
 
                             if (ImGui::InputInt(beh->GetBehaviorName().c_str(), (int*)&updateEnroll.Priority))
                             {
-                                actor.SortUpdateEnrolls(stage);
+                                actor.SortUpdateEnrolls((SimulationStages::Stages)stage);
                             }
                             ImGui::PopID();
                         }

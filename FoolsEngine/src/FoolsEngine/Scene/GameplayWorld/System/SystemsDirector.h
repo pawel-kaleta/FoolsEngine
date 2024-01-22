@@ -9,21 +9,19 @@ namespace fe
 	class SystemsDirector
 	{
 	public:
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority)
 		{
 			FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
 
-			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			m_SystemUpdateEnrolls[stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
+			m_SystemUpdateEnrolls[(size_t)stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
 			SortSystemUpdateEnrolls(stage);
 		}
 
-		template<typename tnSimulationStage>
+		template<SimulationStages::Stages stage>
 		void RemoveUpdateEnroll(System* system)
 		{
-			constexpr int stage = (int)SimulationStages::EnumFromType<tnSimulationStage>();
-			auto& enrolls = m_SystemUpdateEnrolls[stage];
+			auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
 
 			int found = false;
 			int enrollPos;
@@ -92,12 +90,12 @@ namespace fe
 			void (System::* OnUpdateFuncPtr)();
 			uint32_t Priority;
 		};
-		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, (int)SimulationStages::Stages::StagesCount>;
+		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, SimulationStages::Count>;
 
 		Systems             m_Systems;
 		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
 
-		void SortSystemUpdateEnrolls(int stage);
+		void SortSystemUpdateEnrolls(SimulationStages::Stages stage);
 		void RemoveSystem(System* system);
 
 		System* CreateSystemFromName(const std::string& systemTypeName);

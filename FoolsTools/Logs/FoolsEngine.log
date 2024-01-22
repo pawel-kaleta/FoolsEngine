@@ -1,113 +1,112 @@
-23:14:57:469474 | FE  | info     | Logging innitialized!
-23:14:57:470598 | App | info     | Logging innitialized!
-23:14:57:470697 | FE  | info     | /////////////////////////////////////////////////////
-23:14:57:470787 | FE  | info     | ////////////////////// STARTUP //////////////////////
-23:14:57:470871 | FE  | info     | /////////////////////////////////////////////////////
-23:14:57:470958 | App | info     | Logging level set to 0 - all.
-23:14:57:471041 | FE  | info     | Logging level set to 0 - all.
-23:14:57:471494 | FE  | info     | Profiler session 'Startup' started.
-23:14:57:472096 | FE  | info     | Initializing GLFW
-23:14:57:502730 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
-23:14:57:616965 | FE  | debug    | Setting events callbacks for window.
-23:14:57:617157 | FE  | info     | Events callbacks for Win10Window setted up.
-23:14:57:617471 | FE  | info     | Creating rendering context
-23:14:57:620616 | FE  | info     | Rendering platform info:
-23:14:57:620740 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-23:14:57:620922 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-23:14:57:621057 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
-23:14:57:621206 | FE  | info     | OpenGL Rendering Context created.
-23:14:57:621377 | FE  | info     | VSync disabled.
-23:14:57:621706 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-23:14:57:621933 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-23:14:57:622636 | FE  | debug    | OpenGLRendererAPI creation!
-23:14:57:622825 | FE  | info     | OpenGLRendererAPI Initialization.
-23:14:57:718413 | FE  | debug    | Loading texture, Channels: 3
-23:14:57:767892 | FE  | debug    | Loading texture, Channels: 4
-23:14:57:768248 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-23:14:57:768364 | App | info     | EditorLayer::OnAttach()
-23:14:57:768614 | FE  | info     | Scene creation
-23:14:57:768877 | FE  | info     | World Creation
-23:14:57:770872 | FE  | info     | Profiler session 'Startup' closed.
-23:14:57:771796 | FE  | info     | /////////////////////////////////////////////////////
-23:14:57:776461 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-23:14:57:777061 | FE  | info     | /////////////////////////////////////////////////////
-23:14:57:777413 | App | info     | Logging level set to 1 - debug or higher.
-23:14:57:777777 | FE  | info     | Logging level set to 1 - debug or higher.
-23:14:57:778451 | FE  | info     | Profiler session 'Runtime' started.
-23:14:57:928578 | FE  | info     | Profiler session 'Runtime' closed.
-23:14:59:499268 | App | info     | Test Scene Setup
-23:14:59:499617 | FE  | debug    | Actor Creation
-23:14:59:500054 | FE  | debug    | Entity Creation
-23:14:59:500865 | FE  | debug    | Entity Creation
-23:14:59:501509 | FE  | info     | Primary Camera Set.
-23:14:59:501621 | FE  | debug    | Entity Creation
-23:14:59:502097 | FE  | debug    | Actor Creation
-23:14:59:502321 | FE  | debug    | Entity Creation
-23:14:59:502811 | FE  | debug    | Entity Creation
-23:14:59:503135 | FE  | debug    | Entity Creation
-23:14:59:503666 | FE  | debug    | Actor Creation
-23:14:59:503768 | FE  | debug    | Entity Creation
-23:14:59:504273 | FE  | debug    | Behavior creation
-23:14:59:504494 | FE  | debug    | Behavior Update Register
-23:14:59:504831 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:14:59:505352 | FE  | debug    | Behavior creation
-23:14:59:505544 | FE  | debug    | Behavior Update Register
-23:14:59:505891 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:14:59:506251 | FE  | debug    | Behavior creation
-23:14:59:506600 | FE  | debug    | Behavior Update Register
-23:14:59:506961 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:14:59:507482 | FE  | debug    | Entity Creation
-23:14:59:507803 | FE  | debug    | Entity Creation
-23:14:59:508147 | FE  | debug    | System creation
-23:14:59:508379 | FE  | debug    | System Update Register
-23:14:59:508723 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-23:14:59:510955 | FE  | debug    | System creation
-23:14:59:511253 | FE  | debug    | System Update Register
-23:14:59:511597 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-23:15:06:862166 | FE  | error    | TestSystem2 serialization not implemented!
-23:15:06:863121 | FE  | error    | TestBehavior serialization not implemented!
-23:15:06:863323 | FE  | error    | TestBehavior2 serialization not implemented!
-23:15:10:803035 | FE  | info     | Scene creation
-23:15:10:803360 | FE  | info     | World Creation
-23:15:10:834976 | FE  | debug    | Entity Creation with UUID
-23:15:10:835213 | FE  | debug    | Entity Creation with UUID
-23:15:10:835608 | FE  | debug    | Entity Creation with UUID
-23:15:10:836418 | FE  | debug    | Entity Creation with UUID
-23:15:10:837429 | FE  | debug    | Entity Creation with UUID
-23:15:10:838583 | FE  | debug    | Behavior creation
-23:15:10:838806 | FE  | debug    | Behavior creation
-23:15:10:839107 | FE  | error    | TestBehavior deserialization not implemented!
-23:15:10:839462 | FE  | debug    | Behavior creation
-23:15:10:839896 | FE  | error    | TestBehavior2 deserialization not implemented!
-23:15:10:841233 | FE  | debug    | Behavior Update Register
-23:15:10:841537 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:15:10:842099 | FE  | debug    | Behavior Update Register
-23:15:10:842292 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:15:10:842724 | FE  | debug    | Behavior Update Register
-23:15:10:843049 | FE  | debug    | Actor: behavior EnrollForUpdate
-23:15:10:843491 | FE  | debug    | Entity Creation with UUID
-23:15:10:844024 | FE  | debug    | Entity Creation with UUID
-23:15:10:844226 | FE  | debug    | Entity Creation with UUID
-23:15:10:844595 | FE  | debug    | Entity Creation with UUID
-23:15:10:848424 | FE  | debug    | System creation
-23:15:10:848580 | FE  | debug    | System creation
-23:15:10:848956 | FE  | error    | TestSystem2 serialization not implemented!
-23:15:10:849381 | FE  | debug    | System Update Register
-23:15:10:849676 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-23:15:10:850101 | FE  | debug    | System Update Register
-23:15:10:850436 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-23:15:10:852712 | FE  | debug    | CActorData destruction
-23:15:10:852829 | FE  | debug    | CActorData destruction
-23:15:10:853213 | FE  | debug    | CActorData destruction
-23:16:00:844066 | FE  | info     | Window Close Event
-23:16:00:845576 | FE  | info     | /////////////////////////////////////////////////////
-23:16:00:845711 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-23:16:00:846144 | FE  | info     | /////////////////////////////////////////////////////
-23:16:00:846506 | App | info     | Logging level set to 0 - all.
-23:16:00:846865 | FE  | info     | Logging level set to 0 - all.
-23:16:00:847743 | FE  | info     | Profiler session 'Shutdown' started.
-23:16:00:855474 | FE  | debug    | CActorData destruction
-23:16:00:855650 | FE  | debug    | CActorData destruction
-23:16:00:855999 | FE  | debug    | CActorData destruction
-23:16:00:856504 | FE  | info     | Closing Window.
-23:16:00:889623 | FE  | info     | Profiler session 'Shutdown' closed.
+05:26:07:930539 | FE  | info     | Logging innitialized!
+05:26:07:933276 | App | info     | Logging innitialized!
+05:26:07:933373 | FE  | info     | /////////////////////////////////////////////////////
+05:26:07:933472 | FE  | info     | ////////////////////// STARTUP //////////////////////
+05:26:07:933556 | FE  | info     | /////////////////////////////////////////////////////
+05:26:07:933640 | App | info     | Logging level set to 0 - all.
+05:26:07:933722 | FE  | info     | Logging level set to 0 - all.
+05:26:07:934202 | FE  | info     | Profiler session 'Startup' started.
+05:26:07:934765 | FE  | info     | Initializing GLFW
+05:26:07:978951 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
+05:26:08:178457 | FE  | debug    | Setting events callbacks for window.
+05:26:08:178625 | FE  | info     | Events callbacks for Win10Window setted up.
+05:26:08:178966 | FE  | info     | Creating rendering context
+05:26:08:182284 | FE  | info     | Rendering platform info:
+05:26:08:182410 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+05:26:08:182526 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+05:26:08:182634 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
+05:26:08:182773 | FE  | info     | OpenGL Rendering Context created.
+05:26:08:185568 | FE  | info     | VSync disabled.
+05:26:08:186542 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+05:26:08:186847 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+05:26:08:188076 | FE  | debug    | OpenGLRendererAPI creation!
+05:26:08:188333 | FE  | info     | OpenGLRendererAPI Initialization.
+05:26:08:284074 | FE  | debug    | Loading texture, Channels: 3
+05:26:08:334945 | FE  | debug    | Loading texture, Channels: 4
+05:26:08:337078 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+05:26:08:337223 | App | info     | EditorLayer::OnAttach()
+05:26:08:337639 | FE  | info     | Scene creation
+05:26:08:337891 | FE  | info     | World Creation
+05:26:08:339980 | FE  | info     | Profiler session 'Startup' closed.
+05:26:08:343185 | FE  | info     | /////////////////////////////////////////////////////
+05:26:08:348921 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+05:26:08:359218 | FE  | info     | /////////////////////////////////////////////////////
+05:26:08:359593 | App | info     | Logging level set to 1 - debug or higher.
+05:26:08:384496 | FE  | info     | Logging level set to 1 - debug or higher.
+05:26:08:384963 | FE  | info     | Profiler session 'Runtime' started.
+05:26:08:600724 | FE  | info     | Profiler session 'Runtime' closed.
+05:26:14:998009 | App | info     | Test Scene Setup
+05:26:14:998538 | FE  | debug    | Actor Creation
+05:26:14:999044 | FE  | debug    | Entity Creation
+05:26:14:999833 | FE  | debug    | Entity Creation
+05:26:15:000432 | FE  | info     | Primary Camera Set.
+05:26:15:000547 | FE  | debug    | Entity Creation
+05:26:15:001029 | FE  | debug    | Actor Creation
+05:26:15:001249 | FE  | debug    | Entity Creation
+05:26:15:001746 | FE  | debug    | Entity Creation
+05:26:15:002067 | FE  | debug    | Entity Creation
+05:26:15:002592 | FE  | debug    | Actor Creation
+05:26:15:002695 | FE  | debug    | Entity Creation
+05:26:15:003213 | FE  | debug    | Behavior creation
+05:26:15:003439 | FE  | debug    | Behavior Update Register
+05:26:15:003809 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:15:004341 | FE  | debug    | Behavior creation
+05:26:15:004521 | FE  | debug    | Behavior Update Register
+05:26:15:004867 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:15:005229 | FE  | debug    | Behavior creation
+05:26:15:005577 | FE  | debug    | Behavior Update Register
+05:26:15:005933 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:15:006445 | FE  | debug    | Entity Creation
+05:26:15:006778 | FE  | debug    | Entity Creation
+05:26:15:007126 | FE  | debug    | System creation
+05:26:15:007395 | FE  | debug    | System Update Register
+05:26:15:007744 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+05:26:15:008165 | FE  | debug    | System creation
+05:26:15:008474 | FE  | debug    | System Update Register
+05:26:15:008815 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+05:26:29:101234 | FE  | error    | TestSystem2 serialization not implemented!
+05:26:29:102195 | FE  | error    | TestBehavior serialization not implemented!
+05:26:29:102415 | FE  | error    | TestBehavior2 serialization not implemented!
+05:26:33:846956 | FE  | info     | Scene creation
+05:26:33:847277 | FE  | info     | World Creation
+05:26:33:880550 | FE  | debug    | Entity Creation with UUID
+05:26:33:880773 | FE  | debug    | Entity Creation with UUID
+05:26:33:881127 | FE  | debug    | Entity Creation with UUID
+05:26:33:881920 | FE  | debug    | Entity Creation with UUID
+05:26:33:882946 | FE  | debug    | Entity Creation with UUID
+05:26:33:884125 | FE  | debug    | Behavior creation
+05:26:33:884331 | FE  | debug    | Behavior creation
+05:26:33:884636 | FE  | error    | TestBehavior deserialization not implemented!
+05:26:33:884967 | FE  | debug    | Behavior creation
+05:26:33:885338 | FE  | error    | TestBehavior2 deserialization not implemented!
+05:26:33:886426 | FE  | debug    | Behavior Update Register
+05:26:33:886718 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:33:887257 | FE  | debug    | Behavior Update Register
+05:26:33:887425 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:33:887821 | FE  | debug    | Behavior Update Register
+05:26:33:888130 | FE  | debug    | Actor: behavior EnrollForUpdate
+05:26:33:888543 | FE  | debug    | Entity Creation with UUID
+05:26:33:889051 | FE  | debug    | Entity Creation with UUID
+05:26:33:889235 | FE  | debug    | Entity Creation with UUID
+05:26:33:889584 | FE  | debug    | Entity Creation with UUID
+05:26:33:893441 | FE  | debug    | System creation
+05:26:33:893605 | FE  | debug    | System creation
+05:26:33:893946 | FE  | error    | TestSystem2 serialization not implemented!
+05:26:33:894339 | FE  | debug    | System Update Register
+05:26:33:894641 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+05:26:33:895056 | FE  | debug    | System Update Register
+05:26:33:895354 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+05:26:33:897600 | FE  | debug    | CActorData destruction
+05:26:33:897709 | FE  | debug    | CActorData destruction
+05:26:33:898054 | FE  | debug    | CActorData destruction
+05:26:36:743517 | FE  | info     | /////////////////////////////////////////////////////
+05:26:36:743860 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+05:26:36:744443 | FE  | info     | /////////////////////////////////////////////////////
+05:26:36:744806 | App | info     | Logging level set to 0 - all.
+05:26:36:745165 | FE  | info     | Logging level set to 0 - all.
+05:26:36:745810 | FE  | info     | Profiler session 'Shutdown' started.
+05:26:36:748302 | FE  | debug    | CActorData destruction
+05:26:36:748473 | FE  | debug    | CActorData destruction
+05:26:36:748816 | FE  | debug    | CActorData destruction
+05:26:36:749298 | FE  | info     | Closing Window.
+05:26:36:781700 | FE  | info     | Profiler session 'Shutdown' closed.

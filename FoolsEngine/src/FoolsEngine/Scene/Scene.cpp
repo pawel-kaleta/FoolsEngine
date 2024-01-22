@@ -23,29 +23,29 @@ namespace fe
 
 	
 
-	template <typename tnSimulationStage>
+	template <SimulationStages::Stages stage>
 	void Scene::Update()
 	{
 		FE_PROFILER_FUNC();
 
-		m_GameplayWorld->Update<tnSimulationStage>();
+		m_GameplayWorld->Update<stage>();
 	}
 
-	template void Scene::Update<SimulationStages::FrameStart  >();
-	template void Scene::Update<SimulationStages::PrePhysics  >();
-	template void Scene::Update<SimulationStages::Physics     >();
-	template void Scene::Update<SimulationStages::PostPhysics >();
-	template void Scene::Update<SimulationStages::FrameEnd    >();
+	template void Scene::Update<SimulationStages::Stages::FrameStart >();
+	template void Scene::Update<SimulationStages::Stages::PrePhysics >();
+	template void Scene::Update<SimulationStages::Stages::Physics    >();
+	template void Scene::Update<SimulationStages::Stages::PostPhysics>();
+	template void Scene::Update<SimulationStages::Stages::FrameEnd   >();
 
 	void Scene::SimulationUpdate()
 	{
 		FE_PROFILER_FUNC();
 
-		Update<SimulationStages::FrameStart  >();
-		Update<SimulationStages::PrePhysics  >();
-		Update<SimulationStages::Physics     >();
-		Update<SimulationStages::PostPhysics >();
-		Update<SimulationStages::FrameEnd    >();
+		Update<SimulationStages::Stages::FrameStart >();
+		Update<SimulationStages::Stages::PrePhysics >();
+		Update<SimulationStages::Stages::Physics    >();
+		Update<SimulationStages::Stages::PostPhysics>();
+		Update<SimulationStages::Stages::FrameEnd   >();
 	}
 
 	void Scene::PostFrameUpdate()
