@@ -106,10 +106,10 @@ namespace fe
 		s_Data->Batch.QuadVeriticesIt = s_Data->Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(Scene& scene, Entity cameraSet)
+	void Renderer2D::RenderScene(Scene& scene, Entity cameraEntity)
 	{
-		auto& projectionMatrix = scene.GetGameplayWorld()->GetRegistry().get<CCamera>(cameraSet).Camera;
-		auto& cameraTransform = scene.GetGameplayWorld()->GetRegistry().get<CTransformGlobal>(cameraSet).GetRef();
+		auto& projectionMatrix = scene.GetGameplayWorld()->GetRegistry().get<CCamera>(cameraEntity).Camera;
+		auto& cameraTransform = scene.GetGameplayWorld()->GetRegistry().get<CTransformGlobal>(cameraEntity).GetRef();
 		RenderScene(scene, projectionMatrix, cameraTransform);
 	}
 

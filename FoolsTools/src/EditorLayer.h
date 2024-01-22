@@ -30,6 +30,13 @@ namespace fe
 		glm::vec2	m_ViewportSize = { 0, 0 };
 		bool		m_VieportFocus = false;
 		bool		m_VieportHover = false;
+
+		enum class SceneState
+		{
+			Edit,
+			Play,
+			Pause
+		} m_SceneState = SceneState::Edit;
 		
 		SceneHierarchyPanel	m_SceneHierarchyPanel;
 		ActorInspector		m_ActorInspector;
@@ -37,15 +44,24 @@ namespace fe
 		SystemsInspector	m_SystemsInspector;
 		EntityID			m_SelectedEntityID = NullEntityID;
 
+		Ref<Texture> m_IconPlay;
+		Ref<Texture> m_IconPause;
+		Ref<Texture> m_IconStop;
+
 		void RenderViewport();
 		void RenderPanels();
 		void RenderMainMenu();
+		void RenderToolbar();
 
 		void NewScene();
 		void OpenScene();
 		void SaveScene(const std::filesystem::path& path);
 		void SaveSceneAs();
 		void SetSceneContext(const Ref<Scene>& scene);
+
+		void OnScenePlay();
+		void OnSceneStop();
+		void OnScenePause();
 
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 	};

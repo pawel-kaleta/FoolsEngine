@@ -27,7 +27,9 @@ namespace fe
 		m_Scene = CreateRef<Scene>();
 		SetSceneContext(m_Scene);
 
-		//TestSceneSetup(m_Scene.get()); //TestScene.h
+		m_IconPlay  = Texture2D::Create("resources/PlayButton.png");
+		m_IconStop  = Texture2D::Create("resources/StopButton.png");
+		m_IconPause = Texture2D::Create("resources/PauseButton.png");
 	}
 
 	void EditorLayer::OnUpdate()
@@ -35,16 +37,37 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
 
-		if (m_VieportFocus)
-		{
-			m_Scene->SimulationUpdate();
+		static const Camera* viewportCamera = &m_CameraController->GetCamera();
+		static Transform viewportCameraTransform;
 
-			m_CameraController->OnUpdate();
+		switch (m_SceneState)
+		{
+		case SceneState::Edit:
+			if (m_VieportFocus)
+				m_CameraController->OnUpdate();
+			viewportCamera = &m_CameraController->GetCamera();
+			viewportCameraTransform = m_CameraController->GetTransform();
+			break;
+		case SceneState::Play:
+			m_Scene->SimulationUpdate();
+		case SceneState::Pause:
+			Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
+			if (cameraEntity)
+			{
+				viewportCamera = &cameraEntity.Get<CCamera>().Camera;
+				viewportCameraTransform = cameraEntity.GetTransformHandle().Global();
+			}
+			else
+			{
+				viewportCamera = &m_CameraController->GetCamera();
+				viewportCameraTransform = m_CameraController->GetTransform();
+			}
 		}
+
 		m_Scene->PostFrameUpdate();
 
 		m_Framebuffer->Bind();
-		Renderer2D::RenderScene(*m_Scene, m_CameraController->GetCamera(), m_CameraController->GetTransform());
+		Renderer2D::RenderScene(*m_Scene, *viewportCamera, viewportCameraTransform);
 		m_Framebuffer->Unbind();
 	}
 
@@ -101,6 +124,7 @@ namespace fe
 			style.WindowMinSize.x = minWinSizeX;
 
 			RenderMainMenu();
+			RenderToolbar();
 
 			RenderPanels();
 			RenderViewport();
@@ -133,6 +157,49 @@ namespace fe
 		auto fbID = m_Framebuffer->GetColorAttachmentID();
 		ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+		ImGui::End();
+	}
+
+	void EditorLayer::RenderToolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		
+		switch (m_SceneState)
+		{
+		case SceneState::Edit:
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				OnScenePlay();
+			break;
+		case SceneState::Play:
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPause->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				OnScenePause();
+			ImGui::SameLine();
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				OnSceneStop();
+			break;
+		case SceneState::Pause:
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				OnScenePlay();
+			ImGui::SameLine();
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				OnSceneStop();
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
 		ImGui::End();
 	}
 
@@ -264,6 +331,24 @@ namespace fe
 		m_EntityInspector.SetScene(scene);
 		m_ActorInspector.SetScene(scene);
 		m_SystemsInspector.SetScene(scene);
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
+			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
+	
+		m_SceneState = SceneState::Play;
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+	}
+
+	void EditorLayer::OnScenePause()
+	{
+		m_SceneState = SceneState::Pause;
 	}
 
 	void EditorLayer::OnEvent(Ref<Events::Event> event)
