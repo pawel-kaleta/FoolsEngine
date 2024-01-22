@@ -6,6 +6,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "World.h"
 #include "Scene.h"
+#include "FoolsEngine/Platform/FileDialogs.h"
 
 #include "SceneSerializer.h"
 
@@ -152,6 +153,21 @@ namespace fe
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
+			if (ImGui::Selectable("Add..."))
+			{
+				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+				if (!newTextureFilepath.empty())
+				{
+					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
+					if (!TextureLibrary::Exist(textureName))
+					{
+						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string());
+						TextureLibrary::Add(texture);
+					}
+					item_current = TextureLibrary::Get(textureName);
+				}
+			}
+
 			ImGui::EndCombo();
 		}
 
@@ -172,14 +188,26 @@ namespace fe
 	void CTile::Serialize(YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Color"   << YAML::Value << Tile.Color;
-		emitter << YAML::Key << "Texture" << YAML::Value << Tile.Texture->GetName().c_str();
+		emitter << YAML::Key << "Texture" << YAML::Value << Tile.Texture->GetFilePath().c_str();
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Tile.TextureTilingFactor;
 	}
 
 	void CTile::Deserialize(YAML::Node& data)
 	{
 		Tile.Color = data["Color"].as<glm::vec4>();
-		Tile.Texture = TextureLibrary::Get(data["Texture"].as<std::string>());
+
+		const std::string textureFilePath = data["Texture"].as<std::string>();
+		std::string textureName;
+		if (textureFilePath.empty())
+			textureName = "Base2DTexture";
+		else
+			textureName = FileNameFromFilepath(textureFilePath);
+
+		if (!TextureLibrary::Exist(textureName))
+			TextureLibrary::Add(Texture2D::Create(textureFilePath));
+
+		Tile.Texture = TextureLibrary::Get(textureName);
+
 		Tile.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
@@ -209,6 +237,21 @@ namespace fe
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
+
+			if (ImGui::Selectable("Add..."))
+			{
+				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+				if (!newTextureFilepath.empty())
+				{
+					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
+					if (!TextureLibrary::Exist(textureName))
+					{
+						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string());
+						TextureLibrary::Add(texture);
+					}
+					item_current = TextureLibrary::Get(textureName);
+				}
+			}
 			ImGui::EndCombo();
 		}
 
@@ -229,14 +272,26 @@ namespace fe
 	void CSprite::Serialize(YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Color"   << YAML::Value << Sprite.Color;
-		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture->GetName().c_str();
+		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture->GetFilePath().c_str();
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Sprite.TextureTilingFactor;
 	}
 
 	void CSprite::Deserialize(YAML::Node& data)
 	{
 		Sprite.Color = data["Color"].as<glm::vec4>();
-		Sprite.Texture = TextureLibrary::Get(data["Texture"].as<std::string>());
+
+		const std::string textureFilePath = data["Texture"].as<std::string>();
+		std::string textureName;
+		if (textureFilePath.empty())
+			textureName = "Base2DTexture";
+		else
+			textureName = FileNameFromFilepath(textureFilePath);
+
+		if (!TextureLibrary::Exist(textureName))
+			TextureLibrary::Add(Texture2D::Create(textureFilePath));
+
+		Sprite.Texture = TextureLibrary::Get(textureName);
+
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 }

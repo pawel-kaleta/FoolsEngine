@@ -28,6 +28,7 @@ namespace fe {
 		void End();
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
+		bool IsBlocking() const { return m_BlockEvents; }
 	private:
 		float m_Time = 0.0f;
 		bool m_BlockEvents = false;

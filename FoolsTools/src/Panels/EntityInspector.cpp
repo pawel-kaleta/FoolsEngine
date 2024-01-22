@@ -7,6 +7,7 @@ namespace fe
     void EntityInspector::SetScene(const Ref<Scene>& scene)
     {
         m_Scene = scene;
+        m_OpenedEntityID = NullEntityID;
     }
 
     void EntityInspector::OpenEntity(EntityID entityID)

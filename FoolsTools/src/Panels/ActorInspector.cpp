@@ -9,6 +9,7 @@ namespace fe
     void ActorInspector::SetScene(const Ref<Scene>& scene)
     {
         m_Scene = scene;
+        m_OpenedActorID = NullEntityID;
     }
 
     void ActorInspector::OpenActor(EntityID entityID)

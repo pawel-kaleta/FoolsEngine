@@ -43,7 +43,7 @@ namespace fe
 		switch (m_SceneState)
 		{
 		case SceneState::Edit:
-			if (m_VieportFocus)
+			if (! Application::Get().GetImguiLayer()->IsBlocking())
 				m_CameraController->OnUpdate();
 			viewportCamera = &m_CameraController->GetCamera();
 			viewportCameraTransform = m_CameraController->GetTransform();
@@ -142,7 +142,9 @@ namespace fe
 
 		m_VieportFocus = ImGui::IsWindowFocused();
 		m_VieportHover = ImGui::IsWindowHovered();
-		Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus && m_VieportHover));
+
+		bool test = ImGui::IsItemEdited();
+		Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover));
 
 		auto& vidgetSize = ImGui::GetContentRegionAvail();
 		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y };
@@ -254,10 +256,6 @@ namespace fe
 				{
 					NewScene();
 				}
-				if (ImGui::MenuItem("Spawn Test Scene Objects"))
-				{
-					TestSceneSetup(m_Scene);
-				}
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
 					OpenScene();
@@ -273,8 +271,17 @@ namespace fe
 				{
 					SaveSceneAs();
 				}
+				ImGui::Separator();
 				if (ImGui::MenuItem("Exit"))
 					Application::Get().Close();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Debug"))
+			{
+				if (ImGui::MenuItem("Spawn Test Scene Objects"))
+				{
+					TestSceneSetup(m_Scene);
+				}
 				ImGui::EndMenu();
 			}
 
@@ -327,6 +334,7 @@ namespace fe
 
 	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
 	{
+		m_SelectedEntityID = NullEntityID;
 		m_SceneHierarchyPanel.SetScene(scene);
 		m_EntityInspector.SetScene(scene);
 		m_ActorInspector.SetScene(scene);

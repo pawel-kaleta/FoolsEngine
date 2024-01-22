@@ -37,4 +37,29 @@ namespace fe
     {
         OnShutdown();
     }
+
+    void Behavior::DrawEntity(Entity entity, const std::string& name)
+    {
+        //placeholder implementation
+        EntityID entityID = entity.ID();
+        std::string entity_ID_and_name = std::to_string(entityID);
+        if (entity.IsHead())
+        {
+            entity_ID_and_name += " [" + entity.Get<CEntityName>().EntityName + "]";
+        }
+        else
+        {
+            auto& head = entity.Get<CHeadEntity>().HeadEntity;
+
+            entity_ID_and_name += " [" + Entity(head, entity.GetWorld()).Get<CEntityName>().EntityName + "]";
+
+            entity_ID_and_name += " " + entity.Get<CEntityName>().EntityName;
+        }
+
+
+        ImGui::BeginDisabled();
+        ImGui::DragInt(name.c_str(), (int*)&entityID);
+        ImGui::EndDisabled();
+
+    }
 }

@@ -14,16 +14,16 @@ namespace fe
 
 		static void SetActiveInstance(TextureLibrary* textureLib) { s_ActiveInstance = textureLib; }
 
-		void IAdd(const Ref<Texture> texture);
-
-		bool IExist(const std::string& name) const;
-		Ref<Texture> IGet(const std::string& name);
-
 		static const std::unordered_map<std::string, Ref<Texture>>& GetAll() { return s_ActiveInstance->IGetAll(); }
-		const std::unordered_map<std::string, Ref<Texture>>& IGetAll() { return m_Textures; }
 	private:
 		static TextureLibrary* s_ActiveInstance;
 		std::unordered_map<std::string, Ref<Texture>> m_Textures;
+
+		friend class Renderer;
+		bool IExist(const std::string& name) const;
+		void IAdd(const Ref<Texture> texture);
+		Ref<Texture> IGet(const std::string& name);
+		const std::unordered_map<std::string, Ref<Texture>>& IGetAll() { return m_Textures; }
 	};
 }
 

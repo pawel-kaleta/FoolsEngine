@@ -23,7 +23,7 @@ namespace fe
 		virtual const std::string& GetName() const { return m_Name; }
 		virtual uint32_t GetID() const { return m_ID; }
 
-		const std::string& GetFilePath() const { return m_FilePath; }
+		virtual const std::string& GetFilePath() const override { return m_FilePath; }
 	private:
 		uint32_t m_Width, m_Height;
 		uint32_t m_ID;

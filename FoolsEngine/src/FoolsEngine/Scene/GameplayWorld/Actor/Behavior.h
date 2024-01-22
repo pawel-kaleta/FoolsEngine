@@ -72,15 +72,8 @@ namespace fe
 			Actor(m_HeadEntity).RemoveUpdateEnroll<stage>(this);
 		}
 
-		static void DrawEntity(Entity entity, const std::string& name)
-		{
-			//placeholder implementation
+		static void DrawEntity(Entity entity, const std::string& name);
 
-			ImGui::BeginDisabled();
-			EntityID entityID = entity.ID();
-			ImGui::DragInt(name.c_str(), (int*)&entityID);
-			ImGui::EndDisabled();
-		}
 		
 		template<typename tnComponent>
 		static void DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)

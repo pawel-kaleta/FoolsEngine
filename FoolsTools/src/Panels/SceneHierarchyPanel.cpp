@@ -7,6 +7,7 @@ namespace fe
 	void SceneHierarchyPanel::SetScene(const Ref<Scene>& scene)
 	{
 		m_Scene = scene;
+		m_SelectedEntityID = NullEntityID;;
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
