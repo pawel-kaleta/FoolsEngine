@@ -67,6 +67,9 @@ namespace fe
 
 		virtual void OnUpdate_PrePhysics() override
 		{
+			if (!(m_Player && m_Movement.GetEntity()))
+				return;
+
 			auto transform = m_Player.GetTransformHandle();
 			auto newTransform = m_Movement.Get()->PlayerMovement.CalculateNewTransform(transform.Global());
 			transform = newTransform;
@@ -259,16 +262,8 @@ namespace fe
 			tags.Add(Tags::Player);
 			playerActor.GetTagsHandle().SetLocal(tags);
 
-			
-			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
-			movement->m_Player = Entity(playerActor);
-			movement->m_Movement.Set(Entity(playerActor));
-			movement->Activate();
-
 			playerActor.CreateBehavior<TestBehavior>()->Activate();
 			playerActor.CreateBehavior<TestBehavior2>()->Activate();
-
-			playerActor.Emplace<CPlayerMovement>();
 		}
 
 		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
@@ -282,7 +277,15 @@ namespace fe
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
 			testChild_1.GetTransformHandle().SetLocal(transform);
+			
+			testChild_1.Emplace<CPlayerMovement>();
 		}
+
+		PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
+		movement->m_Player = Entity(testChild_1);
+		movement->m_Movement.Set(Entity(testChild_1));
+		movement->Activate();
+
 
 		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
 		{

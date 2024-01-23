@@ -72,18 +72,33 @@ namespace fe
 			Actor(m_HeadEntity).RemoveUpdateEnroll<stage>(this);
 		}
 
-		static void DrawEntity(Entity entity, const std::string& name);
+		static bool DrawEntity(Entity entity, const std::string& name);
 
 		
 		template<typename tnComponent>
-		static void DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)
+		static bool DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)
 		{
-			//placeholder implementation
+			auto entity = compPtr.GetEntity();
+			std::string entity_ID_and_name; 
+			bool missingComponent = true;
+			if (entity)
+			{
+				entity_ID_and_name = std::to_string(entity.ID()) + " " + entity.Get<CEntityName>().EntityName;
+				missingComponent = !entity.AllOf<tnComponent>();
+			}
+			if (missingComponent)
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, {0.75f,0.25f,0.25f,1.0f});
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+			bool selected = ImGui::Button(entity_ID_and_name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+			ImGui::SameLine();
+			ImGui::Text(name.c_str());
+			ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
+			if (missingComponent)
+				ImGui::PopStyleColor();
 
-			ImGui::BeginDisabled();
-			EntityID entityID = compPtr.GetEntity().ID();
-			ImGui::DragInt(name.c_str(), (int*)&entityID);
-			ImGui::EndDisabled();
+			return selected;
 		}
 	private:
 		friend class Actor;

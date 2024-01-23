@@ -38,28 +38,29 @@ namespace fe
         OnShutdown();
     }
 
-    void Behavior::DrawEntity(Entity entity, const std::string& name)
+    bool Behavior::DrawEntity(Entity entity, const std::string& name)
     {
-        //placeholder implementation
-        EntityID entityID = entity.ID();
-        std::string entity_ID_and_name = std::to_string(entityID);
-        if (entity.IsHead())
+        std::string entity_ID_and_name;
+        bool nullEntity = false;
+        if (entity)
         {
-            entity_ID_and_name += " [" + entity.Get<CEntityName>().EntityName + "]";
+            entity_ID_and_name = std::to_string(entity.ID()) + " " + entity.Get<CEntityName>().EntityName;
         }
         else
         {
-            auto& head = entity.Get<CHeadEntity>().HeadEntity;
-
-            entity_ID_and_name += " [" + Entity(head, entity.GetWorld()).Get<CEntityName>().EntityName + "]";
-
-            entity_ID_and_name += " " + entity.Get<CEntityName>().EntityName;
+            nullEntity = true;
+            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.75f,0.25f,0.25f,1.0f });
         }
+        ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+        bool selected = ImGui::Button(entity_ID_and_name.c_str(), {ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing()});
+        ImGui::SameLine();
+        ImGui::Text(name.c_str());
+        ImGui::PopStyleVar();
+        ImGui::PopStyleVar();
+        if (nullEntity)
+            ImGui::PopStyleColor();
 
-
-        ImGui::BeginDisabled();
-        ImGui::DragInt(name.c_str(), (int*)&entityID);
-        ImGui::EndDisabled();
-
+        return selected;
     }
 }

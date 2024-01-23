@@ -237,7 +237,7 @@ namespace fe
 		ImGui::Begin("Settings");
 		{
 			FE_PROFILER_SCOPE("Settings");
-
+			
 			if (ImGui::CollapsingHeader("Editor Camera", ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				m_CameraController->RenderWidget();
