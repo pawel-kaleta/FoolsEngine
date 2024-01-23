@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	struct CPlayerMovement : DataComponent
+	struct CMovement : DataComponent
 	{
 		struct TargetMovement {
 			float MoveSpeed = 0.5f;
@@ -34,28 +34,28 @@ namespace fe
 
 				return transform;
 			}
-		} PlayerMovement;
+		} Movement;
 
-		FE_COMPONENT_SETUP(CPlayerMovement, "PlayerMovement");
+		FE_COMPONENT_SETUP(CMovement, "Movement");
 		virtual void DrawInspectorWidget(BaseEntity entity) override
 		{
-			ImGui::DragFloat("MoveSpeed", &PlayerMovement.MoveSpeed, 0.01f);
-			ImGui::DragFloat("RotationSpeed", &PlayerMovement.RotationSpeed, 0.1f);
-			ImGui::DragFloat("ScaleStepSpeed", &PlayerMovement.ScaleStepSpeed, 0.01f);
+			ImGui::DragFloat("MoveSpeed"     , &Movement.MoveSpeed     , 0.01f);
+			ImGui::DragFloat("RotationSpeed" , &Movement.RotationSpeed , 0.10f);
+			ImGui::DragFloat("ScaleStepSpeed", &Movement.ScaleStepSpeed, 0.01f);
 		}
 
 		virtual void Serialize(YAML::Emitter& emitter) override
 		{
-			emitter << YAML::Key << "MoveSpeed"      << YAML::Value << PlayerMovement.MoveSpeed;
-			emitter << YAML::Key << "RotationSpeed"  << YAML::Value << PlayerMovement.RotationSpeed;
-			emitter << YAML::Key << "ScaleStepSpeed" << YAML::Value << PlayerMovement.ScaleStepSpeed;
+			emitter << YAML::Key << "MoveSpeed"      << YAML::Value << Movement.MoveSpeed;
+			emitter << YAML::Key << "RotationSpeed"  << YAML::Value << Movement.RotationSpeed;
+			emitter << YAML::Key << "ScaleStepSpeed" << YAML::Value << Movement.ScaleStepSpeed;
 		}
 
 		virtual void Deserialize(YAML::Node& data) override
 		{
-			PlayerMovement.MoveSpeed      = data["MoveSpeed"     ].as<float>();
-			PlayerMovement.RotationSpeed  = data["RotationSpeed" ].as<float>();
-			PlayerMovement.ScaleStepSpeed = data["ScaleStepSpeed"].as<float>();
+			Movement.MoveSpeed      = data["MoveSpeed"     ].as<float>();
+			Movement.RotationSpeed  = data["RotationSpeed" ].as<float>();
+			Movement.ScaleStepSpeed = data["ScaleStepSpeed"].as<float>();
 		}
 	};
 
@@ -71,7 +71,7 @@ namespace fe
 				return;
 
 			auto transform = m_Player.GetTransformHandle();
-			auto newTransform = m_Movement.Get()->PlayerMovement.CalculateNewTransform(transform.Global());
+			auto newTransform = m_Movement.Get()->Movement.CalculateNewTransform(transform.Global());
 			transform = newTransform;
 		}
 
@@ -80,10 +80,16 @@ namespace fe
 			RegisterForUpdate<SimulationStages::Stages::PrePhysics>(10);
 		}
 
-		virtual void DrawInspectorWidget() override
+		virtual EntityID DrawInspectorWidget() override
 		{
-			DrawCompPtr(m_Movement, "Movement Component");
-			DrawEntity(m_Player, "Player's root");
+			EntityID selection = NullEntityID;
+
+			if (DrawCompPtr(m_Movement, "Movement Component"))
+				selection = m_Movement.GetEntity().ID();
+			if (DrawEntity(m_Player, "Player's root"))
+				selection = m_Player;
+			
+			return selection;
 		}
 
 		virtual void Serialize(YAML::Emitter& emitter) const override 
@@ -102,9 +108,7 @@ namespace fe
 
 		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
 
-
-
-		CompPtr<CPlayerMovement> m_Movement;
+		CompPtr<CMovement> m_Movement;
 		Entity m_Player;
 	};
 
@@ -181,7 +185,7 @@ namespace fe
 		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
-		ComponentTypesRegistry::GetInstance().RegisterDataComponent<CPlayerMovement>();
+		ComponentTypesRegistry::GetInstance().RegisterDataComponent<CMovement>();
 		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
 		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
 	}
@@ -278,7 +282,7 @@ namespace fe
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
 			testChild_1.GetTransformHandle().SetLocal(transform);
 			
-			testChild_1.Emplace<CPlayerMovement>();
+			testChild_1.Emplace<CMovement>();
 		}
 
 		PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();

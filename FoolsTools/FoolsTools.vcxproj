@@ -149,7 +149,7 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Panels\ActorInspector.h" />
     <ClInclude Include="src\Panels\EntityInspector.h" />
-    <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
+    <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
     <ClInclude Include="src\Panels\SystemsInspector.h" />
     <ClInclude Include="src\SceneTesting.h" />
   </ItemGroup>
@@ -159,7 +159,7 @@
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp" />
     <ClCompile Include="src\Panels\EntityInspector.cpp" />
-    <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
+    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />
     <ClCompile Include="src\Panels\SystemsInspector.cpp" />
   </ItemGroup>
   <ItemGroup>

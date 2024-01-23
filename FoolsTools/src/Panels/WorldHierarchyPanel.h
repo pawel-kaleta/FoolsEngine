@@ -4,11 +4,11 @@
 
 namespace fe
 {
-	class SceneHierarchyPanel
+	class WorldHierarchyPanel
 	{
 	public:
-		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(const Ref<Scene>& scene)
+		WorldHierarchyPanel() = default;
+		WorldHierarchyPanel(const Ref<Scene>& scene)
 			: m_Scene(scene) {}
 
 		void		SetScene(const Ref<Scene>& scene);

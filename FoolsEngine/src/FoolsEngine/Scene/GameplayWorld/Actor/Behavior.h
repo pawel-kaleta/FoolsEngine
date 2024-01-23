@@ -20,7 +20,7 @@ namespace fe
 		void Initialize();
 		void Shutdown();
 
-		virtual void DrawInspectorWidget() {};
+		virtual EntityID DrawInspectorWidget() { return NullEntityID; }
 
 		virtual std::string GetBehaviorName() const { FE_LOG_CORE_ERROR("Unnamed Behavior"); return "Unnamed Behavior"; }
 		static std::string GetName() { return "Base Behavior"; }
@@ -73,7 +73,6 @@ namespace fe
 		}
 
 		static bool DrawEntity(Entity entity, const std::string& name);
-
 		
 		template<typename tnComponent>
 		static bool DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)

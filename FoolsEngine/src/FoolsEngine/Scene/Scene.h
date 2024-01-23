@@ -16,8 +16,6 @@ namespace fe
 		Scene();
 		~Scene() = default;
 
-
-
 		void SimulationUpdate();
 		void PostFrameUpdate();
 
@@ -25,14 +23,19 @@ namespace fe
 
 		const std::string& GetName() const { return m_Name; }
 		void SetName(const std::string& name) { m_Name = name; }
-		const UUID GetUUID() const { return m_UUID; }
+
+		const std::filesystem::path& GetFilepath() const { return m_Filepath; }
+		void SetFilepath(const std::filesystem::path& path) { m_Filepath = path; }
+		      
+		UUID GetUUID() const { return m_UUID; }
 	private:
 		friend class SceneSerializerYAML;
 
-		UUID m_UUID;
-		Scope<GameplayWorld> m_GameplayWorld;
+		std::filesystem::path m_Filepath;
+		std::string           m_Name = "Untitled Scene";
+		UUID                  m_UUID;
 		
-		std::string          m_Name = "Untitled Scene";
+		Scope<GameplayWorld>  m_GameplayWorld;
 		
 		template <SimulationStages::Stages stage>
 		void Update();

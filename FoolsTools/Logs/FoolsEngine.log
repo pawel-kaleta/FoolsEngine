@@ -1,81 +1,81 @@
-01:14:44:421091 | FE  | info     | Logging innitialized!
-01:14:44:422117 | App | info     | Logging innitialized!
-01:14:44:422204 | FE  | info     | /////////////////////////////////////////////////////
-01:14:44:422283 | FE  | info     | ////////////////////// STARTUP //////////////////////
-01:14:44:422359 | FE  | info     | /////////////////////////////////////////////////////
-01:14:44:422434 | App | info     | Logging level set to 0 - all.
-01:14:44:422509 | FE  | info     | Logging level set to 0 - all.
-01:14:44:422912 | FE  | info     | Profiler session 'Startup' started.
-01:14:44:423418 | FE  | info     | Initializing GLFW
-01:14:44:456163 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
-01:14:44:578359 | FE  | debug    | Setting events callbacks for window.
-01:14:44:578776 | FE  | info     | Events callbacks for Win10Window setted up.
-01:14:44:579139 | FE  | info     | Creating rendering context
-01:14:44:582433 | FE  | info     | Rendering platform info:
-01:14:44:582576 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-01:14:44:582683 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-01:14:44:582775 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
-01:14:44:582916 | FE  | info     | OpenGL Rendering Context created.
-01:14:44:583145 | FE  | info     | VSync disabled.
-01:14:44:583452 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-01:14:44:583692 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-01:14:44:584539 | FE  | debug    | OpenGLRendererAPI creation!
-01:14:44:584775 | FE  | info     | OpenGLRendererAPI Initialization.
-01:14:44:697037 | FE  | debug    | Loading texture, Channels: 3
-01:14:44:743326 | FE  | debug    | Loading texture, Channels: 4
-01:14:44:743611 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-01:14:44:743698 | App | info     | EditorLayer::OnAttach()
-01:14:44:743920 | FE  | info     | Scene creation
-01:14:44:744083 | FE  | info     | World Creation
-01:14:44:745710 | FE  | debug    | Loading texture, Channels: 4
-01:14:44:745923 | FE  | debug    | Loading texture, Channels: 4
-01:14:44:749105 | FE  | debug    | Loading texture, Channels: 4
-01:14:44:755437 | FE  | info     | Profiler session 'Startup' closed.
-01:14:44:755595 | FE  | info     | /////////////////////////////////////////////////////
-01:14:44:755974 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-01:14:44:756287 | FE  | info     | /////////////////////////////////////////////////////
-01:14:44:756911 | App | info     | Logging level set to 1 - debug or higher.
-01:14:44:757220 | FE  | info     | Logging level set to 1 - debug or higher.
-01:14:44:757714 | FE  | info     | Profiler session 'Runtime' started.
-01:14:44:876517 | FE  | info     | Profiler session 'Runtime' closed.
-01:14:46:896551 | App | info     | Test Scene Setup
-01:14:46:896928 | FE  | debug    | Actor Creation
-01:14:46:897339 | FE  | debug    | Entity Creation
-01:14:46:898024 | FE  | debug    | Entity Creation
-01:14:46:898528 | FE  | info     | Primary Camera Set.
-01:14:46:898627 | FE  | debug    | Entity Creation
-01:14:46:899051 | FE  | debug    | Actor Creation
-01:14:46:899254 | FE  | debug    | Entity Creation
-01:14:46:899694 | FE  | debug    | Entity Creation
-01:14:46:899977 | FE  | debug    | Entity Creation
-01:14:46:900472 | FE  | debug    | Actor Creation
-01:14:46:900638 | FE  | debug    | Entity Creation
-01:14:46:901090 | FE  | debug    | Behavior creation
-01:14:46:901294 | FE  | debug    | Behavior Update Register
-01:14:46:901599 | FE  | debug    | Actor: behavior EnrollForUpdate
-01:14:46:902065 | FE  | debug    | Behavior creation
-01:14:46:902242 | FE  | debug    | Behavior Update Register
-01:14:46:902551 | FE  | debug    | Actor: behavior EnrollForUpdate
-01:14:46:902875 | FE  | debug    | Entity Creation
-01:14:46:903433 | FE  | debug    | Behavior creation
-01:14:46:903528 | FE  | debug    | Behavior Update Register
-01:14:46:903840 | FE  | debug    | Actor: behavior EnrollForUpdate
-01:14:46:904209 | FE  | debug    | Entity Creation
-01:14:46:904590 | FE  | debug    | System creation
-01:14:46:904815 | FE  | debug    | System Update Register
-01:14:46:905122 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-01:14:46:905463 | FE  | debug    | System creation
-01:14:46:907162 | FE  | debug    | System Update Register
-01:14:46:907482 | FE  | debug    | GameplayWorld: system EnrollForUpdate
-01:14:57:149889 | FE  | info     | Window Close Event
-01:14:57:151246 | FE  | info     | /////////////////////////////////////////////////////
-01:14:57:151364 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-01:14:57:151760 | FE  | info     | /////////////////////////////////////////////////////
-01:14:57:152078 | App | info     | Logging level set to 0 - all.
-01:14:57:152389 | FE  | info     | Logging level set to 0 - all.
-01:14:57:152961 | FE  | info     | Profiler session 'Shutdown' started.
-01:14:57:155407 | FE  | debug    | CActorData destruction
-01:14:57:155545 | FE  | debug    | CActorData destruction
-01:14:57:155854 | FE  | debug    | CActorData destruction
-01:14:57:156271 | FE  | info     | Closing Window.
-01:14:57:180690 | FE  | info     | Profiler session 'Shutdown' closed.
+21:43:13:823673 | FE  | info     | Logging innitialized!
+21:43:13:824749 | App | info     | Logging innitialized!
+21:43:13:824874 | FE  | info     | /////////////////////////////////////////////////////
+21:43:13:824975 | FE  | info     | ////////////////////// STARTUP //////////////////////
+21:43:13:825077 | FE  | info     | /////////////////////////////////////////////////////
+21:43:13:825199 | App | info     | Logging level set to 0 - all.
+21:43:13:825300 | FE  | info     | Logging level set to 0 - all.
+21:43:13:825774 | FE  | info     | Profiler session 'Startup' started.
+21:43:13:826170 | FE  | info     | Initializing GLFW
+21:43:13:860640 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
+21:43:13:989241 | FE  | debug    | Setting events callbacks for window.
+21:43:13:989636 | FE  | info     | Events callbacks for Win10Window setted up.
+21:43:13:989957 | FE  | info     | Creating rendering context
+21:43:13:993407 | FE  | info     | Rendering platform info:
+21:43:13:993543 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+21:43:13:993655 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+21:43:13:993783 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
+21:43:13:993921 | FE  | info     | OpenGL Rendering Context created.
+21:43:13:994085 | FE  | info     | VSync disabled.
+21:43:13:994452 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+21:43:13:994732 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+21:43:13:995602 | FE  | debug    | OpenGLRendererAPI creation!
+21:43:13:995807 | FE  | info     | OpenGLRendererAPI Initialization.
+21:43:14:088445 | FE  | debug    | Loading texture, Channels: 3
+21:43:14:138366 | FE  | debug    | Loading texture, Channels: 4
+21:43:14:138808 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+21:43:14:138943 | App | info     | EditorLayer::OnAttach()
+21:43:14:139193 | FE  | info     | Scene creation
+21:43:14:139366 | FE  | info     | World Creation
+21:43:14:141003 | FE  | debug    | Loading texture, Channels: 4
+21:43:14:141270 | FE  | debug    | Loading texture, Channels: 4
+21:43:14:141853 | FE  | debug    | Loading texture, Channels: 4
+21:43:14:142345 | FE  | info     | Profiler session 'Startup' closed.
+21:43:14:142544 | FE  | info     | /////////////////////////////////////////////////////
+21:43:14:142984 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+21:43:14:143380 | FE  | info     | /////////////////////////////////////////////////////
+21:43:14:143766 | App | info     | Logging level set to 1 - debug or higher.
+21:43:14:144164 | FE  | info     | Logging level set to 1 - debug or higher.
+21:43:14:144786 | FE  | info     | Profiler session 'Runtime' started.
+21:43:14:247786 | FE  | info     | Profiler session 'Runtime' closed.
+21:43:16:502576 | App | info     | Test Scene Setup
+21:43:16:502968 | FE  | debug    | Actor Creation
+21:43:16:503408 | FE  | debug    | Entity Creation
+21:43:16:504230 | FE  | debug    | Entity Creation
+21:43:16:504785 | FE  | info     | Primary Camera Set.
+21:43:16:504898 | FE  | debug    | Entity Creation
+21:43:16:505365 | FE  | debug    | Actor Creation
+21:43:16:505598 | FE  | debug    | Entity Creation
+21:43:16:506137 | FE  | debug    | Entity Creation
+21:43:16:506457 | FE  | debug    | Entity Creation
+21:43:16:506999 | FE  | debug    | Actor Creation
+21:43:16:507097 | FE  | debug    | Entity Creation
+21:43:16:507598 | FE  | debug    | Behavior creation
+21:43:16:507827 | FE  | debug    | Behavior Update Register
+21:43:16:508166 | FE  | debug    | Actor: behavior EnrollForUpdate
+21:43:16:508676 | FE  | debug    | Behavior creation
+21:43:16:508899 | FE  | debug    | Behavior Update Register
+21:43:16:509283 | FE  | debug    | Actor: behavior EnrollForUpdate
+21:43:16:509659 | FE  | debug    | Entity Creation
+21:43:16:510276 | FE  | debug    | Behavior creation
+21:43:16:510382 | FE  | debug    | Behavior Update Register
+21:43:16:510722 | FE  | debug    | Actor: behavior EnrollForUpdate
+21:43:16:511142 | FE  | debug    | Entity Creation
+21:43:16:511569 | FE  | debug    | System creation
+21:43:16:511804 | FE  | debug    | System Update Register
+21:43:16:512142 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+21:43:16:512501 | FE  | debug    | System creation
+21:43:16:512868 | FE  | debug    | System Update Register
+21:43:16:513211 | FE  | debug    | GameplayWorld: system EnrollForUpdate
+21:48:59:694540 | FE  | info     | Window Close Event
+21:48:59:696190 | FE  | info     | /////////////////////////////////////////////////////
+21:48:59:696321 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+21:48:59:696858 | FE  | info     | /////////////////////////////////////////////////////
+21:48:59:697241 | App | info     | Logging level set to 0 - all.
+21:48:59:697606 | FE  | info     | Logging level set to 0 - all.
+21:48:59:698217 | FE  | info     | Profiler session 'Shutdown' started.
+21:48:59:700944 | FE  | debug    | CActorData destruction
+21:48:59:701095 | FE  | debug    | CActorData destruction
+21:48:59:701455 | FE  | debug    | CActorData destruction
+21:48:59:701928 | FE  | info     | Closing Window.
+21:48:59:745141 | FE  | info     | Profiler session 'Shutdown' closed.

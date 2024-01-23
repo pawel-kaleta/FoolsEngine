@@ -34,7 +34,7 @@ namespace fe
 		friend class Entity;
 		friend class Actor;
 		friend class EditorLayer;
-		friend class SceneHierarchyPanel;
+		friend class WorldHierarchyPanel;
 
 		Registry	m_Registry;
 		Scene*		m_Scene				= nullptr;

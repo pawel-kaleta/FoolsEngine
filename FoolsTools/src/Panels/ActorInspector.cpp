@@ -57,7 +57,11 @@ namespace fe
         }
 
         if (widget_open)
-            behavior->DrawInspectorWidget();
+        {
+            EntityID newSelection = behavior->DrawInspectorWidget();
+            if (newSelection != NullEntityID)
+                m_SelectedEntityID = newSelection;
+        }
 
         if (widget_of_popup)
         {
@@ -87,6 +91,7 @@ namespace fe
         FE_PROFILER_FUNC();
 
         ImGui::Begin("Actor Inspector");
+        m_SelectedEntityID = NullEntityID;
 
         if (m_OpenedActorID == NullEntityID || m_Scene == nullptr)
         {

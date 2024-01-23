@@ -209,17 +209,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_SceneHierarchyPanel.SetSelection(m_SelectedEntityID);
-		m_SceneHierarchyPanel.OnImGuiRender();
-		m_SelectedEntityID = m_SceneHierarchyPanel.GetSelection();
-		
-		m_ActorInspector.OpenActor(m_SelectedEntityID);
-		m_ActorInspector.OnImGuiRender();
 
-		m_EntityInspector.OpenEntity(m_SelectedEntityID);
-		m_EntityInspector.OnImGuiRender();
-
-		m_SystemsInspector.OnImGuiRender();
+		SetSelectionContext(m_SelectedEntityID);
+		  
+		m_Panels.WorldHierarchyPanel.OnImGuiRender();
+		m_Panels.ActorInspector.OnImGuiRender();
+		m_Panels.EntityInspector.OnImGuiRender();
+		m_Panels.SystemsInspector.OnImGuiRender();
 
 		ImGui::Begin("RenderStats");
 		{
@@ -244,6 +240,8 @@ namespace fe
 			}
 		}
 		ImGui::End();
+
+		GetSelection();
 	}
 
 	void EditorLayer::RenderMainMenu()
@@ -260,17 +258,21 @@ namespace fe
 				{
 					OpenScene();
 				}
-				if (!m_SceneFilepath.empty())
+				if (m_SceneState != SceneState::Edit)
+					ImGui::BeginDisabled();
+				if (!m_Scene->GetFilepath().empty())
 				{
 					if (ImGui::MenuItem("Save", "Ctrl+S"))
 					{
-						SaveScene(m_SceneFilepath);
+						SaveScene(m_Scene);
 					}
 				}
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 				{
-					SaveSceneAs();
+					SaveSceneAs(m_Scene);
 				}
+				if (m_SceneState != SceneState::Edit)
+					ImGui::EndDisabled();
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit"))
 					Application::Get().Close();
@@ -292,7 +294,6 @@ namespace fe
 	void EditorLayer::NewScene()
 	{
 		m_Scene = CreateRef<Scene>();
-		m_SceneFilepath.clear();
 		SetSceneContext(m_Scene);
 	}
 
@@ -303,13 +304,16 @@ namespace fe
 			return;
 
 		Ref<Scene> newScene = CreateRef<Scene>();
+		newScene->SetFilepath(filepath);
+		newScene->SetName(filepath.filename().string());
 
 		if (SceneSerializerYAML::Deserialize(newScene, filepath))
 		{
+			if (m_SceneState != SceneState::Edit)
+				m_SceneState = SceneState::Edit;
+
 			m_Scene = newScene;
-			m_SceneFilepath = filepath;
 			SetSceneContext(m_Scene);
-			m_Scene->SetName(filepath.filename().string());
 		}
 		else
 		{
@@ -317,28 +321,47 @@ namespace fe
 		}
 	}
 
-	void EditorLayer::SaveScene(const std::filesystem::path& path)
+	void EditorLayer::SaveScene(const Ref<Scene>& scene)
 	{
-		SceneSerializerYAML::Serialize(m_Scene, path);
+		SceneSerializerYAML::Serialize(m_Scene, scene->GetFilepath());
 	}
 
-	void EditorLayer::SaveSceneAs()
+	void EditorLayer::SaveSceneAs(const Ref<Scene>& scene)
 	{
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene.yaml", "FoolsEngine Scene (*.fescene.yaml)\0 * .fescene.yaml\0");
 		if (!filepath.empty())
 		{
-			m_SceneFilepath = filepath;
-			SaveScene(filepath);
+			scene->SetFilepath(filepath);
+			SaveScene(scene);
 		}
 	}
 
 	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
 	{
-		m_SelectedEntityID = NullEntityID;
-		m_SceneHierarchyPanel.SetScene(scene);
-		m_EntityInspector.SetScene(scene);
-		m_ActorInspector.SetScene(scene);
-		m_SystemsInspector.SetScene(scene);
+		SetSelectionContext(NullEntityID);
+
+		m_Panels.WorldHierarchyPanel.SetScene(scene);
+		m_Panels.EntityInspector.SetScene(scene);
+		m_Panels.ActorInspector.SetScene(scene);
+		m_Panels.SystemsInspector.SetScene(scene);
+	}
+
+	void EditorLayer::SetSelectionContext(EntityID entityID)
+	{
+		m_SelectedEntityID = entityID;
+
+		m_Panels.WorldHierarchyPanel.SetSelection(entityID);
+		m_Panels.EntityInspector.OpenEntity(entityID);
+		m_Panels.ActorInspector.OpenActor(entityID);
+	}
+
+	void EditorLayer::GetSelection()
+	{
+		m_SelectedEntityID = m_Panels.WorldHierarchyPanel.GetSelection();
+
+		EntityID newSelection = m_Panels.ActorInspector.GetSelection();
+		if (newSelection != NullEntityID)
+			m_SelectedEntityID = newSelection;
 	}
 
 	void EditorLayer::OnScenePlay()
@@ -390,9 +413,9 @@ namespace fe
 				if (control)
 				{
 					if (shift)
-						SaveSceneAs();
+						SaveSceneAs(m_Scene);
 					else
-						SaveScene(m_SceneFilepath);
+						SaveScene(m_Scene);
 				}
 				break;
 			}

@@ -2,7 +2,7 @@
 
 #include <FoolsEngine.h>
 #include "EditorCameraController.h"
-#include "Panels\SceneHierarchyPanel.h"
+#include "Panels\WorldHierarchyPanel.h"
 #include "Panels\ActorInspector.h"
 #include "Panels\EntityInspector.h"
 #include "Panels\SystemsInspector.h"
@@ -22,7 +22,6 @@ namespace fe
 
 	private:
 		Ref<Scene> m_Scene;
-		std::filesystem::path m_SceneFilepath;
 
 		Scope<EditorCameraController>	m_CameraController;
 		Scope<Framebuffer>				m_Framebuffer;
@@ -38,11 +37,15 @@ namespace fe
 			Pause
 		} m_SceneState = SceneState::Edit;
 		
-		SceneHierarchyPanel	m_SceneHierarchyPanel;
-		ActorInspector		m_ActorInspector;
-		EntityInspector		m_EntityInspector;
-		SystemsInspector	m_SystemsInspector;
-		EntityID			m_SelectedEntityID = NullEntityID;
+		struct Panels
+		{
+			WorldHierarchyPanel	WorldHierarchyPanel;
+			ActorInspector		ActorInspector;
+			EntityInspector		EntityInspector;
+			SystemsInspector	SystemsInspector;
+		} m_Panels;
+
+		EntityID m_SelectedEntityID = NullEntityID;
 
 		Ref<Texture> m_IconPlay;
 		Ref<Texture> m_IconPause;
@@ -55,9 +58,12 @@ namespace fe
 
 		void NewScene();
 		void OpenScene();
-		void SaveScene(const std::filesystem::path& path);
-		void SaveSceneAs();
+		void SaveScene(const Ref<Scene>& scene);
+		void SaveSceneAs(const Ref<Scene>& scene);
+
 		void SetSceneContext(const Ref<Scene>& scene);
+		void SetSelectionContext(EntityID entityID);
+		void GetSelection();
 
 		void OnScenePlay();
 		void OnSceneStop();

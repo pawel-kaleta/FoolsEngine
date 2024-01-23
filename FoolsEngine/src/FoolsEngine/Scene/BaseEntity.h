@@ -120,7 +120,7 @@ namespace fe
 		friend class EditorLayer;
 		friend class HierarchyDirector;
 		friend class ActorInspector;
-		friend class SceneHierarchyPanel;
+		friend class WorldHierarchyPanel;
 		friend class Scene;
 		friend class World;
 		friend class GameplayWorld;

@@ -1,16 +1,16 @@
-#include "SceneHierarchyPanel.h"
+#include "WorldHierarchyPanel.h"
 
 #include <sstream>
 
 namespace fe
 {
-	void SceneHierarchyPanel::SetScene(const Ref<Scene>& scene)
+	void WorldHierarchyPanel::SetScene(const Ref<Scene>& scene)
 	{
 		m_Scene = scene;
 		m_SelectedEntityID = NullEntityID;;
 	}
 
-	void SceneHierarchyPanel::OnImGuiRender()
+	void WorldHierarchyPanel::OnImGuiRender()
 	{
 		FE_PROFILER_FUNC();
 
@@ -55,7 +55,7 @@ namespace fe
 		ImGui::End();
 	}
 
-	bool SceneHierarchyPanel::DrawEntity(EntityID entityID)
+	bool WorldHierarchyPanel::DrawEntity(EntityID entityID)
 	{
 		FE_PROFILER_FUNC();
 
