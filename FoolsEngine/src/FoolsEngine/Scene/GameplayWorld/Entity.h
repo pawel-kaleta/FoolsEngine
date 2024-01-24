@@ -31,7 +31,7 @@ namespace fe
 		// destruction is scheduled 
 		void Destroy();
 
-		bool IsHead();
+		bool IsHead() const;
 
 		GameplayWorld* GetWorld() const { return (GameplayWorld*)m_World; }
 
@@ -43,6 +43,22 @@ namespace fe
 			auto* head = m_Handle.try_get<CHeadEntity>();
 			if (head) { return head->HeadEntity; }
 			return NullEntityID;
+		}
+
+		std::string GetNameSignature() const
+		{
+			std::string ID_and_name = std::to_string(ID());
+
+			if (IsHead())
+				ID_and_name += " [" + Get<CEntityName>().EntityName + "]";
+			else
+			{
+				auto& headID = Get<CHeadEntity>().HeadEntity;
+				auto& headName = m_World->GetRegistry().get<CEntityName>(headID).EntityName;
+				ID_and_name += " [" + headName + "] " + Get<CEntityName>().EntityName;
+			}
+
+			return ID_and_name;
 		}
 
 		// In default storage pool only!

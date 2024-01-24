@@ -15,10 +15,7 @@ namespace fe
 		}
 		m_UniformsData = operator new(m_UniformsDataSize);
 
-		for (ShaderTextureSlot TS : m_Material->GetTextureSlots())
-		{
-			m_Textures.push_back(Ref<Texture>());
-		}
+		m_Textures.resize(m_Material->GetTextureSlots().size());
 	}
 
 	void* MaterialInstance::GetUniformValuePtr(const Uniform& targetUniform)
@@ -128,10 +125,10 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto texturesIt = m_Textures.begin();
-		auto slotsIT = m_Material->GetTextureSlots().begin();
-		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIT++)
+		auto slotsIt = m_Material->GetTextureSlots().begin();
+		for (; texturesIt != m_Textures.end(); ++texturesIt, ++slotsIt)
 		{
-			if (slotsIT._Ptr == &textureSlot)
+			if (slotsIt._Ptr == &textureSlot)
 			{
 				return *texturesIt;
 			}
@@ -146,10 +143,10 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto texturesIt = m_Textures.begin();
-		auto slotsIT = m_Material->GetTextureSlots().begin();
-		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIT++)
+		auto slotsIt = m_Material->GetTextureSlots().begin();
+		for (; texturesIt != m_Textures.end(); ++texturesIt, ++slotsIt)
 		{
-			if (slotsIT->GetName() == textureSlotName)
+			if (slotsIt->GetName() == textureSlotName)
 			{
 				return *texturesIt;
 			}
@@ -164,10 +161,10 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto texturesIt = m_Textures.begin();
-		auto slotsIT = m_Material->GetTextureSlots().begin();
-		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIT++)
+		auto slotsIt = m_Material->GetTextureSlots().begin();
+		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIt++)
 		{
-			if (slotsIT._Ptr == &textureSlot)
+			if (slotsIt._Ptr == &textureSlot)
 			{
 				*texturesIt = texture;
 				return;
@@ -182,10 +179,10 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto texturesIt = m_Textures.begin();
-		auto slotsIT = m_Material->GetTextureSlots().begin();
-		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIT++)
+		auto slotsIt = m_Material->GetTextureSlots().begin();
+		for (; texturesIt != m_Textures.end(); texturesIt++, slotsIt++)
 		{
-			if (slotsIT->GetName() == textureSlotName)
+			if (slotsIt->GetName() == textureSlotName)
 			{
 				*texturesIt = texture;
 				return;

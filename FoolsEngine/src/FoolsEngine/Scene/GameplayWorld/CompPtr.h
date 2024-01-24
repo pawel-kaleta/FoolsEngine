@@ -34,8 +34,20 @@ namespace fe
 
 		void Set(Entity entity)
 		{
-			m_Entity = entity;
-			m_PointerLifeSpanFrameNumber = 0;
+			if (!entity)
+			{
+				FE_LOG_CORE_WARN("Not a valid entity");
+				return;
+			}
+			if (entity.AllOf<tnComponent>())
+			{
+				m_Entity = entity;
+				m_PointerLifeSpanFrameNumber = 0;
+			}
+			else
+			{
+				FE_LOG_CORE_ERROR("This entity ({0}) does not have this component ({1})", entity.Get<CEntityName>().EntityName, tnComponent::GetName());;
+			}
 		}
 
 		Entity GetEntity() const { return m_Entity; }

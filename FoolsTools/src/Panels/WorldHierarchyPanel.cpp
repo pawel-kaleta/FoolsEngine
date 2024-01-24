@@ -59,11 +59,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& nameStorage = m_Scene->GetGameplayWorld()->GetRegistry().storage<CEntityName>();
 		auto allGroup = m_Scene->GetGameplayWorld()->GetHierarchy().Group();
-
 		auto& node = allGroup.get<CEntityNode>(entityID);
-		auto& name = nameStorage.get(entityID);
 
 		Entity entity(entityID, m_Scene->GetGameplayWorld());
 
@@ -77,26 +74,22 @@ namespace fe
 		bool selected = (m_SelectedEntityID == entityID);
 		flags |= selected ? ImGuiTreeNodeFlags_Selected : 0;
 
-		std::string entity_ID_and_name = std::to_string(entityID);
+		std::string name = entity.GetNameSignature();
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, name.c_str());
 
-		if (entity.IsHead())
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
-			entity_ID_and_name += " [" + name.EntityName + "]";
+			// Set payload to carry the index of our item (could be anything)
+			ImGui::SetDragDropPayload("Entity", &entity, sizeof(entity));
+
+			// Display preview (could be anything, e.g. when dragging an image we could decide to display
+			// the filename and a small preview of the image, etc.)
+			ImGui::Text(name.c_str());
+
+			ImGui::EndDragDropSource();
 		}
-		else
-		{
-			auto& headComp = entity.Get<CHeadEntity>();
-
-			entity_ID_and_name += " [" + nameStorage.get(headComp.HeadEntity).EntityName + "]";
-
-			entity_ID_and_name += " " + name.EntityName;
-		}
-
-
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, entity_ID_and_name.c_str());
 
 		bool nodeClicked = false;
-
 		if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked())
 		{
 			m_SelectedEntityID = entityID;
@@ -107,16 +100,16 @@ namespace fe
 		{
 			nodeClicked = true;	
 
-			ImGui::OpenPopup(entity_ID_and_name.c_str());
+			ImGui::OpenPopup(name.c_str());
 		}
 
 		bool create_child_owned_entity	= false;
 		bool create_child_actor			= false;
-		if (ImGui::BeginPopup(entity_ID_and_name.c_str()))
+		if (ImGui::BeginPopup(name.c_str()))
 		{
 			// creating children before drawing all existing children is unsafe
-			create_child_owned_entity	= ImGui::MenuItem("Create Entity");
-			create_child_actor		= ImGui::MenuItem("Create Actor");
+			create_child_owned_entity = ImGui::MenuItem("Create Entity");
+			create_child_actor		  = ImGui::MenuItem("Create Actor" );
 
 			if (ImGui::MenuItem("Destroy"))
 			{

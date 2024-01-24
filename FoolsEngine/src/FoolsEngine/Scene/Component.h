@@ -45,7 +45,7 @@ namespace fe
 	{
 		UUID UUID;
 
-		FE_COMPONENT_SETUP(CUUID, "UUID");
+		//FE_COMPONENT_SETUP(CUUID, "UUID");
 	};
 
 	struct CEntityName final : DataComponent
@@ -58,7 +58,7 @@ namespace fe
 		operator       std::string& () { return EntityName; }
 		operator const std::string& () { return EntityName; }
 
-		FE_COMPONENT_SETUP(CEntityName, "EntityName");
+		//FE_COMPONENT_SETUP(CEntityName, "EntityName");
 	};
 
 	struct HierarchyNode : ProtectedComponent
@@ -75,26 +75,26 @@ namespace fe
 
 	struct CEntityNode final : HierarchyNode
 	{
-		FE_COMPONENT_SETUP(CEntityNode, "EntityNode");
+		//FE_COMPONENT_SETUP(CEntityNode, "EntityNode");
 	};
 
 	struct CActorNode final : HierarchyNode
 	{
-		FE_COMPONENT_SETUP(CActorNode, "ActorNode");
+		//FE_COMPONENT_SETUP(CActorNode, "ActorNode");
 	};
 
 	struct CHeadEntity final : ProtectedComponent
 	{
 		EntityID HeadEntity = NullEntityID;
 
-		FE_COMPONENT_SETUP(CHeadEntity, "HeadEntity");
+		//FE_COMPONENT_SETUP(CHeadEntity, "HeadEntity");
 	};
 
 	struct CTags final : ProtectedComponent
 	{
 		operator const Tags& () const { return Global; }
 
-		FE_COMPONENT_SETUP(CTags, "Tags");
+		//FE_COMPONENT_SETUP(CTags, "Tags");
 
 		Tags Global;
 		Tags Local;
@@ -115,12 +115,12 @@ namespace fe
 
 	struct CTransformLocal final : public TransformComponent
 	{
-		FE_COMPONENT_SETUP(CTransformLocal, "TransformLocal");
+		//FE_COMPONENT_SETUP(CTransformLocal, "TransformLocal");
 	};
 
 	struct CTransformGlobal final : public TransformComponent
 	{
-		FE_COMPONENT_SETUP(CTransformGlobal, "TransformGlobal");
+		//FE_COMPONENT_SETUP(CTransformGlobal, "TransformGlobal");
 	};
 
 	struct CCamera final : SpatialComponent

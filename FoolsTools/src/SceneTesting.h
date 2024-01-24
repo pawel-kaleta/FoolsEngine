@@ -67,8 +67,17 @@ namespace fe
 
 		virtual void OnUpdate_PrePhysics() override
 		{
+			static bool firstError = false;
 			if (!(m_Player && m_Movement.GetEntity()))
+			{
+				if (!firstError)
+				{
+					FE_LOG_ERROR("Missing references on PlayerMovementBehavior");
+					firstError = true;
+				}
 				return;
+			}
+			firstError = false;
 
 			auto transform = m_Player.GetTransformHandle();
 			auto newTransform = m_Movement.Get()->Movement.CalculateNewTransform(transform.Global());
@@ -283,13 +292,11 @@ namespace fe
 			testChild_1.GetTransformHandle().SetLocal(transform);
 			
 			testChild_1.Emplace<CMovement>();
+			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
+			movement->m_Player = Entity(testChild_1);
+			movement->m_Movement.Set(Entity(testChild_1));
+			movement->Activate();
 		}
-
-		PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
-		movement->m_Player = Entity(testChild_1);
-		movement->m_Movement.Set(Entity(testChild_1));
-		movement->Activate();
-
 
 		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
 		{

@@ -11,14 +11,22 @@ namespace fe
 	Entity::Entity(const BaseEntity& other)
 		: BaseEntity(other)
 	{
-		FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld!");
+		if (other)
+		{
+			FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld!");
+		}
 	}
 
 	void Entity::operator=(const BaseEntity& other)
 	{
-		FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld");
-		m_Handle = other.m_Handle;
-		m_World = other.m_World;
+		if (other)
+		{
+			FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld");
+			m_Handle = other.m_Handle;
+			m_World = other.m_World;
+		}
+		else
+			*this = Entity();
 	}
 
 	Entity Entity::CreateChildEntity(const std::string& name)
@@ -33,7 +41,7 @@ namespace fe
 		return ((GameplayWorld*)m_World)->CreateActor(ID(), name);
 	}
 
-	bool Entity::IsHead() { return AllOf<CActorData>(); }
+	bool Entity::IsHead() const { return AllOf<CActorData>(); }
 
 	void Entity::Entity::Destroy()
 	{

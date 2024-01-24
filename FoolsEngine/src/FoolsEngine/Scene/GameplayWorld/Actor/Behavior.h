@@ -72,10 +72,10 @@ namespace fe
 			Actor(m_HeadEntity).RemoveUpdateEnroll<stage>(this);
 		}
 
-		static bool DrawEntity(Entity entity, const std::string& name);
+		static bool DrawEntity(Entity& entity, const std::string& name);
 		
 		template<typename tnComponent>
-		static bool DrawCompPtr(const CompPtr<tnComponent>& compPtr, const std::string& name)
+		static bool DrawCompPtr(CompPtr<tnComponent>& compPtr, const std::string& name)
 		{
 			auto entity = compPtr.GetEntity();
 			std::string entity_ID_and_name; 
@@ -86,10 +86,24 @@ namespace fe
 				missingComponent = !entity.AllOf<tnComponent>();
 			}
 			if (missingComponent)
-				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, {0.75f,0.25f,0.25f,1.0f});
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, {0.25f,0.25f,0.25f,1.0f});
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
 			bool selected = ImGui::Button(entity_ID_and_name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+			
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Entity"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(Entity));
+					Entity entity = *(const Entity*)payload->Data;
+					if (entity)
+						if (entity.AllOf<tnComponent>())
+							compPtr.Set(entity);
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::SameLine();
 			ImGui::Text(name.c_str());
 			ImGui::PopStyleVar();

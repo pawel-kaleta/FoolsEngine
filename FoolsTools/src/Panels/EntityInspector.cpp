@@ -192,6 +192,20 @@ namespace fe
         {
             name.EntityName = std::string(buffer);
         }
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+        {
+
+            // Set payload to carry the index of our item (could be anything)
+            //static EntityID entityID = entity.ID();
+            ImGui::SetDragDropPayload("Entity", &entity, sizeof(entity));
+
+            // Display preview (could be anything, e.g. when dragging an image we could decide to display
+            // the filename and a small preview of the image, etc.)
+            
+            ImGui::Text(entity.GetNameSignature().c_str());
+
+            ImGui::EndDragDropSource();
+        }
     }
 
     void EntityInspector::DrawCTransformWidget(Entity entity)

@@ -28,9 +28,9 @@ namespace fe
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetOpenFileNameA(&ofn) == TRUE)
 		{
-			return ofn.lpstrFile;
+			SetCurrentDirectoryA(currentDir);
+			return std::filesystem::relative(ofn.lpstrFile, currentDir);
 		}
-
 		return std::filesystem::path();
 	}
 

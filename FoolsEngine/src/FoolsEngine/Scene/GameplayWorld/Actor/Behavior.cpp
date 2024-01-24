@@ -38,7 +38,7 @@ namespace fe
         OnShutdown();
     }
 
-    bool Behavior::DrawEntity(Entity entity, const std::string& name)
+    bool Behavior::DrawEntity(Entity& entity, const std::string& name)
     {
         std::string entity_ID_and_name;
         bool nullEntity = false;
@@ -49,11 +49,22 @@ namespace fe
         else
         {
             nullEntity = true;
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.75f,0.25f,0.25f,1.0f });
+            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
         }
         ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
         bool selected = ImGui::Button(entity_ID_and_name.c_str(), {ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing()});
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Entity"))
+            {
+                IM_ASSERT(payload->DataSize == sizeof(Entity));
+                Entity newEntity = *(const Entity*)payload->Data;
+                if (newEntity)
+                    entity = newEntity;
+            }
+            ImGui::EndDragDropTarget();
+        }
         ImGui::SameLine();
         ImGui::Text(name.c_str());
         ImGui::PopStyleVar();
