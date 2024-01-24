@@ -17,6 +17,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		if (Application::Get().GetImguiLayer()->IsBlocking())
+			return;
+
 		int inputAxisDA = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
 		int inputAxisWS = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
 		int inputAxisEQ = InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q);

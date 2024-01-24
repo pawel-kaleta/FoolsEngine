@@ -412,7 +412,7 @@ namespace fe
 			case InputCodes::S:
 				if (control)
 				{
-					if (shift)
+					if (shift || m_Scene->GetFilepath().empty())
 						SaveSceneAs(m_Scene);
 					else
 						SaveScene(m_Scene);

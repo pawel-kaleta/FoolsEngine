@@ -21,16 +21,16 @@ namespace fe
 				float rotAngle = Time::DeltaTime() * RotationSpeed;
 				float scaleStep = Time::DeltaTime() * ScaleStepSpeed;
 
-				if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleStep;
+				     if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleStep;
 				else if (InputPolling::IsKeyPressed(InputCodes::KP3))	scale += scaleStep;
 
-				if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.z -= rotAngle;
-				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.z += rotAngle;
+				     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.y += rotAngle;
+				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.y -= rotAngle;
 
-				if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
+				     if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
 				else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
-				if (InputPolling::IsKeyPressed(InputCodes::Up))	position.y += moveDistance;
-				else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.y -= moveDistance;
+				     if (InputPolling::IsKeyPressed(InputCodes::Up))	position.z -= moveDistance;
+				else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.z += moveDistance;
 
 				return transform;
 			}

@@ -138,16 +138,9 @@ namespace fe
 	Entity GameplayWorld::GetEntityWithPrimaryCamera() const
 	{
 		Entity entity(m_PrimaryCameraEntityID, this);
-		if (!entity)
-		{
-			FE_LOG_CORE_ERROR("Entity with primary camera was deleted");
-			return entity;
-		}
-		if (!entity.AllOf<CCamera>())
-		{
-			FE_LOG_CORE_ERROR("Primary camera was removed from entity");
-			return Entity();
-		}
+		if (entity)
+			if (!entity.AllOf<CCamera>())
+				return Entity();
 		return entity;
 	}
 
