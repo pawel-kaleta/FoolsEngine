@@ -54,8 +54,11 @@ namespace fe
 			Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
 			if (cameraEntity)
 			{
-				viewportCamera = &cameraEntity.Get<CCamera>().Camera;
-				viewportCameraTransform = cameraEntity.GetTransformHandle().Global();
+				auto& camera = cameraEntity.Get<CCamera>();
+				viewportCamera = &camera.Camera;
+				viewportCameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
+				viewportCameraTransform.Scale = { 1.f,1.f,1.f };
+				viewportCameraTransform = viewportCameraTransform + camera.Offset;
 			}
 			else
 			{

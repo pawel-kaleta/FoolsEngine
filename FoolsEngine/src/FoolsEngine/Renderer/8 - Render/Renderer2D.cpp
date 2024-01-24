@@ -125,8 +125,9 @@ namespace fe
 
 		for (auto ID : viewTiles)
 		{
-			auto [tile, transform] = viewTiles.get(ID);
-			BatchQuadDrawCall(tile.Tile, transform.GetRef());
+			auto [tile, entityTransform] = viewTiles.get(ID);
+			Transform transform = entityTransform.GetRef() + tile.Offset;
+			BatchQuadDrawCall(tile.Tile, transform);
 		}
 
 		Flush();
@@ -153,8 +154,9 @@ namespace fe
 
 		for (auto ID : viewSprites)
 		{
-			auto [sprite, transform] = viewSprites.get(ID);
-			BatchQuadDrawCall(sprite.Sprite, transform.GetRef());
+			auto [sprite, entityTransform] = viewSprites.get(ID);
+			Transform transform = entityTransform.GetRef() + sprite.Offset;
+			BatchQuadDrawCall(sprite.Sprite, transform);
 			Flush();
 		}
 
@@ -202,6 +204,8 @@ namespace fe
 			}
 		}
 
+		float aspectRatio = (float)quad.Texture->GetHeight() / (float)quad.Texture->GetWidth();
+
 		constexpr glm::vec4 QuadVertexPositions[] = {
 			{ -0.5f, -0.5f, 0.0f, 1.0f },
 			{  0.5f, -0.5f, 0.0f, 1.0f },
@@ -220,7 +224,9 @@ namespace fe
 
 		for (int i = 0; i < 4; i++)
 		{
-			VIt->Position = transformMatrix * QuadVertexPositions[i];
+			glm::vec4 vertexPosition = QuadVertexPositions[i];
+			vertexPosition.y *= aspectRatio;
+			VIt->Position = transformMatrix * vertexPosition;
 			VIt->Color = quad.Color;
 			VIt->TexCoord = TextureCoord[i];
 			VIt->TilingFactor = quad.TextureTilingFactor;

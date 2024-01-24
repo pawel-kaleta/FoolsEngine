@@ -58,7 +58,18 @@ namespace fe
         }
 
         if (widget_open)
+        {
+            if (component->IsSpatial())
+            {
+                auto& offset = ((SpatialComponent*)component)->Offset;
+                ImGui::SeparatorText("Offset");
+                ImGui::DragFloat3("Position", glm::value_ptr(offset.Position), 0.01f, 0, 0, "%.2f");
+                ImGui::DragFloat3("Rotation", glm::value_ptr(offset.Rotation), 0.10f, 0, 0, "%.2f");
+                ImGui::DragFloat3("Scale"   , glm::value_ptr(offset.Scale)   , 0.01f, 0, 0, "%.2f");
+                ImGui::SeparatorText("Component Data");
+            }
             component->DrawInspectorWidget(entity);
+        }
 
         if (widget_of_popup)
         {

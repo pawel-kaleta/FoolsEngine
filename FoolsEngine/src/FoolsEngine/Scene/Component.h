@@ -28,6 +28,7 @@ namespace fe
 	{
 		virtual std::string GetComponentName() const { return ""; }
 		static std::string GetName() { return ""; }
+		virtual bool IsSpatial() const { return false; }
 
 		virtual void DrawInspectorWidget(BaseEntity entity);
 		virtual void Serialize(YAML::Emitter& emitter);
@@ -37,9 +38,13 @@ namespace fe
 	struct SpatialComponent : DataComponent
 	{
 		Transform Offset;
+		virtual bool IsSpatial() const override final { return true; }
 	};
 
-	struct ProtectedComponent : DataComponent {};
+	struct ProtectedComponent : DataComponent
+	{
+		virtual bool IsSpatial() const override final { return false; }
+	};
 
 	struct CUUID final : ProtectedComponent
 	{

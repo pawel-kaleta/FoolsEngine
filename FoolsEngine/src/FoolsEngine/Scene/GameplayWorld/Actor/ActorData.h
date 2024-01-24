@@ -8,7 +8,7 @@
 
 namespace fe
 {
-	struct CActorData : DataComponent
+	struct CActorData : ProtectedComponent
 	{
 	public:
 		CActorData() = default;
