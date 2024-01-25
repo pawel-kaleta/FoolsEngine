@@ -36,11 +36,6 @@ namespace fe
 		template <typename tnComponent>
 		void RegisterDataComponent()
 		{
-			auto a1 = &BaseEntity::GetAsDataComponentIfExist<tnComponent>;
-			auto a2 = &BaseEntity::DefaultEmplace<tnComponent>;
-			auto a3 = &Entity::RemoveIfExist<tnComponent>;
-			auto a4 = &ComponentTypesRegistry::GetName<tnComponent>;
-
 			DataItems.push_back(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,

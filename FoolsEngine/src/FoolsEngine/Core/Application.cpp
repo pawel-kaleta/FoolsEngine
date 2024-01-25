@@ -39,8 +39,6 @@ namespace fe {
 		ComponentTypesRegistry::GetInstance().RegisterComponents();
 		BehaviorsRegistry::GetInstance().RegisterBehaviors();
 		SystemsRegistry::GetInstance().RegisterSystems();
-
-		
 	}
 
 	Application::~Application()

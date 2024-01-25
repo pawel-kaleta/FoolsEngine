@@ -32,7 +32,6 @@ namespace fe
 	{
 		m_Specification.Width = width;
 		m_Specification.Height = height;
-
 		Recreate();
 	}
 
@@ -76,7 +75,19 @@ namespace fe
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
-		FE_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete.");
+		auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+			FE_LOG_CORE_INFO("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
+			FE_LOG_CORE_INFO("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER )
+			FE_LOG_CORE_INFO("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER )
+			FE_LOG_CORE_INFO("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+		if (status == GL_FRAMEBUFFER_UNSUPPORTED )
+			FE_LOG_CORE_INFO("GL_FRAMEBUFFER_UNSUPPORTED");
+
+		FE_CORE_ASSERT(status == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete.");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
