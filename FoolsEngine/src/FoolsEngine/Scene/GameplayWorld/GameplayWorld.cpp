@@ -138,6 +138,7 @@ namespace fe
 	Entity GameplayWorld::GetEntityWithPrimaryCamera() const
 	{
 		Entity entity(m_PrimaryCameraEntityID, this);
+		// are those ifs neccessary?
 		if (entity)
 			if (!entity.AllOf<CCamera>())
 				return Entity();

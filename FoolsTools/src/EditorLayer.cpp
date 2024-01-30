@@ -30,49 +30,6 @@ namespace fe
 		m_IconPlay  = Texture2D::Create("resources/PlayButton.png");
 		m_IconStop  = Texture2D::Create("resources/StopButton.png");
 		m_IconPause = Texture2D::Create("resources/PauseButton.png");
-
-		// initializing ImGui windows
-		if (0)
-		{
-			ImGui::Begin("Dockspace");
-
-			ImGuiIO& io = ImGui::GetIO();
-			if (io.ConfigFlags & ImGuiConfigFlags_::ImGuiConfigFlags_DockingEnable)
-			{
-				ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
-				ImGui::DockSpace(dockspaceID);
-			}
-
-			RenderToolbar();
-			RenderPanels();
-
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("Vieport");
-			ImGui::PopStyleVar();
-
-			m_VieportFocus = ImGui::IsWindowFocused();
-			m_VieportHover = ImGui::IsWindowHovered();
-
-			bool test = ImGui::IsItemEdited();
-			Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover));
-
-			auto& vidgetSize = ImGui::GetContentRegionAvail();
-			glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y };
-
-			if (m_ViewportSize != newViewPortSize)
-			{
-				m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
-				m_ViewportSize = newViewPortSize;
-				m_CameraController->Resize(newViewPortSize.x, newViewPortSize.y);
-			}
-
-			auto fbID = m_Framebuffer->GetColorAttachmentID();
-			ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-			ImGui::End();
-
-			ImGui::End();
-		}
 	}
 
 	void EditorLayer::OnUpdate()
@@ -151,7 +108,6 @@ namespace fe
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		static bool dockspaceOpen = true;
-		//ImGui::Begin("Dockspace", 0, windowFlags);
 		ImGui::Begin("Dockspace", &dockspaceOpen, windowFlags);
 		{
 			ImGui::PopStyleVar();
@@ -227,7 +183,7 @@ namespace fe
 
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-		float size = ImGui::GetWindowHeight() - 4.0f;
+		float size = ImGui::GetWindowHeight() - 4.0f; //headbar
 		
 		switch (m_SceneState)
 		{
