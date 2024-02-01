@@ -190,23 +190,23 @@ namespace fe
 		case SceneState::Edit:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePlay();
+				OnScenePlayStart();
 			break;
 		case SceneState::Play:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPause->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePause();
+				OnScenePlayPause();
 			ImGui::SameLine();
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnSceneStop();
+				OnScenePlayStop();
 			break;
 		case SceneState::Pause:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePlay();
+				OnScenePlayResume();
 			ImGui::SameLine();
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnSceneStop();
+				OnScenePlayStop();
 		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
@@ -372,22 +372,46 @@ namespace fe
 			m_SelectedEntityID = newSelection;
 	}
 
-	void EditorLayer::OnScenePlay()
+	void EditorLayer::OnScenePlayStart()
 	{
 		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 	
+
+		m_SceneBackup = CreateRef<Scene>();
+
+
+		std::string sceneData = SceneSerializerYAML::Serialize(m_Scene);
+
+		if (SceneSerializerYAML::Deserialize(m_SceneBackup, sceneData))
+		{
+			m_SceneState = SceneState::Play;
+
+			m_SceneBackup->SetFilepath(m_Scene->GetFilepath());
+			m_SceneBackup->SetName(m_Scene->GetName());
+		}
+		else
+		{
+			FE_LOG_CORE_ERROR("Deserialization of scene");
+		}
+	}
+
+	void EditorLayer::OnScenePlayPause()
+	{
+		m_SceneState = SceneState::Pause;
+	}
+	
+	void EditorLayer::OnScenePlayResume()
+	{
 		m_SceneState = SceneState::Play;
 	}
 
-	void EditorLayer::OnSceneStop()
+	void EditorLayer::OnScenePlayStop()
 	{
 		m_SceneState = SceneState::Edit;
-	}
 
-	void EditorLayer::OnScenePause()
-	{
-		m_SceneState = SceneState::Pause;
+		m_Scene = m_SceneBackup;
+		SetSceneContext(m_Scene);
 	}
 
 	void EditorLayer::OnEvent(Ref<Events::Event> event)

@@ -21,8 +21,6 @@ namespace fe
 		m_GameplayWorld = CreateScope<GameplayWorld>(this);
 	}
 
-	
-
 	template <SimulationStages::Stages stage>
 	void Scene::Update()
 	{

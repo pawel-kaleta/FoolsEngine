@@ -38,6 +38,37 @@ namespace fe
 	void SceneSerializerYAML::Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
 	{
 		YAML::Emitter emitter;
+
+		Serialize(scene, emitter);
+
+		std::ofstream fout(filepath);
+		fout << emitter.c_str();
+	}
+
+	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
+	{
+		YAML::Node node = YAML::LoadFile(filepath.string());
+		return Deserialize(scene, node);
+	}
+
+	std::string SceneSerializerYAML::Serialize(const Ref<Scene> scene)
+	{
+		YAML::Emitter emitter;
+
+		Serialize(scene, emitter);
+
+		std::string out = emitter.c_str();
+		return out;
+	}
+
+	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& buffer)
+	{
+		YAML::Node node = YAML::Load(buffer);
+		return Deserialize(scene, node);
+	}
+	
+	void SceneSerializerYAML::Serialize(const Ref<Scene>& scene, YAML::Emitter& emitter)
+	{
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
@@ -51,9 +82,24 @@ namespace fe
 		}
 		emitter << YAML::EndMap; //Worlds
 		emitter << YAML::EndMap;
+	}
 
-		std::ofstream fout(filepath);
-		fout << emitter.c_str();
+	bool SceneSerializerYAML::Deserialize(const Ref<Scene>& scene, YAML::Node& node)
+	{
+		auto& sceneProps = node["Scene Properties"];
+		if (!sceneProps)
+		{
+			FE_CORE_ASSERT(false, "Deserialization failed");
+			FE_LOG_CORE_ERROR("Deserialization failed");
+			return false;
+		}
+
+		scene->m_Name = sceneProps["Name"].as<std::string>();
+		scene->m_UUID = sceneProps["UUID"].as<uint64_t>();
+
+		auto& worlds = node["Worlds"];
+		if (!worlds) return false;
+		return DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]);
 	}
 
 	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
@@ -277,25 +323,6 @@ namespace fe
 		}
 	}
 
-	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
-	{
-		YAML::Node data = YAML::LoadFile(filepath.string());
-
-		auto& sceneProps = data["Scene Properties"];
-		if (!sceneProps)
-		{
-			FE_CORE_ASSERT(false, "Deserialization failed");
-			FE_LOG_CORE_ERROR("Deserialization failed");
-			return false;
-		}
-
-		scene->m_Name = sceneProps["Name"].as<std::string>();
-		scene->m_UUID = sceneProps["UUID"].as<uint64_t>();
-
-		auto& worlds = data["Worlds"];
-		if (!worlds) return false;
-		return DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]);
-	}
 
 	bool SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data)
 	{

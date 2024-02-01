@@ -25,7 +25,7 @@ namespace fe
 		template <typename tnComponent>
 		EntityID ComponentToEntity(const tnComponent& component)
 		{
-			return entt::to_entity(m_Registry, component);
+			return entt::to_entity(m_Registry.storage<tnComponent>(), component);
 		}
 
 		// Use only when deserializing

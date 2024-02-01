@@ -22,6 +22,7 @@ namespace fe
 
 	private:
 		Ref<Scene> m_Scene;
+		Ref<Scene> m_SceneBackup;
 
 		Scope<EditorCameraController>	m_CameraController;
 		Scope<Framebuffer>				m_Framebuffer;
@@ -65,9 +66,10 @@ namespace fe
 		void SetSelectionContext(EntityID entityID);
 		void GetSelection();
 
-		void OnScenePlay();
-		void OnSceneStop();
-		void OnScenePause();
+		void OnScenePlayStart();
+		void OnScenePlayPause();
+		void OnScenePlayResume();
+		void OnScenePlayStop();
 
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 	};

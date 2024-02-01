@@ -16,7 +16,12 @@ namespace fe
 		static void Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
 		static bool Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
 
+		static std::string Serialize(const Ref<Scene> scene);
+		static bool Deserialize(const Ref<Scene> scene, const std::string& buffer);
 	private:
+		static void Serialize(const Ref<Scene>& scene, YAML::Emitter& emitter);
+		static bool Deserialize(const Ref<Scene>& scene, YAML::Node& node);
+
 		static void SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeActors(GameplayWorld* world, YAML::Emitter& emitter);

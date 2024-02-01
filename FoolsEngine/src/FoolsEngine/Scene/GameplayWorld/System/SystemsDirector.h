@@ -9,6 +9,9 @@ namespace fe
 	class SystemsDirector
 	{
 	public:
+		SystemsDirector() = default;
+		SystemsDirector(const SystemsDirector& other) = delete;
+
 		template<SimulationStages::Stages stage>
 		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority)
 		{

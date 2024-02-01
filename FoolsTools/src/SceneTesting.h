@@ -9,20 +9,14 @@ namespace fe
 		struct TargetMovement {
 			float MoveSpeed = 0.5f;
 			float RotationSpeed = 80.0f;
-			float ScaleStepSpeed = 0.2f;
 
 			Transform CalculateNewTransform(Transform transform)
 			{
 				auto& position = transform.Position;
 				auto& rotation = transform.Rotation;
-				auto& scale = transform.Scale;
 
 				float moveDistance = Time::DeltaTime() * MoveSpeed;
 				float rotAngle = Time::DeltaTime() * RotationSpeed;
-				float scaleStep = Time::DeltaTime() * ScaleStepSpeed;
-
-				     if (InputPolling::IsKeyPressed(InputCodes::KP1))	scale -= scaleStep;
-				else if (InputPolling::IsKeyPressed(InputCodes::KP3))	scale += scaleStep;
 
 				     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.y += rotAngle;
 				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.y -= rotAngle;
@@ -41,21 +35,18 @@ namespace fe
 		{
 			ImGui::DragFloat("MoveSpeed"     , &Movement.MoveSpeed     , 0.01f);
 			ImGui::DragFloat("RotationSpeed" , &Movement.RotationSpeed , 0.10f);
-			ImGui::DragFloat("ScaleStepSpeed", &Movement.ScaleStepSpeed, 0.01f);
 		}
 
 		virtual void Serialize(YAML::Emitter& emitter) override
 		{
 			emitter << YAML::Key << "MoveSpeed"      << YAML::Value << Movement.MoveSpeed;
 			emitter << YAML::Key << "RotationSpeed"  << YAML::Value << Movement.RotationSpeed;
-			emitter << YAML::Key << "ScaleStepSpeed" << YAML::Value << Movement.ScaleStepSpeed;
 		}
 
 		virtual void Deserialize(YAML::Node& data) override
 		{
 			Movement.MoveSpeed      = data["MoveSpeed"     ].as<float>();
 			Movement.RotationSpeed  = data["RotationSpeed" ].as<float>();
-			Movement.ScaleStepSpeed = data["ScaleStepSpeed"].as<float>();
 		}
 	};
 
