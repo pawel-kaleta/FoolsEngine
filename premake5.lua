@@ -23,7 +23,8 @@ common_includedirs = {
 	"../FoolsEngine/externals/glm",
 	"../FoolsEngine/externals/stb",
 	"../FoolsEngine/externals/EnTT/src",
-	"../FoolsEngine/externals/yaml-cpp/include"
+	"../FoolsEngine/externals/yaml-cpp/include",
+	"../FoolsEngine/externals/ImGuizmo"
 }
 
 group "Dependencies"

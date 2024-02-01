@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="example">
+      <UniqueIdentifier>{F1997D81-5D79-FC1C-6691-87F3D2EF627E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vcpkg-example">
+      <UniqueIdentifier>{D9A742DD-4568-BE13-0EA3-07917A2203F0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h" />
+    <ClInclude Include="..\..\ImGuizmo\example\ImApp.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imconfig.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imgui.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imgui_internal.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imstb_rectpack.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imstb_textedit.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\imstb_truetype.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\example\stb_image.h">
+      <Filter>example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\vcpkg-example\ImApp.h">
+      <Filter>vcpkg-example</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\example\imgui.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\example\imgui_demo.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\example\imgui_draw.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\example\imgui_tables.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\example\imgui_widgets.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\example\main.cpp">
+      <Filter>example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\vcpkg-example\main.cpp">
+      <Filter>vcpkg-example</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -17,3 +17,6 @@
 [submodule "FoolsEngine/externals/yaml-cpp"]
 	path = FoolsEngine/externals/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "FoolsEngine/externals/ImGuizmo"]
+	path = FoolsEngine/externals/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo

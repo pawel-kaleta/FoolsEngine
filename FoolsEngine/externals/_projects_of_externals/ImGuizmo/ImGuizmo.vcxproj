@@ -15,27 +15,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F98B13CF-E543-551C-4E4B-2E783A22F00C}</ProjectGuid>
+    <ProjectGuid>{36FD234F-22CA-7E5A-4BE3-6C02370FB4E8}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FoolsTools</RootNamespace>
+    <RootNamespace>ImGuizmo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -54,43 +54,38 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug_windows_x86_64\FoolsTools\</OutDir>
-    <IntDir>..\bin-int\Debug_windows_x86_64\FoolsTools\</IntDir>
-    <TargetName>FoolsTools</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\..\..\..\bin\Debug_windows_x86_64\externals\ImGuizmo\</OutDir>
+    <IntDir>..\..\..\..\bin-int\Debug_windows_x86_64\externals\ImGuizmo\</IntDir>
+    <TargetName>ImGuizmo</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release_windows_x86_64\FoolsTools\</OutDir>
-    <IntDir>..\bin-int\Release_windows_x86_64\FoolsTools\</IntDir>
-    <TargetName>FoolsTools</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\..\..\..\bin\Release_windows_x86_64\externals\ImGuizmo\</OutDir>
+    <IntDir>..\..\..\..\bin-int\Release_windows_x86_64\externals\ImGuizmo\</IntDir>
+    <TargetName>ImGuizmo</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Publish_windows_x86_64\FoolsTools\</OutDir>
-    <IntDir>..\bin-int\Publish_windows_x86_64\FoolsTools\</IntDir>
-    <TargetName>FoolsTools</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\..\..\..\bin\Publish_windows_x86_64\externals\ImGuizmo\</OutDir>
+    <IntDir>..\..\..\..\bin-int\Publish_windows_x86_64\externals\ImGuizmo\</IntDir>
+    <TargetName>ImGuizmo</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -98,9 +93,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -109,12 +102,10 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
@@ -123,49 +114,32 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>Full</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
-      <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\EditorCameraController.h" />
-    <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Panels\ActorInspector.h" />
-    <ClInclude Include="src\Panels\EntityInspector.h" />
-    <ClInclude Include="src\Panels\SystemsInspector.h" />
-    <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
-    <ClInclude Include="src\SceneTesting.h" />
+    <ClInclude Include="..\..\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\EditorApp.cpp" />
-    <ClCompile Include="src\EditorCameraController.cpp" />
-    <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Panels\ActorInspector.cpp" />
-    <ClCompile Include="src\Panels\EntityInspector.cpp" />
-    <ClCompile Include="src\Panels\SystemsInspector.cpp" />
-    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">
-      <Project>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</Project>
-    </ProjectReference>
+    <ClCompile Include="..\..\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
