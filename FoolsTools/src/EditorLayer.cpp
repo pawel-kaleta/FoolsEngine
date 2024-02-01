@@ -42,29 +42,9 @@ namespace fe
 
 		switch (m_SceneState)
 		{
-		case SceneState::Edit:
-			if (! Application::Get().GetImguiLayer()->IsBlocking())
-				m_CameraController->OnUpdate();
-			viewportCamera = &m_CameraController->GetCamera();
-			viewportCameraTransform = m_CameraController->GetTransform();
-			break;
-		case SceneState::Play:
-			m_Scene->SimulationUpdate();
-		case SceneState::Pause:
-			Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
-			if (cameraEntity)
-			{
-				auto& camera = cameraEntity.Get<CCamera>();
-				viewportCamera = &camera.Camera;
-				viewportCameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
-				viewportCameraTransform.Scale = { 1.f,1.f,1.f };
-				viewportCameraTransform = viewportCameraTransform + camera.Offset;
-			}
-			else
-			{
-				viewportCamera = &m_CameraController->GetCamera();
-				viewportCameraTransform = m_CameraController->GetTransform();
-			}
+		case SceneState::Edit:  UpdateScene_EditMode( viewportCamera, viewportCameraTransform); break;
+		case SceneState::Play:  UpdateScene_PlayMode( viewportCamera, viewportCameraTransform); break;
+		case SceneState::Pause: UpdateScene_PauseMode(viewportCamera, viewportCameraTransform); break;
 		}
 
 		m_Scene->PostFrameUpdate();
@@ -133,6 +113,43 @@ namespace fe
 			RenderViewport();
 		}
 		ImGui::End();	
+	}
+
+	void EditorLayer::UpdateScene_EditMode(const Camera* camera, Transform& cameraTransform)
+	{
+		if (!Application::Get().GetImguiLayer()->IsBlocking())
+			m_CameraController->OnUpdate();
+		camera = &m_CameraController->GetCamera();
+		cameraTransform = m_CameraController->GetTransform();
+	}
+
+	void EditorLayer::UpdateScene_PlayMode(const Camera* camera, Transform& cameraTransform)
+	{
+		m_Scene->SimulationUpdate();
+		{
+			Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
+			if (cameraEntity)
+			{
+				auto& cameraComponent = cameraEntity.Get<CCamera>();
+				camera = &cameraComponent.Camera;
+				cameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
+				cameraTransform.Scale = { 1.f,1.f,1.f };
+				cameraTransform = cameraTransform + cameraComponent.Offset;
+			}
+			else
+			{
+				camera = &m_CameraController->GetCamera();
+				cameraTransform = m_CameraController->GetTransform();
+			}
+		}
+	}
+
+	void EditorLayer::UpdateScene_PauseMode(const Camera* camera, Transform& cameraTransform)
+	{
+		if (!Application::Get().GetImguiLayer()->IsBlocking())
+			m_CameraController->OnUpdate();
+		camera = &m_CameraController->GetCamera();
+		cameraTransform = m_CameraController->GetTransform();
 	}
 
 	void EditorLayer::RenderViewport()

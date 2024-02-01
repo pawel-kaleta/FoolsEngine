@@ -38,6 +38,10 @@ namespace fe
 			Pause
 		} m_SceneState = SceneState::Edit;
 		
+		void UpdateScene_EditMode(const Camera* camera, Transform& cameraTransform);
+		void UpdateScene_PlayMode(const Camera* camera, Transform& cameraTransform);
+		void UpdateScene_PauseMode(const Camera* camera, Transform& cameraTransform);
+
 		struct Panels
 		{
 			WorldHierarchyPanel	WorldHierarchyPanel;

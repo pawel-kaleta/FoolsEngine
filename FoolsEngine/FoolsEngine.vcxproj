@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\src;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\src;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -126,7 +126,7 @@
       <PrecompiledHeaderFile>FE_pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\single_include\entt;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;externals\spdlog\include;externals\glfw\include;externals\glad\include;externals\imgui;externals\glm;externals\stb;externals\EnTT\src;externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -148,7 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -171,6 +170,7 @@
     <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h" />

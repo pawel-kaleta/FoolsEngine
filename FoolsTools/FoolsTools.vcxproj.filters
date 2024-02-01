@@ -14,10 +14,10 @@
     <ClInclude Include="src\Panels\EntityInspector.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\WorldHierarchyPanel.h">
+    <ClInclude Include="src\Panels\SystemsInspector.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\SystemsInspector.h">
+    <ClInclude Include="src\Panels\WorldHierarchyPanel.h">
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\SceneTesting.h" />
@@ -32,10 +32,10 @@
     <ClCompile Include="src\Panels\EntityInspector.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp">
+    <ClCompile Include="src\Panels\SystemsInspector.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\SystemsInspector.cpp">
+    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>

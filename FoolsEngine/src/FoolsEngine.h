@@ -13,6 +13,7 @@
 #include "FoolsEngine\Core\InputPolling.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
+#include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
@@ -33,7 +34,6 @@
 #include "FoolsEngine\Debug\Profiler.h"
 #endif // INTERNAL_BUILD
 
-#include <entt.hpp>
 #include <yaml-cpp\yaml.h>
 
 //---------Entry Point---------

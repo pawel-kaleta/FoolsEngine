@@ -19,8 +19,8 @@
     <Filter Include="FoolsEngine\Platform">
       <UniqueIdentifier>{327F31CF-1E0E-BB98-C72C-CF93B39ACB3E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Platform\Win10">
-      <UniqueIdentifier>{50D4F850-3CE4-A421-A59D-094091CC93BA}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Platform\Win32">
+      <UniqueIdentifier>{94D4F850-80E4-A421-E99D-0940D5CC93BA}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Renderer">
       <UniqueIdentifier>{84860EAA-7015-9873-1934-AC6E05A2A819}</UniqueIdentifier>
@@ -126,8 +126,11 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h">
+      <Filter>FoolsEngine\Platform</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
-      <Filter>FoolsEngine\Platform\Win10</Filter>
+      <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.h">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
@@ -291,7 +294,6 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -331,11 +333,14 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp">
+      <Filter>FoolsEngine\Platform\Win32</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp">
-      <Filter>FoolsEngine\Platform\Win10</Filter>
+      <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
-      <Filter>FoolsEngine\Platform\Win10</Filter>
+      <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
@@ -466,6 +471,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
   </ItemGroup>
 </Project>

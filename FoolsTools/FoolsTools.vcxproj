@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,7 +99,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -124,7 +124,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;FE_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\single_include\entt;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -149,8 +149,8 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Panels\ActorInspector.h" />
     <ClInclude Include="src\Panels\EntityInspector.h" />
-    <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
     <ClInclude Include="src\Panels\SystemsInspector.h" />
+    <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
     <ClInclude Include="src\SceneTesting.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,8 +159,8 @@
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp" />
     <ClCompile Include="src\Panels\EntityInspector.cpp" />
-    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />
     <ClCompile Include="src\Panels\SystemsInspector.cpp" />
+    <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">

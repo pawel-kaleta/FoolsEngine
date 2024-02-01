@@ -2,7 +2,9 @@
 
 #include <memory>
 
-#include <entt.hpp>
+#include <entt/entity/registry.hpp>
+#include <entt/entity/handle.hpp>
+#include <entt/entity/helper.hpp>
 
 namespace fe
 {
