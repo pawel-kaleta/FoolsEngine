@@ -7,6 +7,8 @@
 #include "Panels\EntityInspector.h"
 #include "Panels\SystemsInspector.h"
 #include <filesystem>
+#include <ImGuizmo.h>
+
 
 namespace fe
 {
@@ -51,6 +53,7 @@ namespace fe
 		} m_Panels;
 
 		EntityID m_SelectedEntityID = NullEntityID;
+		ImGuizmo::OPERATION m_GizmoType = ImGuizmo::OPERATION::UNIVERSAL;
 
 		Ref<Texture> m_IconPlay;
 		Ref<Texture> m_IconPause;

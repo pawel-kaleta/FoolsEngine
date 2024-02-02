@@ -29,6 +29,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 #include "FoolsEngine\Scene\SceneSerializer.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
+#include "FoolsEngine\Math\Math.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"

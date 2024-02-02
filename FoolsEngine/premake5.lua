@@ -26,7 +26,8 @@ project "FoolsEngine"
 		"glad",
 		"imgui",
 		"stb",
-		"yaml-cpp"
+		"yaml-cpp",
+		"ImGuizmo"
 	}
 
 	buildoptions {

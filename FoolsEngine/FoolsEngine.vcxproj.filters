@@ -16,6 +16,9 @@
     <Filter Include="FoolsEngine\ImGui">
       <UniqueIdentifier>{C8746199-348B-5F2F-7D02-EB50E95730B7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Math">
+      <UniqueIdentifier>{B7E8C680-A3E1-E5D2-CC13-CB57B86BC5DE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Platform">
       <UniqueIdentifier>{327F31CF-1E0E-BB98-C72C-CF93B39ACB3E}</UniqueIdentifier>
     </Filter>
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Math\Math.h">
+      <Filter>FoolsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h">
       <Filter>FoolsEngine\Platform</Filter>
@@ -332,6 +338,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Math\Math.cpp">
+      <Filter>FoolsEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>

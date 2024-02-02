@@ -41,7 +41,7 @@ namespace fe
 		m_CurrentRenderingContext = m_RenderingContexts.at(GDI).get();
 		m_CurrentRenderingContext->Init();
 
-		SetVSync(false);
+		SetVSync(true);
 	}
 
 	void Win32Window::MakeRenderingContextCurrent(GDIType GDI)

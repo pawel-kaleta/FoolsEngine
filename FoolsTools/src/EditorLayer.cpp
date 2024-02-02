@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 
+
 namespace fe
 {
 	EditorLayer::EditorLayer()
@@ -183,6 +184,59 @@ namespace fe
 
 		auto fbID = m_Framebuffer->GetColorAttachmentID();
 		ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		//Gizmos
+		if (m_SceneState != SceneState::Play)
+		{
+			Entity selectedEntity(m_SelectedEntityID, m_Scene->GetGameplayWorld());
+
+			if (selectedEntity)
+			{
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
+
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, newViewPortSize.x, newViewPortSize.y);
+
+				// Camera
+				auto cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
+				const auto& camera = m_CameraController->GetCamera();
+				const glm::mat4& cameraProjection = camera.GetProjectionMatrix();
+				glm::mat4 cameraView = glm::inverse(m_CameraController->GetTransform().GetTransform());
+
+				// Entity transform
+				auto& tc = selectedEntity.GetTransformHandle().GetGlobal();
+				glm::mat4 transformMatrix = tc.GetTransform();
+
+				// Snapping
+				bool snap = InputPolling::IsKeyPressed(InputCodes::LeftControl);
+				float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+				// Snap to 45 degrees for rotation
+				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+					snapValue = 45.0f;
+
+				float snapValues[3] = { snapValue, snapValue, snapValue };
+
+				ImGuizmo::Manipulate(
+					glm::value_ptr(cameraView),
+					glm::value_ptr(cameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType,
+					ImGuizmo::LOCAL,
+					glm::value_ptr(transformMatrix),
+					nullptr,
+					snap ? snapValues : nullptr
+				);
+
+
+				if (ImGuizmo::IsUsing())
+				{
+					auto mosePos = ImGui::GetMousePos();
+					Transform transform;
+					Math::DecomposeTransform(transformMatrix, transform);
+					transform.Rotation = glm::degrees(transform.Rotation);
+					selectedEntity.GetTransformHandle().SetGlobal(transform);
+				}
+			}
+		}
 
 		ImGui::End();
 	}
@@ -466,6 +520,20 @@ namespace fe
 					else
 						SaveScene(m_Scene);
 				}
+				break;
+
+			// Gizmos
+			//case InputCodes::Q:
+				//m_GizmoType = -1;
+				//break;
+			case InputCodes::Z:
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case InputCodes::X:
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			case InputCodes::C:
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 				break;
 			}
 		}
