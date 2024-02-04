@@ -7,11 +7,56 @@
 
 namespace fe
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, uint32_t width, uint32_t hight)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight)
 		: m_Name(name), m_Width(width), m_Height(hight)
 	{
-		m_InternalFormat = GL_RGBA8;
-		m_Format = GL_RGBA;
+		// TO DO: encapsulate and isolate specification translation abstract<->OpenGL
+
+		switch (specification.Format)
+		{
+		case TextureData::Format::None:
+		{
+			FE_CORE_ASSERT(false, "Unspecified texture format");
+			break;
+		}
+		case TextureData::Format::RGB:
+		{
+			m_Format = GL_RGB;
+			break;
+		}
+		case TextureData::Format::RGBA:
+		{
+			m_Format = GL_RGBA;
+			break;
+		}
+		default:
+		{
+			FE_CORE_ASSERT(false, "Uknown texture format");
+		}
+		}
+
+		switch (specification.DataFormat)
+		{
+		case TextureData::DataFormat::None:
+		{
+			FE_CORE_ASSERT(false, "Unspecified texture data format");
+			break;
+		}
+		case TextureData::DataFormat::RGB8:
+		{
+			m_InternalFormat = GL_RGB8;
+			break;
+		}
+		case TextureData::DataFormat::RGBA8:
+		{
+			m_InternalFormat = GL_RGBA8;
+			break;
+		}
+		default:
+		{
+			FE_CORE_ASSERT(false, "Uknown texture data format");
+		}
+		}
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
 		glTextureStorage2D(m_ID, 1, m_InternalFormat, m_Width, m_Height);
@@ -37,15 +82,20 @@ namespace fe
 		m_Width = width;
 		m_Height = height;
 
-		if (channels == 3)
+		switch (channels)
+		{
+		case 3:
 		{
 			m_Format = GL_RGB;
 			m_InternalFormat = GL_RGB8;
+			break;
 		}
-		else if (channels == 4)
+		case 4:
 		{
 			m_Format = GL_RGBA;
 			m_InternalFormat = GL_RGBA8;
+			break;
+		}
 		}
 
 		FE_CORE_ASSERT(m_Format & m_InternalFormat, "Texture data format not supported!");
@@ -73,19 +123,37 @@ namespace fe
 	{
 		switch (m_Format)
 		{
-		case GL_RGB:
-			return TextureData::Format::RGB;
-		case GL_RGBA:
-			return TextureData::Format::RGBA;
+		case GL_RGB:  return TextureData::Format::RGB;
+		case GL_RGBA: return TextureData::Format::RGBA;
 		}
 		return TextureData::Format::None;
 	}
 
+	TextureData::DataFormat OpenGLTexture2D::GetDataFormat() const
+	{
+		switch (m_InternalFormat)
+		{
+		case GL_RGB8:  return TextureData::DataFormat::RGB8;
+		case GL_RGBA8: return TextureData::DataFormat::RGBA8;
+		}
+		return TextureData::DataFormat::None;
+	}
+
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
-		// bytes per pixel
-		uint32_t bpp = m_Format == GL_RGBA ? 4 : 3;
-		FE_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
+		uint32_t bytes_per_pixel = 0;
+		switch (m_Format)
+		{
+		case GL_RGB:  bytes_per_pixel = 3; break;
+		case GL_RGBA: bytes_per_pixel = 4; break;
+		default:
+		{
+			FE_CORE_ASSERT(false, "Uknown data format");
+			FE_LOG_CORE_ERROR("Uknown data format of a texture {0}", m_Name);
+			return;
+		}
+		}
+		FE_CORE_ASSERT(size == m_Width * m_Height * bytes_per_pixel, "Data must be entire texture!");
 		glTextureSubImage2D(m_ID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
 

@@ -18,10 +18,13 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		FramebufferData::Specification fbSpec;
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_Framebuffer = Framebuffer::Create(fbSpec);
+		FramebufferData::SpecificationBuilder specBuilder;
+		specBuilder
+			.SetWidth(1280)
+			.SetHight(720)
+			.SetDepthAttachmentDataFormat(TextureData::DataFormat::DEPTH24STENCIL8)
+			.SetCollorAttachmentSpecifications({ {TextureData::Format::RGBA, TextureData::DataFormat::RGBA8} });
+		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 

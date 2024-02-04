@@ -2,6 +2,7 @@
 #include "Renderer2D.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 //#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
@@ -59,7 +60,15 @@ namespace fe
 		for (int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data->BaseShaderSamplers[i] = i;
 
-		Ref<Texture> whiteTexture = Texture2D::Create("Base2DTexture", 1, 1);
+		TextureBuilder textureBuilder;
+		textureBuilder
+			.SetHight(1)
+			.SetWidth(1)
+			.SetName("Base2DTexture")
+			.SetType(TextureData::Type::Texture2D)
+			.SetSpecification(TextureData::Specification{TextureData::Format::RGBA, TextureData::DataFormat::RGBA8});
+
+		Ref<Texture> whiteTexture = textureBuilder.Create();
 		uint32_t whiteTextureData = 0xffffffff;
 		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 		TextureLibrary::Add(whiteTexture);

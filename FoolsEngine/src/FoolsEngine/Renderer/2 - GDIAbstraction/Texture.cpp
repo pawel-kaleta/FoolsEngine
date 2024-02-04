@@ -6,12 +6,7 @@
 
 namespace fe
 {
-	Scope<Texture> Texture2D::Create(const std::string& name, uint32_t width, uint32_t hight)
-	{
-		return Create(name, width, hight, Renderer::GetActiveGDItype());
-	}
-
-	Scope<Texture> Texture2D::Create(const std::string& name, uint32_t width, uint32_t hight, GDIType GDI)
+	Texture* Texture2D::Create(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, GDIType GDI)
 	{
 		switch (GDI)
 		{
@@ -19,19 +14,20 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return CreateScope<OpenGLTexture2D>(name, width, hight);
+			return new OpenGLTexture2D(name, specification, width, hight);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
 
-	Scope<Texture> Texture2D::Create(const std::string& filePath)
+	Ref<Texture> Texture2D::Create(const std::string& filePath)
 	{
-		return Create(filePath, Renderer::GetActiveGDItype());
+		GDIType GDI = Renderer::GetActiveGDItype();
+		return Create(filePath, GDI);
 	}
 
-	Scope<Texture> Texture2D::Create(const std::string& filePath, GDIType GDI)
+	Ref<Texture> Texture2D::Create(const std::string& filePath, GDIType GDI)
 	{
 		switch (GDI)
 		{
@@ -39,10 +35,44 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return CreateScope<OpenGLTexture2D>(filePath);
+			return CreateRef<OpenGLTexture2D>(filePath);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
+	}
+
+	Ref<Texture> TextureBuilder::Create()
+	{
+		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format    ::None, "Unspecified format of a texture");
+		FE_CORE_ASSERT(m_Specification.DataFormat != TextureData::DataFormat::None, "Unspecified data format of a texture");
+		FE_CORE_ASSERT(m_Width != 0, "Unspecified width of a texture");
+		FE_CORE_ASSERT(m_Height != 0, "Unspecified hight of a texture");
+
+		if (m_Specification.Format     == TextureData::Format::None)     return nullptr;
+		if (m_Specification.DataFormat == TextureData::DataFormat::None) return nullptr;
+		if (m_Width == 0) return nullptr;
+		if (m_Height == 0) return nullptr;
+
+		if (m_GDI == GDIType::none)
+			m_GDI = Renderer::GetActiveGDItype();
+
+		switch (m_Type)
+		{
+		case TextureData::Type::None:
+		{
+			FE_CORE_ASSERT(false, "Unspecified type of a texture");
+			return nullptr;
+		}
+		case TextureData::Type::Texture2D:
+		{
+			return Ref<Texture>(Texture2D::Create(m_Name, m_Specification, m_Width, m_Height, m_GDI));
+		}
+		default:
+		{
+			FE_CORE_ASSERT(false, "Unknown type of a texture");
+			return nullptr;
+		}
+		}
 	}
 }

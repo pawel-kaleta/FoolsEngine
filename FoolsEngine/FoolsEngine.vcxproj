@@ -249,7 +249,6 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLBuffers.cpp" />

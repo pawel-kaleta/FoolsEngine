@@ -107,7 +107,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(false, "3D rendering not supported yet!");
-		//s_SceneData->VPMatrix = camera.GetViewProjectionMatrix();
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 	}
