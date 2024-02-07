@@ -14,6 +14,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		m_EntityIDSelectionRequest = m_SelectedEntityID;
+
 		ImGui::Begin("Scene Hierarchy");
 
 		if (m_Scene == nullptr)
@@ -38,7 +40,7 @@ namespace fe
 		if (ImGui::IsWindowHovered() && !nodeClicked)
 		{
 			if (ImGui::IsMouseClicked(0))
-				m_SelectedEntityID = NullEntityID;
+				m_EntityIDSelectionRequest = NullEntityID;
 
 			if (ImGui::IsMouseClicked(1))
 				ImGui::OpenPopup("Context menu popup");
@@ -92,7 +94,7 @@ namespace fe
 		bool nodeClicked = false;
 		if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked())
 		{
-			m_SelectedEntityID = entityID;
+			m_EntityIDSelectionRequest = entityID;
 			nodeClicked = true;
 		}
 

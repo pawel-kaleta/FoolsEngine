@@ -44,32 +44,32 @@ namespace fe
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	GLenum OpenGLFramebuffer::FormatToGLenum(TextureData::Format format)
+	GLenum OpenGLFramebuffer::FormatToGLenum(TextureData::Components format)
 	{
 		switch (format)
 		{
-		case TextureData::Format::None:
+		case TextureData::Components::None:
 			FE_CORE_ASSERT(false, "Not specified format of attachment");
 			return GL_NONE;
-		case TextureData::Format::RGB:  return GL_RGB;
-		case TextureData::Format::RGBA: return GL_RGBA;
-		case TextureData::Format::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
+		case TextureData::Components::RGB:  return GL_RGB;
+		case TextureData::Components::RGBA: return GL_RGBA;
+		case TextureData::Components::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
 		default:
 			FE_CORE_ASSERT(false, "Uknown format of attachment");
 			return 0;
 		}
 	}
 
-	GLenum OpenGLFramebuffer::DataFormatToGLenum(TextureData::DataFormat dataFormat)
+	GLenum OpenGLFramebuffer::DataFormatToGLenum(TextureData::Format dataFormat)
 	{
 		switch (dataFormat)
 		{
-		case TextureData::DataFormat::None:
+		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");
 			return GL_NONE;
-		case TextureData::DataFormat::RGB8:  return GL_RGB8;
-		case TextureData::DataFormat::RGBA8: return GL_RGBA8;
-		case TextureData::DataFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
+		case TextureData::Format::RGB8:  return GL_RGB8;
+		case TextureData::Format::RGBA8: return GL_RGBA8;
+		case TextureData::Format::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
 		default:
 			FE_CORE_ASSERT(false, "Uknown data format of attachment");
 			return GL_NONE;
@@ -91,8 +91,8 @@ namespace fe
 
 			for (int i = 0; i < m_ColorAttachments.size(); ++i)
 			{
-				GLenum format     =     FormatToGLenum(m_Specification.ColorAttachments[i].Format);
-				GLenum dataFormat = DataFormatToGLenum(m_Specification.ColorAttachments[i].DataFormat);
+				GLenum format     =     FormatToGLenum(m_Specification.ColorAttachments[i].Components);
+				GLenum dataFormat = DataFormatToGLenum(m_Specification.ColorAttachments[i].Format);
 
 				glBindTexture(target, m_ColorAttachments[i]);
 
@@ -115,12 +115,12 @@ namespace fe
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, target, m_ColorAttachments[i], 0);
 			}
 
-			if (m_Specification.DepthAttachment != TextureData::DataFormat::None)
+			if (m_Specification.DepthStencilAttachment != TextureData::Format::None)
 			{
-				GLenum dataFormat = DataFormatToGLenum(m_Specification.DepthAttachment);
+				GLenum dataFormat = DataFormatToGLenum(m_Specification.DepthStencilAttachment);
 
-				glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
-				glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
+				glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthStencilAttachment);
+				glBindTexture(GL_TEXTURE_2D, m_DepthStencilAttachment);
 
 				if (multisampled)
 				{
@@ -138,7 +138,7 @@ namespace fe
 					glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				}
 
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, target, m_DepthAttachment, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, target, m_DepthStencilAttachment, 0);
 			}
 		}
 		
@@ -178,8 +178,8 @@ namespace fe
 		glDeleteFramebuffers(1, &m_ID);
 		if (m_ColorAttachments.size())
 			glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
-		if (m_DepthAttachment)
-			glDeleteTextures(1, &m_DepthAttachment);
+		if (m_DepthStencilAttachment)
+			glDeleteTextures(1, &m_DepthStencilAttachment);
 
 		m_ColorAttachments.clear();
 	}

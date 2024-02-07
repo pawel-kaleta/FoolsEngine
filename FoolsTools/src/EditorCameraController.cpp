@@ -56,7 +56,7 @@ namespace fe
 
 		Zoom(delta);
 
-		event->Handled = true;
+		event->Handle();
 	}
 
 	void EditorCameraController::Rotate(int headingDir, int pitchDir, int bankDir)

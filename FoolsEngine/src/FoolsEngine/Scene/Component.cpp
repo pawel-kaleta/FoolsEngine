@@ -140,7 +140,7 @@ namespace fe
 
 			for (auto it = textures.begin(); it != textures.end(); ++it)
 			{
-				if (it->second->GetFormat() != TextureData::Format::RGB)
+				if (it->second->GetComponents() != TextureData::Components::RGB)
 					continue;
 
 				if (it->second->GetID() == flat_color_texture->GetID())

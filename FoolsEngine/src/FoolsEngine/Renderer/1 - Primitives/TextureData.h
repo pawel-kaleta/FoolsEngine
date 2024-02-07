@@ -10,7 +10,7 @@ namespace fe
 			Texture2D
 		};
 
-		enum class Format
+		enum class Components
 		{
 			None = 0,
 
@@ -20,7 +20,7 @@ namespace fe
 			DepthStencil
 		};
 
-		enum class DataFormat
+		enum class Format
 		{
 			None = 0,
 
@@ -33,11 +33,11 @@ namespace fe
 		struct Specification
 		{
 			Specification() = default;
-			Specification(Format format, DataFormat dataFormat)
-				: Format(format), DataFormat(dataFormat) {};
+			Specification(Components format, Format dataFormat)
+				: Components(format), Format(dataFormat) {};
 
+			Components Components = Components::None;
 			Format     Format     = Format::None;
-			DataFormat DataFormat = DataFormat::None;
 		};
 	}
 }

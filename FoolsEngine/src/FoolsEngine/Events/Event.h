@@ -47,6 +47,8 @@ namespace fe
 		public:
 			virtual ~Event() = default;
 
+			void Handle() { Handled = true; Owned = true; }
+
 			bool Handled = false;
 			bool Owned = false;
 

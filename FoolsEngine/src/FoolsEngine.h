@@ -11,6 +11,7 @@
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "FoolsEngine\Core\InputCodes.h"
 #include "FoolsEngine\Core\InputPolling.h"
+#include "FoolsEngine\Renderer\1 - Primitives\FramebufferData.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Scene\ECS.h"

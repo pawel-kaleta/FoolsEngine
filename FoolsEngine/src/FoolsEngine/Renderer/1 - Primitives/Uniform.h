@@ -17,10 +17,10 @@ namespace fe
 			: m_Type(ShaderData::Type::None), m_Count(0) {}
 
 		const std::string& GetName() const { return m_Name; }
-		const ShaderData::Type& GetType() const { return m_Type; }
+		const ShaderData::Type&     GetType()      const { return m_Type; }
 		const ShaderData::Structure GetStructure() const { return ShaderData::StructureInType(m_Type); }
 		const ShaderData::Primitive GetPrimitive() const { return ShaderData::PrimitiveInType(m_Type); }
-		const uint32_t GetSize() const { return SizeOfType(m_Type) * m_Count; }
+		const uint32_t GetSize()  const { return SizeOfType(m_Type) * m_Count; }
 		const uint32_t GetCount() const { return m_Count; }
 	private:
 		std::string m_Name;

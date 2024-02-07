@@ -351,6 +351,9 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp">
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Buffers.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
@@ -474,6 +477,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\BufferData.cpp" />
   </ItemGroup>
 </Project>

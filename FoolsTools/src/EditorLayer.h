@@ -6,7 +6,14 @@
 #include "Panels\ActorInspector.h"
 #include "Panels\EntityInspector.h"
 #include "Panels\SystemsInspector.h"
-#include <filesystem>
+
+#include "Viewports\EditViewport.h"
+#include "Viewports\PlayViewport.h"
+
+#include "EditorState.h"
+#include "Toolbar.h"
+
+
 #include <ImGuizmo.h>
 
 
@@ -26,23 +33,9 @@ namespace fe
 		Ref<Scene> m_Scene;
 		Ref<Scene> m_SceneBackup;
 
-		Scope<EditorCameraController>	m_CameraController;
-		Scope<Framebuffer>				m_Framebuffer;
-		
-		glm::vec2	m_ViewportSize = { 0, 0 };
-		bool		m_VieportFocus = false;
-		bool		m_VieportHover = false;
+		EditorState m_EditorState = EditorState::Edit;
 
-		enum class SceneState
-		{
-			Edit,
-			Play,
-			Pause
-		} m_SceneState = SceneState::Edit;
-		
-		void UpdateScene_EditMode(const Camera* camera, Transform& cameraTransform);
-		void UpdateScene_PlayMode(const Camera* camera, Transform& cameraTransform);
-		void UpdateScene_PauseMode(const Camera* camera, Transform& cameraTransform);
+		Toolbar m_Toolbar;
 
 		struct Panels
 		{
@@ -52,14 +45,14 @@ namespace fe
 			SystemsInspector	SystemsInspector;
 		} m_Panels;
 
+		struct Vieports
+		{
+			EditViewport EditViewport;
+			PlayViewport PlayViewport;
+		} m_Viewports;
+
 		EntityID m_SelectedEntityID = NullEntityID;
-		ImGuizmo::OPERATION m_GizmoType = ImGuizmo::OPERATION::UNIVERSAL;
 
-		Ref<Texture> m_IconPlay;
-		Ref<Texture> m_IconPause;
-		Ref<Texture> m_IconStop;
-
-		void RenderViewport();
 		void RenderPanels();
 		void RenderMainMenu();
 		void RenderToolbar();
@@ -70,7 +63,7 @@ namespace fe
 		void SaveSceneAs(const Ref<Scene>& scene);
 
 		void SetSceneContext(const Ref<Scene>& scene);
-		void SetSelectionContext(EntityID entityID);
+		void SetSelectionContext();
 		void GetSelection();
 
 		void OnScenePlayStart();

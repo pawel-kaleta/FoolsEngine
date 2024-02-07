@@ -15,7 +15,8 @@ project "FoolsTools"
 	}
 
 	includedirs {
-		common_includedirs
+		common_includedirs,
+		"src"
 	}
 
 	links {

@@ -14,8 +14,8 @@ namespace fe
 
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
+		virtual TextureData::Components GetComponents() const override;
 		virtual TextureData::Format GetFormat() const override;
-		virtual TextureData::DataFormat GetDataFormat() const override;
 
 		virtual void SetData(void* data, uint32_t size) override;
 

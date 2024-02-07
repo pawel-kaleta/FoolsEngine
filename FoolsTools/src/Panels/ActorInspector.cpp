@@ -14,6 +14,7 @@ namespace fe
 
     void ActorInspector::OpenActor(EntityID entityID)
     {
+        m_SelectedEntityID = entityID;
         if (entityID == NullEntityID)
         {
             m_OpenedActorID = NullEntityID;
@@ -60,7 +61,7 @@ namespace fe
         {
             EntityID newSelection = behavior->DrawInspectorWidget();
             if (newSelection != NullEntityID)
-                m_SelectedEntityID = newSelection;
+                m_EntityIDSelectionRequest = newSelection;
         }
 
         if (widget_of_popup)
@@ -91,7 +92,7 @@ namespace fe
         FE_PROFILER_FUNC();
 
         ImGui::Begin("Actor Inspector");
-        m_SelectedEntityID = NullEntityID;
+        m_EntityIDSelectionRequest = m_SelectedEntityID;
 
         if (m_OpenedActorID == NullEntityID || m_Scene == nullptr)
         {

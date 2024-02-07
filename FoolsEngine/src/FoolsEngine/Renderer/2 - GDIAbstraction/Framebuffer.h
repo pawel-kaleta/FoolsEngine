@@ -15,11 +15,15 @@ namespace fe
 		virtual void Recreate() = 0;
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
 
-		virtual void Bind() = 0;
+		virtual void Bind()   = 0;
 		virtual void Unbind() = 0;
 
-		virtual uint32_t GetDepthAttachmentID() const = 0;
-		virtual uint32_t GetColorAttachmentID(uint32_t index = 0) const = 0;
+		virtual const std::string& GetName() const = 0;
+		virtual void               SetName(const std::string& name) = 0;
+
+		virtual uint32_t GetDepthStencilAttachmentID()                 const = 0;
+		virtual uint32_t GetColorAttachmentID(uint32_t index = 0)      const = 0;
+		virtual uint32_t GetColorAttachmentID(const std::string& name) const = 0;
 
 		virtual const FramebufferData::Specification& GetSpecification() const = 0;
 

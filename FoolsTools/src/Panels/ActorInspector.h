@@ -13,14 +13,15 @@ namespace fe
 
 		void SetScene(const Ref<Scene>& scene);
 
-		void OpenActor(EntityID entityID);
-		EntityID GetSelection() const { return m_SelectedEntityID; }
-		void OnImGuiRender();
+		void     OpenActor(EntityID entityID);
+		EntityID GetSelectionRequest() const { return m_EntityIDSelectionRequest; }
+		void     OnImGuiRender();
 	private:
 		Ref<Scene> m_Scene;
 		EntityID   m_OpenedActorID    = NullEntityID;
 		Behavior*  m_BehaviorToRemove = nullptr;
 		EntityID   m_SelectedEntityID = NullEntityID;
+		EntityID   m_EntityIDSelectionRequest = NullEntityID;
 
 		static void AddBehaviorPopupMenu(Actor actor);
 		void DrawBehaviorWidget(Behavior* behavior, Actor actor);

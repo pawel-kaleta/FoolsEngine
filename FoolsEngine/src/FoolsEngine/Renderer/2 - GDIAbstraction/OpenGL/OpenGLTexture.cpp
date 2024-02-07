@@ -12,19 +12,19 @@ namespace fe
 	{
 		// TO DO: encapsulate and isolate specification translation abstract<->OpenGL
 
-		switch (specification.Format)
+		switch (specification.Components)
 		{
-		case TextureData::Format::None:
+		case TextureData::Components::None:
 		{
 			FE_CORE_ASSERT(false, "Unspecified texture format");
 			break;
 		}
-		case TextureData::Format::RGB:
+		case TextureData::Components::RGB:
 		{
 			m_Format = GL_RGB;
 			break;
 		}
-		case TextureData::Format::RGBA:
+		case TextureData::Components::RGBA:
 		{
 			m_Format = GL_RGBA;
 			break;
@@ -35,19 +35,19 @@ namespace fe
 		}
 		}
 
-		switch (specification.DataFormat)
+		switch (specification.Format)
 		{
-		case TextureData::DataFormat::None:
+		case TextureData::Format::None:
 		{
 			FE_CORE_ASSERT(false, "Unspecified texture data format");
 			break;
 		}
-		case TextureData::DataFormat::RGB8:
+		case TextureData::Format::RGB8:
 		{
 			m_InternalFormat = GL_RGB8;
 			break;
 		}
-		case TextureData::DataFormat::RGBA8:
+		case TextureData::Format::RGBA8:
 		{
 			m_InternalFormat = GL_RGBA8;
 			break;
@@ -119,24 +119,24 @@ namespace fe
 		glDeleteTextures(1, &m_ID);
 	}
 
-	TextureData::Format OpenGLTexture2D::GetFormat() const
+	TextureData::Components OpenGLTexture2D::GetComponents() const
 	{
 		switch (m_Format)
 		{
-		case GL_RGB:  return TextureData::Format::RGB;
-		case GL_RGBA: return TextureData::Format::RGBA;
+		case GL_RGB:  return TextureData::Components::RGB;
+		case GL_RGBA: return TextureData::Components::RGBA;
 		}
-		return TextureData::Format::None;
+		return TextureData::Components::None;
 	}
 
-	TextureData::DataFormat OpenGLTexture2D::GetDataFormat() const
+	TextureData::Format OpenGLTexture2D::GetFormat() const
 	{
 		switch (m_InternalFormat)
 		{
-		case GL_RGB8:  return TextureData::DataFormat::RGB8;
-		case GL_RGBA8: return TextureData::DataFormat::RGBA8;
+		case GL_RGB8:  return TextureData::Format::RGB8;
+		case GL_RGBA8: return TextureData::Format::RGBA8;
 		}
-		return TextureData::DataFormat::None;
+		return TextureData::Format::None;
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)

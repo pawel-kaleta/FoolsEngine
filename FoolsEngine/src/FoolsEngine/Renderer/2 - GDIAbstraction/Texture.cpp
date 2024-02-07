@@ -44,14 +44,14 @@ namespace fe
 
 	Ref<Texture> TextureBuilder::Create()
 	{
-		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format    ::None, "Unspecified format of a texture");
-		FE_CORE_ASSERT(m_Specification.DataFormat != TextureData::DataFormat::None, "Unspecified data format of a texture");
-		FE_CORE_ASSERT(m_Width != 0, "Unspecified width of a texture");
+		FE_CORE_ASSERT(m_Specification.Components != TextureData::Components::None, "Unspecified components of a texture");
+		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format::None,     "Unspecified format of a texture");
+		FE_CORE_ASSERT(m_Width  != 0, "Unspecified width of a texture");
 		FE_CORE_ASSERT(m_Height != 0, "Unspecified hight of a texture");
 
-		if (m_Specification.Format     == TextureData::Format::None)     return nullptr;
-		if (m_Specification.DataFormat == TextureData::DataFormat::None) return nullptr;
-		if (m_Width == 0) return nullptr;
+		if (m_Specification.Components == TextureData::Components::None) return nullptr;
+		if (m_Specification.Format     == TextureData::Format::None    ) return nullptr;
+		if (m_Width  == 0) return nullptr;
 		if (m_Height == 0) return nullptr;
 
 		if (m_GDI == GDIType::none)

@@ -16,11 +16,12 @@ namespace fe
 	{
 		switch (severity)
 		{
-		case GL_DEBUG_SEVERITY_HIGH:         FE_LOG_CORE_FATAL(message); return;
-		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR(message); return;
-		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(message); return;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(message); return;
+		case GL_DEBUG_SEVERITY_HIGH:         FE_LOG_CORE_FATAL(message); break;
+		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR(message); break;
+		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(message);  break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(message); break;
 		}
+		FE_LOG_CORE_DEBUG("Source: {0}, Type: {1}, ID: {2}", source, type, id);
 	}
 
 	OpenGLRenderingContext::OpenGLRenderingContext(GLFWwindow* window)

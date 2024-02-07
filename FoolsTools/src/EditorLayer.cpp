@@ -18,22 +18,8 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		FramebufferData::SpecificationBuilder specBuilder;
-		specBuilder
-			.SetWidth(1280)
-			.SetHight(720)
-			.SetDepthAttachmentDataFormat(TextureData::DataFormat::DEPTH24STENCIL8)
-			.SetCollorAttachmentSpecifications({ {TextureData::Format::RGBA, TextureData::DataFormat::RGBA8} });
-		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
-
-		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
-
 		m_Scene = CreateRef<Scene>();
 		SetSceneContext(m_Scene);
-
-		m_IconPlay  = Texture2D::Create("resources/PlayButton.png");
-		m_IconStop  = Texture2D::Create("resources/StopButton.png");
-		m_IconPause = Texture2D::Create("resources/PauseButton.png");
 	}
 
 	void EditorLayer::OnUpdate()
@@ -41,21 +27,23 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
 
-		static const Camera* viewportCamera = &m_CameraController->GetCamera();
-		static Transform viewportCameraTransform;
-
-		switch (m_SceneState)
+		switch (m_EditorState)
 		{
-		case SceneState::Edit:  UpdateScene_EditMode( viewportCamera, viewportCameraTransform); break;
-		case SceneState::Play:  UpdateScene_PlayMode( viewportCamera, viewportCameraTransform); break;
-		case SceneState::Pause: UpdateScene_PauseMode(viewportCamera, viewportCameraTransform); break;
+		case EditorState::Edit: 
+			break;
+		case EditorState::Play:
+			m_Scene->SimulationUpdate();
+			break;
+		case EditorState::Pause:
+			break;
 		}
 
 		m_Scene->PostFrameUpdate();
 
-		m_Framebuffer->Bind();
-		Renderer2D::RenderScene(*m_Scene, *viewportCamera, viewportCameraTransform);
-		m_Framebuffer->Unbind();
+		m_Viewports.EditViewport.UpdateCamera();
+
+		m_Viewports.EditViewport.RenderScene();
+		m_Viewports.PlayViewport.RenderScene();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -68,7 +56,7 @@ namespace fe
 
 		// nested docking spaces of the same size bad -> no docking to window, only to dedicated dockspace
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
-		if (fullscreenOpt) 
+		if (fullscreenOpt)
 		{
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->Pos);
@@ -82,7 +70,7 @@ namespace fe
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse |
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoResize |
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
-			
+
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoNavFocus;
 		}
@@ -112,188 +100,47 @@ namespace fe
 
 			RenderMainMenu();
 			RenderToolbar();
-
 			RenderPanels();
-			RenderViewport();
+
+			m_Viewports.EditViewport.OnImGuiRender();
+			m_Viewports.PlayViewport.OnImGuiRender();
+
+			GetSelection();
 		}
-		ImGui::End();	
-	}
-
-	void EditorLayer::UpdateScene_EditMode(const Camera* camera, Transform& cameraTransform)
-	{
-		if (!Application::Get().GetImguiLayer()->IsBlocking())
-			m_CameraController->OnUpdate();
-		camera = &m_CameraController->GetCamera();
-		cameraTransform = m_CameraController->GetTransform();
-	}
-
-	void EditorLayer::UpdateScene_PlayMode(const Camera* camera, Transform& cameraTransform)
-	{
-		m_Scene->SimulationUpdate();
-		{
-			Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
-			if (cameraEntity)
-			{
-				auto& cameraComponent = cameraEntity.Get<CCamera>();
-				camera = &cameraComponent.Camera;
-				cameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
-				cameraTransform.Scale = { 1.f,1.f,1.f };
-				cameraTransform = cameraTransform + cameraComponent.Offset;
-			}
-			else
-			{
-				camera = &m_CameraController->GetCamera();
-				cameraTransform = m_CameraController->GetTransform();
-			}
-		}
-	}
-
-	void EditorLayer::UpdateScene_PauseMode(const Camera* camera, Transform& cameraTransform)
-	{
-		if (!Application::Get().GetImguiLayer()->IsBlocking())
-			m_CameraController->OnUpdate();
-		camera = &m_CameraController->GetCamera();
-		cameraTransform = m_CameraController->GetTransform();
-	}
-
-	void EditorLayer::RenderViewport()
-	{
-		FE_PROFILER_FUNC();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("Vieport");
-		ImGui::PopStyleVar();
-
-		m_VieportFocus = ImGui::IsWindowFocused();
-		m_VieportHover = ImGui::IsWindowHovered();
-
-		bool test = ImGui::IsItemEdited();
-		Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover));
-
-		auto vidgetSize = ImGui::GetContentRegionAvail();
-		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different librarys
-
-		if (m_ViewportSize != newViewPortSize)
-		{
-			// there is a bug in ImGui that is causing GetContentRegionAvail() to report wrong values in first frame
-			// this is a workaround that prevents creation of framebuffer with 0 hight or with
-			if (newViewPortSize.x == 0 || newViewPortSize.y == 0)
-				newViewPortSize = { 1, 1 };
-
-			m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
-			m_ViewportSize = newViewPortSize;
-			m_CameraController->Resize(newViewPortSize.x, newViewPortSize.y);
-		}
-
-		auto fbID = m_Framebuffer->GetColorAttachmentID();
-		ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-		//Gizmos
-		if (m_SceneState != SceneState::Play)
-		{
-			Entity selectedEntity(m_SelectedEntityID, m_Scene->GetGameplayWorld());
-
-			if (selectedEntity)
-			{
-				ImGuizmo::SetOrthographic(false);
-				ImGuizmo::SetDrawlist();
-
-				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, newViewPortSize.x, newViewPortSize.y);
-
-				// Camera
-				auto cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
-				const auto& camera = m_CameraController->GetCamera();
-				const glm::mat4& cameraProjection = camera.GetProjectionMatrix();
-				glm::mat4 cameraView = glm::inverse(m_CameraController->GetTransform().GetTransform());
-
-				// Entity transform
-				auto& tc = selectedEntity.GetTransformHandle().GetGlobal();
-				glm::mat4 transformMatrix = tc.GetTransform();
-
-				// Snapping
-				bool snap = InputPolling::IsKeyPressed(InputCodes::LeftControl);
-				float snapValue = 0.5f; // Snap to 0.5m for translation/scale
-				// Snap to 45 degrees for rotation
-				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
-					snapValue = 45.0f;
-
-				float snapValues[3] = { snapValue, snapValue, snapValue };
-
-				ImGuizmo::Manipulate(
-					glm::value_ptr(cameraView),
-					glm::value_ptr(cameraProjection),
-					(ImGuizmo::OPERATION)m_GizmoType,
-					ImGuizmo::LOCAL,
-					glm::value_ptr(transformMatrix),
-					nullptr,
-					snap ? snapValues : nullptr
-				);
-
-
-				if (ImGuizmo::IsUsing())
-				{
-					auto mosePos = ImGui::GetMousePos();
-					Transform transform;
-					Math::DecomposeTransform(transformMatrix, transform);
-					transform.Rotation = glm::degrees(transform.Rotation);
-					selectedEntity.GetTransformHandle().SetGlobal(transform);
-				}
-			}
-		}
-
 		ImGui::End();
 	}
 
 	void EditorLayer::RenderToolbar()
 	{
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-		auto& colors = ImGui::GetStyle().Colors;
-		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
-		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+		m_Toolbar.SetEditorState(m_EditorState);
+		m_Toolbar.OnImGuiRender();
+		ToolbarButton clickedButton = m_Toolbar.GetClickedButton();
 
-		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-
-		float size = ImGui::GetWindowHeight() - 4.0f; //headbar
-		
-		switch (m_SceneState)
+		switch (clickedButton)
 		{
-		case SceneState::Edit:
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		case ToolbarButton::None:
+			break;
+		case ToolbarButton::Play:
+			if (m_EditorState == EditorState::Edit)
 				OnScenePlayStart();
-			break;
-		case SceneState::Play:
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPause->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePlayPause();
-			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePlayStop();
-			break;
-		case SceneState::Pause:
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (m_EditorState == EditorState::Pause)
 				OnScenePlayResume();
-			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-				OnScenePlayStop();
+			break;
+		case ToolbarButton::Pause:
+			OnScenePlayPause();
+			break;
+		case ToolbarButton::Stop:
+			OnScenePlayStop();
+			break;
 		}
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor(3);
-		ImGui::End();
 	}
 
 	void EditorLayer::RenderPanels()
 	{
 		FE_PROFILER_FUNC();
 
+		SetSelectionContext();
 
-		SetSelectionContext(m_SelectedEntityID);
-		  
 		m_Panels.WorldHierarchyPanel.OnImGuiRender();
 		m_Panels.ActorInspector.OnImGuiRender();
 		m_Panels.EntityInspector.OnImGuiRender();
@@ -315,15 +162,13 @@ namespace fe
 		ImGui::Begin("Settings");
 		{
 			FE_PROFILER_SCOPE("Settings");
-			
+
 			if (ImGui::CollapsingHeader("Editor Camera", ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				m_CameraController->RenderWidget();
+				m_Viewports.EditViewport.GetCameraController().RenderWidget();
 			}
 		}
 		ImGui::End();
-
-		GetSelection();
 	}
 
 	void EditorLayer::RenderMainMenu()
@@ -333,28 +178,29 @@ namespace fe
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
-				{
 					NewScene();
-				}
+
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
 					OpenScene();
-				}
-				if (m_SceneState != SceneState::Edit)
+
+				if (m_EditorState != EditorState::Edit)
 					ImGui::BeginDisabled();
-				if (!m_Scene->GetFilepath().empty())
 				{
-					if (ImGui::MenuItem("Save", "Ctrl+S"))
+					if (!m_Scene->GetFilepath().empty())
 					{
-						SaveScene(m_Scene);
+						if (ImGui::MenuItem("Save", "Ctrl+S"))
+						{
+							SaveScene(m_Scene);
+						}
+					}
+					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					{
+						SaveSceneAs(m_Scene);
 					}
 				}
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-				{
-					SaveSceneAs(m_Scene);
-				}
-				if (m_SceneState != SceneState::Edit)
+				if (m_EditorState != EditorState::Edit)
 					ImGui::EndDisabled();
+
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit"))
 					Application::Get().Close();
@@ -363,9 +209,8 @@ namespace fe
 			if (ImGui::BeginMenu("Debug"))
 			{
 				if (ImGui::MenuItem("Spawn Test Scene Objects"))
-				{
 					TestSceneSetup(m_Scene);
-				}
+
 				ImGui::EndMenu();
 			}
 
@@ -391,8 +236,8 @@ namespace fe
 
 		if (SceneSerializerYAML::Deserialize(newScene, filepath))
 		{
-			if (m_SceneState != SceneState::Edit)
-				m_SceneState = SceneState::Edit;
+			if (m_EditorState != EditorState::Edit)
+				m_EditorState  = EditorState::Edit;
 
 			m_Scene = newScene;
 			SetSceneContext(m_Scene);
@@ -420,69 +265,81 @@ namespace fe
 
 	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
 	{
-		SetSelectionContext(NullEntityID);
+		m_SelectedEntityID = NullEntityID;
 
 		m_Panels.WorldHierarchyPanel.SetScene(scene);
 		m_Panels.EntityInspector.SetScene(scene);
 		m_Panels.ActorInspector.SetScene(scene);
 		m_Panels.SystemsInspector.SetScene(scene);
+
+		m_Viewports.EditViewport.SetScene(scene);
+		m_Viewports.PlayViewport.SetScene(scene);
 	}
 
-	void EditorLayer::SetSelectionContext(EntityID entityID)
+	void EditorLayer::SetSelectionContext()
 	{
-		m_SelectedEntityID = entityID;
+		m_Panels.WorldHierarchyPanel.SetSelection(m_SelectedEntityID);
+		m_Panels.EntityInspector.OpenEntity(m_SelectedEntityID);
+		m_Panels.ActorInspector.OpenActor(m_SelectedEntityID);
 
-		m_Panels.WorldHierarchyPanel.SetSelection(entityID);
-		m_Panels.EntityInspector.OpenEntity(entityID);
-		m_Panels.ActorInspector.OpenActor(entityID);
+		m_Viewports.EditViewport.SetSelection(m_SelectedEntityID);
 	}
 
 	void EditorLayer::GetSelection()
 	{
-		m_SelectedEntityID = m_Panels.WorldHierarchyPanel.GetSelection();
+		EntityID newSelectionID;
+		bool isNewSelection = false;
 
-		EntityID newSelection = m_Panels.ActorInspector.GetSelection();
-		if (newSelection != NullEntityID)
-			m_SelectedEntityID = newSelection;
+		newSelectionID = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
+		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+
+		newSelectionID = m_Viewports.EditViewport.GetSelectionRequest();
+		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+
+		newSelectionID = m_Panels.ActorInspector.GetSelectionRequest();
+		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+
+		if (isNewSelection)
+			m_SelectedEntityID = newSelectionID;
 	}
 
 	void EditorLayer::OnScenePlayStart()
 	{
 		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
-	
+
 
 		m_SceneBackup = CreateRef<Scene>();
 
-
 		std::string sceneData = SceneSerializerYAML::Serialize(m_Scene);
 
+		// TO DO: binary serialization
 		if (SceneSerializerYAML::Deserialize(m_SceneBackup, sceneData))
 		{
-			m_SceneState = SceneState::Play;
+			m_EditorState = EditorState::Play;
 
 			m_SceneBackup->SetFilepath(m_Scene->GetFilepath());
 			m_SceneBackup->SetName(m_Scene->GetName());
 		}
 		else
 		{
-			FE_LOG_CORE_ERROR("Deserialization of scene");
+			FE_LOG_CORE_ERROR("Deserialization of scene failed");
 		}
 	}
 
 	void EditorLayer::OnScenePlayPause()
 	{
-		m_SceneState = SceneState::Pause;
+		m_EditorState = EditorState::Pause;
 	}
-	
+
 	void EditorLayer::OnScenePlayResume()
 	{
-		m_SceneState = SceneState::Play;
+		m_EditorState = EditorState::Play;
 	}
 
 	void EditorLayer::OnScenePlayStop()
 	{
-		m_SceneState = SceneState::Edit;
+		m_EditorState = EditorState::Edit;
 
 		m_Scene = m_SceneBackup;
 		SetSceneContext(m_Scene);
@@ -492,10 +349,14 @@ namespace fe
 	{
 		FE_LOG_TRACE("{0}", event);
 
-		m_CameraController->OnEvent(event);
-
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));
+
+		if (event->Handled || !event->Owned)
+			return;
+
+		if (!Application::Get().GetImguiLayer()->IsBlocking())
+			m_Viewports.EditViewport.OnEvent(event);
 	}
 
 	void EditorLayer::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
@@ -503,41 +364,32 @@ namespace fe
 		if (event->GetRepeatCount() == 0)
 		{
 			bool control = InputPolling::IsKeyPressed(InputCodes::LeftControl) || InputPolling::IsKeyPressed(InputCodes::RightControl);
-			bool shift   = InputPolling::IsKeyPressed(InputCodes::LeftShift  ) || InputPolling::IsKeyPressed(InputCodes::RightShift  );
+			bool shift = InputPolling::IsKeyPressed(InputCodes::LeftShift) || InputPolling::IsKeyPressed(InputCodes::RightShift);
 
-			switch (event->GetKeyCode())
+			if (control)
 			{
-			case InputCodes::N:
-				if (control)
-					NewScene();
-				break;
-			case InputCodes::O:
-				if (control)
-					OpenScene();
-				break;
-			case InputCodes::S:
-				if (control)
+				switch (event->GetKeyCode())
 				{
+				case InputCodes::N:
+					NewScene();
+					event->Handle();
+					return;
+				case InputCodes::O:
+					OpenScene();
+					event->Handle();
+					return;
+				case InputCodes::S:
+					if (m_EditorState != EditorState::Edit)
+						return;
+
 					if (shift || m_Scene->GetFilepath().empty())
 						SaveSceneAs(m_Scene);
 					else
 						SaveScene(m_Scene);
-				}
-				break;
 
-			// Gizmos
-			//case InputCodes::Q:
-				//m_GizmoType = -1;
-				//break;
-			case InputCodes::Z:
-				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-			case InputCodes::X:
-				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-				break;
-			case InputCodes::C:
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-				break;
+					event->Handle();
+					return;
+				}
 			}
 		}
 	}

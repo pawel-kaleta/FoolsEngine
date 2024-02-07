@@ -11,14 +11,15 @@ namespace fe
 		WorldHierarchyPanel(const Ref<Scene>& scene)
 			: m_Scene(scene) {}
 
-		void		SetScene(const Ref<Scene>& scene);
-		EntityID	GetSelection()					{ return m_SelectedEntityID; }
-		void		SetSelection(EntityID entityID)	{ m_SelectedEntityID = entityID; }
+		void     SetScene(const Ref<Scene>& scene);
+		void     SetSelection(EntityID entityID) { m_SelectedEntityID = entityID; }
+		EntityID GetSelectionRequest() { return m_EntityIDSelectionRequest; }
 
 		void OnImGuiRender();
 	private:
-		Ref<Scene>	m_Scene;
-		EntityID	m_SelectedEntityID = NullEntityID;
+		Ref<Scene> m_Scene;
+		EntityID   m_SelectedEntityID = NullEntityID;
+		EntityID   m_EntityIDSelectionRequest = NullEntityID;
 		
 		bool DrawEntity(EntityID entityID);
 	};

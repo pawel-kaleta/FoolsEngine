@@ -66,7 +66,7 @@ namespace fe
 			.SetWidth(1)
 			.SetName("Base2DTexture")
 			.SetType(TextureData::Type::Texture2D)
-			.SetSpecification(TextureData::Specification{TextureData::Format::RGBA, TextureData::DataFormat::RGBA8});
+			.SetSpecification(TextureData::Specification{TextureData::Components::RGBA, TextureData::Format::RGBA8});
 
 		Ref<Texture> whiteTexture = textureBuilder.Create();
 		uint32_t whiteTextureData = 0xffffffff;

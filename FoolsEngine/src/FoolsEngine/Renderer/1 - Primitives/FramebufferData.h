@@ -6,6 +6,13 @@ namespace fe
 {
 	namespace FramebufferData
 	{
+		struct AttachmentSpecification
+		{
+			std::string             Name;
+			TextureData::Components Components;
+			TextureData::Format     Format;
+		};
+
 		struct Specification
 		{
 			uint32_t Width = 0, Height = 0;
@@ -14,8 +21,9 @@ namespace fe
 
 			bool SwapChainTarget = false;
 
-			TextureData::DataFormat DepthAttachment = TextureData::DataFormat::None;
-			std::vector<TextureData::Specification> ColorAttachments;
+
+			TextureData::Format DepthStencilAttachment = TextureData::Format::None;
+			std::vector<AttachmentSpecification> ColorAttachments;
 		};
 
 		class SpecificationBuilder
@@ -27,20 +35,22 @@ namespace fe
 			SpecificationBuilder& SetHight(uint32_t height) { m_Height = height; return *this; }
 			SpecificationBuilder& SetSamples(uint32_t samples) { m_Samples = samples; return *this; }
 			SpecificationBuilder& SetSwapChainTarget(bool isTarget) { m_SwapChainTarget = isTarget; return *this;	}
-			SpecificationBuilder& SetDepthAttachmentDataFormat(TextureData::DataFormat dataFormat) { m_DepthAttachment = dataFormat; return *this; }
-			SpecificationBuilder& SetCollorAttachmentSpecifications(const std::initializer_list<TextureData::Specification>& elements) { m_ColorAttachments = elements; return *this; }
-			SpecificationBuilder& AddColorAttachmentSpecification(TextureData::Specification specification) { m_ColorAttachments.push_back(specification); return *this; }
+			SpecificationBuilder& SetDepthStencilAttachmentDataFormat(TextureData::Format dataFormat) { m_DepthStencilAttachment = dataFormat; return *this; }
+			SpecificationBuilder& SetColorAttachmentSpecifications(const std::initializer_list<AttachmentSpecification>& elements) { m_ColorAttachments = elements; return *this; }
+			SpecificationBuilder& AddColorAttachmentSpecification(AttachmentSpecification specification) { m_ColorAttachments.push_back(specification); return *this; }
 
 			Specification Create()
 			{
 				Specification spec;
 
-				spec.Width            = m_Width;
-				spec.Height           = m_Height;
-				spec.DepthAttachment  = m_DepthAttachment;
-				spec.Samples          = m_Samples;
-				spec.SwapChainTarget  = m_SwapChainTarget;
-				spec.ColorAttachments = m_ColorAttachments;
+				spec.Width  = m_Width;
+				spec.Height = m_Height;
+
+				spec.Samples = m_Samples;
+				spec.SwapChainTarget = m_SwapChainTarget;
+
+				spec.DepthStencilAttachment = m_DepthStencilAttachment;
+				spec.ColorAttachments       = m_ColorAttachments;
 
 				return spec;
 			}
@@ -50,8 +60,8 @@ namespace fe
 			uint32_t m_Samples = 1;
 			bool     m_SwapChainTarget = false;
 
-			TextureData::DataFormat m_DepthAttachment = TextureData::DataFormat::None;
-			std::vector<TextureData::Specification> m_ColorAttachments;
+			TextureData::Format m_DepthStencilAttachment = TextureData::Format::None;
+			std::vector<AttachmentSpecification> m_ColorAttachments;
 		};
 	}
 }

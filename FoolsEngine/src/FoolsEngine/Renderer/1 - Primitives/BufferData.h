@@ -10,9 +10,8 @@ namespace fe
 {
 	namespace BufferData
 	{
-		class Element
+		struct Element
 		{
-		public:
 			std::string Name;
 			ShaderData::Primitive Primitive;
 			ShaderData::Structure Structure;
@@ -30,9 +29,6 @@ namespace fe
 			Element(const std::string& name, ShaderData::Type type, bool normalized = false);
 
 			Element(ShaderData::Type type, const std::string& name, bool normalized = false);
-
-		private:
-
 		};
 
 		class Layout
@@ -42,13 +38,13 @@ namespace fe
 			Layout(const std::initializer_list<Element>& elements);
 
 			const std::vector<Element>& GetElements() const { return m_Elements; }
-			const uint32_t GetStride() const { return m_Stride; }
+			const uint32_t              GetStride()   const { return m_Stride; }
 
 			std::vector<Element>::iterator begin() { return m_Elements.begin(); }
-			std::vector<Element>::iterator end() { return m_Elements.end(); }
+			std::vector<Element>::iterator end()   { return m_Elements.end(); }
 
 			std::vector<Element>::const_iterator begin() const { return m_Elements.begin(); }
-			std::vector<Element>::const_iterator end() const { return m_Elements.end(); }
+			std::vector<Element>::const_iterator end()   const { return m_Elements.end(); }
 
 		private:
 			std::vector<Element> m_Elements;
