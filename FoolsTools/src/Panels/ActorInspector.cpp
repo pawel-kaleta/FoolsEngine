@@ -92,7 +92,7 @@ namespace fe
         FE_PROFILER_FUNC();
 
         ImGui::Begin("Actor Inspector");
-        m_EntityIDSelectionRequest = m_SelectedEntityID;
+        m_EntityIDSelectionRequest = NullEntityID;
 
         if (m_OpenedActorID == NullEntityID || m_Scene == nullptr)
         {

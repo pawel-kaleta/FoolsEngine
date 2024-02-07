@@ -6,6 +6,7 @@ layout (location = 1) in vec4 a_Color;
 layout (location = 2) in vec2 a_TexCoord;
 layout (location = 3) in float a_TilingFactor;
 layout (location = 4) in uint a_TextureSampler;
+layout (location = 5) in uint a_EntityID;
 
 uniform mat4 u_ViewProjection;
 
@@ -13,6 +14,7 @@ layout (location = 0) out vec4 v_Color;
 layout (location = 1) out vec2 v_TexCoord;
 layout (location = 2) out flat float v_TilingFactor;
 layout (location = 3) out flat uint v_TextureSampler;
+layout (location = 4) out flat uint v_EntityID;
 
 void main()
 {
@@ -21,18 +23,21 @@ void main()
 	v_TilingFactor = a_TilingFactor;
 	v_TextureSampler = a_TextureSampler;
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+	v_EntityID = a_EntityID;
 }
 
 
 #type fragment
 #version 450 core
 
-layout(location = 0) out vec4 o_color;
+layout (location = 0) out vec4 o_color;
+layout (location = 1) out uint o_entityID;
 
 layout (location = 0) in vec4 v_Color; 
 layout (location = 1) in vec2 v_TexCoord;
 layout (location = 2) in flat float v_TilingFactor;
 layout (location = 3) in flat uint v_TextureSampler;
+layout (location = 4) in flat uint v_EntityID;
 
 uniform sampler2D u_Texture[32];
 
@@ -79,4 +84,6 @@ void main()
 	
 	if (o_color.w < 0.25)
 		discard;
+
+	o_entityID = v_EntityID;
 }

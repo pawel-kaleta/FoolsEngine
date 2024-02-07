@@ -40,7 +40,7 @@ namespace fe
 
 		m_Scene->PostFrameUpdate();
 
-		m_Viewports.EditViewport.UpdateCamera();
+		m_Viewports.EditViewport.OnUpdate();
 
 		m_Viewports.EditViewport.RenderScene();
 		m_Viewports.PlayViewport.RenderScene();
@@ -287,27 +287,39 @@ namespace fe
 
 	void EditorLayer::GetSelection()
 	{
-		EntityID newSelectionID;
+		EntityID newSelectionRequest = NullEntityID;
+		EntityID newSelection = NullEntityID;
 		bool isNewSelection = false;
 
-		newSelectionID = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
-		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+		newSelectionRequest = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
+		if (newSelectionRequest != m_SelectedEntityID)
+		{
+			newSelection = newSelectionRequest;
+			isNewSelection = true;
+		}
 
-		newSelectionID = m_Viewports.EditViewport.GetSelectionRequest();
-		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+		newSelectionRequest = m_Viewports.EditViewport.GetSelectionRequest();
+		if (newSelectionRequest != NullEntityID)
+		{
+			newSelection = newSelectionRequest;
+			isNewSelection = true;
+		}
 
-		newSelectionID = m_Panels.ActorInspector.GetSelectionRequest();
-		isNewSelection |= (newSelectionID != m_SelectedEntityID);
+		newSelectionRequest = m_Panels.ActorInspector.GetSelectionRequest();
+		if (newSelectionRequest != NullEntityID)
+		{
+			newSelection = newSelectionRequest;
+			isNewSelection = true;
+		}
 
 		if (isNewSelection)
-			m_SelectedEntityID = newSelectionID;
+			m_SelectedEntityID = newSelection;
 	}
 
 	void EditorLayer::OnScenePlayStart()
 	{
 		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
-
 
 		m_SceneBackup = CreateRef<Scene>();
 
@@ -352,7 +364,7 @@ namespace fe
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));
 
-		if (event->Handled || !event->Owned)
+		if (event->Handled || event->Owned)
 			return;
 
 		if (!Application::Get().GetImguiLayer()->IsBlocking())

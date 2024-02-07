@@ -145,29 +145,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Viewports\EditViewport.h" />
     <ClInclude Include="src\EditorCameraController.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
     <ClInclude Include="src\Panels\ActorInspector.h" />
     <ClInclude Include="src\Panels\EntityInspector.h" />
     <ClInclude Include="src\Panels\SystemsInspector.h" />
-    <ClInclude Include="src\Viewports\PlayViewport.h" />
     <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
     <ClInclude Include="src\SceneTesting.h" />
     <ClInclude Include="src\Toolbar.h" />
+    <ClInclude Include="src\Viewports\EditViewport.h" />
+    <ClInclude Include="src\Viewports\PlayViewport.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Viewports\EditViewport.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp" />
     <ClCompile Include="src\Panels\EntityInspector.cpp" />
     <ClCompile Include="src\Panels\SystemsInspector.cpp" />
-    <ClCompile Include="src\Viewports\PlayViewport.cpp" />
     <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />
     <ClCompile Include="src\Toolbar.cpp" />
+    <ClCompile Include="src\Viewports\EditViewport.cpp" />
+    <ClCompile Include="src\Viewports\PlayViewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FoolsEngine\FoolsEngine.vcxproj">

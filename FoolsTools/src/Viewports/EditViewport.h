@@ -12,7 +12,7 @@ namespace fe
 	public:
 		EditViewport();
 
-		void UpdateCamera();
+		void OnUpdate();
 		void RenderScene();
 		void OnEvent(Ref<Events::Event> event);
 		void OnImGuiRender();
@@ -24,14 +24,19 @@ namespace fe
 		EntityID GetSelectionRequest() { return m_EntityIDSelectionRequest; }
 	private:
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
+		void OnMouseButtonPressedEvent(Ref<Events::MouseButtonPressedEvent> event);
+		void RenderGuizmos();
 
 		Ref<Scene> m_Scene;
-		bool m_IsVisible;
+		bool m_IsVisible = false;
+		bool m_EntityClicked = false;
 
 		EntityID m_SelectedEntityID = NullEntityID;
 		EntityID m_EntityIDSelectionRequest = NullEntityID;
+		EntityID m_HoveredEntityID = NullEntityID;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
+		glm::vec2 m_ViewportBounds[2] = { { 0, 0 }, { 0, 0 } };
 		bool      m_VieportFocus = false;
 		bool      m_VieportHover = false;
 

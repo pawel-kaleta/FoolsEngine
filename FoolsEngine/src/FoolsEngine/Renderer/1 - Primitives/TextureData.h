@@ -14,8 +14,10 @@ namespace fe
 		{
 			None = 0,
 
-			RGB,
-			RGBA,
+			R_F,
+			R_UI,
+			RGB_F,
+			RGBA_F,
 
 			DepthStencil
 		};
@@ -24,8 +26,11 @@ namespace fe
 		{
 			None = 0,
 
-			RGB8,
-			RGBA8,
+			R_FLOAT_32,
+			R_UINT_32,
+			RGB_FLOAT_8,
+			RGBA_FLOAT_8,
+
 			
 			DEPTH24STENCIL8
 		};

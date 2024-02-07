@@ -3,6 +3,7 @@
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+#include "FoolsEngine/Renderer/2 - GDIAbstraction/Framebuffer.h"
 
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 //#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
@@ -31,7 +32,8 @@ namespace fe
 			{ ShaderData::Type::Float4, "a_Color" },
 			{ ShaderData::Type::Float2, "a_TexCoord" },
 			{ ShaderData::Type::Float,  "a_TilingFactor" },
-			{ ShaderData::Type::UInt,   "a_TextureSampler" }
+			{ ShaderData::Type::UInt,   "a_TextureSampler" },
+			{ ShaderData::Type::UInt,   "a_EntityID" }
 			});
 		s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
 
@@ -66,7 +68,7 @@ namespace fe
 			.SetWidth(1)
 			.SetName("Base2DTexture")
 			.SetType(TextureData::Type::Texture2D)
-			.SetSpecification(TextureData::Specification{TextureData::Components::RGBA, TextureData::Format::RGBA8});
+			.SetSpecification(TextureData::Specification{TextureData::Components::RGBA_F, TextureData::Format::RGBA_FLOAT_8});
 
 		Ref<Texture> whiteTexture = textureBuilder.Create();
 		uint32_t whiteTextureData = 0xffffffff;
@@ -76,13 +78,18 @@ namespace fe
 		s_Data->Batch.Textures[0] = whiteTexture;
 	}
 
-	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view)
+	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
+
+		framebuffer.Bind();
 
 		RenderCommands::SetDepthTest(true);
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
+
+		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
+		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
 
 		switch (Renderer::GetActiveGDItype())
 		{
@@ -115,18 +122,18 @@ namespace fe
 		s_Data->Batch.QuadVeriticesIt = s_Data->Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(Scene& scene, Entity cameraEntity)
+	void Renderer2D::RenderScene(Scene& scene, Entity cameraEntity, Framebuffer& framebuffer)
 	{
 		auto& projectionMatrix = scene.GetGameplayWorld()->GetRegistry().get<CCamera>(cameraEntity).Camera;
 		auto& cameraTransform = scene.GetGameplayWorld()->GetRegistry().get<CTransformGlobal>(cameraEntity).GetRef();
-		RenderScene(scene, projectionMatrix, cameraTransform);
+		RenderScene(scene, projectionMatrix, cameraTransform, framebuffer);
 	}
 
-	void Renderer2D::RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform)
+	void Renderer2D::RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
 
-		BeginScene(camera, cameraTransform);
+		BeginScene(camera, cameraTransform, framebuffer);
 
 		auto& registry = scene.GetGameplayWorld()->GetRegistry();
 
@@ -136,7 +143,7 @@ namespace fe
 		{
 			auto [tile, entityTransform] = viewTiles.get(ID);
 			Transform transform = entityTransform.GetRef() + tile.Offset;
-			BatchQuadDrawCall(tile.Tile, transform);
+			BatchQuadDrawCall(tile.Tile, transform, ID);
 		}
 
 		Flush();
@@ -165,21 +172,22 @@ namespace fe
 		{
 			auto [sprite, entityTransform] = viewSprites.get(ID);
 			Transform transform = entityTransform.GetRef() + sprite.Offset;
-			BatchQuadDrawCall(sprite.Sprite, transform);
+			BatchQuadDrawCall(sprite.Sprite, transform, ID);
 			Flush();
 		}
 
-		EndScene();
+		EndScene(framebuffer);
 	}
 
-	void Renderer2D::EndScene()
+	void Renderer2D::EndScene(Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
 
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
+		framebuffer.Unbind();
 	}
 
-	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform)
+	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID)
 	{
 		auto& batch = s_Data->Batch;
 
@@ -240,6 +248,7 @@ namespace fe
 			VIt->TexCoord = TextureCoord[i];
 			VIt->TilingFactor = quad.TextureTilingFactor;
 			VIt->TextureSampler = textureSampler;
+			VIt->EntityID = ID;
 			VIt++;
 		}
 

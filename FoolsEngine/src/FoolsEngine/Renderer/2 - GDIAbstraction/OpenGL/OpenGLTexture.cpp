@@ -19,12 +19,12 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unspecified texture format");
 			break;
 		}
-		case TextureData::Components::RGB:
+		case TextureData::Components::RGB_F:
 		{
 			m_Format = GL_RGB;
 			break;
 		}
-		case TextureData::Components::RGBA:
+		case TextureData::Components::RGBA_F:
 		{
 			m_Format = GL_RGBA;
 			break;
@@ -42,12 +42,12 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unspecified texture data format");
 			break;
 		}
-		case TextureData::Format::RGB8:
+		case TextureData::Format::RGB_FLOAT_8:
 		{
 			m_InternalFormat = GL_RGB8;
 			break;
 		}
-		case TextureData::Format::RGBA8:
+		case TextureData::Format::RGBA_FLOAT_8:
 		{
 			m_InternalFormat = GL_RGBA8;
 			break;
@@ -123,8 +123,8 @@ namespace fe
 	{
 		switch (m_Format)
 		{
-		case GL_RGB:  return TextureData::Components::RGB;
-		case GL_RGBA: return TextureData::Components::RGBA;
+		case GL_RGB:  return TextureData::Components::RGB_F;
+		case GL_RGBA: return TextureData::Components::RGBA_F;
 		}
 		return TextureData::Components::None;
 	}
@@ -133,8 +133,8 @@ namespace fe
 	{
 		switch (m_InternalFormat)
 		{
-		case GL_RGB8:  return TextureData::Format::RGB8;
-		case GL_RGBA8: return TextureData::Format::RGBA8;
+		case GL_RGB8:  return TextureData::Format::RGB_FLOAT_8;
+		case GL_RGBA8: return TextureData::Format::RGBA_FLOAT_8;
 		}
 		return TextureData::Format::None;
 	}

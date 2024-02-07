@@ -6,12 +6,15 @@
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 
+#include "FoolsEngine/Scene/ECS.h"
+
 #include "FoolsEngine\Core\Time.h"
 
 namespace fe
 {
-	class Entity;
 	class Scene;
+	class Entity;
+	class Framebuffer;
 
 	class Renderer2D
 	{
@@ -33,8 +36,8 @@ namespace fe
 		static void Init();
 		static void Shutdown() {}
 
-		static void RenderScene(Scene& scene, Entity cameraSet);
-		static void RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform);
+		static void RenderScene(Scene& scene, Entity cameraSet, Framebuffer& framebuffer);
+		static void RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
 
 		static RenderStats GetStats() { return s_Stats; }
 
@@ -54,6 +57,7 @@ namespace fe
 			glm::vec2 TexCoord;
 			float TilingFactor;
 			uint32_t TextureSampler;
+			EntityID EntityID;
 		};
 
 		using QuadVerticesBatch = std::array<QuadVertex, ConstLimits::MaxVeritices>;
@@ -84,11 +88,11 @@ namespace fe
 
 		static Scope<Renderer2DData> s_Data;
 
-		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
+		static void BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer);
 		static void ClearBatch();
-		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform);
+		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
 		static void Flush();
-		static void EndScene();
+		static void EndScene(Framebuffer& framebuffer);
 
 		static RenderStats s_Stats;
 		static Time::TimePoint m_RenderStartTimePoint;

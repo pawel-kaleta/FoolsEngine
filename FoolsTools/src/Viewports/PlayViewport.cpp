@@ -12,7 +12,8 @@ namespace fe
 			.SetHight(1)
 			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
 			.SetColorAttachmentSpecifications({
-				{ "Main Framebuffer", TextureData::Components::RGBA, TextureData::Format::RGBA8}
+				{ "Final Frame", TextureData::Components::RGBA_F, TextureData::Format::RGBA_FLOAT_8},
+				{ "EntityID"   , TextureData::Components::R_UI  , TextureData::Format::R_UINT_32   }
 				});
 		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
 		m_ViewportSize = { 1,1 };
@@ -23,7 +24,6 @@ namespace fe
 		if (!m_IsVisible)
 			return;
 
-		m_Framebuffer->Bind();
 
 		Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
 		if (cameraEntity)
@@ -33,14 +33,15 @@ namespace fe
 			auto cameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
 			cameraTransform.Scale = { 1.f,1.f,1.f };
 			cameraTransform = cameraTransform + cameraComponent.Offset;
-			Renderer2D::RenderScene(*m_Scene, camera, cameraTransform);
+			Renderer2D::RenderScene(*m_Scene, camera, cameraTransform, *m_Framebuffer.get());
 		}
 		else
 		{
+			m_Framebuffer->Bind();
 			RenderCommands::Clear();
+			m_Framebuffer->Unbind();
 		}
 		
-		m_Framebuffer->Unbind();
 	}
 
 	void PlayViewport::OnImGuiRender()

@@ -14,6 +14,9 @@ namespace fe
         virtual void Recreate(const FramebufferData::Specification& spec) override;
         virtual void Recreate() override;
         virtual void Resize(uint32_t width, uint32_t height) override;
+
+        virtual void ClearAttachment(uint32_t attachmentIndex, uint32_t value) override;
+        virtual void ClearAttachment(uint32_t attachmentIndex, float value) override;
                 
         virtual void Bind()   override;
         virtual void Unbind() override;
@@ -27,20 +30,23 @@ namespace fe
             FE_CORE_ASSERT(index < m_ColorAttachments.size(), "Attachment index out of bounds");
             return m_ColorAttachments[index];
         }
-        virtual uint32_t GetColorAttachmentID(const std::string& name) const override
+        virtual uint32_t GetColorAttachmentIndex(const std::string& name) const override
         {
             for (int i = 0; i < m_Specification.ColorAttachments.size(); ++i)
             {
                 if (m_Specification.ColorAttachments[i].Name == name)
-                    return m_ColorAttachments[i];
+                    return i;
             }
             FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer {1}", name, m_Name);
         }
 
+        virtual void ReadPixel(uint32_t attachmentIndex, int x, int y, void* saveLocation) override;
+
         virtual const FramebufferData::Specification& GetSpecification() const override { return m_Specification; };
 
-        static GLenum FormatToGLenum(TextureData::Components format);
-        static GLenum DataFormatToGLenum(TextureData::Format dataFormat);
+        static GLenum ComponentsToGLformat(TextureData::Components components);
+        static GLenum FormatToGLinternalFormat(TextureData::Format format);
+        static GLenum GLformatToGLtype(GLenum format);
     private:
         uint32_t m_ID = 0;
         std::string m_Name;
