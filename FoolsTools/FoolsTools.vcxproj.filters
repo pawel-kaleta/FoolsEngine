@@ -32,6 +32,7 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
+    <ClInclude Include="src\DockSpace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp" />
@@ -56,5 +57,6 @@
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
     </ClCompile>
+    <ClCompile Include="src\DockSpace.cpp" />
   </ItemGroup>
 </Project>

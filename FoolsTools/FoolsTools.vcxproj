@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorCameraController.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="src\Viewports\PlayViewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />

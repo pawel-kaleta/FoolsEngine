@@ -50,64 +50,18 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		static bool constFullscreenOpt = true;
-		bool fullscreenOpt = constFullscreenOpt;
-		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_::ImGuiDockNodeFlags_None;
+		m_DockSpace.BeginDockSpace();
 
-		// nested docking spaces of the same size bad -> no docking to window, only to dedicated dockspace
-		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
-		if (fullscreenOpt)
-		{
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->Pos);
-			ImGui::SetNextWindowSize(viewport->Size);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowBorderSize, 0.0f);
+		RenderMainMenu();
+		RenderToolbar();
+		RenderPanels();
 
-			windowFlags |=
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar |
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
+		m_Viewports.PlayViewport.OnImGuiRender();
+		m_Viewports.EditViewport.OnImGuiRender();
 
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoNavFocus;
-		}
-
-		if (dockspaceFlags & ImGuiDockNodeFlags_::ImGuiDockNodeFlags_PassthruCentralNode)
-			windowFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		static bool dockspaceOpen = true;
-		ImGui::Begin("Dockspace", &dockspaceOpen, windowFlags);
-		{
-			ImGui::PopStyleVar();
-
-			if (fullscreenOpt)
-				ImGui::PopStyleVar(2);
-
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuiStyle& style = ImGui::GetStyle();
-			float minWinSizeX = style.WindowMinSize.x;
-			style.WindowMinSize.x = 300.0f;
-			if (io.ConfigFlags & ImGuiConfigFlags_::ImGuiConfigFlags_DockingEnable)
-			{
-				ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
-				ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), dockspaceFlags);
-			}
-			style.WindowMinSize.x = minWinSizeX;
-
-			RenderMainMenu();
-			RenderToolbar();
-			RenderPanels();
-
-			m_Viewports.EditViewport.OnImGuiRender();
-			m_Viewports.PlayViewport.OnImGuiRender();
-
-			GetSelection();
-		}
-		ImGui::End();
+		GetSelection();
+		
+		m_DockSpace.EndDockSpace();
 	}
 
 	void EditorLayer::RenderToolbar()
@@ -190,12 +144,12 @@ namespace fe
 					{
 						if (ImGui::MenuItem("Save", "Ctrl+S"))
 						{
-							SaveScene(m_Scene);
+							SaveScene();
 						}
 					}
 					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 					{
-						SaveSceneAs(m_Scene);
+						SaveSceneAs();
 					}
 				}
 				if (m_EditorState != EditorState::Edit)
@@ -248,18 +202,18 @@ namespace fe
 		}
 	}
 
-	void EditorLayer::SaveScene(const Ref<Scene>& scene)
+	void EditorLayer::SaveScene()
 	{
-		SceneSerializerYAML::Serialize(m_Scene, scene->GetFilepath());
+		SceneSerializerYAML::Serialize(m_Scene, m_Scene->GetFilepath());
 	}
 
-	void EditorLayer::SaveSceneAs(const Ref<Scene>& scene)
+	void EditorLayer::SaveSceneAs()
 	{
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene.yaml", "FoolsEngine Scene (*.fescene.yaml)\0 * .fescene.yaml\0");
 		if (!filepath.empty())
 		{
-			scene->SetFilepath(filepath);
-			SaveScene(scene);
+			m_Scene->SetFilepath(filepath);
+			SaveScene();
 		}
 	}
 
@@ -287,28 +241,27 @@ namespace fe
 
 	void EditorLayer::GetSelection()
 	{
-		EntityID newSelectionRequest = NullEntityID;
 		EntityID newSelection = NullEntityID;
 		bool isNewSelection = false;
 
-		newSelectionRequest = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
-		if (newSelectionRequest != m_SelectedEntityID)
+		EntityID newSelectionRequest_1 = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
+		if (newSelectionRequest_1 != m_SelectedEntityID)
 		{
-			newSelection = newSelectionRequest;
+			newSelection = newSelectionRequest_1;
 			isNewSelection = true;
 		}
 
-		newSelectionRequest = m_Viewports.EditViewport.GetSelectionRequest();
-		if (newSelectionRequest != NullEntityID)
+		EntityID newSelectionRequest_2 = m_Viewports.EditViewport.GetSelectionRequest();
+		if (newSelectionRequest_2 != NullEntityID)
 		{
-			newSelection = newSelectionRequest;
+			newSelection = newSelectionRequest_2;
 			isNewSelection = true;
 		}
 
-		newSelectionRequest = m_Panels.ActorInspector.GetSelectionRequest();
-		if (newSelectionRequest != NullEntityID)
+		EntityID newSelectionRequest_3 = m_Panels.ActorInspector.GetSelectionRequest();
+		if (newSelectionRequest_3 != NullEntityID)
 		{
-			newSelection = newSelectionRequest;
+			newSelection = newSelectionRequest_3;
 			isNewSelection = true;
 		}
 
@@ -395,9 +348,9 @@ namespace fe
 						return;
 
 					if (shift || m_Scene->GetFilepath().empty())
-						SaveSceneAs(m_Scene);
+						SaveSceneAs();
 					else
-						SaveScene(m_Scene);
+						SaveScene();
 
 					event->Handle();
 					return;

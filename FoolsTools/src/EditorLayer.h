@@ -12,6 +12,7 @@
 
 #include "EditorState.h"
 #include "Toolbar.h"
+#include "DockSpace.h"
 
 
 #include <ImGuizmo.h>
@@ -35,6 +36,7 @@ namespace fe
 
 		EditorState m_EditorState = EditorState::Edit;
 
+		DockSpace m_DockSpace;
 		Toolbar m_Toolbar;
 
 		struct Panels
@@ -59,8 +61,8 @@ namespace fe
 
 		void NewScene();
 		void OpenScene();
-		void SaveScene(const Ref<Scene>& scene);
-		void SaveSceneAs(const Ref<Scene>& scene);
+		void SaveScene();
+		void SaveSceneAs();
 
 		void SetSceneContext(const Ref<Scene>& scene);
 		void SetSelectionContext();
