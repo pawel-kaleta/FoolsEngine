@@ -4,6 +4,8 @@ namespace fe
 {
 	void DockSpace::BeginDockSpace()
 	{
+		FE_PROFILER_FUNC();
+
 		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_::ImGuiDockNodeFlags_None;
 
 		// nested docking spaces of the same size bad -> no docking to window, only to dedicated dockspace

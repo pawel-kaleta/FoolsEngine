@@ -4,6 +4,8 @@ namespace fe
 {
 	EditViewport::EditViewport()
 	{
+		FE_PROFILER_FUNC();
+
 		FramebufferData::SpecificationBuilder specBuilder;
 		specBuilder
 			.SetWidth(1280)
@@ -20,36 +22,19 @@ namespace fe
 
 	void EditViewport::OnUpdate()
 	{
+		FE_PROFILER_FUNC();
+
 		if (Application::Get().GetImguiLayer()->IsBlocking() || !m_IsVisible)
 			return;
 		m_CameraController->OnUpdate();
-
-		auto [mx, my] = ImGui::GetMousePos();
-		mx -= m_ViewportBounds[0].x;
-		my -= m_ViewportBounds[0].y;
-		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-		my = viewportSize.y - my;
-		int mouseX = (int)mx;
-		int mouseY = (int)my;
-
-		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-		{
-			int attachmentIndex = m_Framebuffer->GetColorAttachmentIndex("EntityID");
-			m_Framebuffer->Bind();
-			m_Framebuffer->ReadPixel(attachmentIndex, mouseX, mouseY, &m_HoveredEntityID);
-			m_Framebuffer->Unbind();
-		}
-		else
-		{
-			m_HoveredEntityID = NullEntityID;
-		}
 	}
 
 	void EditViewport::RenderScene()
 	{
+		FE_PROFILER_FUNC();
+
 		if (!m_IsVisible)
 			return;
-
 
 		Renderer2D::RenderScene(*m_Scene, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
 	}
@@ -75,13 +60,17 @@ namespace fe
 
 	void EditViewport::OnImGuiRender()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		m_IsVisible = ImGui::Begin("Edit Scene");
 		ImGui::PopStyleVar();
 
 		m_EntityIDSelectionRequest = NullEntityID;
 		if (m_EntityClicked)
-			m_EntityIDSelectionRequest = m_HoveredEntityID;
+		{
+			m_EntityIDSelectionRequest = ReadEntityIDfromBuffer();
+		}
 		m_EntityClicked = false;
 
 		m_VieportFocus = ImGui::IsWindowFocused();
@@ -160,6 +149,8 @@ namespace fe
 
 	void EditViewport::RenderGuizmos()
 	{
+		FE_PROFILER_FUNC();
+
 		Entity selectedEntity(m_SelectedEntityID, m_Scene->GetGameplayWorld());
 
 		if (!selectedEntity)
@@ -207,5 +198,30 @@ namespace fe
 			transform.Rotation = glm::degrees(transform.Rotation);
 			selectedEntity.GetTransformHandle().SetGlobal(transform);
 		}
+	}
+
+	EntityID EditViewport::ReadEntityIDfromBuffer()
+	{
+		FE_PROFILER_FUNC();
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		EntityID entityID = NullEntityID;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int attachmentIndex = m_Framebuffer->GetColorAttachmentIndex("EntityID");
+			m_Framebuffer->Bind();
+			m_Framebuffer->ReadPixel(attachmentIndex, mouseX, mouseY, &entityID);
+			m_Framebuffer->Unbind();
+		}
+
+		return entityID;
 	}
 }

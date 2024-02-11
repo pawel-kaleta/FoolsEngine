@@ -10,6 +10,8 @@ namespace fe
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer")
 	{
+		FE_PROFILER_FUNC();
+
 		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
@@ -66,26 +68,33 @@ namespace fe
 
 	void EditorLayer::RenderToolbar()
 	{
+		FE_PROFILER_FUNC();
+
 		m_Toolbar.SetEditorState(m_EditorState);
 		m_Toolbar.OnImGuiRender();
-		ToolbarButton clickedButton = m_Toolbar.GetClickedButton();
 
-		switch (clickedButton)
 		{
-		case ToolbarButton::None:
-			break;
-		case ToolbarButton::Play:
-			if (m_EditorState == EditorState::Edit)
-				OnScenePlayStart();
-			if (m_EditorState == EditorState::Pause)
-				OnScenePlayResume();
-			break;
-		case ToolbarButton::Pause:
-			OnScenePlayPause();
-			break;
-		case ToolbarButton::Stop:
-			OnScenePlayStop();
-			break;
+			FE_PROFILER_SCOPE("Handle Toolbar Input");
+
+			ToolbarButton clickedButton = m_Toolbar.GetClickedButton();
+
+			switch (clickedButton)
+			{
+			case ToolbarButton::None:
+				break;
+			case ToolbarButton::Play:
+				if (m_EditorState == EditorState::Edit)
+					OnScenePlayStart();
+				if (m_EditorState == EditorState::Pause)
+					OnScenePlayResume();
+				break;
+			case ToolbarButton::Pause:
+				OnScenePlayPause();
+				break;
+			case ToolbarButton::Stop:
+				OnScenePlayStop();
+				break;
+			}
 		}
 	}
 
@@ -127,6 +136,8 @@ namespace fe
 
 	void EditorLayer::RenderMainMenu()
 	{
+		FE_PROFILER_FUNC();
+
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
@@ -174,12 +185,16 @@ namespace fe
 
 	void EditorLayer::NewScene()
 	{
+		FE_PROFILER_FUNC();
+
 		m_Scene = CreateRef<Scene>();
 		SetSceneContext(m_Scene);
 	}
 
 	void EditorLayer::OpenScene()
 	{
+		FE_PROFILER_FUNC();
+
 		std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene.yaml)\0*.fescene.yaml\0");
 		if (filepath.empty())
 			return;
@@ -204,11 +219,15 @@ namespace fe
 
 	void EditorLayer::SaveScene()
 	{
+		FE_PROFILER_FUNC();
+
 		SceneSerializerYAML::Serialize(m_Scene, m_Scene->GetFilepath());
 	}
 
 	void EditorLayer::SaveSceneAs()
 	{
+		FE_PROFILER_FUNC();
+
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene.yaml", "FoolsEngine Scene (*.fescene.yaml)\0 * .fescene.yaml\0");
 		if (!filepath.empty())
 		{
@@ -219,6 +238,8 @@ namespace fe
 
 	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
 	{
+		FE_PROFILER_FUNC();
+
 		m_SelectedEntityID = NullEntityID;
 
 		m_Panels.WorldHierarchyPanel.SetScene(scene);
@@ -232,6 +253,8 @@ namespace fe
 
 	void EditorLayer::SetSelectionContext()
 	{
+		FE_PROFILER_FUNC();
+
 		m_Panels.WorldHierarchyPanel.SetSelection(m_SelectedEntityID);
 		m_Panels.EntityInspector.OpenEntity(m_SelectedEntityID);
 		m_Panels.ActorInspector.OpenActor(m_SelectedEntityID);
@@ -241,6 +264,8 @@ namespace fe
 
 	void EditorLayer::GetSelection()
 	{
+		FE_PROFILER_FUNC();
+
 		EntityID newSelection = NullEntityID;
 		bool isNewSelection = false;
 
@@ -271,6 +296,8 @@ namespace fe
 
 	void EditorLayer::OnScenePlayStart()
 	{
+		FE_PROFILER_FUNC();
+
 		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
@@ -304,6 +331,8 @@ namespace fe
 
 	void EditorLayer::OnScenePlayStop()
 	{
+		FE_PROFILER_FUNC();
+
 		m_EditorState = EditorState::Edit;
 
 		m_Scene = m_SceneBackup;
@@ -312,6 +341,8 @@ namespace fe
 
 	void EditorLayer::OnEvent(Ref<Events::Event> event)
 	{
+		FE_PROFILER_FUNC();
+
 		FE_LOG_TRACE("{0}", event);
 
 		Events::EventDispacher dispacher(event);

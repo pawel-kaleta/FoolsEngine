@@ -26,6 +26,7 @@ namespace fe
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 		void OnMouseButtonPressedEvent(Ref<Events::MouseButtonPressedEvent> event);
 		void RenderGuizmos();
+		EntityID ReadEntityIDfromBuffer();
 
 		Ref<Scene> m_Scene;
 		bool m_IsVisible = false;
@@ -33,7 +34,6 @@ namespace fe
 
 		EntityID m_SelectedEntityID = NullEntityID;
 		EntityID m_EntityIDSelectionRequest = NullEntityID;
-		EntityID m_HoveredEntityID = NullEntityID;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		glm::vec2 m_ViewportBounds[2] = { { 0, 0 }, { 0, 0 } };

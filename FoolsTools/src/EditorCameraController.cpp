@@ -9,6 +9,8 @@ namespace fe
 	EditorCameraController::EditorCameraController(float width, float hight)
 		: m_ViewportSize({width, hight})
 	{
+		FE_PROFILER_FUNC();
+
 		m_Camera.SetViewportSize((uint32_t)width, (uint32_t)hight);
 		m_Transform.Position.z = 2.0f;
 	}
@@ -47,6 +49,8 @@ namespace fe
 
 	void EditorCameraController::Resize(float width, float hight)
 	{
+		FE_PROFILER_FUNC();
+
 		m_Camera.SetViewportSize((uint32_t)width, (uint32_t)hight);
 	}
 
@@ -61,6 +65,8 @@ namespace fe
 
 	void EditorCameraController::Rotate(int headingDir, int pitchDir, int bankDir)
 	{
+		FE_PROFILER_FUNC();
+
 		auto angleDelta = Time::DeltaTime() * m_RotationSpeed;
 
 		float headingDelta = -headingDir * angleDelta;
@@ -78,6 +84,8 @@ namespace fe
 
 	void EditorCameraController::Move(int horizontalDir, int verticalDir, int viewDir)
 	{
+		FE_PROFILER_FUNC();
+
 		auto step = Time::DeltaTime() * m_MoveSpeed;
 
 		float horizontalStep = horizontalDir * step;
@@ -91,6 +99,8 @@ namespace fe
 
 	void EditorCameraController::Zoom(float delta)
 	{
+		FE_PROFILER_FUNC();
+
 		if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
 		{
 			auto FOV = m_Camera.GetPerspectiveFOV();
@@ -129,6 +139,8 @@ namespace fe
 
 	void EditorCameraController::RenderWidget()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGui::PushItemWidth(-ImGui::GetContentRegionAvail().x * 0.5f);
 
 		auto& transform = GetTransform();

@@ -6,6 +6,8 @@ namespace fe
 {
 	PlayViewport::PlayViewport()
 	{
+		FE_PROFILER_FUNC();
+
 		FramebufferData::SpecificationBuilder specBuilder;
 		specBuilder
 			.SetWidth(1)
@@ -21,9 +23,10 @@ namespace fe
 
 	void PlayViewport::RenderScene()
 	{
+		FE_PROFILER_FUNC();
+
 		if (!m_IsVisible)
 			return;
-
 
 		Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
 		if (cameraEntity)
@@ -46,6 +49,8 @@ namespace fe
 
 	void PlayViewport::OnImGuiRender()
 	{
+		FE_PROFILER_FUNC();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		m_IsVisible = ImGui::Begin("Play");
 		ImGui::PopStyleVar();

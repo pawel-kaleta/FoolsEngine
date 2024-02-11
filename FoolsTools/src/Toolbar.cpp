@@ -4,6 +4,8 @@ namespace fe
 {
 	Toolbar::Toolbar()
 	{
+		FE_PROFILER_FUNC();
+
 		m_IconPlay = Texture2D::Create("resources/PlayButton.png");
 		m_IconStop = Texture2D::Create("resources/StopButton.png");
 		m_IconPause = Texture2D::Create("resources/PauseButton.png");
@@ -11,6 +13,8 @@ namespace fe
 
 	void Toolbar::OnImGuiRender()
 	{
+		FE_PROFILER_FUNC();
+
 		m_ClickedButton = ToolbarButton::None;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
