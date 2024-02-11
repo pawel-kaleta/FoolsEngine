@@ -8,7 +8,7 @@
 
 namespace fe
 {
-	namespace BufferData
+	namespace VertexData
 	{
 		struct Element
 		{

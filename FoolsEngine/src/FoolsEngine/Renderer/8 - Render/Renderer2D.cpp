@@ -24,7 +24,7 @@ namespace fe
 
 		s_Data = CreateScope<Renderer2DData>();
 
-		s_Data->QuadVertexArray = VertexArray::Create();
+		//s_Data->QuadVertexArray = VertexArray::Create();
 
 		s_Data->QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
 		s_Data->QuadVertexBuffer->SetLayout({
@@ -35,7 +35,7 @@ namespace fe
 			{ ShaderData::Type::UInt,   "a_TextureSampler" },
 			{ ShaderData::Type::UInt,   "a_EntityID" }
 			});
-		s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
+		//s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quadIndices = new QuadsIndexBufferData();
@@ -54,7 +54,8 @@ namespace fe
 		}
 
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices->data(), ConstLimits::MaxIndices);
-		s_Data->QuadVertexArray->SetIndexBuffer(quadIB);
+		s_Data->QuadVertexBuffer->SetIndexBuffer(quadIB);
+		//s_Data->QuadVertexArray->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
 		s_Data->BaseShader = Shader::Create("assets/shaders/Base2DShader.glsl");
@@ -275,8 +276,9 @@ namespace fe
 			batch.Textures[i]->Bind(i);
 		}
 
-		s_Data->QuadVertexArray->Bind();
-		RenderCommands::DrawIndexed(s_Data->QuadVertexArray, batch.QuadIndexCount);
+		//s_Data->QuadVertexArray->Bind();
+		s_Data->QuadVertexBuffer->Bind();
+		RenderCommands::DrawIndexed(s_Data->QuadVertexBuffer, batch.QuadIndexCount);
 
 		s_Stats.Quads += batch.QuadIndexCount / 3 / 2;
 		s_Stats.DrawCalls++;

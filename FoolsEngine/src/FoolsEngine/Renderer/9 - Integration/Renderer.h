@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexArray.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\RendererAPI.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\6 - Resources\MaterialLibrary.h"
@@ -28,15 +28,15 @@ namespace fe
 		static void EndScene();
 
 		static void Draw(
-			const Ref<VertexArray>& vertexArray,
+			const Ref<VertexBuffer>& vertexBuffer,
 			const Ref<MaterialInstance>& materialInstance,
 			const glm::mat4& transform)
 		{
-			Draw(vertexArray, materialInstance, transform, s_SceneData->VPMatrix);
+			Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
 		}
 
 		static void Draw(
-			const Ref<VertexArray>& vertexArray,
+			const Ref<VertexBuffer>& vertexBuffer,
 			const Ref<MaterialInstance>& materialInstance,
 			const glm::mat4& transform,
 			const glm::mat4& VPMatrix
@@ -51,7 +51,7 @@ namespace fe
 		struct GDIFixedSystems
 		{
 			GDIType GDI;
-			Scope<RendererAPI> RendererAPI;
+			Scope<DeviceAPI> DeviceAPI;
 			Scope<ShaderLibrary> ShaderLib;
 			Scope<TextureLibrary> TextureLib;
 			Scope<MaterialLibrary> MaterialLib;

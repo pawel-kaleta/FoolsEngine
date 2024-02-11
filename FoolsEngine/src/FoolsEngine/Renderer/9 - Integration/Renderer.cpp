@@ -27,7 +27,7 @@ namespace fe
 
 		GDIFixedSystems& systems = s_GDIFixedSystems.at(GDI);
 
-		RenderCommands::SetAPI(systems.RendererAPI.get());
+		RenderCommands::SetAPI(systems.DeviceAPI.get());
 		ShaderLibrary::SetActiveInstance(systems.ShaderLib.get());
 		TextureLibrary::SetActiveInstance(systems.TextureLib.get());
 		MaterialLibrary::SetActiveInstance(systems.MaterialLib.get());
@@ -43,7 +43,7 @@ namespace fe
 		GDIFixedSystems& systems = s_GDIFixedSystems[GDI];
 
 		systems.GDI = GDI;
-		systems.RendererAPI = RenderCommands::CreateAPI(GDI);
+		systems.DeviceAPI = RenderCommands::CreateAPI(GDI);
 		systems.ShaderLib.reset(new ShaderLibrary());
 		systems.TextureLib.reset(new TextureLibrary());
 		systems.MaterialLib.reset(new MaterialLibrary());
@@ -57,7 +57,7 @@ namespace fe
 
 		GDIFixedSystems& systems = s_GDIFixedSystems.at(GDI);
 
-		systems.RendererAPI->Init();
+		systems.DeviceAPI->Init();
 
 		switch (GDI)
 		{
@@ -117,7 +117,7 @@ namespace fe
 	}
 
 	void Renderer::Draw(
-		const Ref<VertexArray>& vertexArray,
+		const Ref<VertexBuffer>& vertexBuffer,
 		const Ref<MaterialInstance>& materialInstance,
 		const glm::mat4& transform,
 		const glm::mat4& VPMatrix)
@@ -162,8 +162,8 @@ namespace fe
 			}
 		}
 
-		vertexArray->Bind();
+		vertexBuffer->Bind();
 
-		RenderCommands::DrawIndexed(vertexArray);
+		RenderCommands::DrawIndexed(vertexBuffer);
 	}
 }

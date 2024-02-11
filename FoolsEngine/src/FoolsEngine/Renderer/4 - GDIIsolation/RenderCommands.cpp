@@ -1,28 +1,28 @@
 #include "FE_pch.h"
 #include "RenderCommands.h"
 
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRendererAPI.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.h"
 
 namespace fe
 {
-	RendererAPI* RenderCommands::s_RendererAPI = nullptr;
+	DeviceAPI* RenderCommands::s_RendererAPI = nullptr;
 
-	Scope<RendererAPI> RenderCommands::CreateAPI(GDIType GDI)
+	Scope<DeviceAPI> RenderCommands::CreateAPI(GDIType GDI)
 	{
 		switch (GDI)
 		{
 		case GDIType::none:
-			FE_ASSERT(false, "Cannot create RendererAPI for GDIType::none!");
+			FE_ASSERT(false, "Cannot create DeviceAPI for GDIType::none!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return CreateScope<OpenGLRendererAPI>();
+			return CreateScope<OpenGLDeviceAPI>();
 		default:
 			FE_ASSERT(false, "Unknown GDIType!");
 			return nullptr;
 		}
 	}
 
-	void RenderCommands::SetAPI(RendererAPI* rendererAPI)
+	void RenderCommands::SetAPI(DeviceAPI* rendererAPI)
 	{
 		s_RendererAPI = rendererAPI;
 	}

@@ -27,6 +27,179 @@ Worlds:
       FrameEnd:
         []
     Actors:
+      - Actor: Trees
+        UUID: 11817572065028199450
+        Behaviors:
+          []
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            []
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Trees
+            UUID: 11817572065028199450
+            Head: 11817572065028199450
+            Tags: 0
+            Node:
+              Parent: 18166385611883461423
+              HierarchyLvl: 1
+              PreviousSibling: 0
+              NextSibling: 3544897095776242233
+              ChildrenCount: 2
+              FirstChild: 2984700763237874515
+            Transform:
+              Position: [0, 0, 0]
+              Rotation: [0, -0, 0]
+              Scale: [0.938055158, 1.06246591, 1]
+          - Entity: Entity
+            UUID: 5208854908548980062
+            Head: 11817572065028199450
+            Tags: 0
+            Node:
+              Parent: 11817572065028199450
+              HierarchyLvl: 2
+              PreviousSibling: 2984700763237874515
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0.444388628, 0.0613309555, 0.205625981]
+              Rotation: [0.441120982, -24.8598423, 0.111069255]
+              Scale: [0.999999583, 1.13651538, 2.23695445]
+            Sprite:
+              Color: [1, 1, 1, 1]
+              Texture: assets\textures\tree1.png
+              Tiling: 1
+          - Entity: Entity
+            UUID: 2984700763237874515
+            Head: 11817572065028199450
+            Tags: 0
+            Node:
+              Parent: 11817572065028199450
+              HierarchyLvl: 2
+              PreviousSibling: 0
+              NextSibling: 5208854908548980062
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [-0.839909434, -0.0132298442, -0.450122058]
+              Rotation: [0, -0, 0]
+              Scale: [0.999999642, 0.999999642, 1]
+            Sprite:
+              Color: [1, 1, 1, 1]
+              Texture: assets\textures\tree2.png
+              Tiling: 1
+      - Actor: Groud
+        UUID: 3544897095776242233
+        Behaviors:
+          []
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            []
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Groud
+            UUID: 3544897095776242233
+            Head: 3544897095776242233
+            Tags: 0
+            Node:
+              Parent: 18166385611883461423
+              HierarchyLvl: 1
+              PreviousSibling: 11817572065028199450
+              NextSibling: 15611380411897365828
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0.191862732, -0.5, -0.0087775737]
+              Rotation: [90, -0, 0]
+              Scale: [3.09002066, 2.35394812, 0.999995291]
+            Tile:
+              Color: [1, 1, 1, 1]
+              Texture: assets\textures\grassland.jpg
+              Tiling: 3.20000005
+      - Actor: grass
+        UUID: 15611380411897365828
+        Behaviors:
+          []
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            []
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: grass
+            UUID: 15611380411897365828
+            Head: 15611380411897365828
+            Tags: 0
+            Node:
+              Parent: 18166385611883461423
+              HierarchyLvl: 1
+              PreviousSibling: 3544897095776242233
+              NextSibling: 6798256312845489761
+              ChildrenCount: 2
+              FirstChild: 8546446558731507106
+            Transform:
+              Position: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+          - Entity: Entity
+            UUID: 17095849106156439549
+            Head: 15611380411897365828
+            Tags: 0
+            Node:
+              Parent: 15611380411897365828
+              HierarchyLvl: 2
+              PreviousSibling: 8546446558731507106
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [0.400000006, -0.409999996, 0.920000017]
+              Rotation: [0, 0, 0]
+              Scale: [0.200000003, 0.200000003, 1]
+            Sprite:
+              Color: [1, 1, 1, 1]
+              Texture: assets\textures\grass2.png
+              Tiling: 1
+          - Entity: Entity
+            UUID: 8546446558731507106
+            Head: 15611380411897365828
+            Tags: 0
+            Node:
+              Parent: 15611380411897365828
+              HierarchyLvl: 2
+              PreviousSibling: 0
+              NextSibling: 17095849106156439549
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Position: [-0.000114440918, -0.400000006, 0]
+              Rotation: [0, -0, 0]
+              Scale: [0.233599499, 0.200000003, 1]
+            Sprite:
+              Color: [0.602941155, 0.602941155, 0.602941155, 1]
+              Texture: assets\textures\grass1.png
+              Tiling: 1
       - Actor: Actor
         UUID: 6798256312845489761
         Behaviors:
@@ -112,177 +285,4 @@ Worlds:
             Sprite:
               Color: [1, 1, 1, 1]
               Texture: assets/textures/Texture_with_Transparency.png
-              Tiling: 1
-      - Actor: grass
-        UUID: 15611380411897365828
-        Behaviors:
-          []
-        Updates:
-          FrameStart:
-            []
-          PrePhysics:
-            []
-          Physics:
-            []
-          PostPhysics:
-            []
-          FrameEnd:
-            []
-        Entities:
-          - Entity: grass
-            UUID: 15611380411897365828
-            Head: 15611380411897365828
-            Tags: 0
-            Node:
-              Parent: 18166385611883461423
-              HierarchyLvl: 1
-              PreviousSibling: 3544897095776242233
-              NextSibling: 6798256312845489761
-              ChildrenCount: 2
-              FirstChild: 8546446558731507106
-            Transform:
-              Position: [0, 0, 0]
-              Rotation: [0, 0, 0]
-              Scale: [1, 1, 1]
-          - Entity: Entity
-            UUID: 17095849106156439549
-            Head: 15611380411897365828
-            Tags: 0
-            Node:
-              Parent: 15611380411897365828
-              HierarchyLvl: 2
-              PreviousSibling: 8546446558731507106
-              NextSibling: 0
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Position: [0.400000006, -0.409999996, 0.920000017]
-              Rotation: [0, 0, 0]
-              Scale: [0.200000003, 0.200000003, 1]
-            Sprite:
-              Color: [1, 1, 1, 1]
-              Texture: assets\textures\grass2.png
-              Tiling: 1
-          - Entity: Entity
-            UUID: 8546446558731507106
-            Head: 15611380411897365828
-            Tags: 0
-            Node:
-              Parent: 15611380411897365828
-              HierarchyLvl: 2
-              PreviousSibling: 0
-              NextSibling: 17095849106156439549
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Position: [-0.000114440918, -0.400000006, 0]
-              Rotation: [0, -0, 0]
-              Scale: [0.233599499, 0.200000003, 1]
-            Sprite:
-              Color: [0.602941155, 0.602941155, 0.602941155, 1]
-              Texture: assets\textures\grass1.png
-              Tiling: 1
-      - Actor: Groud
-        UUID: 3544897095776242233
-        Behaviors:
-          []
-        Updates:
-          FrameStart:
-            []
-          PrePhysics:
-            []
-          Physics:
-            []
-          PostPhysics:
-            []
-          FrameEnd:
-            []
-        Entities:
-          - Entity: Groud
-            UUID: 3544897095776242233
-            Head: 3544897095776242233
-            Tags: 0
-            Node:
-              Parent: 18166385611883461423
-              HierarchyLvl: 1
-              PreviousSibling: 11817572065028199450
-              NextSibling: 15611380411897365828
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Position: [0.191862732, -0.5, -0.0087775737]
-              Rotation: [90, -0, 0]
-              Scale: [3.09002066, 2.35394812, 0.999995291]
-            Tile:
-              Color: [1, 1, 1, 1]
-              Texture: assets\textures\grassland.jpg
-              Tiling: 3.20000005
-      - Actor: Trees
-        UUID: 11817572065028199450
-        Behaviors:
-          []
-        Updates:
-          FrameStart:
-            []
-          PrePhysics:
-            []
-          Physics:
-            []
-          PostPhysics:
-            []
-          FrameEnd:
-            []
-        Entities:
-          - Entity: Trees
-            UUID: 11817572065028199450
-            Head: 11817572065028199450
-            Tags: 0
-            Node:
-              Parent: 18166385611883461423
-              HierarchyLvl: 1
-              PreviousSibling: 0
-              NextSibling: 3544897095776242233
-              ChildrenCount: 2
-              FirstChild: 2984700763237874515
-            Transform:
-              Position: [0, 0, 0]
-              Rotation: [0, -0, 0]
-              Scale: [0.938055158, 1.06246591, 1]
-          - Entity: Entity
-            UUID: 5208854908548980062
-            Head: 11817572065028199450
-            Tags: 0
-            Node:
-              Parent: 11817572065028199450
-              HierarchyLvl: 2
-              PreviousSibling: 2984700763237874515
-              NextSibling: 0
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Position: [0.444388628, 0.0613309555, 0.205625981]
-              Rotation: [0.441120982, -24.8598423, 0.111069255]
-              Scale: [0.999999583, 1.13651538, 2.23695445]
-            Sprite:
-              Color: [1, 1, 1, 1]
-              Texture: assets\textures\tree1.png
-              Tiling: 1
-          - Entity: Entity
-            UUID: 2984700763237874515
-            Head: 11817572065028199450
-            Tags: 0
-            Node:
-              Parent: 11817572065028199450
-              HierarchyLvl: 2
-              PreviousSibling: 0
-              NextSibling: 5208854908548980062
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Position: [-0.839909434, -0.0132298442, -0.450122058]
-              Rotation: [0, -0, 0]
-              Scale: [0.999999642, 0.999999642, 1]
-            Sprite:
-              Color: [1, 1, 1, 1]
-              Texture: assets\textures\tree2.png
               Tiling: 1

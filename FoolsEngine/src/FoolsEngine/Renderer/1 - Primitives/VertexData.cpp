@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 
-#include "BufferData.h"
+#include "VertexData.h"
 
 namespace fe
 {
-	namespace BufferData
+	namespace VertexData
 	{
 		Element::Element(const std::string& name, ShaderData::Primitive primitive, bool normalized)
 			: Name(name), Primitive(primitive), Structure(ShaderData::Structure::Scalar), Offset(0), ComponentCount(1), Normalized(normalized)
