@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 #include <glad/glad.h>
 #include "OpenGLRenderingContext.h"
-#include "OpenGLRendererAPI.h"
+#include "OpenGLDeviceAPI.h"
 
 namespace fe
 {

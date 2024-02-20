@@ -85,31 +85,27 @@ namespace fe
 		switch (channels)
 		{
 		case 3:
-		{
 			m_Format = GL_RGB;
 			m_InternalFormat = GL_RGB8;
 			break;
-		}
 		case 4:
-		{
 			m_Format = GL_RGBA;
 			m_InternalFormat = GL_RGBA8;
 			break;
 		}
-		}
 
 		FE_CORE_ASSERT(m_Format & m_InternalFormat, "Texture data format not supported!");
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
-		glTextureStorage2D(m_ID, 1, m_InternalFormat, m_Width, m_Height);
+		glGenTextures(1, &m_ID);
+		glBindTexture(GL_TEXTURE_2D, m_ID);
 
-		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTextureSubImage2D(m_ID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, width, height, 0, m_Format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
 
 		stbi_image_free(data);
 	}
