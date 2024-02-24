@@ -9,6 +9,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorCameraController.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
@@ -32,9 +33,9 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
-    <ClInclude Include="src\DockSpace.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
@@ -57,6 +58,5 @@
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
     </ClCompile>
-    <ClCompile Include="src\DockSpace.cpp" />
   </ItemGroup>
 </Project>

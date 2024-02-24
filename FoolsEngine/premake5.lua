@@ -27,7 +27,8 @@ project "FoolsEngine"
 		"imgui",
 		"stb",
 		"yaml-cpp",
-		"ImGuizmo"
+		"ImGuizmo",
+		"assimp"
 	}
 
 	buildoptions {

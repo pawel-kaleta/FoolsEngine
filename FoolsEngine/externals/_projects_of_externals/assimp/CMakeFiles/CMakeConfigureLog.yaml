@@ -1,0 +1,610 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.6.3+07e294721 for .NET Framework
+      Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:47.
+      
+      Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdC\\CompilerIdC.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+      PrepareForBuild:
+        Tworzenie katalogu "Debug\\".
+        Tworzenie katalogu "Debug\\CompilerIdC.tlog\\".
+      InitializeBuildStatus:
+        Trwa tworzenie "Debug\\CompilerIdC.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Usuwanie pliku "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+        Modyfikowanie "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdC\\CompilerIdC.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+      
+      Kompilacja powiod\xc2\x88a si©.
+          Ostrzeľenia: 0
+          Liczba b\xc2\x88©d˘w: 0
+      
+      Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:06.31
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/3.29.0-rc2/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.6.3+07e294721 for .NET Framework
+      Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:53.
+      
+      Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+      PrepareForBuild:
+        Tworzenie katalogu "Debug\\".
+        Tworzenie katalogu "Debug\\CompilerIdCXX.tlog\\".
+      InitializeBuildStatus:
+        Trwa tworzenie "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Usuwanie pliku "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+        Modyfikowanie "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
+      Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\3.29.0-rc2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+      
+      Kompilacja powiod\xc2\x88a si©.
+          Ostrzeľenia: 0
+          Liczba b\xc2\x88©d˘w: 0
+      
+      Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.43
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/3.29.0-rc2/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:64 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-2hps6h"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-2hps6h"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-2hps6h'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d9405.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:54.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-2hps6h\\cmTC_d9405.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_d9405.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-2hps6h\\Debug\\".
+          Tworzenie katalogu "cmTC_d9405.dir\\Debug\\cmTC_d9405.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_d9405.dir\\Debug\\cmTC_d9405.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d9405.dir\\Debug\\\\" /Fd"cmTC_d9405.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CMakeCCompilerABI.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d9405.dir\\Debug\\\\" /Fd"cmTC_d9405.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-2hps6h\\Debug\\cmTC_d9405.exe" /INCREMENTAL /ILK:"cmTC_d9405.dir\\Debug\\cmTC_d9405.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-2hps6h/Debug/cmTC_d9405.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-2hps6h/Debug/cmTC_d9405.lib" /MACHINE:X64  /machine:x64 cmTC_d9405.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_d9405.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-2hps6h\\Debug\\cmTC_d9405.exe
+        FinalizeBuildStatus:
+          Usuwanie pliku "cmTC_d9405.dir\\Debug\\cmTC_d9405.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_d9405.dir\\Debug\\cmTC_d9405.tlog\\cmTC_d9405.lastbuildstate".
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-2hps6h\\cmTC_d9405.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+        
+        Kompilacja powiod\xc2\x88a si©.
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 0
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.41
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:170 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'C': C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:207 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Running the C compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.36.32534.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:64 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-fo5l6q"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-fo5l6q"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-fo5l6q'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_9d0b7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:55.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-fo5l6q\\cmTC_9d0b7.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_9d0b7.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-fo5l6q\\Debug\\".
+          Tworzenie katalogu "cmTC_9d0b7.dir\\Debug\\cmTC_9d0b7.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_9d0b7.dir\\Debug\\cmTC_9d0b7.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_9d0b7.dir\\Debug\\\\" /Fd"cmTC_9d0b7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CMakeCXXCompilerABI.cpp
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_9d0b7.dir\\Debug\\\\" /Fd"cmTC_9d0b7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-fo5l6q\\Debug\\cmTC_9d0b7.exe" /INCREMENTAL /ILK:"cmTC_9d0b7.dir\\Debug\\cmTC_9d0b7.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-fo5l6q/Debug/cmTC_9d0b7.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-fo5l6q/Debug/cmTC_9d0b7.lib" /MACHINE:X64  /machine:x64 cmTC_9d0b7.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_9d0b7.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-fo5l6q\\Debug\\cmTC_9d0b7.exe
+        FinalizeBuildStatus:
+          Usuwanie pliku "cmTC_9d0b7.dir\\Debug\\cmTC_9d0b7.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_9d0b7.dir\\Debug\\cmTC_9d0b7.tlog\\cmTC_9d0b7.lastbuildstate".
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-fo5l6q\\cmTC_9d0b7.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+        
+        Kompilacja powiod\xc2\x88a si©.
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 0
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.44
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:170 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'CXX': C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:207 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:58 (PROJECT)"
+    message: |
+      Running the CXX compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.36.32534.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "contrib/zlib/CMakeLists.txt:35 (check_include_file)"
+    checks:
+      - "Looking for sys/types.h"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-f8y03w"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-f8y03w"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-f8y03w'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d6807.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:56.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\cmTC_d6807.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_d6807.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\Debug\\".
+          Tworzenie katalogu "cmTC_d6807.dir\\Debug\\cmTC_d6807.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_d6807.dir\\Debug\\cmTC_d6807.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d6807.dir\\Debug\\\\" /Fd"cmTC_d6807.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CheckIncludeFile.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d6807.dir\\Debug\\\\" /Fd"cmTC_d6807.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\CheckIncludeFile.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\Debug\\cmTC_d6807.exe" /INCREMENTAL /ILK:"cmTC_d6807.dir\\Debug\\cmTC_d6807.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-f8y03w/Debug/cmTC_d6807.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-f8y03w/Debug/cmTC_d6807.lib" /MACHINE:X64  /machine:x64 cmTC_d6807.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_d6807.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\Debug\\cmTC_d6807.exe
+        FinalizeBuildStatus:
+          Usuwanie pliku "cmTC_d6807.dir\\Debug\\cmTC_d6807.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_d6807.dir\\Debug\\cmTC_d6807.tlog\\cmTC_d6807.lastbuildstate".
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-f8y03w\\cmTC_d6807.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+        
+        Kompilacja powiod\xc2\x88a si©.
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 0
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.41
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "contrib/zlib/CMakeLists.txt:36 (check_include_file)"
+    checks:
+      - "Looking for stdint.h"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-cko0fz"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-cko0fz"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-cko0fz'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7e206.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:56.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\cmTC_7e206.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_7e206.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\Debug\\".
+          Tworzenie katalogu "cmTC_7e206.dir\\Debug\\cmTC_7e206.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_7e206.dir\\Debug\\cmTC_7e206.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7e206.dir\\Debug\\\\" /Fd"cmTC_7e206.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CheckIncludeFile.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7e206.dir\\Debug\\\\" /Fd"cmTC_7e206.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\CheckIncludeFile.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\Debug\\cmTC_7e206.exe" /INCREMENTAL /ILK:"cmTC_7e206.dir\\Debug\\cmTC_7e206.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-cko0fz/Debug/cmTC_7e206.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-cko0fz/Debug/cmTC_7e206.lib" /MACHINE:X64  /machine:x64 cmTC_7e206.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_7e206.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\Debug\\cmTC_7e206.exe
+        FinalizeBuildStatus:
+          Usuwanie pliku "cmTC_7e206.dir\\Debug\\cmTC_7e206.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_7e206.dir\\Debug\\cmTC_7e206.tlog\\cmTC_7e206.lastbuildstate".
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-cko0fz\\cmTC_7e206.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+        
+        Kompilacja powiod\xc2\x88a si©.
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 0
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.41
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "contrib/zlib/CMakeLists.txt:37 (check_include_file)"
+    checks:
+      - "Looking for stddef.h"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-v7zah9"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-v7zah9"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-v7zah9'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ee9c3.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:57.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\cmTC_ee9c3.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_ee9c3.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\Debug\\".
+          Tworzenie katalogu "cmTC_ee9c3.dir\\Debug\\cmTC_ee9c3.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_ee9c3.dir\\Debug\\cmTC_ee9c3.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_ee9c3.dir\\Debug\\\\" /Fd"cmTC_ee9c3.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CheckIncludeFile.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_ee9c3.dir\\Debug\\\\" /Fd"cmTC_ee9c3.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\CheckIncludeFile.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\Debug\\cmTC_ee9c3.exe" /INCREMENTAL /ILK:"cmTC_ee9c3.dir\\Debug\\cmTC_ee9c3.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-v7zah9/Debug/cmTC_ee9c3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-v7zah9/Debug/cmTC_ee9c3.lib" /MACHINE:X64  /machine:x64 cmTC_ee9c3.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_ee9c3.vcxproj -> D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\Debug\\cmTC_ee9c3.exe
+        FinalizeBuildStatus:
+          Usuwanie pliku "cmTC_ee9c3.dir\\Debug\\cmTC_ee9c3.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_ee9c3.dir\\Debug\\cmTC_ee9c3.tlog\\cmTC_ee9c3.lastbuildstate".
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-v7zah9\\cmTC_ee9c3.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe).
+        
+        Kompilacja powiod\xc2\x88a si©.
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 0
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.41
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckTypeSize.cmake:146 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckTypeSize.cmake:271 (__check_type_size_impl)"
+      - "contrib/zlib/CMakeLists.txt:55 (check_type_size)"
+    checks:
+      - "Check size of off64_t"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-kw5x17"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-kw5x17"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "HAVE_OFF64_T"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-kw5x17'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_f1d73.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:58.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_f1d73.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\Debug\\".
+          Tworzenie katalogu "cmTC_f1d73.dir\\Debug\\cmTC_f1d73.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_f1d73.dir\\Debug\\cmTC_f1d73.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D HAVE_SYS_TYPES_H /D HAVE_STDINT_H /D HAVE_STDDEF_H /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_f1d73.dir\\Debug\\\\" /Fd"cmTC_f1d73.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          OFF64_T.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D HAVE_SYS_TYPES_H /D HAVE_STDINT_H /D HAVE_STDDEF_H /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_f1d73.dir\\Debug\\\\" /Fd"cmTC_f1d73.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c"
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(29,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(30,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(31,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(32,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(33,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe) - NIEPOWODZENIE.
+        
+        Kompilacja NIE POWIODťA SI¨.
+        
+        "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj" (domy\xc2\x98lny element docelowy) (1)->
+        (element docelowy ClCompile) -> 
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(29,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(30,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(31,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(32,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\OFF64_T.c(33,12): error C2065: "off64_t": niezadeklarowany identyfikator [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-kw5x17\\cmTC_f1d73.vcxproj]
+        
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 5
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.25
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckFunctionExists.cmake:86 (try_compile)"
+      - "contrib/zlib/CMakeLists.txt:64 (check_function_exists)"
+    checks:
+      - "Looking for fseeko"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-u7mc2g"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-u7mc2g"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "HAVE_FSEEKO"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-u7mc2g'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_44809.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:58.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_44809.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\Debug\\".
+          Tworzenie katalogu "cmTC_44809.dir\\Debug\\cmTC_44809.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_44809.dir\\Debug\\cmTC_44809.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_44809.dir\\Debug\\\\" /Fd"cmTC_44809.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CheckFunctionExists.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_44809.dir\\Debug\\\\" /Fd"cmTC_44809.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\CheckFunctionExists.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\Debug\\cmTC_44809.exe" /INCREMENTAL /ILK:"cmTC_44809.dir\\Debug\\cmTC_44809.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-u7mc2g/Debug/cmTC_44809.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-u7mc2g/Debug/cmTC_44809.lib" /MACHINE:X64  /machine:x64 cmTC_44809.dir\\Debug\\CheckFunctionExists.obj
+        CheckFunctionExists.obj : error LNK2019: nierozpoznany symbol zewn©trzny fseeko przywo\xc2\x88any w funkcji main [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj]
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\Debug\\cmTC_44809.exe : fatal error LNK1120: liczba nierozpoznanych element˘w zewn©trznych: 1 [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj]
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe) - NIEPOWODZENIE.
+        
+        Kompilacja NIE POWIODťA SI¨.
+        
+        "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj" (domy\xc2\x98lny element docelowy) (1)->
+        (element docelowy Link) -> 
+          CheckFunctionExists.obj : error LNK2019: nierozpoznany symbol zewn©trzny fseeko przywo\xc2\x88any w funkcji main [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj]
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\Debug\\cmTC_44809.exe : fatal error LNK1120: liczba nierozpoznanych element˘w zewn©trznych: 1 [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-u7mc2g\\cmTC_44809.vcxproj]
+        
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 2
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.37
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.29/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "contrib/zlib/CMakeLists.txt:72 (check_include_file)"
+    checks:
+      - "Looking for unistd.h"
+    directories:
+      source: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-5zayrj"
+      binary: "D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-5zayrj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "D:/dev/FoolsEngine/FoolsEngine/externals/assimp/cmake-modules"
+    buildResult:
+      variable: "Z_HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/dev/FoolsEngine/FoolsEngine/externals/_projects_of_externals/assimp/CMakeFiles/CMakeScratch/TryCompile-5zayrj'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_35ad4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Kompilacja rozpocz©\xc2\x88a si© 24.02.2024 15:04:59.
+        
+        Projekt "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\cmTC_35ad4.vcxproj" w w©«le 1 (domy\xc2\x98lne elementy docelowe).
+        PrepareForBuild:
+          Tworzenie katalogu "cmTC_35ad4.dir\\Debug\\".
+          Tworzenie katalogu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\Debug\\".
+          Tworzenie katalogu "cmTC_35ad4.dir\\Debug\\cmTC_35ad4.tlog\\".
+        InitializeBuildStatus:
+          Trwa tworzenie "cmTC_35ad4.dir\\Debug\\cmTC_35ad4.tlog\\unsuccessfulbuild", poniewaľ okre\xc2\x98lono "AlwaysCreate".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_35ad4.dir\\Debug\\\\" /Fd"cmTC_35ad4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ wersja kompilatora optymalizujĄcego 19.36.32534 dla x64
+          CheckIncludeFile.c
+          Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeľone.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_35ad4.dir\\Debug\\\\" /Fd"cmTC_35ad4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\CheckIncludeFile.c"
+        D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\CheckIncludeFile.c(1,10): fatal  error C1083: Nie moľna otworzy† pliku do\xc2\x88Ącz: 'unistd.h': No such file or directory [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\cmTC_35ad4.vcxproj]
+        Kompilowanie projektu "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\cmTC_35ad4.vcxproj" wykonane (domy\xc2\x98lne elementy docelowe) - NIEPOWODZENIE.
+        
+        Kompilacja NIE POWIODťA SI¨.
+        
+        "D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\cmTC_35ad4.vcxproj" (domy\xc2\x98lny element docelowy) (1)->
+        (element docelowy ClCompile) -> 
+          D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\CheckIncludeFile.c(1,10): fatal  error C1083: Nie moľna otworzy† pliku do\xc2\x88Ącz: 'unistd.h': No such file or directory [D:\\dev\\FoolsEngine\\FoolsEngine\\externals\\_projects_of_externals\\assimp\\CMakeFiles\\CMakeScratch\\TryCompile-5zayrj\\cmTC_35ad4.vcxproj]
+        
+            Ostrzeľenia: 0
+            Liczba b\xc2\x88©d˘w: 1
+        
+        Czas, kt˘ry up\xc2\x88ynĄ\xc2\x88: 00:00:00.27
+        
+      exitCode: 1
+...

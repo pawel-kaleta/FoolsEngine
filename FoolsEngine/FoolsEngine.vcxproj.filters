@@ -138,9 +138,6 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.h">
-      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
@@ -159,19 +156,25 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\Uniform.h">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.h">
+      <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLIndexBuffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLIndexBuffer.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.h">
@@ -185,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexBuffer.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h">
-      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
@@ -354,19 +354,22 @@
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.cpp">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLIndexBuffer.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.cpp">
+      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLFramebuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLIndexBuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLRenderingContext.cpp">
@@ -380,9 +383,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLVertexBuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.cpp">
-      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>

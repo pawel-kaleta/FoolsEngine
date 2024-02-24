@@ -20,3 +20,6 @@
 [submodule "FoolsEngine/externals/ImGuizmo"]
 	path = FoolsEngine/externals/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo
+[submodule "FoolsEngine/externals/assimp"]
+	path = FoolsEngine/externals/assimp
+	url = https://github.com/assimp/assimp
