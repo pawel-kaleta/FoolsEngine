@@ -24,7 +24,7 @@ void main()
 	v_EntityID = u_EntityID;
 	v_TexCoord = a_TexCoord;
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-	v_Albedo = vec3(u_Albedo.r * v_Albedo.r, u_Albedo.g * v_Albedo.g, u_Albedo.b * v_Albedo.b);
+	v_Albedo = vec3(v_Roughness,v_Roughness,v_Roughness);
 	v_Roughness = u_Roughness;
 	v_Metalness = u_Metalness;
 	v_AO = u_AO;
@@ -51,7 +51,7 @@ uniform sampler2D u_AOMap;
 
 void main()
 {
-	o_color = vec4(v_Albedo, 1);
+	o_color = vec4(0.5, 0.50, 0.50, 1);
 
 	o_entityID = v_EntityID;
 }

@@ -44,12 +44,14 @@ namespace fe
 
 		glBindVertexArray(m_VertexArrayID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
+		m_IndexBuffer->Bind();
 	}
 
 	void OpenGLVertexBuffer::Unbind() const
 	{
 		FE_PROFILER_FUNC();
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		m_IndexBuffer->Unbind();
 		glBindVertexArray(0);
 	}
 
@@ -172,7 +174,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		glBindVertexArray(m_ID);
+		glBindVertexArray(m_VertexArrayID);
 		indexBuffer->Bind();
 
 		m_IndexBuffer = indexBuffer;

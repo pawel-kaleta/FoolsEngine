@@ -21,7 +21,7 @@ namespace fe
 		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
 
 		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t* rendererTextureSlot, uint32_t count = 1) override;
+		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t* rendererTextureSlot, uint32_t count) override;
 		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) override;
 	private:
 		uint32_t m_ProgramID;

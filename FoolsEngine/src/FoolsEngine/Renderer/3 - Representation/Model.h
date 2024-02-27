@@ -13,6 +13,8 @@
 #include "FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 
+#include "FoolsEngine\Scene\ECS.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -51,7 +53,7 @@ namespace fe
 
 		void FreeBuffersFromGPU();
 
-		void Draw(Transform& transform);
+		void Draw(Transform& transform, glm::mat4 VP, EntityID entityID);
 
 		static Ref<Material> Default3DMaterial;
 		Ref<MaterialInstance> m_MaterialInstance;
@@ -80,11 +82,11 @@ namespace fe
 		Model() = default;
 		Model(std::filesystem::path path) { LoadModel(path); }
 
-		void Draw(Transform& transform)
+		void Draw(Transform& transform, glm::mat4 VP, EntityID entityID)
 		{
 			for (unsigned int i = 0; i < m_Meshes.size(); i++)
 			{
-				m_Meshes[i].Draw(transform);
+				m_Meshes[i].Draw(transform, VP, entityID);
 			}
 		}
 

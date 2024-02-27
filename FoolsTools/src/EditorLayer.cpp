@@ -37,7 +37,7 @@ namespace fe
 		m_Scene = CreateRef<Scene>();
 		SetSceneContext(m_Scene);
 
-		AssimpTest();
+		//AssimpTest();
 	}
 
 	void EditorLayer::OnUpdate()

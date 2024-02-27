@@ -184,7 +184,7 @@ namespace fe
 				continue;
 			Transform transform = entityTransform.GetRef();
 			
-			model.Model->Draw(transform);
+			model.Model->Draw(transform, s_Data->VPMatrix, ID);
 		}
 
 		EndScene(framebuffer);

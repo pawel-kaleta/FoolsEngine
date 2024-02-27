@@ -169,7 +169,7 @@ namespace fe
 	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot)
 	{
 		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
-		glUniform1i(location, rendererTextureSlot);
+		glUniform1iv(location, 1, (GLint*) & rendererTextureSlot);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
