@@ -3,6 +3,7 @@
 
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+#include "FoolsEngine\Renderer\3 - Representation\Model.h"
 
 #include <glad\glad.h>
 
@@ -64,12 +65,33 @@ namespace fe
 		case GDIType::OpenGL:
 			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Flat_Color_Shader.glsl", GDI));
 			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Basic_Texture_Shader.glsl", GDI));
+			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Base3DShader.glsl", GDI));
+
+			Mesh::Default3DMaterial.reset(new Material(
+				"Default3DMaterial",
+				systems.ShaderLib->IGet("Base3DShader"),
+				{
+					Uniform("u_ViewProjection", ShaderData::Type::Mat4),
+					Uniform("u_EntityID"      , ShaderData::Type::UInt),
+					Uniform("u_Albedo"        , ShaderData::Type::Float3),
+					Uniform("u_Roughness"     , ShaderData::Type::Float),
+					Uniform("u_Metalness"     , ShaderData::Type::Float),
+					Uniform("u_AO"            , ShaderData::Type::Float)
+				},
+				{
+					ShaderTextureSlot("u_AlbedoMap"   , TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D)
+				}
+			));
+
 			break;
 		default:
 			FE_CORE_ASSERT(false, "Uknown GDIType!");
 		}
 
-		systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI));
+		systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI, TextureData::Usage::Map_Albedo));
 
 		systems.MaterialLib->IAdd(
 			Ref<Material>(
@@ -164,6 +186,6 @@ namespace fe
 
 		vertexBuffer->Bind();
 
-		RenderCommands::DrawIndexed(vertexBuffer);
+		RenderCommands::DrawIndexed(vertexBuffer.get());
 	}
 }

@@ -83,7 +83,7 @@ namespace fe
 
 			Ref<Shader> BaseShader;
 			ShaderTextureSlot BaseShaderTextureSlot;
-			int32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
+			uint32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 		};
 
 		static Scope<Renderer2DData> s_Data;

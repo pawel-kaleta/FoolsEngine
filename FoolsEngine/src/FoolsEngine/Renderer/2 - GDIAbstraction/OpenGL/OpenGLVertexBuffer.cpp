@@ -74,8 +74,8 @@ namespace fe
 		static uint8_t rows;
 		static uint8_t columns;
 
-		glBindVertexArray(m_ID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexArrayID);
+		glBindVertexArray(m_VertexArrayID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 
 		uint32_t bufferElementIndex = 0;
 		for (const auto& element : layout)

@@ -25,12 +25,14 @@ namespace fe
 	class MaterialInstance
 	{
 	public:
-		MaterialInstance(Ref<Material> material);
+		MaterialInstance(Ref<Material> material, const std::string& name);
 		~MaterialInstance()
 		{
 			FE_PROFILER_FUNC();
 			operator delete(m_UniformsData);
 		}
+
+		const std::string& GetName() const { return m_Name; }
 
 		void* GetUniformValuePtr(const Uniform& targetUniform);
 		void* GetUniformValuePtr(const std::string& name);
@@ -45,6 +47,7 @@ namespace fe
 		const std::vector<Ref<Texture>>& GetTextures() const { return m_Textures; }
 		const Ref<Material> GetMaterial() const { return m_Material; }
 	private:
+		std::string m_Name;
 		Ref<Material> m_Material;
 		void* m_UniformsData;
 		size_t m_UniformsDataSize;

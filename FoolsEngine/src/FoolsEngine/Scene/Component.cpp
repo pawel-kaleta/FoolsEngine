@@ -6,7 +6,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "World.h"
 #include "Scene.h"
-#include "FoolsEngine/Platform/FileDialogs.h"
+#include "FoolsEngine\Platform\FileDialogs.h"
 
 #include "SceneSerializer.h"
 
@@ -161,7 +161,7 @@ namespace fe
 					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
 					if (!TextureLibrary::Exist(textureName))
 					{
-						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string());
+						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
 						TextureLibrary::Add(texture);
 					}
 					item_current = TextureLibrary::Get(textureName);
@@ -204,7 +204,7 @@ namespace fe
 			textureName = FileNameFromFilepath(textureFilePath);
 
 		if (!TextureLibrary::Exist(textureName))
-			TextureLibrary::Add(Texture2D::Create(textureFilePath));
+			TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
 
 		Tile.Texture = TextureLibrary::Get(textureName);
 
@@ -246,7 +246,7 @@ namespace fe
 					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
 					if (!TextureLibrary::Exist(textureName))
 					{
-						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string());
+						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
 						TextureLibrary::Add(texture);
 					}
 					item_current = TextureLibrary::Get(textureName);
@@ -288,10 +288,29 @@ namespace fe
 			textureName = FileNameFromFilepath(textureFilePath);
 
 		if (!TextureLibrary::Exist(textureName))
-			TextureLibrary::Add(Texture2D::Create(textureFilePath));
+			TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
 
 		Sprite.Texture = TextureLibrary::Get(textureName);
 
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
+	}
+
+	void CModel::DrawInspectorWidget(BaseEntity entity)
+	{
+		if (!Model)
+		{
+			if (ImGui::Button("Load..."))
+			{
+				const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+				if (!modelFilepath.empty())
+				{
+					Model.reset(new fe::Model(modelFilepath));
+				}
+			}	
+		}
+		else
+		{
+
+		}
 	}
 }

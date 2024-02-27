@@ -12,6 +12,7 @@ namespace fe
 		RegisterDataComponent<CCamera>();
 		RegisterDataComponent<CTile>();
 		RegisterDataComponent<CSprite>();
+		RegisterDataComponent<CModel>();
 	}
 
 }

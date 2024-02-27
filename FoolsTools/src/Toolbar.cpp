@@ -6,9 +6,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_IconPlay = Texture2D::Create("resources/PlayButton.png");
-		m_IconStop = Texture2D::Create("resources/StopButton.png");
-		m_IconPause = Texture2D::Create("resources/PauseButton.png");
+		m_IconPlay = Texture2D::Create("resources/PlayButton.png", TextureData::Usage::Map_Albedo);
+		m_IconStop = Texture2D::Create("resources/StopButton.png", TextureData::Usage::Map_Albedo);
+		m_IconPause = Texture2D::Create("resources/PauseButton.png", TextureData::Usage::Map_Albedo);
 	}
 
 	void Toolbar::OnImGuiRender()

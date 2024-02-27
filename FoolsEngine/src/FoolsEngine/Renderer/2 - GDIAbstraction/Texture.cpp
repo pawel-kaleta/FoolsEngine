@@ -21,13 +21,13 @@ namespace fe
 		return nullptr;
 	}
 
-	Ref<Texture> Texture2D::Create(const std::string& filePath)
+	Ref<Texture> Texture2D::Create(const std::string& filePath, TextureData::Usage usage)
 	{
 		GDIType GDI = Renderer::GetActiveGDItype();
-		return Create(filePath, GDI);
+		return Create(filePath, GDI, usage);
 	}
 
-	Ref<Texture> Texture2D::Create(const std::string& filePath, GDIType GDI)
+	Ref<Texture> Texture2D::Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage)
 	{
 		switch (GDI)
 		{
@@ -35,7 +35,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return CreateRef<OpenGLTexture2D>(filePath);
+			return CreateRef<OpenGLTexture2D>(filePath, usage);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
@@ -57,22 +57,16 @@ namespace fe
 		if (m_GDI == GDIType::none)
 			m_GDI = Renderer::GetActiveGDItype();
 
-		switch (m_Type)
+		switch (m_Specification.Type)
 		{
 		case TextureData::Type::None:
-		{
 			FE_CORE_ASSERT(false, "Unspecified type of a texture");
 			return nullptr;
-		}
 		case TextureData::Type::Texture2D:
-		{
 			return Ref<Texture>(Texture2D::Create(m_Name, m_Specification, m_Width, m_Height, m_GDI));
-		}
 		default:
-		{
 			FE_CORE_ASSERT(false, "Unknown type of a texture");
 			return nullptr;
-		}
 		}
 	}
 }

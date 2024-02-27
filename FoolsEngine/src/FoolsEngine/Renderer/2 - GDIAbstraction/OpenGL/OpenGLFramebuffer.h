@@ -38,6 +38,7 @@ namespace fe
                     return i;
             }
             FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer {1}", name, m_Name);
+            return 0;
         }
 
         virtual void ReadPixel(uint32_t attachmentIndex, int x, int y, void* saveLocation) override;

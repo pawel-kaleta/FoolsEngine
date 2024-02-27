@@ -24,8 +24,6 @@ namespace fe
 
 		s_Data = CreateScope<Renderer2DData>();
 
-		//s_Data->QuadVertexArray = VertexArray::Create();
-
 		s_Data->QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
 		s_Data->QuadVertexBuffer->SetLayout({
 			{ ShaderData::Type::Float3, "a_Position" },
@@ -35,7 +33,6 @@ namespace fe
 			{ ShaderData::Type::UInt,   "a_TextureSampler" },
 			{ ShaderData::Type::UInt,   "a_EntityID" }
 			});
-		//s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quadIndices = new QuadsIndexBufferData();
@@ -55,21 +52,22 @@ namespace fe
 
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices->data(), ConstLimits::MaxIndices);
 		s_Data->QuadVertexBuffer->SetIndexBuffer(quadIB);
-		//s_Data->QuadVertexArray->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
 		s_Data->BaseShader = Shader::Create("assets/shaders/Base2DShader.glsl");
 		s_Data->BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
-		for (int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
+		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data->BaseShaderSamplers[i] = i;
 
 		TextureBuilder textureBuilder;
 		textureBuilder
-			.SetHight(1)
+			.SetHeight(1)
 			.SetWidth(1)
 			.SetName("Base2DTexture")
 			.SetType(TextureData::Type::Texture2D)
-			.SetSpecification(TextureData::Specification{TextureData::Components::RGBA_F, TextureData::Format::RGBA_FLOAT_8});
+			.SetUsage(TextureData::Usage::Map_Albedo)
+			.SetComponents(TextureData::Components::RGBA_F)
+			.SetFormat(TextureData::Format::RGBA_FLOAT_8);
 
 		Ref<Texture> whiteTexture = textureBuilder.Create();
 		uint32_t whiteTextureData = 0xffffffff;
@@ -177,6 +175,18 @@ namespace fe
 			Flush();
 		}
 
+		auto& viewModels = registry.view<CModel, CTransformGlobal>();
+
+		for (auto ID : viewModels)
+		{
+			auto [model, entityTransform] = viewModels.get(ID);
+			if (!model.Model)
+				continue;
+			Transform transform = entityTransform.GetRef();
+			
+			model.Model->Draw(transform);
+		}
+
 		EndScene(framebuffer);
 	}
 
@@ -276,9 +286,8 @@ namespace fe
 			batch.Textures[i]->Bind(i);
 		}
 
-		//s_Data->QuadVertexArray->Bind();
 		s_Data->QuadVertexBuffer->Bind();
-		RenderCommands::DrawIndexed(s_Data->QuadVertexBuffer, batch.QuadIndexCount);
+		RenderCommands::DrawIndexed(s_Data->QuadVertexBuffer.get(), batch.QuadIndexCount);
 
 		s_Stats.Quads += batch.QuadIndexCount / 3 / 2;
 		s_Stats.DrawCalls++;

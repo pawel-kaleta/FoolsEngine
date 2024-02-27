@@ -31,15 +31,15 @@ namespace fe
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLDeviceAPI::DrawIndexed(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLDeviceAPI::DrawIndexed(const VertexBuffer* vertexBuffer)
 	{
 		FE_PROFILER_FUNC();
 
-		uint32_t indexCount = ((std::shared_ptr<OpenGLVertexBuffer>&)vertexBuffer)->GetIndexBuffer()->GetCount(); 
+		uint32_t indexCount = ((OpenGLVertexBuffer*)vertexBuffer)->GetIndexBuffer()->GetCount(); 
 		DrawIndexed(vertexBuffer, indexCount);
 	}
 
-	void OpenGLDeviceAPI::DrawIndexed(const std::shared_ptr<VertexBuffer>& vertexBuffer, uint32_t indexCount)
+	void OpenGLDeviceAPI::DrawIndexed(const VertexBuffer* vertexBuffer, uint32_t indexCount)
 	{
 		FE_PROFILER_FUNC();
 

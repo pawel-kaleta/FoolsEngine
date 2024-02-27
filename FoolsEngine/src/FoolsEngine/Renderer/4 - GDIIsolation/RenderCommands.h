@@ -10,21 +10,21 @@ namespace fe
 	public:
 		static Scope<DeviceAPI> CreateAPI(GDIType GDI);
 		static void SetAPI(DeviceAPI* rendererAPI);
-		static void InitAPI() { s_RendererAPI->Init(); }
+		static void InitAPI() { s_DeviceAPI->Init(); }
 
-		static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
+		static void SetClearColor(const glm::vec4& color) { s_DeviceAPI->SetClearColor(color); }
 
-		static void Clear() { s_RendererAPI->Clear(); }
+		static void Clear() { s_DeviceAPI->Clear(); }
 
-		static void DrawIndexed(const Ref<VertexBuffer>& vertexBuffer, uint32_t indexCount) { s_RendererAPI->DrawIndexed(vertexBuffer, indexCount); }
-		static void DrawIndexed(const Ref<VertexBuffer>& vertexBuffer) { s_RendererAPI->DrawIndexed(vertexBuffer); }
+		static void DrawIndexed(const VertexBuffer* vertexBuffer, uint32_t indexCount) { s_DeviceAPI->DrawIndexed(vertexBuffer, indexCount); }
+		static void DrawIndexed(const VertexBuffer* vertexBuffer) { s_DeviceAPI->DrawIndexed(vertexBuffer); }
 
-		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { s_RendererAPI->SetViewport(x, y, width, height); }
+		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { s_DeviceAPI->SetViewport(x, y, width, height); }
 
-		static void SetDepthTest(bool depthTets) { s_RendererAPI->SetDepthTest(depthTets); }
+		static void SetDepthTest(bool depthTets) { s_DeviceAPI->SetDepthTest(depthTets); }
 
 	private:
-		static DeviceAPI* s_RendererAPI;
+		static DeviceAPI* s_DeviceAPI;
 	};
 
 }

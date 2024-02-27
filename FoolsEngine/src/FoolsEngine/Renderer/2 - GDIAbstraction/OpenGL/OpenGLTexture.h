@@ -9,13 +9,15 @@ namespace fe
 	{
 	public:
 		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight);
-		OpenGLTexture2D(const std::string& filePath);
+		OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage);
 		virtual ~OpenGLTexture2D() override;
 
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
+
+		virtual TextureData::Usage      GetUsage()      const override { return m_Usage; }
 		virtual TextureData::Components GetComponents() const override;
-		virtual TextureData::Format GetFormat() const override;
+		virtual TextureData::Format     GetFormat()     const override;
 
 		virtual void SetData(void* data, uint32_t size) override;
 
@@ -32,5 +34,6 @@ namespace fe
 		std::string m_Name;
 		GLenum m_Format = GL_NONE;
 		GLenum m_InternalFormat = GL_NONE;
+		TextureData::Usage m_Usage = TextureData::Usage::None;
 	};
 }

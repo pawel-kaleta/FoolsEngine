@@ -9,6 +9,18 @@ namespace fe
 			None = 0,
 			Texture2D
 		};
+		
+		enum class Usage
+		{
+			None = 0,
+			RenderTarget_Depth,
+			RenderTarget_Color,
+			Map_Albedo,
+			Map_Roughness,
+			Map_Metalness,
+			Map_Normal,
+			Map_AO
+		};
 
 		enum class Components
 		{
@@ -30,7 +42,6 @@ namespace fe
 			R_UINT_32,
 			RGB_FLOAT_8,
 			RGBA_FLOAT_8,
-
 			
 			DEPTH24STENCIL8
 		};
@@ -38,9 +49,11 @@ namespace fe
 		struct Specification
 		{
 			Specification() = default;
-			Specification(Components format, Format dataFormat)
-				: Components(format), Format(dataFormat) {};
+			Specification(Type type, Usage usage, Components components, Format format)
+				: Type(type), Usage(usage), Components(components), Format(format) {};
 
+			Type       Type       = Type::None;
+			Usage      Usage      = Usage::None;
 			Components Components = Components::None;
 			Format     Format     = Format::None;
 		};

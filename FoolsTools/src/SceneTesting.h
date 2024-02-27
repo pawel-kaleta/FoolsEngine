@@ -181,7 +181,7 @@ namespace fe
 
 	void RegisterAndLoadStuff()
 	{
-		TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
+		TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png", TextureData::Usage::Map_Albedo));
 		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();

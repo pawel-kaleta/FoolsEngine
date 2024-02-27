@@ -3,10 +3,11 @@
 
 namespace fe
 {
-	MaterialInstance::MaterialInstance(Ref<Material> material)
+	MaterialInstance::MaterialInstance(Ref<Material> material, const std::string& name)
 	{
 		FE_PROFILER_FUNC();
 
+		m_Name = name;
 		m_Material = material;
 		m_UniformsDataSize = 0;
 		for (auto& uniform : m_Material->GetUniforms())

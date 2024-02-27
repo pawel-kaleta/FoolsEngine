@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	DeviceAPI* RenderCommands::s_RendererAPI = nullptr;
+	DeviceAPI* RenderCommands::s_DeviceAPI = nullptr;
 
 	Scope<DeviceAPI> RenderCommands::CreateAPI(GDIType GDI)
 	{
@@ -24,6 +24,6 @@ namespace fe
 
 	void RenderCommands::SetAPI(DeviceAPI* rendererAPI)
 	{
-		s_RendererAPI = rendererAPI;
+		s_DeviceAPI = rendererAPI;
 	}
 }

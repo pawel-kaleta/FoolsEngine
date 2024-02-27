@@ -22,9 +22,7 @@ namespace fe
 			FE_LOG_CORE_DEBUG("CActorData destruction");
 		};
 
-#ifdef FE_INTERNAL_BUILD
-		virtual std::string GetComponentName() const override { return "ActorData"; }
-#endif // FE_INTERNAL_BUILD
+		FE_COMPONENT_SETUP(CActorData, "ActorData");
 	
 	private:
 		friend class Actor;

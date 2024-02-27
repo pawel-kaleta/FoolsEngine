@@ -1,32 +1,210 @@
-16:43:12:527959 | FE  | info     | Logging innitialized!
-16:43:12:528446 | App | info     | Logging innitialized!
-16:43:12:528598 | FE  | info     | /////////////////////////////////////////////////////
-16:43:12:528773 | FE  | info     | ////////////////////// STARTUP //////////////////////
-16:43:12:528939 | FE  | info     | /////////////////////////////////////////////////////
-16:43:12:529121 | App | info     | Logging level set to 0 - all.
-16:43:12:529303 | FE  | info     | Logging level set to 0 - all.
-16:43:12:529688 | FE  | info     | Profiler session 'Startup' started.
-16:43:12:530121 | FE  | info     | Initializing GLFW
-16:43:12:603057 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
-16:43:12:782935 | FE  | debug    | Setting events callbacks for window.
-16:43:12:783803 | FE  | info     | Events callbacks for Win10Window setted up.
-16:43:12:784208 | FE  | info     | Creating rendering context
-16:43:12:787418 | FE  | info     | Rendering platform info:
-16:43:12:787613 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-16:43:12:787925 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-16:43:12:788219 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
-16:43:12:788878 | FE  | info     | OpenGL Rendering Context created.
-16:43:12:789223 | FE  | info     | VSync enablled.
-16:43:12:789615 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-16:43:12:789952 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-16:43:12:790943 | FE  | debug    | OpenGLDeviceAPI creation!
-16:43:12:791194 | FE  | info     | OpenGLDeviceAPI Initialization.
-16:43:12:873212 | FE  | debug    | Loading texture, Channels: 3
-16:43:12:919517 | FE  | debug    | Loading texture, Channels: 4
-16:43:12:920373 | FE  | debug    | Loading texture, Channels: 4
-16:43:12:920633 | FE  | debug    | Loading texture, Channels: 4
-16:43:12:921452 | FE  | debug    | Loading texture, Channels: 4
-16:43:12:921753 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-16:43:12:921878 | App | info     | EditorLayer::OnAttach()
-16:43:12:922158 | FE  | info     | Scene creation
-16:43:12:923372 | FE  | info     | World Creation
+08:42:29:988150 | FE  | info     | Logging innitialized!
+08:42:29:988613 | App | info     | Logging innitialized!
+08:42:29:988791 | FE  | info     | /////////////////////////////////////////////////////
+08:42:29:988917 | FE  | info     | ////////////////////// STARTUP //////////////////////
+08:42:29:989160 | FE  | info     | /////////////////////////////////////////////////////
+08:42:29:989291 | App | info     | Logging level set to 0 - all.
+08:42:29:989467 | FE  | info     | Logging level set to 0 - all.
+08:42:29:989947 | FE  | info     | Profiler session 'Startup' started.
+08:42:29:990468 | FE  | info     | Initializing GLFW
+08:42:30:042526 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1600, 900)
+08:42:30:197178 | FE  | debug    | Setting events callbacks for window.
+08:42:30:197836 | FE  | info     | Events callbacks for Win10Window setted up.
+08:42:30:198299 | FE  | info     | Creating rendering context
+08:42:30:203953 | FE  | info     | Rendering platform info:
+08:42:30:204344 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+08:42:30:204707 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+08:42:30:205063 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 23.12.1.231124
+08:42:30:205557 | FE  | info     | OpenGL Rendering Context created.
+08:42:30:205900 | FE  | info     | VSync enablled.
+08:42:30:206226 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+08:42:30:206523 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+08:42:30:208680 | FE  | debug    | OpenGLDeviceAPI creation!
+08:42:30:209137 | FE  | info     | OpenGLDeviceAPI Initialization.
+08:42:30:314000 | FE  | debug    | Loading texture, Channels: 3
+08:42:30:364861 | FE  | debug    | Loading texture, Channels: 4
+08:42:30:365949 | FE  | debug    | Loading texture, Channels: 4
+08:42:30:366239 | FE  | debug    | Loading texture, Channels: 4
+08:42:30:367155 | FE  | debug    | Loading texture, Channels: 4
+08:42:30:367399 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+08:42:30:367518 | App | info     | EditorLayer::OnAttach()
+08:42:30:367819 | FE  | info     | Scene creation
+08:42:30:369379 | FE  | info     | World Creation
+08:42:31:260168 | FE  | info     | Profiler session 'Startup' closed.
+08:42:31:260735 | FE  | info     | /////////////////////////////////////////////////////
+08:42:31:261307 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+08:42:31:261726 | FE  | info     | /////////////////////////////////////////////////////
+08:42:31:262145 | App | info     | Logging level set to 1 - debug or higher.
+08:42:31:262559 | FE  | info     | Logging level set to 1 - debug or higher.
+08:42:31:263214 | FE  | info     | Profiler session 'Runtime' started.
+08:42:31:536638 | FE  | info     | Profiler session 'Runtime' closed.
+08:42:32:648587 | FE  | debug    | Actor Creation
+08:42:32:649145 | FE  | debug    | Entity Creation
+08:42:43:244525 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:245247 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:245919 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:246233 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:246688 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:247086 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:247615 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:247931 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:248459 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:248776 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:249282 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:249625 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:250079 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:250511 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:250930 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:251314 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:251778 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:252165 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:252607 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:253221 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:253706 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:254078 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:254632 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:254926 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:255386 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:255785 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:256220 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:256605 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:257053 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:257446 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:257912 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:258289 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:258770 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:259159 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:259627 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:260018 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:260461 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:262659 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:263125 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:263508 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:263975 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:264350 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:264801 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:265208 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:265685 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:266062 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:266535 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:266912 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:267360 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:267750 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:268199 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:268589 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:269054 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:269432 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:269893 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:270283 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:270730 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:271127 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:271567 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:271969 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:272439 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:272849 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:273303 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:273689 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:274135 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:274530 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:274985 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:275372 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:275816 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:276210 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:276649 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:278682 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:279153 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:279547 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:280020 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:280414 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:280875 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:281267 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:281735 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:282181 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:282630 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:283016 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:283485 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:283954 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:284435 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:284809 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:285283 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:285656 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:286134 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:286532 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:287062 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:287415 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:287868 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:288264 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:288723 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:289106 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:289605 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:289950 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:290406 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:290801 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:291247 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:291641 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:292086 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:292482 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:294501 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:294989 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:295462 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:295854 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:296303 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:296696 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:297204 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:297539 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:298061 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:298398 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:298858 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:299237 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:299684 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:300084 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:300577 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:300981 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:301434 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:301824 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:302280 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:302661 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:303180 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:303564 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:304042 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:304415 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:304901 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:305279 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:305737 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:306117 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:306570 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:306959 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:307426 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:307836 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:308288 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:308671 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:310667 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:311292 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:311900 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:312272 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:312980 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:313439 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:313981 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:314666 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:315163 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:315591 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:316052 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:316433 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:316907 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:317284 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:317738 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:318127 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:318584 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:319022 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:42:43:319439 | FE  | critical | glBindVertexArray has generated an error (GL_INVALID_OPERATION)
+08:42:43:319827 | FE  | debug    | Source: 33350, Type: 33356, ID: 1000
+08:43:51:705376 | FE  | info     | Window Close Event
+08:43:51:713155 | FE  | info     | /////////////////////////////////////////////////////
+08:43:51:713367 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+08:43:51:713836 | FE  | info     | /////////////////////////////////////////////////////
+08:43:51:714265 | App | info     | Logging level set to 0 - all.
+08:43:51:714692 | FE  | info     | Logging level set to 0 - all.
+08:43:51:715333 | FE  | info     | Profiler session 'Shutdown' started.
+08:43:51:724306 | FE  | debug    | CActorData destruction
+08:43:51:724618 | FE  | info     | Closing Window.
+08:43:51:754819 | FE  | info     | Profiler session 'Shutdown' closed.

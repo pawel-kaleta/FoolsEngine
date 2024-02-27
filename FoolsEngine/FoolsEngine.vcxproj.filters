@@ -300,6 +300,9 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Model.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -476,6 +479,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
