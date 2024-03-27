@@ -14,15 +14,16 @@ namespace fe
 		static Ref<Shader> Get(const std::string& name) { return s_ActiveInstance->IGet(name); }
 
 		static void SetActiveInstance(ShaderLibrary* shaderLib) { s_ActiveInstance = shaderLib; }
+	private:
+		friend class Renderer;
+
+		static ShaderLibrary* s_ActiveInstance;
+		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 
 		void IAdd(const Ref<Shader> shader);
 		Ref<Shader> ILoad(const std::string& filePath);
 
 		bool IExist(const std::string& name) const;
 		Ref<Shader> IGet(const std::string& name);
-
-	private:
-		static ShaderLibrary* s_ActiveInstance;
-		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 	};
 }

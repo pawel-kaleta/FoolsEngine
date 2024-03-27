@@ -3,7 +3,7 @@
 
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
+#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 
 #include <glad\glad.h>
 
@@ -32,6 +32,9 @@ namespace fe
 		ShaderLibrary::SetActiveInstance(systems.ShaderLib.get());
 		TextureLibrary::SetActiveInstance(systems.TextureLib.get());
 		MaterialLibrary::SetActiveInstance(systems.MaterialLib.get());
+		MaterialInstanceLibrary::SetActiveInstance(systems.MaterialInstanceLib.get());
+		MeshLibrary::SetActiveInstance(systems.MeshLib.get());
+
 		Renderer2D::Init();
 	}
 
@@ -48,6 +51,8 @@ namespace fe
 		systems.ShaderLib.reset(new ShaderLibrary());
 		systems.TextureLib.reset(new TextureLibrary());
 		systems.MaterialLib.reset(new MaterialLibrary());
+		systems.MaterialInstanceLib.reset(new MaterialInstanceLibrary());
+		systems.MeshLib.reset(new MeshLibrary());
 	}
 
 	void Renderer::InitAPI(GDIType GDI)
@@ -63,29 +68,8 @@ namespace fe
 		switch (GDI)
 		{
 		case GDIType::OpenGL:
-			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Flat_Color_Shader.glsl", GDI));
-			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Basic_Texture_Shader.glsl", GDI));
+			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Base2DShader.glsl", GDI));
 			systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Base3DShader.glsl", GDI));
-
-			Mesh::Default3DMaterial.reset(new Material(
-				"Default3DMaterial",
-				systems.ShaderLib->IGet("Base3DShader"),
-				{
-					Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-					Uniform("u_EntityID"      , ShaderData::Type::UInt),
-					Uniform("u_Albedo"        , ShaderData::Type::Float3),
-					Uniform("u_Roughness"     , ShaderData::Type::Float),
-					Uniform("u_Metalness"     , ShaderData::Type::Float),
-					Uniform("u_AO"            , ShaderData::Type::Float)
-				},
-				{
-					ShaderTextureSlot("u_AlbedoMap"   , TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D)
-				}
-			));
-
 			break;
 		default:
 			FE_CORE_ASSERT(false, "Uknown GDIType!");
@@ -93,31 +77,49 @@ namespace fe
 
 		systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI, TextureData::Usage::Map_Albedo));
 
-		systems.MaterialLib->IAdd(
-			Ref<Material>(
-				new Material(
-					"Flat_Color_Material",
-					systems.ShaderLib->IGet("Flat_Color_Shader"),
-					{
-						{ "u_Color", ShaderData::Type::Float4 }
-					},
-					{}
-				)
-			)
-		);
+		TextureBuilder textureBuilder;
+		textureBuilder
+			.SetGDI(GDI)
+			.SetHeight(1)
+			.SetWidth(1)
+			.SetName("WhiteTexture")
+			.SetType(TextureData::Type::Texture2D)
+			.SetUsage(TextureData::Usage::Map_Albedo)
+			.SetComponents(TextureData::Components::RGBA_F)
+			.SetFormat(TextureData::Format::RGBA_FLOAT_8);
 
-		systems.MaterialLib->IAdd(
-			Ref<Material>(
-				new fe::Material(
-					"Basic_Texture_Material",
-					systems.ShaderLib->IGet("Basic_Texture_Shader"),
-					{},
-					{
-						{ "u_Texture", TextureData::Type::Texture2D }
-					}
-				)
-			)
-		);
+		Ref<Texture> whiteTexture = textureBuilder.Create();
+		uint32_t whiteTextureData = 0xffffffff;
+		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		systems.TextureLib->IAdd(whiteTexture);
+		
+		auto defaultMaterial3D = Ref<Material>(new Material(
+			"Default3DMaterial",
+			systems.ShaderLib->IGet("Base3DShader"),
+			{
+				//Uniform("u_ViewProjection", ShaderData::Type::Mat4),
+				//Uniform("u_EntityID"      , ShaderData::Type::UInt),
+				//Uniform("u_Position"      , ShaderData::Type::Float3),
+				Uniform("u_Albedo"        , ShaderData::Type::Float3),
+				Uniform("u_Roughness"     , ShaderData::Type::Float),
+				Uniform("u_Metalness"     , ShaderData::Type::Float),
+				Uniform("u_AO"            , ShaderData::Type::Float)
+			},
+			{
+				ShaderTextureSlot("u_AlbedoMap"   , TextureData::Type::Texture2D),
+				ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
+				ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
+				ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D),
+				ShaderTextureSlot("u_NormalMap"   , TextureData::Type::Texture2D)
+			}
+		));
+
+		systems.MaterialLib->IAdd(defaultMaterial3D);
+
+		systems.MaterialInstanceLib->IAdd(Ref<MaterialInstance>(new MaterialInstance(
+			defaultMaterial3D,
+			defaultMaterial3D->GetName() + "_Instance"
+		)));
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

@@ -31,7 +31,7 @@ namespace fe
 	class Application
 	{
 	public:
-				 Application(const std::string& name = "Fools Engine Application");
+				 Application(const std::string& name = "Fools Engine Application", WindowAttributes attributes = WindowAttributes());
 		virtual ~Application();
 
 				void			Close()							{ m_Running = false; }

@@ -102,5 +102,51 @@ namespace fe {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
+
+	void ImGuiLayer::RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options)
+	{
+		// TO DO: handle uniform.GetCount() > 1;
+
+		auto name = uniform.GetName().c_str();
+		ImGuiDataType ImGuiType = -1;
+
+		switch (uniform.GetPrimitive())
+		{
+		case ShaderData::Primitive::None:
+			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
+			return;
+		
+		case ShaderData::Primitive::Bool:
+		{
+			bool* dataPtr = (bool*)uniformDataPtr;
+			for (int i = 1; i < uniform.GetCount(); i++)
+			{
+				ImGui::Checkbox("", dataPtr++); ImGui::SameLine();
+			}
+			ImGui::Checkbox(name, dataPtr);
+			return;
+		}
+
+		case ShaderData::Primitive::Int:
+			ImGuiType = ImGuiDataType_::ImGuiDataType_S32;
+			break;
+		case ShaderData::Primitive::UInt:
+			ImGuiType = ImGuiDataType_::ImGuiDataType_U32;
+			break;
+		case ShaderData::Primitive::Float:
+			ImGuiType = ImGuiDataType_::ImGuiDataType_Float;
+			break;
+		case ShaderData::Primitive::Double:
+			ImGuiType = ImGuiDataType_::ImGuiDataType_Double;
+			break;
+
+		default:
+			FE_CORE_ASSERT(false, "Unrecognised Shader Data Primitive of uniform!");
+			return;
+		}
+
+		int count = ShaderData::SizeOfType(uniform.GetType()) / ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags);
+	}
 	
 }

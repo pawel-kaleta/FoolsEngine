@@ -9,7 +9,7 @@ namespace fe
 	{
 	public:
 		EditorApp(const std::string& name)
-			: Application(name)
+			: Application(name, WindowAttributes{name, 1920, 1080})
 		{
 			PushOuterLayer(CreateScope<EditorLayer>());
 		}

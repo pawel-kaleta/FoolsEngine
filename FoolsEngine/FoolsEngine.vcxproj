@@ -148,7 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Model.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\MeshLibrary.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\MeshImporter.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -199,9 +201,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\MaterialLibrary.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\ShaderLibrary.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\TextureLibrary.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
@@ -225,12 +227,14 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\FoolsEngine\Resources\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\MeshLibrary.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\MeshImporter.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -268,9 +272,9 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\MaterialLibrary.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\ShaderLibrary.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\6 - Resources\TextureLibrary.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\MaterialLibrary.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\ShaderLibrary.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\TextureLibrary.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp" />
@@ -290,7 +294,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Resources\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
   </ItemGroup>
   <ItemGroup>

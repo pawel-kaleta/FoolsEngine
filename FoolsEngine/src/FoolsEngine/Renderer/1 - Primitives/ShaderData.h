@@ -143,5 +143,18 @@ namespace fe
 
 			return RowsOfMatrix(type) * ColumnsOfMatrix(type) * 4;
 		}
+
+		constexpr uint32_t SizeOfPrimitive(Primitive primitive)
+		{
+			switch (primitive)
+			{
+			case Primitive::None:
+				return 0;
+			case Primitive::Double:
+				return 8;
+			default:
+				return 4;
+			}
+		}
 	}
 }

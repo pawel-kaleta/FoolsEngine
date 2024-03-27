@@ -84,6 +84,9 @@ namespace fe
 
 		switch (channels)
 		{
+		case 1:
+			m_Format = GL_R;
+			m_InternalFormat = GL_R32F;
 		case 3:
 			m_Format = GL_RGB;
 			m_InternalFormat = GL_RGB8;

@@ -6,10 +6,11 @@
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
+#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "SimulationStages.h"
+#include "FoolsEngine\Resources\MaterialLibrary.h"
 
 #include <yaml-cpp\yaml.h>
 
@@ -168,12 +169,21 @@ namespace fe
 	template <SimulationStages::Stages stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 
-	struct CModel final : DataComponent
+	struct CMesh final : DataComponent
 	{
-		FE_COMPONENT_SETUP(CModel, "Model");
+		FE_COMPONENT_SETUP(CMesh, "Mesh");
 
-		Ref<Model> Model;
+		Ref<Mesh> Mesh;
 
-		virtual void CModel::DrawInspectorWidget(BaseEntity entity) override;
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
+	};
+
+	struct CMaterialInstance final : DataComponent
+	{
+		FE_COMPONENT_SETUP(CMaterialInstance, "MaterialInstance");
+
+		Ref<MaterialInstance> MaterialInstance = MaterialInstanceLibrary::Get("Default3DMaterial_Instance");
+
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
 	};
 }

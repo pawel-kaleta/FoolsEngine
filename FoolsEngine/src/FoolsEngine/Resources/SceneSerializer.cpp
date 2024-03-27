@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 #include "SceneSerializer.h"
 
-#include "GameplayWorld\Actor\Actor.h"
-#include "Component.h"
-#include "ComponentTypesRegistry.h"
-#include "GameplayWorld\Actor\BehaviorsRegistry.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
+#include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine\Scene\ComponentTypesRegistry.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 
 #include <fstream>
 

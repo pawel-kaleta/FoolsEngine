@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene.h"
-#include "GameplayWorld\Entity.h"
+#include "FoolsEngine\Scene\Scene.h"
+#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 
 #include <filesystem>
 #include <yaml-cpp\yaml.h>

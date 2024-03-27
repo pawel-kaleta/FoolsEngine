@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\6 - Resources\TextureLibrary.h"
-#include "FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h"
+#include "FoolsEngine\Resources\TextureLibrary.h"
+#include "FoolsEngine\Resources\ShaderLibrary.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"

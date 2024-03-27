@@ -9,6 +9,8 @@
 
 #include "ImGuiBackend.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+
 namespace fe {
 
 	class ImGuiLayer : public Layer
@@ -29,6 +31,17 @@ namespace fe {
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 		bool IsBlocking() const { return m_BlockEvents; }
+
+		struct UniformRenderSettings
+		{
+			float Speed = 0.01f;
+			void* MinValue = nullptr;
+			void* MaxValue = nullptr;
+			const char* Format = nullptr;
+			ImGuiSliderFlags Flags = ImGuiSelectableFlags_::ImGuiSelectableFlags_None;
+		};
+
+		static void RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
 	private:
 		float m_Time = 0.0f;
 		bool m_BlockEvents = false;

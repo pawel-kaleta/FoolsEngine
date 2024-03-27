@@ -5,17 +5,30 @@ namespace fe
 {
 	MaterialInstance::MaterialInstance(Ref<Material> material, const std::string& name)
 	{
+		Init(material);
+		m_Name = name;
+	}
+
+	void MaterialInstance::Init(Ref<Material> material)
+	{
 		FE_PROFILER_FUNC();
 
-		m_Name = name;
 		m_Material = material;
 		m_UniformsDataSize = 0;
 		for (auto& uniform : m_Material->GetUniforms())
 		{
 			m_UniformsDataSize += uniform.GetSize();
 		}
+		if (m_UniformsData)
+			operator delete(m_UniformsData);
 		m_UniformsData = operator new(m_UniformsDataSize);
 
+		for (auto& uniform : m_Material->GetUniforms())
+		{
+			this->SetUniformValue(uniform, nullptr);
+		}
+
+		m_Textures.clear();
 		m_Textures.resize(m_Material->GetTextureSlots().size());
 	}
 
@@ -92,7 +105,54 @@ namespace fe
 			FE_CORE_ASSERT(false, "Uniform not found in material!");
 			return;
 		}
-		std::memcpy((void*)dest, dataPointer, uniformSize);
+
+		if (dataPointer)
+			std::memcpy((void*)dest, dataPointer, uniformSize);
+		else
+		{
+			if (targetUniform.GetPrimitive() == ShaderData::Primitive::None)
+			{
+				FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
+				return;
+			}
+			if ((int)targetUniform.GetPrimitive() > 5)
+			{
+				FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
+				return;
+			}
+
+			auto type_size = ShaderData::SizeOfType(targetUniform.GetType());
+			auto primitive_size = ShaderData::SizeOfPrimitive(targetUniform.GetPrimitive());
+			auto elements_in_type = type_size / primitive_size;
+			auto elements = elements_in_type * targetUniform.GetCount();
+
+			for (int i = 0; i < elements; i++)
+			{
+				switch (targetUniform.GetPrimitive())
+				{
+				case ShaderData::Primitive::Bool:
+					*(uint32_t*)dest = 0;
+					dest += 4;
+					break;
+				case ShaderData::Primitive::Int:
+					*(int32_t*)dest = 0;
+					dest += 4;
+					break;
+				case ShaderData::Primitive::UInt:
+					*(uint32_t*)dest = 0;
+					dest += 4;
+					break;
+				case ShaderData::Primitive::Float:
+					*(float*)dest = 0.0f;
+					dest += 4;
+					break;
+				case ShaderData::Primitive::Double:
+					*(float*)dest = 0.0;
+					dest += 8;
+					break;
+				}
+			}
+		}
 	}
 	
 	void MaterialInstance::SetUniformValue(const std::string& name, void* dataPointer)
@@ -193,5 +253,4 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	
 }

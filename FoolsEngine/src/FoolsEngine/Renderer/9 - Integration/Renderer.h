@@ -5,9 +5,10 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\6 - Resources\MaterialLibrary.h"
-#include "FoolsEngine\Renderer\6 - Resources\ShaderLibrary.h"
-#include "FoolsEngine\Renderer\6 - Resources\TextureLibrary.h"
+#include "FoolsEngine\Resources\MaterialLibrary.h"
+#include "FoolsEngine\Resources\ShaderLibrary.h"
+#include "FoolsEngine\Resources\TextureLibrary.h"
+#include "FoolsEngine\Resources\MeshLibrary.h"
 
 namespace fe
 {
@@ -55,6 +56,8 @@ namespace fe
 			Scope<ShaderLibrary> ShaderLib;
 			Scope<TextureLibrary> TextureLib;
 			Scope<MaterialLibrary> MaterialLib;
+			Scope<MaterialInstanceLibrary> MaterialInstanceLib;
+			Scope<MeshLibrary> MeshLib;
 		};
 
 		static Scope<SceneData> s_SceneData;

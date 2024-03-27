@@ -32,7 +32,7 @@ namespace fe
 			{ ShaderData::Type::Float,  "a_TilingFactor" },
 			{ ShaderData::Type::UInt,   "a_TextureSampler" },
 			{ ShaderData::Type::UInt,   "a_EntityID" }
-			});
+		});
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quadIndices = new QuadsIndexBufferData();
@@ -54,27 +54,13 @@ namespace fe
 		s_Data->QuadVertexBuffer->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
-		s_Data->BaseShader = Shader::Create("assets/shaders/Base2DShader.glsl");
+		s_Data->BaseShader = ShaderLibrary::Get("Base2DShader");
+
 		s_Data->BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data->BaseShaderSamplers[i] = i;
 
-		TextureBuilder textureBuilder;
-		textureBuilder
-			.SetHeight(1)
-			.SetWidth(1)
-			.SetName("Base2DTexture")
-			.SetType(TextureData::Type::Texture2D)
-			.SetUsage(TextureData::Usage::Map_Albedo)
-			.SetComponents(TextureData::Components::RGBA_F)
-			.SetFormat(TextureData::Format::RGBA_FLOAT_8);
-
-		Ref<Texture> whiteTexture = textureBuilder.Create();
-		uint32_t whiteTextureData = 0xffffffff;
-		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-		TextureLibrary::Add(whiteTexture);
-
-		s_Data->Batch.Textures[0] = whiteTexture;
+		s_Data->Batch.Textures[0] = TextureLibrary::Get("WhiteTexture");
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer)
@@ -175,16 +161,27 @@ namespace fe
 			Flush();
 		}
 
-		auto& viewModels = registry.view<CModel, CTransformGlobal>();
+		auto& viewMeshes = registry.view<CMesh, CTransformGlobal, CMaterialInstance>();
+		void* VPmatrixPtr = (void*)glm::value_ptr(s_Data->VPMatrix);
 
-		for (auto ID : viewModels)
+		for (auto ID : viewMeshes)
 		{
-			auto [model, entityTransform] = viewModels.get(ID);
-			if (!model.Model)
+			auto [c_mesh, c_entityTransform, c_materialInstance] = viewMeshes.get(ID);
+			if (!c_mesh.Mesh)
 				continue;
-			Transform transform = entityTransform.GetRef();
-			
-			model.Model->Draw(transform, s_Data->VPMatrix, ID);
+
+			glm::mat4 modelTransform = c_entityTransform.GetRef().GetTransform();
+			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+
+			auto mi = c_materialInstance.MaterialInstance;
+			auto shader = mi->GetMaterial()->GetShader();
+
+			shader->Bind();
+			shader->UploadUniform(Uniform("u_ViewProjection" , ShaderData::Type::Mat4), VPmatrixPtr);
+			shader->UploadUniform(Uniform("u_ModelTransform" , ShaderData::Type::Mat4), modelTransformPtr);
+			shader->UploadUniform(Uniform("u_EntityID"       , ShaderData::Type::UInt), &ID);
+
+			c_mesh.Mesh->Draw(mi);
 		}
 
 		EndScene(framebuffer);

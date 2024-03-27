@@ -47,7 +47,7 @@ namespace fe
 		FE_CORE_ASSERT(m_Specification.Components != TextureData::Components::None, "Unspecified components of a texture");
 		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format::None,     "Unspecified format of a texture");
 		FE_CORE_ASSERT(m_Width  != 0, "Unspecified width of a texture");
-		FE_CORE_ASSERT(m_Height != 0, "Unspecified hight of a texture");
+		FE_CORE_ASSERT(m_Height != 0, "Unspecified height of a texture");
 
 		if (m_Specification.Components == TextureData::Components::None) return nullptr;
 		if (m_Specification.Format     == TextureData::Format::None    ) return nullptr;

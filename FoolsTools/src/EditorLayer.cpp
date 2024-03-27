@@ -4,10 +4,6 @@
 #include <string>
 #include <filesystem>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 namespace fe
 {
 	EditorLayer::EditorLayer()
@@ -18,17 +14,6 @@ namespace fe
 		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
-	void AssimpTest()
-	{
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile("assets/models/backpack/backpack.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
-
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-		{
-			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", importer.GetErrorString());
-		}
-	}
-
 	void EditorLayer::OnAttach()
 	{
 		FE_PROFILER_FUNC();
@@ -36,8 +21,6 @@ namespace fe
 
 		m_Scene = CreateRef<Scene>();
 		SetSceneContext(m_Scene);
-
-		//AssimpTest();
 	}
 
 	void EditorLayer::OnUpdate()

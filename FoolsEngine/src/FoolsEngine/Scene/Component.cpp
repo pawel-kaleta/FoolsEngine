@@ -7,8 +7,11 @@
 #include "World.h"
 #include "Scene.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
+#include "FoolsEngine\Resources\MeshImporter.h"
+#include "FoolsEngine\Resources\MeshLibrary.h"
 
-#include "SceneSerializer.h"
+
+#include "FoolsEngine\Resources\SceneSerializer.h"
 
 namespace fe
 {
@@ -295,22 +298,179 @@ namespace fe
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
-	void CModel::DrawInspectorWidget(BaseEntity entity)
+	void CMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		if (!Model)
+		const char* combo_preview_value = !Mesh ? "None" : Mesh->GetName().c_str();
+		if (ImGui::BeginCombo("Mesh ", combo_preview_value))
 		{
-			if (ImGui::Button("Load..."))
+			bool is_selected = !(Mesh);
+
+			if (ImGui::Selectable("None", is_selected))
+				Mesh = nullptr;
+
+			auto& mesheLibRecords = MeshLibrary::GetAll();
+			for (auto& meshLibRecord : mesheLibRecords)
+			{
+				is_selected = Mesh ? (Mesh->GetUUID() == meshLibRecord.second->GetUUID()) : false;
+
+				if (ImGui::Selectable(meshLibRecord.first.c_str(), is_selected))
+				{
+					Mesh = meshLibRecord.second;
+				}
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			if (ImGui::Selectable("Load..."))
 			{
 				const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 				if (!modelFilepath.empty())
 				{
-					Model.reset(new fe::Model(modelFilepath));
+					auto newMeshes = ModelImporter::Import(modelFilepath);
+					for (auto& mesh : newMeshes)
+					{
+						if (mesh->GetVertexCount())
+							MeshLibrary::Add(mesh);
+					}
 				}
-			}	
-		}
-		else
-		{
+			}
 
+			ImGui::EndCombo();
+		}
+	}
+
+	void CMaterialInstance::DrawInspectorWidget(BaseEntity entity)
+	{
+		// TO DO: component's widget should not be responsible for creating underlying object
+
+		auto materialInstance_combo_preview = MaterialInstance->GetName().c_str();
+		if (ImGui::BeginCombo("Material Instance", materialInstance_combo_preview))
+		{
+			bool is_selected;
+
+			auto& materialInstanceLibRecords = MaterialInstanceLibrary::GetAll();
+			for (auto& materialInstanceLibRecord : materialInstanceLibRecords)
+			{
+				is_selected = (MaterialInstance.get() == materialInstanceLibRecord.second.get());
+
+				if (ImGui::Selectable(materialInstanceLibRecord.first.c_str(), is_selected))
+				{
+					MaterialInstance = materialInstanceLibRecord.second;
+				}
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			if (ImGui::Selectable("Add..."))
+			{
+				MaterialInstance = Ref<fe::MaterialInstance>(new fe::MaterialInstance());
+				MaterialInstance->SetName(std::to_string(MaterialInstance->GetUUID()));
+				MaterialInstance->Init(MaterialLibrary::Get("Default3DMaterial"));
+				MaterialInstanceLibrary::Add(MaterialInstance);
+			}
+
+			ImGui::EndCombo();
+		}
+
+		auto& name = MaterialInstance->GetName();
+		static char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strncpy_s(buffer, name.c_str(), sizeof(buffer));
+		if (ImGui::InputText("Name", buffer, sizeof(buffer)))
+		{
+			MaterialInstanceLibrary::Rename(MaterialInstance, buffer);
+		}
+
+		auto material_current = MaterialInstance->GetMaterial();
+
+		if (ImGui::BeginCombo("Material", material_current->GetName().c_str()))
+		{
+			bool is_selected;
+
+			auto& materialLibRecords = MaterialLibrary::GetAll();
+			for (auto& materialLibRecord : materialLibRecords)
+			{
+				is_selected = (material_current.get() == materialLibRecord.second.get());
+
+				if (ImGui::Selectable(materialLibRecord.first.c_str(), is_selected))
+				{
+					MaterialInstance->Init(materialLibRecord.second);
+					material_current = materialLibRecord.second;
+				}
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		auto& uniforms = MaterialInstance->GetMaterial()->GetUniforms();
+
+		for (auto& uniform : uniforms)
+		{
+			ImGuiLayer::RenderUniform(uniform, MaterialInstance->GetUniformValuePtr(uniform));
+		}
+
+		auto& textureSlots = MaterialInstance->GetMaterial()->GetTextureSlots();
+
+		for (auto& textureSlot : textureSlots)
+		{
+			auto& texture_current = MaterialInstance->GetTexture(textureSlot);
+			uint32_t texture_current_ID = 0;
+			if (texture_current)
+				texture_current_ID = texture_current->GetID();
+			bool newSelection = false;
+
+			const char* texture_combo_preview = !texture_current ? "None" : texture_current->GetName().c_str();
+			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
+			{
+				bool is_selected = !(texture_current);
+
+				if (ImGui::Selectable("None", is_selected))
+					MaterialInstance->SetTexture(textureSlot, nullptr);
+
+				auto& textureLibRecords = TextureLibrary::GetAll();
+				for (auto& textureLibRecord : textureLibRecords)
+				{
+					is_selected = (texture_current_ID == textureLibRecord.second->GetID());
+
+					if (ImGui::Selectable(textureLibRecord.first.c_str(), is_selected))
+					{
+						newSelection = true;
+						texture_current = textureLibRecord.second;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				if (ImGui::Selectable("Add..."))
+				{
+					const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+					if (!newTextureFilepath.empty())
+					{
+						const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
+						if (!TextureLibrary::Exist(textureName))
+						{
+							Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
+							TextureLibrary::Add(texture);
+						}
+
+						newSelection = true;
+						texture_current = TextureLibrary::Get(textureName);
+					}
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (newSelection)
+			{
+				MaterialInstance->SetTexture(textureSlot, texture_current);
+			}
 		}
 	}
 }

@@ -1,18 +1,28 @@
 #include "FE_pch.h"
-#include "Model.h"
+#include "Mesh.h"
 
 namespace fe
 {
-	Ref<Material> Mesh::Default3DMaterial = Ref<Material>();
+	size_t Mesh::GetVertexCount() const
+	{
+		if (m_DataLocation == DataLocation::CPU || m_DataLocation == DataLocation::CPU_GPU)
+		{
+			return m_Vertices.size();
+		}
+		if (m_DataLocation == DataLocation::GPU)
+		{
+			return m_VertexBuffer->GetSize();
+		}
+		return 0;
+	}
 
 	// swaps vectors' data with internal vectors
-	Mesh::Mesh(Ref<MaterialInstance> materialInstance, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Ref<MaterialInstance> materialInstance)
 	{
 		m_MaterialInstance = materialInstance;
 
 		m_Vertices.swap(vertices);
 		m_Indices.swap(indices);
-		//m_Textures.swap(textures);
 
 		m_DataLocation = DataLocation::CPU;
 	}
@@ -27,7 +37,6 @@ namespace fe
 		FE_CORE_ASSERT(m_DataLocation == DataLocation::CPU, "Meshbuffer not present on CPU upon an attempt to load onto a GPU");
 
 		m_VertexBuffer = VertexBuffer::Create((float*)m_Vertices.data(), (uint32_t)(m_Vertices.size() * sizeof(Vertex)));
-		//m_VertexBuffer->Bind();
 		m_VertexBuffer->SetLayout({
 			{ ShaderData::Type::Float3, "a_Position" },
 			{ ShaderData::Type::Float3, "a_Normal" },
@@ -46,8 +55,6 @@ namespace fe
 		switch (m_DataLocation)
 		{
 		case DataLocation::None:
-			FE_CORE_ASSERT(false, "Attempt to free mesh buffers from CPU, when they are not stored on CPU");
-			break;
 		case DataLocation::GPU:
 			FE_CORE_ASSERT(false, "Attempt to free mesh buffers from CPU, when they are not stored on CPU");
 			break;
@@ -87,7 +94,7 @@ namespace fe
 		}
 	}
 
-	void Mesh::Draw(Transform& transform, glm::mat4 VP, EntityID entityID)
+	void Mesh::Draw(Ref<MaterialInstance> materialInstance)
 	{
 		if (m_DataLocation != DataLocation::GPU && m_DataLocation != DataLocation::CPU_GPU)
 		{
@@ -95,42 +102,30 @@ namespace fe
 			return;
 		}
 
-		uint32_t rendererTextureSlot = 0;
-		auto whiteTexture = TextureLibrary::Get("Base2DTexture");
+		auto& material = materialInstance->GetMaterial();
+		auto& shader = material->GetShader();
 
-		auto& shader = m_MaterialInstance->GetMaterial()->GetShader();
-		auto& textureSlots = m_MaterialInstance->GetMaterial()->GetTextureSlots();
-		shader->Bind();
-		
-		shader->UploadUniform(
-			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-			(void*)glm::value_ptr(VP)
-		);
-		shader->UploadUniform(
-			Uniform("u_EntityID", ShaderData::Type::UInt),
-			(void*)&entityID
-		);
-
-		for (unsigned int i = 0; i < textureSlots.size(); i++)
+		for (auto& uniform : material->GetUniforms())
 		{
-			if (i < m_Textures.size())
-			{
-				if (m_Textures[i])
-				{
-					m_Textures[i]->Bind(rendererTextureSlot);
-				}
-				else
-				{
-					whiteTexture->Bind(rendererTextureSlot);
-				}
-			}
-			else
-			{
-				whiteTexture->Bind(rendererTextureSlot);
-			}
+			shader->UploadUniform(
+				uniform,
+				materialInstance->GetUniformValuePtr(uniform)
+			);
+		}
 
-			
-			shader->BindTextureSlot(textureSlots[i], rendererTextureSlot);
+		auto& textureSlots = material->GetTextureSlots();
+		uint32_t rendererTextureSlot = 0;
+		auto whiteTexture = TextureLibrary::Get("WhiteTexture");
+		for (auto& textureSlot : textureSlots)
+		{
+			auto& texture = materialInstance->GetTexture(textureSlot);
+
+			if (texture)
+				texture->Bind(rendererTextureSlot);
+			else
+				whiteTexture->Bind(rendererTextureSlot);
+
+			shader->BindTextureSlot(textureSlot, rendererTextureSlot);
 
 			rendererTextureSlot++;
 		}

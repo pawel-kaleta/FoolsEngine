@@ -28,7 +28,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
-#include "FoolsEngine\Scene\SceneSerializer.h"
+#include "FoolsEngine\Resources\SceneSerializer.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Math\Math.h"
 
