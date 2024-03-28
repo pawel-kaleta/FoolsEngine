@@ -308,6 +308,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

@@ -16,7 +16,7 @@ namespace fe
 
 	bool MaterialLibrary::IExist(const std::string& name) const
 	{
-		return m_Materials.find(name) != m_Materials.end();;
+		return m_Materials.find(name) != m_Materials.end();
 	}
 
 	Ref<Material> MaterialLibrary::IGet(const std::string& name)

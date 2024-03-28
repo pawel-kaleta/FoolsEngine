@@ -7,6 +7,8 @@
 namespace fe
 {
 	using AssetID = UUID;
+	using AssetSourceID = UUID;
+	using AssetProxyID = UUID;
 
 	enum AssetType
 	{
@@ -32,28 +34,27 @@ namespace fe
 		AssetID m_ID;
 	};
 
-	class AssetSource
-	{
-	public:
 
-	private:
-		std::filesystem::path m_FilePath;
-		UUID m_UUID;
+	struct AssetSource
+	{
+		std::filesystem::path FilePath;
+		AssetSourceID ID;
 	};
+
 
 	class AssetProxy
 	{
 	public:
-		UUID GetUUID() { return m_UUID; }
+		AssetProxyID GetID() { return m_ID; }
 		AssetID GetAssetID() { return m_AssetID; }
 		AssetType GetType() { return m_AssetType; }
-		UUID GetAssetSourceID() { return m_AssetSourceID; }
+		AssetSourceID GetAssetSourceID() { return m_AssetSourceID; }
 	private:
 		std::filesystem::path m_FilePath;
-		UUID m_UUID;
+		AssetProxyID m_ID;
 
 		AssetID m_AssetID;
 		AssetType m_AssetType = AssetType::None;
-		UUID m_AssetSourceID;
+		AssetProxyID m_AssetSourceID;
 	};
 }

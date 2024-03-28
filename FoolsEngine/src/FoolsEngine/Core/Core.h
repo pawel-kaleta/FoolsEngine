@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#include "FoolsEngine/Debug/Asserts.h"
+
 #ifdef FE_PLATFORM_WINDOWS
 #else
 	#error FoolsEngine does not support this platform!
