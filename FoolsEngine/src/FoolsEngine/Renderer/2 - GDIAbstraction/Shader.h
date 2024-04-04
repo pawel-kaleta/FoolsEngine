@@ -7,12 +7,16 @@
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
+#include "FoolsEngine\Assets\Asset.h"
+
 namespace fe
 {
-	class Shader
+	class Shader : public Asset
 	{
 	public:
 		virtual ~Shader() = default;
+
+		static AssetType GetAssetType() { return AssetType::ShaderAsset; }
 
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
@@ -24,12 +28,12 @@ namespace fe
 		virtual const std::string& GetName() const = 0;
 		virtual const uint32_t& GetProgramID() const = 0;
 
-		static Scope<Shader> Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI);
-		static Scope<Shader> Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		static Scope<Shader> Create(const std::string& name, const std::string& shaderSource, GDIType GDI);
-		static Scope<Shader> Create(const std::string& name, const std::string& shaderSource);
-		static Scope<Shader> Create(const std::string& filePath, GDIType GDI);
-		static Scope<Shader> Create(const std::string& filePath);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& filePath, GDIType GDI);
+		static Shader* Create(const AssetSignature& assetSignature, const std::string& filePath);
 	private:
 
 	};

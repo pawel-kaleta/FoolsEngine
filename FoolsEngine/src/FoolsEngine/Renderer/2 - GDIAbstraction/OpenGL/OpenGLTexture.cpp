@@ -7,55 +7,41 @@
 
 namespace fe
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, const AssetSignature& assetSignature)
 		: m_Name(name), m_Width(width), m_Height(hight), m_Usage(specification.Usage)
 	{
 		// TO DO: encapsulate and isolate specification translation abstract<->OpenGL
 
+		m_Signature = assetSignature;
+
 		switch (specification.Components)
 		{
 		case TextureData::Components::None:
-		{
 			FE_CORE_ASSERT(false, "Unspecified texture format");
 			break;
-		}
 		case TextureData::Components::RGB_F:
-		{
 			m_Format = GL_RGB;
 			break;
-		}
 		case TextureData::Components::RGBA_F:
-		{
 			m_Format = GL_RGBA;
 			break;
-		}
 		default:
-		{
 			FE_CORE_ASSERT(false, "Uknown texture format");
-		}
 		}
 
 		switch (specification.Format)
 		{
 		case TextureData::Format::None:
-		{
 			FE_CORE_ASSERT(false, "Unspecified texture data format");
 			break;
-		}
 		case TextureData::Format::RGB_FLOAT_8:
-		{
 			m_InternalFormat = GL_RGB8;
 			break;
-		}
 		case TextureData::Format::RGBA_FLOAT_8:
-		{
 			m_InternalFormat = GL_RGBA8;
 			break;
-		}
 		default:
-		{
 			FE_CORE_ASSERT(false, "Uknown texture data format");
-		}
 		}
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
@@ -68,9 +54,11 @@ namespace fe
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, const AssetSignature& assetSignature)
 		: m_FilePath(filePath), m_Format(0), m_InternalFormat(0), m_Usage(usage)
 	{
+		m_Signature = assetSignature;
+
 		m_Name = FileNameFromFilepath(filePath);
 		m_FilePath = filePath;
 

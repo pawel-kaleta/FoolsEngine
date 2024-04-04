@@ -6,7 +6,7 @@
 
 namespace fe
 {
-	Texture* Texture2D::Create(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, GDIType GDI)
+	Texture* Texture2D::Create(const std::string& name, const TextureData::Specification& specification, uint32_t width, uint32_t hight, GDIType GDI, const AssetSignature& assetSignature)
 	{
 		switch (GDI)
 		{
@@ -14,20 +14,20 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return new OpenGLTexture2D(name, specification, width, hight);
+			return new OpenGLTexture2D(name, specification, width, hight, assetSignature);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
-
-	Ref<Texture> Texture2D::Create(const std::string& filePath, TextureData::Usage usage)
+	
+	Texture* Texture2D::Create(const std::string& filePath, TextureData::Usage usage)
 	{
 		GDIType GDI = Renderer::GetActiveGDItype();
 		return Create(filePath, GDI, usage);
 	}
 
-	Ref<Texture> Texture2D::Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage)
+	Texture* Texture2D::Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage)
 	{
 		switch (GDI)
 		{
@@ -35,14 +35,15 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return CreateRef<OpenGLTexture2D>(filePath, usage);
+			return new OpenGLTexture2D(filePath, usage, { AssetType::TextureAsset });
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
 		return nullptr;
 	}
+	
 
-	Ref<Texture> TextureBuilder::Create()
+	Texture* TextureBuilder::Create()
 	{
 		FE_CORE_ASSERT(m_Specification.Components != TextureData::Components::None, "Unspecified components of a texture");
 		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format::None,     "Unspecified format of a texture");
@@ -63,7 +64,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unspecified type of a texture");
 			return nullptr;
 		case TextureData::Type::Texture2D:
-			return Ref<Texture>(Texture2D::Create(m_Name, m_Specification, m_Width, m_Height, m_GDI));
+			return Texture2D::Create(m_Name, m_Specification, m_Width, m_Height, m_GDI, m_Signature);
 		default:
 			FE_CORE_ASSERT(false, "Unknown type of a texture");
 			return nullptr;

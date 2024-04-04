@@ -8,13 +8,11 @@
 
 namespace fe
 {
-	// TO DO: mutex
-
 	template <typename tAsset>
 	class AssetHandle
 	{
 	public:
-		AssetHandle() = delete;
+		AssetHandle() = default;
 		~AssetHandle()
 		{
 			(*m_RefCount)--;
@@ -35,16 +33,18 @@ namespace fe
 		}
 
 		AssetHandle<tAsset>& operator=(const AssetHandle<tAsset>& other)
-			: m_AssetPtr(other.m_AssetPtr), m_RefCount(other.m_RefCount)
 		{
+			m_AssetPtr = other.m_AssetPtr;
+			m_RefCount = other.m_RefCount;
 			(*m_RefCount)++;
 
 			return *this;
 		}
 
 		AssetHandle<tAsset>& operator=(AssetHandle<tAsset>&& other)
-			: m_AssetPtr(other.m_AssetPtr), m_RefCount(other.m_RefCount)
 		{
+			m_AssetPtr = other.m_AssetPtr;
+			m_RefCount = other.m_RefCount;
 			other.m_AssetPtr = nullptr;
 			other.m_RefCount = nullptr;
 
@@ -54,25 +54,37 @@ namespace fe
 		tAsset& operator*() const { return *m_AssetPtr; }
 		tAsset* operator->() const { return m_AssetPtr; }
 
+		operator bool() const { return m_AssetPtr; }
+
+		tAsset* Raw() const { return m_AssetPtr; }
+
 	private:
-		friend class AssetHandleTracker<tAsset>;
+		friend class AssetHandleTracker;
 		AssetHandle(tAsset* asset, std::atomic<int>* refCount) : m_AssetPtr(asset), m_RefCount() { static_assert(std::is_base_of<Asset, tAsset>::value); }
 
 		tAsset* m_AssetPtr = nullptr;
 		std::atomic<int>* m_RefCount = nullptr;
 	};
 
-	template <typename tAsset>
 	class AssetHandleTracker
 	{
 	public:
-		AssetHandleTracker(tAsset* asset)
+		AssetHandleTracker(Asset* asset)
 			: m_Asset(asset)
 		{
 			m_RefCount = new std::atomic<int>(0);
 		}
+
+		Asset* GetAssetPtr() const { return m_Asset; }
+
+		template <typename tAsset>
+		AssetHandle<tAsset> GetHandle()
+		{
+			(*m_RefCount)++;
+			return AssetHandle<tAsset>(m_Asset, m_RefCount);
+		}
 	private:
-		tAsset* m_Asset = nullptr;
+		Asset* m_Asset = nullptr;
 		std::atomic<int>* m_RefCount = nullptr;
 	};
 }

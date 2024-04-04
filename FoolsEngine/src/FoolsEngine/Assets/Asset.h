@@ -4,57 +4,67 @@
 
 #include <filesystem>
 
+#include <yaml-cpp\yaml.h>
+
 namespace fe
 {
-	using AssetID = UUID;
+	using AssetID       = UUID;
 	using AssetSourceID = UUID;
-	using AssetProxyID = UUID;
+	using AssetProxyID  = UUID;
 
 	enum AssetType
 	{
-		None = 0,
-		Scene,
-		Texture2D,
-		Mesh,
-		Material,
-		MaterialInstance,
-		Substance
+		SceneAsset,
+		TextureAsset,
+		MeshAsset,
+		ShaderAsset,
+		MaterialAsset,
+		MaterialInstanceAsset,
+		Audio,
+
+		TypesCount,
+		None
 	};
 
-	class Asset
+	struct AssetSignature
 	{
-	public:
-		Asset() = delete;
-		Asset(AssetType type) : m_Type(type) { }
-
-		AssetID GetID() { return m_ID; }
-		AssetType GetType() { return m_Type; }
-	private:
-		AssetType m_Type = AssetType::None;
-		AssetID m_ID;
+		AssetType Type = AssetType::None;
+		AssetID ID;
+		AssetProxyID ProxyID = 0;
 	};
-
 
 	struct AssetSource
 	{
 		std::filesystem::path FilePath;
 		AssetSourceID ID;
+		
+		std::vector<AssetProxyID> AssetProxies;
 	};
-
 
 	class AssetProxy
 	{
 	public:
-		AssetProxyID GetID() { return m_ID; }
-		AssetID GetAssetID() { return m_AssetID; }
-		AssetType GetType() { return m_AssetType; }
-		AssetSourceID GetAssetSourceID() { return m_AssetSourceID; }
+		AssetProxyID GetID() const { return m_ID; }
+		AssetID GetAssetID() const { return m_AssetID; }
+		AssetType GetAssetType() const { return m_AssetType; }
+		AssetSourceID GetAssetSourceID() const { return m_AssetSourceID; }
 	private:
 		std::filesystem::path m_FilePath;
 		AssetProxyID m_ID;
 
 		AssetID m_AssetID;
 		AssetType m_AssetType = AssetType::None;
-		AssetProxyID m_AssetSourceID;
+		AssetSourceID m_AssetSourceID;
+		void* m_ImportSettings = nullptr;
+	};
+
+	class Asset
+	{
+	public:
+		Asset() = default;
+		Asset(const AssetSignature& sygnature) : m_Signature(sygnature) { }
+		const AssetSignature& GetSignature() const { return m_Signature; }
+	protected:
+		AssetSignature m_Signature;
 	};
 }

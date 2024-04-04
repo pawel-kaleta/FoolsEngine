@@ -16,7 +16,7 @@ namespace fe
 			.SetColorAttachmentSpecifications({
 				{ "Final Frame", TextureData::Components::RGBA_F, TextureData::Format::RGBA_FLOAT_8},
 				{ "EntityID"   , TextureData::Components::R_UI  , TextureData::Format::R_UINT_32   }
-				});
+			});
 		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
 		m_ViewportSize = { 1,1 };
 	}

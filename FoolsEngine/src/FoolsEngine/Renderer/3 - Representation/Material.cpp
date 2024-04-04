@@ -3,13 +3,13 @@
 
 namespace fe
 {
-	MaterialInstance::MaterialInstance(Ref<Material> material, const std::string& name)
+	MaterialInstance::MaterialInstance(const AssetHandle<Material>& material, const std::string& name)
 	{
 		Init(material);
 		m_Name = name;
 	}
 
-	void MaterialInstance::Init(Ref<Material> material)
+	void MaterialInstance::Init(const AssetHandle<Material>& material)
 	{
 		FE_PROFILER_FUNC();
 
@@ -181,7 +181,7 @@ namespace fe
 		std::memcpy((void*)dest, dataPointer, uniformSize);
 	}
 
-	Ref<Texture> MaterialInstance::GetTexture(const ShaderTextureSlot& textureSlot)
+	AssetHandle<Texture> MaterialInstance::GetTexture(const ShaderTextureSlot& textureSlot)
 	{
 		FE_PROFILER_FUNC();
 
@@ -196,10 +196,10 @@ namespace fe
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
-		return nullptr;
+		return AssetHandle<Texture>();
 	}
 
-	Ref<Texture> MaterialInstance::GetTexture(const std::string& textureSlotName)
+	AssetHandle<Texture> MaterialInstance::GetTexture(const std::string& textureSlotName)
 	{
 		FE_PROFILER_FUNC();
 
@@ -214,10 +214,10 @@ namespace fe
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
-		return nullptr;
+		return AssetHandle<Texture>();
 	}
 
-	void MaterialInstance::SetTexture(const ShaderTextureSlot& textureSlot, Ref<Texture> texture)
+	void MaterialInstance::SetTexture(const ShaderTextureSlot& textureSlot, AssetHandle<Texture> texture)
 	{
 		FE_PROFILER_FUNC();
 
@@ -235,7 +235,7 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	void MaterialInstance::SetTexture(const std::string& textureSlotName, Ref<Texture> texture)
+	void MaterialInstance::SetTexture(const std::string& textureSlotName, AssetHandle<Texture> texture)
 	{
 		FE_PROFILER_FUNC();
 

@@ -2,10 +2,11 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\1 - Primitives\TextureData.h"
+#include "FoolsEngine\Assets\Asset.h"
 
 namespace fe
 {
-	class Texture
+	class Texture : public Asset
 	{
 	public:
 		virtual ~Texture() = default;
@@ -24,6 +25,7 @@ namespace fe
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
 
+		static AssetType GetAssetType() { return AssetType::TextureAsset; }
 	};
 
 	class Texture2D : public Texture
@@ -33,18 +35,23 @@ namespace fe
 
 		virtual TextureData::Type GetType() const override { return TextureData::Type::Texture2D; }
 
-		static Ref<Texture> Create(const std::string& filePath, TextureData::Usage usage);
-		static Ref<Texture> Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage);
+		static Texture* Create(const std::string& filePath, TextureData::Usage usage);
+		static Texture* Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage);
 	private:
 		friend class TextureBuilder;
-		static Texture* Create(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, GDIType GDI);
+		static Texture* Create(
+			const std::string& name,
+			const TextureData::Specification& specification,
+			uint32_t width,
+			uint32_t hight, GDIType GDI,
+			const AssetSignature& assetSignature);
 	};
 
 	class TextureBuilder
 	{
 	public:
 		TextureBuilder() = default;
-		TextureBuilder(TextureData::Specification specification)
+		TextureBuilder(const TextureData::Specification& specification)
 			: m_Specification(specification) { }
 
 		TextureBuilder& SetName(const std::string& name) { m_Name   = name;   return *this; }
@@ -57,12 +64,15 @@ namespace fe
 		TextureBuilder& SetComponents(TextureData::Components components) { m_Specification.Components = components; return *this; }
 		TextureBuilder& SetFormat(TextureData::Format format)             { m_Specification.Format     = format;     return *this; }
 
-		Ref<Texture> Create();
+		TextureBuilder& SetSignature(const AssetSignature& assetSignature) { m_Signature = assetSignature; }
+
+		Texture* Create();
 	private:
-		std::string                m_Name;
 		TextureData::Specification m_Specification;
-		uint32_t                   m_Width = 0;
-		uint32_t                   m_Height = 0;
-		GDIType                    m_GDI = GDIType::none;
+		AssetSignature m_Signature;
+		std::string    m_Name;
+		uint32_t       m_Width  = 0;
+		uint32_t       m_Height = 0;
+		GDIType        m_GDI    = GDIType::none;
 	};
 }

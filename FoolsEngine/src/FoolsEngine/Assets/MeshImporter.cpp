@@ -7,6 +7,8 @@
 
 namespace fe
 {
+	/*
+	
 	void ModelImporter::Import(Ref<Mesh> mesh)
 	{
 		Assimp::Importer importer;
@@ -30,7 +32,7 @@ namespace fe
 
 		Mesh* mesh = new Mesh();
 		mesh->m_Filepath = path;
-		mesh->
+		//mesh->
 		mesh->m_Name = FileNameFromFilepath(path.string()) + "__" + scene->mMeshes[assimpMeshIndex]->mName.C_Str();
 		mesh->m_AssimpMaterialIndex = scene->mMeshes[assimpMeshIndex]->mMaterialIndex;
 		mesh->m_AssimpMeshIndex = assimpMeshIndex;
@@ -47,6 +49,7 @@ namespace fe
 		}
 
 		return importData.MeshBatches;
+		
 	}
 
 
@@ -145,4 +148,6 @@ namespace fe
 				meshBatch->m_Indices.push_back(face.mIndices[j] + newMeshIndicesOffset);
 		}
 	}
+
+	*/
 }

@@ -7,11 +7,11 @@
 #include "World.h"
 #include "Scene.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
-#include "FoolsEngine\Resources\MeshImporter.h"
-#include "FoolsEngine\Resources\MeshLibrary.h"
+#include "FoolsEngine\Assets\MeshImporter.h"
+#include "FoolsEngine\Assets\AssetLibrary.h"
 
 
-#include "FoolsEngine\Resources\SceneSerializer.h"
+#include "FoolsEngine\Assets\SceneSerializer.h"
 
 namespace fe
 {
@@ -129,8 +129,11 @@ namespace fe
 
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto& textures = TextureLibrary::GetAll();
-		auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+		// markmark
+		//auto& textures = TextureLibrary::GetAll();
+		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+		AssetHandle<Texture> flat_color_texture;//dummy
+		auto& textures = AssetLibrary::GetAll();
 
 		auto item_current = Tile.Texture;
 		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
@@ -143,15 +146,20 @@ namespace fe
 
 			for (auto it = textures.begin(); it != textures.end(); ++it)
 			{
-				if (it->second->GetComponents() != TextureData::Components::RGB_F)
+				if (it->second.GetAssetPtr()->GetSignature().Type != AssetType::TextureAsset)
 					continue;
 
-				if (it->second->GetID() == flat_color_texture->GetID())
+				auto& texture = it->second.GetHandle<Texture>();
+
+				if (texture->GetComponents() != TextureData::Components::RGB_F)
 					continue;
 
-				is_selected = (item_current->GetID() == it->second.get()->GetID());
-				if (ImGui::Selectable(it->first.c_str(), is_selected))
-					item_current = it->second;
+				if (texture->GetID() == flat_color_texture->GetID())
+					continue;
+
+				is_selected = (item_current->GetID() == texture->GetID());
+				if (ImGui::Selectable(texture->GetName().c_str(), is_selected))
+					item_current = texture;
 
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
@@ -162,12 +170,13 @@ namespace fe
 				if (!newTextureFilepath.empty())
 				{
 					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
-					if (!TextureLibrary::Exist(textureName))
-					{
-						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-						TextureLibrary::Add(texture);
-					}
-					item_current = TextureLibrary::Get(textureName);
+					// markmark
+					//if (!TextureLibrary::Exist(textureName))
+					//{
+					//	Texture* texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
+					//	TextureLibrary::Add(texture);
+					//}
+					//item_current = TextureLibrary::Get(textureName);
 				}
 			}
 
@@ -206,18 +215,21 @@ namespace fe
 		else
 			textureName = FileNameFromFilepath(textureFilePath);
 
-		if (!TextureLibrary::Exist(textureName))
-			TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
-
-		Tile.Texture = TextureLibrary::Get(textureName);
+		// markmark
+		//if (!TextureLibrary::Exist(textureName))
+		//	TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
+		//
+		//Tile.Texture = TextureLibrary::Get(textureName);
 
 		Tile.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto& textures = TextureLibrary::GetAll();
-		auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+		auto& textures = AssetLibrary::GetAll();
+		// markmark
+		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
+		AssetHandle<Texture> flat_color_texture;
 
 		auto item_current = Sprite.Texture;
 		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
@@ -230,12 +242,16 @@ namespace fe
 
 			for (auto it = textures.begin(); it != textures.end(); ++it)
 			{
-				if (it->second->GetID() == flat_color_texture->GetID())
+				if (it->second.GetAssetPtr()->GetSignature().Type != AssetType::TextureAsset)
 					continue;
 
-				is_selected = (item_current->GetID() == it->second.get()->GetID());
-				if (ImGui::Selectable(it->first.c_str(), is_selected))
-					item_current = it->second;
+				auto texture = it->second.GetHandle<Texture>();
+				if (texture->GetID() == flat_color_texture->GetID())
+					continue;
+
+				is_selected = (item_current->GetID() == texture->GetID());
+				if (ImGui::Selectable(texture->GetName().c_str(), is_selected))
+					item_current = texture;
 
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
@@ -247,12 +263,14 @@ namespace fe
 				if (!newTextureFilepath.empty())
 				{
 					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
-					if (!TextureLibrary::Exist(textureName))
-					{
-						Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-						TextureLibrary::Add(texture);
-					}
-					item_current = TextureLibrary::Get(textureName);
+
+					// markmark
+					//if (!TextureLibrary::Exist(textureName))
+					//{
+					//	Texture* texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
+					//	TextureLibrary::Add(texture);
+					//}
+					//item_current = TextureLibrary::Get(textureName);
 				}
 			}
 			ImGui::EndCombo();
@@ -306,7 +324,7 @@ namespace fe
 			bool is_selected = !(Mesh);
 
 			if (ImGui::Selectable("None", is_selected))
-				Mesh = nullptr;
+				Mesh = AssetHandle<fe::Mesh>();
 
 			auto& mesheLibRecords = MeshLibrary::GetAll();
 			for (auto& meshLibRecord : mesheLibRecords)
@@ -327,12 +345,12 @@ namespace fe
 				const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 				if (!modelFilepath.empty())
 				{
-					auto newMeshes = ModelImporter::Import(modelFilepath);
-					for (auto& mesh : newMeshes)
-					{
-						if (mesh->GetVertexCount())
-							MeshLibrary::Add(mesh);
-					}
+					//auto newMeshes = ModelImporter::Import(modelFilepath);
+					//for (auto& mesh : newMeshes)
+					//{
+					//	if (mesh->GetVertexCount())
+					//		MeshLibrary::Add(mesh);
+					//}
 				}
 			}
 

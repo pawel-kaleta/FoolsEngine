@@ -181,7 +181,8 @@ namespace fe
 
 	void RegisterAndLoadStuff()
 	{
-		TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png", TextureData::Usage::Map_Albedo));
+		// markmark
+		//TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png", TextureData::Usage::Map_Albedo));
 		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
@@ -200,7 +201,8 @@ namespace fe
 		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");
 		{
 			auto& tile = tintedTextureTile.Emplace<CTile>().Tile;
-			tile.Texture = TextureLibrary::Get("Default_Texture");
+			// markmark
+			//tile.Texture = TextureLibrary::Get("Default_Texture");
 			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 			tile.TextureTilingFactor = 3;
 
@@ -255,7 +257,8 @@ namespace fe
 		Actor playerActor = scene->GetGameplayWorld()->CreateActor("Player");
 		{
 			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
-			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			// markmark
+			//sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
 			Transform transform;
 			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
@@ -273,7 +276,8 @@ namespace fe
 		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
 		{
 			auto& sprite = testChild_1.Emplace<CSprite>().Sprite;
-			sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
+			// markmark
+			//sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;
@@ -292,7 +296,8 @@ namespace fe
 		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
 		{
 			auto& sprite = testCild_2.Emplace<CSprite>().Sprite;
-			sprite.Texture = TextureLibrary::Get("Default_Texture");
+			// markmark
+			//sprite.Texture = TextureLibrary::Get("Default_Texture");
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;

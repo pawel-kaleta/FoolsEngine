@@ -54,13 +54,15 @@ namespace fe
 		s_Data->QuadVertexBuffer->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
-		s_Data->BaseShader = ShaderLibrary::Get("Base2DShader");
+		// markmark
+		//s_Data->BaseShader = ShaderLibrary::Get("Base2DShader");
 
 		s_Data->BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data->BaseShaderSamplers[i] = i;
 
-		s_Data->Batch.Textures[0] = TextureLibrary::Get("WhiteTexture");
+		// markmark
+		//s_Data->Batch.Textures[0] = TextureLibrary::Get("WhiteTexture");
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer)
@@ -208,11 +210,11 @@ namespace fe
 
 		uint32_t textureSampler = 0;
 
-		if (batch.Textures[0].get() != quad.Texture.get())
+		if (batch.Textures[0].Raw() != quad.Texture.Raw())
 		{
 			for (unsigned int i = 1; i < batch.TexturesCount; i++)
 			{
-				if (batch.Textures[i].get() == quad.Texture.get())
+				if (batch.Textures[i].Raw() == quad.Texture.Raw())
 				{
 					textureSampler = i;
 					break;

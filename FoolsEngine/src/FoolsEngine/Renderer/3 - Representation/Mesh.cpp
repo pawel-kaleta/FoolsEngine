@@ -17,7 +17,7 @@ namespace fe
 	}
 
 	// swaps vectors' data with internal vectors
-	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Ref<MaterialInstance> materialInstance)
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, AssetHandle<MaterialInstance> materialInstance)
 	{
 		m_MaterialInstance = materialInstance;
 
@@ -94,7 +94,7 @@ namespace fe
 		}
 	}
 
-	void Mesh::Draw(Ref<MaterialInstance> materialInstance)
+	void Mesh::Draw(AssetHandle<MaterialInstance> materialInstance)
 	{
 		if (m_DataLocation != DataLocation::GPU && m_DataLocation != DataLocation::CPU_GPU)
 		{
@@ -115,7 +115,8 @@ namespace fe
 
 		auto& textureSlots = material->GetTextureSlots();
 		uint32_t rendererTextureSlot = 0;
-		auto whiteTexture = TextureLibrary::Get("WhiteTexture");
+		// markmark 
+		//auto whiteTexture = TextureLibrary::Get("WhiteTexture");
 		for (auto& textureSlot : textureSlots)
 		{
 			auto& texture = materialInstance->GetTexture(textureSlot);
@@ -123,7 +124,9 @@ namespace fe
 			if (texture)
 				texture->Bind(rendererTextureSlot);
 			else
-				whiteTexture->Bind(rendererTextureSlot);
+				;// dummy
+				// markmark 
+				// whiteTexture->Bind(rendererTextureSlot);
 
 			shader->BindTextureSlot(textureSlot, rendererTextureSlot);
 

@@ -10,11 +10,11 @@ namespace fe
 	class AssetManager
 	{
 	public:
-		template <typename tAsset>
-		static AssetHandle<tAsset> GetAssetHandle(AssetID assetID);
+		//template <typename tAsset>
+		//static AssetHandle<tAsset> GetAssetHandle(AssetID assetID);
 	private:
 		AssetManager();
-		static void UnloadAsset(AssetID assetID);
+		//static void UnloadAsset(AssetID assetID);
 
 	};
 }

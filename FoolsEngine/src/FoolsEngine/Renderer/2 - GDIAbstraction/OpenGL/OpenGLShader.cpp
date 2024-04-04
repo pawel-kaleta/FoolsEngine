@@ -5,10 +5,12 @@
 
 namespace fe
 {
-    OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+    OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
         : m_Name(name), m_ProgramID(0)
     {
         FE_PROFILER_FUNC();
+
+		m_Signature = assetSignature;
 
 		std::unordered_map<GLenum, std::string> shaderSources;
 
@@ -18,19 +20,23 @@ namespace fe
 		Compile(shaderSources);
     }
 
-	OpenGLShader::OpenGLShader(const std::string& name, const std::string& shaderSource)
+	OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource)
 		: m_Name(name), m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
+
+		m_Signature = assetSignature;
 
 		auto shaderSources = PreProcess(shaderSource);
 		Compile(shaderSources);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& filePath)
+	OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& filePath)
 		: m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
+
+		m_Signature = assetSignature;
 
 		m_Name = FileNameFromFilepath(filePath);
 

@@ -5,10 +5,7 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Resources\MaterialLibrary.h"
-#include "FoolsEngine\Resources\ShaderLibrary.h"
-#include "FoolsEngine\Resources\TextureLibrary.h"
-#include "FoolsEngine\Resources\MeshLibrary.h"
+#include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
 namespace fe
 {
@@ -30,7 +27,7 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const Ref<MaterialInstance>& materialInstance,
+			const AssetHandle<MaterialInstance>& materialInstance,
 			const glm::mat4& transform)
 		{
 			Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
@@ -38,7 +35,7 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const Ref<MaterialInstance>& materialInstance,
+			const AssetHandle<MaterialInstance>& materialInstance,
 			const glm::mat4& transform,
 			const glm::mat4& VPMatrix
 		);
@@ -49,19 +46,8 @@ namespace fe
 			glm::mat4 VPMatrix;
 		};
 
-		struct GDIFixedSystems
-		{
-			GDIType GDI;
-			Scope<DeviceAPI> DeviceAPI;
-			Scope<ShaderLibrary> ShaderLib;
-			Scope<TextureLibrary> TextureLib;
-			Scope<MaterialLibrary> MaterialLib;
-			Scope<MaterialInstanceLibrary> MaterialInstanceLib;
-			Scope<MeshLibrary> MeshLib;
-		};
-
 		static Scope<SceneData> s_SceneData;
 		static GDIType s_ActiveGDI;
-		static std::unordered_map<GDIType, GDIFixedSystems> s_GDIFixedSystems;
+		static std::unordered_map<GDIType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};
 }

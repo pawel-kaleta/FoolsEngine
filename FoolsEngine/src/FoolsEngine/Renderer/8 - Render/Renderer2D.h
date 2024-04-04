@@ -1,10 +1,9 @@
 #pragma once
 
-#include "FoolsEngine\Resources\TextureLibrary.h"
-#include "FoolsEngine\Resources\ShaderLibrary.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
 #include "FoolsEngine/Scene/ECS.h"
 
@@ -30,7 +29,9 @@ namespace fe
 		{
 			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float TextureTilingFactor = 1.0f;
-			Ref<fe::Texture> Texture = TextureLibrary::Get("Base2DTexture");
+			// markmark 
+			//Ref<fe::Texture> Texture = TextureLibrary::Get("Base2DTexture");
+			AssetHandle<Texture> Texture; // markmark
 		};
 
 		static void Init();
@@ -68,7 +69,7 @@ namespace fe
 			QuadVerticesBatch::iterator QuadVeriticesIt;
 			uint32_t QuadIndexCount = 0;
 
-			std::array<Ref<Texture>, ConstLimits::RendererTextureSlotsCount> Textures;
+			std::array<AssetHandle<Texture>, ConstLimits::RendererTextureSlotsCount> Textures;
 			uint32_t TexturesCount = 1;
 		};
 
@@ -81,7 +82,7 @@ namespace fe
 
 			BatchData Batch;
 
-			Ref<Shader> BaseShader;
+			AssetHandle<Shader> BaseShader;
 			ShaderTextureSlot BaseShaderTextureSlot;
 			uint32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 		};

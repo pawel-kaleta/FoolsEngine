@@ -43,16 +43,16 @@ void LayerExample::OnAttach()
 {
 	m_Scene = fe::CreateRef<fe::Scene>();
 
-	auto camera = m_Scene->CreateEntity();
+	auto camera = m_Scene->GetGameplayWorld()->CreateActor();
 	{
 		camera.Emplace<fe::CCamera>();
 		fe::Transform transform;
 		transform.Position = glm::vec3(0.0f, 0.0f, 2.0f);
 		camera.GetTransformHandle() = transform;
 	}
-	m_Scene->SetPrimaryCameraEntity(camera);
+	m_Scene->GetGameplayWorld()->SetPrimaryCameraEntity(camera);
 
-	fe::Entity tintedTextureTile = m_Scene->CreateEntity();
+	fe::Entity tintedTextureTile = m_Scene->GetGameplayWorld()->CreateActor();
 	{
 		auto& tile = tintedTextureTile.Emplace<fe::CTile>().Tile;
 		tile.Texture = fe::TextureLibrary::Get("Default_Texture");
@@ -66,7 +66,7 @@ void LayerExample::OnAttach()
 		tintedTextureTile.GetTransformHandle() = transform;
 	}
 
-	fe::Entity flatTile = m_Scene->CreateEntity();
+	fe::Entity flatTile = m_Scene->GetGameplayWorld()->CreateActor();
 	{
 		auto& tile = flatTile.Emplace<fe::CTile>().Tile;
 		tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
@@ -78,7 +78,7 @@ void LayerExample::OnAttach()
 		flatTile.GetTransformHandle() = transform;
 	}
 
-	m_ColorSprite = m_Scene->CreateEntity();
+	m_ColorSprite = m_Scene->GetGameplayWorld()->CreateActor();
 	{
 		auto& sprite = m_ColorSprite.Emplace<fe::CSprite>().Sprite;
 		sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
@@ -89,7 +89,7 @@ void LayerExample::OnAttach()
 		m_ColorSprite.GetTransformHandle() = transform;
 	}
 
-	fe::Entity target = m_Scene->CreateEntity(fe::RootID, "Target");
+	fe::Entity target = m_Scene->GetGameplayWorld()->CreateEntity(fe::RootID, "Target");
 	{
 		fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
 
@@ -104,11 +104,11 @@ void LayerExample::OnAttach()
 		//target.AddGOController<MovementSystem>();
 
 		auto tags = target.GetTagsHandle().Local();
-		tags.Add(fe::Tags::Player);
+		tags += fe::Tags::Player;
 		target.GetTagsHandle().SetLocal(tags);
 	}
 
-	fe::Entity targetChild_1 = m_Scene->CreateEntity(target, "TargetChild");
+	fe::Entity targetChild_1 = m_Scene->GetGameplayWorld()->CreateEntity(target, "TargetChild");
 	{
 		auto& sprite = targetChild_1.Emplace<fe::CSprite>().Sprite;
 		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
@@ -127,8 +127,8 @@ void LayerExample::OnUpdate()
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
 
-	m_Scene->GetHierarchy().MakeGlobalTransformsCurrent();
-	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetEntityWithPrimaryCamera());
+	m_Scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
+	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera());
 }
 
 void LayerExample::OnImGuiRender()

@@ -9,7 +9,7 @@
 #include "FoolsEngine\Scene\SimulationStages.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 
-#include "FoolsEngine\Resources\SceneSerializer.h"
+#include "FoolsEngine\Assets\SceneSerializer.h"
 
 namespace fe
 {

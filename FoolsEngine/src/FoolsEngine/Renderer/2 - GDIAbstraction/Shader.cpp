@@ -7,12 +7,12 @@
 
 namespace fe
 {
-    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
     {
-        return Create(name, vertexSource, fragmentSource, Renderer::GetActiveGDItype());
+        return Create(assetSignature, name, vertexSource, fragmentSource, Renderer::GetActiveGDItype());
     }
 
-    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
     {
         switch (GDI)
         {
@@ -20,19 +20,19 @@ namespace fe
             FE_CORE_ASSERT(false, "GDItype::none currently not supported!");
             return nullptr;
         case GDIType::OpenGL:
-            return CreateScope<OpenGLShader>(name, vertexSource, fragmentSource);
+            return new OpenGLShader(assetSignature, name, vertexSource, fragmentSource);
         }
 
         FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
 
-    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource)
     {
-        return Create(name, shaderSource, Renderer::GetActiveGDItype());
+        return Create(assetSignature, name, shaderSource, Renderer::GetActiveGDItype());
     }
 
-    Scope<Shader> fe::Shader::Create(const std::string& name, const std::string& shaderSource, GDIType GDI)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI)
     {
         switch (GDI)
         {
@@ -40,19 +40,19 @@ namespace fe
             FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
             return nullptr;
         case GDIType::OpenGL:
-            return CreateScope<OpenGLShader>(name, shaderSource);
+            return new OpenGLShader(assetSignature, name, shaderSource);
         }
 
         FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
 
-    Scope<Shader> fe::Shader::Create(const std::string& filePath)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& filePath)
     {
-        return Create(filePath, Renderer::GetActiveGDItype());
+        return Create(assetSignature, filePath, Renderer::GetActiveGDItype());
     }
 
-    Scope<Shader> fe::Shader::Create(const std::string& filePath, GDIType GDI)
+    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& filePath, GDIType GDI)
     {
         switch (GDI)
         {
@@ -60,14 +60,10 @@ namespace fe
             FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
             return nullptr;
         case GDIType::OpenGL:
-            return CreateScope<OpenGLShader>(filePath);
+            return new OpenGLShader(assetSignature, filePath);
         }
 
         FE_CORE_ASSERT(false, "Unknown GDI");
         return nullptr;
     }
-
-
-    
-
 }

@@ -10,7 +10,7 @@
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "SimulationStages.h"
-#include "FoolsEngine\Resources\MaterialLibrary.h"
+#include "FoolsEngine\Assets\AssetHandle.h"
 
 #include <yaml-cpp\yaml.h>
 
@@ -173,7 +173,7 @@ namespace fe
 	{
 		FE_COMPONENT_SETUP(CMesh, "Mesh");
 
-		Ref<Mesh> Mesh;
+		AssetHandle<Mesh> Mesh;
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 	};
@@ -182,7 +182,8 @@ namespace fe
 	{
 		FE_COMPONENT_SETUP(CMaterialInstance, "MaterialInstance");
 
-		Ref<MaterialInstance> MaterialInstance = MaterialInstanceLibrary::Get("Default3DMaterial_Instance");
+		// markmark
+		AssetHandle<MaterialInstance> MaterialInstance;// = MaterialInstanceLibrary::Get("Default3DMaterial_Instance");
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 	};

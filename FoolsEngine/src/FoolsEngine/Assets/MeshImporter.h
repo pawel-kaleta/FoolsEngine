@@ -4,6 +4,8 @@
 
 namespace fe
 {
+	/*
+
 	class ModelImporter
 	{
 	public:
@@ -40,4 +42,7 @@ namespace fe
 
 
 	};
+
+
+	*/
 }

@@ -17,12 +17,5 @@ namespace fe
 		};
 
 		inline constexpr size_t Count = (size_t)Stages::StagesCount;
-
-
-		//struct FrameStart	{};
-		//struct PrePhysics	{};
-		//struct Physics		{};
-		//struct PostPhysics	{};
-		//struct FrameEnd		{};
 	};
 }
