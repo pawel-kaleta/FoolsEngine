@@ -12,7 +12,7 @@ namespace fe
 	{
 	public:
 		Material(
-			const AssetSignature& signature,
+			AssetSignature* signature,
 			const std::string& name,
 			const AssetHandle<Shader>& shader,
 			const std::initializer_list<Uniform>& uniforms,

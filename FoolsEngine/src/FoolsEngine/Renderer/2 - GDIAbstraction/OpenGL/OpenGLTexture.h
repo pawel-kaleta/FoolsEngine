@@ -9,8 +9,8 @@ namespace fe
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, const AssetSignature& assetSignature);
-		OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, const AssetSignature& assetSignature);
+		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight);
+		OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
 		virtual ~OpenGLTexture2D() override;
 
 		virtual uint32_t GetWidth() const override { return m_Width; }

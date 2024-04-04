@@ -33,7 +33,7 @@ namespace fe
 	public:
 		Mesh() = default;
 		Mesh(
-			const AssetSignature& assetSignature,
+			AssetSignature* assetSignature,
 			//const std::filesystem::path& filepath,
 			const std::string& name,
 			uint32_t assimpMaterialIndex,
@@ -98,10 +98,10 @@ namespace fe
 		MeshBuilder& SetName(const std::string& name) { m_Name = name; return *this; }
 		//MeshBuilder& SetFilepath(const std::filesystem::path& filepath) { m_Filepath = filepath; return *this; }
 		//MeshBuilder& SetUUID(UUID uuid) { m_UUID = uuid; return *this; }
-		MeshBuilder& SetSignature(const AssetSignature& signature) { m_AssetSignature = signature; }
+		MeshBuilder& SetSignature(AssetSignature* signature) { m_AssetSignature = signature; }
 		MeshBuilder& SetAssimpMaterialIndex(uint32_t assimpMaterialIndex) { m_AssimpMaterialIndex = assimpMaterialIndex; return *this; }
 		MeshBuilder& SetAssimpMeshIndex(uint32_t assimpMeshIndex) { m_AssimpMeshIndex = assimpMeshIndex; return *this; }
-		MeshBuilder& SetMaterialInstance(Ref<MaterialInstance> materialInstance) { m_MaterialInstance = materialInstance; }
+		MeshBuilder& SetMaterialInstance(AssetHandle<MaterialInstance> materialInstance) { m_MaterialInstance = materialInstance; }
 
 		Ref<Mesh> Build()
 		{
@@ -117,14 +117,14 @@ namespace fe
 		}
 	private:
 		std::string m_Name;
-		AssetSignature m_AssetSignature;
+		AssetSignature* m_AssetSignature;
 		//std::filesystem::path m_Filepath;
 		//UUID m_UUID;
 
 		uint32_t m_AssimpMaterialIndex = -1;
 		uint32_t m_AssimpMeshIndex = -1;
 
-		Ref<MaterialInstance> m_MaterialInstance;
+		AssetHandle<MaterialInstance> m_MaterialInstance;
 	};
 
 	class Model

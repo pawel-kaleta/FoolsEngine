@@ -7,12 +7,10 @@
 
 namespace fe
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, const AssetSignature& assetSignature)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight)
 		: m_Name(name), m_Width(width), m_Height(hight), m_Usage(specification.Usage)
 	{
-		// TO DO: encapsulate and isolate specification translation abstract<->OpenGL
-
-		m_Signature = assetSignature;
+		// TO DO: factor out specification translation abstract<->OpenGL
 
 		switch (specification.Components)
 		{
@@ -54,7 +52,7 @@ namespace fe
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, const AssetSignature& assetSignature)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, AssetSignature* assetSignature)
 		: m_FilePath(filePath), m_Format(0), m_InternalFormat(0), m_Usage(usage)
 	{
 		m_Signature = assetSignature;

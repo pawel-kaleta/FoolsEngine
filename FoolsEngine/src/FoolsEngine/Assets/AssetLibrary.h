@@ -12,38 +12,36 @@ namespace fe
 	public:
 		static void Add(const AssetHandleTracker& assetTracker)
 		{
-			auto ID = assetTracker.GetAssetPtr()->GetSignature().ID;
+			auto ID = assetTracker.GetAssetPtr()->GetSignature()->ID;
 			if (IsLoaded(ID))
 			{
 				FE_CORE_ASSERT(false, "Asset already in library");
 				return;
 			}
 			
-			AssetType type = assetTracker.GetAssetPtr()->GetSignature().Type;
+			AssetType type = assetTracker.GetAssetPtr()->GetSignature()->Type;
 
 			s_Maps[type][ID] = assetTracker;
 		}
 
 		static bool IsLoaded(AssetID assetID)
 		{
-			auto type = AssetSygnatureRegistry::Get(assetID).Type;
+			auto type = AssetSignatureRegistry::Get(assetID).Type;
 			return s_Maps[type].find(assetID) != s_Maps[type].end();
 		}
 
 		template <typename tAsset>
-		static AssetHandle<tAsset> GetAssetHandle(Asset* asset)
+		static AssetHandle<tAsset> GetAssetHandle(AssetID assetID)
 		{
 			static_assert(std::is_base_of<Asset, tAsset>::value);
 
-			auto ID = asset->GetSignature().ID;
-
-			if (!IsLoaded(ID))
+			if (!IsLoaded(assetID))
 			{
 				FE_CORE_ASSERT(false, "Asset not found");
 				return AssetHandle<tAsset>(nullptr, nullptr);
 			}
 
-			return s_MapByID[ID].GetHandle<tAsset>();
+			return s_Maps[tAsset::GetAssetType()].at(assetID).GetHandle<tAsset>();
 		}
 
 		template <typename tAsset>

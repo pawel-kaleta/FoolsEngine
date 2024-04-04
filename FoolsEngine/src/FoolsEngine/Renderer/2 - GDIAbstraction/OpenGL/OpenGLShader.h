@@ -9,9 +9,9 @@ namespace fe
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource);
-		OpenGLShader(const AssetSignature& assetSignature, const std::string& filepath);
+		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
+		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource);
+		OpenGLShader(AssetSignature* assetSignature, const std::string& filepath);
 		virtual ~OpenGLShader() override;
 
 		virtual void Bind() override;

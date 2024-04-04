@@ -130,10 +130,9 @@ namespace fe
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
 		// markmark
-		//auto& textures = TextureLibrary::GetAll();
 		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
 		AssetHandle<Texture> flat_color_texture;//dummy
-		auto& textures = AssetLibrary::GetAll();
+		auto& textures = AssetLibrary::GetAll<Texture>();
 
 		auto item_current = Tile.Texture;
 		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
@@ -146,9 +145,6 @@ namespace fe
 
 			for (auto it = textures.begin(); it != textures.end(); ++it)
 			{
-				if (it->second.GetAssetPtr()->GetSignature().Type != AssetType::TextureAsset)
-					continue;
-
 				auto& texture = it->second.GetHandle<Texture>();
 
 				if (texture->GetComponents() != TextureData::Components::RGB_F)
@@ -226,7 +222,7 @@ namespace fe
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto& textures = AssetLibrary::GetAll();
+		auto& textures = AssetLibrary::GetAll<Texture>();
 		// markmark
 		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
 		AssetHandle<Texture> flat_color_texture;
@@ -242,9 +238,6 @@ namespace fe
 
 			for (auto it = textures.begin(); it != textures.end(); ++it)
 			{
-				if (it->second.GetAssetPtr()->GetSignature().Type != AssetType::TextureAsset)
-					continue;
-
 				auto texture = it->second.GetHandle<Texture>();
 				if (texture->GetID() == flat_color_texture->GetID())
 					continue;
@@ -308,10 +301,11 @@ namespace fe
 		else
 			textureName = FileNameFromFilepath(textureFilePath);
 
-		if (!TextureLibrary::Exist(textureName))
-			TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
-
-		Sprite.Texture = TextureLibrary::Get(textureName);
+		// markmark
+		//if (!TextureLibrary::Exist(textureName))
+		//	TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
+		//
+		//Sprite.Texture = TextureLibrary::Get(textureName);
 
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
@@ -326,14 +320,15 @@ namespace fe
 			if (ImGui::Selectable("None", is_selected))
 				Mesh = AssetHandle<fe::Mesh>();
 
-			auto& mesheLibRecords = MeshLibrary::GetAll();
+			auto& mesheLibRecords = AssetLibrary::GetAll<fe::Mesh>();
 			for (auto& meshLibRecord : mesheLibRecords)
 			{
-				is_selected = Mesh ? (Mesh->GetUUID() == meshLibRecord.second->GetUUID()) : false;
+				fe::Mesh* nextMesh = (fe::Mesh*)meshLibRecord.second.GetAssetPtr();
+				is_selected = Mesh ? (Mesh.Raw() == nextMesh) : false;
 
-				if (ImGui::Selectable(meshLibRecord.first.c_str(), is_selected))
+				if (ImGui::Selectable(nextMesh->GetName().c_str(), is_selected))
 				{
-					Mesh = meshLibRecord.second;
+					Mesh = meshLibRecord.second.GetHandle<fe::Mesh>();
 				}
 
 				if (is_selected)
@@ -367,14 +362,16 @@ namespace fe
 		{
 			bool is_selected;
 
-			auto& materialInstanceLibRecords = MaterialInstanceLibrary::GetAll();
+			auto& materialInstanceLibRecords = AssetLibrary::GetAll<fe::MaterialInstance>();
 			for (auto& materialInstanceLibRecord : materialInstanceLibRecords)
 			{
-				is_selected = (MaterialInstance.get() == materialInstanceLibRecord.second.get());
+				auto nextMatInst = materialInstanceLibRecord.second.GetHandle<fe::MaterialInstance>();
+				
+				is_selected = (MaterialInstance.Raw() == nextMatInst.Raw());
 
-				if (ImGui::Selectable(materialInstanceLibRecord.first.c_str(), is_selected))
+				if (ImGui::Selectable(nextMatInst->GetName().c_str(), is_selected))
 				{
-					MaterialInstance = materialInstanceLibRecord.second;
+					MaterialInstance = nextMatInst;
 				}
 
 				if (is_selected)
@@ -383,10 +380,12 @@ namespace fe
 
 			if (ImGui::Selectable("Add..."))
 			{
-				MaterialInstance = Ref<fe::MaterialInstance>(new fe::MaterialInstance());
-				MaterialInstance->SetName(std::to_string(MaterialInstance->GetUUID()));
-				MaterialInstance->Init(MaterialLibrary::Get("Default3DMaterial"));
-				MaterialInstanceLibrary::Add(MaterialInstance);
+				// markmark
+				// add creating a file!
+				//MaterialInstance = Ref<fe::MaterialInstance>(new fe::MaterialInstance());
+				//MaterialInstance->SetName(std::to_string(MaterialInstance->GetUUID()));
+				//MaterialInstance->Init(MaterialLibrary::Get("Default3DMaterial"));
+				//MaterialInstanceLibrary::Add(MaterialInstance);
 			}
 
 			ImGui::EndCombo();
@@ -398,7 +397,7 @@ namespace fe
 		strncpy_s(buffer, name.c_str(), sizeof(buffer));
 		if (ImGui::InputText("Name", buffer, sizeof(buffer)))
 		{
-			MaterialInstanceLibrary::Rename(MaterialInstance, buffer);
+			MaterialInstance->SetName(buffer);
 		}
 
 		auto material_current = MaterialInstance->GetMaterial();
@@ -407,7 +406,7 @@ namespace fe
 		{
 			bool is_selected;
 
-			auto& materialLibRecords = MaterialLibrary::GetAll();
+			auto& materialLibRecords = AssetLibrary::GetAll<Material>();
 			for (auto& materialLibRecord : materialLibRecords)
 			{
 				is_selected = (material_current.get() == materialLibRecord.second.get());

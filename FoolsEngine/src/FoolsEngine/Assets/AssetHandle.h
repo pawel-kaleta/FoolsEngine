@@ -16,7 +16,7 @@ namespace fe
 		~AssetHandle()
 		{
 			(*m_RefCount)--;
-			// AssetHandleTracker owns RefCount (and asset?)
+			// AssetHandleTracker owns RefCount, AssetManager owns Asset
 		}
 
 		AssetHandle(const AssetHandle<tAsset>& other)

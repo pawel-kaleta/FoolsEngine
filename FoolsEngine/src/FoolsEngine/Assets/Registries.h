@@ -83,22 +83,19 @@ namespace fe
 		struct InternalData
 		{
 			std::vector<AssetProxy> m_AssetProxies;
+
 			std::unordered_map<AssetProxyID         , AssetProxy*> s_MapByID;
 			std::unordered_map<std::filesystem::path, AssetProxy*> m_MapByPath;
 		};
 		static InternalData s_Data;
 	};
 
-	class AssetSygnatureRegistry
+	class AssetSignatureRegistry
 	{
 	public:
-		static void Add(const AssetSignature& assetSignature)
+		static AssetSignature* GenerateNew()
 		{
-			if (Exist(assetSignature.ID))
-			{
-				FE_CORE_ASSERT(false, "Asset already in registry");
-				return;
-			}
+			AssetSignature assetSignature;
 			s_MapByID[assetSignature.ID] = assetSignature;
 		}
 

@@ -31,6 +31,7 @@ namespace fe
 		AssetType Type = AssetType::None;
 		AssetID ID;
 		AssetProxyID ProxyID = 0;
+		std::filesystem::path FilePath; // set only for non-virtualized assets (existing on disk)
 	};
 
 	struct AssetSource
@@ -41,30 +42,26 @@ namespace fe
 		std::vector<AssetProxyID> AssetProxies;
 	};
 
-	class AssetProxy
+	struct AssetProxy
 	{
-	public:
-		AssetProxyID GetID() const { return m_ID; }
-		AssetID GetAssetID() const { return m_AssetID; }
-		AssetType GetAssetType() const { return m_AssetType; }
-		AssetSourceID GetAssetSourceID() const { return m_AssetSourceID; }
-	private:
-		std::filesystem::path m_FilePath;
-		AssetProxyID m_ID;
+		std::filesystem::path FilePath;
+		AssetProxyID ID;
 
-		AssetID m_AssetID;
-		AssetType m_AssetType = AssetType::None;
-		AssetSourceID m_AssetSourceID;
-		void* m_ImportSettings = nullptr;
+		AssetID AssetID = 0;
+		AssetType AssetType = AssetType::None;
+		AssetSourceID AssetSourceID = 0;
+		void* ImportSettings = nullptr;
 	};
 
 	class Asset
 	{
 	public:
 		Asset() = default;
-		Asset(const AssetSignature& sygnature) : m_Signature(sygnature) { }
-		const AssetSignature& GetSignature() const { return m_Signature; }
+		Asset(AssetSignature* signature) : m_Signature(signature) { }
+		AssetSignature* GetSignature() const { return m_Signature; }
+
+		static AssetType GetAssetType() { return AssetType::None; }
 	protected:
-		AssetSignature m_Signature;
+		AssetSignature* m_Signature = nullptr;
 	};
 }

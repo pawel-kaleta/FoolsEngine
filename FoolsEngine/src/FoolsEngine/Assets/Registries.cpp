@@ -5,7 +5,7 @@ namespace fe
 {
 	AssetSourceRegistry::InternalData AssetSourceRegistry::s_Data;
 	AssetProxyRegistry::InternalData  AssetProxyRegistry::s_Data;
-	std::unordered_map<AssetID, AssetSignature> AssetSygnatureRegistry::s_MapByID;
+	std::unordered_map<AssetID, AssetSignature> AssetSignatureRegistry::s_MapByID;
 
 	void AssetSourceRegistry::Add(const AssetSource& assetSource)
 	{
@@ -22,7 +22,7 @@ namespace fe
 
 	void AssetProxyRegistry::Add(const AssetProxy& assetProxy)
 	{
-		auto& ID = assetProxy.GetID();
+		auto& ID = assetProxy.ID;
 		if (Exist(ID))
 		{
 			FE_CORE_ASSERT(false, "AssetProxy already in registry!");

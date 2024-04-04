@@ -5,7 +5,7 @@
 
 namespace fe
 {
-    OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+    OpenGLShader::OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
         : m_Name(name), m_ProgramID(0)
     {
         FE_PROFILER_FUNC();
@@ -20,7 +20,7 @@ namespace fe
 		Compile(shaderSources);
     }
 
-	OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource)
+	OpenGLShader::OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource)
 		: m_Name(name), m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
@@ -31,7 +31,7 @@ namespace fe
 		Compile(shaderSources);
 	}
 
-	OpenGLShader::OpenGLShader(const AssetSignature& assetSignature, const std::string& filePath)
+	OpenGLShader::OpenGLShader(AssetSignature* assetSignature, const std::string& filePath)
 		: m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
