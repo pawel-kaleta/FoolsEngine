@@ -6,11 +6,11 @@
 
 namespace fe
 {
-	class OpenGLTexture2D : public Texture2D
+	class OpenGLTexture2D final : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight);
-		OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
+		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, AssetSignature* assetSignature);
+		OpenGLTexture2D(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
 		virtual ~OpenGLTexture2D() override;
 
 		virtual uint32_t GetWidth() const override { return m_Width; }
@@ -26,12 +26,9 @@ namespace fe
 
 		virtual const std::string& GetName() const { return m_Name; }
 		virtual uint32_t GetID() const { return m_ID; }
-
-		virtual const std::string& GetFilePath() const override { return m_FilePath; }
 	private:
 		uint32_t m_Width, m_Height;
 		uint32_t m_ID;
-		std::string m_FilePath;
 		std::string m_Name;
 		GLenum m_Format = GL_NONE;
 		GLenum m_InternalFormat = GL_NONE;

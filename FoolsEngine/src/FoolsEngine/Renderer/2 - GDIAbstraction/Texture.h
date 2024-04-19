@@ -18,7 +18,6 @@ namespace fe
 		virtual TextureData::Components GetComponents() const = 0;
 		virtual TextureData::Format     GetFormat()     const = 0;
 		virtual const std::string&      GetName()       const = 0;
-		virtual const std::string&      GetFilePath()   const = 0;
 		virtual uint32_t                GetID()         const = 0;
 
 		virtual void SetData(void* data, uint32_t size) = 0;
@@ -35,16 +34,18 @@ namespace fe
 
 		virtual TextureData::Type GetType() const override { return TextureData::Type::Texture2D; }
 
-		static Texture* Create(const std::string& filePath, TextureData::Usage usage);
-		static Texture* Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage);
 	private:
+		friend class TextureLoader;
+		static Texture* Create(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
+		static Texture* Create(const std::filesystem::path& filePath, GDIType GDI, TextureData::Usage usage, AssetSignature* assetSignature);
+		
 		friend class TextureBuilder;
 		static Texture* Create(
 			const std::string& name,
 			const TextureData::Specification& specification,
-			uint32_t width,
-			uint32_t hight, GDIType GDI,
-			const AssetSignature& assetSignature);
+			uint32_t width,	uint32_t hight,
+			GDIType GDI,
+			AssetSignature* assetSignature);
 	};
 
 	class TextureBuilder
@@ -64,12 +65,12 @@ namespace fe
 		TextureBuilder& SetComponents(TextureData::Components components) { m_Specification.Components = components; return *this; }
 		TextureBuilder& SetFormat(TextureData::Format format)             { m_Specification.Format     = format;     return *this; }
 
-		TextureBuilder& SetSignature(const AssetSignature& assetSignature) { m_Signature = assetSignature; }
+		//TextureBuilder& SetSignature(AssetSignature* assetSignature) { m_Signature = assetSignature; }
 
 		Texture* Create();
 	private:
 		TextureData::Specification m_Specification;
-		AssetSignature m_Signature;
+		AssetSignature* m_Signature = nullptr;
 		std::string    m_Name;
 		uint32_t       m_Width  = 0;
 		uint32_t       m_Height = 0;

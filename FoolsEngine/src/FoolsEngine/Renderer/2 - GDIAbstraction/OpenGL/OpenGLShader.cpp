@@ -31,14 +31,14 @@ namespace fe
 		Compile(shaderSources);
 	}
 
-	OpenGLShader::OpenGLShader(AssetSignature* assetSignature, const std::string& filePath)
+	OpenGLShader::OpenGLShader(AssetSignature* assetSignature, const std::filesystem::path& filePath)
 		: m_ProgramID(0)
 	{
 		FE_PROFILER_FUNC();
 
 		m_Signature = assetSignature;
 
-		m_Name = FileNameFromFilepath(filePath);
+		m_Name = FileNameFromFilepath(filePath.generic_string());
 
 		std::string shaderSource = ReadFile(filePath);
 		auto shaderSources = PreProcess(shaderSource);
@@ -72,13 +72,13 @@ namespace fe
 
 		FE_CORE_ASSERT(!(transpose && (uniform.GetStructure() != ShaderData::Structure::Matrix)), "Only a matrix can be transposed!");
 		
-		if (count <= 0)
+		if (!count)
 		{
 			FE_CORE_ASSERT(false, "Count must be positive");
 			return;
 		}
 
-		//maybe cash this?
+		//to to: maybe cash this?
 		GLint location = glGetUniformLocation(m_ProgramID, uniform.GetName().c_str());
 
 		switch (uniform.GetType())
@@ -166,7 +166,7 @@ namespace fe
 
 	}
 
-	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t* rendererTextureSlot, uint32_t count)
+	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot[], uint32_t count)
 	{
 		GLint location = glGetUniformLocation(m_ProgramID, textureSlot.GetName().c_str());
 		glUniform1iv(location, count, (GLint*)rendererTextureSlot);
@@ -178,7 +178,7 @@ namespace fe
 		glUniform1iv(location, 1, (GLint*) & rendererTextureSlot);
 	}
 
-	std::string OpenGLShader::ReadFile(const std::string& filePath)
+	std::string OpenGLShader::ReadFile(const std::filesystem::path& filePath)
 	{
 		std::ifstream in(filePath, std::ios::in, std::ios::binary);
 

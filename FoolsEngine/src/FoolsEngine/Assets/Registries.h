@@ -97,6 +97,7 @@ namespace fe
 		{
 			AssetSignature assetSignature;
 			s_MapByID[assetSignature.ID] = assetSignature;
+			return &(s_MapByID[assetSignature.ID]);
 		}
 
 		static bool Exist(AssetID assetID) { return s_MapByID.find(assetID) != s_MapByID.end(); }

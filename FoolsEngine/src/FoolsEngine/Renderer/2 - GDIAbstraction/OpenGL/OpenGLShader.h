@@ -11,7 +11,7 @@ namespace fe
 	public:
 		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource);
-		OpenGLShader(AssetSignature* assetSignature, const std::string& filepath);
+		OpenGLShader(AssetSignature* assetSignature, const std::filesystem::path& filepath);
 		virtual ~OpenGLShader() override;
 
 		virtual void Bind() override;
@@ -21,13 +21,13 @@ namespace fe
 		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
 
 		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t* rendererTextureSlot, uint32_t count) override;
+		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot[], uint32_t count) override;
 		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) override;
 	private:
 		uint32_t m_ProgramID;
 		std::string m_Name;
 
-		static std::string ReadFile(const std::string& filePath);
+		static std::string ReadFile(const std::filesystem::path& filePath);
 		static GLenum ShaderTypeFromString(const std::string& type);
 		static std::unordered_map<GLenum, std::string> PreProcess(const std::string& shaderSource);
 

@@ -9,6 +9,7 @@
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Assets\MeshImporter.h"
 #include "FoolsEngine\Assets\AssetLibrary.h"
+#include "FoolsEngine\Assets\TextureLoader.h"
 
 
 #include "FoolsEngine\Assets\SceneSerializer.h"
@@ -409,12 +410,13 @@ namespace fe
 			auto& materialLibRecords = AssetLibrary::GetAll<Material>();
 			for (auto& materialLibRecord : materialLibRecords)
 			{
-				is_selected = (material_current.get() == materialLibRecord.second.get());
+				auto materialHandle = materialLibRecord.second.GetHandle<Material>();
+				is_selected = (material_current.Raw() == materialHandle.Raw());
 
-				if (ImGui::Selectable(materialLibRecord.first.c_str(), is_selected))
+				if (ImGui::Selectable(materialHandle->GetName().c_str(), is_selected))
 				{
-					MaterialInstance->Init(materialLibRecord.second);
-					material_current = materialLibRecord.second;
+					MaterialInstance->Init(materialHandle);
+					material_current = materialHandle;
 				}
 
 				if (is_selected)
@@ -436,9 +438,9 @@ namespace fe
 		for (auto& textureSlot : textureSlots)
 		{
 			auto& texture_current = MaterialInstance->GetTexture(textureSlot);
-			uint32_t texture_current_ID = 0;
-			if (texture_current)
-				texture_current_ID = texture_current->GetID();
+			//uint32_t texture_current_ID = 0;
+			//if (texture_current)
+			//	texture_current_ID = texture_current->GetID();
 			bool newSelection = false;
 
 			const char* texture_combo_preview = !texture_current ? "None" : texture_current->GetName().c_str();
@@ -447,17 +449,19 @@ namespace fe
 				bool is_selected = !(texture_current);
 
 				if (ImGui::Selectable("None", is_selected))
-					MaterialInstance->SetTexture(textureSlot, nullptr);
+					MaterialInstance->SetTexture(textureSlot, AssetHandle<Texture>());
 
-				auto& textureLibRecords = TextureLibrary::GetAll();
+				auto& textureLibRecords = AssetLibrary::GetAll<Texture>();
 				for (auto& textureLibRecord : textureLibRecords)
 				{
-					is_selected = (texture_current_ID == textureLibRecord.second->GetID());
+					auto textureHandle = textureLibRecord.second.GetHandle<Texture>();
+					//is_selected = (texture_current_ID == .second->GetID());
+					is_selected = (texture_current.Raw() == textureHandle.Raw());
 
-					if (ImGui::Selectable(textureLibRecord.first.c_str(), is_selected))
+					if (ImGui::Selectable(textureHandle->GetName().c_str(), is_selected))
 					{
 						newSelection = true;
-						texture_current = textureLibRecord.second;
+						texture_current = textureHandle;
 					}
 
 					if (is_selected)
@@ -469,15 +473,18 @@ namespace fe
 					const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 					if (!newTextureFilepath.empty())
 					{
-						const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
-						if (!TextureLibrary::Exist(textureName))
-						{
-							Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-							TextureLibrary::Add(texture);
-						}
+						//to do: detecting reloading same texture
+						
+						//const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
+						//if (!TextureLibrary::Exist(textureName))
+						//{
 
+							//Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
+							//TextureLibrary::Add(texture);
+						//}
+
+						texture_current = TextureLoader::LoadTexture(newTextureFilepath);
 						newSelection = true;
-						texture_current = TextureLibrary::Get(textureName);
 					}
 				}
 

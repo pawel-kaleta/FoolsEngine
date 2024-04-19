@@ -28,12 +28,12 @@ namespace fe
 		virtual const std::string& GetName() const = 0;
 		virtual const uint32_t& GetProgramID() const = 0;
 
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI);
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI);
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource);
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& filePath, GDIType GDI);
-		static Shader* Create(const AssetSignature& assetSignature, const std::string& filePath);
+		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI);
+		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
+		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI);
+		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource);
+		static Shader* Create(AssetSignature* assetSignature, const std::filesystem::path& filePath, GDIType GDI);
+		static Shader* Create(AssetSignature* assetSignature, const std::filesystem::path& filePath);
 	private:
 
 	};

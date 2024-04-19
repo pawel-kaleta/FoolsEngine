@@ -7,12 +7,12 @@
 
 namespace fe
 {
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
     {
         return Create(assetSignature, name, vertexSource, fragmentSource, Renderer::GetActiveGDItype());
     }
 
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
     {
         switch (GDI)
         {
@@ -27,12 +27,12 @@ namespace fe
         return nullptr;
     }
 
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource)
     {
         return Create(assetSignature, name, shaderSource, Renderer::GetActiveGDItype());
     }
 
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI)
     {
         switch (GDI)
         {
@@ -47,12 +47,12 @@ namespace fe
         return nullptr;
     }
 
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& filePath)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::filesystem::path& filePath)
     {
         return Create(assetSignature, filePath, Renderer::GetActiveGDItype());
     }
 
-    Shader* fe::Shader::Create(const AssetSignature& assetSignature, const std::string& filePath, GDIType GDI)
+    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::filesystem::path& filePath, GDIType GDI)
     {
         switch (GDI)
         {

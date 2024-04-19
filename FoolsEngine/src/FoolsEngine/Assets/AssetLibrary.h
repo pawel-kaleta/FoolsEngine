@@ -10,6 +10,22 @@ namespace fe
 	class AssetLibrary
 	{
 	public:
+		static void Add(Asset* assetPtr)
+		{
+			//AssetHandleTracker tracker(assetPtr);
+			auto ID = assetPtr->GetSignature()->ID;
+			if (IsLoaded(ID))
+			{
+				FE_CORE_ASSERT(false, "Asset already in library");
+				return;
+			}
+
+			AssetType type = assetPtr->GetSignature()->Type;
+
+			s_Maps[type][ID] = AssetHandleTracker(assetPtr);
+		}
+
+		/*
 		static void Add(const AssetHandleTracker& assetTracker)
 		{
 			auto ID = assetTracker.GetAssetPtr()->GetSignature()->ID;
@@ -23,6 +39,7 @@ namespace fe
 
 			s_Maps[type][ID] = assetTracker;
 		}
+		*/
 
 		static bool IsLoaded(AssetID assetID)
 		{

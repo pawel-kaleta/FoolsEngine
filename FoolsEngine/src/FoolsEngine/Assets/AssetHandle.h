@@ -84,6 +84,7 @@ namespace fe
 			return AssetHandle<tAsset>(m_Asset, m_RefCount);
 		}
 	private:
+		friend class AssetLibrary;
 		Asset* m_Asset = nullptr;
 		std::atomic<int>* m_RefCount = nullptr;
 	};

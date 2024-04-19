@@ -7,10 +7,11 @@
 
 namespace fe
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, AssetSignature* assetSignature)
 		: m_Name(name), m_Width(width), m_Height(hight), m_Usage(specification.Usage)
 	{
 		// TO DO: factor out specification translation abstract<->OpenGL
+		m_Signature = assetSignature;
 
 		switch (specification.Components)
 		{
@@ -52,17 +53,17 @@ namespace fe
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, TextureData::Usage usage, AssetSignature* assetSignature)
-		: m_FilePath(filePath), m_Format(0), m_InternalFormat(0), m_Usage(usage)
+	OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature)
+		: m_Format(0), m_InternalFormat(0), m_Usage(usage)
 	{
 		m_Signature = assetSignature;
+		assetSignature->FilePath = filePath;
 
-		m_Name = FileNameFromFilepath(filePath);
-		m_FilePath = filePath;
+		m_Name = FileNameFromFilepath(filePath.generic_string());
 
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load(filePath.generic_string().c_str(), &width, &height, &channels, 0);
 		FE_LOG_CORE_DEBUG("Loading texture, Channels: {0}", channels);
 		FE_CORE_ASSERT(data, "Failed to load image!");
 		m_Width = width;

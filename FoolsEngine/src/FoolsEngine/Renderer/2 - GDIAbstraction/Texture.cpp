@@ -3,10 +3,11 @@
 #include "Texture.h"
 #include "OpenGL\OpenGLTexture.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Assets\Registries.h"
 
 namespace fe
 {
-	Texture* Texture2D::Create(const std::string& name, const TextureData::Specification& specification, uint32_t width, uint32_t hight, GDIType GDI, const AssetSignature& assetSignature)
+	Texture* Texture2D::Create(const std::string& name, const TextureData::Specification& specification, uint32_t width, uint32_t hight, GDIType GDI, AssetSignature* assetSignature)
 	{
 		switch (GDI)
 		{
@@ -21,13 +22,13 @@ namespace fe
 		return nullptr;
 	}
 	
-	Texture* Texture2D::Create(const std::string& filePath, TextureData::Usage usage)
+	Texture* Texture2D::Create(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature)
 	{
 		GDIType GDI = Renderer::GetActiveGDItype();
-		return Create(filePath, GDI, usage);
+		return Create(filePath, GDI, usage, assetSignature);
 	}
 
-	Texture* Texture2D::Create(const std::string& filePath, GDIType GDI, TextureData::Usage usage)
+	Texture* Texture2D::Create(const std::filesystem::path& filePath, GDIType GDI, TextureData::Usage usage, AssetSignature* assetSignature)
 	{
 		switch (GDI)
 		{
@@ -35,7 +36,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:
-			return new OpenGLTexture2D(filePath, usage, { AssetType::TextureAsset });
+			return new OpenGLTexture2D(filePath, usage, assetSignature);
 		}
 
 		FE_CORE_ASSERT(false, "Unknown GDI");
@@ -64,6 +65,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unspecified type of a texture");
 			return nullptr;
 		case TextureData::Type::Texture2D:
+			m_Signature = AssetSignatureRegistry::GenerateNew();
 			return Texture2D::Create(m_Name, m_Specification, m_Width, m_Height, m_GDI, m_Signature);
 		default:
 			FE_CORE_ASSERT(false, "Unknown type of a texture");

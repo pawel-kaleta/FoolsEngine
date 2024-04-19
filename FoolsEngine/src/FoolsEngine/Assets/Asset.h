@@ -30,8 +30,8 @@ namespace fe
 	{
 		AssetType Type = AssetType::None;
 		AssetID ID;
-		AssetProxyID ProxyID = 0;
-		std::filesystem::path FilePath; // set only for non-virtualized assets (existing on disk)
+		AssetProxyID ProxyID = 0;       //
+		std::filesystem::path FilePath; // set only for non-virtualized non-runtime only assets (existing on disk)
 	};
 
 	struct AssetSource

@@ -153,6 +153,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Registries.h" />
     <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\TextureLoader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
