@@ -6,35 +6,20 @@
 
 namespace fe
 {
-	class Texture : public Asset
+	class Texture : public ACBody
 	{
 	public:
-		virtual ~Texture() = default;
-
-		virtual uint32_t                GetWidth()      const = 0;
-		virtual uint32_t                GetHeight()     const = 0;
-		virtual TextureData::Type       GetType()       const = 0;
-		virtual TextureData::Usage      GetUsage()      const = 0;
-		virtual TextureData::Components GetComponents() const = 0;
-		virtual TextureData::Format     GetFormat()     const = 0;
-		virtual const std::string&      GetName()       const = 0;
-		virtual uint32_t                GetID()         const = 0;
-
-		virtual void SetData(void* data, uint32_t size) = 0;
-
-		virtual void Bind(uint32_t slot = 0) const = 0;
-
 		static AssetType GetAssetType() { return AssetType::TextureAsset; }
 	};
 
-	class Texture2D : public Texture
+	class Texture2D : public ACBody
 	{
-	public:
-		virtual ~Texture2D() = default;
+		uint32_t m_Width, m_Height;
 
-		virtual TextureData::Type GetType() const override { return TextureData::Type::Texture2D; }
+		TextureData::Usage m_Usage = TextureData::Usage::None;
 
-	private:
+	};
+
 		friend class TextureLoader;
 		static Texture* Create(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
 		static Texture* Create(const std::filesystem::path& filePath, GDIType GDI, TextureData::Usage usage, AssetSignature* assetSignature);

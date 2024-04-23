@@ -3,8 +3,6 @@
 #include <filesystem>
 #include "AssetHandle.h"
 #include "FoolsEngine/Renderer/2 - GDIAbstraction/Texture.h"
-#include "Registries.h"
-#include "AssetLibrary.h"
 
 namespace fe
 {

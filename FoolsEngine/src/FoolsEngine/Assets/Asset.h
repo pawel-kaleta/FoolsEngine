@@ -41,16 +41,6 @@ namespace fe
 		constexpr static AssetType GetStaticType() { return AssetType::None; }
 	};
 
-	// ACBody deriviations
-	struct SceneAsset;
-	struct TextureAsset;
-	struct Texture2DAsset;
-	struct MeshAsset;
-	struct ShaderAsset;
-	struct MaterialAsset;
-	struct MaterialInstanceAsset;
-	struct AudioAsset;
-
 	struct ACSignature : AssetComponent
 	{
 		UUID UUID;
@@ -61,6 +51,11 @@ namespace fe
 	struct ACFilepath : AssetComponent
 	{
 		std::filesystem::path Filepath;
+	};
+
+	struct ACName : AssetComponent
+	{
+		std::string Name;
 	};
 
 	struct ACAssetProxy

@@ -232,6 +232,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FE_pch.cpp">

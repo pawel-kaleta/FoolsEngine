@@ -13,24 +13,28 @@ namespace fe
 	using ECS_AssetHandle = entt::basic_handle<AssetRegistry>;
 	using Const_ECS_AssetHandle = entt::basic_handle<const AssetRegistry>;
 
+	constexpr int AssetTypesCount = (int)(AssetType::TypesCount);
+
 	class AssetManager
 	{
 	public:
+		AssetManager() = delete;
+		
 		template <typename tAssetBody>
-		constexpr static AssetRegistry const* GetRegistry() { return &m_Registries[(int)tAssetBody::GetStaticType()]; }
+		constexpr static AssetRegistry* GetRegistry() { return &(s_Registries[(int)(tAssetBody::GetStaticType())]); }
 
+		template <typename tAssetBody>
+		AssetID NewID() { AssetRegistry* x = AssetManager::GetRegistry<tAssetBody>(); x->create(); }
 	private:
-		AssetManager();
+		static AssetRegistry s_Registries[AssetTypesCount];
+		static std::unordered_map<UUID, AssetID> s_AssetMapByUUID[AssetTypesCount];
 
-		static AssetRegistry m_Registries[(int)AssetType::TypesCount];
-		static std::unordered_map<UUID, AssetID> m_AssetMapByUUID[(int)AssetType::TypesCount];
-
-		static std::vector<AssetSource> m_AssetSources;
+		static std::vector<AssetSource> s_AssetSources;
 		struct AssetSourceMaps
 		{
-			static std::unordered_map<UUID                 , AssetSourceID> ByUUID;
+			static std::unordered_map<UUID, AssetSourceID> ByUUID;
 			static std::unordered_map<std::filesystem::path, AssetSourceID> ByFilepath;
 		};
-
+		static AssetSourceMaps s_AssetSourceMaps;
 	};
 }

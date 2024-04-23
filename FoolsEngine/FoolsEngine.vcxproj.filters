@@ -471,5 +471,6 @@
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
   </ItemGroup>
 </Project>

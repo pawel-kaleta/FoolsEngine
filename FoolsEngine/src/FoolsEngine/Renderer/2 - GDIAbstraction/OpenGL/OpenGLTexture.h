@@ -9,29 +9,25 @@ namespace fe
 	class OpenGLTexture2D final : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight, AssetSignature* assetSignature);
-		OpenGLTexture2D(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature);
-		virtual ~OpenGLTexture2D() override;
+		OpenGLTexture2D(const std::string& name, TextureData::Specification specification, uint32_t width, uint32_t hight);
+		OpenGLTexture2D(const std::filesystem::path& filePath, TextureData::Usage usage);
+		~OpenGLTexture2D();
 
-		virtual uint32_t GetWidth() const override { return m_Width; }
-		virtual uint32_t GetHeight() const override { return m_Height; }
 
-		virtual TextureData::Usage      GetUsage()      const override { return m_Usage; }
-		virtual TextureData::Components GetComponents() const override;
-		virtual TextureData::Format     GetFormat()     const override;
 
-		virtual void SetData(void* data, uint32_t size) override;
+		TextureData::Components GetComponents() const ;
+		TextureData::Format     GetFormat()     const ;
 
-		virtual void Bind(uint32_t slot = 0) const override;
+		void SetData(void* data, uint32_t size) override;
 
-		virtual const std::string& GetName() const { return m_Name; }
-		virtual uint32_t GetID() const { return m_ID; }
+		void Bind(uint32_t slot = 0) const override;
+
+		uint32_t GetInRenderContextID() const { return m_ID; }
 	private:
-		uint32_t m_Width, m_Height;
+
 		uint32_t m_ID;
-		std::string m_Name;
+
 		GLenum m_Format = GL_NONE;
 		GLenum m_InternalFormat = GL_NONE;
-		TextureData::Usage m_Usage = TextureData::Usage::None;
-	};
+		
 }
