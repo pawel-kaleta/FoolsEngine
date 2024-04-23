@@ -298,7 +298,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Registries.h" />
     <ClInclude Include="src\FoolsEngine\Assets\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -472,8 +471,5 @@
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Registries.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\AssetLibrary.h" />
-    <ClCompile Include="src\FoolsEngine\Assets\AssetLibrary.cpp" />
   </ItemGroup>
 </Project>

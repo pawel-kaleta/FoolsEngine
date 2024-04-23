@@ -22,6 +22,10 @@ namespace fe
 			return AssetLibrary::GetAssetHandle<Texture>(textureSignaturePtr->ID);
 		}
 
+		static Texture* LoadAnonimousTexture(const std::filesystem::path& filePath)
+		{
+			return Texture2D::Create(filePath, TextureData::Usage{0}, nullptr);
+		}
 	private:
 
 	};

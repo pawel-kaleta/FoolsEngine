@@ -34,15 +34,12 @@ namespace fe
 		Mesh() = default;
 		Mesh(
 			AssetSignature* assetSignature,
-			//const std::filesystem::path& filepath,
 			const std::string& name,
 			uint32_t assimpMaterialIndex,
 			uint32_t assimpMeshIndex,
 			AssetHandle<MaterialInstance> materialInstance)
 			:
 			Asset(assetSignature),
-			//m_UUID(uuid),
-			//m_Filepath(filepath),
 			m_Name(name),
 			m_AssimpMaterialIndex(assimpMaterialIndex),
 			m_AssimpMeshIndex(assimpMeshIndex),
@@ -51,9 +48,7 @@ namespace fe
 
 		static AssetType GetAssetType() { return AssetType::MeshAsset; }
 
-		//const std::filesystem::path& GetFilepath() const { return m_Filepath; }
 		const std::string& GetName() const { return m_Name; }
-		// UUID GetUUID() const { return m_UUID; }
 		size_t GetVertexCount() const;
 
 		enum DataLocation
@@ -77,8 +72,6 @@ namespace fe
 		friend class ModelImporter;
 
 		std::string m_Name;
-		//std::filesystem::path m_Filepath;
-		//UUID m_UUID;
 
 		std::vector<Vertex>   m_Vertices;
 		std::vector<uint32_t> m_Indices;
@@ -96,8 +89,6 @@ namespace fe
 	{
 	public:
 		MeshBuilder& SetName(const std::string& name) { m_Name = name; return *this; }
-		//MeshBuilder& SetFilepath(const std::filesystem::path& filepath) { m_Filepath = filepath; return *this; }
-		//MeshBuilder& SetUUID(UUID uuid) { m_UUID = uuid; return *this; }
 		MeshBuilder& SetSignature(AssetSignature* signature) { m_AssetSignature = signature; }
 		MeshBuilder& SetAssimpMaterialIndex(uint32_t assimpMaterialIndex) { m_AssimpMaterialIndex = assimpMaterialIndex; return *this; }
 		MeshBuilder& SetAssimpMeshIndex(uint32_t assimpMeshIndex) { m_AssimpMeshIndex = assimpMeshIndex; return *this; }
@@ -106,8 +97,6 @@ namespace fe
 		Ref<Mesh> Build()
 		{
 			return Ref<Mesh>(new Mesh(
-				//m_UUID,
-				//m_Filepath,
 				m_AssetSignature,
 				m_Name,
 				m_AssimpMaterialIndex,
@@ -118,8 +107,6 @@ namespace fe
 	private:
 		std::string m_Name;
 		AssetSignature* m_AssetSignature;
-		//std::filesystem::path m_Filepath;
-		//UUID m_UUID;
 
 		uint32_t m_AssimpMaterialIndex = -1;
 		uint32_t m_AssimpMeshIndex = -1;

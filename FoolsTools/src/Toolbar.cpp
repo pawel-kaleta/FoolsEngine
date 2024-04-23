@@ -6,7 +6,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_IconPlay  = Ref<Texture>(Texture2D::Create("resources/PlayButton.png" , TextureData::Usage::Map_Albedo));
+		m_IconPlay  = Ref<Texture>(Texture2D::Create("resources/PlayButton.png" , TextureData::Usage::Map_Albedo, nullptr));
 		m_IconStop  = Ref<Texture>(Texture2D::Create("resources/StopButton.png" , TextureData::Usage::Map_Albedo));
 		m_IconPause = Ref<Texture>(Texture2D::Create("resources/PauseButton.png", TextureData::Usage::Map_Albedo));
 	}

@@ -6,62 +6,77 @@
 
 #include <yaml-cpp\yaml.h>
 
+#include <memory>
+
+#include <entt/entity/registry.hpp>
+#include <entt/entity/handle.hpp>
+#include <entt/entity/helper.hpp>
+
 namespace fe
 {
-	using AssetID       = UUID;
-	using AssetSourceID = UUID;
-	using AssetProxyID  = UUID;
+	using AssetID = uint32_t;
+	inline constexpr entt::null_t NullAssetID{};
+
+	using AssetSourceID = uint32_t;
 
 	enum AssetType
 	{
 		SceneAsset,
 		TextureAsset,
+		Texture2DAsset,
 		MeshAsset,
 		ShaderAsset,
 		MaterialAsset,
 		MaterialInstanceAsset,
-		Audio,
+		AudioAsset,
 
 		TypesCount,
 		None
 	};
 
-	struct AssetSignature
+	struct AssetComponent {};
+
+	struct ACBody
 	{
+		constexpr static AssetType GetStaticType() { return AssetType::None; }
+	};
+
+	// ACBody deriviations
+	struct SceneAsset;
+	struct TextureAsset;
+	struct Texture2DAsset;
+	struct MeshAsset;
+	struct ShaderAsset;
+	struct MaterialAsset;
+	struct MaterialInstanceAsset;
+	struct AudioAsset;
+
+	struct ACSignature : AssetComponent
+	{
+		UUID UUID;
 		AssetType Type = AssetType::None;
-		AssetID ID;
-		AssetProxyID ProxyID = 0;       //
-		std::filesystem::path FilePath; // set only for non-virtualized non-runtime only assets (existing on disk)
+		std::atomic<int> m_ActiveHandleCount = 0;
+	};
+
+	struct ACFilepath : AssetComponent
+	{
+		std::filesystem::path Filepath;
+	};
+
+	struct ACAssetProxy
+	{
+		std::filesystem::path FilePath;
+		AssetSourceID AssetSourceID;
+
+		// to do: separate component? dont hold and read from file upon request?
+		void* ImportSettings = nullptr;
 	};
 
 	struct AssetSource
 	{
 		std::filesystem::path FilePath;
-		AssetSourceID ID;
-		
-		std::vector<AssetProxyID> AssetProxies;
-	};
+		UUID UUID;
 
-	struct AssetProxy
-	{
-		std::filesystem::path FilePath;
-		AssetProxyID ID;
-
-		AssetID AssetID = 0;
-		AssetType AssetType = AssetType::None;
-		AssetSourceID AssetSourceID = 0;
-		void* ImportSettings = nullptr;
-	};
-
-	class Asset
-	{
-	public:
-		Asset() = default;
-		Asset(AssetSignature* signature) : m_Signature(signature) { }
-		AssetSignature* GetSignature() const { return m_Signature; }
-
-		static AssetType GetAssetType() { return AssetType::None; }
-	protected:
-		AssetSignature* m_Signature = nullptr;
+		std::vector<AssetID> AssetIDs;
 	};
 }

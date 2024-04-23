@@ -56,8 +56,11 @@ namespace fe
 	OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& filePath, TextureData::Usage usage, AssetSignature* assetSignature)
 		: m_Format(0), m_InternalFormat(0), m_Usage(usage)
 	{
-		m_Signature = assetSignature;
-		assetSignature->FilePath = filePath;
+		if (assetSignature)
+		{
+			m_Signature = assetSignature;
+			assetSignature->FilePath = filePath;
+		}
 
 		m_Name = FileNameFromFilepath(filePath.generic_string());
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Asset.h"
 #include "AssetManager.h"
 
 #include <memory>
@@ -8,84 +7,50 @@
 
 namespace fe
 {
-	template <typename tAsset>
+	template <typename tAssetBody>
 	class AssetHandle
 	{
 	public:
 		AssetHandle() = default;
+		AssetHandle(AssetID assetID) : m_AssetID(assetID) { }
 		~AssetHandle()
 		{
-			(*m_RefCount)--;
-			// AssetHandleTracker owns RefCount, AssetManager owns Asset
+			if (m_Active)
+			{
+				GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--;
+			}
 		}
 
-		AssetHandle(const AssetHandle<tAsset>& other)
-			: m_AssetPtr(other.m_AssetPtr), m_RefCount(other.m_RefCount)
+		// the following are here to prevent spreading m_Active
+		AssetHandle(const AssetHandle<tAssetBody>& other) : m_AssetID(other.m_AssetID) {}
+		AssetHandle(AssetHandle<tAssetBody>&& other)      : m_AssetID(other.m_AssetID) {}
+		AssetHandle<tAssetBody>& operator=(const AssetHandle<tAssetBody>& other)
 		{
-			(*m_RefCount)++;
-		}
+			m_AssetID  = other.m_AssetID;
 
-		AssetHandle(AssetHandle<tAsset>&& other)
-			: m_AssetPtr(other.m_AssetPtr), m_RefCount(other.m_RefCount)
-		{
-			other.m_AssetPtr = nullptr;
-			other.m_RefCount = nullptr;
+			return *this;
 		}
-
-		AssetHandle<tAsset>& operator=(const AssetHandle<tAsset>& other)
+		AssetHandle<tAssetBody>& operator=(AssetHandle<tAssetBody>&& other)
 		{
-			m_AssetPtr = other.m_AssetPtr;
-			m_RefCount = other.m_RefCount;
-			(*m_RefCount)++;
+			m_AssetID  = other.m_AssetID;
 
 			return *this;
 		}
 
-		AssetHandle<tAsset>& operator=(AssetHandle<tAsset>&& other)
+		bool IsValid() { return m_AssetID != NullAssetID; }
+		bool IsActive() { return m_Active; }
+
+		void Activate()
 		{
-			m_AssetPtr = other.m_AssetPtr;
-			m_RefCount = other.m_RefCount;
-			other.m_AssetPtr = nullptr;
-			other.m_RefCount = nullptr;
+			FE_CORE_ASSERT(IsValid(), "Cannot activate invalid AssetHandle!");
 
-			return *this;
-		}
-
-		tAsset& operator*() const { return *m_AssetPtr; }
-		tAsset* operator->() const { return m_AssetPtr; }
-
-		operator bool() const { return m_AssetPtr; }
-
-		tAsset* Raw() const { return m_AssetPtr; }
-
-	private:
-		friend class AssetHandleTracker;
-		AssetHandle(tAsset* asset, std::atomic<int>* refCount) : m_AssetPtr(asset), m_RefCount() { static_assert(std::is_base_of<Asset, tAsset>::value); }
-
-		tAsset* m_AssetPtr = nullptr;
-		std::atomic<int>* m_RefCount = nullptr;
-	};
-
-	class AssetHandleTracker
-	{
-	public:
-		AssetHandleTracker(Asset* asset)
-			: m_Asset(asset)
-		{
-			m_RefCount = new std::atomic<int>(0);
-		}
-
-		Asset* GetAssetPtr() const { return m_Asset; }
-
-		template <typename tAsset>
-		AssetHandle<tAsset> GetHandle()
-		{
-			(*m_RefCount)++;
-			return AssetHandle<tAsset>(m_Asset, m_RefCount);
+			GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount++;
+			m_Active = true;
 		}
 	private:
-		friend class AssetLibrary;
-		Asset* m_Asset = nullptr;
-		std::atomic<int>* m_RefCount = nullptr;
+		constexpr static AssetRegistry const* GetRegistry() { return AssetManager::GetRegistry<tAssetBody>(); }
+
+		AssetID m_AssetID = NullAssetID;
+		bool    m_Active  = false;
 	};
 }
