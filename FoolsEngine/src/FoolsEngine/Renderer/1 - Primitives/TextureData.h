@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace fe
 {
 	namespace TextureData
@@ -56,6 +58,8 @@ namespace fe
 			Usage      Usage      = Usage::None;
 			Components Components = Components::None;
 			Format     Format     = Format::None;
+			uint32_t   Width      = 0;
+			uint32_t   Height     = 0;
 		};
 	}
 }

@@ -7,4 +7,6 @@ namespace fe
 		none = 0,
 		OpenGL = 1
 	};
+
+	using OpenGLID = uint32_t;
 }

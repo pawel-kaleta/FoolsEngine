@@ -4,6 +4,9 @@
     <Filter Include="FoolsEngine">
       <UniqueIdentifier>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Assets">
+      <UniqueIdentifier>{403A6BB3-2C1E-2C09-957E-265C8181168B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Core">
       <UniqueIdentifier>{36A8C180-22A1-E0D2-4BD3-C557372BC0DE}</UniqueIdentifier>
     </Filter>
@@ -43,9 +46,6 @@
     <Filter Include="FoolsEngine\Renderer\4 - GDIIsolation">
       <UniqueIdentifier>{3A8EB534-A652-B424-6FB8-E4EEDB3B505A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\6 - Resources">
-      <UniqueIdentifier>{51606694-3D9C-69FE-A6AE-81F592091219}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FoolsEngine\Renderer\8 - Render">
       <UniqueIdentifier>{F8CC1001-64B0-1F41-6DB3-4D7DD915E691}</UniqueIdentifier>
     </Filter>
@@ -72,6 +72,21 @@
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\SceneSerializer.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\TextureLoader.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Application.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
@@ -207,6 +222,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
@@ -282,26 +300,24 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\SceneSerializer.h">
-      <Filter>FoolsEngine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\SceneSerializer.cpp">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
@@ -401,6 +417,9 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp">
       <Filter>FoolsEngine\Renderer\4 - GDIIsolation</Filter>
     </ClCompile>
@@ -461,16 +480,8 @@
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\SceneSerializer.cpp">
-      <Filter>FoolsEngine\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
   </ItemGroup>
 </Project>

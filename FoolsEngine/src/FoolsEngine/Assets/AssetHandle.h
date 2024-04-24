@@ -1,39 +1,30 @@
 #pragma once
 
 #include "AssetManager.h"
-#include "Asset.h"
 
 #include <memory>
-#include <mutex>
 
 namespace fe
 {
-	template <typename tAssetBody>
-	class AssetHandle
+	template <typename tAssetBody> class AssetHandle
 	{
 	public:
 		AssetHandle() = default;
 		AssetHandle(AssetID assetID) : m_AssetID(assetID) { }
-		~AssetHandle()
-		{
-			if (m_Active)
-			{
-				GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--;
-			}
-		}
+		~AssetHandle() { if (m_Active) GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--; }
 
 		// the following are here to prevent spreading m_Active
-		AssetHandle(const AssetHandle<tAssetBody>& other) : m_AssetID(other.m_AssetID) {}
-		AssetHandle(AssetHandle<tAssetBody>&& other)      : m_AssetID(other.m_AssetID) {}
+		AssetHandle(const AssetHandle<tAssetBody>& other) : m_AssetID(other.m_AssetID) { }
+		AssetHandle(AssetHandle<tAssetBody>&& other) : m_AssetID(other.m_AssetID) { }
 		AssetHandle<tAssetBody>& operator=(const AssetHandle<tAssetBody>& other)
 		{
-			m_AssetID  = other.m_AssetID;
+			m_AssetID = other.m_AssetID;
 
 			return *this;
 		}
 		AssetHandle<tAssetBody>& operator=(AssetHandle<tAssetBody>&& other)
 		{
-			m_AssetID  = other.m_AssetID;
+			m_AssetID = other.m_AssetID;
 
 			return *this;
 		}
@@ -52,7 +43,7 @@ namespace fe
 		void Deactivate()
 		{
 			FE_CORE_ASSERT(IsValid(), "Cannot deactivate invalid AssetHandle!");
-			FE_CORE_ASSERT(m_Active,  "Cannot deactivate inactive AssetHandle!");
+			FE_CORE_ASSERT(m_Active, "Cannot deactivate inactive AssetHandle!");
 
 			GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--;
 			m_Active = false;
@@ -76,14 +67,14 @@ namespace fe
 			return GetRegistry()->try_get<tAC>(m_AssetID);
 		}
 
-		tAssetBody  * AssetBody()  { return Get<tAssetBody>();   }
-		ACSignature * Signature()  { return Get<ACSignature>();  }
-		ACFilepath  * Filepath()   { return Get<ACFilepath>();   }
+		tAssetBody* AssetBody() { return Get<tAssetBody>(); }
+		ACSignature* Signature() { return Get<ACSignature>(); }
+		ACFilepath* Filepath() { return Get<ACFilepath>(); }
 		ACAssetProxy* AssetProxy() { return Get<ACAssetProxy>(); }
 	private:
 		constexpr static AssetRegistry* GetRegistry() { return AssetManager::GetRegistry<tAssetBody>(); }
 
 		AssetID m_AssetID = NullAssetID;
-		bool    m_Active  = false;
+		bool    m_Active = false;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <filesystem>
-#include "AssetHandle.h"
+//#include "AssetHandle.h"
 #include "FoolsEngine/Renderer/2 - GDIAbstraction/Texture.h"
 
 namespace fe
