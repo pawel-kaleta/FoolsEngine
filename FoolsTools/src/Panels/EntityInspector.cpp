@@ -26,7 +26,7 @@ namespace fe
             return;
 
         ImGui::PushID(component);
-        auto name = component->GetComponentName();
+        auto name = component->GetName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
@@ -63,7 +63,7 @@ namespace fe
             {
                 auto& offset = ((SpatialComponent*)component)->Offset;
                 ImGui::SeparatorText("Offset");
-                ImGui::DragFloat3("Position", glm::value_ptr(offset.Position), 0.01f, 0, 0, "%.2f");
+                ImGui::DragFloat3("Shift", glm::value_ptr(offset.Shift), 0.01f, 0, 0, "%.2f");
                 ImGui::DragFloat3("Rotation", glm::value_ptr(offset.Rotation), 0.10f, 0, 0, "%.2f");
                 ImGui::DragFloat3("Scale"   , glm::value_ptr(offset.Scale)   , 0.01f, 0, 0, "%.2f");
                 ImGui::SeparatorText("Component Data");
@@ -104,6 +104,35 @@ namespace fe
         ImGui::PopID();
     }
 
+    void EntityInspector::DrawComponentsTab(Entity entity)
+    {
+        if (!ImGui::BeginTabItem("Components"))
+        {
+            return;
+        }
+
+        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+
+        DrawCNameWidget(entity);
+
+        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
+
+        if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))
+            ImGui::OpenPopup("AddComponent");
+
+        AddComponentPopupMenu(entity);
+
+        DrawCTransformWidget(entity);
+
+        for (const auto& item : ComponentTypesRegistry::GetInstance().DataItems)
+        {
+            DrawComponentWidget(item, entity);
+        }
+
+        ImGui::EndTabItem();
+    }
+
     void EntityInspector::OnImGuiRender()
     {
         FE_PROFILER_FUNC();
@@ -117,78 +146,59 @@ namespace fe
         }
 
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-        if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+        if (!ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
         {
-            Entity entity(m_OpenedEntityID, m_Scene->GetGameplayWorld());
-
-            if (ImGui::BeginTabItem("Components"))
-            {
-                ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-
-                DrawCNameWidget(entity);
-
-                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-                ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
-
-                if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))
-                    ImGui::OpenPopup("AddComponent");
-
-                AddComponentPopupMenu(entity);
-
-                DrawCTransformWidget(entity);
-
-                for (const auto& item : ComponentTypesRegistry::GetInstance().DataItems)
-                {
-                    DrawComponentWidget(item, entity);
-                }
-
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("Tags"))
-            {
-                DrawCTagsWidget(entity);
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("Flags"))
-            {
-                ImGui::Text("UI representation not implemented yet");
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("Debug"))
-            {
-                DrawDebugTab(entity);
-                ImGui::EndTabItem();
-            }
-
-            ImGui::EndTabBar();
+            ImGui::End();
+            return;
         }
+
+        Entity entity(m_OpenedEntityID, m_Scene->GetGameplayWorld());
+
+        DrawComponentsTab(entity);
+        
+        if (ImGui::BeginTabItem("Tags"))
+        {
+            DrawCTagsWidget(entity);
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Flags"))
+        {
+            ImGui::Text("UI representation not implemented yet");
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Debug"))
+        {
+            DrawDebugTab(entity);
+            ImGui::EndTabItem();
+        }
+
+        ImGui::EndTabBar();
         ImGui::End();
     }
 
     void EntityInspector::AddComponentPopupMenu(BaseEntity entity)
     {
-        if (ImGui::BeginPopup("AddComponent"))
-        {
-            auto& compReg = ComponentTypesRegistry::GetInstance();
-            for (const auto& item : compReg.DataItems)
-            {
-                auto& getter = item.Getter;
-                DataComponent* component = (entity.*getter)();
+        if (!ImGui::BeginPopup("AddComponent")) return;
 
-                if (!component)
+        const auto& compReg = ComponentTypesRegistry::GetInstance();
+        for (const auto& item : compReg.DataItems)
+        {
+            auto& getter = item.Getter;
+            DataComponent* component = (entity.*getter)();
+
+            if (!component)
+            {
+                auto& getName = item.Name;
+                std::string name = (compReg.*getName)();
+                if (ImGui::MenuItem(name.c_str()))
                 {
-                    auto& getName = item.Name;
-                    std::string name = (compReg.*getName)();
-                    if (ImGui::MenuItem(name.c_str()))
-                    {
-                        auto& emplacer = item.Emplacer;
-                        (entity.*emplacer)();
-                    }
+                    auto& emplacer = item.Emplacer;
+                    (entity.*emplacer)();
                 }
             }
-
-            ImGui::EndPopup();
         }
+
+        ImGui::EndPopup();
     }
 
     void EntityInspector::DrawCNameWidget(Entity entity)
@@ -229,7 +239,7 @@ namespace fe
 
             bool change = false;
 
-            change = change || ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f, 0, 0, "%.2f");
+            change = change || ImGui::DragFloat3("Shift", glm::value_ptr(transform.Shift), 0.01f, 0, 0, "%.2f");
             change = change || ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f, 0, 0, "%.2f");
             change = change || ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
 

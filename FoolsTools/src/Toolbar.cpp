@@ -1,14 +1,30 @@
 #include "Toolbar.h"
 
+#include "FoolsEngine.h"
+
 namespace fe
 {
 	Toolbar::Toolbar()
 	{
 		FE_PROFILER_FUNC();
 
-		m_IconPlay  = Ref<Texture>(Texture2D::Create("resources/PlayButton.png" , TextureData::Usage::Map_Albedo, nullptr));
-		m_IconStop  = Ref<Texture>(Texture2D::Create("resources/StopButton.png" , TextureData::Usage::Map_Albedo));
-		m_IconPause = Ref<Texture>(Texture2D::Create("resources/PauseButton.png", TextureData::Usage::Map_Albedo));
+		m_IconPlay  = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
+		m_IconStop  = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
+		m_IconPause = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
+
+		auto GDI = Renderer::GetActiveGDItype();
+
+		auto playUser = m_IconPlay.Use();
+		auto stopUser = m_IconStop.Use();
+		auto pauseUser = m_IconPause.Use();
+
+		TextureLoader::LoadTexture("resources/PlayButton.png" , playUser);
+		TextureLoader::LoadTexture("resources/StopButton.png" , stopUser);
+		TextureLoader::LoadTexture("resources/PauseButton.png", pauseUser);
+
+		playUser.CreateGDITexture2D<OpenGLTexture2D>();
+		stopUser.CreateGDITexture2D<OpenGLTexture2D>();
+		pauseUser.CreateGDITexture2D<OpenGLTexture2D>();
 	}
 
 	void Toolbar::OnImGuiRender()
@@ -30,27 +46,29 @@ namespace fe
 
 		float size = ImGui::GetWindowHeight() - 4.0f; //headbar
 
+		auto GDI = Renderer::GetActiveGDItype();
+
 		switch (m_EditorState)
 		{
 		case EditorState::Edit:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)(m_IconPlay.Observe().GetRendererID(GDI)), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 				m_ClickedButton = ToolbarButton::Play;
 			break;
 		case EditorState::Play:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPause->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)(m_IconPause.Observe().GetRendererID(GDI)), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 				m_ClickedButton = ToolbarButton::Pause;
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)(m_IconStop.Observe().GetRendererID(GDI)), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 				m_ClickedButton = ToolbarButton::Stop;
 			break;
 		case EditorState::Pause:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)(m_IconPlay.Observe().GetRendererID(GDI)), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 				m_ClickedButton = ToolbarButton::Play;
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)(m_IconStop.Observe().GetRendererID(GDI)), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 				m_ClickedButton = ToolbarButton::Stop;
 		}
 		ImGui::PopStyleVar(2);

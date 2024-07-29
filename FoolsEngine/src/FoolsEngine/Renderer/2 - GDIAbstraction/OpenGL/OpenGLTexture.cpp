@@ -7,37 +7,48 @@
 
 namespace fe
 {
-	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& specification)
+	GLenum ComponentsToGlFormat(TextureData::Components components)
 	{
-		switch (specification.Components)
+		// TO DO: make this a static lookup table
+
+		switch (components)
 		{
 		case TextureData::Components::None:
-			FE_CORE_ASSERT(false, "Unspecified texture format");
-			break;
+			FE_CORE_ASSERT(false, "Unspecified texture components");
+			return GL_R;
 		case TextureData::Components::RGB_F:
-			m_Format = GL_RGB;
-			break;
+			return GL_RGB;
 		case TextureData::Components::RGBA_F:
-			m_Format = GL_RGBA;
-			break;
+			return GL_RGBA;
 		default:
 			FE_CORE_ASSERT(false, "Uknown texture format");
+			return GL_R;
 		}
+	}
 
-		switch (specification.Format)
+	GLenum FormatToGLinternalFormat(TextureData::Format format)
+	{
+		// TO DO: make this a static lookup table
+
+		switch (format)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Unspecified texture data format");
-			break;
+			return GL_R8;
 		case TextureData::Format::RGB_FLOAT_8:
-			m_InternalFormat = GL_RGB8;
-			break;
+			return GL_RGB8;
 		case TextureData::Format::RGBA_FLOAT_8:
-			m_InternalFormat = GL_RGBA8;
-			break;
+			return GL_RGBA8;
 		default:
 			FE_CORE_ASSERT(false, "Uknown texture data format");
+			return GL_R8;
 		}
+	}
+
+	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& specification)
+	{
+		m_Format = ComponentsToGlFormat(specification.Components);
+		m_InternalFormat = FormatToGLinternalFormat(specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
 		glTextureStorage2D(m_ID, 1, m_InternalFormat, specification.Width, specification.Height);
@@ -49,32 +60,12 @@ namespace fe
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(TextureData::Specification& specification, const std::filesystem::path& filePath)
+	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& spec, const void* data)
 	{
-		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(filePath.generic_string().c_str(), &width, &height, &channels, 0);
-		FE_LOG_CORE_DEBUG("Loading texture, Channels: {0}", channels);
-		FE_CORE_ASSERT(data, "Failed to load image!");
-		specification.Width = width;
-		specification.Height = height;
+		FE_CORE_ASSERT(data, "No texture data");
 
-		switch (channels)
-		{
-		case 1:
-			m_Format = GL_R;
-			m_InternalFormat = GL_R32F;
-		case 3:
-			m_Format = GL_RGB;
-			m_InternalFormat = GL_RGB8;
-			break;
-		case 4:
-			m_Format = GL_RGBA;
-			m_InternalFormat = GL_RGBA8;
-			break;
-		}
-
-		FE_CORE_ASSERT(m_Format & m_InternalFormat, "Texture data format not supported!");
+		m_Format = ComponentsToGlFormat(spec.Components);
+		m_InternalFormat = FormatToGLinternalFormat(spec.Format);
 
 		glGenTextures(1, &m_ID);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
@@ -84,37 +75,29 @@ namespace fe
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, width, height, 0, m_Format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, spec.Width, spec.Height, 0, m_Format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		stbi_image_free(data);
+		FE_LOG_CORE_DEBUG("Uploding texture to GPU, RendererID: {0}", m_ID);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
-		glDeleteTextures(1, &m_ID);
+		if(m_ID)
+		{
+			auto x = m_ID;
+			FE_LOG_CORE_DEBUG("Unloading OpenGLTexture from GPU, RendererID: {0}", x);
+			glDeleteTextures(1, &m_ID);
+		}
 	}
 
-	void OpenGLTexture2D::SetData(void* data, uint32_t size, uint32_t width, uint32_t height)
+	void OpenGLTexture2D::SendDataToGPU(void* data, const TextureData::Specification& spec)
 	{
-		uint32_t bytes_per_pixel = 0;
-		switch (m_Format)
-		{
-		case GL_RGB:  bytes_per_pixel = 3; break;
-		case GL_RGBA: bytes_per_pixel = 4; break;
-		default:
-		{
-			FE_CORE_ASSERT(false, "Uknown data format");
-			FE_LOG_CORE_ERROR("Uknown data format of a texture");
-			return;
-		}
-		}
-		FE_CORE_ASSERT(size == width * height * bytes_per_pixel, "Data must be entire texture!");
-		glTextureSubImage2D(m_ID, 0, 0, 0, width, height, m_Format, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_ID, 0, 0, 0, spec.Width, spec.Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
 
-	void OpenGLTexture2D::Bind(uint32_t slot) const
+	void OpenGLTexture2D::Bind(RenderTextureSlotID slotID) const
 	{
-		glBindTextureUnit(slot, m_ID);
+		glBindTextureUnit(slotID, m_ID);
 	}
 }

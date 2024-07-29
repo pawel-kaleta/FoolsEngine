@@ -119,7 +119,7 @@ namespace fe {
 		case ShaderData::Primitive::Bool:
 		{
 			bool* dataPtr = (bool*)uniformDataPtr;
-			for (int i = 1; i < uniform.GetCount(); i++)
+			for (unsigned int i = 1; i < uniform.GetCount(); i++)
 			{
 				ImGui::Checkbox("", dataPtr++); ImGui::SameLine();
 			}

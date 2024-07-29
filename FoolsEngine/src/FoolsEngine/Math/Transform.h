@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine\Scene\ECS.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
@@ -8,15 +10,37 @@
 
 namespace fe
 {
+	using Shift    = glm::vec3;
+	using Rotation = glm::vec3;
+	using Scale    = glm::vec3;
+
+	struct Position
+	{
+		Shift    Shift  = { 0.0f, 0.0f, 0.0f };
+		EntityID Origin = NullEntityID;
+	};
+	struct Orientation
+	{
+		Rotation Rotation = { 0.0f, 0.0f, 0.0f };
+		EntityID Origin   = NullEntityID;
+	};
+	struct Size
+	{
+		Scale    Scale  = { 1.0f, 1.0f, 1.0f };
+		EntityID Origin = NullEntityID;
+	};
+
+	// TO DO: operations on transform components (eg. Position + Shift = Position, Orientation - Orientation = Rotation)
+
 	struct Transform
 	{
-		glm::vec3 Position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
+		Shift    Shift    = { 0.0f, 0.0f, 0.0f };
+		Rotation Rotation = { 0.0f, 0.0f, 0.0f };
+		Scale    Scale    = { 1.0f, 1.0f, 1.0f };
 
 		glm::mat4 GetTransform() const
 		{
-			auto trans = glm::translate(glm::mat4(1.0f), Position);
+			auto trans = glm::translate(glm::mat4(1.0f), Shift);
 			auto rot = glm::toMat4(glm::quat(glm::radians(Rotation)));
 			auto scale = glm::scale(glm::mat4(1.0f), Scale);
 			return trans * rot * scale;
@@ -33,7 +57,7 @@ namespace fe
 	inline Transform operator+ (const Transform& a, const Transform& b)
 	{
 		Transform newTransform;
-		newTransform.Position = a.Position + a.Scale * glm::rotate(glm::quat(glm::radians(a.Rotation)), b.Position);
+		newTransform.Shift = a.Shift + a.Scale * glm::rotate(glm::quat(glm::radians(a.Rotation)), b.Shift);
 		newTransform.Rotation = a.Rotation + b.Rotation;
 		newTransform.Scale = a.Scale * b.Scale;
 		return newTransform;
@@ -41,13 +65,13 @@ namespace fe
 	inline Transform operator- (const Transform& a, const Transform& b)
 	{
 		Transform newTransform;
-		newTransform.Position = glm::rotate(glm::quat(-1.0f * b.Rotation), (a.Position - b.Position));
+		newTransform.Shift = glm::rotate(glm::quat(-1.0f * b.Rotation), (a.Shift - b.Shift));
 		newTransform.Rotation = a.Rotation - b.Rotation;
 		newTransform.Scale = a.Scale / b.Scale;
 		return newTransform;
 	}
 	inline bool operator==(const Transform& a, const Transform& b)
 	{
-		return a.Position == b.Position && a.Rotation == b.Rotation && a.Scale == b.Scale;
+		return a.Shift == b.Shift && a.Rotation == b.Rotation && a.Scale == b.Scale;
 	}
 }

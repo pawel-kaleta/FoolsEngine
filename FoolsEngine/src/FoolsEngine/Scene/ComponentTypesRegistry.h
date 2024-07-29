@@ -19,7 +19,7 @@ namespace fe
 			DataComponent* (BaseEntity::* Getter)() const;
 			void           (BaseEntity::* Emplacer)() const;
 			void           (Entity::* DestructionScheduler)();
-			std::string    (ComponentTypesRegistry::* Name)();
+			std::string    (ComponentTypesRegistry::* Name)() const;
 		};
 		std::vector<DataComponentRegistryItem> DataItems;
 
@@ -63,9 +63,9 @@ namespace fe
 		static ComponentTypesRegistry s_Registry;
 
 		template <typename tnComponent>
-		std::string GetName()
+		std::string GetName() const
 		{
-			return tnComponent::GetName();
+			return tnComponent::GetNameStatic();
 		}
 	};
 }

@@ -7,36 +7,43 @@
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
-#include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetManager.h"
 
 namespace fe
 {
+	struct ACSourceCode final : public AssetComponent
+	{
+		std::string VertexSource;
+		std::string FragmentSource;
+		std::string ShaderSource;
+	};
+
 	class Shader : public Asset
 	{
 	public:
-		virtual ~Shader() = default;
+		virtual AssetType GetType() const override { return GetTypeStatic(); }
+		static AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
-		static AssetType GetAssetType() { return AssetType::ShaderAsset; }
+		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
+		      ACSourceCode* GetSourceCode()       { return GetIfExist<ACSourceCode>(); }
+		ACSourceCode& GetOrEmplaceSourceCode() { return GetOrEmplace<ACSourceCode>(); }
 
-		virtual void Bind() = 0;
-		virtual void Unbind() = 0;
+		template <typename tnGDIShader, typename... Args>
+		tnGDIShader& CreateGDIShader(Args&&... args) { return Emplace<tnGDIShader>(std::forward<Args>(args)...); }
 
-		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) = 0;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t* rendererTextureSlot, uint32_t count) = 0;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) = 0;
+		void Bind(GDIType GDI);
+		void Unbind(GDIType GDI);
 
-		virtual const std::string& GetName() const = 0;
-		virtual const uint32_t& GetProgramID() const = 0;
+		virtual void UnloadFromGPU() override final;
+		virtual void UnloadFromCPU() override final;
 
-		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI);
-		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI);
-		static Shader* Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource);
-		static Shader* Create(AssetSignature* assetSignature, const std::filesystem::path& filePath, GDIType GDI);
-		static Shader* Create(AssetSignature* assetSignature, const std::filesystem::path& filePath);
-	private:
+		uint32_t GetRendererID(GDIType GDI) const;
 
+		void UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false);
+		void BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count);
+		void BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot);
+
+	protected:
+		Shader(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
 	};
-
-	
 }

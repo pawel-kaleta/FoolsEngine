@@ -13,7 +13,7 @@ namespace fe
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual void SetData(const void* data, uint32_t size) override;
+		virtual void SendDataToGPU(const void* data, uint32_t size) override;
 
 		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 		virtual const Ref<IndexBuffer> GetIndexBuffer() const override { return m_IndexBuffer; }

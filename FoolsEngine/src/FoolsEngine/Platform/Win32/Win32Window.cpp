@@ -83,6 +83,7 @@ namespace fe
 			FE_PROFILER_SCOPE("GLFW_Initialization");
 			FE_LOG_CORE_INFO("Initializing GLFW");
 
+			
 			if (!glfwInit())
 			{
 				FE_CORE_ASSERT(false, "GLFW initialization failed!");
@@ -96,6 +97,10 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("GLFW_CreateWindow");
 			FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
+
+#ifdef FE_INTERNAL_BUILD
+			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
+#endif // FE_INTERNAL_BUILD
 
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
 			s_GLFWWindowCount++;

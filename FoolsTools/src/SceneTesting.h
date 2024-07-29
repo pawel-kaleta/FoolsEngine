@@ -12,7 +12,7 @@ namespace fe
 
 			Transform CalculateNewTransform(Transform transform)
 			{
-				auto& position = transform.Position;
+				auto& position = transform.Shift;
 				auto& rotation = transform.Rotation;
 
 				float moveDistance = Time::DeltaTime() * MoveSpeed;
@@ -181,14 +181,23 @@ namespace fe
 
 	void RegisterAndLoadStuff()
 	{
-		// markmark
-		//TextureLibrary::Add(Texture2D::Create("assets/textures/Texture_with_Transparency.png", TextureData::Usage::Map_Albedo));
+		static bool once = false;
+
+		if (once)
+			return;
+
+		auto id = AssetManager::NewAsset<Texture2D>();
+		auto textureUser = AssetHandle<Texture2D>(id).Use();
+		textureUser.GetFilepath().Filepath = "assets/textures/Texture_with_Transparency.png";
+
 		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
 		ComponentTypesRegistry::GetInstance().RegisterDataComponent<CMovement>();
 		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
 		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
+
+		once = true;
 	}
 
 	void TestSceneSetup(Ref<Scene> scene)
@@ -201,15 +210,13 @@ namespace fe
 		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");
 		{
 			auto& tile = tintedTextureTile.Emplace<CTile>().Tile;
-			// markmark
-			//tile.Texture = TextureLibrary::Get("Default_Texture");
 			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 			tile.TextureTilingFactor = 3;
 
 			Transform transform;
 			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
-			transform.Position = glm::vec3(0.0f, 0.2f, -0.1f);
+			transform.Shift = glm::vec3(0.0f, 0.2f, -0.1f);
 			tintedTextureTile.GetTransformHandle() = transform;
 
 			tintedTextureTile.Emplace<CCamera>();
@@ -235,7 +242,7 @@ namespace fe
 			tile.TextureTilingFactor = 2;
 
 			Transform transform;
-			transform.Position = glm::vec3(0.3f, -0.2f, 0.19f);
+			transform.Shift = glm::vec3(0.3f, -0.2f, 0.19f);
 			transform.Scale = glm::vec3(0.2f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -40.0f);
 			childActor.GetTransformHandle() = transform;
@@ -249,7 +256,7 @@ namespace fe
 			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 
 			Transform transform;
-			transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
+			transform.Shift = glm::vec3(-0.1f, -0.1f, 0.1f);
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
 			colorSprite.GetTransformHandle() = transform;
 		}
@@ -257,11 +264,9 @@ namespace fe
 		Actor playerActor = scene->GetGameplayWorld()->CreateActor("Player");
 		{
 			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
-			// markmark
-			//sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 
 			Transform transform;
-			transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
+			transform.Shift = glm::vec3(0.0f, 0.0f, 0.2f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 			playerActor.GetTransformHandle() = transform;
 
@@ -276,12 +281,10 @@ namespace fe
 		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
 		{
 			auto& sprite = testChild_1.Emplace<CSprite>().Sprite;
-			// markmark
-			//sprite.Texture = TextureLibrary::Get("Texture_with_Transparency");
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;
-			transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
+			transform.Shift = glm::vec3(0.8f, 0.8f, 0.3f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
 			testChild_1.GetTransformHandle().SetLocal(transform);
@@ -296,12 +299,10 @@ namespace fe
 		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
 		{
 			auto& sprite = testCild_2.Emplace<CSprite>().Sprite;
-			// markmark
-			//sprite.Texture = TextureLibrary::Get("Default_Texture");
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;
-			transform.Position = glm::vec3(-0.8f, -0.8f, 0.0f);
+			transform.Shift = glm::vec3(-0.8f, -0.8f, 0.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -20.0f);
 			transform.Scale = glm::vec3(0.7f, 0.4f, 1.0f);
 			testCild_2.GetTransformHandle().SetLocal(transform);

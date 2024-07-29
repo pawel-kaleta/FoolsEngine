@@ -63,7 +63,7 @@ namespace fe
 
 		// In default storage pool only!
 		// Be carefull about defferring, doing it twice in one frame with this method being second is undefined
-		// use RemoveIfExist if you are unsure whether this component could be scheduled for destruction somewhere else before
+		// use RemoveIfExist if you are unsure whether this component could have be scheduled for destruction somewhere else before
 		template<typename tnComponent>
 		void Remove()
 		{

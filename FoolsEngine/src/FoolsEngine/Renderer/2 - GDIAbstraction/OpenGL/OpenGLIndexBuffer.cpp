@@ -4,7 +4,7 @@
 namespace fe
 {
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
-		: m_Count(count)
+		: IndexBuffer(count)
 	{
 		FE_PROFILER_FUNC();
 		glCreateBuffers(1, &m_ID);
@@ -29,10 +29,5 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
-	uint32_t OpenGLIndexBuffer::GetCount() const
-	{
-		return m_Count;
 	}
 }

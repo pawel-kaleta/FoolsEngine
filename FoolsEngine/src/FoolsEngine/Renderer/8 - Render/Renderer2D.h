@@ -1,13 +1,15 @@
 #pragma once
 
+#include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
-#include "FoolsEngine/Scene/ECS.h"
+#include "FoolsEngine\Scene\ECS.h"
 
 #include "FoolsEngine\Core\Time.h"
+
+#include "FoolsEngine\Assets\Asset.h"
 
 namespace fe
 {
@@ -29,13 +31,11 @@ namespace fe
 		{
 			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float TextureTilingFactor = 1.0f;
-			// markmark 
-			//Ref<fe::Texture> Texture = TextureLibrary::Get("Base2DTexture");
-			AssetHandle<Texture> Texture; // markmark
+			AssetHandle<Texture2D> Texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
 		};
 
 		static void Init();
-		static void Shutdown() {}
+		static void Shutdown();
 
 		static void RenderScene(Scene& scene, Entity cameraSet, Framebuffer& framebuffer);
 		static void RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
@@ -53,7 +53,7 @@ namespace fe
 
 		struct QuadVertex
 		{
-			glm::vec3 Position;
+			glm::vec3 Shift;
 			glm::vec4 Color;
 			glm::vec2 TexCoord;
 			float TilingFactor;
@@ -69,25 +69,25 @@ namespace fe
 			QuadVerticesBatch::iterator QuadVeriticesIt;
 			uint32_t QuadIndexCount = 0;
 
-			std::array<AssetHandle<Texture>, ConstLimits::RendererTextureSlotsCount> Textures;
+			std::array<AssetHandle<Texture2D>, ConstLimits::RendererTextureSlotsCount> Textures;
 			uint32_t TexturesCount = 1;
 		};
 
 		struct Renderer2DData
 		{
+
 			glm::mat4 VPMatrix;
 
-			//Ref<VertexArray>  QuadVertexArray;
 			Ref<VertexBuffer> QuadVertexBuffer;
 
 			BatchData Batch;
 
 			AssetHandle<Shader> BaseShader;
 			ShaderTextureSlot BaseShaderTextureSlot;
-			uint32_t BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
+			RenderTextureSlotID BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 		};
 
-		static Scope<Renderer2DData> s_Data;
+		static Renderer2DData& s_Data;
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer);
 		static void ClearBatch();

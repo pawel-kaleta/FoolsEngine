@@ -47,7 +47,7 @@ void LayerExample::OnAttach()
 	{
 		camera.Emplace<fe::CCamera>();
 		fe::Transform transform;
-		transform.Position = glm::vec3(0.0f, 0.0f, 2.0f);
+		transform.Shift = glm::vec3(0.0f, 0.0f, 2.0f);
 		camera.GetTransformHandle() = transform;
 	}
 	m_Scene->GetGameplayWorld()->SetPrimaryCameraEntity(camera);
@@ -62,7 +62,7 @@ void LayerExample::OnAttach()
 		fe::Transform transform;
 		transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
 		transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
-		transform.Position = glm::vec3(0.0f, 0.2f, 0.0f);
+		transform.Shift = glm::vec3(0.0f, 0.2f, 0.0f);
 		tintedTextureTile.GetTransformHandle() = transform;
 	}
 
@@ -84,7 +84,7 @@ void LayerExample::OnAttach()
 		sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 
 		fe::Transform transform;
-		transform.Position = glm::vec3(-0.1f, -0.1f, 0.1f);
+		transform.Shift = glm::vec3(-0.1f, -0.1f, 0.1f);
 		transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
 		m_ColorSprite.GetTransformHandle() = transform;
 	}
@@ -97,7 +97,7 @@ void LayerExample::OnAttach()
 		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 
 		fe::Transform transform;
-		transform.Position = glm::vec3(0.0f, 0.0f, 0.2f);
+		transform.Shift = glm::vec3(0.0f, 0.0f, 0.2f);
 		transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 		target.GetTransformHandle() = transform;
 
@@ -115,7 +115,7 @@ void LayerExample::OnAttach()
 		sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 		fe::Transform transform;
-		transform.Position = glm::vec3(0.8f, 0.8f, 0.3f);
+		transform.Shift = glm::vec3(0.8f, 0.8f, 0.3f);
 		transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 		transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
 		targetChild_1.GetTransformHandle().SetLocal(transform);

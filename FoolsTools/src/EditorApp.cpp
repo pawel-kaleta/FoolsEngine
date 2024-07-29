@@ -1,24 +1,18 @@
-#include <FoolsEngine.h>
+#include "EditorApp.h"
+
 #include <EntryPoint.h>
 
+#include "EditorAssetManager.h"
 #include "EditorLayer.h"
 
 namespace fe
 {
-	class EditorApp : public Application
+	EditorApp::EditorApp(const std::string& name)
+		: Application(name, WindowAttributes{ name, 1920, 1080 })
 	{
-	public:
-		EditorApp(const std::string& name)
-			: Application(name, WindowAttributes{name, 1920, 1080})
-		{
-			PushOuterLayer(CreateScope<EditorLayer>());
-		}
-
-		~EditorApp()
-		{
-
-		}
-	};
+		m_EditorAssetManager = Scope<EditorAssetManager>(new EditorAssetManager());
+		PushOuterLayer(CreateScope<EditorLayer>());
+	}
 
 	Application* CreateApplication()
 	{

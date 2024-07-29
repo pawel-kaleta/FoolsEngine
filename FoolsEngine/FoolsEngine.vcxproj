@@ -151,11 +151,16 @@
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetsInclude.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\SceneSerializer.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\TextureLoader.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serializers\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core\Core.h" />
     <ClInclude Include="src\FoolsEngine\Core\InputCodes.h" />
@@ -176,6 +181,7 @@
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\FoolsEngine\Math\Math.h" />
+    <ClInclude Include="src\FoolsEngine\Math\Transform.h" />
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Primitives\FramebufferData.h" />
@@ -201,8 +207,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Transform.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
@@ -234,9 +240,14 @@
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\Asset.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\SceneSerializer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serializers\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
@@ -270,6 +281,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />

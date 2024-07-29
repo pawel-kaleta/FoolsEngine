@@ -12,7 +12,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		m_Camera.SetViewportSize((uint32_t)width, (uint32_t)hight);
-		m_Transform.Position.z = 2.0f;
+		m_Transform.Shift.z = 2.0f;
 	}
 
 	void EditorCameraController::OnUpdate()
@@ -92,9 +92,9 @@ namespace fe
 		float verticalStep = verticalDir * step;
 		float viewStep = viewDir * step;
 
-		m_Transform.Position += verticalStep * GetDirectionUp();
-		m_Transform.Position += horizontalStep * GetDirectionRight();
-		m_Transform.Position += viewStep * GetDirectionForward();
+		m_Transform.Shift += verticalStep * GetDirectionUp();
+		m_Transform.Shift += horizontalStep * GetDirectionRight();
+		m_Transform.Shift += viewStep * GetDirectionForward();
 	}
 
 	void EditorCameraController::Zoom(float delta)
@@ -145,7 +145,7 @@ namespace fe
 
 		auto& transform = GetTransform();
 
-		ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.01f);
+		ImGui::DragFloat3("Shift", glm::value_ptr(transform.Shift), 0.01f);
 		ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f);
 		ImGui::DragFloat3("Scale"   , glm::value_ptr(transform.Scale   ), 0.01f);
 

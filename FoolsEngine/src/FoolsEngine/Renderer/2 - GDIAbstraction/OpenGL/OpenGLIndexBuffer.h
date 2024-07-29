@@ -15,11 +15,8 @@ namespace fe
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual uint32_t GetCount() const override;
-
 	private:
 		uint32_t m_ID;
-		uint32_t m_Count;
 	};
 
 	static GLenum SDPrimitiveToGLBaseType(ShaderData::Primitive primitive)

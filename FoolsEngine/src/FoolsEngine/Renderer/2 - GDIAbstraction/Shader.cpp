@@ -7,63 +7,118 @@
 
 namespace fe
 {
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
-    {
-        return Create(assetSignature, name, vertexSource, fragmentSource, Renderer::GetActiveGDItype());
-    }
-
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource, GDIType GDI)
+    void Shader::Bind(GDIType GDI)
     {
         switch (GDI)
         {
         case GDIType::none:
-            FE_CORE_ASSERT(false, "GDItype::none currently not supported!");
-            return nullptr;
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
         case GDIType::OpenGL:
-            return new OpenGLShader(assetSignature, name, vertexSource, fragmentSource);
+            Get<OpenGLShader>().Bind();
+            return;
         }
-
-        FE_CORE_ASSERT(false, "Unknown GDI");
-        return nullptr;
     }
 
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource)
-    {
-        return Create(assetSignature, name, shaderSource, Renderer::GetActiveGDItype());
-    }
-
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource, GDIType GDI)
+    void Shader::Unbind(GDIType GDI)
     {
         switch (GDI)
         {
         case GDIType::none:
-            FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
-            return nullptr;
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
         case GDIType::OpenGL:
-            return new OpenGLShader(assetSignature, name, shaderSource);
+            Get<OpenGLShader>().Unbind();
+            return;
         }
-
-        FE_CORE_ASSERT(false, "Unknown GDI");
-        return nullptr;
     }
 
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::filesystem::path& filePath)
+    void Shader::UnloadFromGPU()
     {
-        return Create(assetSignature, filePath, Renderer::GetActiveGDItype());
+        auto gdi = Renderer::GetActiveGDItype();
+        switch (gdi)
+        {
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
+        case GDIType::OpenGL:
+            if (AllOf<OpenGLShader>())
+                Erase<OpenGLShader>();
+            return;
+        }
     }
 
-    Shader* fe::Shader::Create(AssetSignature* assetSignature, const std::filesystem::path& filePath, GDIType GDI)
+    void Shader::UnloadFromCPU()
+    {
+        auto& dataPtr = GetDataLocation().Data;
+        if (dataPtr)
+        {
+            free(dataPtr);
+            dataPtr = nullptr;
+        }
+        auto& sourceCode = Get<ACSourceCode>();
+        sourceCode.ShaderSource.clear();
+        sourceCode.VertexSource.clear();
+        sourceCode.FragmentSource.clear();
+    }
+
+    uint32_t Shader::GetRendererID(GDIType GDI) const
     {
         switch (GDI)
         {
         case GDIType::none:
-            FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
-            return nullptr;
-        case GDIType::OpenGL:
-            return new OpenGLShader(assetSignature, filePath);
-        }
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return 0;
 
-        FE_CORE_ASSERT(false, "Unknown GDI");
-        return nullptr;
+        case GDIType::OpenGL:
+            return Get<OpenGLShader>().GetProgramID();
+            break;
+        }
+        return 0;
+    }
+
+    void Shader::UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose)
+    {
+        switch (GDI)
+        {
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
+        case GDIType::OpenGL:
+            Get<OpenGLShader>().UploadUniform(uniform, dataPointer, count, transpose);
+            return;
+        }
+    }
+
+    void Shader::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count)
+    {
+        switch (GDI)
+        {
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
+        case GDIType::OpenGL:
+            Get<OpenGLShader>().BindTextureSlot(textureSlot, rendererTextureSlot, count);
+            return;
+        }
+    }
+
+    void Shader::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot)
+    {
+        switch (GDI)
+        {
+        case GDIType::none:
+            FE_CORE_ASSERT(false, "Unspecified GDIType");
+            return;
+
+        case GDIType::OpenGL:
+            Get<OpenGLShader>().BindTextureSlot(textureSlot, rendererTextureSlot);
+            return;
+        }
     }
 }

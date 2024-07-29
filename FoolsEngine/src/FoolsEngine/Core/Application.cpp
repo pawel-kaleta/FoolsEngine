@@ -6,6 +6,7 @@
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 
+#include "FoolsEngine\Assets\AssetManager.h"
 
 namespace fe {
 
@@ -15,6 +16,8 @@ namespace fe {
 		: m_Name(name)
 	{
 		FE_PROFILER_FUNC();
+
+		m_AssetManager = Scope<AssetManager>(new AssetManager());
 
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!")
 		s_Instance = this;
@@ -44,6 +47,8 @@ namespace fe {
 	Application::~Application()
 	{
 		FE_PROFILER_FUNC();
+
+		Renderer::Shutdown();
 	}
 
 	void Application::OnEvent(Ref<Events::Event> event)

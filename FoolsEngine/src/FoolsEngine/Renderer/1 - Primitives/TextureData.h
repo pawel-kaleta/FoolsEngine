@@ -4,6 +4,8 @@
 
 namespace fe
 {
+	using RenderTextureSlotID = uint32_t;
+
 	namespace TextureData
 	{
 		enum class Type

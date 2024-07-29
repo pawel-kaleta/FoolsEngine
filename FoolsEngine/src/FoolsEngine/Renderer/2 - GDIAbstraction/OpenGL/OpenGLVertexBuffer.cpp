@@ -55,7 +55,7 @@ namespace fe
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	void OpenGLVertexBuffer::SendDataToGPU(const void* data, uint32_t size)
 	{
 		FE_CORE_ASSERT(size <= m_Size, "Too much data for this VertexBuffer!");
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);

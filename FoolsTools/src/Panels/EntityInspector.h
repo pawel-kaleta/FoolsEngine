@@ -21,6 +21,8 @@ namespace fe
 
 		static void AddComponentPopupMenu(BaseEntity entity);
 
+		static void DrawComponentsTab(Entity entity);
+
 		static void DrawCNameWidget(Entity entity);
 		static void DrawDebugTab(Entity entity);
 		static void DrawCTransformWidget(Entity entity);

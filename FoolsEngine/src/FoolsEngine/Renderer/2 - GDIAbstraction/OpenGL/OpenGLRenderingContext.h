@@ -6,17 +6,16 @@
 
 namespace fe
 {
-	class OpenGLRenderingContext : public RenderingContext
+	class OpenGLRenderingContext final : public RenderingContext
 	{
 	public:
-		OpenGLRenderingContext(GLFWwindow* window);
+		OpenGLRenderingContext() = default;
+		OpenGLRenderingContext(void* nativeWindow);
 		virtual ~OpenGLRenderingContext() override = default;
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
-		virtual const GDIType GetGDItype() const override { return m_GDI; }
 	private:
-		GLFWwindow* m_Window;
-		GDIType m_GDI;
+		GLFWwindow* Window() const { return (GLFWwindow*)m_Window; };
 	};
 }

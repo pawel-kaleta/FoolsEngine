@@ -8,5 +8,4 @@ namespace fe
 		OpenGL = 1
 	};
 
-	using OpenGLID = uint32_t;
 }

@@ -3,7 +3,14 @@
 
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+
+#include "FoolsEngine\Assets\AssetManager.h"
+#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
+
+#include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
 
 #include <glad\glad.h>
 
@@ -16,6 +23,119 @@ namespace fe
 	void Renderer::Init()
 	{
 		FE_PROFILER_FUNC();
+
+		CreateBaseAssets();
+	}
+
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
+	}
+
+	void Renderer::CreateBaseAssets()
+	{
+		FE_PROFILER_FUNC();
+
+		{
+			auto id1 = AssetManager::NewAsset<Texture2D>((AssetID)BaseAssets::Textures2D::Default);
+			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Textures2D::Default, "Failed to create base asset with requested ID");
+
+			TextureLoader::LoadTexture("assets/textures/Default_Texture.png", AssetHandle<Texture2D>(id1).Use());
+
+			// ----------------
+
+			auto id2 = AssetManager::NewAsset<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+			FE_CORE_ASSERT(id2 == (AssetID)BaseAssets::Textures2D::FlatWhite, "Failed to create base asset with requested ID");
+			auto whiteTextureUser = AssetHandle<Texture2D>(id2).Use();
+
+			uint32_t* whiteTextureData = new uint32_t(0xffffffff);
+			Texture2DBuilder textureBuilder;
+			textureBuilder
+				.SetDataPtr(whiteTextureData)
+				.SetResolution(1, 1)
+				.SetType(TextureData::Type::Texture2D)
+				.SetUsage(TextureData::Usage::Map_Albedo)
+				.SetComponents(TextureData::Components::RGBA_F)
+				.SetFormat(TextureData::Format::RGBA_FLOAT_8);
+
+			textureBuilder.Create(whiteTextureUser);
+			whiteTextureUser.GetFilepath().Filepath = "FlatWhite";
+		}
+
+		{
+			auto id1 = AssetManager::NewAsset<Shader>((AssetID)BaseAssets::Shaders::Default2D);
+			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Shaders::Default2D, "Failed to create base asset with requested ID");
+
+			auto assetUser1 = AssetHandle<Shader>(id1).Use();
+			ShaderLoader::LoadShader("assets/shaders/Base2DShader.glsl", assetUser1);
+
+			// ----------------
+
+			auto id2 = AssetManager::NewAsset<Shader>((AssetID)BaseAssets::Shaders::Default3D);
+			FE_CORE_ASSERT(id2 == (AssetID)BaseAssets::Shaders::Default3D, "Failed to create base asset with requested ID");
+
+			auto assetUser2 = AssetHandle<Shader>(id2).Use();
+			ShaderLoader::LoadShader("assets/shaders/Base3DShader.glsl", assetUser2);
+		}
+
+		{
+			auto id1 = AssetManager::NewAsset<Material>((AssetID)BaseAssets::Materials::Default3D);
+			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Materials::Default3D, "Failed to create base asset with requested ID");
+
+			Material::MakeMaterial(
+				AssetHandle<Material>(id1).Use(),
+				AssetHandle<Shader>((AssetID)BaseAssets::Shaders::Default3D),
+				{
+					Uniform("u_Albedo"   , ShaderData::Type::Float3),
+					Uniform("u_Roughness", ShaderData::Type::Float),
+					Uniform("u_Metalness", ShaderData::Type::Float),
+					Uniform("u_AO"       , ShaderData::Type::Float)
+				},
+				{
+					ShaderTextureSlot("u_AlbedoMap"   , TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D),
+					ShaderTextureSlot("u_NormalMap"   , TextureData::Type::Texture2D)
+				}
+				);
+		}
+
+		{
+			auto id1 = AssetManager::NewAsset<MaterialInstance>((AssetID)BaseAssets::MaterialInstances::Default3D);
+			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::MaterialInstances::Default3D, "Failed to create base asset with requested ID");
+
+			auto miUser = AssetHandle<MaterialInstance>(id1).Use();
+			MaterialInstance::MakeMaterialInstance(miUser);
+			miUser.Init(AssetHandle<Material>((AssetID)BaseAssets::Materials::Default3D));
+		}
+	}
+
+	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)
+	{
+		{
+			auto id1 = (AssetID)BaseAssets::Textures2D::Default;
+			auto textureUser = AssetHandle<Texture2D>(id1).Use();
+			textureUser.CreateGDITexture2D(GDI);
+			
+			// ----------------
+
+			auto id2 = (AssetID)BaseAssets::Textures2D::FlatWhite;
+			auto textureUser2 = AssetHandle<Texture2D>(id2).Use();
+			textureUser2.CreateGDITexture2D(GDI);
+		}
+
+		{
+			auto id1 = (AssetID)BaseAssets::Shaders::Default2D;
+			auto assetUser1 = AssetHandle<Shader>(id1).Use();
+			ShaderLoader::CompileShader(GDI, assetUser1);
+
+			// ----------------
+
+			auto id2 = (AssetID)BaseAssets::Shaders::Default3D;
+			auto assetUser2 = AssetHandle<Shader>(id2).Use();
+			ShaderLoader::CompileShader(GDI, assetUser2);
+		}
 	}
 
 	void Renderer::SetAPI(GDIType GDI)
@@ -52,69 +172,7 @@ namespace fe
 
 		deviceAPI->Init();
 
-		switch (GDI)
-		{
-		case GDIType::OpenGL:
-			// markmark
-			//systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Base2DShader.glsl", GDI));
-			//systems.ShaderLib->IAdd(Shader::Create("assets/shaders/Base3DShader.glsl", GDI));
-			break;
-		default:
-			FE_CORE_ASSERT(false, "Uknown GDIType!");
-		}
-
-		// markmark
-		//systems.TextureLib->IAdd(Texture2D::Create("assets/textures/Default_Texture.png", GDI, TextureData::Usage::Map_Albedo));
-
-		TextureBuilder textureBuilder;
-		textureBuilder
-			.SetGDI(GDI)
-			.SetHeight(1)
-			.SetWidth(1)
-			.SetName("WhiteTexture")
-			.SetType(TextureData::Type::Texture2D)
-			.SetUsage(TextureData::Usage::Map_Albedo)
-			.SetComponents(TextureData::Components::RGBA_F)
-			.SetFormat(TextureData::Format::RGBA_FLOAT_8);
-
-		Texture* whiteTexture = textureBuilder.Create();
-		uint32_t whiteTextureData = 0xffffffff;
-		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-		// markmark
-		//systems.TextureLib->IAdd(whiteTexture);
-		
-		// markmark
-		/*
-		auto defaultMaterial3D = new Material(
-			"Default3DMaterial",
-			systems.ShaderLib->IGet("Base3DShader"),
-			{
-				//Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-				//Uniform("u_EntityID"      , ShaderData::Type::UInt),
-				//Uniform("u_Position"      , ShaderData::Type::Float3),
-				Uniform("u_Albedo"        , ShaderData::Type::Float3),
-				Uniform("u_Roughness"     , ShaderData::Type::Float),
-				Uniform("u_Metalness"     , ShaderData::Type::Float),
-				Uniform("u_AO"            , ShaderData::Type::Float)
-			},
-			{
-				ShaderTextureSlot("u_AlbedoMap"   , TextureData::Type::Texture2D),
-				ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
-				ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
-				ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D),
-				ShaderTextureSlot("u_NormalMap"   , TextureData::Type::Texture2D)
-			}
-		);
-		*/
-
-		// markmark
-		// systems.MaterialLib->IAdd(defaultMaterial3D);
-
-		// markmark
-		// systems.MaterialInstanceLib->IAdd(Ref<MaterialInstance>(new MaterialInstance(
-		//	defaultMaterial3D,
-		//	defaultMaterial3D->GetName() + "_Instance"
-		//)));
+		UploadBaseAssetsToGPU(GDI);
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -137,48 +195,52 @@ namespace fe
 
 	void Renderer::Draw(
 		const Ref<VertexBuffer>& vertexBuffer,
-		const AssetHandle<MaterialInstance>& materialInstance,
+		AssetHandle<MaterialInstance> materialInstance,
 		const glm::mat4& transform,
 		const glm::mat4& VPMatrix)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& shader = materialInstance->GetMaterial()->GetShader();
+		auto miObserver = materialInstance.Observe();
+		auto materialObserver = miObserver.GetMaterial().Observe();
 
-		shader->Bind();
+		auto& shaderUser = materialObserver.GetShader().Use();
 
-		shader->UploadUniform(
+		shaderUser.Bind(s_ActiveGDI);
+
+		shaderUser.UploadUniform(
+			s_ActiveGDI,
 			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
 			(void*)glm::value_ptr(VPMatrix)
 		);
-		shader->UploadUniform(
+		shaderUser.UploadUniform(
+			s_ActiveGDI,
 			Uniform("u_Transform", ShaderData::Type::Mat4),
 			(void*)glm::value_ptr(transform)
 		);
 
-		for (auto& uniform : materialInstance->GetMaterial()->GetUniforms())
+		for (auto& uniform : materialObserver.GetUniforms())
 		{
-			void* dataPointer = materialInstance->GetUniformValuePtr(uniform);
-			shader->UploadUniform(uniform, dataPointer);
+			void* dataPointer = miObserver.GetUniformValuePtr(uniform);
+			shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
 		}
 
 		{
 			uint32_t rendererTextureSlot = 0;
-			auto shaderTextureSlotsIt = materialInstance->GetMaterial()->GetTextureSlots().begin();
+			auto shaderTextureSlotsIt = materialObserver.GetTextureSlots().begin();
 
-			for (auto& texture : materialInstance->GetTextures())
+			for (auto& texture : miObserver.GetTextures())
 			{
-				shader->BindTextureSlot(*shaderTextureSlotsIt++, rendererTextureSlot);
+				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
 				
-				if (!texture)
+				if (!texture.IsValid())
 				{
-					//FE_CORE_ASSERT(false, "Uninitialized texture!");
-					// markmark
-					//TextureLibrary::Get("Default_Texture")->Bind(rendererTextureSlot++);
+					FE_LOG_CORE_WARN("Uninitialized texture!");
+					AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::Default).Use().Bind(s_ActiveGDI, rendererTextureSlot++);
 					continue;
 				}
 
-				texture->Bind(rendererTextureSlot++);
+				texture.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
 			}
 		}
 
@@ -186,4 +248,4 @@ namespace fe
 
 		RenderCommands::DrawIndexed(vertexBuffer.get());
 	}
-}
+} 

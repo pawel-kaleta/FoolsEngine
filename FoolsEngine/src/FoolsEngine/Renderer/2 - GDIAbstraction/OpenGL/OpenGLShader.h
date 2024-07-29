@@ -6,31 +6,23 @@
 
 namespace fe
 {
-	class OpenGLShader : public Shader
+	class OpenGLShader final : public AssetComponent
 	{
 	public:
-		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
-		OpenGLShader(AssetSignature* assetSignature, const std::string& name, const std::string& shaderSource);
-		OpenGLShader(AssetSignature* assetSignature, const std::filesystem::path& filepath);
-		virtual ~OpenGLShader() override;
+		OpenGLShader(GLuint programID) : m_ProgramID(programID) { };
+		OpenGLShader() = default;
+		~OpenGLShader();
 
-		virtual void Bind() override;
-		virtual void Unbind() override;
+		void Bind();
+		void Unbind();
 
-		virtual const std::string& GetName() const override { return m_Name; };
-		virtual const uint32_t& GetProgramID() const override { return m_ProgramID; };
+		const GLuint& GetProgramID() const { return m_ProgramID; };
 
-		virtual void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) override;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot[], uint32_t count) override;
-		virtual void BindTextureSlot(const ShaderTextureSlot& textureSlot, uint32_t rendererTextureSlot) override;
+		void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false);
+		void BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count);
+		void BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot);
 	private:
-		uint32_t m_ProgramID;
-		std::string m_Name;
-
-		static std::string ReadFile(const std::filesystem::path& filePath);
-		static GLenum ShaderTypeFromString(const std::string& type);
-		static std::unordered_map<GLenum, std::string> PreProcess(const std::string& shaderSource);
-
-		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+		GLuint m_ProgramID = 0;
+		std::unordered_map<std::string, GLint> m_UniformLocations;
 	};
 }

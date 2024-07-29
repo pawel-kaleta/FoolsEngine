@@ -4,8 +4,9 @@
 
 #include "FoolsEngine\Core\UUID.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
-#include "FoolsEngine\Renderer\3 - Representation\Transform.h"
+#include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
@@ -19,8 +20,8 @@ namespace fe
 	class BaseEntity;
 
 #define FE_COMPONENT_SETUP(type, name) \
-	virtual std::string GetComponentName() const override { return name; } \
-	static std::string GetName() { return name; } 
+	virtual std::string GetName() const override final { return name; } \
+	static std::string GetNameStatic() { return name; }
 
 	struct Component {};
 
@@ -28,9 +29,12 @@ namespace fe
 
 	struct DataComponent : Component
 	{
-		virtual std::string GetComponentName() const = 0;
-		static std::string GetName() { return ""; }
+		virtual std::string GetName() const = 0;
+		static std::string GetNameStatic() { return "Uknown DataComponent"; }
 		virtual bool IsSpatial() const { return false; }
+
+		virtual void SerializeBase(YAML::Emitter& emitter) { Serialize(emitter); }
+		virtual void DeserializeBase(YAML::Node& data) { Deserialize(data); }
 
 		virtual void DrawInspectorWidget(BaseEntity entity);
 		virtual void Serialize(YAML::Emitter& emitter);
@@ -41,6 +45,12 @@ namespace fe
 	{
 		Transform Offset;
 		virtual bool IsSpatial() const override final { return true; }
+
+		void SerializeOffset(YAML::Emitter& emitter);
+		void DeserializeOffset(YAML::Node& data);
+
+		virtual void SerializeBase(YAML::Emitter& emitter) override final { SerializeOffset(emitter); Serialize(emitter); }
+		virtual void DeserializeBase(YAML::Node& data)     override final { DeserializeOffset(data); Deserialize(data); }
 	};
 
 	struct ProtectedComponent : DataComponent
@@ -169,22 +179,25 @@ namespace fe
 	template <SimulationStages::Stages stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 
-	struct CMesh final : DataComponent
+	struct CMesh final : SpatialComponent
 	{
 		FE_COMPONENT_SETUP(CMesh, "Mesh");
 
 		AssetHandle<Mesh> Mesh;
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
 	};
 
 	struct CMaterialInstance final : DataComponent
 	{
 		FE_COMPONENT_SETUP(CMaterialInstance, "MaterialInstance");
 
-		// markmark
-		AssetHandle<MaterialInstance> MaterialInstance;// = MaterialInstanceLibrary::Get("Default3DMaterial_Instance");
+		AssetHandle<MaterialInstance> MaterialInstance;
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
 	};
 }

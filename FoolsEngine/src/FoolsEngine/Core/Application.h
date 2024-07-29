@@ -40,7 +40,6 @@ namespace fe
 				Time::TimeStep	GetLastFrameTimeStep()			{ return m_LastFrameTimeStep; }
 				ImGuiLayer*		GetImguiLayer()					{ return m_ImGuiLayer.get(); }
 				uint32_t		GetFrameCount()					{ return m_FrameCount; }
-				void			ActivateScene(Ref<Scene> scene) { m_ActiveScene = scene; }
 
 	protected:
 		void PushInnerLayer	(Ref<Layer> layer)	{ m_LayerStack.PushInnerLayer(layer);	}
@@ -52,6 +51,7 @@ namespace fe
 		friend int ::main(int argc, char** argv);
 
 		void Run();
+		void ShutDown() { FE_CORE_ASSERT(false, "implement this!"); };
 		void UpdateLayers();
 		void UpdateImGui();
 		void OnEvent(Ref<Events::Event> event);
@@ -69,7 +69,6 @@ namespace fe
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;
 		uint32_t	m_FrameCount	= 1;
-		Ref<Scene>	m_ActiveScene;
 
 		Time::TimePoint	m_LastFrameTimePoint;
 		Time::TimeStep	m_LastFrameTimeStep;
@@ -81,6 +80,9 @@ namespace fe
 		uint16_t	m_ProfilerFramesCount	= 0;
 #endif // FE_INTERNAL_BUILD
 
+		friend class AssetManager;
+		// Ownership
+		Scope<AssetManager> m_AssetManager;
 	};
 
 	// To be defined in FoolsEngine application (game)

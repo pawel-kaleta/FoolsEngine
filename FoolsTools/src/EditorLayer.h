@@ -32,7 +32,6 @@ namespace fe
 
 	private:
 
-
 		Ref<Scene> m_Scene;
 		Ref<Scene> m_SceneBackup;
 

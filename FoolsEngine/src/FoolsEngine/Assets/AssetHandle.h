@@ -6,75 +6,137 @@
 
 namespace fe
 {
-	template <typename tAssetBody> class AssetHandle
+	template <typename tnAsset>
+	class AssetObserver final : public tnAsset
 	{
 	public:
-		AssetHandle() = default;
-		AssetHandle(AssetID assetID) : m_AssetID(assetID) { }
-		~AssetHandle() { if (m_Active) GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--; }
+		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
 
-		// the following are here to prevent spreading m_Active
-		AssetHandle(const AssetHandle<tAssetBody>& other) : m_AssetID(other.m_AssetID) { }
-		AssetHandle(AssetHandle<tAssetBody>&& other) : m_AssetID(other.m_AssetID) { }
-		AssetHandle<tAssetBody>& operator=(const AssetHandle<tAssetBody>& other)
+		AssetObserver() = delete;
+		AssetObserver(const AssetObserver& other) = delete;
+		AssetObserver(AssetObserver&& other)      = delete;
+		AssetObserver& operator=(const AssetObserver& other) = delete;
+		AssetObserver& operator=(AssetObserver&& other)      = delete;
+		~AssetObserver() { if (IsValid()) GetRefCounters().ActiveObserversCount--; } //TODO: mutexes
+
+		AssetObserver(ECS_AssetHandle ECS_handle) :
+			tnAsset(ECS_handle)
 		{
-			m_AssetID = other.m_AssetID;
+#ifdef FE_INTERNAL_BUILD
+			char dummy;
+			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
+			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
+#endif // FE_INTERNAL_BUILD
 
-			return *this;
-		}
-		AssetHandle<tAssetBody>& operator=(AssetHandle<tAssetBody>&& other)
-		{
-			m_AssetID = other.m_AssetID;
-
-			return *this;
-		}
-
-		bool IsValid() { return NullAssetID != m_AssetID; }
-		bool IsActive() { return m_Active; }
-
-		void Activate()
-		{
-			FE_CORE_ASSERT(IsValid(), "Cannot activate invalid AssetHandle!");
-			FE_CORE_ASSERT(!m_Active, "Cannot activate active AssetHandle!");
-
-			GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount++;
-			m_Active = true;
-		}
-		void Deactivate()
-		{
-			FE_CORE_ASSERT(IsValid(), "Cannot deactivate invalid AssetHandle!");
-			FE_CORE_ASSERT(m_Active, "Cannot deactivate inactive AssetHandle!");
-
-			GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--;
-			m_Active = false;
-		}
-
-		void Reset(AssetID assetID)
-		{
-			if (m_Active)
+			if (IsValid())
 			{
-				GetRegistry()->get<ACSignature>(m_AssetID).m_ActiveHandleCount--;
-				m_Active = false;
+				GetRefCounters().ActiveObserversCount++; //TODO: mutexes
 			}
-			m_AssetID = assetID;
-		}
-		void Reset() { Reset(NullAssetID); }
+		};
+	};
 
-		template <typename tAC>
-		tAC* Get()
+	template <typename tnAsset>
+	class AssetUser final : public tnAsset
+	{
+	public:
+		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
+
+		AssetUser() = delete;
+		AssetUser(const AssetUser& other) = delete;
+		AssetUser(AssetUser&& other)      = delete;
+		AssetUser& operator=(const AssetUser& other) = delete;
+		AssetUser& operator=(AssetUser&& other)      = delete;
+		~AssetUser() { if (IsValid()) GetRefCounters().ActiveUser = false; } //TODO: mutexes
+
+		AssetUser(ECS_AssetHandle ECS_handle) :
+			tnAsset(ECS_handle)
 		{
-			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid");
-			return GetRegistry()->try_get<tAC>(m_AssetID);
+#ifdef FE_INTERNAL_BUILD
+			char dummy;
+			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
+			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
+#endif // FE_INTERNAL_BUILD
+
+			if (IsValid())
+			{
+				GetRefCounters().ActiveUser = true; //TODO: mutexes
+			}
+		};
+	};
+
+	template <typename tnAsset>
+	class AssetHandle
+	{
+	public:
+		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
+
+		AssetHandle() = default;
+		AssetHandle(ECS_AssetHandle assetHandle) :
+			m_ID(assetHandle.entity())
+		{
+			if (assetHandle)
+				assetHandle.get<ACRefsCounters>().LiveHandles++;
+		};
+		AssetHandle(AssetID assetID) :
+			m_ID(assetID)
+		{
+			auto ECShandle = GetECSHandle();
+			if (ECShandle.valid())
+				ECShandle.get<ACRefsCounters>().LiveHandles++;
+		};
+
+		~AssetHandle()
+		{
+			auto ECShandle = GetECSHandle();
+			if (ECShandle.valid())
+				ECShandle.get<ACRefsCounters>().LiveHandles--;
 		}
 
-		tAssetBody* AssetBody() { return Get<tAssetBody>(); }
-		ACSignature* Signature() { return Get<ACSignature>(); }
-		ACFilepath* Filepath() { return Get<ACFilepath>(); }
-		ACAssetProxy* AssetProxy() { return Get<ACAssetProxy>(); }
-	private:
-		constexpr static AssetRegistry* GetRegistry() { return AssetManager::GetRegistry<tAssetBody>(); }
+		AssetHandle(const AssetHandle& other) :
+			m_ID(other.m_ID)
+		{
+			auto ECShandle = GetECSHandle();
+			if (ECShandle.valid())
+				ECShandle.get<ACRefsCounters>().LiveHandles++;
+		};
+		AssetHandle(AssetHandle&& other) :
+			m_ID(other.m_ID)
+		{
+			other.m_ID = NullAssetID;
+		};
+		AssetHandle& operator=(const AssetHandle& other)
+		{
+			auto ECShandle = GetECSHandle();
+			if (ECShandle.valid())
+				ECShandle.get<ACRefsCounters>().LiveHandles--;
+			m_ID = other.m_ID;
+			ECShandle = GetECSHandle();
+			if (ECShandle.valid())
+				ECShandle.get<ACRefsCounters>().LiveHandles++;
 
-		AssetID m_AssetID = NullAssetID;
-		bool    m_Active = false;
+			return *this;
+		}
+		AssetHandle& operator=(AssetHandle&& other)
+		{
+			m_ID = other.m_ID;
+			other.m_ID = NullAssetID;
+
+			return *this;
+		}
+
+		bool operator==(const AssetHandle& other) const { return m_ID == other.m_ID; }
+
+		AssetID GetID() const { return m_ID; }
+		static AssetType GetType() { return tnAsset::GetTypeStatic(); }
+		UUID GetUUID() const { return GetECSHandle().get<ACUUID>().UUID; }
+
+		bool IsValid() const { return (bool)GetECSHandle(); }
+
+		const AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
+		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
+	private:
+		AssetID m_ID = NullAssetID;
+
+		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetType()), m_ID); };
 	};
 }

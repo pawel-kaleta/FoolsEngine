@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm\glm.hpp>
-#include "FoolsEngine\Renderer\3 - Representation\Transform.h"
+#include "Transform.h"
 
 namespace fe::Math
 {

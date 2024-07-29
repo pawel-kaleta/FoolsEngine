@@ -3,6 +3,8 @@
 #include <FoolsEngine.h>
 #include "EditorState.h"
 
+#include "EditorAssetManager.h"
+
 namespace fe
 {
 	enum class ToolbarButton
@@ -25,8 +27,8 @@ namespace fe
 		ToolbarButton m_ClickedButton = ToolbarButton::None;
 		EditorState m_EditorState;
 
-		Ref<Texture> m_IconPlay;
-		Ref<Texture> m_IconPause;
-		Ref<Texture> m_IconStop;
+		EditorAssetHandle<Texture2D> m_IconPlay;
+		EditorAssetHandle<Texture2D> m_IconPause;
+		EditorAssetHandle<Texture2D> m_IconStop;
 	};
 }

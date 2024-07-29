@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+
 namespace fe
 {
 	size_t Mesh::GetVertexCount() const
@@ -102,33 +104,40 @@ namespace fe
 			return;
 		}
 
-		auto& material = materialInstance->GetMaterial();
-		auto& shader = material->GetShader();
+		auto& material_instance = materialInstance.Use();
+		auto& material = material_instance.GetMaterial().Observe();
+		auto& shader = material.GetShader().Use();
 
-		for (auto& uniform : material->GetUniforms())
+		auto GDI = Renderer::GetActiveGDItype();
+
+		for (auto& uniform : material.GetUniforms())
 		{
-			shader->UploadUniform(
+			shader.UploadUniform(
+				GDI,
 				uniform,
-				materialInstance->GetUniformValuePtr(uniform)
+				material_instance.GetUniformValuePtr(uniform)
 			);
 		}
 
-		auto& textureSlots = material->GetTextureSlots();
+		auto& textureSlots = material.GetTextureSlots();
 		uint32_t rendererTextureSlot = 0;
 		// markmark 
+		FE_CORE_ASSERT(false, "");
 		//auto whiteTexture = TextureLibrary::Get("WhiteTexture");
 		for (auto& textureSlot : textureSlots)
 		{
-			auto& texture = materialInstance->GetTexture(textureSlot);
+			auto& texture = material_instance.GetTexture(textureSlot).Use();
 
-			if (texture)
-				texture->Bind(rendererTextureSlot);
+			if (texture.IsValid())
+				texture.Bind(GDI, rendererTextureSlot);
 			else
-				;// dummy
+			{
+				FE_CORE_ASSERT(false, "");
 				// markmark 
 				// whiteTexture->Bind(rendererTextureSlot);
+			}
 
-			shader->BindTextureSlot(textureSlot, rendererTextureSlot);
+			shader.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
 
 			rendererTextureSlot++;
 		}

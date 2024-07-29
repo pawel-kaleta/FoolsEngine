@@ -8,27 +8,27 @@
 #include "Scene.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Assets\MeshImporter.h"
-#include "FoolsEngine\Assets\AssetLibrary.h"
-#include "FoolsEngine\Assets\TextureLoader.h"
 
+#include "FoolsEngine\Assets\Serializers\SceneSerializer.h"
+#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
-#include "FoolsEngine\Assets\SceneSerializer.h"
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 namespace fe
 {
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
-		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetComponentName());
+		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetName());
 	}
 
 	void DataComponent::Serialize(YAML::Emitter& emitter)
 	{
-		FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetComponentName());
+		FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetName());
 	}
 
 	void DataComponent::Deserialize(YAML::Node& data)
 	{
-		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetComponentName());
+		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetName());
 	}
 
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
@@ -130,32 +130,34 @@ namespace fe
 
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		// markmark
-		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
-		AssetHandle<Texture> flat_color_texture;//dummy
-		auto& textures = AssetLibrary::GetAll<Texture>();
+		auto flat_color_texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
 
-		auto item_current = Tile.Texture;
-		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
-		if (ImGui::BeginCombo("Texture", combo_preview_value))
+		
+		std::string combo_preview_value = Tile.Texture.GetID() == flat_color_texture.GetID() ? "None" : std::to_string(Tile.Texture.GetID()) + ": " + Tile.Texture.Observe().GetName();
+
+		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
 		{
-			bool is_selected = (item_current->GetID() == flat_color_texture->GetID());
+			auto item_current = Tile.Texture;
+			bool is_selected = (Tile.Texture.GetID() == flat_color_texture.GetID());
 
 			if (ImGui::Selectable("None", is_selected))
 				item_current = flat_color_texture;
 
-			for (auto it = textures.begin(); it != textures.end(); ++it)
+			auto textures = AssetManager::GetAll<Texture2D>();
+			for (auto id : textures)
 			{
-				auto& texture = it->second.GetHandle<Texture>();
+				auto texture = AssetHandle<Texture2D>(id);
+				auto textureObserver = texture.Observe();
 
-				if (texture->GetComponents() != TextureData::Components::RGB_F)
+				if (textureObserver.GetSpecification()->Specification.Components != TextureData::Components::RGB_F)
 					continue;
 
-				if (texture->GetID() == flat_color_texture->GetID())
+				if (id == flat_color_texture.GetID())
 					continue;
 
-				is_selected = (item_current->GetID() == texture->GetID());
-				if (ImGui::Selectable(texture->GetName().c_str(), is_selected))
+				is_selected = (item_current.GetID() == id);
+				std::string name = std::to_string(id) + ": " + textureObserver.GetName();
+				if (ImGui::Selectable(name.c_str(), is_selected))
 					item_current = texture;
 
 				if (is_selected)
@@ -166,23 +168,36 @@ namespace fe
 				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 				if (!newTextureFilepath.empty())
 				{
-					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
-					// markmark
-					//if (!TextureLibrary::Exist(textureName))
-					//{
-					//	Texture* texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-					//	TextureLibrary::Add(texture);
-					//}
-					//item_current = TextureLibrary::Get(textureName);
+					bool found = false;
+
+					for (auto id : textures)
+					{
+						auto texture = AssetHandle<Texture2D>(id);
+						if (texture.Observe().GetFilepath().Filepath == newTextureFilepath)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (!found)
+					{
+						auto texture = AssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+						auto textureUser = texture.Use();
+						TextureLoader::LoadTexture(newTextureFilepath, textureUser);
+						//textureUser.CreateGDITexture2D<OpenGLTexture2D>();
+
+						if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB_F)
+							item_current = texture;
+					}
 				}
 			}
+			Tile.Texture = item_current;
 
 			ImGui::EndCombo();
 		}
 
-		Tile.Texture = item_current;
-
-		if (item_current->GetID() == flat_color_texture->GetID())
+		if (Tile.Texture.GetID() == flat_color_texture.GetID())
 		{
 			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
 		}
@@ -197,54 +212,40 @@ namespace fe
 	void CTile::Serialize(YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Color"   << YAML::Value << Tile.Color;
-		emitter << YAML::Key << "Texture" << YAML::Value << Tile.Texture->GetFilePath().c_str();
+		emitter << YAML::Key << "Texture" << YAML::Value << Tile.Texture;
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Tile.TextureTilingFactor;
 	}
 
 	void CTile::Deserialize(YAML::Node& data)
 	{
 		Tile.Color = data["Color"].as<glm::vec4>();
-
-		const std::string textureFilePath = data["Texture"].as<std::string>();
-		std::string textureName;
-		if (textureFilePath.empty())
-			textureName = "Base2DTexture";
-		else
-			textureName = FileNameFromFilepath(textureFilePath);
-
-		// markmark
-		//if (!TextureLibrary::Exist(textureName))
-		//	TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
-		//
-		//Tile.Texture = TextureLibrary::Get(textureName);
-
+		Tile.Texture = data["Texture"].as<AssetHandle<Texture2D>>();
 		Tile.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto& textures = AssetLibrary::GetAll<Texture>();
-		// markmark
-		//auto flat_color_texture = TextureLibrary::Get("Base2DTexture");
-		AssetHandle<Texture> flat_color_texture;
+		auto flat_color_texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+		std::string combo_preview_value = Sprite.Texture.GetID() == flat_color_texture.GetID() ? "None" : std::to_string(Sprite.Texture.GetID()) + ": " + Sprite.Texture.Observe().GetName();
 
-		auto item_current = Sprite.Texture;
-		const char* combo_preview_value = item_current->GetID() == flat_color_texture->GetID() ? "None" : item_current->GetName().c_str();
-		if (ImGui::BeginCombo("Texture", combo_preview_value))
+		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
 		{
-			bool is_selected = (item_current->GetID() == flat_color_texture->GetID());
+			auto item_current = Sprite.Texture;
+			bool is_selected = (Sprite.Texture.GetID() == flat_color_texture.GetID());
 
 			if (ImGui::Selectable("None", is_selected))
 				item_current = flat_color_texture;
 
-			for (auto it = textures.begin(); it != textures.end(); ++it)
+			auto textures = AssetManager::GetAll<Texture2D>();
+			for (auto id : textures)
 			{
-				auto texture = it->second.GetHandle<Texture>();
-				if (texture->GetID() == flat_color_texture->GetID())
+				auto texture = AssetHandle<Texture2D>(id);
+				if (id == flat_color_texture.GetID())
 					continue;
 
-				is_selected = (item_current->GetID() == texture->GetID());
-				if (ImGui::Selectable(texture->GetName().c_str(), is_selected))
+				is_selected = (item_current.GetID() == id);
+				std::string name = std::to_string(id) + ": " + texture.Observe().GetName();
+				if (ImGui::Selectable(name.c_str(), is_selected))
 					item_current = texture;
 
 				if (is_selected)
@@ -256,23 +257,32 @@ namespace fe
 				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 				if (!newTextureFilepath.empty())
 				{
-					const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
+					bool found = false;
 
-					// markmark
-					//if (!TextureLibrary::Exist(textureName))
-					//{
-					//	Texture* texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-					//	TextureLibrary::Add(texture);
-					//}
-					//item_current = TextureLibrary::Get(textureName);
+					for (auto id : textures)
+					{
+						auto texture = AssetHandle<Texture2D>(id);
+						if (texture.Observe().GetFilepath().Filepath == newTextureFilepath)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (!found)
+					{
+						auto texture = AssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+						auto textureUser = texture.Use().GetFilepath().Filepath = newTextureFilepath;
+
+						item_current = texture;
+					}
 				}
 			}
+			Sprite.Texture = item_current;
 			ImGui::EndCombo();
 		}
 
-		Sprite.Texture = item_current;
-
-		if (item_current->GetID() == flat_color_texture->GetID())
+		if (Sprite.Texture.GetID() == flat_color_texture.GetID())
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));
 		}
@@ -287,49 +297,37 @@ namespace fe
 	void CSprite::Serialize(YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Color"   << YAML::Value << Sprite.Color;
-		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture->GetFilePath().c_str();
+		emitter << YAML::Key << "Texture" << YAML::Value << Sprite.Texture;
 		emitter << YAML::Key << "Tiling"  << YAML::Value << Sprite.TextureTilingFactor;
 	}
 
 	void CSprite::Deserialize(YAML::Node& data)
 	{
 		Sprite.Color = data["Color"].as<glm::vec4>();
-
-		const std::string textureFilePath = data["Texture"].as<std::string>();
-		std::string textureName;
-		if (textureFilePath.empty())
-			textureName = "Base2DTexture";
-		else
-			textureName = FileNameFromFilepath(textureFilePath);
-
-		// markmark
-		//if (!TextureLibrary::Exist(textureName))
-		//	TextureLibrary::Add(Texture2D::Create(textureFilePath, TextureData::Usage::Map_Albedo));
-		//
-		//Sprite.Texture = TextureLibrary::Get(textureName);
-
+		Sprite.Texture = data["Texture"].as<AssetHandle<Texture2D>>();
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
 	void CMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		const char* combo_preview_value = !Mesh ? "None" : Mesh->GetName().c_str();
+		const char* combo_preview_value = !Mesh.IsValid() ? "None" : Mesh.Observe().GetName().c_str();
 		if (ImGui::BeginCombo("Mesh ", combo_preview_value))
 		{
-			bool is_selected = !(Mesh);
+			bool is_selected = !(Mesh.IsValid());
 
 			if (ImGui::Selectable("None", is_selected))
 				Mesh = AssetHandle<fe::Mesh>();
 
-			auto& mesheLibRecords = AssetLibrary::GetAll<fe::Mesh>();
-			for (auto& meshLibRecord : mesheLibRecords)
-			{
-				fe::Mesh* nextMesh = (fe::Mesh*)meshLibRecord.second.GetAssetPtr();
-				is_selected = Mesh ? (Mesh.Raw() == nextMesh) : false;
+			auto meshes = AssetManager::GetAll<fe::Mesh>();
 
-				if (ImGui::Selectable(nextMesh->GetName().c_str(), is_selected))
+			for (auto id : meshes)
+			{
+				auto nextMesh = AssetHandle<fe::Mesh>(id);
+				is_selected = Mesh.IsValid() ? (Mesh.GetID() == id) : false;
+
+				if (ImGui::Selectable(nextMesh.Observe().GetName().c_str(), is_selected))
 				{
-					Mesh = meshLibRecord.second.GetHandle<fe::Mesh>();
+					Mesh = nextMesh;
 				}
 
 				if (is_selected)
@@ -341,6 +339,8 @@ namespace fe
 				const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
 				if (!modelFilepath.empty())
 				{
+					FE_CORE_ASSERT(false, "");
+					// markmark
 					//auto newMeshes = ModelImporter::Import(modelFilepath);
 					//for (auto& mesh : newMeshes)
 					//{
@@ -354,23 +354,34 @@ namespace fe
 		}
 	}
 
+	void CMesh::Serialize(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Mesh" << YAML::Value << Mesh; 
+	}
+
+	void CMesh::Deserialize(YAML::Node& data)
+	{ 
+		Mesh = data[Mesh].as<AssetHandle<fe::Mesh>>();
+	}
+
 	void CMaterialInstance::DrawInspectorWidget(BaseEntity entity)
 	{
 		// TO DO: component's widget should not be responsible for creating underlying object
 
-		auto materialInstance_combo_preview = MaterialInstance->GetName().c_str();
+		const char* materialInstance_combo_preview = MaterialInstance.Observe().GetName().c_str();
+
 		if (ImGui::BeginCombo("Material Instance", materialInstance_combo_preview))
 		{
 			bool is_selected;
 
-			auto& materialInstanceLibRecords = AssetLibrary::GetAll<fe::MaterialInstance>();
-			for (auto& materialInstanceLibRecord : materialInstanceLibRecords)
+			auto materialInstances = AssetManager::GetAll<fe::MaterialInstance>();
+			for (auto id : materialInstances)
 			{
-				auto nextMatInst = materialInstanceLibRecord.second.GetHandle<fe::MaterialInstance>();
+				auto nextMatInst = AssetHandle<fe::MaterialInstance>(id);
 				
-				is_selected = (MaterialInstance.Raw() == nextMatInst.Raw());
+				is_selected = (MaterialInstance.GetID() == id);
 
-				if (ImGui::Selectable(nextMatInst->GetName().c_str(), is_selected))
+				if (ImGui::Selectable(nextMatInst.Observe().GetName().c_str(), is_selected))
 				{
 					MaterialInstance = nextMatInst;
 				}
@@ -382,40 +393,48 @@ namespace fe
 			if (ImGui::Selectable("Add..."))
 			{
 				// markmark
-				// add creating a file!
-				//MaterialInstance = Ref<fe::MaterialInstance>(new fe::MaterialInstance());
-				//MaterialInstance->SetName(std::to_string(MaterialInstance->GetUUID()));
-				//MaterialInstance->Init(MaterialLibrary::Get("Default3DMaterial"));
-				//MaterialInstanceLibrary::Add(MaterialInstance);
+				// create file / read file
+				MaterialInstance = AssetHandle<fe::MaterialInstance>( AssetManager::NewAsset<fe::MaterialInstance>() );
+				auto miUser = MaterialInstance.Use();
+				MaterialInstance::MakeMaterialInstance(miUser);
+				auto material = AssetHandle<Material>((AssetID)BaseAssets::Materials::Default3D);
+				miUser.Init(material);
 			}
 
 			ImGui::EndCombo();
 		}
 
-		auto& name = MaterialInstance->GetName();
 		static char buffer[256];
-		memset(buffer, 0, sizeof(buffer));
-		strncpy_s(buffer, name.c_str(), sizeof(buffer));
+		{
+			auto miObserver = MaterialInstance.Observe();
+			auto& name = miObserver.GetName();
+			memset(buffer, 0, sizeof(buffer));
+			strncpy_s(buffer, name.c_str(), sizeof(buffer));
+		}
 		if (ImGui::InputText("Name", buffer, sizeof(buffer)))
 		{
-			MaterialInstance->SetName(buffer);
+			FE_CORE_ASSERT(false, "What? Should name change be happening here at all? Is this an artifact of prototyping?");
+			// markmark
+			//MaterialInstance.Use().GetName()SetName(buffer);
 		}
 
-		auto material_current = MaterialInstance->GetMaterial();
+		auto miUser = MaterialInstance.Use();
+		auto material_current = miUser.GetMaterial();
 
-		if (ImGui::BeginCombo("Material", material_current->GetName().c_str()))
+		if (ImGui::BeginCombo("Material", material_current.Observe().GetName().c_str()))
 		{
 			bool is_selected;
 
-			auto& materialLibRecords = AssetLibrary::GetAll<Material>();
-			for (auto& materialLibRecord : materialLibRecords)
-			{
-				auto materialHandle = materialLibRecord.second.GetHandle<Material>();
-				is_selected = (material_current.Raw() == materialHandle.Raw());
+			auto materials = AssetManager::GetAll<Material>();
 
-				if (ImGui::Selectable(materialHandle->GetName().c_str(), is_selected))
+			for (auto id : materials)
+			{
+				AssetHandle<Material> materialHandle(id);
+				is_selected = (material_current.GetID() == id);
+
+				if (ImGui::Selectable(materialHandle.Observe().GetName().c_str(), is_selected))
 				{
-					MaterialInstance->Init(materialHandle);
+					miUser.Init(materialHandle);
 					material_current = materialHandle;
 				}
 
@@ -426,39 +445,37 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		auto& uniforms = MaterialInstance->GetMaterial()->GetUniforms();
+		auto materialObserver = miUser.GetMaterial().Observe();
+
+		auto& uniforms = materialObserver.GetUniforms();
 
 		for (auto& uniform : uniforms)
 		{
-			ImGuiLayer::RenderUniform(uniform, MaterialInstance->GetUniformValuePtr(uniform));
+			ImGuiLayer::RenderUniform(uniform, miUser.GetUniformValuePtr(uniform));
 		}
 
-		auto& textureSlots = MaterialInstance->GetMaterial()->GetTextureSlots();
+		auto& textureSlots = materialObserver.GetTextureSlots();
 
 		for (auto& textureSlot : textureSlots)
 		{
-			auto& texture_current = MaterialInstance->GetTexture(textureSlot);
-			//uint32_t texture_current_ID = 0;
-			//if (texture_current)
-			//	texture_current_ID = texture_current->GetID();
+			auto texture_current = miUser.GetTexture(textureSlot);
 			bool newSelection = false;
 
-			const char* texture_combo_preview = !texture_current ? "None" : texture_current->GetName().c_str();
+			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetName().c_str();
 			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
 			{
-				bool is_selected = !(texture_current);
+				bool is_selected = !(texture_current.IsValid());
 
 				if (ImGui::Selectable("None", is_selected))
-					MaterialInstance->SetTexture(textureSlot, AssetHandle<Texture>());
+					miUser.SetTexture(textureSlot, AssetHandle<Texture2D>());
 
-				auto& textureLibRecords = AssetLibrary::GetAll<Texture>();
-				for (auto& textureLibRecord : textureLibRecords)
+				auto textures = AssetManager::GetAll<Texture2D>();
+				for (auto id : textures)
 				{
-					auto textureHandle = textureLibRecord.second.GetHandle<Texture>();
-					//is_selected = (texture_current_ID == .second->GetID());
-					is_selected = (texture_current.Raw() == textureHandle.Raw());
+					auto textureHandle = AssetHandle<Texture2D>(id);
+					is_selected = (texture_current.GetID() == textureHandle.GetID());
 
-					if (ImGui::Selectable(textureHandle->GetName().c_str(), is_selected))
+					if (ImGui::Selectable(textureHandle.Observe().GetName().c_str(), is_selected))
 					{
 						newSelection = true;
 						texture_current = textureHandle;
@@ -474,6 +491,9 @@ namespace fe
 					if (!newTextureFilepath.empty())
 					{
 						//to do: detecting reloading same texture
+
+						FE_CORE_ASSERT(false, "");
+						// markmark
 						
 						//const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
 						//if (!TextureLibrary::Exist(textureName))
@@ -482,9 +502,9 @@ namespace fe
 							//Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
 							//TextureLibrary::Add(texture);
 						//}
-
-						texture_current = TextureLoader::LoadTexture(newTextureFilepath);
-						newSelection = true;
+						
+						//texture_current = TextureLoader::LoadTexture(newTextureFilepath);
+						//newSelection = true;
 					}
 				}
 
@@ -493,8 +513,37 @@ namespace fe
 
 			if (newSelection)
 			{
-				MaterialInstance->SetTexture(textureSlot, texture_current);
+				miUser.SetTexture(textureSlot, texture_current);
 			}
 		}
+	}
+
+	void CMaterialInstance::Serialize(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "MaterialInstance" << YAML::Value << MaterialInstance;
+	}
+
+	void CMaterialInstance::Deserialize(YAML::Node& data)
+	{
+		MaterialInstance = data[MaterialInstance].as<AssetHandle<fe::MaterialInstance>>();
+	}
+
+	void SpatialComponent::SerializeOffset(YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Offset" << YAML::BeginMap;
+
+		emitter << YAML::Key << "Shift"    << YAML::Value << Offset.Shift;
+		emitter << YAML::Key << "Rotation" << YAML::Value << Offset.Rotation;
+		emitter << YAML::Key << "Scale"    << YAML::Value << Offset.Scale;
+
+		emitter << YAML::EndMap;
+	}
+
+	void SpatialComponent::DeserializeOffset(YAML::Node& data)
+	{
+		auto& node = data["Offset"];
+		Offset.Shift = node["Shift"].as<glm::vec3>();
+		Offset.Rotation = node["Rotation"].as<glm::vec3>();
+		Offset.Scale = node["Scale"].as<glm::vec3>();
 	}
 }

@@ -20,7 +20,7 @@ namespace fe
 		const ShaderData::Type&     GetType()      const { return m_Type; }
 		const ShaderData::Structure GetStructure() const { return ShaderData::StructureInType(m_Type); }
 		const ShaderData::Primitive GetPrimitive() const { return ShaderData::PrimitiveInType(m_Type); }
-		const uint32_t              GetSize()      const { return SizeOfType(m_Type) * m_Count; }
+		const uint32_t              GetSize()      const { return ShaderData::SizeOfType(m_Type) * m_Count; }
 		const uint32_t              GetCount()     const { return m_Count; }
 	private:
 		std::string      m_Name;

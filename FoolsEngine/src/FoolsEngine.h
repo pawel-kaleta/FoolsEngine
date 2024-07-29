@@ -28,9 +28,10 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
-#include "FoolsEngine\Assets\SceneSerializer.h"
+#include "FoolsEngine\Assets\Serializers\SceneSerializer.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Math\Math.h"
+#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"

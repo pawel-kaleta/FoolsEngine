@@ -4,6 +4,8 @@
 
 namespace fe
 {
+	using OpenGLID = uint32_t;
+
 	class OpenGLDeviceAPI : public DeviceAPI
 	{
 	public:

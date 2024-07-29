@@ -16,7 +16,12 @@ namespace fe
 		template <typename tnComponent>
 		void ScheduleErasure(EntityID entityID)
 		{
-			m_Erasures.push_back( ErasureEnroll{ &Registry::erase<tnComponent>,	entityID } );
+			m_Erasures.push_back( ErasureEnroll{
+#ifdef FE_INTERNAL_BUILD
+				&Registry::all_of<tnComponent>,
+#endif // FE_INTERNAL_BUILD
+				&Registry::erase<tnComponent>,
+				entityID } );
 		}
 
 		void DestroyComponents(Registry& registry)
@@ -27,6 +32,12 @@ namespace fe
 			{
 				auto& funcPtr = enroll.EraseFunkPtr;
 				auto& entityID = enroll.m_EntityID;
+
+#ifdef FE_INTERNAL_BUILD
+				auto& allOfPtr = enroll.AllOfFunkPtr;
+				FE_CORE_ASSERT((registry.*allOfPtr)(entityID), "Entity does not have this component! Use RemoveIfExist if you are unsure whether this component could have be scheduled for destruction somewhere else before.");
+#endif // FE_INTERNAL_BUILD
+				
 				(registry.*funcPtr)(entityID);
 			}
 
@@ -51,6 +62,9 @@ namespace fe
 
 		struct ErasureEnroll
 		{
+#ifdef FE_INTERNAL_BUILD
+			bool (Registry::* AllOfFunkPtr)(EntityID);
+#endif // FE_INTERNAL_BUILD
 			void (Registry::* EraseFunkPtr)(EntityID);
 			EntityID m_EntityID;
 		};

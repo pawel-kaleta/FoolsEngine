@@ -5,41 +5,22 @@
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
+#include "YAML.h"
+#include "AssetsSerializer.h"
 
 #include <fstream>
 
 
 namespace fe
 {
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Entity& entity)
-	{
-		if (entity)
-			out << entity.Get<CUUID>().UUID;
-		else
-			out << UUID(0);
-
-		return out;
-	}
-
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
-	{
-		out << YAML::Flow;
-		out << YAML::BeginSeq << v.x << v.y << v.z << YAML::EndSeq;
-		return out;
-	}
-
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v)
-	{
-		out << YAML::Flow;
-		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
-		return out;
-	}
-
 	void SceneSerializerYAML::Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
 	{
 		YAML::Emitter emitter;
 
+		emitter << YAML::BeginMap;
+		AssetSerializer::Serialize(emitter);
 		Serialize(scene, emitter);
+		emitter << YAML::EndMap;
 
 		std::ofstream fout(filepath);
 		fout << emitter.c_str();
@@ -48,14 +29,21 @@ namespace fe
 	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
 	{
 		YAML::Node node = YAML::LoadFile(filepath.string());
-		return Deserialize(scene, node);
+		if (!AssetSerializer::Deserialize(node))
+			return false;
+		if (!Deserialize(scene, node))
+			return false;
+		AssetManager::EvaluateAndReload();
+		return true;
 	}
 
 	std::string SceneSerializerYAML::Serialize(const Ref<Scene> scene)
 	{
 		YAML::Emitter emitter;
 
+		emitter << YAML::BeginMap;
 		Serialize(scene, emitter);
+		emitter << YAML::EndMap;
 
 		std::string out = emitter.c_str();
 		return out;
@@ -69,7 +57,6 @@ namespace fe
 	
 	void SceneSerializerYAML::Serialize(const Ref<Scene>& scene, YAML::Emitter& emitter)
 	{
-		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
 			emitter << YAML::Key << "Name" << YAML::Value << scene->GetName();
@@ -81,7 +68,6 @@ namespace fe
 			SerializeGameplayWorld(scene->GetGameplayWorld(), emitter);
 		}
 		emitter << YAML::EndMap; //Worlds
-		emitter << YAML::EndMap;
 	}
 
 	bool SceneSerializerYAML::Deserialize(const Ref<Scene>& scene, YAML::Node& node)
@@ -99,7 +85,10 @@ namespace fe
 
 		auto& worlds = node["Worlds"];
 		if (!worlds) return false;
-		return DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]);
+		if (!DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]))
+			return false;
+
+		return true;
 	}
 
 	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
@@ -301,7 +290,7 @@ namespace fe
 
 	void SceneSerializerYAML::SerializeTransform(Transform transform, YAML::Emitter& emitter)
 	{
-		emitter << YAML::Key << "Position" << YAML::Value << transform.Position;
+		emitter << YAML::Key << "Shift"    << YAML::Value << transform.Shift;
 		emitter << YAML::Key << "Rotation" << YAML::Value << transform.Rotation;
 		emitter << YAML::Key << "Scale"    << YAML::Value << transform.Scale;
 	}
@@ -316,8 +305,8 @@ namespace fe
 			auto* component = (entity.*getPtr)();
 			if (component)
 			{
-				emitter << YAML::Key << component->GetComponentName() << YAML::BeginMap;
-				component->Serialize(emitter);
+				emitter << YAML::Key << component->GetName() << YAML::BeginMap;
+				component->SerializeBase(emitter);
 				emitter << YAML::EndMap;
 			}
 		}
@@ -408,7 +397,10 @@ namespace fe
 
 			auto& entities = actor["Entities"];
 			if (entities)
-				DeserializeEntities(world, entities);
+			{
+				if (!DeserializeEntities(world, entities))
+					return false;
+			}
 			else
 				return false;
 			
@@ -469,8 +461,7 @@ namespace fe
 			if (!entity["UUID"] || !entity["Entity"] || !entity["Head"] || !entity["Tags"] || !entity["Node"] || !entity["Transform"])
 				return false;
 
-			// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in future
-			// would be best propably for the world to emplace all protected components and deserialization only overriding data - in case of fail we have a default fallback
+			// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
 			BaseEntity newEntity = world->CreateOrGetEntityWithUUID(entity["UUID"].as<UUID>());
 			newEntity.Emplace<CEntityName>(entity["Entity"].as<std::string>());
 
@@ -502,7 +493,7 @@ namespace fe
 					(newEntity.*createFunkPtr)();
 					auto& getFunkPtr = item.Getter;
 					DataComponent* component = (newEntity.*getFunkPtr)();
-					component->Deserialize(compData);
+					component->DeserializeBase(compData);
 				}
 			}
 		}
@@ -524,7 +515,7 @@ namespace fe
 	bool SceneSerializerYAML::DeserializeTransform(YAML::Node& data, Transform& transform)
 	{
 		bool success = true;
-		if(data["Position"]) transform.Position = data["Position"].as<glm::vec3>();	else success = false;
+		if(data["Shift"]) transform.Shift = data["Shift"].as<glm::vec3>();	else success = false;
 		if(data["Rotation"]) transform.Rotation = data["Rotation"].as<glm::vec3>();	else success = false;
 		if(data["Scale"   ]) transform.Scale    = data["Scale"   ].as<glm::vec3>();	else success = false;
 		return success;

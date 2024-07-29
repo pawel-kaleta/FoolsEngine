@@ -11,7 +11,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		RegisterAndLoadStuff(); //SceneTesting.h
+		//RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
 	void EditorLayer::OnAttach()
@@ -43,6 +43,7 @@ namespace fe
 
 		m_Viewports.EditViewport.OnUpdate();
 
+		AssetManager::EvaluateAndReload();
 		m_Viewports.EditViewport.RenderScene();
 		m_Viewports.PlayViewport.RenderScene();
 	}
@@ -173,7 +174,10 @@ namespace fe
 			if (ImGui::BeginMenu("Debug"))
 			{
 				if (ImGui::MenuItem("Spawn Test Scene Objects"))
+				{
+					RegisterAndLoadStuff(); //SceneTesting.h
 					TestSceneSetup(m_Scene);
+				}
 
 				ImGui::EndMenu();
 			}
@@ -253,6 +257,9 @@ namespace fe
 	void EditorLayer::SetSelectionContext()
 	{
 		FE_PROFILER_FUNC();
+
+		if (!m_Scene->GetGameplayWorld()->GetRegistry().valid(m_SelectedEntityID))
+			m_SelectedEntityID = NullEntityID;
 
 		m_Panels.WorldHierarchyPanel.SetSelection(m_SelectedEntityID);
 		m_Panels.EntityInspector.OpenEntity(m_SelectedEntityID);

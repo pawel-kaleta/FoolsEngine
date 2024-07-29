@@ -1,0 +1,104 @@
+Assets:
+  Scenes:
+    []
+  Textures:
+    []
+  Textures2D:
+    - UUID: 1235044501499084131
+      Filepath: assets\textures\Texture_with_Transparency.png
+    - UUID: 13196037493420593378
+      Filepath: assets\textures\grassland.jpg
+  Meshes:
+    []
+  Models:
+    []
+  Shaders:
+    []
+  Materials:
+    []
+  MaterialInstances:
+    []
+  Audio:
+    []
+Scene Properties:
+  Name: Untitled Scene
+  UUID: 9445016957539630837
+Worlds:
+  GameplayWorld:
+    Properties:
+      RootID: 10466039629654299369
+      RootNode:
+        Parent: 0
+        HierarchyLvl: 0
+        PreviousSibling: 0
+        NextSibling: 0
+        ChildrenCount: 1
+        FirstChild: 2310104987145480360
+      Primary Camera: 0
+    Systems:
+      []
+    System Updates:
+      FrameStart:
+        []
+      PrePhysics:
+        []
+      Physics:
+        []
+      PostPhysics:
+        []
+      FrameEnd:
+        []
+    Actors:
+      - Actor: Actor
+        UUID: 2310104987145480360
+        Behaviors:
+          []
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            []
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Actor
+            UUID: 2310104987145480360
+            Head: 2310104987145480360
+            Tags: 0
+            Node:
+              Parent: 10466039629654299369
+              HierarchyLvl: 1
+              PreviousSibling: 0
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+            Tile:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 13196037493420593378
+                Name: grassland
+              Tiling: 1
+            Sprite:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 1235044501499084131
+                Name: Texture_with_Transparency
+              Tiling: 1

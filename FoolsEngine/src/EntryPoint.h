@@ -35,6 +35,8 @@ int main(int argc, char** argv)
 	FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 
+	app->ShutDown();
+
 	fe::Log::SetClientLoggingLevel(spdlog::level::trace);
 	fe::Log::SetCoreLoggingLevel(spdlog::level::trace);
 

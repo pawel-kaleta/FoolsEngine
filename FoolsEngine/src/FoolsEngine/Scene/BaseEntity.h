@@ -45,7 +45,7 @@ namespace fe
 			static_assert(std::is_base_of_v<DataComponent, tnComponent>, "This is not a component!");
 			
 			FE_CORE_ASSERT(!AnyOf<tnComponent>(), "This Entity already have this component");
-			return m_Handle.emplace<tnComponent>(args...);
+			return m_Handle.emplace<tnComponent>(std::forward<Args>(args)...);
 		}
 
 		template <typename tnComponent>

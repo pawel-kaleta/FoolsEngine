@@ -60,7 +60,7 @@ namespace fe
 		template <typename tnComponent>
 		void ScheduleComponentDestructionUnsafe(tnComponent* componentPointer, EntityID entityID)
 		{
-			m_DestructionManager.ScheduleDestructionUnsafe<tnComponent>(entityID);
+			m_DestructionManager.ScheduleErasure<tnComponent>(entityID);
 		}
 
 		template <SimulationStages::Stages stage>

@@ -6,6 +6,7 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
+#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 
 namespace fe
 {
@@ -15,10 +16,13 @@ namespace fe
 		const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
 
 		static void Init();
-		static void Shutdown() {}
+		static void CreateBaseAssets();
+		static void UploadBaseAssetsToGPU(GDIType GDI);
+		static void Shutdown();
 		static void SetAPI(GDIType GDI);
 		static void CreateAPI(GDIType GDI);
 		static void InitAPI(GDIType GDI);
+
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
@@ -27,7 +31,7 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetHandle<MaterialInstance>& materialInstance,
+			AssetHandle<MaterialInstance> materialInstance,
 			const glm::mat4& transform)
 		{
 			Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
@@ -35,7 +39,7 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetHandle<MaterialInstance>& materialInstance,
+			const AssetHandle<MaterialInstance> materialInstance,
 			const glm::mat4& transform,
 			const glm::mat4& VPMatrix
 		);
