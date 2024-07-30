@@ -12,21 +12,21 @@ namespace fe
 {
     bool InputPolling::IsKeyPressed(int keycode)
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetWindow().GetNativeWindow());
         auto state = glfwGetKey(window, keycode);
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
     bool InputPolling::IsMouseButtonPressed(int button)
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetWindow().GetNativeWindow());
         auto state = glfwGetMouseButton(window, button);
         return state == GLFW_PRESS;
     }
 
     glm::vec2 InputPolling::GetMousePosition()
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetWindow().GetNativeWindow());
         double x, y;
         glfwGetCursorPos(window, &x, &y);
         return { (float)x, (float)y };

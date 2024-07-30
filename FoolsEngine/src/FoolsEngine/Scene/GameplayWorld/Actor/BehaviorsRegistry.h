@@ -8,42 +8,42 @@ namespace fe
 	class BehaviorsRegistry
 	{
 	public:
-		static BehaviorsRegistry& GetInstance() { return s_Instance; }
-
 		struct Item
 		{
 			Behavior*   (Actor::* Create)();
-			std::string (BehaviorsRegistry::* Name)();
+			std::string (* GetName)();
 		};
 
-		void RegisterBehaviors();
-
 		template <typename tnBehavior>
-		void RegisterBehavior()
+		static void RegisterBehavior()
 		{
-			Items.push_back(
+			Get().m_Items.push_back(
 				Item{
 					&Actor::CreateBehaviorAsBase<tnBehavior>,
-					&BehaviorsRegistry::GetName<tnBehavior>
+					&tnBehavior::GetNameStatic
 				}
 			);
 		}
 
-		const Item* GetItemFromName(const std::string& name);
-
+		static const Item* GetItemFromName(const std::string& name) { return Get().GetItemFromNameInternal(name); }
+		static std::vector<Item>& GetAll() { return Get().m_Items; }
 	private:
 		friend class ActorInspector;
+		friend class Application;
+		BehaviorsRegistry() { s_Instance = this;}
+		void RegisterBehaviors();
+		void Shutdown() {};
 
-		BehaviorsRegistry() = default;
-		static BehaviorsRegistry s_Instance;
-		
-		std::vector<Item> Items;
+		static BehaviorsRegistry* s_Instance;
+		static BehaviorsRegistry& Get() { return *s_Instance; }
 
+		std::vector<Item> m_Items;
+		const Item* GetItemFromNameInternal(const std::string& name) const;
 
-		template <typename tnBehavior>
-		std::string GetName()
-		{
-			return tnBehavior::GetName();
-		}
+		//template <typename tnBehavior>
+		//std::string GetName() const
+		//{
+		//	return tnBehavior::GetNameStatic();
+		//}
 	};
 }

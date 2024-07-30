@@ -20,7 +20,7 @@ namespace fe
 	GDIType Renderer::s_ActiveGDI = GDIType::none;
 	std::unordered_map<GDIType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
 
-	void Renderer::Init()
+	void Renderer::Startup()
 	{
 		FE_PROFILER_FUNC();
 

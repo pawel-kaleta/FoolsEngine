@@ -72,7 +72,7 @@ namespace fe
                             ImGui::PushID(++uniqueIdWrap);
                             auto& sys = updateEnroll.System;
 
-                            if (ImGui::InputInt(sys->GetSystemName().c_str(), (int*)&updateEnroll.Priority))
+                            if (ImGui::InputInt(sys->GetName().c_str(), (int*)&updateEnroll.Priority))
                             {
                                 systemsDirector.SortSystemUpdateEnrolls((SimulationStages::Stages)stage);
                             }
@@ -100,7 +100,7 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        auto& name = system->GetSystemName();
+        auto& name = system->GetName();
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;

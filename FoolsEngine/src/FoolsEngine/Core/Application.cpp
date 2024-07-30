@@ -3,12 +3,29 @@
 #include "FoolsEngine\Core\Application.h"
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
+#include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 
 #include "FoolsEngine\Assets\AssetManager.h"
 
-namespace fe {
+namespace fe
+{
+	class ApplicationLayer : public Layer
+	{
+	public:
+		ApplicationLayer(std::function<void(Ref<Events::Event>)> EventCallback)
+			: Layer("ApplicationLayer"), m_Callback(EventCallback) {
+			FE_PROFILER_FUNC();
+		}
+
+		void OnEvent(Ref<Events::Event> event) override { m_Callback(event); };
+
+		void Shutdown() { }
+	private:
+		std::function<void(Ref<Events::Event>)> m_Callback;
+	};
 
 	Application* Application::s_Instance = nullptr;
 
@@ -17,38 +34,159 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 
-		m_AssetManager = Scope<AssetManager>(new AssetManager());
-
-		FE_CORE_ASSERT(!s_Instance, "Application already exists!")
+		FE_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = Window::Create(attributes);
-		m_Window->CreateRenderingContext(GDIType::OpenGL);
 		m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, & m_MainEventDispacher, std::placeholders::_1));
+		m_Window->CreateRenderingContext();
+	}
 
-		m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		m_LayerStack.PushOuterLayer(m_AppLayer);
+	void Application::Startup()
+	{
+		FE_PROFILER_FUNC();
 
-		m_ImGuiLayer = CreateRef<ImGuiLayer>();
-		m_LayerStack.PushOuterLayer(m_ImGuiLayer);
+		{
+			FE_PROFILER_SCOPE("Type Registers");
+			m_ComponentTypesRegistry = new ComponentTypesRegistry();
+			m_ComponentTypesRegistry->RegisterComponents();
 
-		GDIType gdi = GDIType::OpenGL;
+			m_BehaviorsRegistry = new BehaviorsRegistry();
+			m_BehaviorsRegistry->RegisterBehaviors();
+		
+			m_SystemsRegistry = new SystemsRegistry();
+			m_SystemsRegistry->RegisterSystems();
+		}
 
-		Renderer::Init();
-		Renderer::CreateAPI(gdi);
-		Renderer::InitAPI(gdi);
-		Renderer::SetAPI(gdi);
+		{
+			FE_PROFILER_SCOPE("Asset manager");
+			m_AssetManager = new AssetManager();
+		}
 
-		ComponentTypesRegistry::GetInstance().RegisterComponents();
-		BehaviorsRegistry::GetInstance().RegisterBehaviors();
-		SystemsRegistry::GetInstance().RegisterSystems();
+		{
+			FE_PROFILER_SCOPE("Core layers");
+			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+			m_LayerStack.PushOuterLayer(m_AppLayer);
+
+			m_ImGuiLayer = CreateRef<ImGuiLayer>();
+			m_ImGuiLayer->Startup();
+			m_LayerStack.PushOuterLayer(m_ImGuiLayer);
+		}
+
+		{
+			FE_PROFILER_SCOPE("Rendering");
+			GDIType gdi = m_Window->GetGDIType();
+			Renderer::Startup();
+			Renderer::CreateAPI(gdi);
+			Renderer::InitAPI(gdi);
+			Renderer::SetAPI(gdi);
+		}
+
+		{
+			FE_PROFILER_SCOPE("Client app startup");
+			ClientAppStartup();
+		}
+	}
+
+	void Application::Run()
+	{
+		FE_PROFILER_FUNC();
+
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
+		m_ProfilerFramesCount = 0;
+		m_ActiveProfiler = true;
+#endif // FE_INTERNAL_BUILD
+
+		while (m_Running)
+		{
+			FE_PROFILER_SCOPE("FRAME");
+
+			Time::TimePoint now = Time::Now();
+			m_LastFrameTimeStep = Time::TimeStep(m_LastFrameTimePoint, now);
+			m_LastFrameTimePoint = now;
+
+			FE_LOG_CORE_TRACE("m_LastFrameTimeStep:  {0}", m_LastFrameTimeStep.GetSeconds());
+			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
+
+			m_FrameCount++;
+
+			m_MainEventDispacher.DispachEvents(m_LayerStack);
+
+			if (!m_Minimized)
+			{
+				UpdateLayers();
+				UpdateImGui();
+			}
+			m_Window->OnUpdate();
+
+#ifdef FE_INTERNAL_BUILD
+			if (m_ActiveProfiler)
+				if (++m_ProfilerFramesCount >= 30)
+				{
+					FE_PROFILER_SESSION_END();
+					m_ActiveProfiler = false;
+				}
+#endif // FE_INTERNAL_BUILD
+		}
+	}
+
+	void Application::ShutDown()
+	{
+		FE_PROFILER_FUNC();
+
+		{
+			FE_PROFILER_SCOPE("Client app shutdown");
+			ClientAppShutdown();
+		}
+
+		{
+			FE_PROFILER_SCOPE("layers detaching");
+			for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+			{
+				(*layer_it)->OnDetach();
+				(*layer_it).reset();
+			}
+
+			m_LayerStack.m_Layers.clear();
+
+			FE_PROFILER_SCOPE("Core layers shutdown");
+			m_ImGuiLayer->Shutdown();
+			m_ImGuiLayer.reset();
+			m_AppLayer->Shutdown();
+			m_AppLayer.reset();
+		}
+
+		{
+			FE_PROFILER_SCOPE("Rendering");
+			Renderer::Shutdown();
+		}
+
+		{
+			FE_PROFILER_SCOPE("Asset Manager");
+			m_AssetManager->Shutdown();
+			//Just giving back memory to OS.
+			//delete m_AssetManager;
+		}
+
+		{
+			FE_PROFILER_SCOPE("Type Registers");
+			m_ComponentTypesRegistry->Shutdown();
+			m_BehaviorsRegistry->Shutdown();
+			m_SystemsRegistry->Shutdown();
+			/*
+			Just giving back memory to OS.
+		
+			delete m_ComponentTypesRegistry;
+			delete m_BehaviorsRegistry;
+			delete m_SystemsRegistry;
+			*/
+		}
 	}
 
 	Application::~Application()
 	{
 		FE_PROFILER_FUNC();
-
-		Renderer::Shutdown();
 	}
 
 	void Application::OnEvent(Ref<Events::Event> event)
@@ -109,49 +247,6 @@ namespace fe {
 		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
 	}
 
-	void Application::Run()
-	{
-#ifdef FE_INTERNAL_BUILD
-		FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
-		m_ProfilerFramesCount = 0;
-		m_ActiveProfiler = true;
-#endif // FE_INTERNAL_BUILD
-
-		FE_PROFILER_FUNC();
-
-		while (m_Running)
-		{
-			FE_PROFILER_SCOPE("FRAME");
-
-			Time::TimePoint now = Time::Now();
-			m_LastFrameTimeStep = Time::TimeStep(m_LastFrameTimePoint, now);
-			m_LastFrameTimePoint = now;
-
-			FE_LOG_CORE_TRACE("m_LastFrameTimeStep: {0}", m_LastFrameTimeStep.GetSeconds());
-			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
-
-			m_FrameCount++;
-
-			m_MainEventDispacher.DispachEvents(m_LayerStack);
-
-			if (!m_Minimized)
-			{
-				UpdateLayers();
-				UpdateImGui();
-			}
-			m_Window->OnUpdate();
-
-#ifdef FE_INTERNAL_BUILD
-			if (m_ActiveProfiler)
-				if (++m_ProfilerFramesCount >= 30)
-				{
-					FE_PROFILER_SESSION_END();
-					m_ActiveProfiler = false;
-				}
-#endif // FE_INTERNAL_BUILD
-		}
-	}
-
 	void Application::UpdateLayers()
 	{
 		FE_PROFILER_FUNC();
@@ -165,6 +260,9 @@ namespace fe {
 	void Application::UpdateImGui()
 	{
 		FE_PROFILER_FUNC();
+
+		if (!m_ImGuiLayer->m_Attached)
+			return;
 
 		m_ImGuiLayer->Begin();
 

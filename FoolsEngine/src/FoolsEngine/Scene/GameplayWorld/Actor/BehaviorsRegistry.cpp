@@ -4,20 +4,22 @@
 
 namespace fe
 {
-	BehaviorsRegistry BehaviorsRegistry::s_Instance = BehaviorsRegistry();
+	BehaviorsRegistry* BehaviorsRegistry::s_Instance;
 
 	void BehaviorsRegistry::RegisterBehaviors()
 	{
-
+		FE_PROFILER_FUNC();
 	}
 
-	const BehaviorsRegistry::Item* BehaviorsRegistry::GetItemFromName(const std::string& name)
+	const BehaviorsRegistry::Item* BehaviorsRegistry::GetItemFromNameInternal(const std::string& name) const
 	{
-		for (auto& item : Items)
-		{
-			auto& nameFunkPtr = item.Name;
+		FE_PROFILER_FUNC();
 
-			auto& string1 = (this->*nameFunkPtr)();
+		for (auto& item : m_Items)
+		{
+			auto& nameFunkPtr = item.GetName;
+
+			auto& string1 = (*nameFunkPtr)();
 			if (string1.compare(name) == 0)
 			{
 				return &item;

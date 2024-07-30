@@ -1,7 +1,5 @@
 #pragma once
 
-
-#include "FoolsEngine\Core\Application.h"
 #include "Asset.h"
 
 #include <entt/entity/registry.hpp>
@@ -35,6 +33,8 @@ namespace fe
 		template <typename tnAsset>
 		static AssetID NewAsset()
 		{
+			FE_PROFILER_FUNC();
+
 			auto type = tnAsset::GetTypeStatic();
 			auto newID = NewID(type);
 			InitAsset(type, newID);
@@ -43,6 +43,8 @@ namespace fe
 
 		static AssetID NewAsset(AssetType type)
 		{
+			FE_PROFILER_FUNC();
+
 			auto newID = NewID(type);
 			InitAsset(type, newID);
 			return newID;
@@ -50,6 +52,8 @@ namespace fe
 
 		static AssetID CreateOrGetAssetWithUUID(AssetType type, UUID uuid)
 		{
+			FE_PROFILER_FUNC();
+
 			if (0 == uuid)
 				return NullAssetID;
 			
@@ -61,19 +65,22 @@ namespace fe
 			return id;
 		}
 
-		static void ClearRegistries();
 		static void EvaluateAndReload();
 	private:
 		friend class Application;
-		AssetManager() = default;
+		AssetManager() { s_Instance = this; }
+		void Shutdown() {};
 
-		static AssetManager& Get() { return *(Application::Get().m_AssetManager); }
+		static AssetManager* s_Instance;
+		static AssetManager& Get() { return *s_Instance; }
 
 		AssetRegistry m_Registries[AssetType::Count];
 		std::unordered_map<UUID, AssetID> m_AssetMapByUUID[AssetType::Count];
 
 		static AssetID TranslateID(AssetType type, UUID uuid)
 		{
+			FE_PROFILER_FUNC();
+
 			if (Get().m_AssetMapByUUID[type].find(uuid) == Get().m_AssetMapByUUID[type].end())
 				return NullAssetID;
 
@@ -88,7 +95,7 @@ namespace fe
 			static std::unordered_map<UUID, AssetSourceID> ByUUID;
 			static std::unordered_map<std::filesystem::path, AssetSourceID> ByFilepath;
 		};
-		static AssetSourceMaps m_AssetSourceMaps;
+		AssetSourceMaps m_AssetSourceMaps;
 		
 		static void InitAsset(AssetType type, AssetID assetID)
 		{
@@ -112,6 +119,5 @@ namespace fe
 			InitAsset(type, newID);
 			return newID;
 		}
-
 	};
 }

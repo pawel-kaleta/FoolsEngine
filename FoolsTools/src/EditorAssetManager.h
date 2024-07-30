@@ -31,7 +31,7 @@ namespace fe
 		friend class EditorApp;
 		EditorAssetManager() = default;
 
-		static EditorAssetManager& Get() { return *(EditorApp::Get().m_EditorAssetManager); }
+		static EditorAssetManager& Get() { return (*(EditorApp::Get().m_EditorAssetManager.get())); }
 
 		AssetRegistry m_Registries[AssetType::Count];
 		std::unordered_map<fe::UUID, AssetID> m_AssetMapByUUID[AssetType::Count];

@@ -180,11 +180,10 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
-            auto& behReg = BehaviorsRegistry::GetInstance();
-            for (const auto& item : behReg.Items)
+            for (const auto& item : BehaviorsRegistry::GetAll())
             {
-                auto& getName = item.Name;
-                std::string name = (behReg.*getName)();
+                auto& getName = item.GetName;
+                std::string name = (*getName)();
                 if (ImGui::MenuItem(name.c_str()))
                 {
                     auto& create = item.Create;

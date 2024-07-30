@@ -190,12 +190,12 @@ namespace fe
 		auto textureUser = AssetHandle<Texture2D>(id).Use();
 		textureUser.GetFilepath().Filepath = "assets/textures/Texture_with_Transparency.png";
 
-		BehaviorsRegistry::GetInstance().RegisterBehavior<PlayerMovementBehavior>();
-		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior>();
-		BehaviorsRegistry::GetInstance().RegisterBehavior<TestBehavior2>();
-		ComponentTypesRegistry::GetInstance().RegisterDataComponent<CMovement>();
-		SystemsRegistry::GetInstance().RegisterSystem<TestSystem>();
-		SystemsRegistry::GetInstance().RegisterSystem<TestSystem2>();
+		BehaviorsRegistry::RegisterBehavior<PlayerMovementBehavior>();
+		BehaviorsRegistry::RegisterBehavior<TestBehavior>();
+		BehaviorsRegistry::RegisterBehavior<TestBehavior2>();
+		ComponentTypesRegistry::RegisterDataComponent<CMovement>();
+		SystemsRegistry::RegisterSystem<TestSystem>();
+		SystemsRegistry::RegisterSystem<TestSystem2>();
 
 		once = true;
 	}

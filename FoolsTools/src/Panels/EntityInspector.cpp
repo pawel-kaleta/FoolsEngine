@@ -125,7 +125,7 @@ namespace fe
 
         DrawCTransformWidget(entity);
 
-        for (const auto& item : ComponentTypesRegistry::GetInstance().DataItems)
+        for (const auto& item : ComponentTypesRegistry::GetDataCompItems())
         {
             DrawComponentWidget(item, entity);
         }
@@ -180,16 +180,15 @@ namespace fe
     {
         if (!ImGui::BeginPopup("AddComponent")) return;
 
-        const auto& compReg = ComponentTypesRegistry::GetInstance();
-        for (const auto& item : compReg.DataItems)
+        for (const auto& item : ComponentTypesRegistry::GetDataCompItems())
         {
             auto& getter = item.Getter;
             DataComponent* component = (entity.*getter)();
 
             if (!component)
             {
-                auto& getName = item.Name;
-                std::string name = (compReg.*getName)();
+                auto& getName = item.GetName;
+                std::string name = (*getName)();
                 if (ImGui::MenuItem(name.c_str()))
                 {
                     auto& emplacer = item.Emplacer;

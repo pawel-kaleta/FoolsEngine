@@ -12,16 +12,13 @@ namespace fe
 	class ComponentTypesRegistry
 	{
 	public:
-		static ComponentTypesRegistry& GetInstance() { return s_Registry; }
-
 		struct DataComponentRegistryItem
 		{
 			DataComponent* (BaseEntity::* Getter)() const;
 			void           (BaseEntity::* Emplacer)() const;
 			void           (Entity::* DestructionScheduler)();
-			std::string    (ComponentTypesRegistry::* Name)() const;
+			std::string    (*GetName)();
 		};
-		std::vector<DataComponentRegistryItem> DataItems;
 
 		struct FlagComponentRegistryItem
 		{
@@ -29,27 +26,24 @@ namespace fe
 			void (BaseEntity::* Flagger)();
 			void (BaseEntity::* Remover)();
 		};
-		std::vector<FlagComponentRegistryItem> FlagItems;
-
-		void RegisterComponents();
 
 		template <typename tnComponent>
-		void RegisterDataComponent()
+		static void RegisterDataComponent()
 		{
-			DataItems.push_back(
+			Get().m_DataItems.push_back(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
 					&BaseEntity::DefaultEmplace<tnComponent>,
 					&Entity::RemoveIfExist<tnComponent>,
-					&ComponentTypesRegistry::GetName<tnComponent>
+					&tnComponent::GetNameStatic
 				}
 			);
 		}
 
 		template <typename tnFlagComponent>
-		void RegisterFlagComponent()
+		static void RegisterFlagComponent()
 		{
-			FlagItems.push_back(
+			Get().m_FlagItems.push_back(
 				FlagComponentRegistryItem{
 					&BaseEntity::AllOf<tnFlagComponent>,
 					&BaseEntity::Flag<tnFlagComponent>,
@@ -58,14 +52,27 @@ namespace fe
 			);
 		}
 
+		static std::vector<DataComponentRegistryItem>& GetDataCompItems() { return Get().m_DataItems; };
+		static std::vector<FlagComponentRegistryItem>& GetFlagCompItems() { return Get().m_FlagItems; };
+		
+		
 	private:
-		ComponentTypesRegistry() {};
-		static ComponentTypesRegistry s_Registry;
+		friend class Application;
+		ComponentTypesRegistry() { s_Instance = this; };
+		void RegisterComponents();
+		void Shutdown() {};
 
-		template <typename tnComponent>
-		std::string GetName() const
-		{
-			return tnComponent::GetNameStatic();
-		}
+		static ComponentTypesRegistry* s_Instance;
+		static ComponentTypesRegistry& Get() { return *s_Instance; }
+
+		std::vector<DataComponentRegistryItem> m_DataItems;
+		std::vector<FlagComponentRegistryItem> m_FlagItems;
+
 	};
+
+	//template <typename tnComponent>
+	//static std::string GetName()
+	//{
+	//	return tnComponent::GetNameStatic();
+	//}
 }

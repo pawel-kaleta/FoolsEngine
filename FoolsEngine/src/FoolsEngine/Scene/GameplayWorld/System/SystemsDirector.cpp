@@ -17,7 +17,7 @@ namespace fe
 
 	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
 	{
-		auto* item = SystemsRegistry::GetInstance().GetItem(systemTypeName);
+		auto* item = SystemsRegistry::GetItem(systemTypeName);
 		if (item)
 		{
 			auto& createPtr = item->Create;
@@ -30,7 +30,7 @@ namespace fe
 	{
 		for (auto& system : m_Systems)
 		{
-			if (system->GetSystemName() == name)
+			if (system->GetName() == name)
 			{
 				return system.get();
 			}

@@ -26,9 +26,6 @@ namespace fe {
 
 		virtual void OnImGuiRender() override {};
 
-		void Begin();
-		void End();
-
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 		bool IsBlocking() const { return m_BlockEvents; }
 
@@ -43,7 +40,15 @@ namespace fe {
 
 		static void RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
 	private:
-		float m_Time = 0.0f;
+		friend class Application;
+		//float m_Time = 0.0f;
 		bool m_BlockEvents = false;
+		bool m_Attached = false;
+
+		void Startup();
+		void Shutdown();
+
+		void Begin();
+		void End();
 	};
 }

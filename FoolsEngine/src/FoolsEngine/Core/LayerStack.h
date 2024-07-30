@@ -22,6 +22,7 @@ namespace fe
 		std::vector< Ref<Layer> >::reverse_iterator rbegin() { return m_Layers.rbegin(); }
 		std::vector< Ref<Layer> >::reverse_iterator rend()   { return m_Layers.rend(); }
 	private:
+		friend class Application;
 		std::vector< Ref<Layer> > m_Layers;
 		unsigned int m_InnerLayerInsertIndex = 0;
 	};

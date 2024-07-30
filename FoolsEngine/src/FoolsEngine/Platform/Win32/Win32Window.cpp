@@ -16,6 +16,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
+		m_GDI = attr.GDI;
 		Init(attr);
 	}
 

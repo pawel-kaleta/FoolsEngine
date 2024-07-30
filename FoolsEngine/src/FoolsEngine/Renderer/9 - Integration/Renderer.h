@@ -15,7 +15,7 @@ namespace fe
 	public:
 		const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
 
-		static void Init();
+		static void Startup();
 		static void CreateBaseAssets();
 		static void UploadBaseAssetsToGPU(GDIType GDI);
 		static void Shutdown();

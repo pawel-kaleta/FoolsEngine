@@ -125,6 +125,6 @@ namespace fe
 
 #define FE_BEHAVIOR_SETUP(type, name) \
 	virtual std::string GetBehaviorName() const override { return name; } \
-	static std::string GetName() { return name; }
+	static std::string GetNameStatic() { return name; }
 
 }

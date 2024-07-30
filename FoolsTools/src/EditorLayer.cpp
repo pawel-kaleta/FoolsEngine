@@ -168,7 +168,7 @@ namespace fe
 
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit"))
-					Application::Get().Close();
+					Application::Close();
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Debug"))
@@ -357,7 +357,7 @@ namespace fe
 		if (event->Handled || event->Owned)
 			return;
 
-		if (!Application::Get().GetImguiLayer()->IsBlocking())
+		if (!Application::GetImguiLayer()->IsBlocking())
 			m_Viewports.EditViewport.OnEvent(event);
 	}
 

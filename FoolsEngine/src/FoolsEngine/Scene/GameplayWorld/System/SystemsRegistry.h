@@ -12,34 +12,40 @@ namespace fe
 		struct Item
 		{
 			System*     (SystemsDirector::* Create)();
-			std::string (SystemsRegistry::* Name)() const;
+			std::string (*GetName)();
 		};
-		std::vector<Item> Items;
-
-		void RegisterSystems();
 
 		template <typename tnSystem>
-		void RegisterSystem()
+		static void RegisterSystem()
 		{
-			Items.push_back(
+			Get().m_Items.push_back(
 				Item{
 					&SystemsDirector::CreateSystemAsBase<tnSystem>,
-					&SystemsRegistry::GetName<tnSystem>
+					&tnSystem::GetNameStatic
 				}
 			);
 		}
 
-		const Item* GetItem(const std::string& systemTypeName) const;
+		static const Item* GetItem(const std::string& systemTypeName) { return Get().GetItemInternal(systemTypeName); };
 
-		static SystemsRegistry& GetInstance() { return m_Instance; }
+		static std::vector<Item>& GetAll() { return Get().m_Items; }
 	private:
 		friend class SystemsDirector;
-		static SystemsRegistry m_Instance;
+		friend class Application;
+		SystemsRegistry() { m_Instance = this; }
+		void RegisterSystems();
+		void Shutdown() {};
 
-		template <typename tnSystem>
-		std::string GetName() const
-		{
-			return tnSystem::GetName();
-		}
+		static SystemsRegistry* m_Instance;
+		static SystemsRegistry& Get() { return *m_Instance; }
+
+		std::vector<Item> m_Items;
+		const Item* GetItemInternal(const std::string& systemTypeName) const;
+
+		//template <typename tnSystem>
+		//std::string GetName() const
+		//{
+		//	return tnSystem::GetNameStatic();
+		//}
 	};
 }

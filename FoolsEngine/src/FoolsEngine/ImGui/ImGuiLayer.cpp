@@ -21,6 +21,29 @@ namespace fe {
 	{
 		FE_PROFILER_FUNC();
 
+		m_Attached = true;
+	}
+
+	void ImGuiLayer::OnDetach()
+	{
+		FE_PROFILER_FUNC();
+
+		m_Attached = false;
+	}
+
+	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
+	{
+		if (m_BlockEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;
+			event->Handled |= event->IsInCategory(Events::Keyboard) & io.WantCaptureKeyboard;
+			event->Owned = true;
+		}
+	}
+
+	void ImGuiLayer::Startup()
+	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -45,34 +68,26 @@ namespace fe {
 		}
 
 		// Setup Platform/Renderer backends
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetWindow().GetNativeWindow());
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void ImGuiLayer::OnDetach()
+	void ImGuiLayer::Shutdown()
 	{
-		FE_PROFILER_FUNC();
-
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
-	{
-		if (m_BlockEvents)
-		{
-			ImGuiIO& io = ImGui::GetIO();
-			event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;
-			event->Handled |= event->IsInCategory(Events::Keyboard) & io.WantCaptureKeyboard;
-			event->Owned = true;
-		}
-	}
-
 	void ImGuiLayer::Begin()
 	{
 		FE_PROFILER_FUNC();
+
+		if (!m_Attached)
+		{
+			FE_CORE_ASSERT(false, "ImGuiLayer not attached, but Begin() called");
+		}
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -85,7 +100,7 @@ namespace fe {
 		FE_PROFILER_FUNC();
 
 		ImGuiIO& io = ImGui::GetIO();
-		Window& window = Application::Get().GetWindow();
+		Window& window = Application::GetWindow();
 		io.DisplaySize = ImVec2((float)window.GetWidth(), (float)window.GetHeight());
 
 		ImGui::Render();
@@ -105,6 +120,7 @@ namespace fe {
 
 	void ImGuiLayer::RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options)
 	{
+		FE_PROFILER_FUNC();
 		// TO DO: handle uniform.GetCount() > 1;
 
 		auto name = uniform.GetName().c_str();

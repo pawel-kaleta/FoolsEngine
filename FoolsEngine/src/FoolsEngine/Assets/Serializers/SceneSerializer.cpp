@@ -120,7 +120,7 @@ namespace fe
 			{
 				emitter << YAML::BeginMap;
 
-				emitter << YAML::Key << "System" << YAML::Value << system->GetSystemName();
+				emitter << YAML::Key << "System" << YAML::Value << system->GetName();
 				emitter << YAML::Key << "UUID"   << YAML::Value << system->GetUUID();
 				emitter << YAML::Key << "Active" << YAML::Value << system->IsActive();
 
@@ -297,7 +297,7 @@ namespace fe
 
 	void SceneSerializerYAML::SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter)
 	{
-		auto& regItems = ComponentTypesRegistry::GetInstance().DataItems;
+		auto& regItems = ComponentTypesRegistry::GetDataCompItems();
 
 		for (auto& item : regItems)
 		{
@@ -425,7 +425,7 @@ namespace fe
 				return false;
 
 			auto behaviorType = behavior["Behavior"].as<std::string>();
-			auto* item = BehaviorsRegistry::GetInstance().GetItemFromName(behaviorType);
+			auto* item = BehaviorsRegistry::GetItemFromName(behaviorType);
 			if (!item)
 			{
 				//FE_CORE_ASSERT(false, "Deserialization failed");
@@ -480,11 +480,10 @@ namespace fe
 			if (!DeserializeTransform((YAML::Node)entity["Transform"], transform.Transform))
 				return false;
 
-			auto& compReg = ComponentTypesRegistry::GetInstance();
-			for (auto& item : compReg.DataItems)
+			for (auto& item : ComponentTypesRegistry::GetDataCompItems())
 			{
-				auto& nameFunkPtr = item.Name;
-				auto compName = (compReg.*nameFunkPtr)();
+				auto& nameFunkPtr = item.GetName;
+				auto compName = (*nameFunkPtr)();
 
 				auto compData = entity[compName];
 				if (compData)

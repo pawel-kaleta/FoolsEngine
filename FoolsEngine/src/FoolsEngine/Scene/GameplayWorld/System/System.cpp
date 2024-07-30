@@ -13,7 +13,7 @@ namespace fe
 	void System::Activate()
 	{
 		if (m_Active)
-			FE_LOG_CORE_WARN("{0} already active", GetSystemName());
+			FE_LOG_CORE_WARN("{0} already active", GetName());
 
 		m_Active = true;
 		OnActivate();
@@ -22,7 +22,7 @@ namespace fe
 	void System::Deactivate()
 	{
 		if (!m_Active)
-			FE_LOG_CORE_WARN("{0} already deactivated", GetSystemName());
+			FE_LOG_CORE_WARN("{0} already deactivated", GetName());
 
 		m_Active = false;
 		OnDeactivate();
@@ -41,6 +41,6 @@ namespace fe
 
 	void System::Deserialize(YAML::Node& data, GameplayWorld* world)
 	{
-		FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetSystemName());
+		FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName());
 	}
 }

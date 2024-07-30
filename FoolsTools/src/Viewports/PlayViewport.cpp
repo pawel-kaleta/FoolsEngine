@@ -58,7 +58,7 @@ namespace fe
 		m_VieportFocus = ImGui::IsWindowFocused();
 		m_VieportHover = ImGui::IsWindowHovered();
 
-		Application::Get().GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover) && m_IsVisible);
+		Application::GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover) && m_IsVisible);
 
 		auto vidgetSize = ImGui::GetContentRegionAvail();
 		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different librarys

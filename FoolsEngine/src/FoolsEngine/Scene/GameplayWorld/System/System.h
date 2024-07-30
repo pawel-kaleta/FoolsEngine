@@ -25,12 +25,12 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		virtual std::string GetSystemName() const { return "BaseSystem"; }
+		virtual std::string GetName() const { return "BaseSystem"; }
 		UUID GetUUID() const { return m_UUID; }
 		bool IsActive() const { return m_Active; }
-		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetSystemName()); }
+		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName()); }
 		virtual void Deserialize(YAML::Node& data, GameplayWorld* world);
-		static std::string GetName() { return "BaseSystem"; }
+		static std::string GetNameStatic() { return "BaseSystem"; }
 
 	protected:
 		virtual void OnInitialize() {};
@@ -85,6 +85,6 @@ namespace fe
 	};
 
 #define FE_SYSTEM_SETUP(type, name) \
-	static std::string GetName() { return name; } \
-	virtual std::string GetSystemName() const override { return name; }
+	static std::string GetNameStatic() { return name; } \
+	virtual std::string GetName() const override { return name; }
 }

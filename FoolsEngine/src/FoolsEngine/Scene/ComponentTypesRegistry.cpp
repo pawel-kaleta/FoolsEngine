@@ -5,10 +5,12 @@
 
 namespace fe
 {
-	ComponentTypesRegistry ComponentTypesRegistry::s_Registry = ComponentTypesRegistry();
+	ComponentTypesRegistry* ComponentTypesRegistry::s_Instance;
 
 	void ComponentTypesRegistry::RegisterComponents()
 	{
+		FE_PROFILER_FUNC();
+
 		RegisterDataComponent<CCamera>();
 		RegisterDataComponent<CTile>();
 		RegisterDataComponent<CSprite>();

@@ -4,19 +4,21 @@
 
 namespace fe
 {
-	SystemsRegistry SystemsRegistry::m_Instance = SystemsRegistry();
+	SystemsRegistry* SystemsRegistry::m_Instance;
 
 	void SystemsRegistry::RegisterSystems()
 	{
-
+		FE_PROFILER_FUNC();
 	}
 
-	const SystemsRegistry::Item* SystemsRegistry::GetItem(const std::string& name) const
+	const SystemsRegistry::Item* SystemsRegistry::GetItemInternal(const std::string& name) const
 	{
-		for (auto& item : Items)
+		FE_PROFILER_FUNC();
+
+		for (auto& item : m_Items)
 		{
-			auto& nameFunkPtr = item.Name;
-			if ((this->*nameFunkPtr)().compare(name) == 0)
+			auto& nameFunkPtr = item.GetName;
+			if ((*nameFunkPtr)().compare(name) == 0)
 			{
 				return &item;
 			}
