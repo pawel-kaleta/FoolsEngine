@@ -104,10 +104,12 @@ namespace fe
 
 		SetSelectionContext();
 
+		m_Panels.ContentBrowser.OnImGuiRender();
 		m_Panels.WorldHierarchyPanel.OnImGuiRender();
 		m_Panels.ActorInspector.OnImGuiRender();
 		m_Panels.EntityInspector.OnImGuiRender();
 		m_Panels.SystemsInspector.OnImGuiRender();
+
 
 		ImGui::Begin("RenderStats");
 		{

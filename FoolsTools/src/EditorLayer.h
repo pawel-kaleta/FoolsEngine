@@ -6,6 +6,7 @@
 #include "Panels\ActorInspector.h"
 #include "Panels\EntityInspector.h"
 #include "Panels\SystemsInspector.h"
+#include "Panels\ContentBrowser.h"
 
 #include "Viewports\EditViewport.h"
 #include "Viewports\PlayViewport.h"
@@ -46,6 +47,7 @@ namespace fe
 			ActorInspector		ActorInspector;
 			EntityInspector		EntityInspector;
 			SystemsInspector	SystemsInspector;
+			ContentBrowser		ContentBrowser;
 		} m_Panels;
 
 		struct Vieports

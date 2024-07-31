@@ -152,6 +152,7 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
     <ClInclude Include="src\Panels\ActorInspector.h" />
+    <ClInclude Include="src\Panels\ContentBrowser.h" />
     <ClInclude Include="src\Panels\EntityInspector.h" />
     <ClInclude Include="src\Panels\SystemsInspector.h" />
     <ClInclude Include="src\Panels\WorldHierarchyPanel.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp" />
+    <ClCompile Include="src\Panels\ContentBrowser.cpp" />
     <ClCompile Include="src\Panels\EntityInspector.cpp" />
     <ClCompile Include="src\Panels\SystemsInspector.cpp" />
     <ClCompile Include="src\Panels\WorldHierarchyPanel.cpp" />

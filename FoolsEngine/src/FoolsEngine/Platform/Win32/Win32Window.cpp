@@ -38,7 +38,7 @@ namespace fe
 			return;
 		};
 
-		m_RenderingContexts[GDI] = RenderingContext::Create(GDIType::OpenGL, m_Window);
+		m_RenderingContexts[GDI] = RenderingContext::Create(GDI, m_Window);
 		m_CurrentRenderingContext = m_RenderingContexts.at(GDI).get();
 		m_CurrentRenderingContext->Init();
 
@@ -238,7 +238,7 @@ namespace fe
 		if (enabled)
 		{
 			glfwSwapInterval(1);
-			FE_LOG_CORE_INFO("VSync enablled.");
+			FE_LOG_CORE_INFO("VSync enabled.");
 		}
 		else
 		{

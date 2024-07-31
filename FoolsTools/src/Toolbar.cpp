@@ -12,8 +12,6 @@ namespace fe
 		m_IconStop  = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
 		m_IconPause = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
 
-		auto GDI = Renderer::GetActiveGDItype();
-
 		auto playUser = m_IconPlay.Use();
 		auto stopUser = m_IconStop.Use();
 		auto pauseUser = m_IconPause.Use();
@@ -22,9 +20,10 @@ namespace fe
 		TextureLoader::LoadTexture("resources/StopButton.png" , stopUser);
 		TextureLoader::LoadTexture("resources/PauseButton.png", pauseUser);
 
-		playUser.CreateGDITexture2D<OpenGLTexture2D>();
-		stopUser.CreateGDITexture2D<OpenGLTexture2D>();
-		pauseUser.CreateGDITexture2D<OpenGLTexture2D>();
+		auto GDI = Renderer::GetActiveGDItype();
+		playUser.CreateGDITexture2D(GDI);
+		stopUser.CreateGDITexture2D(GDI);
+		pauseUser.CreateGDITexture2D(GDI);
 	}
 
 	void Toolbar::OnImGuiRender()

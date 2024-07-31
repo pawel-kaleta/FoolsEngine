@@ -35,6 +35,7 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
+    <ClInclude Include="src\Panels\ContentBrowser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DockSpace.cpp" />
@@ -61,5 +62,6 @@
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
     </ClCompile>
+    <ClCompile Include="src\Panels\ContentBrowser.cpp" />
   </ItemGroup>
 </Project>

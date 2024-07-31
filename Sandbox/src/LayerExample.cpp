@@ -55,7 +55,6 @@ void LayerExample::OnAttach()
 	fe::Entity tintedTextureTile = m_Scene->GetGameplayWorld()->CreateActor();
 	{
 		auto& tile = tintedTextureTile.Emplace<fe::CTile>().Tile;
-		tile.Texture = fe::TextureLibrary::Get("Default_Texture");
 		tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 		tile.TextureTilingFactor = 3;
 
@@ -91,17 +90,12 @@ void LayerExample::OnAttach()
 
 	fe::Entity target = m_Scene->GetGameplayWorld()->CreateEntity(fe::RootID, "Target");
 	{
-		fe::TextureLibrary::Add(fe::Texture2D::Create("assets/textures/Texture_with_Transparency.png"));
-
 		auto& sprite = target.Emplace<fe::CSprite>().Sprite;
-		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 
 		fe::Transform transform;
 		transform.Shift = glm::vec3(0.0f, 0.0f, 0.2f);
 		transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
 		target.GetTransformHandle() = transform;
-
-		//target.AddGOController<MovementSystem>();
 
 		auto tags = target.GetTagsHandle().Local();
 		tags += fe::Tags::Player;
@@ -111,7 +105,6 @@ void LayerExample::OnAttach()
 	fe::Entity targetChild_1 = m_Scene->GetGameplayWorld()->CreateEntity(target, "TargetChild");
 	{
 		auto& sprite = targetChild_1.Emplace<fe::CSprite>().Sprite;
-		sprite.Texture = fe::TextureLibrary::Get("Texture_with_Transparency");
 		sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 		fe::Transform transform;
@@ -128,7 +121,7 @@ void LayerExample::OnUpdate()
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
 
 	m_Scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
-	fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera());
+	//fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera());
 }
 
 void LayerExample::OnImGuiRender()
