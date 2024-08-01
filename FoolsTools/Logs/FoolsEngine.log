@@ -1,65 +1,65 @@
-01:15:54:635737 | FE  | info     | Logging innitialized!
-01:15:54:636333 | App | info     | Logging innitialized!
-01:15:54:636460 | FE  | info     | /////////////////////////////////////////////////////
-01:15:54:636633 | FE  | info     | ////////////////////// STARTUP //////////////////////
-01:15:54:636813 | FE  | info     | /////////////////////////////////////////////////////
-01:15:54:636997 | App | info     | Logging level set to 0 - all.
-01:15:54:637179 | FE  | info     | Logging level set to 0 - all.
-01:15:54:637698 | FE  | info     | Profiler session 'Startup' started.
-01:15:54:638237 | FE  | info     | Initializing GLFW
-01:15:54:687999 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
-01:15:54:921902 | FE  | debug    | Setting events callbacks for window.
-01:15:54:922454 | FE  | info     | Events callbacks for Win10Window setted up.
-01:15:54:922893 | FE  | info     | Creating rendering context
-01:15:54:926798 | FE  | info     | Rendering platform info:
-01:15:54:927034 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-01:15:54:927589 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-01:15:54:928028 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.7.1.240711
-01:15:54:928454 | FE  | info     | OpenGL Rendering Context created.
-01:15:54:928815 | FE  | info     | VSync enabled.
-01:15:54:929537 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-01:15:54:931032 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-01:15:54:932455 | FE  | debug    | Loading texture, AssetID: 0, Channels: 3
-01:15:54:936293 | FE  | debug    | OpenGLDeviceAPI creation!
-01:15:54:936603 | FE  | info     | OpenGLDeviceAPI Initialization.
-01:15:54:936977 | FE  | debug    | Uploding texture to GPU, RendererID: 1
-01:15:54:937275 | FE  | debug    | Uploding texture to GPU, RendererID: 2
-01:15:54:995544 | FE  | debug    | 3
-01:15:54:999324 | FE  | debug    | 4
-01:15:55:003439 | FE  | debug    | Loading texture, AssetID: 0, Channels: 4
-01:15:55:003694 | FE  | debug    | Loading texture, AssetID: 1, Channels: 4
-01:15:55:003978 | FE  | debug    | Loading texture, AssetID: 2, Channels: 4
-01:15:55:004779 | FE  | debug    | Uploding texture to GPU, RendererID: 3
-01:15:55:005047 | FE  | debug    | Uploding texture to GPU, RendererID: 4
-01:15:55:005430 | FE  | debug    | Uploding texture to GPU, RendererID: 5
-01:15:55:006399 | FE  | debug    | Loading texture, AssetID: 3, Channels: 4
-01:15:55:007505 | FE  | debug    | Loading texture, AssetID: 4, Channels: 4
-01:15:55:007706 | FE  | debug    | Uploding texture to GPU, RendererID: 6
-01:15:55:008082 | FE  | debug    | Uploding texture to GPU, RendererID: 7
-01:15:55:008949 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-01:15:55:009293 | App | info     | EditorLayer::OnAttach()
-01:15:55:010276 | FE  | info     | Scene creation
-01:15:55:010958 | FE  | info     | World Creation
-01:15:55:013042 | FE  | info     | Profiler session 'Startup' closed.
-01:15:55:013250 | FE  | info     | /////////////////////////////////////////////////////
-01:15:55:014237 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-01:15:55:015076 | FE  | info     | /////////////////////////////////////////////////////
-01:15:55:015713 | App | info     | Logging level set to 1 - debug or higher.
-01:15:55:016795 | FE  | info     | Logging level set to 1 - debug or higher.
-01:15:55:018126 | FE  | info     | Profiler session 'Runtime' started.
-01:15:55:438425 | FE  | info     | Profiler session 'Runtime' closed.
-01:17:14:738635 | FE  | info     | Window Close Event
-01:17:14:744241 | FE  | info     | /////////////////////////////////////////////////////
-01:17:14:744410 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-01:17:14:744786 | FE  | info     | /////////////////////////////////////////////////////
-01:17:14:745168 | App | info     | Logging level set to 0 - all.
-01:17:14:745541 | FE  | info     | Logging level set to 0 - all.
-01:17:14:746104 | FE  | info     | Profiler session 'Shutdown' started.
-01:17:14:746343 | FE  | info     | Outer layer "EditorLayer" removed from LayerStack
-01:17:14:746939 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 3
-01:17:14:747091 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 4
-01:17:14:747457 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 5
-01:17:14:747837 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 6
-01:17:14:748210 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 7
-01:17:14:749683 | FE  | info     | Closing Window.
-01:17:14:784998 | FE  | info     | Profiler session 'Shutdown' closed.
+08:37:00:620097 | FE  | info     | Logging innitialized!
+08:37:00:620813 | App | info     | Logging innitialized!
+08:37:00:621056 | FE  | info     | /////////////////////////////////////////////////////
+08:37:00:621268 | FE  | info     | ////////////////////// STARTUP //////////////////////
+08:37:00:621423 | FE  | info     | /////////////////////////////////////////////////////
+08:37:00:621574 | App | info     | Logging level set to 0 - all.
+08:37:00:621787 | FE  | info     | Logging level set to 0 - all.
+08:37:00:622297 | FE  | info     | Profiler session 'Startup' started.
+08:37:00:622770 | FE  | info     | Initializing GLFW
+08:37:00:680666 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
+08:37:00:849490 | FE  | debug    | Setting events callbacks for window.
+08:37:00:850083 | FE  | info     | Events callbacks for Win10Window setted up.
+08:37:00:850526 | FE  | info     | Creating rendering context
+08:37:00:854008 | FE  | info     | Rendering platform info:
+08:37:00:854278 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+08:37:00:854604 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+08:37:00:854942 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.7.1.240711
+08:37:00:855273 | FE  | info     | OpenGL Rendering Context created.
+08:37:00:855664 | FE  | info     | VSync enabled.
+08:37:00:856427 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+08:37:00:857781 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+08:37:00:859573 | FE  | debug    | Loading texture, AssetID: 0, Channels: 3
+08:37:00:863249 | FE  | debug    | OpenGLDeviceAPI creation!
+08:37:00:863490 | FE  | info     | OpenGLDeviceAPI Initialization.
+08:37:00:863955 | FE  | debug    | Uploding texture to GPU, RendererID: 1
+08:37:00:864224 | FE  | debug    | Uploding texture to GPU, RendererID: 2
+08:37:00:930547 | FE  | debug    | 3
+08:37:00:934164 | FE  | debug    | 4
+08:37:00:938737 | FE  | debug    | Loading texture, AssetID: 0, Channels: 4
+08:37:00:939143 | FE  | debug    | Loading texture, AssetID: 1, Channels: 4
+08:37:00:939755 | FE  | debug    | Loading texture, AssetID: 2, Channels: 4
+08:37:00:943268 | FE  | debug    | Uploding texture to GPU, RendererID: 3
+08:37:00:945972 | FE  | debug    | Uploding texture to GPU, RendererID: 4
+08:37:00:947990 | FE  | debug    | Uploding texture to GPU, RendererID: 5
+08:37:00:951748 | FE  | debug    | Loading texture, AssetID: 3, Channels: 4
+08:37:00:955562 | FE  | debug    | Loading texture, AssetID: 4, Channels: 4
+08:37:00:957189 | FE  | debug    | Uploding texture to GPU, RendererID: 6
+08:37:00:957782 | FE  | debug    | Uploding texture to GPU, RendererID: 7
+08:37:00:959419 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+08:37:00:960922 | App | info     | EditorLayer::OnAttach()
+08:37:00:963610 | FE  | info     | Scene creation
+08:37:00:966481 | FE  | info     | World Creation
+08:37:00:972805 | FE  | info     | Profiler session 'Startup' closed.
+08:37:00:974962 | FE  | info     | /////////////////////////////////////////////////////
+08:37:00:977666 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+08:37:00:980848 | FE  | info     | /////////////////////////////////////////////////////
+08:37:00:984237 | App | info     | Logging level set to 1 - debug or higher.
+08:37:00:988109 | FE  | info     | Logging level set to 1 - debug or higher.
+08:37:00:991379 | FE  | info     | Profiler session 'Runtime' started.
+08:37:01:338221 | FE  | info     | Profiler session 'Runtime' closed.
+08:37:56:815785 | FE  | info     | Window Close Event
+08:37:56:818956 | FE  | info     | /////////////////////////////////////////////////////
+08:37:56:819188 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+08:37:56:819636 | FE  | info     | /////////////////////////////////////////////////////
+08:37:56:820077 | App | info     | Logging level set to 0 - all.
+08:37:56:820501 | FE  | info     | Logging level set to 0 - all.
+08:37:56:821226 | FE  | info     | Profiler session 'Shutdown' started.
+08:37:56:821497 | FE  | info     | Outer layer "EditorLayer" removed from LayerStack
+08:37:56:822160 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 3
+08:37:56:822339 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 4
+08:37:56:822767 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 5
+08:37:56:823206 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 6
+08:37:56:823873 | FE  | debug    | Unloading OpenGLTexture from GPU, RendererID: 7
+08:37:56:825538 | FE  | info     | Closing Window.
+08:37:56:857355 | FE  | info     | Profiler session 'Shutdown' closed.

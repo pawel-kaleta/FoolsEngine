@@ -4,10 +4,10 @@ Assets:
   Textures:
     []
   Textures2D:
-    - UUID: 1235044501499084131
-      Filepath: assets\textures\Texture_with_Transparency.png
     - UUID: 13196037493420593378
       Filepath: assets\textures\grassland.jpg
+    - UUID: 1235044501499084131
+      Filepath: assets\textures\Texture_with_Transparency.png
   Meshes:
     []
   Models:
@@ -82,7 +82,7 @@ Worlds:
               Scale: [1, 1, 1]
             Tile:
               Offset:
-                Shift: [0, 0, 0]
+                Shift: [0, 0, -0.360000014]
                 Rotation: [0, 0, 0]
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]

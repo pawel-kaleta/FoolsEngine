@@ -233,7 +233,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene.yaml", "FoolsEngine Scene (*.fescene.yaml)\0 * .fescene.yaml\0");
+		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 		if (!filepath.empty())
 		{
 			m_Scene->SetFilepath(filepath);
