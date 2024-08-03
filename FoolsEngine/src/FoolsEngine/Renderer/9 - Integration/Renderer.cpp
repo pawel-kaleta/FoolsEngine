@@ -37,14 +37,14 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			auto id1 = AssetManager::NewAsset<Texture2D>((AssetID)BaseAssets::Textures2D::Default);
+			auto id1 = AssetManager::NewBaseAsset<Texture2D>((AssetID)BaseAssets::Textures2D::Default, "Default Texture");
 			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Textures2D::Default, "Failed to create base asset with requested ID");
 
 			TextureLoader::LoadTexture("assets/textures/Default_Texture.png", AssetHandle<Texture2D>(id1).Use());
 
 			// ----------------
 
-			auto id2 = AssetManager::NewAsset<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+			auto id2 = AssetManager::NewBaseAsset<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite, "FlatWhite");
 			FE_CORE_ASSERT(id2 == (AssetID)BaseAssets::Textures2D::FlatWhite, "Failed to create base asset with requested ID");
 			auto whiteTextureUser = AssetHandle<Texture2D>(id2).Use();
 
@@ -53,17 +53,15 @@ namespace fe
 			textureBuilder
 				.SetDataPtr(whiteTextureData)
 				.SetResolution(1, 1)
-				.SetType(TextureData::Type::Texture2D)
 				.SetUsage(TextureData::Usage::Map_Albedo)
-				.SetComponents(TextureData::Components::RGBA_F)
-				.SetFormat(TextureData::Format::RGBA_FLOAT_8);
+				.SetComponents(TextureData::Components::RGBA)
+				.SetFormat(TextureData::Format::RGBA_8);
 
 			textureBuilder.Create(whiteTextureUser);
-			whiteTextureUser.GetFilepath().Filepath = "FlatWhite";
 		}
 
 		{
-			auto id1 = AssetManager::NewAsset<Shader>((AssetID)BaseAssets::Shaders::Default2D);
+			auto id1 = AssetManager::NewBaseAsset<Shader>((AssetID)BaseAssets::Shaders::Default2D, "Base2DShader");
 			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Shaders::Default2D, "Failed to create base asset with requested ID");
 
 			auto assetUser1 = AssetHandle<Shader>(id1).Use();
@@ -71,7 +69,7 @@ namespace fe
 
 			// ----------------
 
-			auto id2 = AssetManager::NewAsset<Shader>((AssetID)BaseAssets::Shaders::Default3D);
+			auto id2 = AssetManager::NewBaseAsset<Shader>((AssetID)BaseAssets::Shaders::Default3D, "Base3DShader");
 			FE_CORE_ASSERT(id2 == (AssetID)BaseAssets::Shaders::Default3D, "Failed to create base asset with requested ID");
 
 			auto assetUser2 = AssetHandle<Shader>(id2).Use();
@@ -79,7 +77,7 @@ namespace fe
 		}
 
 		{
-			auto id1 = AssetManager::NewAsset<Material>((AssetID)BaseAssets::Materials::Default3D);
+			auto id1 = AssetManager::NewBaseAsset<Material>((AssetID)BaseAssets::Materials::Default3D, "Default Material");
 			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Materials::Default3D, "Failed to create base asset with requested ID");
 
 			Material::MakeMaterial(
@@ -102,7 +100,7 @@ namespace fe
 		}
 
 		{
-			auto id1 = AssetManager::NewAsset<MaterialInstance>((AssetID)BaseAssets::MaterialInstances::Default3D);
+			auto id1 = AssetManager::NewBaseAsset<MaterialInstance>((AssetID)BaseAssets::MaterialInstances::Default3D, "Default Material Instance");
 			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::MaterialInstances::Default3D, "Failed to create base asset with requested ID");
 
 			auto miUser = AssetHandle<MaterialInstance>(id1).Use();

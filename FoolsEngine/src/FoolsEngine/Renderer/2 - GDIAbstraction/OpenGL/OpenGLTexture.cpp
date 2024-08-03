@@ -7,22 +7,24 @@
 
 namespace fe
 {
-	GLenum ComponentsToGlFormat(TextureData::Components components)
+	GLenum FormatToGlFormat(TextureData::Format format)
 	{
 		// TO DO: make this a static lookup table
 
-		switch (components)
+		switch (format)
 		{
-		case TextureData::Components::None:
-			FE_CORE_ASSERT(false, "Unspecified texture components");
-			return GL_R;
-		case TextureData::Components::RGB_F:
-			return GL_RGB;
-		case TextureData::Components::RGBA_F:
-			return GL_RGBA;
+		case TextureData::Format::None:
+			FE_CORE_ASSERT(false, "Not specified data format of attachment");
+			return GL_NONE;
+		case TextureData::Format::R_8:				return GL_RED;
+		case TextureData::Format::RG_8:				return GL_RG;
+		case TextureData::Format::RGB_8:			return GL_RGB;
+		case TextureData::Format::RGBA_8:			return GL_RGBA;
+		case TextureData::Format::R_UINT_32:		return GL_RED_INTEGER;
+		case TextureData::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 		default:
-			FE_CORE_ASSERT(false, "Uknown texture format");
-			return GL_R;
+			FE_CORE_ASSERT(false, "Uknown data format of attachment");
+			return GL_NONE;
 		}
 	}
 
@@ -33,21 +35,24 @@ namespace fe
 		switch (format)
 		{
 		case TextureData::Format::None:
-			FE_CORE_ASSERT(false, "Unspecified texture data format");
-			return GL_R8;
-		case TextureData::Format::RGB_FLOAT_8:
-			return GL_RGB8;
-		case TextureData::Format::RGBA_FLOAT_8:
-			return GL_RGBA8;
+			FE_CORE_ASSERT(false, "Not specified data format of attachment");
+			return GL_NONE;
+		case TextureData::Format::R_8:				return GL_R8;
+		case TextureData::Format::RG_8:				return GL_RG8;
+		case TextureData::Format::RGB_8:			return GL_RGB8;
+		case TextureData::Format::RGBA_8:			return GL_RGBA8;
+		case TextureData::Format::R_UINT_32:		return GL_R32UI;
+		case TextureData::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 		default:
-			FE_CORE_ASSERT(false, "Uknown texture data format");
-			return GL_R8;
+			FE_CORE_ASSERT(false, "Uknown data format of attachment");
+			return GL_NONE;
 		}
+		
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& specification)
 	{
-		m_Format = ComponentsToGlFormat(specification.Components);
+		m_Format = FormatToGlFormat(specification.Format);
 		m_InternalFormat = FormatToGLinternalFormat(specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
@@ -64,7 +69,7 @@ namespace fe
 	{
 		FE_CORE_ASSERT(data, "No texture data");
 
-		m_Format = ComponentsToGlFormat(spec.Components);
+		m_Format = FormatToGlFormat(spec.Format);
 		m_InternalFormat = FormatToGLinternalFormat(spec.Format);
 
 		glGenTextures(1, &m_ID);

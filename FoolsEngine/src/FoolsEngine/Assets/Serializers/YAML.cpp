@@ -3,6 +3,7 @@
 #include "YAML.h"
 
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "FoolsEngine\Assets\AssetsInclude.h"
 
 namespace fe
 {

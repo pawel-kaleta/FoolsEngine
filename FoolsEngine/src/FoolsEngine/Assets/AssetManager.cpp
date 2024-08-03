@@ -11,6 +11,68 @@ namespace fe
 {
 	AssetManager* AssetManager::s_Instance;
 
+	AssetID AssetManager::CreateAsset(const std::filesystem::path& filePath, AssetType type)
+	{
+		FE_PROFILER_FUNC();
+
+		AssetID assetID = NewID(type);
+		AssetRegistry& reg = *GetRegistry(type);
+
+		reg.emplace<ACRefsCounters>(assetID);
+		reg.emplace<ACDataLocation>(assetID);
+
+		UUID uuid = reg.emplace<ACUUID>(assetID).UUID;
+		Get().m_AssetMapByUUID[type][uuid] = assetID;
+
+		reg.emplace<ACFilepath>(assetID).Filepath = filePath;
+		Get().m_AssetMapByPath[type][filePath] = assetID;
+
+		return assetID;
+	}
+
+	AssetID AssetManager::GetAssetWithUUID(UUID uuid, AssetType type)
+	{
+		FE_PROFILER_FUNC();
+
+		if (0 == uuid)
+			return NullAssetID;
+
+		if (Get().m_AssetMapByUUID[type].find(uuid) == Get().m_AssetMapByUUID[type].end())
+			return NullAssetID;
+
+		return Get().m_AssetMapByUUID[type].at(uuid);
+	}
+
+	AssetID AssetManager::CreateAssetWithUUID(UUID uuid, const std::filesystem::path& filePath, AssetType type)
+	{
+		AssetID assetID = NewID(type);
+		AssetRegistry& reg = *GetRegistry(type);
+
+		reg.emplace<ACRefsCounters>(assetID);
+		reg.emplace<ACDataLocation>(assetID);
+
+		reg.emplace<ACUUID>(assetID).UUID = uuid;
+		Get().m_AssetMapByUUID[type][uuid] = assetID;
+
+		reg.emplace<ACFilepath>(assetID).Filepath = filePath;
+		Get().m_AssetMapByPath[type][filePath] = assetID;
+
+		return assetID;
+	}
+
+	AssetID AssetManager::NewBaseAsset(AssetID requestID, const std::string& name, AssetType type)
+	{
+		AssetID assetID = NewID(type, requestID);
+
+		AssetRegistry& reg = *GetRegistry(type);
+		reg.emplace<ACRefsCounters>(assetID);
+		reg.emplace<ACDataLocation>(assetID);
+		reg.emplace<ACUUID>(assetID);
+		reg.emplace<ACFilepath>(assetID).Filepath = name;
+
+		return assetID;
+	}
+
 	void AssetManager::EvaluateAndReload()
 	{
 		FE_PROFILER_FUNC();
@@ -69,16 +131,5 @@ namespace fe
 				shaderUser.UnloadFromCPU();
 			}
 		}
-	}
-
-	AssetID AssetManager::CreateAssetWithUUID(AssetType type, UUID uuid)
-	{
-		auto& inst = Get();
-		auto id = NewAsset(type);
-
-		inst.m_Registries[type].get<ACUUID>(id).UUID = uuid;
-		inst.m_AssetMapByUUID[type][uuid] = id;
-
-		return id;
 	}
 }

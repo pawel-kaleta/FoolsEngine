@@ -138,7 +138,7 @@ namespace fe
 
 	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count)
 	{
-		FE_CORE_ASSERT((size_t)rendererTextureSlot * count, "RenderTextureSlotID pointer is null or count is 0 - ptr_val: {0}; count: {1}", (int)rendererTextureSlot, count);
+		FE_CORE_ASSERT((size_t)rendererTextureSlot * count, "RenderTextureSlotID pointer is null or count is 0 - ptr_val: {0}; count: {1}", (size_t)rendererTextureSlot, count);
 
 		auto& name = textureSlot.GetName();
 		GLint location;

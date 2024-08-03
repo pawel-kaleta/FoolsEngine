@@ -200,7 +200,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene.yaml)\0*.fescene.yaml\0");
+		std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Scene (*.fescene)\0*.fescene\0");
 		if (filepath.empty())
 			return;
 

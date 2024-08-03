@@ -71,12 +71,9 @@ namespace fe
 				if (!asset["UUID"])     return false;
 				if (!asset["Filepath"]) return false;
 
-				std::string filepath = asset["Filepath"].as<std::string>();
+				std::filesystem::path filepath = asset["Filepath"].as<std::string>();
 				UUID uuid = asset["UUID"].as<UUID>();
-				auto id = AssetManager::CreateOrGetAssetWithUUID(type, uuid);
-				auto& fp = AssetManager::GetRegistry(type)->get<ACFilepath>(id);
-				
-				fp.Filepath = filepath;
+				AssetManager::CreateAssetWithUUID(uuid, filepath, type);
 			}
 		}
 

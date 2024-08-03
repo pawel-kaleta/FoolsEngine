@@ -37,16 +37,16 @@ namespace fe
 	{
 		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
 
-		auto components = m_Specification.ColorAttachments[attachmentIndex].Components;
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, ComponentsToGLformat(components), GL_UNSIGNED_INT, &value);
+		auto& format = m_Specification.ColorAttachments[attachmentIndex].Format;
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, FormatToGLformat(format), GL_UNSIGNED_INT, &value);
 	}
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, float value)
 	{
 		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
 
-		auto components = m_Specification.ColorAttachments[attachmentIndex].Components;
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, ComponentsToGLformat(components), GL_FLOAT, &value);
+		auto& format = m_Specification.ColorAttachments[attachmentIndex].Format;
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, FormatToGLformat(format), GL_FLOAT, &value);
 	}
 
 	void fe::OpenGLFramebuffer::Bind()
@@ -65,27 +65,11 @@ namespace fe
 		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-		GLenum format = ComponentsToGLformat(m_Specification.ColorAttachments[attachmentIndex].Components);
-
-		glReadPixels(x, y, 1, 1, format, GLformatToGLtype(format), saveLocation);
-	}
-
-	GLenum OpenGLFramebuffer::ComponentsToGLformat(TextureData::Components components)
-	{
-		switch (components)
-		{
-		case TextureData::Components::None:
-			FE_CORE_ASSERT(false, "Not specified format of attachment");
-			return GL_NONE;
-		case TextureData::Components::R_F:    return GL_RED;
-		case TextureData::Components::R_UI:   return GL_RED_INTEGER;
-		case TextureData::Components::RGB_F:  return GL_RGB;
-		case TextureData::Components::RGBA_F: return GL_RGBA;
-		case TextureData::Components::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
-		default:
-			FE_CORE_ASSERT(false, "Uknown format of attachment");
-			return 0;
-		}
+		auto& format = m_Specification.ColorAttachments[attachmentIndex].Format;
+		GLenum glFormat = FormatToGLformat(format);
+		GLenum glType = FormatToGLtype(format);
+		glReadPixels(x, y, 1, 1, glFormat, glType, saveLocation);
+	
 	}
 
 	GLenum OpenGLFramebuffer::FormatToGLinternalFormat(TextureData::Format format)
@@ -95,28 +79,53 @@ namespace fe
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");
 			return GL_NONE;
-		case TextureData::Format::R_FLOAT_32:      return GL_R32F;
-		case TextureData::Format::R_UINT_32:       return GL_R32UI;
-		case TextureData::Format::RGB_FLOAT_8:     return GL_RGB8;
-		case TextureData::Format::RGBA_FLOAT_8:    return GL_RGBA8;
-		case TextureData::Format::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
+		case TextureData::Format::R_8:				return GL_R8;
+		case TextureData::Format::RG_8:				return GL_RG8;
+		case TextureData::Format::RGB_8:			return GL_RGB8;
+		case TextureData::Format::RGBA_8:			return GL_RGBA8;
+		case TextureData::Format::R_UINT_32:		return GL_R32UI;
+		case TextureData::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 		default:
 			FE_CORE_ASSERT(false, "Uknown data format of attachment");
 			return GL_NONE;
 		}
 	}
 
-	GLenum OpenGLFramebuffer::GLformatToGLtype(GLenum format)
+	GLenum OpenGLFramebuffer::FormatToGLtype(TextureData::Format format)
 	{
 		switch (format)
 		{
-		case GL_RED:         return GL_FLOAT;
-		case GL_RED_INTEGER: return GL_INT;
-		case GL_RGB:         return GL_FLOAT;
-		case GL_RGBA:        return GL_FLOAT;
+		case TextureData::Format::None:
+			FE_CORE_ASSERT(false, "Not specified data format of attachment");
+			return GL_NONE;
+		case TextureData::Format::R_8:				return GL_UNSIGNED_BYTE;
+		case TextureData::Format::RG_8:				return GL_UNSIGNED_BYTE;
+		case TextureData::Format::RGB_8:			return GL_UNSIGNED_BYTE;
+		case TextureData::Format::RGBA_8:			return GL_UNSIGNED_BYTE;
+		case TextureData::Format::R_UINT_32:		return GL_UNSIGNED_INT;
+		case TextureData::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 		default:
-			FE_CORE_ASSERT(false, "Uknown format of attachment");
-			return 0;
+			FE_CORE_ASSERT(false, "Uknown data format of attachment");
+			return GL_NONE;
+		}
+	}
+
+	GLenum OpenGLFramebuffer::FormatToGLformat(TextureData::Format format)
+	{
+		switch (format)
+		{
+		case TextureData::Format::None:
+			FE_CORE_ASSERT(false, "Not specified data format of attachment");
+			return GL_NONE;
+		case TextureData::Format::R_8:				return GL_RED;
+		case TextureData::Format::RG_8:				return GL_RG;
+		case TextureData::Format::RGB_8:			return GL_RGB;
+		case TextureData::Format::RGBA_8:			return GL_RGBA;
+		case TextureData::Format::R_UINT_32:		return GL_RED_INTEGER;
+		case TextureData::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
+		default:
+			FE_CORE_ASSERT(false, "Uknown data format of attachment");
+			return GL_NONE;
 		}
 	}
 
@@ -135,7 +144,7 @@ namespace fe
 
 			for (int i = 0; i < m_ColorAttachments.size(); ++i)
 			{
-				GLenum format         = ComponentsToGLformat(m_Specification.ColorAttachments[i].Components);
+				//GLenum format         = ComponentsToGLformat(m_Specification.ColorAttachments[i].Components);
 				GLenum internalFormat = FormatToGLinternalFormat(m_Specification.ColorAttachments[i].Format);
 
 				glBindTexture(target, m_ColorAttachments[i]);
@@ -146,9 +155,7 @@ namespace fe
 				}
 				else
 				{
-					auto format_test = GL_RED_INTEGER;
-					auto internalFormat_test = GL_R32UI;
-					glTexImage2D(target, 0, internalFormat, m_Specification.Width, m_Specification.Height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+					glTexStorage2D(target, 1, internalFormat, m_Specification.Width, m_Specification.Height);
 
 					glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 					glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

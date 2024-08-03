@@ -47,7 +47,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			FE_PROFILER_SCOPE("Type Registers");
+			FE_PROFILER_SCOPE("Type Registries");
 			m_ComponentTypesRegistry = new ComponentTypesRegistry();
 			m_ComponentTypesRegistry->RegisterComponents();
 

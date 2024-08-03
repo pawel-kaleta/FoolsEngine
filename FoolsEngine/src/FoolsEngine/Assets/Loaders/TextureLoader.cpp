@@ -3,6 +3,10 @@
 #include "TextureLoader.h"
 #include "FoolsEngine\Debug\Asserts.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#include <imgui.h>
+
 namespace fe
 {
 	void TextureLoader::LoadTexture(const std::filesystem::path& filePath, AssetUser<Texture2D>& textureUser)
@@ -11,14 +15,13 @@ namespace fe
 		if (acDataLocation.Data)
 			return;
 
-		textureUser.GetFilepath().Filepath = filePath;
 		auto& spec = textureUser.GetOrEmplaceSpecification().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
 		stbi_set_flip_vertically_on_load(1);
 
-		stbi_uc* data = stbi_load(filePath.generic_string().c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
 
 		acDataLocation.Data = data;
 
@@ -26,21 +29,20 @@ namespace fe
 		FE_CORE_ASSERT(data, "Failed to load image!");
 		spec.Width = width;
 		spec.Height = height;
-		spec.Type = TextureData::Type::Texture2D;
 
 		switch (channels)
 		{
 		case 1:
-			spec.Components = TextureData::Components::R_F;
-			spec.Format = TextureData::Format::R_FLOAT_32;
+			spec.Components = TextureData::Components::R;
+			spec.Format = TextureData::Format::R_8;
 			return;
 		case 3:
-			spec.Components = TextureData::Components::RGB_F;
-			spec.Format = TextureData::Format::RGB_FLOAT_8;
+			spec.Components = TextureData::Components::RGB;
+			spec.Format = TextureData::Format::RGB_8;
 			return;
 		case 4:
-			spec.Components = TextureData::Components::RGBA_F;
-			spec.Format = TextureData::Format::RGBA_FLOAT_8;
+			spec.Components = TextureData::Components::RGBA;
+			spec.Format = TextureData::Format::RGBA_8;
 			return;
 		default:
 			FE_CORE_ASSERT(false, "Unimplemented texture format");
@@ -52,5 +54,49 @@ namespace fe
 		auto& dataPtr = textureUser.GetDataLocation().Data;
 		stbi_image_free(dataPtr);
 		dataPtr = nullptr;
+	}
+
+	TextureData::Specification TextureLoader::InspectTexture(const std::filesystem::path& filePath)
+	{
+		using namespace TextureData;
+		int width, height, channels;
+		int result = 0;
+		result = stbi_info(filePath.string().c_str(), &width, &height, &channels);
+
+		if (!result)
+		{
+			FE_CORE_ASSERT(false, "Failed to read texture file");
+			return Specification();
+		}
+
+		Specification spec;
+		spec.Components = (Components)channels;
+		spec.Format = (Format)channels;
+		spec.Width = width;
+		spec.Height = height;
+
+		return spec;
+	}
+
+	bool TextureLoader::IsKnownExtension(const std::string& extension)
+	{
+		static std::string knownExtensions[] = {
+			".jpg",
+			".jpeg",
+			".png",
+			".bmp",
+			".tga",
+			".gif",
+			".ppm",
+			".pgm"
+		};
+
+		for (auto& knownExtension : knownExtensions)
+		{
+			if (extension == knownExtension)
+				return true;
+		}
+
+		return false;
 	}
 }

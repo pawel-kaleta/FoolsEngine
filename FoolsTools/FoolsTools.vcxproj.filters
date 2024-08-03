@@ -36,6 +36,7 @@
       <Filter>Viewports</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\ContentBrowser.h" />
+    <ClInclude Include="src\AssetImport\TextureImport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DockSpace.cpp" />
@@ -63,5 +64,6 @@
       <Filter>Viewports</Filter>
     </ClCompile>
     <ClCompile Include="src\Panels\ContentBrowser.cpp" />
+    <ClCompile Include="src\AssetImport\TextureImport.cpp" />
   </ItemGroup>
 </Project>

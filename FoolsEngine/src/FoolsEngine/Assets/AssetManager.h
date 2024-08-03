@@ -31,40 +31,26 @@ namespace fe
 		static auto GetAll() { return GetRegistry(tnAsset::GetTypeStatic())->view<AssetID>(); }
 
 		template <typename tnAsset>
-		static AssetID NewAsset()
+		static AssetID CreateAsset(const std::filesystem::path& filePath)
 		{
-			FE_PROFILER_FUNC();
-
-			auto type = tnAsset::GetTypeStatic();
-			auto newID = NewID(type);
-			InitAsset(type, newID);
-			return newID;
+			return CreateAsset(filePath, tnAsset::GetTypeStatic());
 		}
+		static AssetID CreateAsset(const std::filesystem::path& filePath, AssetType type);
 
-		static AssetID NewAsset(AssetType type)
+		template <typename tnAsset>
+		static AssetID GetAssetWithUUID(UUID uuid)
 		{
-			FE_PROFILER_FUNC();
-
-			auto newID = NewID(type);
-			InitAsset(type, newID);
-			return newID;
+			return GetAssetWithUUID(uuid, tnAsset::GetTypeStatic());
 		}
+		static AssetID GetAssetWithUUID(UUID uuid, AssetType type);
 
-		static AssetID CreateOrGetAssetWithUUID(AssetType type, UUID uuid)
+		template <typename tnAsset>
+		static AssetID CreateAssetWithUUID(UUID uuid, const std::filesystem::path& filePath)
 		{
-			FE_PROFILER_FUNC();
-
-			if (0 == uuid)
-				return NullAssetID;
-			
-			AssetID id = TranslateID(type, uuid);
-
-			if (id == NullAssetID)
-				return CreateAssetWithUUID(type, uuid);
-			
-			return id;
+			return CreateAssetWithUUID(uuid, filePath, tnAsset::GetTypeStatic());
 		}
-
+		static AssetID CreateAssetWithUUID(UUID uuid, const std::filesystem::path& filePath, AssetType type);
+		
 		static void EvaluateAndReload();
 	private:
 		friend class Application;
@@ -76,48 +62,29 @@ namespace fe
 
 		AssetRegistry m_Registries[AssetType::Count];
 		std::unordered_map<UUID, AssetID> m_AssetMapByUUID[AssetType::Count];
-
-		static AssetID TranslateID(AssetType type, UUID uuid)
-		{
-			FE_PROFILER_FUNC();
-
-			if (Get().m_AssetMapByUUID[type].find(uuid) == Get().m_AssetMapByUUID[type].end())
-				return NullAssetID;
-
-			return Get().m_AssetMapByUUID[type].at(uuid);
-		}
-
-		static AssetID CreateAssetWithUUID(AssetType type, UUID uuid);
+		std::unordered_map<std::filesystem::path, AssetID> m_AssetMapByPath[AssetType::Count];
 
 		static std::vector<AssetSource> m_AssetSources;
 		struct AssetSourceMaps
 		{
 			static std::unordered_map<UUID, AssetSourceID> ByUUID;
 			static std::unordered_map<std::filesystem::path, AssetSourceID> ByFilepath;
-		};
-		AssetSourceMaps m_AssetSourceMaps;
-		
-		static void InitAsset(AssetType type, AssetID assetID)
-		{
-			AssetRegistry& reg = Get().m_Registries[type];
+		} m_AssetSourceMaps;
 
-			reg.emplace<ACUUID>(assetID);
-			reg.emplace<ACRefsCounters>(assetID);
-			reg.emplace<ACDataLocation>(assetID);
-			reg.emplace<ACFilepath>(assetID);
-		}
-
+		template <typename tnAsset>
+		static AssetID NewID() { return Get().m_Registries[tnAsset::GetTypeStatic()].create(); }
 		static AssetID NewID(AssetType type) { return Get().m_Registries[type].create(); }
+
+		template <typename tnAsset>
+		static AssetID NewID(uint32_t requestID) { return Get().m_Registries[tnAsset::GetTypeStatic()].create(requestID); }
 		static AssetID NewID(AssetType type, uint32_t requestID) { return Get().m_Registries[type].create(requestID); }
 
 		friend class Renderer;
 		template <typename tnAsset>
-		static AssetID NewAsset(AssetID requestID)
+		static AssetID NewBaseAsset(AssetID requestID, const std::string& name)
 		{
-			auto type = tnAsset::GetTypeStatic();
-			auto newID = NewID(type, requestID);
-			InitAsset(type, newID);
-			return newID;
+			return NewBaseAsset(requestID, name, tnAsset::GetTypeStatic());
 		}
+		static AssetID NewBaseAsset(AssetID requestID, const std::string& name, AssetType type);
 	};
 }

@@ -125,7 +125,7 @@ namespace YAML
 
 			fe::AssetType type = (fe::AssetType)(node["Type"].as<int>());
 			fe::UUID uuid = node["UUID"].as<fe::UUID>();
-			fe::AssetID id = fe::AssetManager::CreateOrGetAssetWithUUID(type, uuid);
+			fe::AssetID id = fe::AssetManager::GetAssetWithUUID(uuid, type);
 
 			rhs = fe::AssetHandle<tnAsset>(id);
 

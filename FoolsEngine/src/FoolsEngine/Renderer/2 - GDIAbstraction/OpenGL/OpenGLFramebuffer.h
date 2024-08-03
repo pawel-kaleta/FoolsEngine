@@ -45,9 +45,10 @@ namespace fe
 
         virtual const FramebufferData::Specification& GetSpecification() const override { return m_Specification; };
 
-        static GLenum ComponentsToGLformat(TextureData::Components components);
+        //static GLenum ComponentsToGLformat(TextureData::Components components);
         static GLenum FormatToGLinternalFormat(TextureData::Format format);
-        static GLenum GLformatToGLtype(GLenum format);
+        static GLenum OpenGLFramebuffer::FormatToGLtype(TextureData::Format format);
+        static GLenum FormatToGLformat(TextureData::Format format);
     private:
         uint32_t m_ID = 0;
         std::string m_Name;

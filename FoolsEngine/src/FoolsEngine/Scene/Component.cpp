@@ -149,7 +149,7 @@ namespace fe
 				auto texture = AssetHandle<Texture2D>(id);
 				auto textureObserver = texture.Observe();
 
-				if (textureObserver.GetSpecification()->Specification.Components != TextureData::Components::RGB_F)
+				if (textureObserver.GetSpecification()->Specification.Components != TextureData::Components::RGB)
 					continue;
 
 				if (id == flat_color_texture.GetID())
@@ -182,12 +182,12 @@ namespace fe
 
 					if (!found)
 					{
-						auto texture = AssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+						auto texture = AssetHandle<Texture2D>(AssetManager::CreateAsset<Texture2D>(newTextureFilepath));
 						auto textureUser = texture.Use();
 						TextureLoader::LoadTexture(newTextureFilepath, textureUser);
-						//textureUser.CreateGDITexture2D<OpenGLTexture2D>();
+						
 
-						if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB_F)
+						if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB)
 							item_current = texture;
 					}
 				}
@@ -271,7 +271,7 @@ namespace fe
 
 					if (!found)
 					{
-						auto texture = AssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+						auto texture = AssetHandle<Texture2D>(AssetManager::CreateAsset<Texture2D>(newTextureFilepath));
 						auto textureUser = texture.Use().GetFilepath().Filepath = newTextureFilepath;
 
 						item_current = texture;
@@ -394,7 +394,8 @@ namespace fe
 			{
 				// markmark
 				// create file / read file
-				MaterialInstance = AssetHandle<fe::MaterialInstance>( AssetManager::NewAsset<fe::MaterialInstance>() );
+				std::filesystem::path filePath;
+				MaterialInstance = AssetHandle<fe::MaterialInstance>(AssetManager::CreateAsset<fe::MaterialInstance>(filePath));
 				auto miUser = MaterialInstance.Use();
 				MaterialInstance::MakeMaterialInstance(miUser);
 				auto material = AssetHandle<Material>((AssetID)BaseAssets::Materials::Default3D);

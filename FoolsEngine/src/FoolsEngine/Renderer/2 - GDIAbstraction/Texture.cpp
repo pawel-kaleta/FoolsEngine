@@ -65,7 +65,7 @@ namespace fe
 		auto& dataPtr = GetDataLocation().Data;
 		if (!dataPtr)
 			return;
-		stbi_image_free(dataPtr);
+		delete dataPtr;
 		dataPtr = nullptr;
 	}
 
@@ -116,21 +116,6 @@ namespace fe
 		if (m_Specification.Height     == 0                            ) return;
 
 		textureUser.GetDataLocation().Data = m_Data;
-
-		switch (m_Specification.Type)
-		{
-		case TextureData::Type::None:
-			FE_CORE_ASSERT(false, "Unspecified type of a texture");
-			return;
-
-		case TextureData::Type::Texture2D:
-		{
-			textureUser.GetOrEmplaceSpecification().Specification = m_Specification;
-			return;
-		}
-		default:
-			FE_CORE_ASSERT(false, "Unknown type of a texture");
-			return;
-		}
+		textureUser.GetOrEmplaceSpecification().Specification = m_Specification;		
 	}
 }

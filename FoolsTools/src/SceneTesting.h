@@ -186,10 +186,6 @@ namespace fe
 		if (once)
 			return;
 
-		auto id = AssetManager::NewAsset<Texture2D>();
-		auto textureUser = AssetHandle<Texture2D>(id).Use();
-		textureUser.GetFilepath().Filepath = "assets/textures/Texture_with_Transparency.png";
-
 		BehaviorsRegistry::RegisterBehavior<PlayerMovementBehavior>();
 		BehaviorsRegistry::RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::RegisterBehavior<TestBehavior2>();

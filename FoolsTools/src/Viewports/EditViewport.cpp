@@ -12,8 +12,8 @@ namespace fe
 			.SetHight(720)
 			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
 			.SetColorAttachmentSpecifications({
-				{ "Final frame", TextureData::Components::RGBA_F, TextureData::Format::RGBA_FLOAT_8 },
-				{ "EntityID"   , TextureData::Components::R_UI  , TextureData::Format::R_UINT_32    }
+				{ "Final frame", TextureData::Components::RGBA, TextureData::Format::RGBA_8 },
+				{ "EntityID"   , TextureData::Components::R   , TextureData::Format::R_UINT_32    }
 			});
 		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
 

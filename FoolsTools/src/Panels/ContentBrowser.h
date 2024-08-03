@@ -19,7 +19,7 @@ namespace fe
 
 		struct Settings
 		{
-			int ThumbnailSize = 64;
+			int ThumbnailSize = 100;
 
 			bool DisplayFiles		= false;
 			bool DisplayDirectories	= true;

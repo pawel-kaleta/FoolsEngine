@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\AssetImport\TextureImport.h" />
     <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorApp.h" />
     <ClInclude Include="src\EditorAssetManager.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="src\Viewports\PlayViewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetImport\TextureImport.cpp" />
     <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorAssetManager.cpp" />

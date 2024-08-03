@@ -30,11 +30,13 @@ namespace fe
 		{
 			None = 0,
 
-			R_F,
-			R_UI,
-			RGB_F,
-			RGBA_F,
+			R    = 1,
+			RG   = 2,
+			RGB  = 3,
+			RGBA = 4,
 
+			Depth,
+			Stencil,
 			DepthStencil
 		};
 
@@ -42,26 +44,23 @@ namespace fe
 		{
 			None = 0,
 
-			R_FLOAT_32,
+			R_8,
+			RG_8,
+			RGB_8,
+			RGBA_8,
+
 			R_UINT_32,
-			RGB_FLOAT_8,
-			RGBA_FLOAT_8,
 			
 			DEPTH24STENCIL8
 		};
 
 		struct Specification
 		{
-			Specification() = default;
-			Specification(Type type, Usage usage, Components components, Format format)
-				: Type(type), Usage(usage), Components(components), Format(format) {};
-
-			Type       Type       = Type::None;
-			Usage      Usage      = Usage::None;
-			Components Components = Components::None;
-			Format     Format     = Format::None;
-			uint32_t   Width      = 0;
-			uint32_t   Height     = 0;
+			Usage		Usage		= Usage::None;
+			Components	Components	= Components::None;
+			Format		Format		= Format::None;
+			uint32_t	Width		= 0;
+			uint32_t	Height		= 0;
 		};
 	}
 }

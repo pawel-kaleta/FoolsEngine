@@ -2,6 +2,8 @@
 
 #include <FoolsEngine.h>
 
+#include "AssetImport\TextureImport.h"
+
 namespace fe
 {
 	ContentBrowser::ContentBrowser()
@@ -48,24 +50,7 @@ namespace fe
 		
 		ImGui::Checkbox("Display Files", &(m_Settings.DisplayFiles));
 
-		for (auto& p : std::filesystem::directory_iterator(m_AssetsPath))
-		{
-			if (!p.is_directory())
-				continue;
-
-			RenderFolderNode(p);
-		}
-
-		if (m_Settings.DisplayFiles)
-		{
-			for (auto& p : std::filesystem::directory_iterator(m_AssetsPath))
-			{
-				if (p.is_directory())
-					continue;
-
-				RenderFileNode(p);
-			}
-		}
+		RenderFolderNode(std::filesystem::directory_entry(m_AssetsPath));
 		ImGui::EndChild();
 	}
 
@@ -76,52 +61,19 @@ namespace fe
 
 		ReadFolder();
 
-		auto& tnSize = m_Settings.ThumbnailSize;
-
 		ImGui::Checkbox("Display Directories", &(m_Settings.DisplayDirectories));
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(120);
-		ImGui::SliderInt("Thumbnail Size", &tnSize, 16, 256);
+		ImGui::SliderInt("Thumbnail Size", &(m_Settings.ThumbnailSize), 16, 256);
 
-		ImGuiStyle& style = ImGui::GetStyle();
-		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
-		auto gdi = Renderer::GetActiveGDItype();
+
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, ImVec4(0.16f, 0.29f, 0.48f, 0.3f));
 
 		if (m_Settings.DisplayDirectories)
-		{
 			RenderFolders();
-		}
 
-		for (auto& file : m_Files)
-		{
-			std::string extension = file.extension().string();
-			if		(extension == ".fescene")	{ extension = "Scene";	 }
-			else if (extension == ".glsl")		{ extension = "Shader";	 }
-			else if (extension == ".png")		{ extension = "Texture"; }
-			else if (extension == ".jpg")		{ extension = "Texture"; }
-
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
-			ImGui::BeginTable(file.string().c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)tnSize + 9.f, 0 });
-			ImGui::TableNextColumn();
-			ImGui::ImageButton(file.string().c_str(), (ImTextureID)m_Icons.File.Use().GetRendererID(gdi), thumbnailSizeIm, {0,1}, {1,0});
-			ImGui::PopStyleVar();
-
-			ImGui::TableNextRow(ImGuiTableRowFlags_None, 25.f);
-			ImGui::TableNextColumn();
-			ImGui::Text(file.stem().string().c_str());
-			ImGui::TableNextColumn();
-			
-			ImGui::TextWrapped(extension.c_str());
-			ImGui::EndTable();
-
-			float last_button_x2 = ImGui::GetItemRectMax().x;
-			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next button was on same line
-			if (next_button_x2 < window_visible_x2)
-				ImGui::SameLine();
-		}
+		RenderFiles();
 
 		ImGui::PopStyleColor(2);
 		
@@ -131,10 +83,10 @@ namespace fe
 	void ContentBrowser::RenderFolders()
 	{
 		auto& tnSize = m_Settings.ThumbnailSize;
-		auto gdi = Renderer::GetActiveGDItype();
 		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
-		ImGuiStyle& style = ImGui::GetStyle();
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+		ImGuiStyle& style = ImGui::GetStyle();
+		auto gdi = Renderer::GetActiveGDItype();
 
 		auto textureUser = m_Icons.Folder.Use();
 		if (m_CurrentPath.compare(m_AssetsPath))
@@ -142,7 +94,7 @@ namespace fe
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
 			ImGui::BeginTable("UP", 1, 0, { (float)tnSize + 9.f, (float)tnSize * 2 });
 			ImGui::TableNextColumn();
-			ImGui::ImageButton("UP2", (ImTextureID)textureUser.GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
+			ImGui::ImageButton("UP2", (ImTextureID)(int64_t)textureUser.GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
 			ImGui::PopStyleVar();
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_::ImGuiMouseButton_Left)
@@ -168,7 +120,7 @@ namespace fe
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
 			ImGui::BeginTable(folder.string().c_str(), 1, 0, { (float)tnSize + 9.f, (float)tnSize * 2 });
 			ImGui::TableNextColumn();
-			ImGui::ImageButton(folder.string().c_str(), (ImTextureID)textureUser.GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
+			ImGui::ImageButton(folder.string().c_str(), (ImTextureID)(int64_t)textureUser.GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
 			ImGui::PopStyleVar();
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_::ImGuiMouseButton_Left)
@@ -192,7 +144,77 @@ namespace fe
 
 	void ContentBrowser::RenderFiles()
 	{
+		auto& tnSize = m_Settings.ThumbnailSize;
+		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
+		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+		ImGuiStyle& style = ImGui::GetStyle();
+		auto gdi = Renderer::GetActiveGDItype();
 
+		std::filesystem::path fileOpenAttempt;
+
+		for (auto& file : m_Files)
+		{
+			std::string extension = file.extension().string();
+			bool recognizedAsset = false;
+			bool recognizedAssetSource = false;
+			if (extension == ".fescene") { extension = "Scene"; recognizedAsset = true; }
+			else if (extension == ".glsl") { extension = "Shader Source"; recognizedAssetSource = true; }
+			else if (extension == ".fetex2d") { extension = "Texture2D"; recognizedAsset = true; }
+			else if (TextureLoader::IsKnownExtension(extension)) { extension = "Texture Source"; recognizedAssetSource = true; }
+
+			if (recognizedAssetSource || recognizedAsset)
+			{
+				ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
+				ImGui::BeginTable(file.string().c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)tnSize + 9.f, 0 });
+				ImGui::PopStyleVar();
+				ImGui::TableNextColumn();
+
+				// thumbnail in the future
+				ImGui::ImageButton(file.string().c_str(), (ImTextureID)(int64_t)m_Icons.File.Use().GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
+				{
+					if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0))
+					{
+						fileOpenAttempt = file;
+					}
+
+					ImGui::BeginTable(file.string().c_str(), 1, ImGuiTableFlags_PadOuterX);
+					ImGui::TableNextRow(ImGuiTableRowFlags_None, 25.f);
+					ImGui::TableNextColumn();
+					ImGui::Text(file.stem().string().c_str());
+					ImGui::TableNextColumn();
+
+					ImGui::TextWrapped(extension.c_str());
+					ImGui::EndTable();
+				}
+
+				ImGui::EndTable();
+			}
+			else
+			{
+				ImGui::BeginTable(file.string().c_str(), 1, 0, { (float)tnSize + 9.f, 0 });
+				ImGui::TableNextColumn();
+				ImGui::ImageButton(file.string().c_str(), (ImTextureID)(int64_t)m_Icons.File.Use().GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
+				ImGui::TableNextColumn();
+				ImGui::TextWrapped(file.filename().string().c_str());
+				ImGui::EndTable();
+			}
+
+			float last_button_x2 = ImGui::GetItemRectMax().x;
+			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next button was on same line
+			if (next_button_x2 < window_visible_x2)
+				ImGui::SameLine();
+		}
+
+		if (!fileOpenAttempt.empty())
+		{
+			if (TextureLoader::IsKnownExtension(fileOpenAttempt.extension().string()))
+			{
+				TextureImport::OpenWindow(m_CurrentPath / fileOpenAttempt);
+			}	
+		}
+
+		TextureImport::RenderWindow();
+		
 	}
 
 	void ContentBrowser::ReadFolder()
@@ -215,14 +237,15 @@ namespace fe
 
 	void ContentBrowser::RenderFolderNode(const std::filesystem::directory_entry& dir)
 	{
-		if (!dir.path().lexically_relative(m_CurrentPath).compare(".."))
-		{
-			ImGui::SetNextItemOpen(true);
-		}
-		else if (dir.path().compare(m_CurrentPath) && m_Settings.DisplayDirectories)
-		{
+		if (dir.path().compare(m_CurrentPath) != 0 && m_Settings.DisplayDirectories)
 			ImGui::SetNextItemOpen(false);
-		}
+		if (dir.path().lexically_relative(m_CurrentPath).compare("..")==0)
+			ImGui::SetNextItemOpen(true);
+		if (dir.path().compare(m_CurrentPath) == 0)
+			ImGui::SetNextItemOpen(true);
+		if (dir.path().compare(m_AssetsPath) == 0)
+			ImGui::SetNextItemOpen(true);
+
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 		flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;

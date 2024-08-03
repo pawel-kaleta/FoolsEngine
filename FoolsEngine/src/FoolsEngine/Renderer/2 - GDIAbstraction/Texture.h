@@ -68,11 +68,12 @@ namespace fe
 
 		Texture2DBuilder& SetSpecification(const TextureData::Specification& specification) { m_Specification = specification; return *this; }
 
-		Texture2DBuilder& SetType(TextureData::Type type)                   { m_Specification.Type       = type;       return *this; }
+		//Texture2DBuilder& SetType(TextureData::Type type)                   { m_Specification.Type       = type;       return *this; }
 		Texture2DBuilder& SetUsage(TextureData::Usage usage)                { m_Specification.Usage      = usage;      return *this; }
 		Texture2DBuilder& SetComponents(TextureData::Components components) { m_Specification.Components = components; return *this; }
 		Texture2DBuilder& SetFormat(TextureData::Format format)             { m_Specification.Format     = format;     return *this; }
-		Texture2DBuilder& SetResolution(uint32_t width, uint32_t height)    { m_Specification.Width      = width;                                                                   m_Specification.Height     = height;     return *this; }
+		Texture2DBuilder& SetResolution(uint32_t width, uint32_t height)    { m_Specification.Width      = width;
+																			  m_Specification.Height     = height;     return *this; }
 
 		void Create(AssetUser<Texture2D>& textureUser);
 	private:
