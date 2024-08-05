@@ -11,15 +11,43 @@ namespace fe
 	struct CActorData : ProtectedComponent
 	{
 	public:
-		CActorData() = default;
-		CActorData(CActorData& other) :
-			m_Behaviors	    (std::move(other.m_Behaviors)),
-			m_UpdateEnrolls	(std::move(other.m_UpdateEnrolls))
-		{  };
+		CActorData() = delete;
+		CActorData(EntityID entityID)
+			: m_ID(entityID)
+		{
+			FE_LOG_CORE_DEBUG("CActorData construction");
+		};
+		CActorData& operator=(CActorData&& other)
+		{
+			m_Behaviors = std::move(other.m_Behaviors);
+			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
+			m_ID = other.m_ID;
+			other.m_ID = NullEntityID;
+			return *this;
+		};
+		CActorData(CActorData&& other)
+		{
+			m_Behaviors = std::move(other.m_Behaviors);
+			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
+			m_ID = other.m_ID;
+			other.m_ID = NullEntityID;
+		};
+		CActorData& operator=(CActorData& other) = delete;
+		CActorData(CActorData& other) = delete;
 		~CActorData()
 		{
-			FE_PROFILER_FUNC();
-			FE_LOG_CORE_DEBUG("CActorData destruction");
+			if (m_ID != NullEntityID)
+			{
+				FE_PROFILER_FUNC();
+				FE_LOG_CORE_DEBUG("CActorData destruction: {0}", m_ID);
+
+				for (size_t i = 0; i < SimulationStages::Count; i++)
+				{
+					m_UpdateEnrolls[i].clear();
+				}
+
+				m_Behaviors.clear();
+			}
 		};
 
 		FE_COMPONENT_SETUP(CActorData, "ActorData");
@@ -41,5 +69,6 @@ namespace fe
 
 		Behaviors		m_Behaviors;
 		UpdateEnrolls	m_UpdateEnrolls;
+		EntityID		m_ID;
 	};
 }

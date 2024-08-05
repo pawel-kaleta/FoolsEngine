@@ -20,6 +20,7 @@ namespace fe
 
 		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Entity in a GameplayWorld");
 
+
 		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = handle.entity();
 
 		handle.emplace<CEntityName>("WorldRoot");
@@ -59,7 +60,7 @@ namespace fe
 		entity.Emplace<CEntityName>(name);
 		m_Hierarchy->CreateNode(entity, attachmentEntityID);
 		entity.Emplace<CHeadEntity>().HeadEntity = entity.ID();
-		auto& actorData = m_Registry.emplace<CActorData>(entity.ID());
+		auto& actorData = m_Registry.emplace<CActorData>(entity.ID(), entity.ID());
 		return Actor(entity);
 	}
 
@@ -75,8 +76,7 @@ namespace fe
 
 		Entity ent = GameplayWorld::CreateEntityWithUUID(uuid);
 
-		ent.Emplace<CHeadEntity>().HeadEntity = ent.ID();
-		auto& actorData = m_Registry.emplace<CActorData>(ent.ID());
+		auto& actorData = m_Registry.emplace<CActorData>(ent.ID(), ent.ID());
 		return Actor(actorData, this);
 	}
 

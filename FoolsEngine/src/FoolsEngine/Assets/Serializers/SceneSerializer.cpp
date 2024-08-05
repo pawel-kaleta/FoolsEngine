@@ -97,7 +97,7 @@ namespace fe
 
 		emitter << YAML::Key << "Properties" << YAML::Value << YAML::BeginMap;
 		{
-			emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
+			//emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
 			emitter << YAML::Key << "RootNode" << YAML::Value << YAML::BeginMap;
 			SerializeEntityNode(Entity(RootID, world), emitter);
 			emitter << YAML::EndMap;
@@ -156,7 +156,8 @@ namespace fe
 		auto& actorStorage = reg.storage<CActorData>();
 
 		emitter << YAML::Key << "Actors" << YAML::Value << YAML::BeginSeq;
-		for (auto& [actorID, actorData] : actorStorage.each())
+		
+		for (auto&& [actorID, actorData] : actorStorage.each())
 		{
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Actor" << YAML::Value << nameStorage.get(actorID).EntityName.c_str();
@@ -317,9 +318,9 @@ namespace fe
 	{
 		auto& props = data["Properties"];
 
-		UUID rootUUID = props["RootID"].as<UUID>();
-		world->m_Registry.get<CUUID>(RootID).UUID = rootUUID;
-		world->m_PersistentToTransientIDsMap[rootUUID] = RootID;
+		//UUID rootUUID = props["RootID"].as<UUID>();
+		//world->m_Registry.get<CUUID>(RootID).UUID = rootUUID;
+		//world->m_PersistentToTransientIDsMap[rootUUID] = RootID;
 
 		auto& rootNode = props["RootNode"];
 		if (!DeserializeEntityNode(rootNode, world->m_Registry.get<CEntityNode>(RootID), world))
@@ -391,9 +392,7 @@ namespace fe
 		{
 			if (!actor["UUID"]) return false;
 
-			BaseEntity newActorHead = world->CreateOrGetEntityWithUUID(actor["UUID"].as<UUID>());
-			auto& actorData = world->m_Registry.emplace<CActorData>(newActorHead.ID());
-			Actor newActor(actorData, world);
+			Actor newActor = world->CreateActorWithUUID(actor["UUID"].as<UUID>());
 
 			auto& entities = actor["Entities"];
 			if (entities)
@@ -502,10 +501,10 @@ namespace fe
 	bool SceneSerializerYAML::DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world)
 	{
 		bool success = true;
-		if (data["Parent"         ]) node.Parent          = world->CreateOrGetEntityWithUUID(data["Parent"         ].as<UUID>()); else success = false;
-		if (data["PreviousSibling"]) node.PreviousSibling = world->CreateOrGetEntityWithUUID(data["PreviousSibling"].as<UUID>()); else success = false;
-		if (data["NextSibling"    ]) node.NextSibling     = world->CreateOrGetEntityWithUUID(data["NextSibling"    ].as<UUID>()); else success = false;
-		if (data["FirstChild"     ]) node.FirstChild      = world->CreateOrGetEntityWithUUID(data["FirstChild"     ].as<UUID>()); else success = false;
+		if (data["Parent"         ]) node.Parent          = world->CreateOrGetEntityWithUUID(data["Parent"         ].as<UUID>()).ID(); else success = false;
+		if (data["PreviousSibling"]) node.PreviousSibling = world->CreateOrGetEntityWithUUID(data["PreviousSibling"].as<UUID>()).ID(); else success = false;
+		if (data["NextSibling"    ]) node.NextSibling     = world->CreateOrGetEntityWithUUID(data["NextSibling"    ].as<UUID>()).ID(); else success = false;
+		if (data["FirstChild"     ]) node.FirstChild      = world->CreateOrGetEntityWithUUID(data["FirstChild"     ].as<UUID>()).ID(); else success = false;
 		if (data["HierarchyLvl"   ]) node.HierarchyLvl    = data["HierarchyLvl" ].as<uint32_t>(); else success = false;
 		if (data["ChildrenCount"  ]) node.ChildrenCount   = data["ChildrenCount"].as<uint32_t>(); else success = false;
 		return success;

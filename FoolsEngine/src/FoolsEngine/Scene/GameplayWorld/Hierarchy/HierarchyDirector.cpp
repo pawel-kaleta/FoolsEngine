@@ -3,6 +3,7 @@
 
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "FoolsEngine\Scene\GameplayWorld\Actor\ActorData.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\World.h"
 
@@ -116,41 +117,39 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& storage = m_Registry->storage<CDestroyFlag>();
+		auto& flagStorage = m_Registry->storage<CDestroyFlag>();
 		
-		if (storage.size() == 0)
+		if (flagStorage.size() == 0)
 			return;
 		
-		storage.sort(m_Compare);
+		flagStorage.sort(m_Compare);
 
-		auto view = m_Registry->view<CDestroyFlag, CEntityNode>();
+		auto& nodeStorage = m_Registry->storage<CEntityNode>();
 
-		for (auto it = storage.begin(); it != storage.end(); ++it)
+		for (auto entityID : flagStorage)
 		{
-			auto& node = view.get<CEntityNode>(*it);
-
-			if (!storage.contains(node.Parent))
+			auto& node = nodeStorage.get(entityID);
+			if (!flagStorage.contains(node.Parent) && m_Registry->valid(node.Parent))
 			{
 				if (node.PreviousSibling != NullEntityID)
 				{
-					auto& prev = view.get<CEntityNode>(node.PreviousSibling);
+					auto& prev = nodeStorage.get(node.PreviousSibling);
 					prev.NextSibling = node.NextSibling;
 				}
 				if (node.NextSibling != NullEntityID)
 				{
-					auto& next = view.get<CEntityNode>(node.NextSibling);
+					auto& next = nodeStorage.get(node.NextSibling);
 					next.PreviousSibling = node.PreviousSibling;
 				}
-				
-				auto& parentNode = view.get<CEntityNode>(node.Parent);
-				
-				if (parentNode.FirstChild == *it)
+
+				auto& parentNode = nodeStorage.get(node.Parent);
+
+				if (parentNode.FirstChild == entityID)
 					parentNode.FirstChild = node.NextSibling;
 
 				--parentNode.ChildrenCount;
 			}
-
-			m_Registry->destroy(*it);
+			m_Registry->destroy(entityID);
 		}
 	}
 }
