@@ -11,7 +11,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		//RegisterAndLoadStuff(); //SceneTesting.h
+		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 
 	void EditorLayer::OnAttach()
@@ -20,6 +20,7 @@ namespace fe
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
 		m_Scene = CreateRef<Scene>();
+		m_Scene->Initialize();
 		SetSceneContext(m_Scene);
 	}
 
@@ -193,6 +194,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		m_Scene = CreateRef<Scene>();
+		m_Scene->Initialize();
 		SetSceneContext(m_Scene);
 	}
 
@@ -210,8 +212,7 @@ namespace fe
 
 		if (SceneSerializerYAML::Deserialize(newScene, filepath))
 		{
-			if (m_EditorState != EditorState::Edit)
-				m_EditorState  = EditorState::Edit;
+			m_EditorState  = EditorState::Edit;
 
 			m_Scene = newScene;
 			SetSceneContext(m_Scene);

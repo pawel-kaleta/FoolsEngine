@@ -39,8 +39,4 @@ namespace fe
 		OnShutdown();
 	}
 
-	void System::Deserialize(YAML::Node& data, GameplayWorld* world)
-	{
-		FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName());
 	}
-}

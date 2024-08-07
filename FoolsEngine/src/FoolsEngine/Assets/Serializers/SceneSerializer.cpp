@@ -91,13 +91,14 @@ namespace fe
 		return true;
 	}
 
+
 	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
 
 		emitter << YAML::Key << "Properties" << YAML::Value << YAML::BeginMap;
 		{
-			//emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
+			emitter << YAML::Key << "RootID" << YAML::Value << Entity(RootID, world);
 			emitter << YAML::Key << "RootNode" << YAML::Value << YAML::BeginMap;
 			SerializeEntityNode(Entity(RootID, world), emitter);
 			emitter << YAML::EndMap;
@@ -318,35 +319,44 @@ namespace fe
 	{
 		auto& props = data["Properties"];
 
-		//UUID rootUUID = props["RootID"].as<UUID>();
-		//world->m_Registry.get<CUUID>(RootID).UUID = rootUUID;
-		//world->m_PersistentToTransientIDsMap[rootUUID] = RootID;
+		UUID rootUUID = props["RootID"].as<UUID>();
+		auto rootEntity = world->CreateOrGetEntityWithUUID(rootUUID);
 
-		auto& rootNode = props["RootNode"];
-		if (!DeserializeEntityNode(rootNode, world->m_Registry.get<CEntityNode>(RootID), world))
+		rootEntity.Emplace<CEntityName>("WorldRoot");
+		rootEntity.Emplace<CTransformLocal>();
+		rootEntity.Emplace<CTransformGlobal>();
+		rootEntity.Emplace<CTags>();
+		rootEntity.Emplace<CHeadEntity>().HeadEntity = NullEntityID;
+
+		auto& rootNode = rootEntity.Emplace<CEntityNode>();
+		auto& rootData = props["RootNode"];
+		if (!DeserializeEntityNode(rootData, rootNode, world))
 			return false;
 
 		auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
 		world->m_PrimaryCameraEntityID = cameraEntity.ID();
 
 		auto& actors = data["Actors"];
-		if (actors)
-			DeserializeActors(world, actors);
-		else
+		if (!actors)
 			return false;
+		
+		if (!DeserializeActors(world, actors))
+			return false;
+			
 
 		if (!DeserializeSystems(world, data))
 			return false;
 		
 		// global transforms and global tags init
+		world->GetHierarchy().m_SafeOrder = false;
 		world->GetHierarchy().EnforceSafeOrder();
 		world->GetHierarchy().MakeGlobalTransformsCurrent();
-		EntityID current = world->GetRegistry().get<CEntityNode>(RootID).FirstChild;
-		while (current != NullEntityID)
-		{
-			TagsHandle(current, &world->GetRegistry()).UpdateTags();
-			current = world->GetRegistry().get<CEntityNode>(current).FirstChild;
-		}
+		EntityID current = rootNode.FirstChild;
+		//while (current != NullEntityID)
+		//{
+		//	TagsHandle(current, &world->GetRegistry()).UpdateTags();
+		//	current = world->GetRegistry().get<CEntityNode>(current).FirstChild;
+		//}
 
 		return true;
 	}
@@ -366,7 +376,6 @@ namespace fe
 
 			if (!newSystem)
 			{
-				//FE_CORE_ASSERT(false, "Deserialization failed");
 				FE_LOG_CORE_ERROR("Deserialization of {0} failed", systemType);
 				continue;
 			}
@@ -388,21 +397,28 @@ namespace fe
 
 	bool SceneSerializerYAML::DeserializeActors(GameplayWorld* world, YAML::Node& data)
 	{
+		if (!data)
+			return false;
+
+		bool x1 = data.IsMap();
+		bool x2 = data.IsScalar();
+		bool x3 = data.IsSequence();
+		size_t x4 = data.size();
+
 		for (auto& actor : data)
 		{
-			if (!actor["UUID"]) return false;
+			if (!actor["UUID"])
+				return false;
 
 			Actor newActor = world->CreateActorWithUUID(actor["UUID"].as<UUID>());
 
 			auto& entities = actor["Entities"];
-			if (entities)
-			{
-				if (!DeserializeEntities(world, entities))
-					return false;
-			}
-			else
+			if (!entities)
 				return false;
 			
+			if (!DeserializeEntities(world, entities))
+				return false;
+						
 			if (!DeserializeBehaviors(newActor, actor))
 				return false;
 		}
@@ -460,23 +476,27 @@ namespace fe
 			if (!entity["UUID"] || !entity["Entity"] || !entity["Head"] || !entity["Tags"] || !entity["Node"] || !entity["Transform"])
 				return false;
 
-			// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
-			BaseEntity newEntity = world->CreateOrGetEntityWithUUID(entity["UUID"].as<UUID>());
-			newEntity.Emplace<CEntityName>(entity["Entity"].as<std::string>());
+			UUID uuid = entity["UUID"].as<UUID>();
+			std::string name = entity["Entity"].as<std::string>();
+			UUID headUUID = entity["Head"].as<UUID>();
 
-			auto head = world->CreateOrGetEntityWithUUID(entity["Head"].as<UUID>());
+			// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
+			BaseEntity newEntity = world->CreateOrGetEntityWithUUID(uuid);
+			newEntity.Emplace<CEntityName>(name);
+
+			auto head = world->CreateOrGetEntityWithUUID(headUUID);
 			newEntity.Emplace<CHeadEntity>().HeadEntity = head.ID();
 
 			newEntity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
 
 			auto& node = newEntity.Emplace<CEntityNode>();
-			if (!DeserializeEntityNode((YAML::Node)entity["Node"], node, world))
+			if (!DeserializeEntityNode(entity["Node"], node, world))
 				return false;
 
 			newEntity.Emplace<CTransformGlobal>();
 			newEntity.Flag<CDirtyFlag<CTransformGlobal>>();
 			auto& transform = newEntity.Emplace<CTransformLocal>();
-			if (!DeserializeTransform((YAML::Node)entity["Transform"], transform.Transform))
+			if (!DeserializeTransform(entity["Transform"], transform.Transform))
 				return false;
 
 			for (auto& item : ComponentTypesRegistry::GetDataCompItems())

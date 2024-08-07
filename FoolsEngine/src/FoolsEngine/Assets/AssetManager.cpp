@@ -64,11 +64,17 @@ namespace fe
 	{
 		AssetID assetID = NewID(type, requestID);
 
+		FE_CORE_ASSERT(requestID == assetID, "Failed to create base asset with requested ID");
+
 		AssetRegistry& reg = *GetRegistry(type);
 		reg.emplace<ACRefsCounters>(assetID);
 		reg.emplace<ACDataLocation>(assetID);
-		reg.emplace<ACUUID>(assetID);
+
+		reg.emplace<ACUUID>(assetID).UUID = assetID;
+		Get().m_AssetMapByUUID[type][(UUID)(uint64_t)assetID] = assetID;
+
 		reg.emplace<ACFilepath>(assetID).Filepath = name;
+		Get().m_AssetMapByPath[type][name] = assetID;
 
 		return assetID;
 	}

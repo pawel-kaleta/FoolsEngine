@@ -4,8 +4,7 @@ Assets:
   Textures:
     []
   Textures2D:
-    - UUID: 3171430740742280134
-      Filepath: assets/textures/Texture_with_Transparency.png
+    []
   Meshes:
     []
   Models:
@@ -20,25 +19,25 @@ Assets:
     []
 Scene Properties:
   Name: Untitled Scene
-  UUID: 16155988209546430500
+  UUID: 3913246492905658901
 Worlds:
   GameplayWorld:
     Properties:
-      RootID: 9511953723061411788
+      RootID: 14721253588128730750
       RootNode:
         Parent: 0
         HierarchyLvl: 0
         PreviousSibling: 0
         NextSibling: 0
         ChildrenCount: 2
-        FirstChild: 749327963811732342
-      Primary Camera: 4778887420276370934
+        FirstChild: 8981044575774950707
+      Primary Camera: 17500945664002797029
     Systems:
       - System: TestSystem
-        UUID: 17919191125652228074
+        UUID: 6229094161596982341
         Active: true
       - System: TestSystem2
-        UUID: 9874688948637997825
+        UUID: 13666369422360715081
         Active: true
     System Updates:
       FrameStart:
@@ -48,36 +47,36 @@ Worlds:
       Physics:
         []
       PostPhysics:
-        - System: 17919191125652228074
+        - System: 6229094161596982341
           Priority: 9
-        - System: 9874688948637997825
+        - System: 13666369422360715081
           Priority: 10
       FrameEnd:
         []
     Actors:
       - Actor: Player
-        UUID: 4726768001092840488
+        UUID: 15941103547094657215
         Behaviors:
           - Behavior: TestBehavior
-            UUID: 7717863328883198692
+            UUID: 11249049998987638053
             Active: true
           - Behavior: TestBehavior2
-            UUID: 10981608790516340292
+            UUID: 9954274544421781820
             Active: true
           - Behavior: PlayerMovement
-            UUID: 10767949057867549234
+            UUID: 3258283244192141621
             Active: true
-            MovementComponent: 8074871770146053699
-            Player Root entity: 8074871770146053699
+            MovementComponent: 8640942011417335132
+            Player Root entity: 8640942011417335132
         Updates:
           FrameStart:
             []
           PrePhysics:
-            - Behavior: 7717863328883198692
+            - Behavior: 11249049998987638053
               Priority: 9
-            - Behavior: 10767949057867549234
+            - Behavior: 3258283244192141621
               Priority: 10
-            - Behavior: 10981608790516340292
+            - Behavior: 9954274544421781820
               Priority: 11
           Physics:
             []
@@ -87,16 +86,16 @@ Worlds:
             []
         Entities:
           - Entity: Player
-            UUID: 4726768001092840488
-            Head: 4726768001092840488
+            UUID: 15941103547094657215
+            Head: 15941103547094657215
             Tags: 2
             Node:
-              Parent: 9511953723061411788
+              Parent: 14721253588128730750
               HierarchyLvl: 1
-              PreviousSibling: 749327963811732342
+              PreviousSibling: 8981044575774950707
               NextSibling: 0
               ChildrenCount: 2
-              FirstChild: 8074871770146053699
+              FirstChild: 8640942011417335132
             Transform:
               Shift: [0, 0, 0.200000003]
               Rotation: [0, 0, 0]
@@ -109,17 +108,17 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 1
           - Entity: ChildEntity_2
-            UUID: 1795060947939713193
-            Head: 4726768001092840488
+            UUID: 13556645187571425717
+            Head: 15941103547094657215
             Tags: 0
             Node:
-              Parent: 4726768001092840488
+              Parent: 15941103547094657215
               HierarchyLvl: 2
-              PreviousSibling: 8074871770146053699
+              PreviousSibling: 8640942011417335132
               NextSibling: 0
               ChildrenCount: 0
               FirstChild: 0
@@ -135,18 +134,18 @@ Worlds:
               Color: [1, 1, 1, 0.5]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 1
           - Entity: ChildEntity_1
-            UUID: 8074871770146053699
-            Head: 4726768001092840488
+            UUID: 8640942011417335132
+            Head: 15941103547094657215
             Tags: 0
             Node:
-              Parent: 4726768001092840488
+              Parent: 15941103547094657215
               HierarchyLvl: 2
               PreviousSibling: 0
-              NextSibling: 1795060947939713193
+              NextSibling: 13556645187571425717
               ChildrenCount: 0
               FirstChild: 0
             Transform:
@@ -161,14 +160,14 @@ Worlds:
               Color: [1, 1, 1, 0.5]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 1
             Movement:
               MoveSpeed: 0.5
               RotationSpeed: 80
       - Actor: TestChildActor
-        UUID: 3828334314055835780
+        UUID: 11144640854272017799
         Behaviors:
           []
         Updates:
@@ -184,16 +183,16 @@ Worlds:
             []
         Entities:
           - Entity: TestChildActor
-            UUID: 3828334314055835780
-            Head: 3828334314055835780
+            UUID: 11144640854272017799
+            Head: 11144640854272017799
             Tags: 0
             Node:
-              Parent: 749327963811732342
+              Parent: 8981044575774950707
               HierarchyLvl: 2
-              PreviousSibling: 12844949203358993875
-              NextSibling: 1638654727267016395
+              PreviousSibling: 7640665158811104314
+              NextSibling: 10858955989763150331
               ChildrenCount: 1
-              FirstChild: 10791301912427062792
+              FirstChild: 7305449671197016262
             Transform:
               Shift: [0.300000012, -0.200000003, 0.189999998]
               Rotation: [0, 0, -40]
@@ -206,15 +205,15 @@ Worlds:
               Color: [0.800000012, 0.800000012, 0.100000001, 1]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 2
           - Entity: Entity
-            UUID: 10791301912427062792
-            Head: 3828334314055835780
+            UUID: 7305449671197016262
+            Head: 11144640854272017799
             Tags: 0
             Node:
-              Parent: 3828334314055835780
+              Parent: 11144640854272017799
               HierarchyLvl: 3
               PreviousSibling: 0
               NextSibling: 0
@@ -225,7 +224,7 @@ Worlds:
               Rotation: [0, 0, 0]
               Scale: [1, 1, 1]
       - Actor: Enviro
-        UUID: 749327963811732342
+        UUID: 8981044575774950707
         Behaviors:
           []
         Updates:
@@ -241,28 +240,28 @@ Worlds:
             []
         Entities:
           - Entity: Enviro
-            UUID: 749327963811732342
-            Head: 749327963811732342
+            UUID: 8981044575774950707
+            Head: 8981044575774950707
             Tags: 0
             Node:
-              Parent: 9511953723061411788
+              Parent: 14721253588128730750
               HierarchyLvl: 1
               PreviousSibling: 0
-              NextSibling: 4726768001092840488
+              NextSibling: 15941103547094657215
               ChildrenCount: 4
-              FirstChild: 4778887420276370934
+              FirstChild: 17500945664002797029
             Transform:
               Shift: [0, 0, 0]
               Rotation: [0, 0, 0]
               Scale: [1, 1, 1]
           - Entity: Entity
-            UUID: 1638654727267016395
-            Head: 749327963811732342
+            UUID: 10858955989763150331
+            Head: 8981044575774950707
             Tags: 0
             Node:
-              Parent: 749327963811732342
+              Parent: 8981044575774950707
               HierarchyLvl: 2
-              PreviousSibling: 3828334314055835780
+              PreviousSibling: 11144640854272017799
               NextSibling: 0
               ChildrenCount: 0
               FirstChild: 0
@@ -278,18 +277,18 @@ Worlds:
               Color: [0.899999976, 0.200000003, 0.899999976, 0.800000012]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 1
           - Entity: Entity
-            UUID: 12844949203358993875
-            Head: 749327963811732342
+            UUID: 7640665158811104314
+            Head: 8981044575774950707
             Tags: 0
             Node:
-              Parent: 749327963811732342
+              Parent: 8981044575774950707
               HierarchyLvl: 2
-              PreviousSibling: 4778887420276370934
-              NextSibling: 3828334314055835780
+              PreviousSibling: 17500945664002797029
+              NextSibling: 11144640854272017799
               ChildrenCount: 0
               FirstChild: 0
             Transform:
@@ -304,18 +303,18 @@ Worlds:
               Color: [0.100000001, 0.100000001, 1, 1]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 3
           - Entity: TestEntity
-            UUID: 4778887420276370934
-            Head: 749327963811732342
+            UUID: 17500945664002797029
+            Head: 8981044575774950707
             Tags: 0
             Node:
-              Parent: 749327963811732342
+              Parent: 8981044575774950707
               HierarchyLvl: 2
               PreviousSibling: 0
-              NextSibling: 12844949203358993875
+              NextSibling: 7640665158811104314
               ChildrenCount: 0
               FirstChild: 0
             Transform:
@@ -343,6 +342,6 @@ Worlds:
               Color: [0.200000003, 0.699999988, 0.300000012, 1]
               Texture:
                 Type: 2
-                UUID: 11876308255290293445
+                UUID: 1
                 Name: FlatWhite
               Tiling: 3

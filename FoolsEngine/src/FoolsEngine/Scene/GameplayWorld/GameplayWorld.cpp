@@ -14,14 +14,18 @@ namespace fe
 
 		m_Hierarchy = CreateScope<HierarchyDirector>(this);
 		m_SystemsDirector = CreateScope<SystemsDirector>();
+	}
 
-		auto root = m_Registry.create(RootID);
+	void GameplayWorld::Initialize()
+	{
+		FE_PROFILER_FUNC();
+
+		EntityID root = m_Registry.create(RootID);
 		ECS_handle handle(m_Registry, RootID);
 
 		FE_CORE_ASSERT(handle.valid() && handle.entity() == RootID, "Failed to create root Entity in a GameplayWorld");
 
-
-		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = handle.entity();
+		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = root;
 
 		handle.emplace<CEntityName>("WorldRoot");
 		handle.emplace<CTransformLocal>();
@@ -74,7 +78,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_DEBUG("Actor Creation with UUID");
 
-		Entity ent = GameplayWorld::CreateEntityWithUUID(uuid);
+		Entity ent = CreateOrGetEntityWithUUID(uuid);
 
 		auto& actorData = m_Registry.emplace<CActorData>(ent.ID(), ent.ID());
 		return Actor(actorData, this);

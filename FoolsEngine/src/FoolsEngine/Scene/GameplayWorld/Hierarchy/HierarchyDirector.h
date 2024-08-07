@@ -23,7 +23,8 @@ namespace fe
 	private:
 		friend class Scene;
 		friend class GameplayWorld;
-		friend class Entity;		
+		friend class Entity;
+		friend class SceneSerializerYAML;
 
 		GameplayWorld* m_World     = nullptr;
 		Registry*      m_Registry  = nullptr;

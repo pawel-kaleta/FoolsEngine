@@ -15,6 +15,7 @@ namespace fe
 	{
 	public:
 		World(Scene* scene, bool isGameplayWorld = false);
+		virtual void Initialize();
 
 		Registry&	GetRegistry()		{ return m_Registry; }
 		Scene*		GetScene()			{ return m_Scene; }

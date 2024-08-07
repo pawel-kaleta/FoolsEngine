@@ -29,14 +29,14 @@ namespace fe
 		UUID GetUUID() const { return m_UUID; }
 		bool IsActive() const { return m_Active; }
 		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world);
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetName()); }
 		static std::string GetNameStatic() { return "BaseSystem"; }
 
 	protected:
 		virtual void OnInitialize() {};
 		virtual void OnActivate() {};
 
-		virtual void OnUpdate_FrameStart()  {};
+		virtual void OnUpdate_FrameStart() {};
 		virtual void OnUpdate_PrePhysics()  {};
 		virtual void OnUpdate_Physics()     {};
 		virtual void OnUpdate_PostPhysics() {};

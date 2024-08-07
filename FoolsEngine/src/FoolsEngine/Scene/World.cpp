@@ -12,6 +12,11 @@ namespace fe
 		FE_LOG_CORE_INFO("World Creation");
 	}
 
+	void World::Initialize()
+	{
+
+	}
+
 	BaseEntity World::CreateEntity()
 	{
 		FE_PROFILER_FUNC();

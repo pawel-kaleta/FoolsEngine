@@ -14,6 +14,7 @@ namespace fe
 	{
 	public:
 		GameplayWorld(Scene* scene);
+		virtual void Initialize() override;
 
 		HierarchyDirector& GetHierarchy() { return *m_Hierarchy.get(); }
 		SystemsDirector& GetSystems()     { return *m_SystemsDirector.get(); }
@@ -71,5 +72,7 @@ namespace fe
 		}
 
 		void UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID));
+
+
 	};
 }

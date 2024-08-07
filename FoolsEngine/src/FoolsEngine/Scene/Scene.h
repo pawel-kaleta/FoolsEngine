@@ -15,6 +15,7 @@ namespace fe
 	public:
 		Scene();
 		~Scene() = default;
+		void Initialize();
 
 		void SimulationUpdate();
 		void PostFrameUpdate();
