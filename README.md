@@ -26,7 +26,7 @@ If your goal is to make a game, you are better of using off-the-shelf, fully fea
 	- logging
 	- profiling
 	- assertions
-- Hybrid Actor/GameObject/ECS scene representation model
+- Hybrid Actor/GameObject/ECS scene representation and execution model
 - Placeholder 2D renderer
 - Editor features
 	- Basic UI setup
@@ -35,10 +35,15 @@ If your goal is to make a game, you are better of using off-the-shelf, fully fea
 	- Scene hierarchy vidget
 	- Actor inspector
 	- Entity inspector
- - Serialization
+	- Systems inspector
+	- Content browser
+	- In-editor playing
+- Serialization
+- ECS-based asset system
 
 ## Getting Started
 `FoolsEngine` uses PreMake and Visual Studio 2022 for its build system.
+PreMake is included in the repository.
 Other development environments are untested and would require a custom setup.
 
 1. Download the repository
@@ -65,21 +70,20 @@ Program structure isolates engine and application into separate exe/dll files.
 	- Implements IoC (inversion of control) using layers stack
 	- Includes entry point
 	- Provides core layers: main application layer, ImGui layer
-- **Application EXE** - `Sandbox` (outdated, most likely does not compile)
+- **Application EXE** - `Sandbox` (outdated, may not compile)
 	- Extends main application layer
 	- Provides additionall layers
 	- May separate it's parts into hot-reloadable DLLs
 - **Editor EXE** - `FoolsTools`
 	- Provides editor-specific layers
-- **Test EXE** - `TestBed` (planned)
-	- Intended for testeing/debugging of the engine without running the game or editor
 
 ## Documentation
 
 `FoolsEngine` architectual design is documented in `./Documentation` folder.
 - Event system
-- Scene representation model
+- Scene representation and execution model
 - Rendering (mostly planned)
+- Asset system
 
 ## Profiling data
 
@@ -92,7 +96,7 @@ There are automatic dedicated profiling sessions for startup, shutdown and first
 ## Technologies
 - C++17
 - VisualStudio 2022
-- PreMake (config in LUA) 
+- PreMake (config in LUA)
 - ImGui
 - GLFW
 - glad
@@ -102,6 +106,8 @@ There are automatic dedicated profiling sessions for startup, shutdown and first
 - Chromium Trace Event Profiling Tool
 - EnTT (ECS)
 - OpenGL
+- yaml-cpp
+- ImGuizmo
 
 ## Sources
 `FoolsEngine` development is inspired by and draws from various projects and tutorials of other people:
