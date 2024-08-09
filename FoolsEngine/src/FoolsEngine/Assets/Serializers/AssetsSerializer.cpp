@@ -34,7 +34,7 @@ namespace fe
 			emitter << YAML::Key << AssetTypeName(type);
 
 			auto reg = AssetManager::GetRegistry(type);
-			auto view = reg->view<ACUUID, ACFilepath>();
+			auto view = reg->view<ACUUID, ACProxyFilepath>();
 			
 			emitter << YAML::Value << YAML::BeginSeq;
 			for (auto id : view)
@@ -73,7 +73,10 @@ namespace fe
 
 				std::filesystem::path filepath = asset["Filepath"].as<std::string>();
 				UUID uuid = asset["UUID"].as<UUID>();
-				AssetManager::CreateAssetWithUUID(uuid, filepath, type);
+
+				AssetID id = AssetManager::CreateAsset(filepath, type);
+
+				FE_CORE_ASSERT(AssetManager::GetRegistry(type)->get<ACUUID>(id).UUID == uuid, "Asset import failed");
 			}
 		}
 

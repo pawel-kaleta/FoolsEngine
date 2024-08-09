@@ -40,18 +40,16 @@ namespace fe
 
 			if (ImGui::Button("Import As..."))
 			{
+                
                 std::filesystem::path defaultFilepath = s_Filepath;
                 defaultFilepath.replace_extension(std::filesystem::path(".fetex2d"));
 				const std::filesystem::path newTextureFilepath = FileDialogs::SaveFile(defaultFilepath.string().c_str(), "Texture2D (*.fetex2d)\0 *.fetex2d\0");
 				if (!newTextureFilepath.empty())
 				{
-                    auto textureId = AssetManager::CreateAsset<Texture2D>(newTextureFilepath);
-                    auto textureHandle = AssetHandle<Texture2D>(textureId);
-
                     YAML::Emitter emitter;
 
                     emitter << YAML::BeginMap;
-                    emitter << YAML::Key << "UUID"          << YAML::Value << textureHandle.GetUUID();
+                    emitter << YAML::Key << "UUID"          << YAML::Value << UUID();
                     emitter << YAML::Key << "Source File"   << YAML::Value << s_Filepath.string();
                     emitter << YAML::Key << "Components"    << YAML::Value << (uint32_t)s_Specification.Components;
                     emitter << YAML::Key << "Format"        << YAML::Value << (uint32_t)s_Specification.Format;
@@ -61,6 +59,11 @@ namespace fe
 
                     std::ofstream fout(newTextureFilepath);
                     fout << emitter.c_str();
+                    fout.close();
+
+                    AssetID textureID = AssetManager::CreateAsset<Texture2D>(newTextureFilepath);
+
+                    AssetHandle<Texture2D>(textureID).Use().GetOrEmplaceSpecification().Specification = s_Specification;
 
                     ImGui::CloseCurrentPopup();
 				}

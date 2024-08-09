@@ -17,7 +17,7 @@ namespace fe
 		template <typename tnBehavior>
 		static void RegisterBehavior()
 		{
-			Get().m_Items.push_back(
+			s_Instance->m_Items.push_back(
 				Item{
 					&Actor::CreateBehaviorAsBase<tnBehavior>,
 					&tnBehavior::GetNameStatic
@@ -25,8 +25,8 @@ namespace fe
 			);
 		}
 
-		static const Item* GetItemFromName(const std::string& name) { return Get().GetItemFromNameInternal(name); }
-		static std::vector<Item>& GetAll() { return Get().m_Items; }
+		static const Item* GetItemFromName(const std::string& name) { return s_Instance->GetItemFromNameInternal(name); }
+		static std::vector<Item>& GetAll() { return s_Instance->m_Items; }
 	private:
 		friend class ActorInspector;
 		friend class Application;
@@ -35,15 +35,8 @@ namespace fe
 		void Shutdown() {};
 
 		static BehaviorsRegistry* s_Instance;
-		static BehaviorsRegistry& Get() { return *s_Instance; }
 
 		std::vector<Item> m_Items;
 		const Item* GetItemFromNameInternal(const std::string& name) const;
-
-		//template <typename tnBehavior>
-		//std::string GetName() const
-		//{
-		//	return tnBehavior::GetNameStatic();
-		//}
 	};
 }

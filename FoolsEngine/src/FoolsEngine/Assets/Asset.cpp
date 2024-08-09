@@ -9,6 +9,22 @@ namespace fe
 		m_ECSHandle(ECS_AssetHandle(*AssetManager::GetRegistry(type), assetID))
 	{ }
 
+	std::filesystem::path& Asset::GetSourceFilepath()
+	{
+		FE_CORE_ASSERT(!BaseAssets::IsBaseAsset(GetID(), GetTypeStatic()), "Dont try getting source filepaths of base assets");
+
+		auto sourceIndex = Get<ACSourceIndex>().Index;
+		return AssetManager::s_Instance->m_AssetSources[sourceIndex].FilePath;
+	}
+
+	const std::filesystem::path& Asset::GetSourceFilepath() const
+	{
+		FE_CORE_ASSERT(!BaseAssets::IsBaseAsset(GetID(), GetTypeStatic()), "Dont try getting source filepaths of base assets");
+
+		auto sourceIndex = Get<ACSourceIndex>().Index;
+		return AssetManager::s_Instance->m_AssetSources[sourceIndex].FilePath;
+	}
+
 	uint32_t BaseAssets::Counts(AssetType type)
 	{
 		static uint32_t Counts[AssetType::Count] = {

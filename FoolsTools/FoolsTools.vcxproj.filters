@@ -35,8 +35,10 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\ContentBrowser.h" />
     <ClInclude Include="src\AssetImport\TextureImport.h" />
+    <ClInclude Include="src\Panels\ContentBrowser.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DockSpace.cpp" />
@@ -63,7 +65,9 @@
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\ContentBrowser.cpp" />
     <ClCompile Include="src\AssetImport\TextureImport.cpp" />
+    <ClCompile Include="src\Panels\ContentBrowser.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

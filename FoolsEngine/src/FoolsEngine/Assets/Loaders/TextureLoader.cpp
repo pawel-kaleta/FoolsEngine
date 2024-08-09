@@ -9,19 +9,20 @@
 
 namespace fe
 {
-	void TextureLoader::LoadTexture(const std::filesystem::path& filePath, AssetUser<Texture2D>& textureUser)
+	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Texture2D>& textureUser)
 	{
 		auto& acDataLocation = textureUser.GetDataLocation();
 		if (acDataLocation.Data)
 			return;
 
+		//TO DO: dont override specification, use import settings
 		auto& spec = textureUser.GetOrEmplaceSpecification().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
 		stbi_set_flip_vertically_on_load(1);
 
-		stbi_uc* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load(sourceFilePath.string().c_str(), &width, &height, &channels, 0);
 
 		acDataLocation.Data = data;
 
@@ -56,12 +57,12 @@ namespace fe
 		dataPtr = nullptr;
 	}
 
-	TextureData::Specification TextureLoader::InspectTexture(const std::filesystem::path& filePath)
+	TextureData::Specification TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
 	{
 		using namespace TextureData;
 		int width, height, channels;
 		int result = 0;
-		result = stbi_info(filePath.string().c_str(), &width, &height, &channels);
+		result = stbi_info(sourceFilePath.string().c_str(), &width, &height, &channels);
 
 		if (!result)
 		{

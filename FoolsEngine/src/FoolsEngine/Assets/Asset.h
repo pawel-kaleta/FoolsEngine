@@ -10,12 +10,8 @@
 namespace fe
 {
 	using AssetID = uint32_t;
-	inline constexpr entt::null_t NullAssetID{};
-
-	using AssetSourceID = uint32_t;
-	inline constexpr entt::null_t NullAssetSourceID{};
-
 	using AssetRegistry = entt::basic_registry<AssetID>;
+	inline constexpr entt::null_t NullAssetID{};
 
 	using ECS_AssetHandle = entt::basic_handle<AssetRegistry>;
 	using Const_ECS_AssetHandle = entt::basic_handle<const AssetRegistry>;
@@ -102,10 +98,15 @@ namespace fe
 
 	struct ACUUID final : AssetComponent
 	{
-		fe::UUID UUID;
+		UUID UUID;
 	};
 
-	struct ACFilepath final : AssetComponent
+	struct ACSourceIndex
+	{
+		uint32_t Index;
+	};
+
+	struct ACProxyFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
 	};
@@ -122,15 +123,6 @@ namespace fe
 		void* Data = nullptr;
 	};
 
-	struct ACAssetProxy
-	{
-		std::filesystem::path FilePath;
-		AssetSourceID AssetSourceID;
-
-		// to do: separate component? dont hold and read from file upon request?
-		void* ImportSettings = nullptr;
-	};
-
 	class Asset
 	{
 	public:
@@ -140,13 +132,16 @@ namespace fe
 
 		bool IsValid() const { return (bool)m_ECSHandle; }
 
-		std::string GetName() const { return Get<ACFilepath>().Filepath.stem().string(); }
+		std::string GetName() const { return Get<ACProxyFilepath>().Filepath.stem().string(); }
 
 		ACDataLocation& GetDataLocation() { return Get<ACDataLocation>(); }
 		const ACDataLocation& GetDataLocation() const { return Get<ACDataLocation>(); }
 
-		ACFilepath& GetFilepath() { return Get<ACFilepath>(); }
-		const ACFilepath& GetFilepath() const { return Get<ACFilepath>(); }
+		ACProxyFilepath& GetProxyFilepath() { return Get<ACProxyFilepath>(); }
+		const ACProxyFilepath& GetProxyFilepath() const { return Get<ACProxyFilepath>(); }
+
+		std::filesystem::path& GetSourceFilepath();
+		const std::filesystem::path& GetSourceFilepath() const;
 
 		virtual void UnloadFromGPU() = 0;
 		virtual void UnloadFromCPU() = 0;

@@ -4,16 +4,16 @@ Assets:
   Textures:
     []
   Textures2D:
-    - UUID: 7565488741050205216
-      Filepath: assets\textures\grass2.png
-    - UUID: 5226859400653070881
-      Filepath: assets\textures\grass1.png
-    - UUID: 3961297738226790671
-      Filepath: assets\textures\tree2.png
-    - UUID: 17660216556848608682
-      Filepath: assets\textures\tree1.png
-    - UUID: 17479880947416584392
-      Filepath: assets\textures\grassland.jpg
+    - UUID: 18112934642992629188
+      Filepath: assets\textures\grass2.fetex2D
+    - UUID: 2406470786547939043
+      Filepath: assets\textures\grass1.fetex2D
+    - UUID: 3147587995776764887
+      Filepath: assets\textures\tree2.fetex2D
+    - UUID: 7011469824264952867
+      Filepath: assets\textures\tree1.fetex2D
+    - UUID: 16144042178780554263
+      Filepath: assets\textures\grassland.fetex2D
   Meshes:
     []
   Models:
@@ -176,7 +176,7 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 7565488741050205216
+                UUID: 18112934642992629188
                 Name: grass2
               Tiling: 1
           - Entity: Grass_1
@@ -202,7 +202,7 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 5226859400653070881
+                UUID: 2406470786547939043
                 Name: grass1
               Tiling: 1
           - Entity: Tree_2
@@ -228,7 +228,7 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 3961297738226790671
+                UUID: 3147587995776764887
                 Name: tree2
               Tiling: 1
           - Entity: Tree_1
@@ -254,7 +254,7 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 17660216556848608682
+                UUID: 7011469824264952867
                 Name: tree1
               Tiling: 1
           - Entity: Ground
@@ -280,6 +280,6 @@ Worlds:
               Color: [1, 1, 1, 1]
               Texture:
                 Type: 2
-                UUID: 17479880947416584392
+                UUID: 16144042178780554263
                 Name: grassland
               Tiling: 1

@@ -130,18 +130,17 @@ namespace fe
 
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto flat_color_texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+		auto flat_color_texture = (AssetID)BaseAssets::Textures2D::FlatWhite;
 
-		
-		std::string combo_preview_value = Tile.Texture.GetID() == flat_color_texture.GetID() ? "None" : std::to_string(Tile.Texture.GetID()) + ": " + Tile.Texture.Observe().GetName();
+		std::string combo_preview_value = Tile.Texture.GetID() == flat_color_texture ? "None" : std::to_string(Tile.Texture.GetID()) + ": " + Tile.Texture.Observe().GetName();
 
 		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
 		{
 			auto item_current = Tile.Texture;
-			bool is_selected = (Tile.Texture.GetID() == flat_color_texture.GetID());
+			bool is_selected = (Tile.Texture.GetID() == flat_color_texture);
 
 			if (ImGui::Selectable("None", is_selected))
-				item_current = flat_color_texture;
+				item_current = AssetHandle<Texture2D>(flat_color_texture);
 
 			auto textures = AssetManager::GetAll<Texture2D>();
 			for (auto id : textures)
@@ -152,7 +151,7 @@ namespace fe
 				if (textureObserver.GetSpecification()->Specification.Components != TextureData::Components::RGB)
 					continue;
 
-				if (id == flat_color_texture.GetID())
+				if (id == flat_color_texture)
 					continue;
 
 				is_selected = (item_current.GetID() == id);
@@ -165,31 +164,17 @@ namespace fe
 			}
 			if (ImGui::Selectable("Add..."))
 			{
-				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-				if (!newTextureFilepath.empty())
+				const std::filesystem::path newTextureProxyFilepath = FileDialogs::OpenFile("(*.fetex2d)\0*.fetex2d\0");
+				if (!newTextureProxyFilepath.empty())
 				{
-					bool found = false;
+					AssetID newTextureID = AssetManager::GetOrCreateAsset<Texture2D>(newTextureProxyFilepath);
+					auto texture = AssetHandle<Texture2D>(newTextureID);
+					auto textureUser = texture.Use();
+					TextureLoader::LoadTexture(textureUser);
+					// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
 
-					for (auto id : textures)
-					{
-						auto texture = AssetHandle<Texture2D>(id);
-						if (texture.Observe().GetFilepath().Filepath == newTextureFilepath)
-						{
-							found = true;
-							break;
-						}
-					}
-
-					if (!found)
-					{
-						auto texture = AssetHandle<Texture2D>(AssetManager::CreateAsset<Texture2D>(newTextureFilepath));
-						auto textureUser = texture.Use();
-						TextureLoader::LoadTexture(newTextureFilepath, textureUser);
-						
-
-						if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB)
-							item_current = texture;
-					}
+					if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB)
+						item_current = texture;
 				}
 			}
 			Tile.Texture = item_current;
@@ -197,7 +182,7 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		if (Tile.Texture.GetID() == flat_color_texture.GetID())
+		if (Tile.Texture.GetID() == flat_color_texture)
 		{
 			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
 		}
@@ -225,22 +210,22 @@ namespace fe
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto flat_color_texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
-		std::string combo_preview_value = Sprite.Texture.GetID() == flat_color_texture.GetID() ? "None" : std::to_string(Sprite.Texture.GetID()) + ": " + Sprite.Texture.Observe().GetName();
+		auto flat_color_texture = (AssetID)BaseAssets::Textures2D::FlatWhite;
+		std::string combo_preview_value = Sprite.Texture.GetID() == flat_color_texture ? "None" : std::to_string(Sprite.Texture.GetID()) + ": " + Sprite.Texture.Observe().GetName();
 
 		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
 		{
 			auto item_current = Sprite.Texture;
-			bool is_selected = (Sprite.Texture.GetID() == flat_color_texture.GetID());
+			bool is_selected = (Sprite.Texture.GetID() == flat_color_texture);
 
 			if (ImGui::Selectable("None", is_selected))
-				item_current = flat_color_texture;
+				item_current = AssetHandle<Texture2D>(flat_color_texture);
 
 			auto textures = AssetManager::GetAll<Texture2D>();
 			for (auto id : textures)
 			{
 				auto texture = AssetHandle<Texture2D>(id);
-				if (id == flat_color_texture.GetID())
+				if (id == flat_color_texture)
 					continue;
 
 				is_selected = (item_current.GetID() == id);
@@ -254,35 +239,21 @@ namespace fe
 
 			if (ImGui::Selectable("Add..."))
 			{
-				const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-				if (!newTextureFilepath.empty())
+				const std::filesystem::path newTextureProxyFilepath = FileDialogs::OpenFile("(*.fetex2d)\0*.fetex2d\0");
+				if (!newTextureProxyFilepath.empty())
 				{
-					bool found = false;
-
-					for (auto id : textures)
-					{
-						auto texture = AssetHandle<Texture2D>(id);
-						if (texture.Observe().GetFilepath().Filepath == newTextureFilepath)
-						{
-							found = true;
-							break;
-						}
-					}
-
-					if (!found)
-					{
-						auto texture = AssetHandle<Texture2D>(AssetManager::CreateAsset<Texture2D>(newTextureFilepath));
-						auto textureUser = texture.Use().GetFilepath().Filepath = newTextureFilepath;
-
-						item_current = texture;
-					}
+					AssetID newTextureID = AssetManager::GetOrCreateAsset<Texture2D>(newTextureProxyFilepath);
+					item_current = AssetHandle<Texture2D>(newTextureID);
+					auto textureUser = item_current.Use();
+					TextureLoader::LoadTexture(textureUser);
+					// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
 				}
 			}
 			Sprite.Texture = item_current;
 			ImGui::EndCombo();
 		}
 
-		if (Sprite.Texture.GetID() == flat_color_texture.GetID())
+		if (Sprite.Texture.GetID() == flat_color_texture)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));
 		}
@@ -367,8 +338,8 @@ namespace fe
 	void CMaterialInstance::DrawInspectorWidget(BaseEntity entity)
 	{
 		// TO DO: component's widget should not be responsible for creating underlying object
-
-		const char* materialInstance_combo_preview = MaterialInstance.Observe().GetName().c_str();
+		std::string name = MaterialInstance.Observe().GetName();
+		const char* materialInstance_combo_preview = name.c_str();
 
 		if (ImGui::BeginCombo("Material Instance", materialInstance_combo_preview))
 		{
@@ -395,7 +366,7 @@ namespace fe
 				// markmark
 				// create file / read file
 				std::filesystem::path filePath;
-				MaterialInstance = AssetHandle<fe::MaterialInstance>(AssetManager::CreateAsset<fe::MaterialInstance>(filePath));
+				MaterialInstance = AssetHandle<fe::MaterialInstance>(AssetManager::GetOrCreateAsset<fe::MaterialInstance>(filePath));
 				auto miUser = MaterialInstance.Use();
 				MaterialInstance::MakeMaterialInstance(miUser);
 				auto material = AssetHandle<Material>((AssetID)BaseAssets::Materials::Default3D);

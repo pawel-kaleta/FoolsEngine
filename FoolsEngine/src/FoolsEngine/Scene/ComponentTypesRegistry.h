@@ -30,7 +30,7 @@ namespace fe
 		template <typename tnComponent>
 		static void RegisterDataComponent()
 		{
-			Get().m_DataItems.push_back(
+			s_Instance->m_DataItems.push_back(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
 					&BaseEntity::DefaultEmplace<tnComponent>,
@@ -43,7 +43,7 @@ namespace fe
 		template <typename tnFlagComponent>
 		static void RegisterFlagComponent()
 		{
-			Get().m_FlagItems.push_back(
+			s_Instance->m_FlagItems.push_back(
 				FlagComponentRegistryItem{
 					&BaseEntity::AllOf<tnFlagComponent>,
 					&BaseEntity::Flag<tnFlagComponent>,
@@ -52,8 +52,8 @@ namespace fe
 			);
 		}
 
-		static std::vector<DataComponentRegistryItem>& GetDataCompItems() { return Get().m_DataItems; };
-		static std::vector<FlagComponentRegistryItem>& GetFlagCompItems() { return Get().m_FlagItems; };
+		static std::vector<DataComponentRegistryItem>& GetDataCompItems() { return s_Instance->m_DataItems; };
+		static std::vector<FlagComponentRegistryItem>& GetFlagCompItems() { return s_Instance->m_FlagItems; };
 		
 		
 	private:
@@ -63,16 +63,9 @@ namespace fe
 		void Shutdown() {};
 
 		static ComponentTypesRegistry* s_Instance;
-		static ComponentTypesRegistry& Get() { return *s_Instance; }
 
 		std::vector<DataComponentRegistryItem> m_DataItems;
 		std::vector<FlagComponentRegistryItem> m_FlagItems;
 
 	};
-
-	//template <typename tnComponent>
-	//static std::string GetName()
-	//{
-	//	return tnComponent::GetNameStatic();
-	//}
 }

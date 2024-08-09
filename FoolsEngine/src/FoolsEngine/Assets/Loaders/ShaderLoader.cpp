@@ -17,7 +17,6 @@ namespace fe
 			return;
 		}
 
-		shaderUser.GetFilepath().Filepath = filePath;
 		auto& sourceCode = shaderUser.GetOrEmplaceSourceCode();
 		auto& shaderSource = sourceCode.ShaderSource;
 		

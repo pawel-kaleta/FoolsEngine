@@ -19,7 +19,6 @@ namespace fe
 	YAML::Emitter& operator<<(YAML::Emitter& out, const AssetHandle<tnAsset> assetHandle)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Type" << YAML::Value << assetHandle.GetType();
 		if (assetHandle.IsValid())
 		{
 			out << YAML::Key << "UUID" << YAML::Value << assetHandle.GetUUID();
@@ -123,9 +122,11 @@ namespace YAML
 			if (!node.IsMap())
 				return false;
 
-			fe::AssetType type = (fe::AssetType)(node["Type"].as<int>());
 			fe::UUID uuid = node["UUID"].as<fe::UUID>();
-			fe::AssetID id = fe::AssetManager::GetAssetWithUUID(uuid, type);
+
+			fe::AssetID id = fe::AssetManager::GetAssetWithUUID<tnAsset>(uuid);
+
+			FE_CORE_ASSERT(id != fe::NullAssetID, "Failed to deserialize asset handle");
 
 			rhs = fe::AssetHandle<tnAsset>(id);
 

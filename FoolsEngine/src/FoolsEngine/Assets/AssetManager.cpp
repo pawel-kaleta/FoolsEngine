@@ -7,11 +7,12 @@
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
 
+#include "FoolsEngine\Assets\Serializers\YAML.h"
 namespace fe
 {
 	AssetManager* AssetManager::s_Instance;
 
-	AssetID AssetManager::CreateAsset(const std::filesystem::path& filePath, AssetType type)
+	AssetID AssetManager::CreateAsset(const std::filesystem::path& proxyFilePath, AssetType type)
 	{
 		FE_PROFILER_FUNC();
 
@@ -21,11 +22,34 @@ namespace fe
 		reg.emplace<ACRefsCounters>(assetID);
 		reg.emplace<ACDataLocation>(assetID);
 
-		UUID uuid = reg.emplace<ACUUID>(assetID).UUID;
-		Get().m_AssetMapByUUID[type][uuid] = assetID;
+		auto& assetMaps = s_Instance->m_AssetMaps[type];
 
-		reg.emplace<ACFilepath>(assetID).Filepath = filePath;
-		Get().m_AssetMapByPath[type][filePath] = assetID;
+		YAML::Node node = YAML::LoadFile(proxyFilePath.string());
+
+		UUID uuid = node["UUID"].as<UUID>();
+		reg.emplace<ACUUID>(assetID).UUID = uuid;
+		assetMaps.ByUUID[uuid] = assetID;
+
+		reg.emplace<ACProxyFilepath>(assetID).Filepath = proxyFilePath;
+		assetMaps.ByProxyPath[proxyFilePath] = assetID;
+
+		auto& sourcesMap = s_Instance->m_AssetSourceMaps.ByFilepath;
+		if (sourcesMap.find(proxyFilePath) != sourcesMap.end())
+		{
+			auto assetSourceIndex = sourcesMap.at(proxyFilePath);
+			auto& assetSource = s_Instance->m_AssetSources[assetSourceIndex];
+
+			assetSource.Assets.push_back( {assetID, type} );
+			reg.emplace<ACSourceIndex>(assetID).Index = assetSourceIndex;
+		}
+		else
+		{
+			auto& assetSource = s_Instance->m_AssetSources.emplace_back();
+			assetSource.Assets.push_back({ assetID, type });
+			reg.emplace<ACSourceIndex>(assetID).Index = (uint32_t)s_Instance->m_AssetSources.size() - 1;
+
+			assetSource.FilePath = node["Source File"].as<std::string>();
+		}
 
 		return assetID;
 	}
@@ -37,27 +61,12 @@ namespace fe
 		if (0 == uuid)
 			return NullAssetID;
 
-		if (Get().m_AssetMapByUUID[type].find(uuid) == Get().m_AssetMapByUUID[type].end())
+		auto& assetMap = s_Instance->m_AssetMaps[type].ByUUID;
+
+		if (assetMap.find(uuid) == assetMap.end())
 			return NullAssetID;
 
-		return Get().m_AssetMapByUUID[type].at(uuid);
-	}
-
-	AssetID AssetManager::CreateAssetWithUUID(UUID uuid, const std::filesystem::path& filePath, AssetType type)
-	{
-		AssetID assetID = NewID(type);
-		AssetRegistry& reg = *GetRegistry(type);
-
-		reg.emplace<ACRefsCounters>(assetID);
-		reg.emplace<ACDataLocation>(assetID);
-
-		reg.emplace<ACUUID>(assetID).UUID = uuid;
-		Get().m_AssetMapByUUID[type][uuid] = assetID;
-
-		reg.emplace<ACFilepath>(assetID).Filepath = filePath;
-		Get().m_AssetMapByPath[type][filePath] = assetID;
-
-		return assetID;
+		return assetMap.at(uuid);
 	}
 
 	AssetID AssetManager::NewBaseAsset(AssetID requestID, const std::string& name, AssetType type)
@@ -70,11 +79,13 @@ namespace fe
 		reg.emplace<ACRefsCounters>(assetID);
 		reg.emplace<ACDataLocation>(assetID);
 
-		reg.emplace<ACUUID>(assetID).UUID = assetID;
-		Get().m_AssetMapByUUID[type][(UUID)(uint64_t)assetID] = assetID;
+		auto& assetMaps = s_Instance->m_AssetMaps[type];
 
-		reg.emplace<ACFilepath>(assetID).Filepath = name;
-		Get().m_AssetMapByPath[type][name] = assetID;
+		reg.emplace<ACUUID>(assetID).UUID = assetID;
+		assetMaps.ByUUID[(UUID)(uint64_t)assetID] = assetID;
+
+		reg.emplace<ACProxyFilepath>(assetID).Filepath = name;
+		assetMaps.ByProxyPath[name] = assetID;
 
 		return assetID;
 	}
@@ -83,12 +94,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& inst = Get();
 		auto GDI = Renderer::GetActiveGDItype();
 
 		{
 			FE_PROFILER_SCOPE("Texture2D");
-			auto texturesView = inst.m_Registries[AssetType::Texture2DAsset].view<ACRefsCounters, ACFilepath>();
+			// TO DO: doesnt need to be a view, make a group acctually
+			auto texturesView = s_Instance->m_Registries[AssetType::Texture2DAsset].view<ACRefsCounters, ACProxyFilepath>();
 			for (auto id : texturesView)
 			{
 				if (BaseAssets::IsBaseAsset(id, AssetType::Texture2DAsset))
@@ -99,14 +110,13 @@ namespace fe
 				auto textureUser = AssetHandle<Texture2D>(id).Use();
 				if (acref.LiveHandles == 0)
 				{
-
 					textureUser.UnloadFromGPU();
 				}
 				else
 				{
 					if (!textureUser.GetRendererID(GDI))
 					{
-						TextureLoader::LoadTexture(acfp.Filepath, textureUser);
+						TextureLoader::LoadTexture(textureUser);
 						textureUser.CreateGDITexture2D(GDI);
 					}
 				}
@@ -116,7 +126,8 @@ namespace fe
 
 		{
 			FE_PROFILER_SCOPE("Shaders");
-			auto shadersView = inst.m_Registries[AssetType::ShaderAsset].view<ACRefsCounters, ACFilepath>();
+			// TO DO: doesnt need to be a view, make a group acctually
+			auto shadersView = s_Instance->m_Registries[AssetType::ShaderAsset].view<ACRefsCounters, ACProxyFilepath>();
 			for (auto id : shadersView)
 			{
 				if (BaseAssets::IsBaseAsset(id, AssetType::ShaderAsset))
@@ -131,7 +142,7 @@ namespace fe
 				}
 				else
 				{
-					ShaderLoader::LoadShader(acfp.Filepath, shaderUser);
+					ShaderLoader::LoadShader(shaderUser);
 					ShaderLoader::CompileShader(GDI, shaderUser);
 				}
 				shaderUser.UnloadFromCPU();

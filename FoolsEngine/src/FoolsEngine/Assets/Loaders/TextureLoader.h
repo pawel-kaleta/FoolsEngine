@@ -11,10 +11,10 @@ namespace fe
 	class TextureLoader
 	{
 	public:
-		static void LoadTexture(const std::filesystem::path& filePath, AssetUser<Texture2D>& textureUser);
+		static void LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Texture2D>& textureUser);
 		static void LoadTexture(AssetUser<Texture2D>& textureUser)
 		{
-			LoadTexture(textureUser.GetFilepath().Filepath, textureUser);
+			LoadTexture(textureUser.GetSourceFilepath(), textureUser);
 		}
 		static void UnloadTexture(AssetUser<Texture2D>& textureUser);
 		static TextureData::Specification InspectTexture(const std::filesystem::path& filePath);

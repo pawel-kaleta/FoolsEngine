@@ -47,7 +47,7 @@ namespace fe
 			reg->emplace<ACUUID>(assetID);
 			reg->emplace<ACRefsCounters>(assetID);
 			reg->emplace<ACDataLocation>(assetID);
-			reg->emplace<ACFilepath>(assetID);
+			reg->emplace<ACProxyFilepath>(assetID);
 		}
 	};
 

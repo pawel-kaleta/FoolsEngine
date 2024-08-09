@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	SystemsRegistry* SystemsRegistry::m_Instance;
+	SystemsRegistry* SystemsRegistry::s_Instance;
 
 	void SystemsRegistry::RegisterSystems()
 	{
