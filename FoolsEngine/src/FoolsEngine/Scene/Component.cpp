@@ -210,6 +210,9 @@ namespace fe
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
+		std::string nameTag = "Texture";
+		DrawAssetHandle<Texture2D>(Sprite.Texture, nameTag);
+
 		auto flat_color_texture = (AssetID)BaseAssets::Textures2D::FlatWhite;
 		std::string combo_preview_value = Sprite.Texture.GetID() == flat_color_texture ? "None" : std::to_string(Sprite.Texture.GetID()) + ": " + Sprite.Texture.Observe().GetName();
 

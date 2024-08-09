@@ -39,6 +39,70 @@ namespace fe
 		virtual void DrawInspectorWidget(BaseEntity entity);
 		virtual void Serialize(YAML::Emitter& emitter);
 		virtual void Deserialize(YAML::Node& data);
+
+	protected:
+		bool IsAssetSource(const std::filesystem::path& filepath)
+		{
+			return false;
+		}
+
+		bool IsAssetProxy(const std::filesystem::path& filepath)
+		{
+			return true;
+		}
+
+		template<typename tnAsset>
+		void DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
+		{
+			std::string name;
+			if (!assetHandle.IsValid())
+			{
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
+				name = "-";
+			}
+			else
+			{
+				name = std::to_string(assetHandle.GetID()) + ": " + assetHandle.Observe().GetName();
+			}
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+			bool selected = ImGui::Button(name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPath"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
+					std::filesystem::path filepath = *(const std::filesystem::path*)payload->Data;
+					if (!filepath.empty())
+					{
+						if (IsAssetSource(filepath))
+						{
+							//import
+						}
+						else if (IsAssetProxy(filepath))
+						{
+							AssetID newAssetID = AssetManager::GetOrCreateAsset<tnAsset>(filepath);
+							assetHandle = AssetHandle<tnAsset>(newAssetID);
+							if (tnAsset::GetTypeStatic() == AssetType::Texture2DAsset)
+							{
+								auto textureUser = assetHandle.Use();
+								TextureLoader::LoadTexture(textureUser);
+								// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::SameLine();
+			ImGui::Text(nameTag.c_str());
+			ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
+			if (!assetHandle.IsValid())
+				ImGui::PopStyleColor();
+		}
 	};
 
 	struct SpatialComponent : DataComponent
