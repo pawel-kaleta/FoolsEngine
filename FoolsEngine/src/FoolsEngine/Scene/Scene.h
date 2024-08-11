@@ -10,9 +10,20 @@ namespace fe
 	class Entity;
 	class UUID;
 
-	class Scene
+	class Scene : public Asset
 	{
 	public:
+
+		// Asset
+		virtual AssetType GetType() const override { return GetTypeStatic(); }
+		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
+		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { return false; }
+		//static std::string GetSourceExtensionAlias() { return ""; } // base asserts here and its ok
+		static std::string GetProxyExtension() { return ".fescene"; }
+		static std::string GetProxyExtensionAlias() { return "Scene"; }
+		virtual void UnloadFromGPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
+		virtual void UnloadFromCPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
+
 		Scene();
 		~Scene() = default;
 		void Initialize();

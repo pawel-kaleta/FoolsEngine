@@ -7,6 +7,11 @@
 
 namespace fe
 {
+	bool Texture2D::IsKnownSourceExtension(const std::filesystem::path& extension)
+	{
+		return TextureLoader::IsKnownExtension(extension);
+	}
+
 	AssetHandle<Texture2D> Texture2D::GetHandle() const { return AssetHandle<Texture2D>(GetECSHandle()); }
 
 	void Texture2D::SendDataToGPU(GDIType GDI, void* data)

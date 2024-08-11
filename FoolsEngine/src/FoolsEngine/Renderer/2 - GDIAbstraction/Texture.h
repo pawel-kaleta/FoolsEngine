@@ -23,6 +23,11 @@ namespace fe
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
+		static std::string GetSourceExtensionAlias() { return "Texture Source"; }
+		static std::string GetProxyExtension() { return ".fetex2d"; }
+		static std::string GetProxyExtensionAlias() { return "Texture2D"; }
+
 		AssetHandle<Texture2D> GetHandle() const;
 
 		void SendDataToGPU(GDIType GDI, void* data);

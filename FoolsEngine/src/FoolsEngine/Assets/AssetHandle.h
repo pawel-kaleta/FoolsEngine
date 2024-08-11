@@ -64,21 +64,34 @@ namespace fe
 		};
 	};
 
+
+
+	class AssetHandleBase
+	{
+	protected:
+		AssetHandleBase() : m_ID(NullAssetID) {};
+		AssetHandleBase(AssetID id) : m_ID(id) {};
+		
+		AssetID m_ID;
+	};
+
 	template <typename tnAsset>
-	class AssetHandle
+	class AssetHandle : public AssetHandleBase
 	{
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
 
+		static AssetType GetType() { return tnAsset::GetTypeStatic(); }
+
 		AssetHandle() = default;
 		AssetHandle(ECS_AssetHandle assetHandle) :
-			m_ID(assetHandle.entity())
+			AssetHandleBase(assetHandle.entity())
 		{
 			if (assetHandle)
 				assetHandle.get<ACRefsCounters>().LiveHandles++;
 		};
 		AssetHandle(AssetID assetID) :
-			m_ID(assetID)
+			AssetHandleBase(assetID)
 		{
 			auto ECShandle = GetECSHandle();
 			if (ECShandle.valid())
@@ -93,24 +106,21 @@ namespace fe
 		}
 
 		AssetHandle(const AssetHandle& other) :
-			m_ID(other.m_ID)
+			AssetHandleBase(other.m_ID)
 		{
 			auto ECShandle = GetECSHandle();
 			if (ECShandle.valid())
 				ECShandle.get<ACRefsCounters>().LiveHandles++;
 		};
 		AssetHandle(AssetHandle&& other) :
-			m_ID(other.m_ID)
+			AssetHandleBase(other.m_ID)
 		{
 			other.m_ID = NullAssetID;
 		};
 		AssetHandle& operator=(const AssetHandle& other)
 		{
-			auto ECShandle = GetECSHandle();
-			if (ECShandle.valid())
-				ECShandle.get<ACRefsCounters>().LiveHandles--;
 			m_ID = other.m_ID;
-			ECShandle = GetECSHandle();
+			auto ECShandle = GetECSHandle();
 			if (ECShandle.valid())
 				ECShandle.get<ACRefsCounters>().LiveHandles++;
 
@@ -127,16 +137,14 @@ namespace fe
 		bool operator==(const AssetHandle& other) const { return m_ID == other.m_ID; }
 
 		AssetID GetID() const { return m_ID; }
-		static AssetType GetType() { return tnAsset::GetTypeStatic(); }
 		UUID GetUUID() const { return GetECSHandle().get<ACUUID>().UUID; }
 
 		bool IsValid() const { return (bool)GetECSHandle(); }
 
 		const AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
 		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
-	private:
-		AssetID m_ID = NullAssetID;
 
+	private:
 		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetType()), m_ID); };
 	};
 }

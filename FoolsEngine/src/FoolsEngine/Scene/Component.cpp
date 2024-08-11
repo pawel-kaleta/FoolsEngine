@@ -341,8 +341,8 @@ namespace fe
 	void CMaterialInstance::DrawInspectorWidget(BaseEntity entity)
 	{
 		// TO DO: component's widget should not be responsible for creating underlying object
-		std::string name = MaterialInstance.Observe().GetName();
-		const char* materialInstance_combo_preview = name.c_str();
+		std::string previewName = MaterialInstance.Observe().GetName();
+		const char* materialInstance_combo_preview = previewName.c_str();
 
 		if (ImGui::BeginCombo("Material Instance", materialInstance_combo_preview))
 		{

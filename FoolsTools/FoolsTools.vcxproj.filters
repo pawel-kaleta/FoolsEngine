@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="AssetImport">
+      <UniqueIdentifier>{809D32B6-EC52-ABAB-7547-A582E1FBA1AF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Panels">
       <UniqueIdentifier>{A80D95C9-94AF-BF9F-7D6A-D3F369AB46F0}</UniqueIdentifier>
     </Filter>
@@ -9,6 +12,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AssetImport\AssetImportModal.h">
+      <Filter>AssetImport</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetImport\FileHandler.h">
+      <Filter>AssetImport</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetImport\TextureImport.h">
+      <Filter>AssetImport</Filter>
+    </ClInclude>
     <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorApp.h" />
     <ClInclude Include="src\EditorAssetManager.h" />
@@ -16,6 +28,9 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
     <ClInclude Include="src\Panels\ActorInspector.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\ContentBrowser.h">
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\EntityInspector.h">
@@ -35,18 +50,26 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\TextureImport.h" />
-    <ClInclude Include="src\Panels\ContentBrowser.h">
-      <Filter>Panels</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetImport\AssetImportModal.cpp">
+      <Filter>AssetImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetImport\FileHandler.cpp">
+      <Filter>AssetImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetImport\TextureImport.cpp">
+      <Filter>AssetImport</Filter>
+    </ClCompile>
     <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorAssetManager.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\ContentBrowser.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="src\Panels\EntityInspector.cpp">
@@ -64,10 +87,6 @@
     </ClCompile>
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetImport\TextureImport.cpp" />
-    <ClCompile Include="src\Panels\ContentBrowser.cpp">
-      <Filter>Panels</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

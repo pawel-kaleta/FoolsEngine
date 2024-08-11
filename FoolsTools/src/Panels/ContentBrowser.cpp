@@ -2,7 +2,7 @@
 
 #include <FoolsEngine.h>
 
-#include "AssetImport\TextureImport.h"
+#include "AssetImport\FileHandler.h"
 
 namespace fe
 {
@@ -155,14 +155,8 @@ namespace fe
 		for (auto& file : m_Files)
 		{
 			std::string extension = file.extension().string();
-			bool recognizedAsset = false;
-			bool recognizedAssetSource = false;
-			if (extension == ".fescene") { extension = "Scene"; recognizedAsset = true; }
-			else if (extension == ".glsl") { extension = "Shader Source"; recognizedAssetSource = true; }
-			else if (extension == ".fetex2d") { extension = "Texture2D"; recognizedAsset = true; }
-			else if (TextureLoader::IsKnownExtension(extension)) { extension = "Texture Source"; recognizedAssetSource = true; }
 
-			if (recognizedAssetSource || recognizedAsset)
+			if (FileHandler::IsKnownExtension(extension))
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
 				ImGui::BeginTable(file.string().c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)tnSize + 9.f, 0 });
@@ -172,9 +166,24 @@ namespace fe
 				// thumbnail in the future
 				ImGui::ImageButton(file.string().c_str(), (ImTextureID)(int64_t)m_Icons.File.Use().GetRendererID(gdi), thumbnailSizeIm, { 0,1 }, { 1,0 });
 				{
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+					{
+						// Set payload to carry the asset filepath of our item (could be anything)
+						static std::filesystem::path payload;
+						payload = m_CurrentPath / file;
+						ImGui::SetDragDropPayload("AssetPath", &payload, sizeof(payload));
+
+						// Display preview (could be anything, e.g. when dragging an image we could decide to display
+						// the filename and a small preview of the image, etc.)
+						ImGui::ImageButton(file.string().c_str(), (ImTextureID)(int64_t)m_Icons.File.Use().GetRendererID(gdi), { 32,32 }, { 0,1 }, { 1,0 });
+						ImGui::Text(file.stem().string().c_str());
+
+						ImGui::EndDragDropSource();
+					}
+
 					if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0))
 					{
-						fileOpenAttempt = file;
+						FileHandler::OpenFile(m_CurrentPath / file);
 					}
 
 					ImGui::BeginTable(file.string().c_str(), 1, ImGuiTableFlags_PadOuterX);
@@ -204,17 +213,6 @@ namespace fe
 			if (next_button_x2 < window_visible_x2)
 				ImGui::SameLine();
 		}
-
-		if (!fileOpenAttempt.empty())
-		{
-			if (TextureLoader::IsKnownExtension(fileOpenAttempt.extension().string()))
-			{
-				TextureImport::OpenWindow(m_CurrentPath / fileOpenAttempt);
-			}	
-		}
-
-		TextureImport::RenderWindow();
-		
 	}
 
 	void ContentBrowser::ReadFolder()

@@ -79,9 +79,9 @@ namespace fe
 		return spec;
 	}
 
-	bool TextureLoader::IsKnownExtension(const std::string& extension)
+	bool TextureLoader::IsKnownExtension(const std::filesystem::path& extension)
 	{
-		static std::string knownExtensions[] = {
+		static std::filesystem::path knownExtensions[] = {
 			".jpg",
 			".jpeg",
 			".png",
@@ -95,7 +95,9 @@ namespace fe
 		for (auto& knownExtension : knownExtensions)
 		{
 			if (extension == knownExtension)
+			{
 				return true;
+			}
 		}
 
 		return false;

@@ -18,6 +18,11 @@
 namespace fe
 {
 	class BaseEntity;
+	namespace AssetImportModal
+	{
+		extern void OpenWindow(const std::filesystem::path& filepath, AssetType type, AssetHandleBase* optionalBaseHandle);
+	}
+
 
 #define FE_COMPONENT_SETUP(type, name) \
 	virtual std::string GetName() const override final { return name; } \
@@ -41,16 +46,6 @@ namespace fe
 		virtual void Deserialize(YAML::Node& data);
 
 	protected:
-		bool IsAssetSource(const std::filesystem::path& filepath)
-		{
-			return false;
-		}
-
-		bool IsAssetProxy(const std::filesystem::path& filepath)
-		{
-			return true;
-		}
-
 		template<typename tnAsset>
 		void DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
 		{
@@ -76,11 +71,9 @@ namespace fe
 					std::filesystem::path filepath = *(const std::filesystem::path*)payload->Data;
 					if (!filepath.empty())
 					{
-						if (IsAssetSource(filepath))
-						{
-							//import
-						}
-						else if (IsAssetProxy(filepath))
+						std::filesystem::path extension = filepath.extension();
+						
+						if (extension == tnAsset::GetProxyExtension())
 						{
 							AssetID newAssetID = AssetManager::GetOrCreateAsset<tnAsset>(filepath);
 							assetHandle = AssetHandle<tnAsset>(newAssetID);
@@ -90,6 +83,12 @@ namespace fe
 								TextureLoader::LoadTexture(textureUser);
 								// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
 							}
+						}
+						else if (tnAsset::IsKnownSourceExtension(extension))
+						{
+							#ifdef FE_EDITOR
+								AssetImportModal::OpenWindow(filepath, tnAsset::GetTypeStatic(), &assetHandle);
+							#endif // FE_EDITOR
 						}
 					}
 				}

@@ -2,78 +2,63 @@
 
 #include <FoolsEngine.h>
 
+#include <filesystem>
+
 namespace fe
 {
     std::filesystem::path TextureImport::s_Filepath;
     TextureData::Specification TextureImport::s_Specification;
+    AssetHandle<Texture2D>* s_Handle;
     static char str0[128];
 
-	void TextureImport::OpenWindow(std::filesystem::path filepath)
+	void TextureImport::InitImport(const std::filesystem::path& filepath, AssetHandleBase* optionalBaseHandle)
 	{
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
+        s_Handle = (AssetHandle<Texture2D>*)optionalBaseHandle;
         s_Filepath = filepath;
-        s_Specification = TextureLoader::InspectTexture(s_Filepath);
+        s_Specification = TextureLoader::InspectTexture(filepath);
 
         memset(str0, 0, sizeof(str0));
         strncpy_s(str0, "Texture name", sizeof(str0));
-
-        ImGui::OpenPopup("Texture Import");
 	}
 
     void TextureImport::RenderWindow()
     {
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        ImGui::Text("File: %s", s_Filepath.string().c_str());
+        ImGui::Text("Components: %d", s_Specification.Components);
+        ImGui::Text("Format: %d", s_Specification.Format);
+        ImGui::Text("Width: %d", s_Specification.Width);
+        ImGui::Text("Height: %d", s_Specification.Height);
+        ImGui::Separator();
+        ImGui::Text("TO DO: import settings");
+    }
 
-        if (ImGui::BeginPopupModal("Texture Import", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text("File: %s", s_Filepath.string().c_str());
-            ImGui::Text("Components: %d", s_Specification.Components);
-            ImGui::Text("Format: %d", s_Specification.Format);
-            ImGui::Text("Width: %d", s_Specification.Width);
-            ImGui::Text("Height: %d", s_Specification.Height);
-            ImGui::Separator();
-            ImGui::Text("TO DO: import settings");
-            ImGui::Separator();
+    void TextureImport::ImportAs(const std::filesystem::path& filepath)
+    {
+        if (filepath.empty())
+            return;
 
-			if (ImGui::Button("Import As..."))
-			{
-                
-                std::filesystem::path defaultFilepath = s_Filepath;
-                defaultFilepath.replace_extension(std::filesystem::path(".fetex2d"));
-				const std::filesystem::path newTextureFilepath = FileDialogs::SaveFile(defaultFilepath.string().c_str(), "Texture2D (*.fetex2d)\0 *.fetex2d\0");
-				if (!newTextureFilepath.empty())
-				{
-                    YAML::Emitter emitter;
+        YAML::Emitter emitter;
 
-                    emitter << YAML::BeginMap;
-                    emitter << YAML::Key << "UUID"          << YAML::Value << UUID();
-                    emitter << YAML::Key << "Source File"   << YAML::Value << s_Filepath.string();
-                    emitter << YAML::Key << "Components"    << YAML::Value << (uint32_t)s_Specification.Components;
-                    emitter << YAML::Key << "Format"        << YAML::Value << (uint32_t)s_Specification.Format;
-                    emitter << YAML::Key << "Width"         << YAML::Value << s_Specification.Width;
-                    emitter << YAML::Key << "Height"        << YAML::Value << s_Specification.Height;
-                    emitter << YAML::EndMap;
+        emitter << YAML::BeginMap;
+        emitter << YAML::Key << "UUID" << YAML::Value << UUID();
+        emitter << YAML::Key << "Source File" << YAML::Value << s_Filepath.string();
+        emitter << YAML::Key << "Components" << YAML::Value << (uint32_t)s_Specification.Components;
+        emitter << YAML::Key << "Format" << YAML::Value << (uint32_t)s_Specification.Format;
+        emitter << YAML::Key << "Width" << YAML::Value << s_Specification.Width;
+        emitter << YAML::Key << "Height" << YAML::Value << s_Specification.Height;
+        emitter << YAML::EndMap;
 
-                    std::ofstream fout(newTextureFilepath);
-                    fout << emitter.c_str();
-                    fout.close();
+        std::ofstream fout(filepath);
+        fout << emitter.c_str();
+        fout.close();
 
-                    AssetID textureID = AssetManager::CreateAsset<Texture2D>(newTextureFilepath);
+        AssetID assetID = AssetManager::CreateAsset<Texture2D>(filepath);
+        AssetHandle<Texture2D> textureHandle(assetID);
 
-                    AssetHandle<Texture2D>(textureID).Use().GetOrEmplaceSpecification().Specification = s_Specification;
+        if (s_Handle)
+            *s_Handle = textureHandle;
+        s_Handle = nullptr;
 
-                    ImGui::CloseCurrentPopup();
-				}
-			}
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel"))
-                ImGui::CloseCurrentPopup();
-
-            ImGui::EndPopup();
-        }
+        textureHandle.Use().GetOrEmplaceSpecification().Specification = s_Specification;
     }
 }

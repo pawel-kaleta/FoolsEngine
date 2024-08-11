@@ -35,7 +35,10 @@ project "FoolsEngine"
 		"/analyze:external-",
 	}
 
-	defines "YAML_CPP_STATIC_DEFINE"
+	defines {
+		"YAML_CPP_STATIC_DEFINE",
+		"FE_EDITOR"
+	}
 
 	filter "system:windows"
 		systemversion "latest"

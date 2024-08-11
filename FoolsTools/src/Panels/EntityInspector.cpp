@@ -216,7 +216,6 @@ namespace fe
         {
 
             // Set payload to carry the index of our item (could be anything)
-            //static EntityID entityID = entity.ID();
             ImGui::SetDragDropPayload("Entity", &entity, sizeof(entity));
 
             // Display preview (could be anything, e.g. when dragging an image we could decide to display

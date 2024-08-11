@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
 #include "SceneTesting.h"
 
+#include "AssetImport\AssetImportModal.h"
+
 #include <string>
 #include <filesystem>
 
@@ -61,6 +63,8 @@ namespace fe
 
 		m_Viewports.PlayViewport.OnImGuiRender();
 		m_Viewports.EditViewport.OnImGuiRender();
+
+		AssetImportModal::OnImGuiRender();
 
 		GetSelection();
 		
