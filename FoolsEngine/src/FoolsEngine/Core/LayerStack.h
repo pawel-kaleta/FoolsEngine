@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FE_pch.h"
-#include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Core/Layer.h"
 
 namespace fe

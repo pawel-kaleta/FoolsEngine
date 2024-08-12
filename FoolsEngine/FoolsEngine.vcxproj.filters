@@ -114,10 +114,10 @@
     <ClInclude Include="src\FoolsEngine\Core\Core.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\InputCodes.h">
+    <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h">
+    <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Layer.h">
@@ -524,6 +524,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp">
+      <Filter>FoolsEngine\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

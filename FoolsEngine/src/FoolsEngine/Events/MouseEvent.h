@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Events/Event.h"
-#include "FoolsEngine/Core/InputCodes.h"
+#include "FoolsEngine/Platform/InputCodes.h"
 
 /*
 	enum class EventType

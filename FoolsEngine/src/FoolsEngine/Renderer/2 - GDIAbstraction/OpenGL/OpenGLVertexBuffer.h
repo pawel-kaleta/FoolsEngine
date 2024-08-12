@@ -1,5 +1,7 @@
 #pragma once
+#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
 
 namespace fe
 {

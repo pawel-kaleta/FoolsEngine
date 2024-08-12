@@ -94,30 +94,36 @@ namespace fe
 
 		constexpr uint32_t RowsOfMatrix(Type matrix)
 		{
+#ifdef FE_INTERNAL_BUILD
 			if ((uint32_t)matrix > 29 || (uint32_t)matrix < 21) {
 				FE_CORE_ASSERT(false, "It is not a matrix!");
 				return 0;
 			}
+#endif // FE_INTERNAL_BUILD
 
 			return ((uint32_t)matrix / 3) - 5;
 		}
 
 		constexpr uint32_t ColumnsOfMatrix(Type matrix)
 		{
+#ifdef FE_INTERNAL_BUILD
 			if ((uint32_t)matrix > 29 || (uint32_t)matrix < 21) {
 				FE_CORE_ASSERT(false, "It is not a matrix!");
 				return 0;
 			}
+#endif // FE_INTERNAL_BUILD
 
 			return ((uint32_t)matrix % 3) + 2;
 		}
 		
 		constexpr uint32_t SizeOfType(Type type)
 		{
+#ifdef FE_INTERNAL_BUILD
 			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return 0;
 			}
+#endif // FE_INTERNAL_BUILD
 
 			/*const static uint8_t SDSizeOfTypeLookupTable[] = {
 			0,

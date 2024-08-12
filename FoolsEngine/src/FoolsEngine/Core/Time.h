@@ -66,6 +66,10 @@ namespace fe
 		TimePoint Now();
 
 		//defined in Application.h to avoid "include loop"
-		//inline TimeStep DeltaTime();
+		inline float DeltaTime()
+		{
+			extern TimeStep s_LastFrameTimeStep;;
+			return s_LastFrameTimeStep.GetSeconds();
+		}
 	}
 }

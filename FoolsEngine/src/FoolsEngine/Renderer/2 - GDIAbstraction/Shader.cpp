@@ -3,6 +3,9 @@
 #include "Shader.h"
 #include "OpenGL\OpenGLShader.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 namespace fe

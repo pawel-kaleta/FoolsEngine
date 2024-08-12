@@ -1,6 +1,4 @@
 #pragma once
-#include "FE_pch.h"
-#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 
 namespace fe
 {

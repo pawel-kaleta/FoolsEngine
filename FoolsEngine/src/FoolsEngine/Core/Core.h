@@ -1,9 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
-
-#include "FoolsEngine/Debug/Asserts.h"
 
 #ifdef FE_PLATFORM_WINDOWS
 #else

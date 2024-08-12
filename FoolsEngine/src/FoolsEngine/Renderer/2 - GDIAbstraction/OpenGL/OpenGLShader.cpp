@@ -1,7 +1,10 @@
 #include "FE_pch.h"
 
 #include "OpenGLShader.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
+#include <glad\glad.h>
 
 namespace fe
 {

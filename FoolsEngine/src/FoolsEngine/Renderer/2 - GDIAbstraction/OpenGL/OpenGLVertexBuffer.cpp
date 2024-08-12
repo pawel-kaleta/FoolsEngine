@@ -1,12 +1,18 @@
 #include "FE_pch.h"
 
 #include "OpenGLVertexBuffer.h"
-#include "OpenGLIndexBuffer.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderData.h"
 
 #include <glad\glad.h>
 
 namespace fe
 {
+	GLenum SDPrimitiveToGLBaseType(ShaderData::Primitive primitive)
+	{
+		const static GLenum LookupTable[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
+		return LookupTable[(int)primitive - 1];
+	};
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
 		: m_Size(size)
 	{

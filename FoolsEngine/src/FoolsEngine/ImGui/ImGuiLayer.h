@@ -1,17 +1,17 @@
 #pragma once
 
-#include "FE_pch.h"
 #include "FoolsEngine\Core\Layer.h"
-#include "FoolsEngine\Events\Event.h"
-#include "FoolsEngine\Events\MouseEvent.h"
-#include "FoolsEngine\Events\KeyEvent.h"
-#include "FoolsEngine\Events\ApplicationEvent.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 
 #include "ImGuiBackend.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+namespace fe
+{
+	namespace Events
+	{
+		class Event;
+	}
 
-namespace fe {
 
 	class ImGuiLayer : public Layer
 	{

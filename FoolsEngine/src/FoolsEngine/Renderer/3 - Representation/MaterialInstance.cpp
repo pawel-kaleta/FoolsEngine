@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 
 #include "MaterialInstance.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
 namespace fe
 {
@@ -138,7 +140,7 @@ namespace fe
 			auto elements_in_type = type_size / primitive_size;
 			auto elements = elements_in_type * targetUniform.GetCount();
 
-			for (unsigned int i = 0; i < elements; i++)
+			for (size_t i = 0; i < elements; i++)
 			{
 				switch (targetUniform.GetPrimitive())
 				{

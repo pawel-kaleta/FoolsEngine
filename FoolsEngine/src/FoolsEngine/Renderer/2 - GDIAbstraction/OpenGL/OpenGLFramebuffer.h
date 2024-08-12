@@ -1,10 +1,12 @@
 #pragma once
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 
-#include <glad\glad.h>
+#include "FoolsEngine\Renderer\1 - Primitives\FramebufferData.h"
 
 namespace fe
 {
+    typedef unsigned int GLenum;
+
     class OpenGLFramebuffer : public Framebuffer
     {
     public:
@@ -47,7 +49,7 @@ namespace fe
 
         //static GLenum ComponentsToGLformat(TextureData::Components components);
         static GLenum FormatToGLinternalFormat(TextureData::Format format);
-        static GLenum OpenGLFramebuffer::FormatToGLtype(TextureData::Format format);
+        static GLenum FormatToGLtype(TextureData::Format format);
         static GLenum FormatToGLformat(TextureData::Format format);
     private:
         uint32_t m_ID = 0;

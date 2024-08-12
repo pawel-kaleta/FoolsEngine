@@ -2,7 +2,7 @@
 
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace fe
 {

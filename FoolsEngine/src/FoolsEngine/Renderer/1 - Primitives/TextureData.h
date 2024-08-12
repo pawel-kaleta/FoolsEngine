@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 namespace fe
 {
 	using RenderTextureSlotID = uint32_t;

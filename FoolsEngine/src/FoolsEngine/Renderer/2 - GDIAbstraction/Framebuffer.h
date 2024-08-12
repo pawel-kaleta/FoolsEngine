@@ -1,11 +1,12 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Primitives\FramebufferData.h"
-
-#include<glm\glm.hpp>
-
 namespace fe
 {
+	namespace FramebufferData
+	{
+		struct Specification;
+	}
+
 	class Framebuffer
 	{
 	public:

@@ -3,14 +3,16 @@
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine/Renderer/2 - GDIAbstraction/Framebuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-//#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\Component.h"
 
 #include <glad\glad.h>
+
+#include <glm\gtc\type_ptr.hpp>
 
 namespace fe
 {

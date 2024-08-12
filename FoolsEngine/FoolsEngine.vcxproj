@@ -163,8 +163,8 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serializers\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core\Core.h" />
-    <ClInclude Include="src\FoolsEngine\Core\InputCodes.h" />
-    <ClInclude Include="src\FoolsEngine\Core\InputPolling.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h" />
     <ClInclude Include="src\FoolsEngine\Core\Layer.h" />
     <ClInclude Include="src\FoolsEngine\Core\LayerStack.h" />
     <ClInclude Include="src\FoolsEngine\Core\Time.h" />
@@ -261,6 +261,7 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Math\Math.cpp" />
+    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />

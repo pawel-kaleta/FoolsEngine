@@ -2,10 +2,13 @@
 
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 
-#include <glad\glad.h>
+typedef unsigned int GLuint;
+typedef int GLint;
 
 namespace fe
 {
+	class ShaderTextureSlot;
+
 	class OpenGLShader final : public AssetComponent
 	{
 	public:

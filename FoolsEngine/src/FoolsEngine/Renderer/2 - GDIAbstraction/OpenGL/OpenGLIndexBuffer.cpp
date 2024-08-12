@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "OpenGLIndexBuffer.h"
 
+#include <glad\glad.h>
+
 namespace fe
 {
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)

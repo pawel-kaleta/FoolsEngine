@@ -1,6 +1,9 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 namespace fe

@@ -1,9 +1,13 @@
 #pragma once
 
+//#include "Transform.h"
 #include <glm\glm.hpp>
-#include "Transform.h"
 
-namespace fe::Math
+namespace fe
 {
-	bool DecomposeTransform(const glm::mat4& matrix, Transform& outTransform);
+	struct Transform;
+	namespace Math
+	{
+		bool DecomposeTransform(const glm::mat4& matrix, Transform& outTransform);
+	}
 }

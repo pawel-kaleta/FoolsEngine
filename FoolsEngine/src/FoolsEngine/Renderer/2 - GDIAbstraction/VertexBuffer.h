@@ -1,10 +1,13 @@
 #pragma once
 
-#include "FE_pch.h"
-#include "IndexBuffer.h"
-
 namespace fe
 {
+	namespace VertexData
+	{
+		class Layout;
+	}
+	class IndexBuffer;
+
 	class VertexBuffer
 	{
 	public:

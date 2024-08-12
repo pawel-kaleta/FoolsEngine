@@ -1,10 +1,15 @@
 #pragma once
 
-#include "FoolsEngine\Events\Event.h"
+//#include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
 namespace fe
 {
+	namespace Events
+	{
+		class Event;
+	}
+
 	struct WindowAttributes
 	{
 		std::string Title;

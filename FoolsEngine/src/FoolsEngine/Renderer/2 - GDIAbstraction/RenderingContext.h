@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FoolsEngine\Assets\Asset.h"
-
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
 namespace fe

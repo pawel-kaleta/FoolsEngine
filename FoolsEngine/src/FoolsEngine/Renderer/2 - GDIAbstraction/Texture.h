@@ -1,13 +1,17 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\1 - Primitives\TextureData.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
-
-#include "OpenGL\OpenGLTexture.h"
+#include "FoolsEngine\Assets\Asset.h"
 
 namespace fe
 {
+	template <typename>
+	class AssetHandle;
+	template <typename>
+	class AssetUser;
+
+	enum class GDIType;
+
 	struct ACTextureSpecification final : public AssetComponent
 	{
 		

@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 namespace fe {
-
 	class InputPolling
 	{
 	public:

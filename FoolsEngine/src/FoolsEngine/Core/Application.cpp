@@ -10,8 +10,18 @@
 
 #include "FoolsEngine\Assets\AssetManager.h"
 
+#include "FoolsEngine\Events\Event.h"
+
+#include "Time.h"
+
 namespace fe
 {
+	namespace Time
+	{
+		extern TimePoint s_LastFrameTimePoint;
+		extern TimeStep	s_LastFrameTimeStep;
+	}
+
 	class ApplicationLayer : public Layer
 	{
 	public:
@@ -103,11 +113,11 @@ namespace fe
 			FE_PROFILER_SCOPE("FRAME");
 
 			Time::TimePoint now = Time::Now();
-			m_LastFrameTimeStep = Time::TimeStep(m_LastFrameTimePoint, now);
-			m_LastFrameTimePoint = now;
+			Time::s_LastFrameTimeStep = Time::TimeStep(Time::s_LastFrameTimePoint, now);
+			Time::s_LastFrameTimePoint = now;
 
-			FE_LOG_CORE_TRACE("m_LastFrameTimeStep:  {0}", m_LastFrameTimeStep.GetSeconds());
-			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", m_LastFrameTimePoint.GetTime());
+			FE_LOG_CORE_TRACE("m_LastFrameTimeStep:  {0}", Time::s_LastFrameTimeStep.GetSeconds());
+			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", Time::s_LastFrameTimePoint.GetTime());
 
 			m_FrameCount++;
 

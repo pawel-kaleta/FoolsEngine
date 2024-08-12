@@ -9,8 +9,8 @@
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Core\Layer.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
-#include "FoolsEngine\Core\InputCodes.h"
-#include "FoolsEngine\Core\InputPolling.h"
+#include "FoolsEngine\Platform\InputCodes.h"
+#include "FoolsEngine\Platform\InputPolling.h"
 #include "FoolsEngine\Renderer\1 - Primitives\FramebufferData.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
@@ -38,6 +38,8 @@
 #endif // INTERNAL_BUILD
 
 #include <yaml-cpp\yaml.h>
+
+#include <glm\gtc\type_ptr.hpp>
 
 //---------Entry Point---------
 //#include "FoolsEngine\Core\EntryPoint.h"

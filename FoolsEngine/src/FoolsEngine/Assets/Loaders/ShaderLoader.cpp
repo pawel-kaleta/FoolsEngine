@@ -2,6 +2,7 @@
 
 #include "ShaderLoader.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
+#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
 #include <glad\glad.h>
 

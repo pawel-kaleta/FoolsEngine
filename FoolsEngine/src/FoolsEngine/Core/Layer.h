@@ -1,9 +1,12 @@
 #pragma once
 
-#include "FoolsEngine/Events/Event.h"
-
 namespace fe
 {
+	namespace Events
+	{
+		class Event;
+	}
+
 	class Layer
 	{
 	public:

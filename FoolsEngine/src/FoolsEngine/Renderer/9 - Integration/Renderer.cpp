@@ -1,18 +1,22 @@
 #include "FE_pch.h"
 #include "Renderer.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
+#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
-#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 
 #include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
 
 #include <glad\glad.h>
+
+#include <glm\gtc\type_ptr.hpp>
 
 namespace fe
 {
@@ -80,8 +84,10 @@ namespace fe
 			auto id1 = AssetManager::NewBaseAsset<Material>((AssetID)BaseAssets::Materials::Default3D, "Default Material");
 			FE_CORE_ASSERT(id1 == (AssetID)BaseAssets::Materials::Default3D, "Failed to create base asset with requested ID");
 
+			auto materialUser = AssetHandle<Material>(id1).Use();
+
 			Material::MakeMaterial(
-				AssetHandle<Material>(id1).Use(),
+				materialUser,
 				AssetHandle<Shader>((AssetID)BaseAssets::Shaders::Default3D),
 				{
 					Uniform("u_Albedo"   , ShaderData::Type::Float3),

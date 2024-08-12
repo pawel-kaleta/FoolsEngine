@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"

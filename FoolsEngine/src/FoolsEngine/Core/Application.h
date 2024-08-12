@@ -1,14 +1,19 @@
 #pragma once
 
 #include "FoolsEngine\Core\Core.h"
-#include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Events\MainEventDispacher.h"
 #include "FoolsEngine\Core\Window.h"
 #include "FoolsEngine\Core\Layer.h"
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
-#include "Time.h"
+namespace Events
+{
+	class Event;
+	class WindowCloseEvent;
+	class KeyPressedEvent;
+	class WindowResizeEvent;
+}
 
 int main(int argc, char** argv);
 
@@ -29,7 +34,7 @@ namespace fe
 
 		static void				Close()					{ Get().m_Running = false; }
 		static Window&			GetWindow()				{ return *(Get().m_Window); }
-		static Time::TimeStep	GetLastFrameTimeStep()	{ return Get().m_LastFrameTimeStep; }
+		//static Time::TimeStep	GetLastFrameTimeStep()	{ return Get().m_LastFrameTimeStep; }
 		static ImGuiLayer*		GetImguiLayer()			{ return Get().m_ImGuiLayer.get(); }
 		static uint32_t			GetFrameCount()			{ return Get().m_FrameCount; }
 
@@ -74,8 +79,8 @@ namespace fe
 		bool		m_Minimized		= false;
 		uint32_t	m_FrameCount	= 1;
 
-		Time::TimePoint	m_LastFrameTimePoint;
-		Time::TimeStep	m_LastFrameTimeStep;
+		//Time::TimePoint	m_LastFrameTimePoint;
+		//Time::TimeStep	m_LastFrameTimeStep;
 
 #ifdef FE_INTERNAL_BUILD
 		bool		m_ActiveProfiler		= false;
@@ -88,8 +93,8 @@ namespace fe
 	// To be defined in FoolsEngine application (game)
 	Application* CreateApplication();
 
-	namespace Time
-	{
-		inline float DeltaTime() { return Application::GetLastFrameTimeStep().GetSeconds(); }
-	}
+	//namespace Time
+	//{
+	//	extern inline float DeltaTime() { return Application::GetLastFrameTimeStep().GetSeconds(); }
+	//}
 }

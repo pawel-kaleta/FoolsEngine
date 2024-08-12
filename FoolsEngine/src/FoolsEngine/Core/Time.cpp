@@ -8,6 +8,9 @@ namespace fe
 {
 	namespace Time
 	{
+		Time::TimePoint	s_LastFrameTimePoint;
+		Time::TimeStep	s_LastFrameTimeStep;
+
 		TimePoint Now()
 		{
 			return TimePoint((float)glfwGetTime());
@@ -46,5 +49,7 @@ namespace fe
 		TimeStep TimeStep::operator< (const TimeStep& b) { return this->m_Time < b.m_Time; }
 		TimeStep TimeStep::operator>=(const TimeStep& b) { return this->m_Time >= b.m_Time; }
 		TimeStep TimeStep::operator<=(const TimeStep& b) { return this->m_Time <= b.m_Time; }
+
+		
 	}
 }

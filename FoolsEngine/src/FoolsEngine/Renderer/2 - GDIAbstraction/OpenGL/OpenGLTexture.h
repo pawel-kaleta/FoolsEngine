@@ -1,12 +1,19 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "OpenGLDeviceAPI.h"
-#include "FoolsEngine\Assets\AssetManager.h"
-#include <glad\glad.h>
+#include "FoolsEngine\Assets\Asset.h"
+
+typedef unsigned int GLenum;
 
 namespace fe
 {
+	namespace TextureData
+	{
+		struct Specification;
+	}
+
+	using RenderTextureSlotID = uint32_t;
+	using OpenGLID = uint32_t;
+
 	class OpenGLTexture2D final : public AssetComponent
 	{
 	public:
@@ -29,7 +36,7 @@ namespace fe
 	private:
 		OpenGLID m_ID = 0;
 
-		GLenum m_Format = GL_NONE;
-		GLenum m_InternalFormat = GL_NONE;
+		GLenum m_Format = 0;
+		GLenum m_InternalFormat = 0;
 	};
 }

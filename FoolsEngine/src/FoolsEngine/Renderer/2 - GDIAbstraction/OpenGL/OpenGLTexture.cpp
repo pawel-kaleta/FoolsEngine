@@ -2,8 +2,9 @@
 
 #include "OpenGLTexture.h"
 
-#include <stb_image.h>
+#include "FoolsEngine\Renderer\1 - Primitives\TextureData.h"
 
+#include <glad\glad.h>
 
 namespace fe
 {

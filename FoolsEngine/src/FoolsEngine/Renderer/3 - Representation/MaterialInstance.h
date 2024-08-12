@@ -2,6 +2,8 @@
 
 #include "Material.h"
 
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+
 namespace fe
 {
 	struct ACMaterial final : public AssetComponent

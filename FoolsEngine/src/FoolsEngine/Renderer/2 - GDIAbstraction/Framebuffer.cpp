@@ -3,8 +3,8 @@
 #include "Framebuffer.h"
 #include "OpenGL\OpenGLFramebuffer.h"
 
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 namespace fe
 {

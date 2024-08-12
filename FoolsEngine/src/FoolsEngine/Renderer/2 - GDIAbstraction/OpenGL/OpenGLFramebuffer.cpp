@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "OpenGLFramebuffer.h"
 
+#include <glad\glad.h>
+
 namespace fe
 {
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferData::Specification& spec)

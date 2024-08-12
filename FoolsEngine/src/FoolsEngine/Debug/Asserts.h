@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FoolsEngine/Debug/Profiler.h"
-#include "FoolsEngine/Debug/Log.h"
+#include "FoolsEngine\Debug\Profiler.h"
+#include "FoolsEngine\Debug\Log.h"
 #include <filesystem>
 
 namespace fe {

@@ -1,16 +1,14 @@
 #pragma once
 
-#include <glm\glm.hpp>
-#include <glm\gtc\type_ptr.hpp>
-
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
-
-#include "FoolsEngine\Assets\AssetManager.h"
+#include "FoolsEngine\Assets\Asset.h"
 
 namespace fe
 {
+	enum class GDIType;
+	class Uniform;
+	class ShaderTextureSlot;
+	using RenderTextureSlotID = uint32_t;
+
 	struct ACSourceCode final : public AssetComponent
 	{
 		std::string VertexSource;
