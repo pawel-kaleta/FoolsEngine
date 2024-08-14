@@ -1,10 +1,11 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
 namespace fe
 {
+	enum class GDIType;
+
 	class RenderCommands
 	{
 	public:

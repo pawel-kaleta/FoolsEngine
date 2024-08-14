@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 #include "RenderCommands.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.h"
 
 namespace fe

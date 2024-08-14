@@ -1,16 +1,18 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
+
 
 namespace fe
 {
+	class Camera;
+	class VertexBuffer;
+	class MaterialInstance;
+
+	template <class MaterialInstance>
+	class AssetHandle;
+
 	class Renderer
 	{
 	public:
@@ -33,10 +35,8 @@ namespace fe
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
 			AssetHandle<MaterialInstance> materialInstance,
-			const glm::mat4& transform)
-		{
-			Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
-		}
+			const glm::mat4& transform
+		);
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 //#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 

@@ -4,20 +4,21 @@
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 
-#include "FoolsEngine\Scene\ECS.h"
 
 #include "FoolsEngine\Core\Time.h"
 
-#include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetHandle.h"
 
 namespace fe
 {
 	class Scene;
 	class Entity;
 	class Framebuffer;
+	class Camera;
+
+	using AssetID = uint32_t;
 
 	class Renderer2D
 	{

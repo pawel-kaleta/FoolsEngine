@@ -4,12 +4,15 @@
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
+#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 
-#include "FoolsEngine\Assets\AssetManager.h"
+#include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
@@ -195,6 +198,11 @@ namespace fe
 	void Renderer::EndScene()
 	{
 		FE_PROFILER_FUNC();
+	}
+
+	void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, AssetHandle<MaterialInstance> materialInstance, const glm::mat4& transform)
+	{
+		Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
 	}
 
 	void Renderer::Draw(
