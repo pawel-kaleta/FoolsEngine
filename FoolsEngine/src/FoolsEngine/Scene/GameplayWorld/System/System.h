@@ -1,16 +1,23 @@
 #pragma once
 
 #include "FoolsEngine\Core\UUID.h"
-#include "FoolsEngine\Scene\SimulationStages.h"
 
-#include <string>
 
-#include <yaml-cpp\yaml.h>
+namespace YAML
+{
+	class Emitter;
+	class Node;
+}
 
 namespace fe
 {
 	class SystemsDirector;
 	class GameplayWorld;
+
+	namespace SimulationStages
+	{
+		enum class Stages;
+	}
 
 	class System
 	{
@@ -46,34 +53,10 @@ namespace fe
 		virtual void OnShutdown() {};
 		
 		template<SimulationStages::Stages stage>
-		void RegisterForUpdate(uint32_t priority)
-		{
-			FE_PROFILER_FUNC();
-
-			FE_LOG_CORE_DEBUG("System Update Register");
-
-			void (System::* onUpdateFuncPtr)() = nullptr;
-
-			if constexpr (stage == SimulationStages::Stages::FrameStart ) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
-			if constexpr (stage == SimulationStages::Stages::PrePhysics ) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
-			if constexpr (stage == SimulationStages::Stages::Physics    ) onUpdateFuncPtr = &System::OnUpdate_Physics;
-			if constexpr (stage == SimulationStages::Stages::PostPhysics) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
-			if constexpr (stage == SimulationStages::Stages::FrameEnd   ) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
-			
-			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
-
-			m_SystemsDirector->EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
-		}
+		void RegisterForUpdate(uint32_t priority);
 
 		template<SimulationStages::Stages stage>
-		void UnregisterFromUpdate()
-		{
-			FE_PROFILER_FUNC();
-
-			FE_LOG_CORE_DEBUG("Behavior Update Unregister");
-
-			m_SystemsDirector->RemoveUpdateEnroll<stage>(this);
-		}
+		void UnregisterFromUpdate();
 
 	private:
 		UUID m_UUID;

@@ -1,14 +1,10 @@
 #pragma once
-#include "FoolsEngine\Debug\Asserts.h"
 #include "ECS.h"
-#include "Component.h"
-
-
-#include <queue>
 
 namespace fe
 {
 	class World;
+	struct DataComponent;
 
 	class BaseEntity
 	{
@@ -72,8 +68,8 @@ namespace fe
 		template<typename tnComponent, typename... Args>
 		tnComponent& Replace(Args&&... args) const
 		{
-			FE_CORE_ASSERT(AllOf<Component>(), "This Entity does not have this component yet");
-			return m_Handle.replace<Component>(std::forward<Args>(args)...);
+			FE_CORE_ASSERT(AllOf<tnComponent>(), "This Entity does not have this component yet");
+			return m_Handle.replace<tnComponent>(std::forward<Args>(args)...);
 		}
 
 		//In global storage pool only!

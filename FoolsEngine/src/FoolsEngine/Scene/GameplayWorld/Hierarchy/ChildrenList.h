@@ -3,8 +3,6 @@
 #include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\Component.h"
 
-#include <vector>
-
 namespace fe
 {
 	class ChildrenList

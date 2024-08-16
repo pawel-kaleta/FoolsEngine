@@ -2,6 +2,7 @@
 #include "SystemsDirector.h"
 
 #include "SystemsRegistry.h"
+#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
@@ -14,6 +15,55 @@ namespace fe
 			(updateEnroll.System->*(updateEnroll.OnUpdateFuncPtr))();
 		}
 	}
+
+	template<SimulationStages::Stages stage>
+	void SystemsDirector::EnrollForUpdate(System* system, void(System::* onUpdateFuncPtr)(), uint32_t priority)
+	{
+		FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
+
+		m_SystemUpdateEnrolls[(size_t)stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
+		SortSystemUpdateEnrolls(stage);
+	}
+
+	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::FrameStart >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::PrePhysics >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::Physics    >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::PostPhysics>(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::FrameEnd   >(System*, void(System::*)(), uint32_t);
+
+	template<SimulationStages::Stages stage>
+	void SystemsDirector::RemoveUpdateEnroll(System* system)
+	{
+		auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
+
+		int found = false;
+		int enrollPos;
+		for (int j = 0; j < enrolls.size(); ++j)
+		{
+			if (enrolls[j].System == system)
+			{
+				found = true;
+				enrollPos = j;
+				break;
+			}
+		}
+
+		if (found)
+		{
+			for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+			{
+				std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+			}
+
+			enrolls.pop_back();
+		}
+	}
+
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::FrameStart >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::PrePhysics >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::Physics    >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::PostPhysics>(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::FrameEnd   >(System*);
 
 	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
 	{
@@ -31,6 +81,18 @@ namespace fe
 		for (auto& system : m_Systems)
 		{
 			if (system->GetName() == name)
+			{
+				return system.get();
+			}
+		}
+		return nullptr;
+	}
+
+	System* SystemsDirector::GetSystemFromUUID(UUID uuid) const
+	{
+		for (auto& system : m_Systems)
+		{
+			if (uuid == system->m_UUID)
 			{
 				return system.get();
 			}

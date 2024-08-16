@@ -32,6 +32,7 @@
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Math\Math.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
+#include "FoolsEngine\Assets\Serializers\YAML.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 
 #ifdef FE_INTERNAL_BUILD

@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "SceneSerializer.h"
 
+#include "YAML.h"
+
 #include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
@@ -9,7 +11,7 @@
 #include "AssetsSerializer.h"
 
 #include <fstream>
-
+#include <stack>
 
 namespace fe
 {
@@ -395,6 +397,36 @@ namespace fe
 		return success;
 	}
 
+	template<SimulationStages::Stages stage>
+	bool SceneSerializerYAML::DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director)
+	{
+		if (!stageUpdates)
+			return false;
+
+		for (auto& update : stageUpdates)
+		{
+			if (!update["System"] || !update["Priority"])
+				return false;
+
+			System* system = director->GetSystemFromUUID(update["System"].as<UUID>());
+			if (!system)
+			{
+				FE_CORE_ASSERT(false, "Deserialization of system update enrollment failed");
+				continue;
+			}
+			system->RegisterForUpdate<stage>(update["Priority"].as<uint32_t>());
+		}
+
+		return true;
+	}
+
+
+	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::FrameStart >(const YAML::Node&, SystemsDirector*);
+	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::PrePhysics >(const YAML::Node&, SystemsDirector*);
+	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::Physics    >(const YAML::Node&, SystemsDirector*);
+	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::PostPhysics>(const YAML::Node&, SystemsDirector*);
+	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::FrameEnd   >(const YAML::Node&, SystemsDirector*);
+
 	bool SceneSerializerYAML::DeserializeActors(GameplayWorld* world, YAML::Node& data)
 	{
 		if (!data)
@@ -466,6 +498,35 @@ namespace fe
 		return success;
 	}
 
+	template<SimulationStages::Stages stage>
+	bool SceneSerializerYAML::DeserializeBehaviorUpdates(const YAML::Node& stageUpdates, Actor& actor)
+	{
+		if (!stageUpdates)
+			return false;
+
+		for (auto& update : stageUpdates)
+		{
+			if (!update["Behavior"] || !update["Priority"])
+				return false;
+
+			Behavior* behavior = actor.GetBehaviorFromUUID(update["Behavior"].as<UUID>());
+			if (!behavior)
+			{
+				FE_CORE_ASSERT(false, "Deserialization of system update enrollment failed");
+				continue;
+			}
+			behavior->RegisterForUpdate<stage>(update["Priority"].as<uint32_t>());
+		}
+
+		return true;
+	}
+
+	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStages::Stages::FrameStart >(const YAML::Node&, Actor&);
+	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStages::Stages::PrePhysics >(const YAML::Node&, Actor&);
+	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStages::Stages::Physics    >(const YAML::Node&, Actor&);
+	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStages::Stages::PostPhysics>(const YAML::Node&, Actor&);
+	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStages::Stages::FrameEnd   >(const YAML::Node&, Actor&);
+
 	bool SceneSerializerYAML::DeserializeEntities(GameplayWorld* world, YAML::Node& data)
 	{
 		if (!data)
@@ -517,6 +578,7 @@ namespace fe
 		}
 		return true;
 	}
+
 
 	bool SceneSerializerYAML::DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world)
 	{

@@ -1,14 +1,17 @@
 #pragma once
 #include "ECS.h"
 
-#include "SimulationStages.h"
-#include "World.h"
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
+#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
+	namespace SimulationStages
+	{
+		enum class Stage;
+	}
+
 	class Entity;
-	class UUID;
 
 	class Scene : public Asset
 	{
@@ -18,7 +21,7 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { return false; }
-		//static std::string GetSourceExtensionAlias() { return ""; } // base asserts here and its ok
+		//static std::string GetSourceExtensionAlias() { return ""; } // base class Asset asserts here and its ok
 		static std::string GetProxyExtension() { return ".fescene"; }
 		static std::string GetProxyExtensionAlias() { return "Scene"; }
 		virtual void UnloadFromGPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }

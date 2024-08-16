@@ -2,8 +2,6 @@
 
 #include "AssetManager.h"
 
-#include <memory>
-
 namespace fe
 {
 	template <typename tnAsset>

@@ -9,14 +9,23 @@
 #include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
-#include "SimulationStages.h"
+
 #include "FoolsEngine\Assets\AssetHandle.h"
 
-#include <yaml-cpp\yaml.h>
+namespace YAML
+{
+	class Emitter;
+	class Node;
+}
 
 namespace fe
 {
+	namespace SimulationStages
+	{
+		enum class Stages;
+	}
 	class BaseEntity;
 	namespace AssetImportModal
 	{

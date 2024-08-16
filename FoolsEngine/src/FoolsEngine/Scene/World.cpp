@@ -2,6 +2,7 @@
 #include "World.h"
 
 #include "BaseEntity.h"
+#include "Component.h"
 
 namespace fe
 {

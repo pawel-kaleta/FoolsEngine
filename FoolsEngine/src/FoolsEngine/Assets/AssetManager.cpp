@@ -1,13 +1,12 @@
 #include "FE_pch.h"
-
 #include "AssetManager.h"
 
-#include "AssetsInclude.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
 
 #include "FoolsEngine\Assets\Serializers\YAML.h"
+
 namespace fe
 {
 	AssetManager* AssetManager::s_Instance;

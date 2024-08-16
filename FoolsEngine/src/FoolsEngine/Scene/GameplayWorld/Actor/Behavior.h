@@ -4,7 +4,11 @@
 #include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
 #include "FoolsEngine\Scene\SimulationStages.h"
 
-#include <yaml-cpp\yaml.h>
+namespace YAML
+{
+	class Emitter;
+	class Node;
+}
 
 namespace fe
 {

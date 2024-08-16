@@ -3,7 +3,9 @@
 
 #include "Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
+#include "FoolsEngine\Scene\SimulationStages.h"
 
+#include <stack>
 
 namespace fe
 {
@@ -83,6 +85,21 @@ namespace fe
 		auto& actorData = m_Registry.emplace<CActorData>(ent.ID(), ent.ID());
 		return Actor(actorData, this);
 	}
+
+	template <SimulationStages::Stages stage>
+	void GameplayWorld::Update()
+	{
+		FE_PROFILER_FUNC();
+
+		UpdateActors(stage, &GameplayWorld::IsActorUpdateEnrolled<stage>);
+		m_SystemsDirector->UpdateSystems(stage);
+	}
+
+	template void GameplayWorld::Update<SimulationStages::Stages::FrameStart >();
+	template void GameplayWorld::Update<SimulationStages::Stages::PrePhysics >();
+	template void GameplayWorld::Update<SimulationStages::Stages::Physics    >();
+	template void GameplayWorld::Update<SimulationStages::Stages::PostPhysics>();
+	template void GameplayWorld::Update<SimulationStages::Stages::FrameEnd   >();
 
 	void GameplayWorld::UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID))
 	{

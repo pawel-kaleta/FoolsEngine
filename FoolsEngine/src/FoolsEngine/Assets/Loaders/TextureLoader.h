@@ -1,6 +1,5 @@
 #pragma once
 
-#include <filesystem>
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 

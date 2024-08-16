@@ -2,10 +2,12 @@
 
 #include "System.h"
 #include "FoolsEngine\Scene\SimulationStages.h"
-#include "FoolsEngine\Core\UUID.h"
+
 
 namespace fe
 {
+	class UUID;
+
 	class SystemsDirector
 	{
 	public:
@@ -13,41 +15,10 @@ namespace fe
 		SystemsDirector(const SystemsDirector& other) = delete;
 
 		template<SimulationStages::Stages stage>
-		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority)
-		{
-			FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
-
-			m_SystemUpdateEnrolls[(size_t)stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
-			SortSystemUpdateEnrolls(stage);
-		}
+		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority);
 
 		template<SimulationStages::Stages stage>
-		void RemoveUpdateEnroll(System* system)
-		{
-			auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
-
-			int found = false;
-			int enrollPos;
-			for (int j = 0; j < enrolls.size(); ++j)
-			{
-				if (enrolls[j].System == system)
-				{
-					found = true;
-					enrollPos = j;
-					break;
-				}
-			}
-
-			if (found)
-			{
-				for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
-				{
-					std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
-				}
-
-				enrolls.pop_back();
-			}
-		}
+		void RemoveUpdateEnroll(System* system);
 
 		void UpdateSystems(SimulationStages::Stages stage);
 
@@ -69,17 +40,7 @@ namespace fe
 
 		System* GetSystemFromName(const std::string& name);
 
-		System* GetSystemFromUUID(UUID uuid) const
-		{
-			for (auto& system : m_Systems)
-			{
-				if (uuid == system->m_UUID)
-				{
-					return system.get();
-				}
-			}
-			return nullptr;
-		}
+		System* GetSystemFromUUID(UUID uuid) const;
 	private:
 		friend class SystemsInspector;
 		friend class SystemsRegistry;
@@ -106,4 +67,5 @@ namespace fe
 		template <typename tnSystem>
 		System* CreateSystemAsBase() { return CreateSystem<tnSystem>(); }
 	};
+	
 }

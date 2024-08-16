@@ -1,9 +1,7 @@
 #pragma once
+
 #include "ECS.h"
-
 #include "FoolsEngine\Core\UUID.h"
-
-#include <stack>
 
 namespace fe
 {

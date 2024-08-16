@@ -154,7 +154,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\AssetsInclude.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h" />

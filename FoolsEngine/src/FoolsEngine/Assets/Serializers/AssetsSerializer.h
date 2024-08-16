@@ -1,11 +1,15 @@
 #pragma once
 
-#include <yaml-cpp\yaml.h>
-
-#include "FoolsEngine\Assets\Asset.h"
+namespace YAML
+{
+	class Emitter;
+	class Node;
+}
 
 namespace fe
 {
+	enum AssetType;
+
 	class AssetSerializer
 	{
 	public:

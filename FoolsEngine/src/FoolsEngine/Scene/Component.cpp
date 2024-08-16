@@ -14,6 +14,8 @@
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
+#include "FoolsEngine\Assets\Serializers\YAML.h"
+
 #include <glm\gtc\type_ptr.hpp>
 
 namespace fe

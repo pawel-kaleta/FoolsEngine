@@ -2,8 +2,6 @@
 
 #include "Asset.h"
 
-#include <entt/entity/registry.hpp>
-
 namespace fe
 {
 	struct AssetSource

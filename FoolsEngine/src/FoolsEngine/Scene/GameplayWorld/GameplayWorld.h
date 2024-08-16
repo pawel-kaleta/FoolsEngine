@@ -2,14 +2,17 @@
 
 #include "FoolsEngine\Scene\World.h"
 
-#include "FoolsEngine\Scene\SimulationStages.h"
 #include "Hierarchy\HierarchyDirector.h"
 #include "ComponentDestructionManager.h"
-#include "System\SystemsRegistry.h"
 #include "System\SystemsDirector.h"
 
 namespace fe
 {
+	namespace SimulationStages
+	{
+		enum class Stages;
+	}
+
 	class GameplayWorld : public World
 	{
 	public:
@@ -36,13 +39,7 @@ namespace fe
 		void DestroyScheduledComponents() { m_DestructionManager.DestroyComponents(m_Registry); }
 
 		template <SimulationStages::Stages stage>
-		void Update()
-		{
-			FE_PROFILER_FUNC();
-
-			UpdateActors(stage, &GameplayWorld::IsActorUpdateEnrolled<stage>);
-			m_SystemsDirector->UpdateSystems(stage);
-		}
+		void Update();
 
 		Entity	GetEntityWithPrimaryCamera() const;
 		void	SetPrimaryCameraEntity(Entity entity);

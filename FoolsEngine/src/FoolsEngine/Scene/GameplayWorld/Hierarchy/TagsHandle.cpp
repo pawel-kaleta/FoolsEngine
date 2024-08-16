@@ -1,6 +1,7 @@
 #include "FE_pch.h"
-
 #include "TagsHandle.h"
+
+#include <queue>
 
 namespace fe
 {
@@ -11,7 +12,7 @@ namespace fe
 		m_EntityID(ID),
 		m_Registry(registry)
 	{
-		//FE_CORE_ASSERT(m_Node.Parent != NullEntityID, "Node does not have a parent!");
+		FE_CORE_ASSERT(m_Node.Parent != NullEntityID, "Node does not have a parent!");
 	}
 
 	void TagsHandle::SetLocal(const Tags& other)

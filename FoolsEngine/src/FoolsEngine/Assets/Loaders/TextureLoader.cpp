@@ -1,7 +1,5 @@
 #include "FE_pch.h"
-
 #include "TextureLoader.h"
-#include "FoolsEngine\Debug\Asserts.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
