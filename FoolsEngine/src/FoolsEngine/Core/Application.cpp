@@ -1,5 +1,4 @@
 #include "FE_pch.h"
-
 #include "FoolsEngine\Core\Application.h"
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"

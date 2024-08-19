@@ -1,6 +1,6 @@
 #include "FE_pch.h"
-
 #include "OpenGLVertexBuffer.h"
+
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderData.h"
 
 #include <glad\glad.h>

@@ -468,9 +468,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp">
       <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp">
-      <Filter>FoolsEngine\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>

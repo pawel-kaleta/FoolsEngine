@@ -1,6 +1,6 @@
 #include "FE_pch.h"
-
 #include "Shader.h"
+
 #include "OpenGL\OpenGLShader.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"

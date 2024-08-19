@@ -1,5 +1,4 @@
 #include "FE_pch.h"
-
 #include "OpenGLRenderingContext.h"
 
 #include <map>

@@ -31,8 +31,8 @@ namespace fe
 	class MaterialInstance : public Asset
 	{
 	public:
-		virtual AssetType GetType() { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
+		virtual AssetType GetType() const override { return GetTypeStatic(); }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
 
 		void Init(const AssetHandle<Material> material);
 

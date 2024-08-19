@@ -5,7 +5,6 @@
 	#include "FoolsEngine/Platform/Win32/Win32Window.h"
 #endif // FE_PLATFORM_WINDOWS
 
-
 namespace fe
 {
 	Scope<Window> Window::Create(const WindowAttributes& attr)

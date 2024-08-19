@@ -1,5 +1,4 @@
 #include "FE_pch.h"
-
 #include "OpenGLTexture.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\TextureData.h"

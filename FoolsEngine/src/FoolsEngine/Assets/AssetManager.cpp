@@ -5,7 +5,7 @@
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
 
-#include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "Serializers\YAML.h"
 
 namespace fe
 {

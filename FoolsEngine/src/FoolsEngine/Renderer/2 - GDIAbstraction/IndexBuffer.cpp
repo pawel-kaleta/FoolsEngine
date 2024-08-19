@@ -1,6 +1,6 @@
 #include "FE_pch.h"
-
 #include "IndexBuffer.h"
+
 #include "OpenGL\OpenGLIndexBuffer.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"

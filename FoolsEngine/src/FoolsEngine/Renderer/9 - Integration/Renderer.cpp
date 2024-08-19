@@ -14,7 +14,6 @@
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
-
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
 
 #include <glad\glad.h>

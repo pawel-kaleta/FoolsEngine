@@ -1,5 +1,4 @@
 #include "FE_pch.h"
-
 #include "VertexData.h"
 
 namespace fe

@@ -20,7 +20,7 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
 		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
 		      ACSourceCode* GetSourceCode()       { return GetIfExist<ACSourceCode>(); }

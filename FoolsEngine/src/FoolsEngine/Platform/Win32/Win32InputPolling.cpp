@@ -1,5 +1,3 @@
-#pragma once
-
 #include "FE_pch.h"
 #include "FoolsEngine\Platform\InputPolling.h"
 

@@ -27,8 +27,8 @@ namespace fe
 	class Material : public Asset
 	{
 	public:
-		virtual AssetType GetType() { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
+		virtual AssetType GetType() const override { return GetTypeStatic(); }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
 
 		virtual void UnloadFromGPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
 		virtual void UnloadFromCPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };

@@ -81,6 +81,7 @@ namespace fe
 
 		static AssetType GetType() { return tnAsset::GetTypeStatic(); }
 
+		//AssetHandle(AssetHandleBase handleBase) : m_ID(handleBase.m_ID) {};
 		AssetHandle() = default;
 		AssetHandle(ECS_AssetHandle assetHandle) :
 			AssetHandleBase(assetHandle.entity())

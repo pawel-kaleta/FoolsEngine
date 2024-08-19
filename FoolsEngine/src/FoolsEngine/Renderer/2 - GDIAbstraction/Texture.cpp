@@ -1,13 +1,13 @@
 #include "FE_pch.h"
-
 #include "Texture.h"
+
 #include "OpenGL\OpenGLTexture.h"
 
-#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 namespace fe
 {

@@ -1,6 +1,6 @@
 #include "FE_pch.h"
-
 #include "MaterialInstance.h"
+
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 

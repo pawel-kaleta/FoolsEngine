@@ -1,20 +1,18 @@
 #include "FE_pch.h"
-
 #include "Component.h"
 
 #include "BaseEntity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "World.h"
 #include "Scene.h"
-#include "FoolsEngine\Platform\FileDialogs.h"
-#include "FoolsEngine\Assets\MeshImporter.h"
 
+#include "FoolsEngine\Assets\MeshImporter.h"
+#include "FoolsEngine\Assets\Serializers\YAML.h"
 #include "FoolsEngine\Assets\Serializers\SceneSerializer.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
-#include "FoolsEngine\Assets\Serializers\YAML.h"
 
 #include <glm\gtc\type_ptr.hpp>
 
@@ -34,6 +32,65 @@ namespace fe
 	{
 		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetName());
 	}
+
+	template<typename tnAsset>
+	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
+	{
+		std::string name;
+		if (!assetHandle.IsValid())
+		{
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
+			name = "-";
+		}
+		else
+		{
+			name = std::to_string(assetHandle.GetID()) + ": " + assetHandle.Observe().GetName();
+		}
+		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+		bool selected = ImGui::Button(name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPath"))
+			{
+				IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
+				std::filesystem::path filepath = *(const std::filesystem::path*)payload->Data;
+				if (!filepath.empty())
+				{
+					std::filesystem::path extension = filepath.extension();
+
+					if (extension == tnAsset::GetProxyExtension())
+					{
+						AssetID newAssetID = AssetManager::GetOrCreateAsset<tnAsset>(filepath);
+						assetHandle = AssetHandle<tnAsset>(newAssetID);
+						if constexpr (tnAsset::GetTypeStatic() == AssetType::Texture2DAsset)
+						{
+							auto textureUser = assetHandle.Use();
+							TextureLoader::LoadTexture(textureUser);
+							// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
+						}
+					}
+					else if (tnAsset::IsKnownSourceExtension(extension))
+					{
+#ifdef FE_EDITOR
+						AssetImportModal::OpenWindow(filepath, tnAsset::GetTypeStatic(), &assetHandle);
+#endif // FE_EDITOR
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		ImGui::SameLine();
+		ImGui::Text(nameTag.c_str());
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+		if (!assetHandle.IsValid())
+			ImGui::PopStyleColor();
+	}
+	template void DataComponent::DrawAssetHandle<Texture2D>(AssetHandle<Texture2D>&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Shader>(AssetHandle<Shader>&, const std::string&);
 
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{
@@ -134,59 +191,10 @@ namespace fe
 
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		auto flat_color_texture = (AssetID)BaseAssets::Textures2D::FlatWhite;
-
-		std::string combo_preview_value = Tile.Texture.GetID() == flat_color_texture ? "None" : std::to_string(Tile.Texture.GetID()) + ": " + Tile.Texture.Observe().GetName();
-
-		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
-		{
-			auto item_current = Tile.Texture;
-			bool is_selected = (Tile.Texture.GetID() == flat_color_texture);
-
-			if (ImGui::Selectable("None", is_selected))
-				item_current = AssetHandle<Texture2D>(flat_color_texture);
-
-			auto textures = AssetManager::GetAll<Texture2D>();
-			for (auto id : textures)
-			{
-				auto texture = AssetHandle<Texture2D>(id);
-				auto textureObserver = texture.Observe();
-
-				if (textureObserver.GetSpecification()->Specification.Components != TextureData::Components::RGB)
-					continue;
-
-				if (id == flat_color_texture)
-					continue;
-
-				is_selected = (item_current.GetID() == id);
-				std::string name = std::to_string(id) + ": " + textureObserver.GetName();
-				if (ImGui::Selectable(name.c_str(), is_selected))
-					item_current = texture;
-
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
-			}
-			if (ImGui::Selectable("Add..."))
-			{
-				const std::filesystem::path newTextureProxyFilepath = FileDialogs::OpenFile("(*.fetex2d)\0*.fetex2d\0");
-				if (!newTextureProxyFilepath.empty())
-				{
-					AssetID newTextureID = AssetManager::GetOrCreateAsset<Texture2D>(newTextureProxyFilepath);
-					auto texture = AssetHandle<Texture2D>(newTextureID);
-					auto textureUser = texture.Use();
-					TextureLoader::LoadTexture(textureUser);
-					// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
-
-					if (textureUser.GetSpecification()->Specification.Components == TextureData::Components::RGB)
-						item_current = texture;
-				}
-			}
-			Tile.Texture = item_current;
-
-			ImGui::EndCombo();
-		}
-
-		if (Tile.Texture.GetID() == flat_color_texture)
+		std::string nameTag = "Texture";
+		DrawAssetHandle<Texture2D>(Tile.Texture, nameTag);
+		
+		if (Tile.Texture.GetID() == (AssetID)BaseAssets::Textures2D::FlatWhite)
 		{
 			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
 		}
@@ -217,50 +225,7 @@ namespace fe
 		std::string nameTag = "Texture";
 		DrawAssetHandle<Texture2D>(Sprite.Texture, nameTag);
 
-		auto flat_color_texture = (AssetID)BaseAssets::Textures2D::FlatWhite;
-		std::string combo_preview_value = Sprite.Texture.GetID() == flat_color_texture ? "None" : std::to_string(Sprite.Texture.GetID()) + ": " + Sprite.Texture.Observe().GetName();
-
-		if (ImGui::BeginCombo("Texture", combo_preview_value.c_str()))
-		{
-			auto item_current = Sprite.Texture;
-			bool is_selected = (Sprite.Texture.GetID() == flat_color_texture);
-
-			if (ImGui::Selectable("None", is_selected))
-				item_current = AssetHandle<Texture2D>(flat_color_texture);
-
-			auto textures = AssetManager::GetAll<Texture2D>();
-			for (auto id : textures)
-			{
-				auto texture = AssetHandle<Texture2D>(id);
-				if (id == flat_color_texture)
-					continue;
-
-				is_selected = (item_current.GetID() == id);
-				std::string name = std::to_string(id) + ": " + texture.Observe().GetName();
-				if (ImGui::Selectable(name.c_str(), is_selected))
-					item_current = texture;
-
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
-			}
-
-			if (ImGui::Selectable("Add..."))
-			{
-				const std::filesystem::path newTextureProxyFilepath = FileDialogs::OpenFile("(*.fetex2d)\0*.fetex2d\0");
-				if (!newTextureProxyFilepath.empty())
-				{
-					AssetID newTextureID = AssetManager::GetOrCreateAsset<Texture2D>(newTextureProxyFilepath);
-					item_current = AssetHandle<Texture2D>(newTextureID);
-					auto textureUser = item_current.Use();
-					TextureLoader::LoadTexture(textureUser);
-					// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
-				}
-			}
-			Sprite.Texture = item_current;
-			ImGui::EndCombo();
-		}
-
-		if (Sprite.Texture.GetID() == flat_color_texture)
+		if (Sprite.Texture.GetID() == (AssetID)BaseAssets::Textures2D::FlatWhite)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));
 		}
@@ -314,8 +279,9 @@ namespace fe
 
 			if (ImGui::Selectable("Load..."))
 			{
-				const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-				if (!modelFilepath.empty())
+
+				//const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+				//if (!modelFilepath.empty())
 				{
 					FE_CORE_ASSERT(false, "");
 					// markmark
@@ -466,8 +432,8 @@ namespace fe
 
 				if (ImGui::Selectable("Add..."))
 				{
-					const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-					if (!newTextureFilepath.empty())
+					//const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
+					//if (!newTextureFilepath.empty())
 					{
 						//to do: detecting reloading same texture
 

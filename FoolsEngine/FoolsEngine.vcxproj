@@ -286,7 +286,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\BaseEntity.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp" />

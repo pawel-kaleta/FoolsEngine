@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS.h"
+#include "World.h"
 
 namespace fe
 {
@@ -9,7 +10,8 @@ namespace fe
 	class BaseEntity
 	{
 	public:
-		BaseEntity(EntityID entityID, World* world);
+		BaseEntity(EntityID entityID, World* world)
+			: m_World(world), m_Handle(ECS_handle(world->GetRegistry(), entityID)) { }
 		BaseEntity(const BaseEntity& other) = default;
 		BaseEntity() = default;
 

@@ -1,6 +1,6 @@
 #include "FE_pch.h"
-
 #include "VertexBuffer.h"
+
 #include "OpenGL\OpenGLVertexBuffer.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
