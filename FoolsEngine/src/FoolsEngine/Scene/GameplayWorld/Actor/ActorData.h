@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FoolsEngine\Scene\ECS.h"
-#include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\Component.h"
 
 #include "Behavior.h"
 

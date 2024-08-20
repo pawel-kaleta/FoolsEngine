@@ -1,9 +1,20 @@
 #pragma once
 
-//#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 
 namespace fe
 {
+	class MeshLoader
+	{
+	public:
+		static void LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& textureUser);
+		static void LoadTexture(AssetUser<Mesh>& textureUser)
+		{
+			LoadTexture(textureUser.GetSourceFilepath(), textureUser);
+		}
+		static bool IsKnownExtension(const std::filesystem::path& extension);
+	};
+
 	/*
 
 	class ModelImporter

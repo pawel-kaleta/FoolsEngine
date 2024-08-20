@@ -156,7 +156,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\MeshLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serializers\YAML.h" />
@@ -243,7 +243,7 @@
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\MeshLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\YAML.cpp" />

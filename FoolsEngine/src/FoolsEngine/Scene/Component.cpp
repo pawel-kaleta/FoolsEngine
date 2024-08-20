@@ -6,12 +6,10 @@
 #include "World.h"
 #include "Scene.h"
 
-#include "FoolsEngine\Assets\MeshImporter.h"
 #include "FoolsEngine\Assets\Serializers\YAML.h"
 #include "FoolsEngine\Assets\Serializers\SceneSerializer.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
-
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Assets\Loaders\MeshLoader.h"
 
 
 #include <glm\gtc\type_ptr.hpp>

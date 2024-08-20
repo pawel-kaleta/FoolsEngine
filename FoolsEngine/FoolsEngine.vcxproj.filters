@@ -93,7 +93,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\MeshImporter.h">
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\MeshLoader.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.h">
@@ -342,7 +342,7 @@
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\MeshImporter.cpp">
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\MeshLoader.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.cpp">

@@ -1,5 +1,5 @@
 #include "FE_pch.h"
-#include "MeshImporter.h"
+#include "MeshLoader.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -7,6 +7,29 @@
 
 namespace fe
 {
+	void MeshLoader::LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& textureUser)
+	{
+
+	}
+
+	bool MeshLoader::IsKnownExtension(const std::filesystem::path& extension)
+	{
+		static std::filesystem::path knownExtensions[] = {
+			".obj",
+			".fbx"
+		};
+
+		for (auto& knownExtension : knownExtensions)
+		{
+			if (extension == knownExtension)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	/*
 	
 	void ModelImporter::Import(Ref<Mesh> mesh)

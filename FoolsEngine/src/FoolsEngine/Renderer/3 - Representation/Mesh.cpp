@@ -8,100 +8,68 @@
 
 namespace fe
 {
-	size_t Mesh::GetVertexCount() const
+	bool Mesh::IsKnownSourceExtension(const std::filesystem::path& extension)
 	{
-		if (m_DataLocation == DataLocation::CPU || m_DataLocation == DataLocation::CPU_GPU)
-		{
-			return m_Vertices.size();
-		}
-		if (m_DataLocation == DataLocation::GPU)
-		{
-			return m_VertexBuffer->GetSize();
-		}
-		return 0;
+		return false;
 	}
 
-	// swaps vectors' data with internal vectors
-	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, AssetHandle<MaterialInstance> materialInstance)
+	void Mesh::SendDataToGPU(GDIType GDI, void* data)
 	{
-		m_MaterialInstance = materialInstance;
-
-		m_Vertices.swap(vertices);
-		m_Indices.swap(indices);
-
-		m_DataLocation = DataLocation::CPU;
-	}
-
-	void Mesh::UploadBuffersToGPU()
-	{
-		if (m_DataLocation == DataLocation::GPU || m_DataLocation == DataLocation::CPU_GPU)
+		if (AllOf<ACGPUBuffers>())
 		{
-			FE_LOG_CORE_WARN("Mesh buffers already uploaded to GPU");
+			FE_CORE_ASSERT(false, "Already on GPU");
 			return;
 		}
-		FE_CORE_ASSERT(m_DataLocation == DataLocation::CPU, "Meshbuffer not present on CPU upon an attempt to load onto a GPU");
 
-		m_VertexBuffer = VertexBuffer::Create((float*)m_Vertices.data(), (uint32_t)(m_Vertices.size() * sizeof(Vertex)));
-		m_VertexBuffer->SetLayout({
+		FE_CORE_ASSERT(data, "Missing mesh data");
+
+		auto& meshData = *(MeshData*)data;
+
+		Ref<VertexBuffer> vb = VertexBuffer::Create((float*)meshData.Vertices.data(), (uint32_t)(meshData.Vertices.size() * sizeof(Vertex)));
+		vb->SetLayout({
 			{ ShaderData::Type::Float3, "a_Position" },
 			{ ShaderData::Type::Float3, "a_Normal" },
 			{ ShaderData::Type::Float2, "a_TexCoord" }
 		});
 
-		m_IndexBuffer = IndexBuffer::Create(m_Indices.data(), (uint32_t)m_Indices.size());
-		m_IndexBuffer->Bind();
-		m_VertexBuffer->SetIndexBuffer(m_IndexBuffer);
+		Ref<IndexBuffer> ib = IndexBuffer::Create(meshData.Indices.data(), (uint32_t)meshData.Indices.size());
+		ib->Bind();
+		vb->SetIndexBuffer(ib);
 
-		m_DataLocation = DataLocation::CPU_GPU;
+		auto& buffersComp = Emplace<ACGPUBuffers>();
+		buffersComp.IndexBuffer = ib;
+		buffersComp.VertexBuffer = vb;
 	}
 
-	void Mesh::FreeBuffersFromCPU()
+	void Mesh::UnloadFromCPU()
 	{
-		switch (m_DataLocation)
+		auto& dataLocation = Get<ACDataLocation>();
+		if (!dataLocation.Data)
 		{
-		case DataLocation::None:
-		case DataLocation::GPU:
-			FE_CORE_ASSERT(false, "Attempt to free mesh buffers from CPU, when they are not stored on CPU");
-			break;
-		case DataLocation::CPU:
-			m_DataLocation = DataLocation::None;
-			m_Vertices.clear();
-			m_Indices.clear();
-			break;
-		case DataLocation::CPU_GPU:
-			m_DataLocation = DataLocation::GPU;
-			m_Vertices.clear();
-			m_Indices.clear();
-			break;
+			FE_CORE_ASSERT(false, "Not on CPU");
+			return;
 		}
+
+		auto& meshData = *(MeshData*)dataLocation.Data;
+
+		meshData.Indices.clear();
+		meshData.Vertices.clear();
 	}
 
-	void Mesh::FreeBuffersFromGPU()
+	void Mesh::UnloadFromGPU()
 	{
-		switch (m_DataLocation)
+		if (!AllOf<ACGPUBuffers>())
 		{
-		case DataLocation::None:
-			FE_CORE_ASSERT(false, "Attempt to free mesh buffers from GPU, when they are not stored on GPU");
-			break;
-		case DataLocation::CPU:
-			FE_CORE_ASSERT(false, "Attempt to free mesh buffers from GPU, when they are not stored on GPU");
-			break;
-		case DataLocation::GPU:
-			m_DataLocation = DataLocation::None;
-			m_VertexBuffer.reset();
-			m_IndexBuffer.reset();
-			break;
-		case DataLocation::CPU_GPU:
-			m_DataLocation = DataLocation::CPU;
-			m_VertexBuffer.reset();
-			m_IndexBuffer.reset();
-			break;
+			FE_CORE_ASSERT(false, "Not on GPU");
+			return;
 		}
+
+		Erase<ACGPUBuffers>();
 	}
 
 	void Mesh::Draw(AssetHandle<MaterialInstance> materialInstance)
 	{
-		if (m_DataLocation != DataLocation::GPU && m_DataLocation != DataLocation::CPU_GPU)
+		if (AllOf<ACGPUBuffers>())
 		{
 			FE_CORE_ASSERT(false, "Mesh not uploaded to GPU");
 			return;
@@ -123,21 +91,19 @@ namespace fe
 		}
 
 		auto& textureSlots = material.GetTextureSlots();
-		uint32_t rendererTextureSlot = 0;
-		// markmark 
-		FE_CORE_ASSERT(false, "");
-		//auto whiteTexture = TextureLibrary::Get("WhiteTexture");
+		RenderTextureSlotID rendererTextureSlot = 0;
+		
 		for (auto& textureSlot : textureSlots)
 		{
 			auto& texture = material_instance.GetTexture(textureSlot).Use();
 
 			if (texture.IsValid())
+			{
 				texture.Bind(GDI, rendererTextureSlot);
+			}
 			else
 			{
-				FE_CORE_ASSERT(false, "");
-				// markmark 
-				// whiteTexture->Bind(rendererTextureSlot);
+				AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::Default).Use().Bind(GDI, rendererTextureSlot);
 			}
 
 			shader.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
@@ -145,8 +111,25 @@ namespace fe
 			rendererTextureSlot++;
 		}
 
-		m_VertexBuffer->Bind();
-		m_IndexBuffer->Bind();
-		RenderCommands::DrawIndexed(m_VertexBuffer.get());
+		auto gpuBuffers = Get<ACGPUBuffers>();
+
+		gpuBuffers.VertexBuffer->Bind();
+		gpuBuffers.IndexBuffer->Bind();
+		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
+	}
+
+	void MeshBuilder::Create(AssetUser<Mesh>& textureUser)
+	{
+		FE_CORE_ASSERT(m_Data, "Mesh data pointer not set");
+		if (!m_Data) return;
+
+		FE_CORE_ASSERT(m_Specification.IndicesCount != 0, "No indices");
+		FE_CORE_ASSERT(m_Specification.VertexCount != 0, "No verticies");
+
+		if (m_Specification.IndicesCount != 0) return;
+		if (m_Specification.VertexCount != 0) return;
+
+		textureUser.GetDataLocation().Data = m_Data;
+		textureUser.GetOrEmplaceSpecification() = m_Specification;
 	}
 }

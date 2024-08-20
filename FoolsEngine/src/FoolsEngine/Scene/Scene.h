@@ -24,6 +24,7 @@ namespace fe
 		//static std::string GetSourceExtensionAlias() { return ""; } // base class Asset asserts here and its ok
 		static std::string GetProxyExtension() { return ".fescene"; }
 		static std::string GetProxyExtensionAlias() { return "Scene"; }
+
 		virtual void UnloadFromGPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
 		virtual void UnloadFromCPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
 

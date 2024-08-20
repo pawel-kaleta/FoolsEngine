@@ -98,7 +98,6 @@ namespace fe
 			auto& [local, global, node] = group.get<CTransformLocal, CTransformGlobal, CEntityNode>(entityID);
 
 			auto& parentGlobal = group.get<CTransformGlobal>(node.Parent);
-			//auto& parentGlobal = m_Registry->get<CTransformGlobal>(node.Parent);
 			global.Transform = parentGlobal.Transform + local.Transform;
 		}
 

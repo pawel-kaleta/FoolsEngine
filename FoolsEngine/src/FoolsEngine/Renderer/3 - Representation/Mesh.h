@@ -24,89 +24,81 @@
 namespace fe
 {
 	struct Vertex {
-		glm::vec3 Shift;
+		glm::vec3 Position;
 		glm::vec3 Normal;
 		glm::vec2 TexCoords;
+	};
+
+	struct ACMaterialInstance final : public AssetComponent
+	{
+		AssetHandle<MaterialInstance> MaterialInstance;
+	};
+
+	struct MeshData
+	{
+		std::vector<Vertex>   Vertices;
+		std::vector<uint32_t> Indices;
+	};
+
+	struct ACMeshSpecification final : public AssetComponent
+	{
+		uint32_t AssimpMaterialIndex = -1;
+		uint32_t AssimpMeshIndex = -1;
+		uint32_t VertexCount = 0;
+		uint32_t IndicesCount = 0;
+	};
+
+	struct ACGPUBuffers final : public AssetComponent
+	{
+		Ref<VertexBuffer> VertexBuffer;
+		Ref<IndexBuffer>  IndexBuffer;
 	};
 
 	class Mesh : public Asset
 	{
 	public:
-		Mesh() = default;
-		Mesh(
-			uint32_t assimpMaterialIndex,
-			uint32_t assimpMeshIndex,
-			AssetHandle<MaterialInstance> materialInstance)
-			:
-			Asset(),
-			m_AssimpMaterialIndex(assimpMaterialIndex),
-			m_AssimpMeshIndex(assimpMeshIndex),
-			m_MaterialInstance(materialInstance)
-		{ }
-
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		constexpr static AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
+		static std::string GetSourceExtensionAlias() { return "Mesh Source"; }
+		static std::string GetProxyExtension() { return ".femesh"; }
+		static std::string GetProxyExtensionAlias() { return "Mesh"; }
 
-		virtual void UnloadFromGPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
-		virtual void UnloadFromCPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
+		void SendDataToGPU(GDIType GDI, void* data);
 
-		size_t GetVertexCount() const;
+		virtual void UnloadFromGPU() override;
+		virtual void UnloadFromCPU() override;
 
-		enum DataLocation
-		{
-			None = 0,
-			CPU,
-			GPU,
-			CPU_GPU
-		};
-
-		// swaps vectors' data with internal vectors
-		Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, AssetHandle<MaterialInstance> materialInstance);
-
-		void UploadBuffersToGPU();
-		void FreeBuffersFromCPU();
-		void FreeBuffersFromGPU();
+		const ACMeshSpecification* GetSpecification() const { return GetIfExist<ACMeshSpecification>(); }
+		ACMeshSpecification& GetOrEmplaceSpecification() { return GetOrEmplace<ACMeshSpecification>(); }
 
 		void Draw(AssetHandle<MaterialInstance> materialInstance);
-		void Draw() { Draw(m_MaterialInstance); }
+		void Draw() { Draw(Get<ACMaterialInstance>().MaterialInstance); }
 
 	protected:
 		Mesh(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
 	private:
 		friend class ModelImporter;
-
-		std::vector<Vertex>   m_Vertices;
-		std::vector<uint32_t> m_Indices;
-		uint32_t m_AssimpMaterialIndex = -1;
-		uint32_t m_AssimpMeshIndex = -1;
-		
-		Ref<VertexBuffer> m_VertexBuffer;
-		Ref<IndexBuffer>  m_IndexBuffer;
-		DataLocation m_DataLocation = DataLocation::None;
-
-		AssetHandle<MaterialInstance> m_MaterialInstance;
 	};
 
 	class MeshBuilder
 	{
 	public:
-		MeshBuilder& SetSignature() {  }
-		MeshBuilder& SetAssimpMaterialIndex(uint32_t assimpMaterialIndex) { m_AssimpMaterialIndex = assimpMaterialIndex; return *this; }
-		MeshBuilder& SetAssimpMeshIndex(uint32_t assimpMeshIndex) { m_AssimpMeshIndex = assimpMeshIndex; return *this; }
+		MeshBuilder& SetData(MeshData* data)
+		{
+			m_Data = data;
+			m_Specification.IndicesCount = (uint32_t)data->Indices.size();
+			m_Specification.VertexCount = (uint32_t)data->Vertices.size();
+			return *this;
+		}
+		MeshBuilder& SetAssimpMaterialIndex(uint32_t assimpMaterialIndex) { m_Specification.AssimpMaterialIndex = assimpMaterialIndex; return *this; }
+		MeshBuilder& SetAssimpMeshIndex(uint32_t assimpMeshIndex) { m_Specification.AssimpMeshIndex = assimpMeshIndex; return *this; }
 		MeshBuilder& SetMaterialInstance(AssetHandle<MaterialInstance> materialInstance) { m_MaterialInstance = materialInstance; }
 
-		Ref<Mesh> Build()
-		{
-			return Ref<Mesh>(new Mesh(
-				m_AssimpMaterialIndex,
-				m_AssimpMeshIndex,
-				m_MaterialInstance
-			));
-		}
+		void Create(AssetUser<Mesh>& textureUser);
 	private:
-
-		uint32_t m_AssimpMaterialIndex = -1;
-		uint32_t m_AssimpMeshIndex = -1;
+		ACMeshSpecification m_Specification;
+		MeshData* m_Data;
 
 		AssetHandle<MaterialInstance> m_MaterialInstance;
 	};
