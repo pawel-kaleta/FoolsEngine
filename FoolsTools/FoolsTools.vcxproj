@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="src\AssetImport\AssetImportModal.h" />
     <ClInclude Include="src\AssetImport\FileHandler.h" />
+    <ClInclude Include="src\AssetImport\MeshImport.h" />
     <ClInclude Include="src\AssetImport\TextureImport.h" />
     <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorApp.h" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="src\AssetImport\AssetImportModal.cpp" />
     <ClCompile Include="src\AssetImport\FileHandler.cpp" />
+    <ClCompile Include="src\AssetImport\MeshImport.cpp" />
     <ClCompile Include="src\AssetImport\TextureImport.cpp" />
     <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />

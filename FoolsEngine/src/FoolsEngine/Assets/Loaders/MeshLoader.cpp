@@ -7,9 +7,38 @@
 
 namespace fe
 {
-	void MeshLoader::LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& textureUser)
+	void MeshLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
 	{
+		Assimp::Importer importer;
+		//aiProcessPreset_TargetRealtime_Fast
+		const aiScene* scene = importer.ReadFile(sourceFilePath.string().c_str(),
+			aiProcess_Triangulate |
+			aiProcess_FlipUVs |
+			aiProcess_GenNormals |
+			aiProcess_ValidateDataStructure);
 
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", importer.GetErrorString());
+			return;
+		}
+
+		ImportData importData;
+		importData.Scene = scene;
+		importData.Directory = sourceFilePath;
+		importData.Directory.remove_filename();
+
+		//for (size_t i=0; i<scene->mNumMeshes; i++)
+		//	importData.Meshes.emplace_back();
+
+		ImportMesh* mesh = new ImportMesh();
+		uint32_t assimpMeshIndex = 0;
+		mesh->AssimpMaterialIndex = scene->mMeshes[assimpMeshIndex]->mMaterialIndex;
+		mesh->AssimpMeshIndex = assimpMeshIndex;
+
+		ProcessNode(scene->mRootNode, importData);
+
+		return;
 	}
 
 	bool MeshLoader::IsKnownExtension(const std::filesystem::path& extension)
@@ -28,6 +57,58 @@ namespace fe
 		}
 
 		return false;
+	}
+
+	void MeshLoader::ProcessNode(aiNode* node, ImportData& importData)
+	{
+		// process all the node's meshes (if any)
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
+		{
+			aiMesh* newMesh = importData.Scene->mMeshes[node->mMeshes[i]];
+			ImportMesh* meshBatch = importData.Meshes[newMesh->mMaterialIndex].get();
+			ProcessMesh(newMesh, meshBatch);
+		}
+		// then do the same for each of its children
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			ProcessNode(node->mChildren[i], importData);
+		}
+	}
+
+	void MeshLoader::ProcessMesh(aiMesh* newMesh, Mesh* meshBatch)
+	{
+		uint32_t newMeshIndicesOffset = meshBatch->m_Vertices.size();
+
+		for (unsigned int i = 0; i < newMesh->mNumVertices; i++)
+		{
+			Vertex vertex;
+
+			vertex.Position.x = newMesh->mVertices[i].x;
+			vertex.Position.y = newMesh->mVertices[i].y;
+			vertex.Position.z = newMesh->mVertices[i].z;
+
+			vertex.Normal.x = newMesh->mNormals[i].x;
+			vertex.Normal.y = newMesh->mNormals[i].y;
+			vertex.Normal.z = newMesh->mNormals[i].z;
+
+			if (newMesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+			{
+				vertex.TexCoords.x = newMesh->mTextureCoords[0][i].x;
+				vertex.TexCoords.y = newMesh->mTextureCoords[0][i].y;
+			}
+			else
+				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
+			meshBatch->m_Vertices.push_back(vertex);
+		}
+
+		// process indices
+		for (unsigned int i = 0; i < newMesh->mNumFaces; i++)
+		{
+			aiFace face = newMesh->mFaces[i];
+			for (unsigned int j = 0; j < face.mNumIndices; j++)
+				meshBatch->m_Indices.push_back(face.mIndices[j] + newMeshIndicesOffset);
+		}
 	}
 
 	/*

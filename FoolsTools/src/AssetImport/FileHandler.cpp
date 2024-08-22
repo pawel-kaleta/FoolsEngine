@@ -11,7 +11,7 @@ namespace fe
 		&Scene::IsKnownSourceExtension,
 		nullptr, //TextureAsset
 		&TextureLoader::IsKnownExtension,
-		nullptr, //MeshAsset
+		&MeshLoader::IsKnownExtension, //MeshAsset
 		nullptr, //ModelAsset
 		nullptr, //ShaderAsset
 		nullptr, //MaterialAsset
@@ -24,7 +24,7 @@ namespace fe
 		nullptr,
 		nullptr,
 		&Texture2D::GetSourceExtensionAlias,
-		nullptr,
+		&Mesh::GetSourceExtensionAlias,
 		nullptr,
 		nullptr,
 		nullptr,
@@ -36,10 +36,10 @@ namespace fe
 	{
 		&Scene::GetProxyExtension,
 		nullptr,
-		& Texture2D::GetProxyExtension,
+		&Texture2D::GetProxyExtension,
+		&Mesh::GetProxyExtension,
 		nullptr,
-		nullptr,
-		& Shader::GetProxyExtension,
+		&Shader::GetProxyExtension,
 		nullptr,
 		nullptr,
 		nullptr
@@ -48,14 +48,14 @@ namespace fe
 	std::string(*GetProxyExtensionAliasPtrs[AssetType::Count])()
 	{
 		&Scene::GetProxyExtensionAlias,
-			nullptr,
-			& Texture2D::GetProxyExtensionAlias,
-			nullptr,
-			nullptr,
-			& Shader::GetProxyExtensionAlias,
-			nullptr,
-			nullptr,
-			nullptr
+		nullptr,
+		&Texture2D::GetProxyExtensionAlias,
+		&Mesh::GetProxyExtensionAlias,
+		nullptr,
+		&Shader::GetProxyExtensionAlias,
+		nullptr,
+		nullptr,
+		nullptr
 	};
 
 	bool FileHandler::IsKnownExtension(std::string& extension)

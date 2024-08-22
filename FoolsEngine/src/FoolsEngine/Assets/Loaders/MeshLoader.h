@@ -7,12 +7,33 @@ namespace fe
 	class MeshLoader
 	{
 	public:
-		static void LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& textureUser);
-		static void LoadTexture(AssetUser<Mesh>& textureUser)
+		static void LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser);
+		static void LoadMesh(AssetUser<Mesh>& meshUser)
 		{
-			LoadTexture(textureUser.GetSourceFilepath(), textureUser);
+			LoadMesh(meshUser.GetSourceFilepath(), meshUser);
 		}
 		static bool IsKnownExtension(const std::filesystem::path& extension);
+
+	private:
+		struct ImportMesh
+		{
+			std::vector<Vertex>   Vertices;
+			std::vector<uint32_t> Indices;
+			uint32_t AssimpMaterialIndex = -1;
+			uint32_t AssimpMeshIndex = -1;
+
+		};
+
+		struct ImportData
+		{
+			const aiScene* Scene = nullptr;
+			std::filesystem::path Directory;
+			std::vector<Ref<ImportMesh>> Meshes;
+		};
+
+		static void ProcessNode(aiNode* node, ImportData& importData);
+
+		static void ProcessMesh(aiMesh* newMesh, ImportMesh* meshBatch);
 	};
 
 	/*

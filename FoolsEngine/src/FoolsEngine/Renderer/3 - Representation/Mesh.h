@@ -17,6 +17,8 @@
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
+#include "FoolsEngine/Core/Core.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -34,7 +36,7 @@ namespace fe
 		AssetHandle<MaterialInstance> MaterialInstance;
 	};
 
-	struct MeshData
+	struct MeshData //ACDataLocation
 	{
 		std::vector<Vertex>   Vertices;
 		std::vector<uint32_t> Indices;

@@ -1,10 +1,5 @@
 #pragma once
 
-namespace fe::TextureData
-{
-	struct Specification;
-}
-
 namespace std::filesystem
 {
 	class path;
@@ -14,7 +9,7 @@ namespace fe
 {
 	class AssetHandleBase;
 
-	class TextureImport
+	class MeshImport
 	{
 	public:
 		static void RenderWindow();
@@ -24,6 +19,5 @@ namespace fe
 
 	private:
 		static std::filesystem::path s_Filepath;
-		static TextureData::Specification s_Specification;
 	};
 }
