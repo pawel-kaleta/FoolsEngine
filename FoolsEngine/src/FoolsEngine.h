@@ -44,6 +44,8 @@
 
 #include <glm\gtc\type_ptr.hpp>
 
+#include <assimp\scene.h>
+
 //---------Entry Point---------
 //#include "FoolsEngine\Core\EntryPoint.h"
 //-----------------------------

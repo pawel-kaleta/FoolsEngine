@@ -45,7 +45,7 @@ namespace fe
 	struct ACMeshSpecification final : public AssetComponent
 	{
 		uint32_t AssimpMaterialIndex = -1;
-		uint32_t AssimpMeshIndex = -1;
+		std::vector<uint32_t> AssimpMeshesIndexes;
 		uint32_t VertexCount = 0;
 		uint32_t IndicesCount = 0;
 	};

@@ -2,6 +2,8 @@
 
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 
+struct aiScene;
+
 namespace fe
 {
 	class MeshLoader
@@ -13,25 +15,23 @@ namespace fe
 			LoadMesh(meshUser.GetSourceFilepath(), meshUser);
 		}
 		static bool IsKnownExtension(const std::filesystem::path& extension);
+		static Scope<const aiScene> InspectSourceFile(const std::filesystem::path& filePath);
 
 	private:
 		struct ImportMesh
 		{
 			std::vector<Vertex>   Vertices;
 			std::vector<uint32_t> Indices;
-			uint32_t AssimpMaterialIndex = -1;
-			uint32_t AssimpMeshIndex = -1;
-
 		};
 
 		struct ImportData
 		{
 			const aiScene* Scene = nullptr;
 			std::filesystem::path Directory;
-			std::vector<Ref<ImportMesh>> Meshes;
+			std::vector<ImportMesh> Meshes;
 		};
 
-		static void ProcessNode(aiNode* node, ImportData& importData);
+		static void ProcessNode(aiNode* node, ImportData& importData, ImportMesh* meshBatch);
 
 		static void ProcessMesh(aiMesh* newMesh, ImportMesh* meshBatch);
 	};

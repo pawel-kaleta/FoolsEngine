@@ -7,40 +7,6 @@
 
 namespace fe
 {
-	void MeshLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
-	{
-		Assimp::Importer importer;
-		//aiProcessPreset_TargetRealtime_Fast
-		const aiScene* scene = importer.ReadFile(sourceFilePath.string().c_str(),
-			aiProcess_Triangulate |
-			aiProcess_FlipUVs |
-			aiProcess_GenNormals |
-			aiProcess_ValidateDataStructure);
-
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-		{
-			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", importer.GetErrorString());
-			return;
-		}
-
-		ImportData importData;
-		importData.Scene = scene;
-		importData.Directory = sourceFilePath;
-		importData.Directory.remove_filename();
-
-		//for (size_t i=0; i<scene->mNumMeshes; i++)
-		//	importData.Meshes.emplace_back();
-
-		ImportMesh* mesh = new ImportMesh();
-		uint32_t assimpMeshIndex = 0;
-		mesh->AssimpMaterialIndex = scene->mMeshes[assimpMeshIndex]->mMaterialIndex;
-		mesh->AssimpMeshIndex = assimpMeshIndex;
-
-		ProcessNode(scene->mRootNode, importData);
-
-		return;
-	}
-
 	bool MeshLoader::IsKnownExtension(const std::filesystem::path& extension)
 	{
 		static std::filesystem::path knownExtensions[] = {
@@ -59,7 +25,56 @@ namespace fe
 		return false;
 	}
 
-	void MeshLoader::ProcessNode(aiNode* node, ImportData& importData)
+	Scope<const aiScene> MeshLoader::InspectSourceFile(const std::filesystem::path& filePath)
+	{
+		Assimp::Importer importer;
+		
+		const aiScene* scene = importer.ReadFile(filePath.string().c_str(),
+			aiProcess_Triangulate |
+			aiProcess_FlipUVs |
+			aiProcess_GenNormals |
+			aiProcess_ValidateDataStructure);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", importer.GetErrorString());
+			return;
+		}
+
+		return Scope<const aiScene>(scene);
+	}
+	
+	void MeshLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
+	{
+		Assimp::Importer importer;
+
+		const aiScene* scene = importer.ReadFile(sourceFilePath.string().c_str(),
+			aiProcess_Triangulate |
+			aiProcess_FlipUVs |
+			aiProcess_GenNormals |
+			aiProcess_ValidateDataStructure);
+
+		ImportData importData;
+		importData.Scene = scene;
+		importData.Directory = sourceFilePath;
+		importData.Directory.remove_filename();
+
+		//for (size_t i=0; i<scene->mNumMeshes; i++)
+		//	importData.Meshes.emplace_back();
+
+		ImportMesh* mesh = new ImportMesh();
+		//uint32_t assimpMaterial = 0;
+		
+		meshUser.GetSpecification()->AssimpMaterialIndex
+		//mesh->AssimpMaterialIndex = scene->mMeshes[assimpMeshIndex]->mMaterialIndex;
+		//mesh->AssimpMeshIndex = assimpMeshIndex;
+
+		ProcessNode(scene->mRootNode, importData, mesh);
+
+		return;
+	}
+
+	void MeshLoader::ProcessNode(aiNode* node, ImportData& importData, ImportMesh* meshBatch)
 	{
 		// process all the node's meshes (if any)
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -71,11 +86,11 @@ namespace fe
 		// then do the same for each of its children
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(node->mChildren[i], importData);
+			ProcessNode(node->mChildren[i], importData, meshBatch);
 		}
 	}
 
-	void MeshLoader::ProcessMesh(aiMesh* newMesh, Mesh* meshBatch)
+	void MeshLoader::ProcessMesh(aiMesh* newMesh, ImportData& importData)
 	{
 		uint32_t newMeshIndicesOffset = meshBatch->m_Vertices.size();
 
