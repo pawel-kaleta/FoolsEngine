@@ -6,7 +6,7 @@
 
 namespace fe
 {
-	Scope<const aiScene> s_Scene;
+	Scope<const aiScene> s_Scene = nullptr;
 	std::filesystem::path MeshImport::s_Filepath;
 	ACMeshSpecification s_Specification;
 	AssetHandle<Mesh>* s_Handle;
@@ -49,7 +49,7 @@ namespace fe
 	{
 		s_Handle = (AssetHandle<Mesh>*)optionalBaseHandle;
 		s_Filepath = filepath;
-		s_Scene = MeshLoader::InspectSourceFile(filepath);
+		s_Scene.reset(MeshLoader::InspectSourceFile(filepath));
 		s_Specification = ACMeshSpecification();
 
 		if (s_Scene->HasMaterials())

@@ -1,9 +1,15 @@
 #include "AssetImportModal.h"
 #include "TextureImport.h"
+#include "MeshImport.h"
 
 #include <FoolsEngine.h>
 
 #include <filesystem>
+
+namespace fe
+{
+    extern std::string(*GetProxyExtensionPtrs[AssetType::Count])();
+}
 
 namespace fe::AssetImportModal
 {
@@ -16,7 +22,7 @@ namespace fe::AssetImportModal
         nullptr, //SceneAsset
         nullptr, //TextureAsset
         &TextureImport::InitImport,
-        nullptr, //MeshAsset
+        &MeshImport::InitImport,
         nullptr, //ModelAsset
         nullptr, //ShaderAsset
         nullptr, //MaterialAsset
@@ -29,7 +35,7 @@ namespace fe::AssetImportModal
         nullptr, //SceneAsset
         nullptr, //TextureAsset
         &TextureImport::RenderWindow,
-        nullptr, //MeshAsset
+        &MeshImport::RenderWindow,
         nullptr, //ModelAsset
         nullptr, //ShaderAsset
         nullptr, //MaterialAsset
@@ -42,13 +48,15 @@ namespace fe::AssetImportModal
         nullptr, //SceneAsset
         nullptr, //TextureAsset
         &TextureImport::ImportAs,
-        nullptr, //MeshAsset
+        &MeshImport::ImportAs,
         nullptr, //ModelAsset
         nullptr, //ShaderAsset
         nullptr, //MaterialAsset
         nullptr, //MaterialInstanceAsset
         nullptr  //AudioAsset
     };
+
+    
 
 	void OnImGuiRender()
 	{
@@ -65,8 +73,11 @@ namespace fe::AssetImportModal
             if (ImGui::Button("Import As..."))
             {
                 std::filesystem::path defaultFilepath = s_Filepath;
-                defaultFilepath.replace_extension(std::filesystem::path(Texture2D::GetProxyExtension()));
-                const std::filesystem::path newTextureFilepath = FileDialogs::SaveFile(defaultFilepath.string().c_str(), "Texture2D (*.fetex2d)\0 *.fetex2d\0");
+                std::string extension = (*GetProxyExtensionPtrs[s_Type])();
+                defaultFilepath.replace_extension(std::filesystem::path(extension));
+
+                std::string filter = "NewAsset (*" + extension + ")\0 *" + extension + "\0";
+                const std::filesystem::path newTextureFilepath = FileDialogs::SaveFile(defaultFilepath.string().c_str(), filter.c_str());
 
                 (*s_ImportAs[s_Type])(newTextureFilepath);
 

@@ -251,49 +251,8 @@ namespace fe
 
 	void CMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		const char* combo_preview_value = !Mesh.IsValid() ? "None" : Mesh.Observe().GetName().c_str();
-		if (ImGui::BeginCombo("Mesh ", combo_preview_value))
-		{
-			bool is_selected = !(Mesh.IsValid());
-
-			if (ImGui::Selectable("None", is_selected))
-				Mesh = AssetHandle<fe::Mesh>();
-
-			auto meshes = AssetManager::GetAll<fe::Mesh>();
-
-			for (auto id : meshes)
-			{
-				auto nextMesh = AssetHandle<fe::Mesh>(id);
-				is_selected = Mesh.IsValid() ? (Mesh.GetID() == id) : false;
-
-				if (ImGui::Selectable(nextMesh.Observe().GetName().c_str(), is_selected))
-				{
-					Mesh = nextMesh;
-				}
-
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
-			}
-
-			if (ImGui::Selectable("Load..."))
-			{
-
-				//const std::filesystem::path modelFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-				//if (!modelFilepath.empty())
-				{
-					FE_CORE_ASSERT(false, "");
-					// markmark
-					//auto newMeshes = ModelImporter::Import(modelFilepath);
-					//for (auto& mesh : newMeshes)
-					//{
-					//	if (mesh->GetVertexCount())
-					//		MeshLibrary::Add(mesh);
-					//}
-				}
-			}
-
-			ImGui::EndCombo();
-		}
+		std::string nameTag = "Mesh";
+		DrawAssetHandle<fe::Mesh>(Mesh, nameTag);
 	}
 
 	void CMesh::Serialize(YAML::Emitter& emitter)

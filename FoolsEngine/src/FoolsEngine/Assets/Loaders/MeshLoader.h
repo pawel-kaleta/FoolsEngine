@@ -15,25 +15,19 @@ namespace fe
 			LoadMesh(meshUser.GetSourceFilepath(), meshUser);
 		}
 		static bool IsKnownExtension(const std::filesystem::path& extension);
-		static Scope<const aiScene> InspectSourceFile(const std::filesystem::path& filePath);
+		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath);
 
 	private:
-		struct ImportMesh
-		{
-			std::vector<Vertex>   Vertices;
-			std::vector<uint32_t> Indices;
-		};
-
 		struct ImportData
 		{
 			const aiScene* Scene = nullptr;
 			std::filesystem::path Directory;
-			std::vector<ImportMesh> Meshes;
+			//std::vector<MeshData> Meshes;
 		};
 
-		static void ProcessNode(aiNode* node, ImportData& importData, ImportMesh* meshBatch);
+		static void ProcessNode(aiNode* node, ImportData& importData, const ACMeshSpecification* meshSpec, MeshData* meshData);
 
-		static void ProcessMesh(aiMesh* newMesh, ImportMesh* meshBatch);
+		static void ProcessMesh(aiMesh* newMesh, MeshData* meshData);
 	};
 
 	/*

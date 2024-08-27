@@ -15,6 +15,8 @@ namespace fe
 			LoadShader(shaderUser.GetSourceFilepath(), shaderUser);
 		}
 		static void CompileShader(GDIType GDI, AssetUser<Shader>& shaderUser);
+
+		static bool IsKnownExtension(const std::filesystem::path& extension);
 	private:
 		static void PreProcess(AssetUser<Shader>& shaderUser);
 

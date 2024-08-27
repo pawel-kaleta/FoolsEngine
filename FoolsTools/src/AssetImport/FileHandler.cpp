@@ -13,7 +13,7 @@ namespace fe
 		&TextureLoader::IsKnownExtension,
 		&MeshLoader::IsKnownExtension, //MeshAsset
 		nullptr, //ModelAsset
-		nullptr, //ShaderAsset
+		&ShaderLoader::IsKnownExtension, //ShaderAsset
 		nullptr, //MaterialAsset
 		nullptr, //MaterialInstanceAsset
 		nullptr  //AudioAsset
@@ -26,13 +26,13 @@ namespace fe
 		&Texture2D::GetSourceExtensionAlias,
 		&Mesh::GetSourceExtensionAlias,
 		nullptr,
-		nullptr,
+		&Shader::GetSourceExtensionAlias,
 		nullptr,
 		nullptr,
 		nullptr
 	};
 
-	std::string(*GetProxyExtensionPtrs[AssetType::Count])()
+	std::string(*GetProxyExtensionPtrs[AssetType::Count])() = 
 	{
 		&Scene::GetProxyExtension,
 		nullptr,

@@ -43,6 +43,23 @@ namespace fe
 		}
 	}
 
+	bool ShaderLoader::IsKnownExtension(const std::filesystem::path& extension)
+	{
+		static std::filesystem::path knownExtensions[] = {
+			".glsl"
+		};
+
+		for (auto& knownExtension : knownExtensions)
+		{
+			if (extension == knownExtension)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void ShaderLoader::GLCompileShader(AssetUser<Shader>& shaderUser)
 	{
 		FE_PROFILER_FUNC();

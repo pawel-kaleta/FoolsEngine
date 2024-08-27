@@ -94,7 +94,7 @@ namespace fe
 			return *this;
 		}
 		MeshBuilder& SetAssimpMaterialIndex(uint32_t assimpMaterialIndex) { m_Specification.AssimpMaterialIndex = assimpMaterialIndex; return *this; }
-		MeshBuilder& SetAssimpMeshIndex(uint32_t assimpMeshIndex) { m_Specification.AssimpMeshIndex = assimpMeshIndex; return *this; }
+		MeshBuilder& AddAssimpMeshIndex(uint32_t assimpMeshIndex) { m_Specification.AssimpMeshesIndexes.push_back(assimpMeshIndex); return *this; }
 		MeshBuilder& SetMaterialInstance(AssetHandle<MaterialInstance> materialInstance) { m_MaterialInstance = materialInstance; }
 
 		void Create(AssetUser<Mesh>& textureUser);

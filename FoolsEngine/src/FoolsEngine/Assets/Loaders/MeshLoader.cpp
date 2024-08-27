@@ -7,6 +7,9 @@
 
 namespace fe
 {
+	
+	//const aiScene* s_InspectedScene = nullptr;
+
 	bool MeshLoader::IsKnownExtension(const std::filesystem::path& extension)
 	{
 		static std::filesystem::path knownExtensions[] = {
@@ -25,11 +28,11 @@ namespace fe
 		return false;
 	}
 
-	Scope<const aiScene> MeshLoader::InspectSourceFile(const std::filesystem::path& filePath)
+	const aiScene* MeshLoader::InspectSourceFile(const std::filesystem::path& filePath)
 	{
-		Assimp::Importer importer;
-		
-		const aiScene* scene = importer.ReadFile(filePath.string().c_str(),
+		static Assimp::Importer s_Inspector;
+
+		const aiScene* scene = s_Inspector.ReadFile(filePath.string().c_str(),
 			aiProcess_Triangulate |
 			aiProcess_FlipUVs |
 			aiProcess_GenNormals |
@@ -37,11 +40,11 @@ namespace fe
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", importer.GetErrorString());
-			return;
+			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", s_Inspector.GetErrorString());
+			return nullptr;
 		}
 
-		return Scope<const aiScene>(scene);
+		return scene;
 	}
 	
 	void MeshLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
@@ -59,40 +62,43 @@ namespace fe
 		importData.Directory = sourceFilePath;
 		importData.Directory.remove_filename();
 
-		//for (size_t i=0; i<scene->mNumMeshes; i++)
-		//	importData.Meshes.emplace_back();
+		auto& dataLocation = meshUser.GetDataLocation();
+		if (dataLocation.Data)
+		{
+			FE_LOG_CORE_WARN("Reloading mesh");
+			delete dataLocation.Data;
+		}
 
-		ImportMesh* mesh = new ImportMesh();
-		//uint32_t assimpMaterial = 0;
-		
-		meshUser.GetSpecification()->AssimpMaterialIndex
-		//mesh->AssimpMaterialIndex = scene->mMeshes[assimpMeshIndex]->mMaterialIndex;
-		//mesh->AssimpMeshIndex = assimpMeshIndex;
+		dataLocation.Data = new MeshData();
 
-		ProcessNode(scene->mRootNode, importData, mesh);
+		ProcessNode(scene->mRootNode, importData, meshUser.GetSpecification(), (MeshData*)dataLocation.Data);
 
 		return;
 	}
 
-	void MeshLoader::ProcessNode(aiNode* node, ImportData& importData, ImportMesh* meshBatch)
+	void MeshLoader::ProcessNode(aiNode* node, ImportData& importData, const ACMeshSpecification* meshSpec, MeshData* meshData)
 	{
 		// process all the node's meshes (if any)
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* newMesh = importData.Scene->mMeshes[node->mMeshes[i]];
-			ImportMesh* meshBatch = importData.Meshes[newMesh->mMaterialIndex].get();
-			ProcessMesh(newMesh, meshBatch);
+			//ImportMesh* meshBatch = importData.Meshes[newMesh->mMaterialIndex].get();
+
+			if (meshSpec->AssimpMaterialIndex != newMesh->mMaterialIndex)
+				continue;
+
+			ProcessMesh(newMesh, meshData);
 		}
 		// then do the same for each of its children
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(node->mChildren[i], importData, meshBatch);
+			ProcessNode(node->mChildren[i], importData, meshSpec, meshData);
 		}
 	}
 
-	void MeshLoader::ProcessMesh(aiMesh* newMesh, ImportData& importData)
+	void MeshLoader::ProcessMesh(aiMesh* newMesh, MeshData* meshData)
 	{
-		uint32_t newMeshIndicesOffset = meshBatch->m_Vertices.size();
+		uint32_t newMeshIndicesOffset = (uint32_t)meshData->Vertices.size();
 
 		for (unsigned int i = 0; i < newMesh->mNumVertices; i++)
 		{
@@ -114,7 +120,7 @@ namespace fe
 			else
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
-			meshBatch->m_Vertices.push_back(vertex);
+			meshData->Vertices.push_back(vertex);
 		}
 
 		// process indices
@@ -122,7 +128,7 @@ namespace fe
 		{
 			aiFace face = newMesh->mFaces[i];
 			for (unsigned int j = 0; j < face.mNumIndices; j++)
-				meshBatch->m_Indices.push_back(face.mIndices[j] + newMeshIndicesOffset);
+				meshData->Indices.push_back(face.mIndices[j] + newMeshIndicesOffset);
 		}
 	}
 

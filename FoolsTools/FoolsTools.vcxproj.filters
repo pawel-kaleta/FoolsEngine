@@ -50,7 +50,9 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\MeshImport.h" />
+    <ClInclude Include="src\AssetImport\MeshImport.h">
+      <Filter>AssetImport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetImport\AssetImportModal.cpp">
@@ -89,6 +91,8 @@
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
     </ClCompile>
-    <ClCompile Include="src\AssetImport\MeshImport.cpp" />
+    <ClCompile Include="src\AssetImport\MeshImport.cpp">
+      <Filter>AssetImport</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

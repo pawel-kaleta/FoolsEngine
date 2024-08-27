@@ -129,6 +129,7 @@ namespace fe
 		AssetID GetID() const { return m_ECSHandle.entity(); }
 		virtual AssetType GetType() const = 0;
 		static AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
+
 		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return false; }
 		static std::string GetSourceExtensionAlias() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }
 		static std::string GetProxyExtension() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }

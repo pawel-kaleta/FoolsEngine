@@ -8,8 +8,15 @@
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
+#include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
+
 namespace fe
 {
+    bool Shader::IsKnownSourceExtension(const std::filesystem::path& extension)
+    {
+        return ShaderLoader::IsKnownExtension(extension);
+    }
+
     void Shader::Bind(GDIType GDI)
     {
         switch (GDI)

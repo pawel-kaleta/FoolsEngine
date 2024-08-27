@@ -22,6 +22,11 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
+		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
+		static std::string GetSourceExtensionAlias() { return "Shader"; }
+		static std::string GetProxyExtension() { return ""; }
+		static std::string GetProxyExtensionAlias() { return ""; }
+
 		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
 		      ACSourceCode* GetSourceCode()       { return GetIfExist<ACSourceCode>(); }
 		ACSourceCode& GetOrEmplaceSourceCode() { return GetOrEmplace<ACSourceCode>(); }
