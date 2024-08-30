@@ -44,11 +44,7 @@ namespace fe
 	void Mesh::UnloadFromCPU()
 	{
 		auto& dataLocation = Get<ACDataLocation>();
-		if (!dataLocation.Data)
-		{
-			FE_CORE_ASSERT(false, "Not on CPU");
-			return;
-		}
+		if (!dataLocation.Data) return;
 
 		auto& meshData = *(MeshData*)dataLocation.Data;
 

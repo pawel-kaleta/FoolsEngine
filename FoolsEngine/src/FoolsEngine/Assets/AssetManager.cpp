@@ -4,6 +4,7 @@
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
+#include "Loaders\MeshLoader.h"
 
 #include "Serializers\YAML.h"
 
@@ -141,10 +142,41 @@ namespace fe
 				}
 				else
 				{
-					ShaderLoader::LoadShader(shaderUser);
-					ShaderLoader::CompileShader(GDI, shaderUser);
+					if (!shaderUser.GetRendererID(GDI))
+					{
+						ShaderLoader::LoadShader(shaderUser);
+						ShaderLoader::CompileShader(GDI, shaderUser);
+					}
 				}
 				shaderUser.UnloadFromCPU();
+			}
+		}
+
+		{
+			FE_PROFILER_SCOPE("Meshes");
+			// TO DO: doesnt need to be a view, make a group acctually
+			auto meshesView = s_Instance->m_Registries[AssetType::MeshAsset].view<ACRefsCounters, ACProxyFilepath>();
+			for (auto id : meshesView)
+			{
+				if (BaseAssets::IsBaseAsset(id, AssetType::MeshAsset))
+					continue;
+
+				auto [acref, acfp] = meshesView.get(id);
+
+				auto meshUser = AssetHandle<Mesh>(id).Use();
+				if (acref.LiveHandles == 0)
+				{
+					meshUser.UnloadFromGPU();
+				}
+				else
+				{
+					if (!meshUser.GetBuffers())
+					{
+						MeshLoader::LoadMesh(meshUser);
+						meshUser.SendDataToGPU(GDI, meshUser.GetDataLocation().Data);
+					}
+				}
+				meshUser.UnloadFromCPU();
 			}
 		}
 	}

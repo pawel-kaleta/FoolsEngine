@@ -60,13 +60,16 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		constexpr static AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+		static AssetType GetTypeStatic() { return AssetType::MeshAsset; }
 		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
 		static std::string GetSourceExtensionAlias() { return "Mesh Source"; }
 		static std::string GetProxyExtension() { return ".femesh"; }
 		static std::string GetProxyExtensionAlias() { return "Mesh"; }
 
 		void SendDataToGPU(GDIType GDI, void* data);
+
+		const ACGPUBuffers* GetBuffers() { return GetIfExist<ACGPUBuffers>(); }
+		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
 
 		virtual void UnloadFromGPU() override;
 		virtual void UnloadFromCPU() override;

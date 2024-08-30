@@ -47,6 +47,10 @@ namespace fe
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
 		bool selected = ImGui::Button(name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+		if (!assetHandle.IsValid())
+			ImGui::PopStyleColor();
 
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -82,13 +86,10 @@ namespace fe
 
 		ImGui::SameLine();
 		ImGui::Text(nameTag.c_str());
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		if (!assetHandle.IsValid())
-			ImGui::PopStyleColor();
 	}
 	template void DataComponent::DrawAssetHandle<Texture2D>(AssetHandle<Texture2D>&, const std::string&);
 	template void DataComponent::DrawAssetHandle<Shader>(AssetHandle<Shader>&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Mesh>(AssetHandle<Mesh>&, const std::string&);
 
 	void CCamera::DrawInspectorWidget(BaseEntity entity)
 	{
