@@ -20,7 +20,7 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
 		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
 		static std::string GetSourceExtensionAlias() { return "Shader"; }

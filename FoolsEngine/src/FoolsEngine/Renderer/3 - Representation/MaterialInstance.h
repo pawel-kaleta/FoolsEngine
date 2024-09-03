@@ -32,7 +32,7 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
+		static AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
 
 		void Init(const AssetHandle<Material> material);
 

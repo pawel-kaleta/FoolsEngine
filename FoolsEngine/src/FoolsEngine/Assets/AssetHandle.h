@@ -79,7 +79,7 @@ namespace fe
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
 
-		static AssetType GetType() { return tnAsset::GetTypeStatic(); }
+		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
 		//AssetHandle(AssetHandleBase handleBase) : m_ID(handleBase.m_ID) {};
 		AssetHandle() = default;
@@ -144,6 +144,6 @@ namespace fe
 		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
-		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetType()), m_ID); };
+		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetTypeStatic()), m_ID); };
 	};
 }

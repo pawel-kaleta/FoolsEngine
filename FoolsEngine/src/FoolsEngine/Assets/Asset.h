@@ -128,7 +128,7 @@ namespace fe
 	public:
 		AssetID GetID() const { return m_ECSHandle.entity(); }
 		virtual AssetType GetType() const = 0;
-		constexpr static AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
+		static AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
 
 		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return false; }
 		static std::string GetSourceExtensionAlias() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }
@@ -139,13 +139,13 @@ namespace fe
 
 		std::string GetName() const { return Get<ACProxyFilepath>().Filepath.stem().string(); }
 
-		ACDataLocation& GetDataLocation() { return Get<ACDataLocation>(); }
+		      ACDataLocation& GetDataLocation()       { return Get<ACDataLocation>(); }
 		const ACDataLocation& GetDataLocation() const { return Get<ACDataLocation>(); }
 
-		ACProxyFilepath& GetProxyFilepath() { return Get<ACProxyFilepath>(); }
+		      ACProxyFilepath& GetProxyFilepath()       { return Get<ACProxyFilepath>(); }
 		const ACProxyFilepath& GetProxyFilepath() const { return Get<ACProxyFilepath>(); }
 
-		std::filesystem::path& GetSourceFilepath();
+		      std::filesystem::path& GetSourceFilepath();
 		const std::filesystem::path& GetSourceFilepath() const;
 
 		virtual void UnloadFromGPU() = 0;

@@ -11,6 +11,7 @@
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 #include "FoolsEngine\Assets\Loaders\MeshLoader.h"
 
+#include <type_traits>
 
 #include <glm\gtc\type_ptr.hpp>
 
@@ -66,7 +67,7 @@ namespace fe
 					{
 						AssetID newAssetID = AssetManager::GetOrCreateAsset<tnAsset>(filepath);
 						assetHandle = AssetHandle<tnAsset>(newAssetID);
-						if constexpr (tnAsset::GetTypeStatic() == AssetType::Texture2DAsset)
+						if constexpr (std::is_same_v<tnAsset, Texture2D>)
 						{
 							auto textureUser = assetHandle.Use();
 							TextureLoader::LoadTexture(textureUser);

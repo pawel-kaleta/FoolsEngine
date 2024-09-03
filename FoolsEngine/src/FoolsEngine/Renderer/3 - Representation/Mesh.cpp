@@ -6,11 +6,13 @@
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
+#include "FoolsEngine\Assets\Loaders\MeshLoader.h"
+
 namespace fe
 {
 	bool Mesh::IsKnownSourceExtension(const std::filesystem::path& extension)
 	{
-		return false;
+		return MeshLoader::IsKnownExtension(extension);
 	}
 
 	void Mesh::SendDataToGPU(GDIType GDI, void* data)
@@ -54,11 +56,7 @@ namespace fe
 
 	void Mesh::UnloadFromGPU()
 	{
-		if (!AllOf<ACGPUBuffers>())
-		{
-			FE_CORE_ASSERT(false, "Not on GPU");
-			return;
-		}
+		if (!AllOf<ACGPUBuffers>()) return;
 
 		Erase<ACGPUBuffers>();
 	}
