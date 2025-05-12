@@ -12,10 +12,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AssetImport\AssetImportModal.h">
+    <ClInclude Include="src\AssetImport\FileHandler.h">
       <Filter>AssetImport</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\FileHandler.h">
+    <ClInclude Include="src\AssetImport\ImportData.h">
+      <Filter>AssetImport</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetImport\GeometryImport.h">
       <Filter>AssetImport</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetImport\TextureImport.h">
@@ -50,15 +53,12 @@
     <ClInclude Include="src\Viewports\PlayViewport.h">
       <Filter>Viewports</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\MeshImport.h">
-      <Filter>AssetImport</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AssetImport\AssetImportModal.cpp">
+    <ClCompile Include="src\AssetImport\FileHandler.cpp">
       <Filter>AssetImport</Filter>
     </ClCompile>
-    <ClCompile Include="src\AssetImport\FileHandler.cpp">
+    <ClCompile Include="src\AssetImport\GeometryImport.cpp">
       <Filter>AssetImport</Filter>
     </ClCompile>
     <ClCompile Include="src\AssetImport\TextureImport.cpp">
@@ -90,9 +90,6 @@
     </ClCompile>
     <ClCompile Include="src\Viewports\PlayViewport.cpp">
       <Filter>Viewports</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetImport\MeshImport.cpp">
-      <Filter>AssetImport</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

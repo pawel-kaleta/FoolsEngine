@@ -27,30 +27,24 @@ namespace fe
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
-		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
-		static std::string GetSourceExtensionAlias() { return "Texture Source"; }
-		static std::string GetProxyExtension() { return ".fetex2d"; }
-		static std::string GetProxyExtensionAlias() { return "Texture2D"; }
 
-		AssetHandle<Texture2D> GetHandle() const;
-
+		virtual void PlaceCoreComponents() final override;
+		virtual void Release() final override;
 		void SendDataToGPU(GDIType GDI, void* data);
 		void Bind(GDIType GDI, RenderTextureSlotID slotID = 0);
-
-		virtual void UnloadFromGPU() override final;
-		virtual void UnloadFromCPU() override final;
+		void UnloadFromCPU();
 
 		uint32_t GetRendererID(GDIType GDI) const;
 
-		const ACTexture2DSpecification* GetSpecification() const { return GetIfExist<ACTexture2DSpecification>(); }
-		ACTexture2DSpecification& GetOrEmplaceSpecification() { return GetOrEmplace<ACTexture2DSpecification>(); }
+		const ACTexture2DSpecification& GetSpecification() const { return Get<ACTexture2DSpecification>(); }
+		      ACTexture2DSpecification& GetSpecification()       { return Get<ACTexture2DSpecification>(); }
 
 		template <typename tnGDITexture2D>
 		tnGDITexture2D& CreateGDITexture2D(const TextureData::Specification& spec, const void* data) { return Emplace<tnGDITexture2D>(spec, data); }
 
 		void CreateGDITexture2D(GDIType gdi)
 		{
-			auto& spec = GetOrEmplaceSpecification().Specification;
+			auto& spec = GetSpecification().Specification;
 			void* data = GetDataLocation().Data;
 			CreateGDITexture2D(gdi, spec, data);
 		}
@@ -64,6 +58,7 @@ namespace fe
 			void* data = GetDataLocation().Data;
 			return Emplace<tnGDITexture2D>(spec, data);
 		}
+
 	protected:
 		Texture2D(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
 	};

@@ -7,7 +7,7 @@
 
 namespace fe
 {
-	GLenum FormatToGlFormat(TextureData::Format format)
+	static GLenum FormatToGlFormat(TextureData::Format format)
 	{
 		// TO DO: make this a static lookup table
 
@@ -28,7 +28,7 @@ namespace fe
 		}
 	}
 
-	GLenum FormatToGLinternalFormat(TextureData::Format format)
+	static GLenum FormatToGLinternalFormat(TextureData::Format format)
 	{
 		// TO DO: make this a static lookup table
 

@@ -28,7 +28,10 @@ namespace fe
 
 			if (IsValid())
 			{
-				GetRefCounters().ActiveObserversCount++; //TODO: mutexes
+				ACRefsCounters& refs = GetRefCounters();
+				FE_CORE_ASSERT(!refs.ActiveUser, "Cannot read and write at the same time");
+
+				refs.ActiveObserversCount++; //TODO: mutexes
 			}
 		};
 	};
@@ -57,20 +60,37 @@ namespace fe
 
 			if (IsValid())
 			{
-				GetRefCounters().ActiveUser = true; //TODO: mutexes
+				ACRefsCounters& refs = GetRefCounters();
+				FE_CORE_ASSERT(!refs.ActiveObserversCount, "Cannot read and write at the same time");
+				FE_CORE_ASSERT(!refs.ActiveUser, "Cannot write concurently");
+				refs.ActiveUser = true; //TODO: mutexes
 			}
 		};
 	};
 
 
+	enum AssetLoadingPriority : uint32_t
+	{
+		LoadingPriority_None = 0,
+		LoadingPriority_Low = 1,
+		LoadingPriority_Standard = 10,
+		LoadingPriority_High = 100,
+		LoadingPriority_Critical = -1
+	};
 
 	class AssetHandleBase
 	{
+	public:
+		AssetID GetID() const { return m_ID; }
+		AssetLoadingPriority GetLoadingPriority() const { return m_LoadingPriority; }
 	protected:
-		AssetHandleBase() : m_ID(NullAssetID) {};
-		AssetHandleBase(AssetID id) : m_ID(id) {};
+		AssetHandleBase() :
+			m_ID(NullAssetID) { };
+		AssetHandleBase(AssetID id, AssetLoadingPriority priority) :
+			m_ID(id), m_LoadingPriority(priority) { };
 		
 		AssetID m_ID;
+		AssetLoadingPriority m_LoadingPriority;
 	};
 
 	template <typename tnAsset>
@@ -78,72 +98,69 @@ namespace fe
 	{
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
+		// TO DO: add AssetLoadingPriority counting
 
 		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
-		//AssetHandle(AssetHandleBase handleBase) : m_ID(handleBase.m_ID) {};
-		AssetHandle() = default;
-		AssetHandle(ECS_AssetHandle assetHandle) :
-			AssetHandleBase(assetHandle.entity())
+		AssetHandle() { };
+		AssetHandle(AssetID assetID, AssetLoadingPriority priority = LoadingPriority_Standard) :
+			AssetHandleBase(assetID, priority)
 		{
-			if (assetHandle)
-				assetHandle.get<ACRefsCounters>().LiveHandles++;
-		};
-		AssetHandle(AssetID assetID) :
-			AssetHandleBase(assetID)
-		{
-			auto ECShandle = GetECSHandle();
-			if (ECShandle.valid())
-				ECShandle.get<ACRefsCounters>().LiveHandles++;
+			if (assetID && priority != LoadingPriority_None)
+				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
 		};
 
 		~AssetHandle()
 		{
-			auto ECShandle = GetECSHandle();
-			if (ECShandle.valid())
-				ECShandle.get<ACRefsCounters>().LiveHandles--;
+			if (m_ID && m_LoadingPriority != LoadingPriority_None)
+				GetECSHandle().get<ACRefsCounters>().LiveHandles--;
 		}
 
 		AssetHandle(const AssetHandle& other) :
-			AssetHandleBase(other.m_ID)
+			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
 		{
-			auto ECShandle = GetECSHandle();
-			if (ECShandle.valid())
-				ECShandle.get<ACRefsCounters>().LiveHandles++;
+			if (other.m_ID && other.m_LoadingPriority != LoadingPriority_None)
+				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
 		};
 		AssetHandle(AssetHandle&& other) :
-			AssetHandleBase(other.m_ID)
+			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
 		{
 			other.m_ID = NullAssetID;
 		};
 		AssetHandle& operator=(const AssetHandle& other)
 		{
+			if (m_ID && m_LoadingPriority != LoadingPriority_None)
+				GetECSHandle().get<ACRefsCounters>().LiveHandles--;
+
 			m_ID = other.m_ID;
-			auto ECShandle = GetECSHandle();
-			if (ECShandle.valid())
-				ECShandle.get<ACRefsCounters>().LiveHandles++;
+			m_LoadingPriority = other.m_LoadingPriority;
+
+			if (other.m_ID && other.m_LoadingPriority != LoadingPriority_None)
+				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
 
 			return *this;
 		}
 		AssetHandle& operator=(AssetHandle&& other)
 		{
 			m_ID = other.m_ID;
+			m_LoadingPriority = other.m_LoadingPriority;
+
 			other.m_ID = NullAssetID;
 
 			return *this;
 		}
 
 		bool operator==(const AssetHandle& other) const { return m_ID == other.m_ID; }
-
-		AssetID GetID() const { return m_ID; }
+		
 		UUID GetUUID() const { return GetECSHandle().get<ACUUID>().UUID; }
-
 		bool IsValid() const { return (bool)GetECSHandle(); }
+		void SetLoadingPriority(AssetLoadingPriority priority) { m_LoadingPriority = priority; } // TO DO: add AssetLoadingPriority counting
 
 		const AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
 		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
 		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetTypeStatic()), m_ID); };
+		
 	};
 }

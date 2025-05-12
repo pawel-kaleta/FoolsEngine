@@ -12,10 +12,7 @@ namespace fe
 		struct Element
 		{
 			std::string Name;
-			ShaderData::Primitive Primitive;
-			ShaderData::Structure Structure;
 			ShaderData::Type Type;
-			uint32_t Size;
 			uint32_t Offset;
 			uint32_t ComponentCount;
 			bool Normalized;
@@ -28,6 +25,10 @@ namespace fe
 			Element(const std::string& name, ShaderData::Type type, bool normalized = false);
 
 			Element(ShaderData::Type type, const std::string& name, bool normalized = false);
+
+			ShaderData::Primitive Primitive() const { return ShaderData::PrimitiveInType(Type); }
+			ShaderData::Structure Structure() const { return ShaderData::StructureInType(Type); }
+			uint32_t Size() const { return ShaderData::SizeOfType(Type); }
 		};
 
 		class Layout

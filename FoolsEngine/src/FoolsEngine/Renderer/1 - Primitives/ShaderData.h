@@ -33,6 +33,8 @@ namespace fe
 			Mat4x2, Mat4x3, Mat4
 		};
 
+		const char* TypesArray[];
+
 		constexpr Primitive PrimitiveInType(Type type)
 		{
 			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {

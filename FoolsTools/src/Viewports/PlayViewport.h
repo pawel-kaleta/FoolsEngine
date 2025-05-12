@@ -12,11 +12,11 @@ namespace fe
 		void RenderScene();
 		void OnImGuiRender();
 
-		void SetScene(const Ref<Scene>& scene) { m_Scene = scene; }
+		void SetScene(const AssetHandle<Scene>& scene) { m_Scene = scene; }
 
 	private:
-		Ref<Scene> m_Scene;
-		bool m_IsVisible;
+		AssetHandle<Scene> m_Scene;
+		bool m_IsVisible = false;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool      m_VieportFocus = false;

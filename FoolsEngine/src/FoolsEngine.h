@@ -2,6 +2,7 @@
 
 
 // To be included by FoolsEngine application (game)
+// To do: create a nice include folder with with include batches based on areas/namespaces
 
 #include "FoolsEngine\Debug\Log.h"
 #include "FoolsEngine\Debug\Asserts.h"
@@ -12,6 +13,7 @@
 #include "FoolsEngine\Platform\InputCodes.h"
 #include "FoolsEngine\Platform\InputPolling.h"
 #include "FoolsEngine\Renderer\1 - Primitives\FramebufferData.h"
+#include "FoolsEngine\Renderer\3 - Representation\Model.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Scene\ECS.h"
@@ -32,10 +34,11 @@
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Math\Math.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
-#include "FoolsEngine\Assets\Loaders\MeshLoader.h"
+#include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
 #include "FoolsEngine\Assets\Serializers\YAML.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Memory\Scratchpad.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"

@@ -12,11 +12,6 @@
 
 namespace fe
 {
-    bool Shader::IsKnownSourceExtension(const std::filesystem::path& extension)
-    {
-        return ShaderLoader::IsKnownExtension(extension);
-    }
-
     void Shader::Bind(GDIType GDI)
     {
         switch (GDI)
@@ -45,7 +40,7 @@ namespace fe
         }
     }
 
-    void Shader::UnloadFromGPU()
+    void Shader::Release()
     {
         auto gdi = Renderer::GetActiveGDItype();
         switch (gdi)

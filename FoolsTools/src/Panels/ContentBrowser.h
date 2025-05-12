@@ -1,11 +1,14 @@
 #pragma once
 
 #include <filesystem>
+#include <memory_resource>
 
 #include "EditorAssetManager.h"
 
 namespace fe
 {
+	class Scratchpad;
+
 	class ContentBrowser
 	{
 	public:
@@ -19,7 +22,7 @@ namespace fe
 
 		struct Settings
 		{
-			int ThumbnailSize = 100;
+			uint32_t ThumbnailSize = 100;
 
 			bool DisplayFiles		= false;
 			bool DisplayDirectories	= true;
@@ -31,8 +34,11 @@ namespace fe
 			EditorAssetHandle<Texture2D> Folder;
 		} m_Icons;
 
-		std::vector<std::filesystem::path> m_Files;
-		std::vector<std::filesystem::path> m_Directories;
+		Scratchpad* m_SP;
+		
+		using PmrVecString = std::pmr::vector<std::pmr::string>;
+		PmrVecString* m_Files;
+		PmrVecString* m_Directories;
 
 		void RenderFolderHierarchy();
 		void RenderFolderContent();

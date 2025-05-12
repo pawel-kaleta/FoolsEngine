@@ -54,11 +54,20 @@ namespace fe
 
 		struct Specification
 		{
-			Usage		Usage		= Usage::None;
-			Components	Components	= Components::None;
-			Format		Format		= Format::None;
-			uint32_t	Width		= 0;
-			uint32_t	Height		= 0;
+			Usage	    Usage;
+			Components  Components;
+			Format		Format;
+			uint32_t	Width;
+			uint32_t	Height;
+
+			void Init()
+			{
+				Usage      = Usage::None;
+				Components = Components::None;
+				Format     = Format::None;
+				Width      = 0;
+				Height     = 0;
+			}
 		};
 	}
 }

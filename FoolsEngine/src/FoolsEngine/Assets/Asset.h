@@ -19,6 +19,7 @@ namespace fe
 	enum AssetType
 	{
 		SceneAsset,
+		PrefabAsset,
 		TextureAsset,
 		Texture2DAsset,
 		MeshAsset,
@@ -32,68 +33,6 @@ namespace fe
 		None
 	};
 
-	namespace BaseAssets
-	{
-		enum class Scenes
-		{
-			Count
-		};
-
-		enum class Textures
-		{
-			Count
-		};
-
-		enum class Textures2D
-		{
-			Default,
-			FlatWhite,
-
-			Count
-		};
-
-		enum class Meshes
-		{
-			Count
-		};
-
-		enum class Models
-		{
-			Count
-		};
-
-		enum class Shaders
-		{
-			Default2D,
-			Default3D,
-
-			Count
-		};
-
-		enum class Materials
-		{
-			Default3D,
-
-			Count
-		};
-
-		enum class MaterialInstances
-		{
-			Default3D,
-
-			Count
-		};
-
-		enum class Audio
-		{
-			Count
-		};
-
-		uint32_t Counts(AssetType type);
-
-		bool IsBaseAsset(AssetID id, AssetType type);
-	};
-
 	struct AssetComponent {};
 
 	struct ACUUID final : AssetComponent
@@ -101,24 +40,39 @@ namespace fe
 		UUID UUID;
 	};
 
-	struct ACSourceIndex
+	struct ACName final : AssetComponent
 	{
-		uint32_t Index;
+		std::string Name;
 	};
 
-	struct ACProxyFilepath final : AssetComponent
+	struct ACFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
+	};
+
+	struct ACDataFilepath final : AssetComponent
+	{
+		std::filesystem::path Filepath;
+	};
+
+	struct ACParentAsset final : AssetComponent
+	{
+		AssetID ParentAssetID = NullAssetID;
+		AssetType ParenAssetType = AssetType::None;
 	};
 
 	struct ACRefsCounters final : AssetComponent
 	{
 		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
 		std::atomic<int> ActiveObserversCount = 0;
+
+		// TO DO: add AssetLoadingPriority counting
 		std::atomic<int> LiveHandles = 0;
+
+		// TO DO: split into 2 components
 	};
 
-	struct ACDataLocation final : public AssetComponent
+	struct ACDataLocation final : AssetComponent
 	{
 		void* Data = nullptr;
 	};
@@ -126,39 +80,31 @@ namespace fe
 	class Asset
 	{
 	public:
-		AssetID GetID() const { return m_ECSHandle.entity(); }
-		virtual AssetType GetType() const = 0;
-		static AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
-
-		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return false; }
-		static std::string GetSourceExtensionAlias() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }
-		static std::string GetProxyExtension() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }
-		static std::string GetProxyExtensionAlias() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return ""; }
-
 		bool IsValid() const { return (bool)m_ECSHandle; }
+		AssetID GetID() const { return m_ECSHandle.entity(); }
 
-		std::string GetName() const { return Get<ACProxyFilepath>().Filepath.stem().string(); }
+		UUID GetUUID() const { return Get<ACUUID>().UUID; }
+
+		virtual AssetType GetType() const = 0;
+		static  AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
 
 		      ACDataLocation& GetDataLocation()       { return Get<ACDataLocation>(); }
 		const ACDataLocation& GetDataLocation() const { return Get<ACDataLocation>(); }
 
-		      ACProxyFilepath& GetProxyFilepath()       { return Get<ACProxyFilepath>(); }
-		const ACProxyFilepath& GetProxyFilepath() const { return Get<ACProxyFilepath>(); }
+		      ACName* TryGetName()       { return GetIfExist<ACName>(); }
+		const ACName* TryGetName() const { return GetIfExist<ACName>(); }
 
-		      std::filesystem::path& GetSourceFilepath();
-		const std::filesystem::path& GetSourceFilepath() const;
+		void SetName(const std::string& name) { GetOrEmplace<ACName>().Name = name; }
 
-		virtual void UnloadFromGPU() = 0;
-		virtual void UnloadFromCPU() = 0;
-	protected:
-		template <typename tnAsset>
-		friend class AssetHandle;
-		Asset() = default;
-		Asset(AssetType type, AssetID assetID);
-		Asset(ECS_AssetHandle ECS_handle) :
-			m_ECSHandle(std::move(ECS_handle))
-		{ }
+		const ACFilepath& GetFilepath() const { return Get<ACFilepath>(); }
+		void SetFilepath(const std::filesystem::path& path);
 
+		      ACParentAsset* TryGetParentAsset()       { return GetIfExist<ACParentAsset>(); }
+		const ACParentAsset* TryGetParentAsset() const { return GetIfExist<ACParentAsset>(); }
+
+		virtual void PlaceCoreComponents() = 0;
+		virtual void Release() = 0;
+		
 		template<typename... tnAssetComponents>
 		bool AllOf() const
 		{
@@ -172,6 +118,14 @@ namespace fe
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 			return m_ECSHandle.any_of<tnAssetComponents...>();
 		}
+	protected:
+		template <typename tnAsset>
+		friend class AssetHandle;
+		Asset() = default;
+		Asset(AssetType type, AssetID assetID);
+		Asset(ECS_AssetHandle ECS_handle) :
+			m_ECSHandle(std::move(ECS_handle))
+		{ }
 
 		template<typename tnAssetComponent, typename... Args>
 		tnAssetComponent& Emplace(Args&&... args)

@@ -2,11 +2,14 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 
+#include "FoolsEngine\Math\Transform.h"
+#include "FoolsEngine\Scene\Scene.h"
 
 namespace fe
 {
-	class Camera;
 	class VertexBuffer;
 	class MaterialInstance;
 
@@ -29,7 +32,10 @@ namespace fe
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void BeginScene(Camera& camera);
+		static void RenderScene(const AssetObserver<Scene>& scene, Framebuffer& framebuffer);
+		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
+
+		static void BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer);
 		static void EndScene();
 
 		static void Draw(
@@ -45,6 +51,26 @@ namespace fe
 			const glm::mat4& VPMatrix
 		);
 
+		static struct
+		{
+			struct {
+				AssetHandle<Texture2D> Default;
+				AssetHandle<Texture2D> FlatWhite;
+			} Textures;
+
+			struct {
+				AssetHandle<Shader> Base2D;
+				AssetHandle<Shader> Base3D;
+			} Shaders;
+
+			struct {
+				AssetHandle<Material> Default;
+			} Materials;
+
+			struct {
+				AssetHandle<MaterialInstance> Default;
+			} MaterialInstances;
+		} BaseAssets;
 	private:
 		struct SceneData
 		{

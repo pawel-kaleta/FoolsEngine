@@ -43,16 +43,16 @@ void LayerExample::OnAttach()
 {
 	m_Scene = fe::CreateRef<fe::Scene>();
 
-	auto camera = m_Scene->GetGameplayWorld()->CreateActor();
+	auto camera = m_Scene->GetWorlds()->CreateActor();
 	{
 		camera.Emplace<fe::CCamera>();
 		fe::Transform transform;
 		transform.Shift = glm::vec3(0.0f, 0.0f, 2.0f);
 		camera.GetTransformHandle() = transform;
 	}
-	m_Scene->GetGameplayWorld()->SetPrimaryCameraEntity(camera);
+	m_Scene->GetWorlds()->SetPrimaryCameraEntity(camera);
 
-	fe::Entity tintedTextureTile = m_Scene->GetGameplayWorld()->CreateActor();
+	fe::Entity tintedTextureTile = m_Scene->GetWorlds()->CreateActor();
 	{
 		auto& tile = tintedTextureTile.Emplace<fe::CTile>().Tile;
 		tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
@@ -65,7 +65,7 @@ void LayerExample::OnAttach()
 		tintedTextureTile.GetTransformHandle() = transform;
 	}
 
-	fe::Entity flatTile = m_Scene->GetGameplayWorld()->CreateActor();
+	fe::Entity flatTile = m_Scene->GetWorlds()->CreateActor();
 	{
 		auto& tile = flatTile.Emplace<fe::CTile>().Tile;
 		tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
@@ -77,7 +77,7 @@ void LayerExample::OnAttach()
 		flatTile.GetTransformHandle() = transform;
 	}
 
-	m_ColorSprite = m_Scene->GetGameplayWorld()->CreateActor();
+	m_ColorSprite = m_Scene->GetWorlds()->CreateActor();
 	{
 		auto& sprite = m_ColorSprite.Emplace<fe::CSprite>().Sprite;
 		sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
@@ -88,7 +88,7 @@ void LayerExample::OnAttach()
 		m_ColorSprite.GetTransformHandle() = transform;
 	}
 
-	fe::Entity target = m_Scene->GetGameplayWorld()->CreateEntity(fe::RootID, "Target");
+	fe::Entity target = m_Scene->GetWorlds()->CreateEntity(fe::RootID, "Target");
 	{
 		auto& sprite = target.Emplace<fe::CSprite>().Sprite;
 
@@ -102,7 +102,7 @@ void LayerExample::OnAttach()
 		target.GetTagsHandle().SetLocal(tags);
 	}
 
-	fe::Entity targetChild_1 = m_Scene->GetGameplayWorld()->CreateEntity(target, "TargetChild");
+	fe::Entity targetChild_1 = m_Scene->GetWorlds()->CreateEntity(target, "TargetChild");
 	{
 		auto& sprite = targetChild_1.Emplace<fe::CSprite>().Sprite;
 		sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
@@ -120,8 +120,8 @@ void LayerExample::OnUpdate()
 	FE_PROFILER_FUNC();
 	FE_LOG_TRACE("LayerExample::OnUpdate()");
 
-	m_Scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
-	//fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera());
+	m_Scene->GetWorlds()->GetHierarchy().MakeGlobalTransformsCurrent();
+	//fe::Renderer2D::RenderScene(*m_Scene, m_Scene->GetWorlds()->GetEntityWithPrimaryCamera());
 }
 
 void LayerExample::OnImGuiRender()

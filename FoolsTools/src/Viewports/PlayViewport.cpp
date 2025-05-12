@@ -28,7 +28,8 @@ namespace fe
 		if (!m_IsVisible)
 			return;
 
-		Entity cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
+		auto scene_observer = m_Scene.Observe();
+		Entity cameraEntity = scene_observer.GetWorlds().GameplayWorld->GetEntityWithPrimaryCamera();
 		if (cameraEntity)
 		{
 			auto& cameraComponent = cameraEntity.Get<CCamera>();
@@ -36,7 +37,7 @@ namespace fe
 			auto cameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
 			cameraTransform.Scale = { 1.f,1.f,1.f };
 			cameraTransform = cameraTransform + cameraComponent.Offset;
-			Renderer2D::RenderScene(*m_Scene, camera, cameraTransform, *m_Framebuffer.get());
+			Renderer::RenderScene(scene_observer, camera, cameraTransform, *m_Framebuffer.get());
 		}
 		else
 		{

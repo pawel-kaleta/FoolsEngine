@@ -7,17 +7,14 @@
 
 namespace fe
 {
-	Scene::Scene()
-	{
-		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Scene creation");
-
-		m_GameplayWorld = CreateScope<GameplayWorld>(this);
-	}
-
 	void Scene::Initialize()
 	{
-		m_GameplayWorld->Initialize();
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Scene initialization");
+
+		auto& gameplay_world = GetWorlds().GameplayWorld;
+		gameplay_world = CreateScope<GameplayWorld>();
+		gameplay_world->Initialize();
 	}
 
 	template <SimulationStages::Stages stage>
@@ -25,7 +22,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_GameplayWorld->Update<stage>();
+		GetWorlds().GameplayWorld->Update<stage>();
 	}
 
 	template void Scene::Update<SimulationStages::Stages::FrameStart >();
@@ -49,10 +46,24 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_GameplayWorld->DestroyScheduledComponents();
-		m_GameplayWorld->GetHierarchy().DestroyFlagged();
+		auto& gameplay_world = GetWorlds().GameplayWorld;
 
-		m_GameplayWorld->GetHierarchy().RecreateStorageOrder();
-		m_GameplayWorld->GetHierarchy().MakeGlobalTransformsCurrent();
+		gameplay_world->DestroyScheduledComponents();
+		gameplay_world->GetHierarchy().DestroyFlagged();
+
+		gameplay_world->GetHierarchy().RecreateStorageOrder();
+		gameplay_world->GetHierarchy().MakeGlobalTransformsCurrent();
+	}
+
+	void Scene::PlaceCoreComponents()
+	{
+		Emplace<ACWorlds>();
+	}
+
+	void Scene::Release()
+	{
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Scene release");
+		GetWorlds().GameplayWorld.release();
 	}
 }

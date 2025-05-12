@@ -87,6 +87,9 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h">
+      <Filter>FoolsEngine\Assets\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
@@ -106,12 +109,6 @@
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Core.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Layer.h">
@@ -166,6 +163,12 @@
       <Filter>FoolsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h">
+      <Filter>FoolsEngine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h">
+      <Filter>FoolsEngine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h">
       <Filter>FoolsEngine\Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
@@ -246,6 +249,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Model.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h">
       <Filter>FoolsEngine\Renderer\4 - GDIIsolation</Filter>
     </ClInclude>
@@ -324,9 +330,8 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Loaders\MeshLoader.h">
-      <Filter>FoolsEngine\Assets\Loaders</Filter>
-    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Memory\Scratchpad.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -335,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp">
       <Filter>FoolsEngine\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp">
+      <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
@@ -388,6 +396,9 @@
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Math\Math.cpp">
+      <Filter>FoolsEngine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp">
       <Filter>FoolsEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp">
@@ -456,6 +467,9 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp">
       <Filter>FoolsEngine\Renderer\4 - GDIIsolation</Filter>
     </ClCompile>
@@ -516,11 +530,8 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp">
-      <Filter>FoolsEngine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Loaders\MeshLoader.cpp">
-      <Filter>FoolsEngine\Assets\Loaders</Filter>
-    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\ComponentRegistry.cpp" />
   </ItemGroup>
 </Project>

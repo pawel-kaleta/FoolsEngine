@@ -16,8 +16,8 @@ namespace fe
 	class GameplayWorld : public World
 	{
 	public:
-		GameplayWorld(Scene* scene);
-		virtual void Initialize() override;
+		GameplayWorld();
+		virtual void Initialize() final override;
 
 		HierarchyDirector& GetHierarchy() { return *m_Hierarchy.get(); }
 		SystemsDirector& GetSystems()     { return *m_SystemsDirector.get(); }

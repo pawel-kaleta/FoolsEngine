@@ -22,11 +22,6 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
-		static bool IsKnownSourceExtension(const std::filesystem::path& extension);
-		static std::string GetSourceExtensionAlias() { return "Shader"; }
-		static std::string GetProxyExtension() { return ""; }
-		static std::string GetProxyExtensionAlias() { return ""; }
-
 		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
 		      ACSourceCode* GetSourceCode()       { return GetIfExist<ACSourceCode>(); }
 		ACSourceCode& GetOrEmplaceSourceCode() { return GetOrEmplace<ACSourceCode>(); }
@@ -37,8 +32,10 @@ namespace fe
 		void Bind(GDIType GDI);
 		void Unbind(GDIType GDI);
 
-		virtual void UnloadFromGPU() override final;
-		virtual void UnloadFromCPU() override final;
+		virtual void PlaceCoreComponents() final override {};
+		virtual void Release() final override;
+		void SendDataToGPU(GDIType GDI, void* data) { FE_CORE_ASSERT(false, "Shader loading not implemented yet"); };
+		void UnloadFromCPU();
 
 		uint32_t GetRendererID(GDIType GDI) const;
 

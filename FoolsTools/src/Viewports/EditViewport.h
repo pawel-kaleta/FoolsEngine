@@ -17,7 +17,7 @@ namespace fe
 		void OnEvent(Ref<Events::Event> event);
 		void OnImGuiRender();
 
-		void SetScene(const Ref<Scene>& scene) { m_Scene = scene; }
+		void SetScene(const AssetHandle<Scene>& scene) { m_Scene = scene; }
 		EditorCameraController& GetCameraController() { return *m_CameraController.get(); }
 
 		void     SetSelection(EntityID entityID) { m_SelectedEntityID = entityID; }
@@ -28,7 +28,7 @@ namespace fe
 		void RenderGuizmos();
 		EntityID ReadEntityIDfromBuffer();
 
-		Ref<Scene> m_Scene;
+		AssetHandle<Scene> m_Scene;
 		bool m_IsVisible = false;
 		bool m_EntityClicked = false;
 

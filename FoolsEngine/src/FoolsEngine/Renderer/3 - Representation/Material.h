@@ -3,7 +3,6 @@
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
-//#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 
@@ -11,7 +10,7 @@ namespace fe
 {
 	struct ACShader final : public AssetComponent
 	{
-		AssetHandle<Shader> Shader;
+		AssetID ShaderID;
 	};
 
 	struct ACUniforms final : public AssetComponent
@@ -30,26 +29,31 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
 
-		virtual void UnloadFromGPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
-		virtual void UnloadFromCPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
+		AssetID GetShaderID()               const { return Get<ACShader>().ShaderID; }
+		void    SetShader(AssetID shaderID)       { Get<ACShader>().ShaderID = shaderID; }
 
-		AssetHandle<Shader> GetShader() const { return Get<ACShader>().Shader; }
-		void SetShader(AssetHandle<Shader> shader) { Get<ACShader>().Shader = shader; }
-
-		const std::vector<Uniform>& GetUniforms() const { return Get<ACUniforms>().Uniforms; }
 		      std::vector<Uniform>& GetUniforms()       { return Get<ACUniforms>().Uniforms; }
+		const std::vector<Uniform>& GetUniforms() const { return Get<ACUniforms>().Uniforms; }
 
-		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACShaderTextureSlots>().TextureSlots; }
 		      std::vector<ShaderTextureSlot>& GetTextureSlots()       { return Get<ACShaderTextureSlots>().TextureSlots; }
+		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACShaderTextureSlots>().TextureSlots; }
 
-		static void MakeMaterial(
-			AssetUser<Material>& materialUser,
-			AssetHandle<Shader> shader,
+		virtual void PlaceCoreComponents() final override;;
+		virtual void Release() final override {};
+		void SendDataToGPU(GDIType GDI, void* data) { };
+		void UnloadFromCPU() {};
+
+		void MakeMaterial(
+			AssetID shaderID,
 			const std::initializer_list<Uniform>& uniforms,
 			const std::initializer_list<ShaderTextureSlot>& textureSlots);
 
 	protected:
 		Material(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
+
+
+		friend class AssetManager;
+		void Init() {};
 	};
 
 	

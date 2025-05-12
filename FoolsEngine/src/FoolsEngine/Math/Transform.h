@@ -38,10 +38,10 @@ namespace fe
 		Rotation Rotation = { 0.0f, 0.0f, 0.0f };
 		Scale    Scale    = { 1.0f, 1.0f, 1.0f };
 
-		glm::mat4 GetTransform() const;
+		glm::mat4 GetMatrix() const;
 
-		operator glm::mat4() { return GetTransform(); }
-		operator const glm::mat4() const { return GetTransform(); }
+		operator glm::mat4() { return GetMatrix(); }
+		operator const glm::mat4() const { return GetMatrix(); }
 
 	};
 

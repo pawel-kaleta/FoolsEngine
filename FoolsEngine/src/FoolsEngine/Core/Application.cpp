@@ -11,6 +11,8 @@
 
 #include "FoolsEngine\Events\Event.h"
 
+#include "FoolsEngine\Memory\Scratchpad.h"
+
 #include "Time.h"
 
 namespace fe
@@ -54,6 +56,10 @@ namespace fe
 	void Application::Startup()
 	{
 		FE_PROFILER_FUNC();
+
+		{
+			Scratchpad::Init();
+		}
 
 		{
 			FE_PROFILER_SCOPE("Type Registries");
@@ -131,7 +137,7 @@ namespace fe
 
 #ifdef FE_INTERNAL_BUILD
 			if (m_ActiveProfiler)
-				if (++m_ProfilerFramesCount >= 30)
+				if (++m_ProfilerFramesCount >= 5)
 				{
 					FE_PROFILER_SESSION_END();
 					m_ActiveProfiler = false;

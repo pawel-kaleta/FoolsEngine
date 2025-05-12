@@ -3,10 +3,7 @@
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 
-namespace std::filepath
-{
-	class path;
-}
+#include <filesystem>
 
 namespace YAML
 {
@@ -21,14 +18,14 @@ namespace fe
 	class SceneSerializerYAML
 	{
 	public:
-		static void Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
-		static bool Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath);
+		static void SerializeToFile(AssetUser<Scene>& scene);
+		static bool DeserializeFromFile(AssetUser<Scene>& scene);
 
-		static std::string Serialize(const Ref<Scene> scene);
-		static bool Deserialize(const Ref<Scene> scene, const std::string& buffer);
+		static std::string SerializeToString(AssetUser<Scene>& scene);
+		static bool DeserializeFromString(AssetUser<Scene>& scene, const std::string& buffer);
 	private:
-		static void Serialize(const Ref<Scene>& scene, YAML::Emitter& emitter);
-		static bool Deserialize(const Ref<Scene>& scene, YAML::Node& node);
+		static void Serialize(AssetUser<Scene>& scene, YAML::Emitter& emitter);
+		static bool Deserialize(AssetUser<Scene>& scene, YAML::Node& node);
 
 		static void SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter);

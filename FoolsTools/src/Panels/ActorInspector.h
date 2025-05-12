@@ -8,16 +8,16 @@ namespace fe
 	{
 	public:
 		ActorInspector() = default;
-		ActorInspector(const Ref<Scene>& scene)
+		ActorInspector(const AssetHandle<Scene>& scene)
 			: m_Scene(scene) {}
 
-		void SetScene(const Ref<Scene>& scene);
+		void SetScene(const AssetHandle<Scene>& scene);
 
 		void     OpenActor(EntityID entityID);
 		EntityID GetSelectionRequest() const { return m_EntityIDSelectionRequest; }
 		void     OnImGuiRender();
 	private:
-		Ref<Scene> m_Scene;
+		AssetHandle<Scene> m_Scene;
 		EntityID   m_OpenedActorID    = NullEntityID;
 		Behavior*  m_BehaviorToRemove = nullptr;
 		EntityID   m_SelectedEntityID = NullEntityID;

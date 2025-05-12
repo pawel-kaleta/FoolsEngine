@@ -1,0 +1,24 @@
+Shader: assets/shaders/Base3DShader.glsl
+Uniforms:
+  - Name: u_BaseColor
+    Type: Float3
+    Count: 1
+	DefaultValue: [1, 1, 1]
+  - Name: u_Roughness
+    Type: Float
+    Count: 1
+	DefaultValue: 0
+  - Name: u_Metalness
+    Type: Float
+    Count: 1
+	DefaultValue: 0
+  - Name: u_AO
+    Type: Float
+    Count: 1
+	DefaultValue: 1
+Shader Texture Slots:
+  - u_BaseColorMap
+  - u_RoughnessMap
+  - u_MetalnessMap
+  - u_AOMap
+  - u_NormalMap

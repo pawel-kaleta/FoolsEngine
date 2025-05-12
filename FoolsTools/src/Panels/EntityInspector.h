@@ -8,15 +8,15 @@ namespace fe
 	{
 	public:
 		EntityInspector() = default;
-		EntityInspector(const Ref<Scene>& scene)
+		EntityInspector(const AssetHandle<Scene>& scene)
 			: m_Scene(scene) {}
 
-		void SetScene(const Ref<Scene>& scene);
+		void SetScene(const AssetHandle<Scene>& scene);
 
 		void OpenEntity(EntityID entityID);
 		void OnImGuiRender();
 	private:
-		Ref<Scene> m_Scene;
+		AssetHandle<Scene> m_Scene;
 		EntityID m_OpenedEntityID = NullEntityID;
 
 		static void AddComponentPopupMenu(BaseEntity entity);

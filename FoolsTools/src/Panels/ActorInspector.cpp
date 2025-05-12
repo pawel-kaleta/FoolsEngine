@@ -6,7 +6,7 @@
 
 namespace fe
 {
-    void ActorInspector::SetScene(const Ref<Scene>& scene)
+    void ActorInspector::SetScene(const AssetHandle<Scene>& scene)
     {
         m_Scene = scene;
         m_OpenedActorID = NullEntityID;
@@ -20,7 +20,9 @@ namespace fe
             m_OpenedActorID = NullEntityID;
             return;
         }
-        m_OpenedActorID = m_Scene->GetGameplayWorld()->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
+
+        auto scene_observer = m_Scene.Observe();
+        m_OpenedActorID = scene_observer.GetWorlds().GameplayWorld->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
     }
     
     void ActorInspector::DrawBehaviorWidget(Behavior* behavior, Actor actor)
@@ -94,14 +96,15 @@ namespace fe
         ImGui::Begin("Actor Inspector");
         m_EntityIDSelectionRequest = NullEntityID;
 
-        if (m_OpenedActorID == NullEntityID || m_Scene == nullptr)
+        if (m_OpenedActorID == NullEntityID || m_Scene.GetID() == NullAssetID)
         {
             ImGui::End();
             return;
         }
 
         m_BehaviorToRemove = nullptr;
-        Actor actor(m_OpenedActorID, m_Scene->GetGameplayWorld());
+        auto scene_observer = m_Scene.Observe();
+        Actor actor(m_OpenedActorID, scene_observer.GetWorlds().GameplayWorld.get());
 
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))

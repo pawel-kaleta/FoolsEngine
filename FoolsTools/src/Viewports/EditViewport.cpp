@@ -36,7 +36,8 @@ namespace fe
 		if (!m_IsVisible)
 			return;
 
-		Renderer2D::RenderScene(*m_Scene, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
+		auto scene_observer = m_Scene.Observe();
+		Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
 	}
 
 	void EditViewport::OnEvent(Ref<Events::Event> event)
@@ -151,7 +152,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Entity selectedEntity(m_SelectedEntityID, m_Scene->GetGameplayWorld());
+		auto scene_observer = m_Scene.Observe();
+		auto gameplay_world = scene_observer.GetWorlds().GameplayWorld.get();
+
+		Entity selectedEntity(m_SelectedEntityID, gameplay_world);
 
 		if (!selectedEntity)
 			return;
@@ -162,14 +166,14 @@ namespace fe
 		ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 		// Camera
-		auto cameraEntity = m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera();
+		auto cameraEntity = gameplay_world->GetEntityWithPrimaryCamera();
 		const auto& camera = m_CameraController->GetCamera();
 		const glm::mat4& cameraProjection = camera.GetProjectionMatrix();
-		glm::mat4 cameraView = glm::inverse(m_CameraController->GetTransform().GetTransform());
+		glm::mat4 cameraView = glm::inverse(m_CameraController->GetTransform().GetMatrix());
 
 		// Entity transform
 		auto& tc = selectedEntity.GetTransformHandle().GetGlobal();
-		glm::mat4 transformMatrix = tc.GetTransform();
+		glm::mat4 transformMatrix = tc.GetMatrix();
 
 		// Snapping
 		bool snap = InputPolling::IsKeyPressed(InputCodes::LeftControl);

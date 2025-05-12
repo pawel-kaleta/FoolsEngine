@@ -14,8 +14,8 @@ namespace fe
 		RegisterDataComponent<CCamera>();
 		RegisterDataComponent<CTile>();
 		RegisterDataComponent<CSprite>();
-		RegisterDataComponent<CMesh>();
-		RegisterDataComponent<CMaterialInstance>();
+		RegisterDataComponent<CRenderMesh>();
+		//RegisterDataComponent<CMaterialInstance>();
 	}
 
 }

@@ -88,7 +88,7 @@ namespace fe
 		uint32_t bufferElementIndex = 0;
 		for (const auto& element : layout)
 		{
-			ShaderData::Primitive primitive = element.Primitive;
+			ShaderData::Primitive primitive = element.Primitive();
 #pragma warning(disable : 4312)
 			switch (primitive)
 			{
@@ -119,7 +119,7 @@ namespace fe
 				break;
 
 			case ShaderData::Primitive::Float:
-				switch (element.Structure)
+				switch (element.Structure())
 				{
 				case ShaderData::Structure::Scalar:
 				case ShaderData::Structure::Vector:

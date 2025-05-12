@@ -196,12 +196,13 @@ namespace fe
 		once = true;
 	}
 
-	void TestSceneSetup(Ref<Scene> scene)
+	void TestSceneSetup(const AssetObserver<Scene>& sceneObserver)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("Test Scene Setup");
 
-		Actor enviroActor = scene->GetGameplayWorld()->CreateActor("Enviro");
+		auto gameplay_world = sceneObserver.GetWorlds().GameplayWorld.get();
+		Actor enviroActor = gameplay_world->CreateActor("Enviro");
 
 		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");
 		{
@@ -216,7 +217,7 @@ namespace fe
 			tintedTextureTile.GetTransformHandle() = transform;
 
 			tintedTextureTile.Emplace<CCamera>();
-			scene->GetGameplayWorld()->SetPrimaryCameraEntity(tintedTextureTile);
+			gameplay_world->SetPrimaryCameraEntity(tintedTextureTile);
 		}
 
 		Entity flatTile = enviroActor.CreateChildEntity();
@@ -257,7 +258,7 @@ namespace fe
 			colorSprite.GetTransformHandle() = transform;
 		}
 
-		Actor playerActor = scene->GetGameplayWorld()->CreateActor("Player");
+		Actor playerActor = gameplay_world->CreateActor("Player");
 		{
 			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
 
@@ -304,9 +305,9 @@ namespace fe
 			testCild_2.GetTransformHandle().SetLocal(transform);
 		}
 
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem>()->Activate();
-		scene->GetGameplayWorld()->GetSystems().CreateSystem<TestSystem2>()->Activate();
+		gameplay_world->GetSystems().CreateSystem<TestSystem>()->Activate();
+		gameplay_world->GetSystems().CreateSystem<TestSystem2>()->Activate();
 
-		scene->GetGameplayWorld()->GetHierarchy().MakeGlobalTransformsCurrent();
+		gameplay_world->GetHierarchy().MakeGlobalTransformsCurrent();
 	}
 }

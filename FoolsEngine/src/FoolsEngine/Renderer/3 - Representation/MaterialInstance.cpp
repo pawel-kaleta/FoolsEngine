@@ -6,12 +6,11 @@
 
 namespace fe
 {
-	void MaterialInstance::Init(AssetHandle<Material> material)
+	void MaterialInstance::Init(const AssetObserver<Material>& materialObserver)
 	{
 		FE_PROFILER_FUNC();
 
-		Get<ACMaterial>().Material = material;
-		auto materialObserver = material.Observe();
+		Get<ACMaterial>().MaterialID = materialObserver.GetID();
 		auto& acUniformsData = Get<ACUniformsData>();
 		auto& data = acUniformsData.UniformsData;
 		auto& size = acUniformsData.UniformsDataSize;
@@ -79,7 +78,9 @@ namespace fe
 		uint8_t* uniformDataPointer = (uint8_t*)(Get<ACUniformsData>().UniformsData);
 		bool uniformFound = false;
 
-		for (auto& uniform : Get<ACMaterial>().Material.Observe().GetUniforms())
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+
+		for (auto& uniform : material_observer.GetUniforms())
 		{
 			if (name == uniform.GetName())
 			{
@@ -104,7 +105,9 @@ namespace fe
 		size_t uniformSize = 0;
 		bool uniformFound = false;
 
-		for (auto& uniform : Get<ACMaterial>().Material.Observe().GetUniforms())
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+
+		for (auto& uniform : material_observer.GetUniforms())
 		{
 			if (&targetUniform == &uniform)
 			{
@@ -177,7 +180,9 @@ namespace fe
 		size_t uniformSize = 0;
 		bool uniformFound = false;
 
-		for (auto& uniform : Get<ACMaterial>().Material.Observe().GetUniforms())
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID, LoadingPriority_None).Observe();
+
+		for (auto& uniform : material_observer.GetUniforms())
 		{
 			if (name == uniform.GetName())
 			{
@@ -202,12 +207,13 @@ namespace fe
 		auto& textures = Get<ACTextures>().Textures;
 
 		auto texturesIt = textures.begin();
-		auto slotsIt = Get<ACMaterial>().Material.Observe().GetTextureSlots().begin();
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
 		{
 			if (slotsIt._Ptr == &textureSlot)
 			{
-				return *texturesIt;
+				return AssetHandle<Texture2D>(*texturesIt);
 			}
 		}
 
@@ -222,12 +228,13 @@ namespace fe
 		auto& textures = Get<ACTextures>().Textures;
 
 		auto texturesIt = textures.begin();
-		auto slotsIt = Get<ACMaterial>().Material.Observe().GetTextureSlots().begin();
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
 		{
 			if (slotsIt->GetName() == textureSlotName)
 			{
-				return *texturesIt;
+				return AssetHandle<Texture2D>(*texturesIt);
 			}
 		}
 
@@ -235,19 +242,20 @@ namespace fe
 		return AssetHandle<Texture2D>();
 	}
 
-	void MaterialInstance::SetTexture(const ShaderTextureSlot& textureSlot, AssetHandle<Texture2D> texture)
+	void MaterialInstance::SetTexture(const ShaderTextureSlot& textureSlot, AssetID textureID)
 	{
 		FE_PROFILER_FUNC();
 
 		auto& textures = Get<ACTextures>().Textures;
 
 		auto texturesIt = textures.begin();
-		auto slotsIt = Get<ACMaterial>().Material.Observe().GetTextureSlots().begin();
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
 		{
 			if (slotsIt._Ptr == &textureSlot)
 			{
-				*texturesIt = texture;
+				*texturesIt = textureID;
 				return;
 			}
 		}
@@ -255,19 +263,20 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	void MaterialInstance::SetTexture(const std::string& textureSlotName, AssetHandle<Texture2D> texture)
+	void MaterialInstance::SetTexture(const std::string& textureSlotName, AssetID textureID)
 	{
 		FE_PROFILER_FUNC();
 
 		auto& textures = Get<ACTextures>().Textures;
 
 		auto texturesIt = textures.begin();
-		auto slotsIt = Get<ACMaterial>().Material.Observe().GetTextureSlots().begin();
+		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
 		{
 			if (slotsIt->GetName() == textureSlotName)
 			{
-				*texturesIt = texture;
+				*texturesIt = textureID;
 				return;
 			}
 		}

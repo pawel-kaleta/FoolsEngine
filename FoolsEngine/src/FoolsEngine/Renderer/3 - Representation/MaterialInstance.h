@@ -8,7 +8,7 @@ namespace fe
 {
 	struct ACMaterial final : public AssetComponent
 	{
-		AssetHandle<Material> Material;
+		AssetID MaterialID;
 	};
 
 	struct ACUniformsData final : public AssetComponent
@@ -25,7 +25,7 @@ namespace fe
 
 	struct ACTextures final : public AssetComponent
 	{
-		std::vector<AssetHandle<Texture2D>> Textures;
+		std::vector<AssetID> Textures;
 	};
 
 	class MaterialInstance : public Asset
@@ -34,10 +34,12 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
 
-		void Init(const AssetHandle<Material> material);
+		virtual void PlaceCoreComponents() final override {};
+		virtual void Release() final override {};
+		void SendDataToGPU(GDIType GDI, void* data) { };
+		void UnloadFromCPU() {};
 
-		virtual void UnloadFromGPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
-		virtual void UnloadFromCPU() override final { FE_CORE_ASSERT(false, "Not implemented"); };
+		void Init(const AssetObserver<Material>& materialObserver);
 
 		const void* GetUniformValuePtr(const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(targetUniform); };
 		      void* GetUniformValuePtr(const Uniform& targetUniform)       { return GetUniformValuePtr_Internal(targetUniform); };
@@ -50,13 +52,13 @@ namespace fe
 
 		AssetHandle<Texture2D> GetTexture(const ShaderTextureSlot& textureSlot) const;
 		AssetHandle<Texture2D> GetTexture(const std::string& textureSlotName) const;
-		void SetTexture(const ShaderTextureSlot& textureSlot, AssetHandle<Texture2D> texture);
-		void SetTexture(const std::string& textureSlotName, AssetHandle<Texture2D> texture);
+		void SetTexture(const ShaderTextureSlot& textureSlot, AssetID textureID);
+		void SetTexture(const std::string& textureSlotName, AssetID textureID);
 
-		const std::vector<AssetHandle<Texture2D>>& GetTextures() const { return Get<ACTextures>().Textures; }
-		      std::vector<AssetHandle<Texture2D>>& GetTextures()       { return Get<ACTextures>().Textures; }
+		const std::vector<AssetID>& GetTextures() const { return Get<ACTextures>().Textures; }
+		      std::vector<AssetID>& GetTextures()       { return Get<ACTextures>().Textures; }
 		
-		AssetHandle<Material> GetMaterial() const { return Get<ACMaterial>().Material; }
+		AssetHandle<Material> GetMaterial() const { return AssetHandle<Material>(Get<ACMaterial>().MaterialID); }
 
 		static void MakeMaterialInstance(AssetUser<MaterialInstance>& miUser);
 
@@ -64,6 +66,10 @@ namespace fe
 		friend class AssetObserver<MaterialInstance>;
 		friend class AssetUser<MaterialInstance>;
 		MaterialInstance(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
+
+
+		friend class AssetManager;
+		void Init() {};
 
 	private:
 

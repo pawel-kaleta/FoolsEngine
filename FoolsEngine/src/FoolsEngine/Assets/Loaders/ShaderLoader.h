@@ -12,11 +12,14 @@ namespace fe
 		static void LoadShader(const std::filesystem::path& filePath, AssetUser<Shader>& shaderUser);
 		static void LoadShader(AssetUser<Shader>& shaderUser)
 		{
-			LoadShader(shaderUser.GetSourceFilepath(), shaderUser);
+			auto& path = shaderUser.GetFilepath();
+			LoadShader(path.Filepath, shaderUser);
 		}
 		static void CompileShader(GDIType GDI, AssetUser<Shader>& shaderUser);
 
-		static bool IsKnownExtension(const std::filesystem::path& extension);
+		static bool IsKnownExtension(const std::pmr::string& extension);
+
+		static const char* GetExtensionAlias() { return "Shader Source"; }
 	private:
 		static void PreProcess(AssetUser<Shader>& shaderUser);
 

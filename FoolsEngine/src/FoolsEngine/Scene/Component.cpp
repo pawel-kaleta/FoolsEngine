@@ -9,7 +9,11 @@
 #include "FoolsEngine\Assets\Serializers\YAML.h"
 #include "FoolsEngine\Assets\Serializers\SceneSerializer.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
-#include "FoolsEngine\Assets\Loaders\MeshLoader.h"
+#include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
+
+#include "../../FoolsTools/src/AssetImport/FileHandler.h"
+
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include <type_traits>
 
@@ -17,6 +21,11 @@
 
 namespace fe
 {
+	namespace AssetImportModal
+	{
+		extern void OpenWindow(const std::filesystem::path& filepath, AssetType type, AssetHandleBase* optionalBaseHandle);
+	}
+
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
 		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetName());
@@ -43,7 +52,7 @@ namespace fe
 		}
 		else
 		{
-			name = std::to_string(assetHandle.GetID()) + ": " + assetHandle.Observe().GetName();
+			name = std::to_string(assetHandle.GetID()) + ": " + assetHandle.Observe().TryGetName()->Name;
 		}
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
@@ -53,37 +62,41 @@ namespace fe
 		if (!assetHandle.IsValid())
 			ImGui::PopStyleColor();
 
+#ifdef FE_EDITOR
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPath"))
 			{
 				IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
-				std::filesystem::path filepath = *(const std::filesystem::path*)payload->Data;
+				const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
 				if (!filepath.empty())
 				{
-					std::filesystem::path extension = filepath.extension();
+					std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>();
 
-					if (extension == tnAsset::GetProxyExtension())
+					uint32_t file_importer_idx = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
+					bool     is_asset_proxy    = FileHandler::GetAliasAndAssetTypeOfProxy(extension, std::pmr::string()) != AssetType::None;
+
+					if (is_asset_proxy || file_importer_idx != -1)
 					{
-						AssetID newAssetID = AssetManager::GetOrCreateAsset<tnAsset>(filepath);
-						assetHandle = AssetHandle<tnAsset>(newAssetID);
-						if constexpr (std::is_same_v<tnAsset, Texture2D>)
+						AssetID assetID = AssetManager::GetAssetFromFilepath<tnAsset>(filepath);
+						if (assetID != NullAssetID)
 						{
-							auto textureUser = assetHandle.Use();
-							TextureLoader::LoadTexture(textureUser);
-							// ^ needed to create specification, should happen inside GetOrCreateAsset with some array of funk ptrs to AssetType specific init funks
+							assetHandle = AssetHandle<tnAsset>(assetID);
 						}
-					}
-					else if (tnAsset::IsKnownSourceExtension(extension))
-					{
-#ifdef FE_EDITOR
-						AssetImportModal::OpenWindow(filepath, tnAsset::GetTypeStatic(), &assetHandle);
-#endif // FE_EDITOR
+						else
+						{
+							FE_CORE_ASSERT(!is_asset_proxy, "Dont import asset proxies!");
+
+							uint32_t file_importer_idx = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
+							if (file_importer_idx != -1)
+								AssetImportModal::OpenWindow(filepath, file_importer_idx, tnAsset::GetTypeStatic(), &assetHandle);
+						}
 					}
 				}
 			}
 			ImGui::EndDragDropTarget();
 		}
+#endif // FE_EDITOR
 
 		ImGui::SameLine();
 		ImGui::Text(nameTag.c_str());
@@ -194,7 +207,7 @@ namespace fe
 		std::string nameTag = "Texture";
 		DrawAssetHandle<Texture2D>(Tile.Texture, nameTag);
 		
-		if (Tile.Texture.GetID() == (AssetID)BaseAssets::Textures2D::FlatWhite)
+		if (Tile.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{
 			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
 		}
@@ -225,7 +238,7 @@ namespace fe
 		std::string nameTag = "Texture";
 		DrawAssetHandle<Texture2D>(Sprite.Texture, nameTag);
 
-		if (Sprite.Texture.GetID() == (AssetID)BaseAssets::Textures2D::FlatWhite)
+		if (Sprite.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));
 		}
@@ -251,81 +264,39 @@ namespace fe
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
 	}
 
-	void CMesh::DrawInspectorWidget(BaseEntity entity)
+	void CRenderMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string nameTag = "Mesh";
-		DrawAssetHandle<fe::Mesh>(Mesh, nameTag);
+		std::string mesh_name_tag = "Mesh";
+		DrawAssetHandle<fe::Mesh>(Mesh, mesh_name_tag);
+		std::string mi_name_tag = "Material Instance";
+		DrawAssetHandle<fe::MaterialInstance>(MaterialInstance, mi_name_tag);
 	}
 
-	void CMesh::Serialize(YAML::Emitter& emitter)
+	void CRenderMesh::Serialize(YAML::Emitter& emitter)
 	{
-		emitter << YAML::Key << "Mesh" << YAML::Value << Mesh; 
+		emitter << YAML::Key << "Mesh"             << YAML::Value << Mesh; 
+		emitter << YAML::Key << "MaterialInstance" << YAML::Value << MaterialInstance;
 	}
 
-	void CMesh::Deserialize(YAML::Node& data)
+	void CRenderMesh::Deserialize(YAML::Node& data)
 	{ 
-		Mesh = data[Mesh].as<AssetHandle<fe::Mesh>>();
+		Mesh = data["Mesh"].as<AssetHandle<fe::Mesh>>();
+		MaterialInstance = data["MaterialInstance"].as<AssetHandle<fe::MaterialInstance>>();
 	}
 
-	void CMaterialInstance::DrawInspectorWidget(BaseEntity entity)
+	void EditMaterialInstance()
 	{
-		// TO DO: component's widget should not be responsible for creating underlying object
-		std::string previewName = MaterialInstance.Observe().GetName();
-		const char* materialInstance_combo_preview = previewName.c_str();
+		AssetHandle<MaterialInstance> MaterialInstance;
 
-		if (ImGui::BeginCombo("Material Instance", materialInstance_combo_preview))
+		if (!MaterialInstance.IsValid())
 		{
-			bool is_selected;
-
-			auto materialInstances = AssetManager::GetAll<fe::MaterialInstance>();
-			for (auto id : materialInstances)
-			{
-				auto nextMatInst = AssetHandle<fe::MaterialInstance>(id);
-				
-				is_selected = (MaterialInstance.GetID() == id);
-
-				if (ImGui::Selectable(nextMatInst.Observe().GetName().c_str(), is_selected))
-				{
-					MaterialInstance = nextMatInst;
-				}
-
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
-			}
-
-			if (ImGui::Selectable("Add..."))
-			{
-				// markmark
-				// create file / read file
-				std::filesystem::path filePath;
-				MaterialInstance = AssetHandle<fe::MaterialInstance>(AssetManager::GetOrCreateAsset<fe::MaterialInstance>(filePath));
-				auto miUser = MaterialInstance.Use();
-				MaterialInstance::MakeMaterialInstance(miUser);
-				auto material = AssetHandle<Material>((AssetID)BaseAssets::Materials::Default3D);
-				miUser.Init(material);
-			}
-
-			ImGui::EndCombo();
-		}
-
-		static char buffer[256];
-		{
-			auto miObserver = MaterialInstance.Observe();
-			auto& name = miObserver.GetName();
-			memset(buffer, 0, sizeof(buffer));
-			strncpy_s(buffer, name.c_str(), sizeof(buffer));
-		}
-		if (ImGui::InputText("Name", buffer, sizeof(buffer)))
-		{
-			FE_CORE_ASSERT(false, "What? Should name change be happening here at all? Is this an artifact of prototyping?");
-			// markmark
-			//MaterialInstance.Use().GetName()SetName(buffer);
+			return;
 		}
 
 		auto miUser = MaterialInstance.Use();
 		auto material_current = miUser.GetMaterial();
 
-		if (ImGui::BeginCombo("Material", material_current.Observe().GetName().c_str()))
+		if (ImGui::BeginCombo("Material", material_current.Observe().TryGetName()->Name.c_str()))
 		{
 			bool is_selected;
 
@@ -333,13 +304,14 @@ namespace fe
 
 			for (auto id : materials)
 			{
-				AssetHandle<Material> materialHandle(id);
+				AssetHandle<Material> material_handle(id);
+				auto material_observer = material_handle.Observe();
 				is_selected = (material_current.GetID() == id);
 
-				if (ImGui::Selectable(materialHandle.Observe().GetName().c_str(), is_selected))
+				if (ImGui::Selectable(material_observer.TryGetName()->Name.c_str(), is_selected))
 				{
-					miUser.Init(materialHandle);
-					material_current = materialHandle;
+					miUser.Init(material_observer);
+					material_current = material_handle;
 				}
 
 				if (is_selected)
@@ -365,13 +337,13 @@ namespace fe
 			auto texture_current = miUser.GetTexture(textureSlot);
 			bool newSelection = false;
 
-			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetName().c_str();
+			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().TryGetName()->Name.c_str();
 			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
 			{
 				bool is_selected = !(texture_current.IsValid());
 
 				if (ImGui::Selectable("None", is_selected))
-					miUser.SetTexture(textureSlot, AssetHandle<Texture2D>());
+					miUser.SetTexture(textureSlot, NullAssetID);
 
 				auto textures = AssetManager::GetAll<Texture2D>();
 				for (auto id : textures)
@@ -379,7 +351,7 @@ namespace fe
 					auto textureHandle = AssetHandle<Texture2D>(id);
 					is_selected = (texture_current.GetID() == textureHandle.GetID());
 
-					if (ImGui::Selectable(textureHandle.Observe().GetName().c_str(), is_selected))
+					if (ImGui::Selectable(textureHandle.Observe().TryGetName()->Name.c_str(), is_selected))
 					{
 						newSelection = true;
 						texture_current = textureHandle;
@@ -389,50 +361,17 @@ namespace fe
 						ImGui::SetItemDefaultFocus();
 				}
 
-				if (ImGui::Selectable("Add..."))
-				{
-					//const std::filesystem::path newTextureFilepath = FileDialogs::OpenFile("(*.*)\0*.*\0");
-					//if (!newTextureFilepath.empty())
-					{
-						//to do: detecting reloading same texture
-
-						FE_CORE_ASSERT(false, "");
-						// markmark
-						
-						//const std::string textureName = FileNameFromFilepath(newTextureFilepath.string());
-						//if (!TextureLibrary::Exist(textureName))
-						//{
-
-							//Ref<Texture> texture = Texture2D::Create(newTextureFilepath.string(), TextureData::Usage::Map_Albedo);
-							//TextureLibrary::Add(texture);
-						//}
-						
-						//texture_current = TextureLoader::LoadTexture(newTextureFilepath);
-						//newSelection = true;
-					}
-				}
-
 				ImGui::EndCombo();
 			}
 
 			if (newSelection)
 			{
-				miUser.SetTexture(textureSlot, texture_current);
+				miUser.SetTexture(textureSlot, texture_current.GetID());
 			}
 		}
 	}
 
-	void CMaterialInstance::Serialize(YAML::Emitter& emitter)
-	{
-		emitter << YAML::Key << "MaterialInstance" << YAML::Value << MaterialInstance;
-	}
-
-	void CMaterialInstance::Deserialize(YAML::Node& data)
-	{
-		MaterialInstance = data[MaterialInstance].as<AssetHandle<fe::MaterialInstance>>();
-	}
-
-	void SpatialComponent::SerializeOffset(YAML::Emitter& emitter)
+	void SpatialComponent::SerializeOffset(YAML::Emitter& emitter) const
 	{
 		emitter << YAML::Key << "Offset" << YAML::BeginMap;
 
@@ -450,4 +389,8 @@ namespace fe
 		Offset.Rotation = node["Rotation"].as<glm::vec3>();
 		Offset.Scale = node["Scale"].as<glm::vec3>();
 	}
+	
+	void CRenderModel::DrawInspectorWidget(BaseEntity entity) {}
+	void CRenderModel::Serialize(YAML::Emitter& emitter) {}
+	void CRenderModel::Deserialize(YAML::Node& data) {}
 }

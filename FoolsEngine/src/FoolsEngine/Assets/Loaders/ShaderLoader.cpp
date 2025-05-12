@@ -43,9 +43,9 @@ namespace fe
 		}
 	}
 
-	bool ShaderLoader::IsKnownExtension(const std::filesystem::path& extension)
+	bool ShaderLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static std::filesystem::path knownExtensions[] = {
+		static std::pmr::string knownExtensions[] = {
 			".glsl"
 		};
 

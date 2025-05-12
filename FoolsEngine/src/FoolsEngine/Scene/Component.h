@@ -8,6 +8,7 @@
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\Model.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
 
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
@@ -27,11 +28,7 @@ namespace fe
 		enum class Stages;
 	}
 	class BaseEntity;
-	namespace AssetImportModal
-	{
-		extern void OpenWindow(const std::filesystem::path& filepath, AssetType type, AssetHandleBase* optionalBaseHandle);
-	}
-
+	
 
 #define FE_COMPONENT_SETUP(type, name) \
 	virtual std::string GetName() const override final { return name; } \
@@ -64,7 +61,7 @@ namespace fe
 		Transform Offset;
 		virtual bool IsSpatial() const override final { return true; }
 
-		void SerializeOffset(YAML::Emitter& emitter);
+		void SerializeOffset(YAML::Emitter& emitter) const;
 		void DeserializeOffset(YAML::Node& data);
 
 		virtual void SerializeBase(YAML::Emitter& emitter) override final { SerializeOffset(emitter); Serialize(emitter); }
@@ -138,8 +135,8 @@ namespace fe
 	struct TransformComponent : ProtectedComponent
 	{
 	public:
-		      Transform  GetCopy() { return Transform; }
-		const Transform& GetRef()  { return Transform; }
+		      Transform  GetCopy() const { return Transform; }
+		const Transform& GetRef()  const{ return Transform; }
 	private:
 		friend class TransformHandle;
 		friend class HierarchyDirector;
@@ -197,26 +194,27 @@ namespace fe
 	template <SimulationStages::Stages stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 
-	struct CMesh final : SpatialComponent
+	struct CRenderMesh final : SpatialComponent
 	{
-		FE_COMPONENT_SETUP(CMesh, "Mesh");
+		FE_COMPONENT_SETUP(CRenderMesh, "RenderMesh");
 
 		AssetHandle<Mesh> Mesh;
+		AssetHandle<MaterialInstance> MaterialInstance; // Default3D
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
 		virtual void Deserialize(YAML::Node& data) override;
 	};
 
-	struct CMaterialInstance final : DataComponent
+	struct CRenderModel final : SpatialComponent
 	{
-		FE_COMPONENT_SETUP(CMaterialInstance, "MaterialInstance");
+		FE_COMPONENT_SETUP(CRenderModel, "RenderModel");
 
-		AssetHandle<MaterialInstance> MaterialInstance;
+		AssetHandle<Model> Model;
+		// list of material instances?
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
 		virtual void Deserialize(YAML::Node& data) override;
 	};
-	
 }

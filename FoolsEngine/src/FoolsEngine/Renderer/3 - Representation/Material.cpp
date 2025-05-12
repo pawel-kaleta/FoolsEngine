@@ -5,12 +5,18 @@
 
 namespace fe
 {
-	void Material::MakeMaterial(AssetUser<Material>& materialUser, AssetHandle<Shader> shader, const std::initializer_list<Uniform>& uniforms, const std::initializer_list<ShaderTextureSlot>& textureSlots)
+	void Material::PlaceCoreComponents()
 	{
-		materialUser.Emplace<ACShader>().Shader = shader;
-		materialUser.Emplace<ACUniforms>().Uniforms = uniforms;
-		materialUser.Emplace<ACShaderTextureSlots>().TextureSlots = textureSlots;
+		Emplace<ACShader>().ShaderID = NullAssetID;
+		Emplace<ACUniforms>();
+		Emplace<ACShaderTextureSlots>();
+	}
 
-		return;
+
+	void Material::MakeMaterial(AssetID shaderID, const std::initializer_list<Uniform>& uniforms, const std::initializer_list<ShaderTextureSlot>& textureSlots)
+	{
+		Get<ACShader>().ShaderID = shaderID;
+		Get<ACUniforms>().Uniforms = uniforms;
+		Get<ACShaderTextureSlots>().TextureSlots = textureSlots;
 	}
 }

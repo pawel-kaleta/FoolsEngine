@@ -1,7 +1,7 @@
 #include "EditorLayer.h"
 #include "SceneTesting.h"
 
-#include "AssetImport\AssetImportModal.h"
+#include "AssetImport\FileHandler.h"
 
 #include <string>
 #include <filesystem>
@@ -21,9 +21,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		m_Scene = CreateRef<Scene>();
-		m_Scene->Initialize();
-		SetSceneContext(m_Scene);
+		NewScene();
 	}
 
 	void EditorLayer::OnUpdate()
@@ -31,18 +29,21 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
 
-		switch (m_EditorState)
 		{
-		case EditorState::Edit: 
-			break;
-		case EditorState::Play:
-			m_Scene->SimulationUpdate();
-			break;
-		case EditorState::Pause:
-			break;
-		}
+			auto scene_observer = m_Scene.Observe();
+			switch (m_EditorState)
+			{
+			case EditorState::Edit: 
+				break;
+			case EditorState::Play:
+				scene_observer.SimulationUpdate();
+				break;
+			case EditorState::Pause:
+				break;
+			}
 
-		m_Scene->PostFrameUpdate();
+			scene_observer.PostFrameUpdate();
+		}//scope to kill scene_observer
 
 		m_Viewports.EditViewport.OnUpdate();
 
@@ -149,41 +150,28 @@ namespace fe
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
-					NewScene();
+				if (ImGui::MenuItem("New Scene", "Ctrl+N")) NewScene();
+				if (ImGui::MenuItem("Open...",   "Ctrl+O")) OpenScene();
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					OpenScene();
+				if (m_EditorState != EditorState::Edit) ImGui::BeginDisabled();
 
-				if (m_EditorState != EditorState::Edit)
-					ImGui::BeginDisabled();
-				{
-					if (!m_Scene->GetFilepath().empty())
-					{
-						if (ImGui::MenuItem("Save", "Ctrl+S"))
-						{
-							SaveScene();
-						}
-					}
-					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-					{
-						SaveSceneAs();
-					}
-				}
-				if (m_EditorState != EditorState::Edit)
-					ImGui::EndDisabled();
+				if (ImGui::MenuItem("Save",       "Ctrl+S"))       SaveScene();
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) SaveSceneAs();
+
+				if (m_EditorState != EditorState::Edit) ImGui::EndDisabled();
 
 				ImGui::Separator();
-				if (ImGui::MenuItem("Exit"))
-					Application::Close();
+
+				if (ImGui::MenuItem("Exit")) Application::Close();
+
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Debug"))
 			{
 				if (ImGui::MenuItem("Spawn Test Scene Objects"))
 				{
-					RegisterAndLoadStuff(); //SceneTesting.h
-					TestSceneSetup(m_Scene);
+					//RegisterAndLoadStuff(); //EditorLayer::EditorLayer() already calls  //SceneTesting.h 
+					TestSceneSetup(m_Scene.Observe());
 				}
 
 				ImGui::EndMenu();
@@ -197,8 +185,11 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_Scene = CreateRef<Scene>();
-		m_Scene->Initialize();
+		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
+
+		m_Scene = AssetHandle<Scene>(AssetManager::CreateAsset<Scene>(filepath), LoadingPriority_Critical);
+		m_Scene.Use().Initialize();
+
 		SetSceneContext(m_Scene);
 	}
 
@@ -210,11 +201,25 @@ namespace fe
 		if (filepath.empty())
 			return;
 
-		Ref<Scene> newScene = CreateRef<Scene>();
-		newScene->SetFilepath(filepath);
-		newScene->SetName(filepath.filename().string());
+		auto& current_scene_filepath = m_Scene.Observe().GetFilepath();
+		if (current_scene_filepath.Filepath == filepath)
+			return;
+		
+		AssetHandle<Scene> newScene = AssetHandle<Scene>(AssetManager::GetAssetFromFilepath<Scene>(filepath));
+		bool new_scene_opened = false;
+		if (newScene.IsValid())
+		{
+			auto newScene_user = newScene.Use();
+			newScene_user.Initialize();
 
-		if (SceneSerializerYAML::Deserialize(newScene, filepath))
+			new_scene_opened = SceneSerializerYAML::DeserializeFromFile(newScene_user);
+		}
+		else
+		{
+			FE_LOG_CORE_ERROR("Adding scenes to project not implemented");
+		}
+
+		if (new_scene_opened)
 		{
 			m_EditorState  = EditorState::Edit;
 
@@ -231,22 +236,32 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		SceneSerializerYAML::Serialize(m_Scene, m_Scene->GetFilepath());
+		SceneSerializerYAML::SerializeToFile(m_Scene.Use());
 	}
 
 	void EditorLayer::SaveSceneAs()
 	{
 		FE_PROFILER_FUNC();
 
+		FE_LOG_CORE_ERROR("Adding scenes to project not implemented");
+
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
-		if (!filepath.empty())
+		
+		if (filepath.empty()) return;
+	
+		AssetHandle<Scene>(AssetManager::CreateAsset<Scene>(filepath));
+
 		{
-			m_Scene->SetFilepath(filepath);
-			SaveScene();
-		}
+			auto scene_user = m_Scene.Use();
+
+			scene_user.SetName(filepath.stem().string());
+			scene_user.SetFilepath(filepath);
+		} //scope to kill scene user
+		
+		SaveScene();
 	}
 
-	void EditorLayer::SetSceneContext(const Ref<Scene>& scene)
+	void EditorLayer::SetSceneContext(const AssetHandle<Scene>& scene)
 	{
 		FE_PROFILER_FUNC();
 
@@ -265,8 +280,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		if (!m_Scene->GetGameplayWorld()->GetRegistry().valid(m_SelectedEntityID))
-			m_SelectedEntityID = NullEntityID;
+		{
+			if (!m_Scene.Use().GetWorlds().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
+				m_SelectedEntityID = NullEntityID;
+		}
 
 		m_Panels.WorldHierarchyPanel.SetSelection(m_SelectedEntityID);
 		m_Panels.EntityInspector.OpenEntity(m_SelectedEntityID);
@@ -311,25 +328,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		if (!m_Scene->GetGameplayWorld()->GetEntityWithPrimaryCamera())
+		auto scene_user = m_Scene.Use();
+
+		if (!scene_user.GetWorlds().GameplayWorld->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
-		m_SceneBackup = CreateRef<Scene>();
-
-		std::string sceneData = SceneSerializerYAML::Serialize(m_Scene);
-
-		// TO DO: binary serialization
-		if (SceneSerializerYAML::Deserialize(m_SceneBackup, sceneData))
-		{
-			m_EditorState = EditorState::Play;
-
-			m_SceneBackup->SetFilepath(m_Scene->GetFilepath());
-			m_SceneBackup->SetName(m_Scene->GetName());
-		}
-		else
-		{
-			FE_LOG_CORE_ERROR("Deserialization of scene failed");
-		}
+		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_user);
 	}
 
 	void EditorLayer::OnScenePlayPause()
@@ -348,8 +352,12 @@ namespace fe
 
 		m_EditorState = EditorState::Edit;
 
-		m_Scene = m_SceneBackup;
-		SetSceneContext(m_Scene);
+		auto scene_user = m_Scene.Use();
+		scene_user.Release();
+		scene_user.Initialize();
+		bool deserialization_result = SceneSerializerYAML::DeserializeFromString(scene_user, m_SceneBackup);
+		FE_CORE_ASSERT(deserialization_result, "Scene recovery after play stop failed.");
+		m_SceneBackup.clear();
 	}
 
 	void EditorLayer::OnEvent(Ref<Events::Event> event)
@@ -391,7 +399,7 @@ namespace fe
 					if (m_EditorState != EditorState::Edit)
 						return;
 
-					if (shift || m_Scene->GetFilepath().empty())
+					if (shift || m_Scene.Observe().AllOf<ACFilepath>())
 						SaveSceneAs();
 					else
 						SaveScene();

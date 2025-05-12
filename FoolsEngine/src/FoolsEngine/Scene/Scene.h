@@ -1,6 +1,8 @@
 #pragma once
 #include "ECS.h"
 
+#include "FoolsEngine\Assets\Asset.h"
+
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 #include "FoolsEngine\Core\UUID.h"
 
@@ -13,47 +15,34 @@ namespace fe
 
 	class Entity;
 
+	struct ACWorlds : public AssetComponent
+	{
+		Scope<GameplayWorld> GameplayWorld;
+	};
+
+	// observer can be used for drawing editor panels and other stuff during editing/playing scene
+	// user needed for initialization, serialization, deserialization and release
 	class Scene : public Asset
 	{
 	public:
-
-		// Asset
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
-		static bool IsKnownSourceExtension(const std::filesystem::path& extension) { return false; }
-		//static std::string GetSourceExtensionAlias() { return ""; } // base class Asset asserts here and its ok
-		static std::string GetProxyExtension() { return ".fescene"; }
-		static std::string GetProxyExtensionAlias() { return "Scene"; }
+		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 
-		virtual void UnloadFromGPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
-		virtual void UnloadFromCPU() override { FE_CORE_ASSERT(false, "Why is this called?"); }
-
-		Scene();
-		~Scene() = default;
+		virtual void PlaceCoreComponents() override final;
+		virtual void Release() override final;
 		void Initialize();
 
 		void SimulationUpdate();
 		void PostFrameUpdate();
 
-		GameplayWorld* GetGameplayWorld() const { return m_GameplayWorld.get(); }
+		      ACWorlds& GetWorlds()       { return Get<ACWorlds>(); }
+		const ACWorlds& GetWorlds() const { return Get<ACWorlds>(); }
 
-		const std::string& GetName() const { return m_Name; }
-		void SetName(const std::string& name) { m_Name = name; }
-
-		const std::filesystem::path& GetFilepath() const { return m_Filepath; }
-		void SetFilepath(const std::filesystem::path& path) { m_Filepath = path; }
-		      
-		UUID GetUUID() const { return m_UUID; }
 	private:
-		friend class SceneSerializerYAML;
-
-		std::filesystem::path m_Filepath;
-		std::string           m_Name = "Untitled Scene";
-		UUID                  m_UUID;
-		
-		Scope<GameplayWorld>  m_GameplayWorld;
-		
 		template <SimulationStages::Stages stage>
 		void Update();
+
+	protected:
+		Scene(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
 	};
 }

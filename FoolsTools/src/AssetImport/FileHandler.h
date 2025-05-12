@@ -1,18 +1,24 @@
 #pragma once
 
 #include <filesystem>
+#include <memory_resource>
 
 namespace fe
 {
-	class FileHandler
+	enum AssetType;
+
+	namespace FileHandler
 	{
-	public:
-		static bool IsKnownExtension(std::string& extension);
-		static void OpenFile(const std::filesystem::path& filepath);
-	private:
-		//static bool (*IsKnownExtensionPtrs[AssetType::Count])(const std::filesystem::path&);
-		//static std::string(*GetSourceExtensionAliasPtrs[AssetType::Count])();
-		//static std::string(*GetProxyExtensionPtrs[AssetType::Count])();
-		//static std::string(*GetProxyExtensionAliasPtrs[AssetType::Count])();
+		uint32_t GetSourceAliasAndLoaderIndex(const std::pmr::string& extension, std::pmr::string& outAlias);
+
+		void OpenFile(const std::filesystem::path& filepath);
+	};
+
+	class AssetHandleBase;
+
+	namespace AssetImportModal
+	{
+		void OnImGuiRender();
+		void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle);
 	};
 }

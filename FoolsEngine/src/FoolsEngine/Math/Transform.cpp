@@ -3,7 +3,7 @@
 
 namespace fe
 {
-	glm::mat4 Transform::GetTransform() const
+	glm::mat4 Transform::GetMatrix() const
 	{
 		auto trans = glm::translate(glm::mat4(1.0f), Shift);
 		auto rot = glm::toMat4(glm::quat(glm::radians(Rotation)));

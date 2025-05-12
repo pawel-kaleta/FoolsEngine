@@ -32,9 +32,8 @@ namespace fe
 		virtual void OnEvent(Ref<Events::Event> event)	override;
 
 	private:
-
-		Ref<Scene> m_Scene;
-		Ref<Scene> m_SceneBackup;
+		AssetHandle<Scene> m_Scene;
+		std::string m_SceneBackup;
 
 		EditorState m_EditorState = EditorState::Edit;
 
@@ -67,7 +66,7 @@ namespace fe
 		void SaveScene();
 		void SaveSceneAs();
 
-		void SetSceneContext(const Ref<Scene>& scene);
+		void SetSceneContext(const AssetHandle<Scene>& scene);
 		void SetSelectionContext();
 		void GetSelection();
 

@@ -4,17 +4,13 @@
 #include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
-#include "FoolsEngine\Assets\Loaders\MeshLoader.h"
+#include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 
 namespace fe
 {
-	bool Mesh::IsKnownSourceExtension(const std::filesystem::path& extension)
-	{
-		return MeshLoader::IsKnownExtension(extension);
-	}
-
 	void Mesh::SendDataToGPU(GDIType GDI, void* data)
 	{
 		if (AllOf<ACGPUBuffers>())
@@ -25,53 +21,53 @@ namespace fe
 
 		FE_CORE_ASSERT(data, "Missing mesh data");
 
-		auto& meshData = *(MeshData*)data;
-
-		Ref<VertexBuffer> vb = VertexBuffer::Create((float*)meshData.Vertices.data(), (uint32_t)(meshData.Vertices.size() * sizeof(Vertex)));
-		vb->SetLayout({
-			{ ShaderData::Type::Float3, "a_Position" },
-			{ ShaderData::Type::Float3, "a_Normal" },
-			{ ShaderData::Type::Float2, "a_TexCoord" }
-		});
-
-		Ref<IndexBuffer> ib = IndexBuffer::Create(meshData.Indices.data(), (uint32_t)meshData.Indices.size());
-		ib->Bind();
-		vb->SetIndexBuffer(ib);
+		MeshData& meshData = *(MeshData*)GetDataLocation().Data;
+		auto& spec = GetSpecification();
 
 		auto& buffersComp = Emplace<ACGPUBuffers>();
-		buffersComp.IndexBuffer = ib;
-		buffersComp.VertexBuffer = vb;
+
+		buffersComp.VertexBuffer = VertexBuffer::Create(meshData.GetVertexArrayPtr(spec.IndicesCount), (spec.VertexCount * sizeof(Vertex)));
+		buffersComp.VertexBuffer->SetLayout(Vertex::GetLayout());
+
+		buffersComp.IndexBuffer = IndexBuffer::Create(meshData.GetIndexArrayPtr(), spec.IndicesCount);
+		buffersComp.IndexBuffer->Bind();
+
+		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
 	}
 
 	void Mesh::UnloadFromCPU()
 	{
-		auto& dataLocation = Get<ACDataLocation>();
-		if (!dataLocation.Data) return;
-
-		auto& meshData = *(MeshData*)dataLocation.Data;
-
-		meshData.Indices.clear();
-		meshData.Vertices.clear();
+		auto& data = GetDataLocation().Data;
+		if (data)
+		{
+			GeometryLoader::UnloadMesh(data);
+			data = nullptr;
+		}
 	}
 
-	void Mesh::UnloadFromGPU()
+	void Mesh::PlaceCoreComponents()
+	{
+		Emplace<ACMeshSpecification>().Init();
+	}
+
+	void Mesh::Release()
 	{
 		if (!AllOf<ACGPUBuffers>()) return;
 
 		Erase<ACGPUBuffers>();
 	}
 
-	void Mesh::Draw(AssetHandle<MaterialInstance> materialInstance)
+	void Mesh::Draw(const AssetObserver<MaterialInstance>& miObserver)
 	{
-		if (AllOf<ACGPUBuffers>())
+		if (!AllOf<ACGPUBuffers>())
 		{
 			FE_CORE_ASSERT(false, "Mesh not uploaded to GPU");
 			return;
 		}
 
-		auto& material_instance = materialInstance.Use();
-		auto& material = material_instance.GetMaterial().Observe();
-		auto& shader = material.GetShader().Use();
+		//auto& material_instance = materialInstance.Use();
+		auto& material = miObserver.GetMaterial().Observe();
+		auto& shader = AssetHandle<Shader>(material.GetShaderID()).Use();
 
 		auto GDI = Renderer::GetActiveGDItype();
 
@@ -80,7 +76,7 @@ namespace fe
 			shader.UploadUniform(
 				GDI,
 				uniform,
-				material_instance.GetUniformValuePtr(uniform)
+				(void*)miObserver.GetUniformValuePtr(uniform)
 			);
 		}
 
@@ -89,7 +85,7 @@ namespace fe
 		
 		for (auto& textureSlot : textureSlots)
 		{
-			auto& texture = material_instance.GetTexture(textureSlot).Use();
+			auto& texture = miObserver.GetTexture(textureSlot).Use();
 
 			if (texture.IsValid())
 			{
@@ -97,7 +93,8 @@ namespace fe
 			}
 			else
 			{
-				AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::Default).Use().Bind(GDI, rendererTextureSlot);
+				FE_CORE_ASSERT(false, "Not implemented default texture");
+				//AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::Default).Use().Bind(GDI, rendererTextureSlot);
 			}
 
 			shader.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
@@ -108,22 +105,7 @@ namespace fe
 		auto gpuBuffers = Get<ACGPUBuffers>();
 
 		gpuBuffers.VertexBuffer->Bind();
-		gpuBuffers.IndexBuffer->Bind();
+		//gpuBuffers.IndexBuffer->Bind();
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
-	}
-
-	void MeshBuilder::Create(AssetUser<Mesh>& textureUser)
-	{
-		FE_CORE_ASSERT(m_Data, "Mesh data pointer not set");
-		if (!m_Data) return;
-
-		FE_CORE_ASSERT(m_Specification.IndicesCount != 0, "No indices");
-		FE_CORE_ASSERT(m_Specification.VertexCount != 0, "No verticies");
-
-		if (m_Specification.IndicesCount != 0) return;
-		if (m_Specification.VertexCount != 0) return;
-
-		textureUser.GetDataLocation().Data = m_Data;
-		textureUser.GetOrEmplaceSpecification() = m_Specification;
 	}
 }

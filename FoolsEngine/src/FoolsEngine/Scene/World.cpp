@@ -6,16 +6,11 @@
 
 namespace fe
 {
-	World::World(Scene* scene, bool isGameplayWorld)
-		: m_Scene(scene), m_IsGameplayWorld(isGameplayWorld)
+	World::World(bool isGameplayWorld)
+		: m_IsGameplayWorld(isGameplayWorld)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("World Creation");
-	}
-
-	void World::Initialize()
-	{
-
 	}
 
 	BaseEntity World::CreateEntity()

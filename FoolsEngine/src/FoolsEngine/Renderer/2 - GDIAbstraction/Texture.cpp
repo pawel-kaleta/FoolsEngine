@@ -11,13 +11,6 @@
 
 namespace fe
 {
-	bool Texture2D::IsKnownSourceExtension(const std::filesystem::path& extension)
-	{
-		return TextureLoader::IsKnownExtension(extension);
-	}
-
-	AssetHandle<Texture2D> Texture2D::GetHandle() const { return AssetHandle<Texture2D>(GetECSHandle()); }
-
 	void Texture2D::SendDataToGPU(GDIType GDI, void* data)
 	{
 		switch (GDI)
@@ -50,32 +43,14 @@ namespace fe
 		}
 	}
 
-	void Texture2D::UnloadFromGPU()
-	{
-		auto gdi = Renderer::GetActiveGDItype();
-		switch (gdi)
-		{
-		case GDIType::none:
-			FE_CORE_ASSERT(false, "Unspecified GDIType");
-			break;
-
-		case GDIType::OpenGL:
-			if (AllOf<OpenGLTexture2D>())
-			{
-				FE_LOG_CORE_DEBUG("Unloading Texture from GPU, AssetID: {0}, RendererID: {1}", GetID(), GetRendererID(gdi));
-				Erase<OpenGLTexture2D>();
-			}
-			break;
-		}
-	}
-
 	void Texture2D::UnloadFromCPU()
 	{
 		auto& dataPtr = GetDataLocation().Data;
-		if (!dataPtr)
-			return;
-		delete dataPtr;
-		dataPtr = nullptr;
+		if (dataPtr)
+		{
+			TextureLoader::UnloadTexture(dataPtr);
+			dataPtr = nullptr;
+		}
 	}
 
 	uint32_t Texture2D::GetRendererID(GDIType GDI) const
@@ -109,6 +84,30 @@ namespace fe
 		}
 	}
 
+	void Texture2D::PlaceCoreComponents()
+	{
+		Emplace<ACTexture2DSpecification>().Specification.Init();
+	}
+
+	void Texture2D::Release()
+	{
+		auto gdi = Renderer::GetActiveGDItype();
+		switch (gdi)
+		{
+		case GDIType::none:
+			FE_CORE_ASSERT(false, "Unspecified GDIType");
+			break;
+
+		case GDIType::OpenGL:
+			if (AllOf<OpenGLTexture2D>())
+			{
+				FE_LOG_CORE_DEBUG("Unloading Texture from GPU, AssetID: {0}, RendererID: {1}", GetID(), GetRendererID(gdi));
+				Erase<OpenGLTexture2D>();
+			}
+			break;
+		}
+	}
+
 	void Texture2DBuilder::Create(AssetUser<Texture2D>& textureUser)
 	{
 		FE_CORE_ASSERT(m_Data, "Texture data pointer not set");
@@ -125,6 +124,6 @@ namespace fe
 		if (m_Specification.Height     == 0                            ) return;
 
 		textureUser.GetDataLocation().Data = m_Data;
-		textureUser.GetOrEmplaceSpecification().Specification = m_Specification;		
+		textureUser.GetSpecification().Specification = m_Specification;
 	}
 }

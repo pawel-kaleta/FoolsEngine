@@ -1,121 +1,142 @@
 #include "FileHandler.h"
 
-#include <FoolsEngine.h>
+#include "ImportData.h"
+#include "TextureImport.h"
+#include "GeometryImport.h"
 
-#include "AssetImport\AssetImportModal.h"
+#include <FoolsEngine.h>
 
 namespace fe
 {
-	bool (*IsKnownExtensionPtrs[AssetType::Count])(const std::filesystem::path&) =
-	{
-		&Scene::IsKnownSourceExtension,
-		nullptr, //TextureAsset
-		&TextureLoader::IsKnownExtension,
-		&MeshLoader::IsKnownExtension, //MeshAsset
-		nullptr, //ModelAsset
-		&ShaderLoader::IsKnownExtension, //ShaderAsset
-		nullptr, //MaterialAsset
-		nullptr, //MaterialInstanceAsset
-		nullptr  //AudioAsset
-	};
+    constexpr static size_t LoadersCount = 4;
 
-	std::string(*GetSourceExtensionAliasPtrs[AssetType::Count])() =
-	{
-		nullptr,
-		nullptr,
-		&Texture2D::GetSourceExtensionAlias,
-		&Mesh::GetSourceExtensionAlias,
-		nullptr,
-		&Shader::GetSourceExtensionAlias,
-		nullptr,
-		nullptr,
-		nullptr
-	};
+    namespace FileHandler
+    {
+        struct LoaderData
+        {
+            bool (* const IsKnownExtensionFunkPtr)(const std::pmr::string&);
+            const char* SourceExtensionAlias;
+            AssetType AssetType;
+        };
+        
+        const static LoaderData s_LoaderData[LoadersCount] =
+        {
+            { nullptr,                            "",                                  AssetType::SceneAsset },
+            { & TextureLoader::IsKnownExtension,  TextureLoader::GetExtensionAlias(),  AssetType::Texture2DAsset },
+            { & GeometryLoader::IsKnownExtension, GeometryLoader::GetExtensionAlias(), AssetType::None }, // multiple asset types
+            { & ShaderLoader::IsKnownExtension,   ShaderLoader::GetExtensionAlias(),   AssetType::ShaderAsset }
+        };
+       
+        uint32_t GetSourceAliasAndLoaderIndex(const std::pmr::string& extension, std::pmr::string& outAlias)
+        {
+            for (size_t i = 0; i < LoadersCount; i++)
+            {
+                auto& loader_data = s_LoaderData[i];
+                if (!loader_data.IsKnownExtensionFunkPtr)
+                    continue;
 
-	std::string(*GetProxyExtensionPtrs[AssetType::Count])() = 
-	{
-		&Scene::GetProxyExtension,
-		nullptr,
-		&Texture2D::GetProxyExtension,
-		&Mesh::GetProxyExtension,
-		nullptr,
-		&Shader::GetProxyExtension,
-		nullptr,
-		nullptr,
-		nullptr
-	};
+                if ((*loader_data.IsKnownExtensionFunkPtr)(extension))
+                {
+                    outAlias = loader_data.SourceExtensionAlias;
+                    return i;
+                }
+            }
 
-	std::string(*GetProxyExtensionAliasPtrs[AssetType::Count])()
-	{
-		&Scene::GetProxyExtensionAlias,
-		nullptr,
-		&Texture2D::GetProxyExtensionAlias,
-		&Mesh::GetProxyExtensionAlias,
-		nullptr,
-		&Shader::GetProxyExtensionAlias,
-		nullptr,
-		nullptr,
-		nullptr
-	};
+            return -1;
+        }
 
-	bool FileHandler::IsKnownExtension(std::string& extension)
-	{
-		for (size_t i = 0; i < AssetType::Count; i++)
-		{
-			if (GetProxyExtensionPtrs[i])
-			{
-				if ((*GetProxyExtensionPtrs[i])() == extension)
-				{
-					if (GetProxyExtensionAliasPtrs[i])
-					{
-						extension = (*GetProxyExtensionAliasPtrs[i])();
-						return true;
-					}
-					else
-					{
-						FE_CORE_ASSERT(false, "Missing GetProxyExtensionAliasPtr for asset type {0}", i);
-					}
-				}	
-			}
+	    void OpenFile(const std::filesystem::path& filepath)
+	    {
+		    if (filepath.empty())
+		    {
+			    FE_CORE_ASSERT(false, "Attempt to open file without filepath");
+			    return;
+		    }
 
-			if (!IsKnownExtensionPtrs[i])
-				continue;
+		    for (size_t i = 0; i < LoadersCount; i++)
+		    {
+                auto& loader_data = s_LoaderData[i];
 
-			if ((*IsKnownExtensionPtrs[i])(extension))
-			{
-				if (GetSourceExtensionAliasPtrs[i])
-				{
-					extension = (*GetSourceExtensionAliasPtrs[i])();
-					return true;
-				}
-				else
-				{
-					FE_CORE_ASSERT(false, "Missing GetSourceExtensionAliasPtr for asset type {0}", i);
-				}
-			}
-		}
+                if (AssetManager::GetAssetFromFilepath(filepath, loader_data.AssetType))
+                {
+                    //asset allready imported
+                    return;
+                }
 
-		return false;
-	}
+			    if (!loader_data.IsKnownExtensionFunkPtr)
+				    continue;
 
-	void FileHandler::OpenFile(const std::filesystem::path& filepath)
-	{
-		if (filepath.empty())
-		{
-			FE_CORE_ASSERT(false, "Attempt to open file without filepath");
-			return;
-		}
+			    if ((*loader_data.IsKnownExtensionFunkPtr)(filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>()))
+			    {
+				    AssetImportModal::OpenWindow(filepath, i, AssetType::None, nullptr);
+				    return;
+			    }
+		    }
+	    }
+    }
 
-		for (size_t i = 0; i < AssetType::Count; i++)
-		{
-			if (!IsKnownExtensionPtrs[i])
-				continue;
+    namespace AssetImportModal
+    {
+        ImportData* s_ImportData = nullptr;
 
-			if ((*IsKnownExtensionPtrs[i])(filepath.extension()))
-			{
-				AssetImportModal::OpenWindow(filepath, (AssetType)i, nullptr);
-				return;
-			}
-		}
-	}
+        struct ImporterData
+        {
+            void (* const InitImportFunkPtr)(ImportData* const);
+            void (* const RenderWindowFunkPtr)(ImportData* const);
+        };
+
+        const static ImporterData s_ImporterData[LoadersCount] =
+        {
+            { nullptr, nullptr },
+            { & TextureImport::InitImport,  & TextureImport::RenderWindow },
+            { & GeometryImport::InitImport, & GeometryImport::RenderWindow },
+            { nullptr, nullptr }
+        };
+
+        void OnImGuiRender()
+        {
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+            if (s_ImportData)
+                ImGui::OpenPopup("Asset Import");
+            if (ImGui::BeginPopupModal("Asset Import", NULL, 0))
+            {
+                FE_CORE_ASSERT(s_ImportData, "");
+                auto& render_window_funk = s_ImporterData[s_ImportData->LoaderIndex].RenderWindowFunkPtr;
+                (*render_window_funk)(s_ImportData);
+
+                if (s_ImportData->Finished)
+                {
+                    delete s_ImportData;
+                    s_ImportData = nullptr;
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::SetItemDefaultFocus();
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel"))
+                {
+                    delete s_ImportData;
+                    s_ImportData = nullptr;
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+        }
+
+        void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle)
+        {
+            s_ImportData = new ImportData;
+
+            s_ImportData->Filepath = filepath;
+            s_ImportData->Type = type;
+            s_ImportData->HandleToOverride = optionalBaseHandle;
+            s_ImportData->LoaderIndex = loaderIndex;
+
+            auto& init_import_funk = s_ImporterData[loaderIndex].InitImportFunkPtr;
+            (*init_import_funk)(s_ImportData);
+        }
+    }
 }

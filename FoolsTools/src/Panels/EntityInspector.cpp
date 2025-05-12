@@ -4,7 +4,7 @@
 
 namespace fe
 {
-    void EntityInspector::SetScene(const Ref<Scene>& scene)
+    void EntityInspector::SetScene(const AssetHandle<Scene>& scene)
     {
         m_Scene = scene;
         m_OpenedEntityID = NullEntityID;
@@ -61,14 +61,20 @@ namespace fe
         {
             if (component->IsSpatial())
             {
-                auto& offset = ((SpatialComponent*)component)->Offset;
-                ImGui::SeparatorText("Offset");
-                ImGui::DragFloat3("Shift", glm::value_ptr(offset.Shift), 0.01f, 0, 0, "%.2f");
-                ImGui::DragFloat3("Rotation", glm::value_ptr(offset.Rotation), 0.10f, 0, 0, "%.2f");
-                ImGui::DragFloat3("Scale"   , glm::value_ptr(offset.Scale)   , 0.01f, 0, 0, "%.2f");
-                ImGui::SeparatorText("Component Data");
+                if (ImGui::TreeNodeEx("Offset", ImGuiTreeNodeFlags_SpanAvailWidth))
+                {
+                    auto& offset = ((SpatialComponent*)component)->Offset;
+                    ImGui::DragFloat3("Shift", glm::value_ptr(offset.Shift), 0.01f, 0, 0, "%.2f");
+                    ImGui::DragFloat3("Rotation", glm::value_ptr(offset.Rotation), 0.10f, 0, 0, "%.2f");
+                    ImGui::DragFloat3("Scale", glm::value_ptr(offset.Scale), 0.01f, 0, 0, "%.2f");
+                    ImGui::TreePop();
+                }
+                ImGui::Separator();
             }
+            ImGui::TreePush("Comp data");
             component->DrawInspectorWidget(entity);
+            ImGui::TreePop();
+            
         }
 
         if (widget_of_popup)
@@ -139,7 +145,7 @@ namespace fe
 
         ImGui::Begin("Entity Inspector");
 
-        if (m_OpenedEntityID == NullEntityID || m_Scene == nullptr)
+        if (m_OpenedEntityID == NullEntityID || m_Scene.GetID() == NullAssetID)
         {
             ImGui::End();
             return;
@@ -152,7 +158,8 @@ namespace fe
             return;
         }
 
-        Entity entity(m_OpenedEntityID, m_Scene->GetGameplayWorld());
+        auto scene_Observer = m_Scene.Observe();
+        Entity entity(m_OpenedEntityID, scene_Observer.GetWorlds().GameplayWorld.get());
 
         DrawComponentsTab(entity);
         
@@ -337,19 +344,27 @@ namespace fe
             ImGuiTableFlags_NoSavedSettings;
 
         ImGui::PushID(1);
-        if (ImGui::BeginTable("split", 5, flags))//, ImVec2(0, 150)
+
+        if (ImGui::BeginTable("split", 5, flags))
         {
-            ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
-            ImGui::TableSetupColumn("Parent", ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("Local", ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("Global", ImGuiTableColumnFlags_WidthFixed, 19.0f);
-            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_WidthFixed, 14.0f);
-            ImGui::TableSetupColumn("Tag Name", ImGuiTableColumnFlags_None);
+            uint32_t column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed;
+            
+            ImGui::TableSetupScrollFreeze(0, 2); // Make top row2 always visible
+            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_WidthFixed, 19.0f);
+            ImGui::TableSetupColumn("Parent", column_flags, 19.0f);
+            ImGui::TableSetupColumn("Local", column_flags, 19.0f);
+            ImGui::TableSetupColumn("Global", column_flags, 19.0f);
+            ImGui::TableSetupColumn("Tag Name");
+            ImGui::TableAngledHeadersRow();
             ImGui::TableHeadersRow();
 
             for (int i = 0; i < 64; i++)
             {
                 ImGui::PushID(i);
+                
+                ImGui::TableNextColumn();
+                auto id_str = (i < 10 ? " " : "") + std::to_string(i);
+                ImGui::Text(id_str.c_str());
 
                 ImGui::TableNextColumn();
                 ImGui::BeginDisabled();
@@ -363,10 +378,6 @@ namespace fe
                 ImGui::BeginDisabled();
                 ImGui::CheckboxFlags("##3", &tagsGlobal.TagBitFlags, WIDE_BIT_FLAG(i));
                 ImGui::EndDisabled();
-
-                ImGui::TableNextColumn();
-                auto id_str = (i < 10 ? " " : "") + std::to_string(i);
-                ImGui::Text(id_str.c_str());
 
                 ImGui::TableNextColumn();
                 ImGui::Text(tagLabels[i]);

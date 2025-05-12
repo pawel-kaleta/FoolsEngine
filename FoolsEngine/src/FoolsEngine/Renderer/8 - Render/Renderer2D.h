@@ -34,18 +34,19 @@ namespace fe
 		{
 			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float TextureTilingFactor = 1.0f;
-			AssetHandle<Texture2D> Texture = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+			AssetHandle<Texture2D> Texture; // FlatWhite
 		};
 
 		static void Init();
 		static void Shutdown();
 
-		static void RenderScene(Scene& scene, Entity cameraSet, Framebuffer& framebuffer);
-		static void RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
+		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
 
 		static RenderStats GetStats() { return s_Stats; }
 
 	private:
+		friend class Renderer;
+
 		struct ConstLimits {
 			constexpr static uint32_t QuadsInBatch = 10000;
 			constexpr static uint32_t MaxVeritices = QuadsInBatch * 4;

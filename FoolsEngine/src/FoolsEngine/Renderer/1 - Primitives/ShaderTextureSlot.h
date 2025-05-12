@@ -18,8 +18,8 @@ namespace fe
 		const std::string&      GetName()  const { return m_Name; }
 		const uint32_t          GetCount() const { return m_Count; }
 	private:
-		TextureData::Type m_Type;
 		std::string       m_Name;
+		TextureData::Type m_Type;
 		uint32_t          m_Count;
 	};
 }

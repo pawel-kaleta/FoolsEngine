@@ -5,18 +5,16 @@
 
 namespace fe
 {
-	class Scene;
 	class Actor;
 	class BaseEntity;
 
 	class World
 	{
 	public:
-		World(Scene* scene, bool isGameplayWorld = false);
-		virtual void Initialize();
+		World(bool isGameplayWorld = false);
+		virtual void Initialize() = 0;
 
 		Registry&	GetRegistry()		{ return m_Registry; }
-		Scene*		GetScene()			{ return m_Scene; }
 		bool		IsGameplayWorld()	{ return m_IsGameplayWorld; }
 
 		EntityID TranslateID(UUID uuid);
@@ -36,7 +34,6 @@ namespace fe
 		friend class WorldHierarchyPanel;
 
 		Registry	m_Registry;
-		Scene*		m_Scene				= nullptr;
 		bool		m_IsGameplayWorld	= false;
 
 		std::unordered_map<UUID, EntityID>	m_PersistentToTransientIDsMap;

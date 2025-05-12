@@ -14,31 +14,31 @@
 
 namespace fe
 {
-	void SceneSerializerYAML::Serialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
+	void SceneSerializerYAML::SerializeToFile(AssetUser<Scene>& scene)
 	{
 		YAML::Emitter emitter;
 
 		emitter << YAML::BeginMap;
-		AssetSerializer::Serialize(emitter);
+		//AssetSerializer::Serialize(emitter);
 		Serialize(scene, emitter);
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(filepath);
+		std::ofstream fout(scene.GetFilepath().Filepath);
 		fout << emitter.c_str();
 	}
 
-	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::filesystem::path& filepath)
+	bool SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>& scene)
 	{
-		YAML::Node node = YAML::LoadFile(filepath.string());
-		if (!AssetSerializer::Deserialize(node))
-			return false;
+		YAML::Node node = YAML::LoadFile(scene.GetFilepath().Filepath.string());
+		//if (!AssetSerializer::Deserialize(node))
+		//	return false;
 		if (!Deserialize(scene, node))
 			return false;
 		AssetManager::EvaluateAndReload();
 		return true;
 	}
 
-	std::string SceneSerializerYAML::Serialize(const Ref<Scene> scene)
+	std::string SceneSerializerYAML::SerializeToString(AssetUser<Scene>& scene)
 	{
 		YAML::Emitter emitter;
 
@@ -50,28 +50,32 @@ namespace fe
 		return out;
 	}
 
-	bool SceneSerializerYAML::Deserialize(const Ref<Scene> scene, const std::string& buffer)
+	bool SceneSerializerYAML::DeserializeFromString(AssetUser<Scene>& scene, const std::string& buffer)
 	{
 		YAML::Node node = YAML::Load(buffer);
 		return Deserialize(scene, node);
 	}
 	
-	void SceneSerializerYAML::Serialize(const Ref<Scene>& scene, YAML::Emitter& emitter)
+	void SceneSerializerYAML::Serialize(AssetUser<Scene>& scene, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
-			emitter << YAML::Key << "Name" << YAML::Value << scene->GetName();
-			emitter << YAML::Key << "UUID" << YAML::Value << scene->GetUUID();
+			auto name = scene.TryGetName();
+			if (name)
+				emitter << YAML::Key << "Name" << YAML::Value << name->Name;
+			else
+				emitter << YAML::Key << "Name" << YAML::Value << "";
+			emitter << YAML::Key << "UUID" << YAML::Value << scene.GetUUID();
 		}
 		emitter << YAML::EndMap; //Scene Properties
 		emitter << YAML::Key << "Worlds" << YAML::Value << YAML::BeginMap;
 		{
-			SerializeGameplayWorld(scene->GetGameplayWorld(), emitter);
+			SerializeGameplayWorld(scene.GetWorlds().GameplayWorld.get(), emitter);
 		}
 		emitter << YAML::EndMap; //Worlds
 	}
 
-	bool SceneSerializerYAML::Deserialize(const Ref<Scene>& scene, YAML::Node& node)
+	bool SceneSerializerYAML::Deserialize(AssetUser<Scene>& scene, YAML::Node& node)
 	{
 		auto& sceneProps = node["Scene Properties"];
 		if (!sceneProps)
@@ -81,17 +85,17 @@ namespace fe
 			return false;
 		}
 
-		scene->m_Name = sceneProps["Name"].as<std::string>();
-		scene->m_UUID = sceneProps["UUID"].as<uint64_t>();
+		std::string name = sceneProps["Name"].as<std::string>();
+		if (!name.empty()) scene.SetName(name);
+		//scene.SetUUID((UUID)sceneProps["UUID"].as<uint64_t>());
 
 		auto& worlds = node["Worlds"];
 		if (!worlds) return false;
-		if (!DeserializeGameplayWorld(scene->m_GameplayWorld.get(), worlds["GameplayWorld"]))
+		if (!DeserializeGameplayWorld(scene.GetWorlds().GameplayWorld.get(), worlds["GameplayWorld"]))
 			return false;
 
 		return true;
 	}
-
 
 	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
 	{
@@ -315,7 +319,6 @@ namespace fe
 		}
 	}
 
-
 	bool SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data)
 	{
 		auto& props = data["Properties"];
@@ -418,7 +421,6 @@ namespace fe
 
 		return true;
 	}
-
 
 	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::FrameStart >(const YAML::Node&, SystemsDirector*);
 	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStages::Stages::PrePhysics >(const YAML::Node&, SystemsDirector*);
@@ -577,7 +579,6 @@ namespace fe
 		}
 		return true;
 	}
-
 
 	bool SceneSerializerYAML::DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world)
 	{

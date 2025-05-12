@@ -58,13 +58,13 @@ namespace fe
 		s_Data.QuadVertexBuffer->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
-		s_Data.BaseShader = AssetHandle<Shader>((AssetID)BaseAssets::Shaders::Default2D);
+		s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 
 		s_Data.BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data.BaseShaderSamplers[i] = i;
 
-		s_Data.Batch.Textures[0] = AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::FlatWhite);
+		s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite;
 	}
 
 	void Renderer2D::Shutdown()
@@ -79,11 +79,6 @@ namespace fe
 		framebuffer.Bind();
 
 		RenderCommands::SetDepthTest(true);
-		RenderCommands::Clear();
-		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
-
-		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
-		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
 
 		auto GDI = Renderer::GetActiveGDItype();
 
@@ -126,20 +121,13 @@ namespace fe
 		s_Data.Batch.QuadVeriticesIt = s_Data.Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(Scene& scene, Entity cameraEntity, Framebuffer& framebuffer)
-	{
-		auto& projectionMatrix = scene.GetGameplayWorld()->GetRegistry().get<CCamera>(cameraEntity).Camera;
-		auto& cameraTransform = scene.GetGameplayWorld()->GetRegistry().get<CTransformGlobal>(cameraEntity).GetRef();
-		RenderScene(scene, projectionMatrix, cameraTransform, framebuffer);
-	}
-
-	void Renderer2D::RenderScene(Scene& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
+	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
 
 		BeginScene(camera, cameraTransform, framebuffer);
 
-		auto& registry = scene.GetGameplayWorld()->GetRegistry();
+		auto& registry = scene.GetWorlds().GameplayWorld->GetRegistry();
 
 		auto viewTiles = registry.view<CTile, CTransformGlobal>();
 
@@ -187,34 +175,6 @@ namespace fe
 			Flush();
 		}
 
-		auto viewMeshes = registry.view<CMesh, CTransformGlobal, CMaterialInstance>();
-		void* VPmatrixPtr = (void*)glm::value_ptr(s_Data.VPMatrix);
-
-		auto GDI = Renderer::GetActiveGDItype();
-
-		for (auto ID : viewMeshes)
-		{
-			auto [c_mesh, c_entityTransform, c_materialInstance] = viewMeshes.get(ID);
-			if (!c_mesh.Mesh.IsValid())
-				continue;
-
-			glm::mat4 modelTransform = c_entityTransform.GetRef().GetTransform();
-			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
-
-			auto mi = c_materialInstance.MaterialInstance;
-			auto miObserver = mi.Observe();
-
-			auto shader = miObserver.GetMaterial().Observe().GetShader();
-			auto shaderUser = shader.Use();
-
-			shaderUser.Bind(GDI);
-			shaderUser.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-			shaderUser.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
-			shaderUser.UploadUniform(GDI, Uniform("u_EntityID"      , ShaderData::Type::UInt), &ID);
-
-			c_mesh.Mesh.Use().Draw(mi);
-		}
-
 		EndScene(framebuffer);
 	}
 
@@ -223,7 +183,6 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
-		framebuffer.Unbind();
 	}
 
 	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID)
@@ -267,7 +226,8 @@ namespace fe
 
 		float aspectRatio;
 		{
-			auto& spec = quad.Texture.Observe().GetSpecification()->Specification;
+			auto texture_user = quad.Texture.Observe();
+			auto& spec = texture_user.GetSpecification().Specification;
 			aspectRatio = (float)spec.Height / (float)spec.Width;
 		}
 
@@ -285,7 +245,7 @@ namespace fe
 			{ 0.0f, 1.0f }
 		};
 
-		glm::mat4 transformMatrix = transform.GetTransform();
+		glm::mat4 transformMatrix = transform.GetMatrix();
 
 		for (int i = 0; i < 4; i++)
 		{

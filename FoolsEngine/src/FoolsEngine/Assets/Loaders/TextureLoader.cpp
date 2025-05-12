@@ -13,7 +13,7 @@ namespace fe
 			return;
 
 		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.GetOrEmplaceSpecification().Specification;
+		auto& spec = textureUser.GetSpecification().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
@@ -47,11 +47,9 @@ namespace fe
 		}
 	}
 
-	void TextureLoader::UnloadTexture(AssetUser<Texture2D>& textureUser)
+	void TextureLoader::UnloadTexture(void* data)
 	{
-		auto& dataPtr = textureUser.GetDataLocation().Data;
-		stbi_image_free(dataPtr);
-		dataPtr = nullptr;
+		stbi_image_free(data);
 	}
 
 	TextureData::Specification TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
@@ -76,9 +74,9 @@ namespace fe
 		return spec;
 	}
 
-	bool TextureLoader::IsKnownExtension(const std::filesystem::path& extension)
+	bool TextureLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static std::filesystem::path knownExtensions[] = {
+		static std::pmr::string knownExtensions[] = {
 			".jpg",
 			".jpeg",
 			".png",

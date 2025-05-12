@@ -4,7 +4,7 @@
 
 namespace fe
 {
-    void SystemsInspector::SetScene(const Ref<Scene>& scene)
+    void SystemsInspector::SetScene(const AssetHandle<Scene>& scene)
     {
         m_Scene = scene;
     }
@@ -15,7 +15,7 @@ namespace fe
 
         ImGui::Begin("Systems Inspector");
 
-        if (m_Scene == nullptr)
+        if (m_Scene.GetID() == NullAssetID)
         {
             ImGui::End();
             return;
@@ -23,7 +23,8 @@ namespace fe
 
         m_SystemToRemove = nullptr;
 
-        auto& systemsDirector = m_Scene->GetGameplayWorld()->GetSystems();
+        auto scene_observer = m_Scene.Observe();
+        auto& systemsDirector = scene_observer.GetWorlds().GameplayWorld->GetSystems();
 
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
@@ -89,7 +90,7 @@ namespace fe
 
         if (m_SystemToRemove)
         {
-            m_Scene->GetGameplayWorld()->GetSystems().RemoveSystem(m_SystemToRemove);
+            systemsDirector.RemoveSystem(m_SystemToRemove);
             m_SystemToRemove = nullptr;
         }
 
@@ -155,7 +156,6 @@ namespace fe
 
         if (removeSystem)
         {
-            //FE_LOG_CORE_ERROR("Behavior removal not yet implemented");
             m_SystemToRemove = system;
         }
     }

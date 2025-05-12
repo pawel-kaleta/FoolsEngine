@@ -9,8 +9,8 @@
 
 namespace fe
 {
-	GameplayWorld::GameplayWorld(Scene* scene)
-		: World(scene, true), m_PrimaryCameraEntityID(NullEntityID)
+	GameplayWorld::GameplayWorld()
+		: World(true), m_PrimaryCameraEntityID(NullEntityID)
 	{
 		FE_PROFILER_FUNC();
 

@@ -1,29 +1,24 @@
 #pragma once
 
-namespace fe::TextureData
-{
-	struct Specification;
-}
+#include <filesystem>
 
-namespace std::filesystem
-{
-	class path;
-}
+#include <FoolsEngine.h>
 
 namespace fe
 {
-	class AssetHandleBase;
+	struct ImportData;
 
-	class TextureImport
+	namespace TextureData { struct Specification; }
+
+	namespace TextureImport
 	{
-	public:
-		static void RenderWindow();
+		void RenderWindow(ImportData* const importData);
 
-		static void InitImport(const std::filesystem::path& filepath, AssetHandleBase* optionalBaseHandle);
-		static void ImportAs(const std::filesystem::path& filepath);
+		void InitImport(ImportData* const importData);
 
-	private:
-		static std::filesystem::path s_Filepath;
-		static TextureData::Specification s_Specification;
+		struct Data
+		{
+			TextureData::Specification Specification;
+		};
 	};
 }

@@ -258,13 +258,19 @@ project "assimp"
 		'assimp/code/Material/**',
 		'assimp/code/Pbrt/**',
 		'assimp/code/PostProcessing/**',
-		-- Importers
+		-- Importers and Exporters
 		'assimp/code/AssetLib/Obj/**',
 		'assimp/code/AssetLib/FBX/**',
+		'assimp/code/AssetLib/glTF/**.cpp', 
+		'assimp/code/AssetLib/glTF/**.h', -- glTF has some .inl files, we are skipping them to prevent compiling them like .cpp files
+		'assimp/code/AssetLib/glTF2/**.cpp', 
+		'assimp/code/AssetLib/glTF2/**.h', -- glTF has some .inl files, we are skipping them to prevent compiling them like .cpp files
 		'assimp/code/AssetLib/Assbin/**' -- For caching
 	}
 	-- Importers
 	defines {
+		'RAPIDJSON_HAS_STDSTRING=1',
+
 		'ASSIMP_BUILD_NO_3D_IMPORTER',
 		'ASSIMP_BUILD_NO_3DS_IMPORTER',
 		'ASSIMP_BUILD_NO_3MF_IMPORTER',
@@ -281,7 +287,7 @@ project "assimp"
 		'ASSIMP_BUILD_NO_CSM_IMPORTER',
 		'ASSIMP_BUILD_NO_DXF_IMPORTER',
 		-- 'ASSIMP_BUILD_NO_FBX_IMPORTER',
-		'ASSIMP_BUILD_NO_GLTF_IMPORTER',
+		-- 'ASSIMP_BUILD_NO_GLTF_IMPORTER',
 		'ASSIMP_BUILD_NO_HMP_IMPORTER',
 		'ASSIMP_BUILD_NO_IFC_IMPORTER',
 		'ASSIMP_BUILD_NO_IQM_IMPORTER',

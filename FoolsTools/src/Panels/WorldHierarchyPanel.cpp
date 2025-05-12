@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	void WorldHierarchyPanel::SetScene(const Ref<Scene>& scene)
+	void WorldHierarchyPanel::SetScene(const AssetHandle<Scene>& scene)
 	{
 		m_Scene = scene;
 		m_SelectedEntityID = NullEntityID;;
@@ -18,7 +18,7 @@ namespace fe
 
 		ImGui::Begin("Scene Hierarchy");
 
-		if (m_Scene == nullptr)
+		if (m_Scene.GetID() == NullAssetID)
 		{
 			ImGui::End();
 			return;
@@ -26,15 +26,19 @@ namespace fe
 
 		bool nodeClicked = false;
 
-		m_Scene->GetGameplayWorld()->GetHierarchy().EnforceSafeOrder();
-		auto group = m_Scene->GetGameplayWorld()->GetHierarchy().Group();
+		auto scene_observer = m_Scene.Observe();
+		auto& gameplay_world = scene_observer.GetWorlds().GameplayWorld;
+		auto& hierarchy = gameplay_world->GetHierarchy();
+
+		hierarchy.EnforceSafeOrder();
+		auto group = hierarchy.Group();
 
 		for (auto current = ++group.rbegin(); current != group.rend(); ++current) { //first entity is root
 			auto& node = group.get<CEntityNode>(*current);
 			if (node.HierarchyLvl > 1) // other levels drawn recursively
 				break;
 
-			nodeClicked |= DrawEntity(*current);
+			nodeClicked |= DrawEntity(scene_observer, *current);
 		}
 
 		if (ImGui::IsWindowHovered() && !nodeClicked)
@@ -49,7 +53,7 @@ namespace fe
 		if (ImGui::BeginPopup("Context menu popup"))
 		{
 			if (ImGui::MenuItem("Create Actor"))
-				m_Scene->GetGameplayWorld()->CreateActor();
+				gameplay_world->CreateActor();
 
 			ImGui::EndPopup();
 		}
@@ -57,14 +61,15 @@ namespace fe
 		ImGui::End();
 	}
 
-	bool WorldHierarchyPanel::DrawEntity(EntityID entityID)
+	bool WorldHierarchyPanel::DrawEntity(const AssetObserver<Scene>& sceneObserver, EntityID entityID)
 	{
 		FE_PROFILER_FUNC();
 
-		auto allGroup = m_Scene->GetGameplayWorld()->GetHierarchy().Group();
+		auto& gameplay_world = sceneObserver.GetWorlds().GameplayWorld;
+		auto allGroup = gameplay_world->GetHierarchy().Group();
 		auto& node = allGroup.get<CEntityNode>(entityID);
 
-		Entity entity(entityID, m_Scene->GetGameplayWorld());
+		Entity entity(entityID, gameplay_world.get());
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 
@@ -115,7 +120,7 @@ namespace fe
 
 			if (ImGui::MenuItem("Destroy"))
 			{
-				Entity(entityID, m_Scene->GetGameplayWorld()).Destroy();
+				Entity(entityID, gameplay_world.get()).Destroy();
 				if (m_SelectedEntityID == entityID)
 					SetSelection(NullEntityID);
 			}
@@ -124,11 +129,11 @@ namespace fe
 
 		if (opened && node.ChildrenCount)
 		{
-			auto children = ChildrenList(entityID, & m_Scene->GetGameplayWorld()->GetRegistry());
+			auto children = ChildrenList(entityID, & gameplay_world->GetRegistry());
 
 			auto child = children.Begin();
 			while (child != children.End())
-				nodeClicked |= DrawEntity(*child++);
+				nodeClicked |= DrawEntity(sceneObserver, *child++);
 
 			ImGui::TreePop();
 		}
