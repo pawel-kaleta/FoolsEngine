@@ -18,15 +18,24 @@ namespace fe
 
 	enum AssetType
 	{
-		SceneAsset,
-		PrefabAsset,
 		TextureAsset,
 		Texture2DAsset,
-		MeshAsset,
-		ModelAsset,
+
 		ShaderAsset,
 		MaterialAsset,
 		MaterialInstanceAsset,
+
+		MeshAsset,
+		RenderMeshAsset,
+		ModelAsset,
+
+		SkeletonAsset,
+		SkinnedModelAsset,
+		AnimationAsset,
+		
+		SceneAsset,
+		PrefabAsset,
+		
 		AudioAsset,
 
 		Count,
@@ -50,10 +59,20 @@ namespace fe
 		std::filesystem::path Filepath;
 	};
 
-	struct ACParentAsset final : AssetComponent
+	//struct ACParentAsset final : AssetComponent
+	//{
+	//	AssetID ParentAssetID = NullAssetID;
+	//	AssetType ParentAssetType = AssetType::None;
+	//};
+
+	struct ACChildrenAssets final : AssetComponent
 	{
-		AssetID ParentAssetID = NullAssetID;
-		AssetType ParentAssetType = AssetType::None;
+		struct ChildAsset
+		{
+			AssetID ID;
+			AssetType Type;
+		};
+		std::vector<ChildAsset> ChildrenAssets;
 	};
 
 	struct ACRefsCounters final : AssetComponent
@@ -92,9 +111,9 @@ namespace fe
 		const std::filesystem::path& GetDataFilepath() const { return Get<ACDataFilepath>().Filepath; }
 		const std::filesystem::path& GetMetaFilepath() const { return Get<ACMetaFilepath>().Filepath; }
 
-		      ACParentAsset* TryGetParentAsset()       { return GetIfExist<ACParentAsset>(); }
-		const ACParentAsset* TryGetParentAsset() const { return GetIfExist<ACParentAsset>(); }
-
+		//      ACParentAsset* TryGetParentAsset()       { return GetIfExist<ACParentAsset>(); }
+		//const ACParentAsset* TryGetParentAsset() const { return GetIfExist<ACParentAsset>(); }
+		
 		virtual void PlaceCoreComponents() = 0;
 		virtual void Release() = 0;
 		
