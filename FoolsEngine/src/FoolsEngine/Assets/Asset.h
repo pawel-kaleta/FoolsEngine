@@ -40,12 +40,7 @@ namespace fe
 		UUID UUID;
 	};
 
-	struct ACName final : AssetComponent
-	{
-		std::string Name;
-	};
-
-	struct ACFilepath final : AssetComponent
+	struct ACMetaFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
 	};
@@ -58,7 +53,7 @@ namespace fe
 	struct ACParentAsset final : AssetComponent
 	{
 		AssetID ParentAssetID = NullAssetID;
-		AssetType ParenAssetType = AssetType::None;
+		AssetType ParentAssetType = AssetType::None;
 	};
 
 	struct ACRefsCounters final : AssetComponent
@@ -91,13 +86,11 @@ namespace fe
 		      ACDataLocation& GetDataLocation()       { return Get<ACDataLocation>(); }
 		const ACDataLocation& GetDataLocation() const { return Get<ACDataLocation>(); }
 
-		      ACName* TryGetName()       { return GetIfExist<ACName>(); }
-		const ACName* TryGetName() const { return GetIfExist<ACName>(); }
+		//      std::string GetName()       { return Get<ACDataFilepath>().Filepath.filename().string(); }
+		//const std::string GetName() const { return Get<ACDataFilepath>().Filepath.filename().string(); }
 
-		void SetName(const std::string& name) { GetOrEmplace<ACName>().Name = name; }
-
-		const ACFilepath& GetFilepath() const { return Get<ACFilepath>(); }
-		void SetFilepath(const std::filesystem::path& path);
+		const std::filesystem::path& GetDataFilepath() const { return Get<ACDataFilepath>().Filepath; }
+		const std::filesystem::path& GetMetaFilepath() const { return Get<ACMetaFilepath>().Filepath; }
 
 		      ACParentAsset* TryGetParentAsset()       { return GetIfExist<ACParentAsset>(); }
 		const ACParentAsset* TryGetParentAsset() const { return GetIfExist<ACParentAsset>(); }
@@ -126,6 +119,8 @@ namespace fe
 		Asset(ECS_AssetHandle ECS_handle) :
 			m_ECSHandle(std::move(ECS_handle))
 		{ }
+
+		void SetFilepath(const std::filesystem::path& path);
 
 		template<typename tnAssetComponent, typename... Args>
 		tnAssetComponent& Emplace(Args&&... args)

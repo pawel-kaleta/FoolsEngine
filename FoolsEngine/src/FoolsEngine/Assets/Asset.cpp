@@ -15,7 +15,7 @@ namespace fe
 		FE_CORE_ASSERT(m_ECSHandle, "Invlaid ECS asset handle");
 		
 		const AssetType type = GetType();
-		auto& ac_sourcepath = Get<ACFilepath>();
+		auto& ac_sourcepath = Get<ACDataFilepath>();
 
 		ac_sourcepath.Filepath = path;
 		AssetManager::RemoveByFilepathMapEntry(path, type);
