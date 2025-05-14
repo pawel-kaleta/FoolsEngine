@@ -20,7 +20,7 @@ namespace fe
 			break;
 
 		case GDIType::OpenGL:
-			auto& spec = Get<ACTexture2DSpecification>();
+			auto& spec = Get<ACTexture2DData>();
 			Get<OpenGLTexture2D>().SendDataToGPU(data, spec.Specification);
 			break;
 		}
@@ -45,7 +45,7 @@ namespace fe
 
 	void Texture2D::UnloadFromCPU()
 	{
-		auto& dataPtr = GetDataLocation().Data;
+		auto& dataPtr = Get<ACTexture2DData>().Data;
 		if (dataPtr)
 		{
 			TextureLoader::UnloadTexture(dataPtr);
@@ -84,11 +84,6 @@ namespace fe
 		}
 	}
 
-	void Texture2D::PlaceCoreComponents()
-	{
-		Emplace<ACTexture2DSpecification>().Specification.Init();
-	}
-
 	void Texture2D::Release()
 	{
 		auto gdi = Renderer::GetActiveGDItype();
@@ -106,24 +101,5 @@ namespace fe
 			}
 			break;
 		}
-	}
-
-	void Texture2DBuilder::Create(AssetUser<Texture2D>& textureUser)
-	{
-		FE_CORE_ASSERT(m_Data, "Texture data pointer not set");
-		if (!m_Data) return;
-
-		FE_CORE_ASSERT(m_Specification.Components != TextureData::Components::None, "Unspecified components of a texture");
-		FE_CORE_ASSERT(m_Specification.Format     != TextureData::Format::None,     "Unspecified format of a texture");
-		FE_CORE_ASSERT(m_Specification.Width      != 0,                             "Unspecified width of a texture");
-		FE_CORE_ASSERT(m_Specification.Height     != 0,                             "Unspecified height of a texture");
-
-		if (m_Specification.Components == TextureData::Components::None) return;
-		if (m_Specification.Format     == TextureData::Format::None    ) return;
-		if (m_Specification.Width      == 0                            ) return;
-		if (m_Specification.Height     == 0                            ) return;
-
-		textureUser.GetDataLocation().Data = m_Data;
-		textureUser.GetSpecification().Specification = m_Specification;
 	}
 }

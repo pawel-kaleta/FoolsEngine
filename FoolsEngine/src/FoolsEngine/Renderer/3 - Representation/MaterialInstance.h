@@ -32,7 +32,7 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
 
 		virtual void PlaceCoreComponents() final override {};
 		virtual void Release() final override {};

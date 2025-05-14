@@ -42,7 +42,7 @@ namespace fe
 		None
 	};
 
-	struct AssetComponent {};
+	struct AssetComponent { };
 
 	struct ACUUID final : AssetComponent
 	{
@@ -59,22 +59,6 @@ namespace fe
 		std::filesystem::path Filepath;
 	};
 
-	//struct ACParentAsset final : AssetComponent
-	//{
-	//	AssetID ParentAssetID = NullAssetID;
-	//	AssetType ParentAssetType = AssetType::None;
-	//};
-
-	struct ACChildrenAssets final : AssetComponent
-	{
-		struct ChildAsset
-		{
-			AssetID ID;
-			AssetType Type;
-		};
-		std::vector<ChildAsset> ChildrenAssets;
-	};
-
 	struct ACRefsCounters final : AssetComponent
 	{
 		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
@@ -86,11 +70,6 @@ namespace fe
 		// TO DO: split into 2 components
 	};
 
-	struct ACDataLocation final : AssetComponent
-	{
-		void* Data = nullptr;
-	};
-
 	class Asset
 	{
 	public:
@@ -100,21 +79,12 @@ namespace fe
 		UUID GetUUID() const { return Get<ACUUID>().UUID; }
 
 		virtual AssetType GetType() const = 0;
-		static  AssetType GetTypeStatic() { FE_CORE_ASSERT(false, "Cover this method in derived class!"); return AssetType::None; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::None; }
 
-		      ACDataLocation& GetDataLocation()       { return Get<ACDataLocation>(); }
-		const ACDataLocation& GetDataLocation() const { return Get<ACDataLocation>(); }
-
-		//      std::string GetName()       { return Get<ACDataFilepath>().Filepath.filename().string(); }
-		//const std::string GetName() const { return Get<ACDataFilepath>().Filepath.filename().string(); }
-
-		const std::filesystem::path& GetDataFilepath() const { return Get<ACDataFilepath>().Filepath; }
-		const std::filesystem::path& GetMetaFilepath() const { return Get<ACMetaFilepath>().Filepath; }
-
-		//      ACParentAsset* TryGetParentAsset()       { return GetIfExist<ACParentAsset>(); }
-		//const ACParentAsset* TryGetParentAsset() const { return GetIfExist<ACParentAsset>(); }
+		const ACDataFilepath* GetDataFilepath() const { return GetIfExist<ACDataFilepath>(); }
+		const std::filesystem::path& GetFilepath() const { return Get<ACMetaFilepath>().Filepath; }
 		
-		virtual void PlaceCoreComponents() = 0;
+		virtual void PlaceCoreComponent() = 0; // devirtualise this!
 		virtual void Release() = 0;
 		
 		template<typename... tnAssetComponents>
@@ -134,12 +104,12 @@ namespace fe
 		template <typename tnAsset>
 		friend class AssetHandle;
 		Asset() = default;
-		Asset(AssetType type, AssetID assetID);
+		Asset(AssetType type, AssetID assetID) :
+			m_ECSHandle(ECS_AssetHandle(*AssetManager::GetRegistry(type), assetID))
+		{ }
 		Asset(ECS_AssetHandle ECS_handle) :
 			m_ECSHandle(std::move(ECS_handle))
 		{ }
-
-		void SetFilepath(const std::filesystem::path& path);
 
 		template<typename tnAssetComponent, typename... Args>
 		tnAssetComponent& Emplace(Args&&... args)

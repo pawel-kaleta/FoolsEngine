@@ -80,7 +80,7 @@ namespace fe
 
 		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
 
-		for (auto& uniform : material_observer.GetUniforms())
+		for (const auto& uniform : material_observer.GetUniforms())
 		{
 			if (name == uniform.GetName())
 			{

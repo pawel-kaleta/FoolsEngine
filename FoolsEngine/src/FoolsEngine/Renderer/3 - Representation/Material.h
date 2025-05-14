@@ -8,18 +8,10 @@
 
 namespace fe
 {
-	struct ACShader final : public AssetComponent
+	struct ACMaterialData final : public AssetComponent
 	{
-		AssetID ShaderID;
-	};
-
-	struct ACUniforms final : public AssetComponent
-	{
+		AssetID ShaderID = NullAssetID;
 		std::vector<Uniform> Uniforms;
-	};
-
-	struct ACShaderTextureSlots final : public AssetComponent
-	{
 		std::vector<ShaderTextureSlot> TextureSlots;
 	};
 
@@ -27,21 +19,19 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
 
-		AssetID GetShaderID()               const { return Get<ACShader>().ShaderID; }
-		void    SetShader(AssetID shaderID)       { Get<ACShader>().ShaderID = shaderID; }
+		AssetID GetShaderID()               const { return Get<ACMaterialData>().ShaderID; }
+		void    SetShader(AssetID shaderID)       { Get<ACMaterialData>().ShaderID = shaderID; }
 
-		      std::vector<Uniform>& GetUniforms()       { return Get<ACUniforms>().Uniforms; }
-		const std::vector<Uniform>& GetUniforms() const { return Get<ACUniforms>().Uniforms; }
+		      std::vector<Uniform>& GetUniforms()       { return Get<ACMaterialData>().Uniforms; }
+		const std::vector<Uniform>& GetUniforms() const { return Get<ACMaterialData>().Uniforms; }
 
-		      std::vector<ShaderTextureSlot>& GetTextureSlots()       { return Get<ACShaderTextureSlots>().TextureSlots; }
-		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACShaderTextureSlots>().TextureSlots; }
+		      std::vector<ShaderTextureSlot>& GetTextureSlots()       { return Get<ACMaterialData>().TextureSlots; }
+		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACMaterialData>().TextureSlots; }
 
-		virtual void PlaceCoreComponents() final override;;
-		virtual void Release() final override {};
-		void SendDataToGPU(GDIType GDI, void* data) { };
-		void UnloadFromCPU() {};
+		virtual void PlaceCoreComponents() final override;
+		virtual void Release() final override { };
 
 		void MakeMaterial(
 			AssetID shaderID,

@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h" />
     <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -243,7 +244,6 @@
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Asset.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
@@ -290,6 +290,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />

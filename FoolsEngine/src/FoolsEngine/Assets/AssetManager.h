@@ -23,7 +23,7 @@ namespace fe
 			AssetID assetID = reg.create();
 
 			reg.emplace<ACRefsCounters>(assetID);
-			reg.emplace<ACDataLocation>(assetID);
+			reg.emplace<ACAssetData>(assetID);
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
 
 			data.MapByUUID[uuid] = assetID;
@@ -42,7 +42,7 @@ namespace fe
 			AssetRegistry& reg = data.Registry;
 			AssetID assetID = reg.create();
 
-			reg.emplace<ACDataLocation>(assetID);
+			reg.emplace<ACAssetData>(assetID);
 
 			auto& ac_parent_asset = reg.emplace<ACParentAsset>(assetID);
 			ac_parent_asset.ParenAssetType = parentAssetType;
@@ -55,11 +55,11 @@ namespace fe
 		template <typename tnAsset>
 		static auto GetAll() { return GetAll(tnAsset::GetTypeStatic()); }
 		static auto GetAll(AssetType type) { return GetRegistry(type)->view<AssetID>(); }
-
+		
 		template <typename tnAsset>
 		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath)
 		{
-			return GetAssetFromFilepath(filepath, tnAsset::GetTypeStatic());
+			return GetAssetFromDataFilepath(filepath, tnAsset::GetTypeStatic());
 		}
 		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath, AssetType type);
 		

@@ -45,11 +45,6 @@ namespace fe
 		}
 	}
 
-	void Mesh::PlaceCoreComponents()
-	{
-		Emplace<ACMeshSpecification>().Init();
-	}
-
 	void Mesh::Release()
 	{
 		if (!AllOf<ACGPUBuffers>()) return;

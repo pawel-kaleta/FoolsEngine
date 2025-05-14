@@ -20,7 +20,7 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 
 		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
 		      ACSourceCode* GetSourceCode()       { return GetIfExist<ACSourceCode>(); }
@@ -32,7 +32,7 @@ namespace fe
 		void Bind(GDIType GDI);
 		void Unbind(GDIType GDI);
 
-		virtual void PlaceCoreComponents() final override {};
+		virtual void PlaceCoreComponent() final override { };
 		virtual void Release() final override;
 		void SendDataToGPU(GDIType GDI, void* data) { FE_CORE_ASSERT(false, "Shader loading not implemented yet"); };
 		void UnloadFromCPU();

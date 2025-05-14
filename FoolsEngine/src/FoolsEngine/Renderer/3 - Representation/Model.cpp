@@ -3,23 +3,8 @@
 
 namespace fe
 {
-	void Model::PlaceCoreComponents()
+	void Model::PlaceCoreComponent()
 	{
-		Emplace< ACModelSpecification>().Init();
-	}
-
-	void Model::Release()
-	{
-
-	}
-
-	void Model::SendDataToGPU(GDIType GDI, void* data)
-	{
-
-	}
-
-	void Model::UnloadFromCPU()
-	{
-
+		Emplace<ACModelData>();
 	}
 }

@@ -58,12 +58,6 @@ namespace fe
 
     void Shader::UnloadFromCPU()
     {
-        auto& dataPtr = GetDataLocation().Data;
-        if (dataPtr)
-        {
-            free(dataPtr);
-            dataPtr = nullptr;
-        }
         auto& sourceCode = Get<ACSourceCode>();
         sourceCode.ShaderSource.clear();
         sourceCode.VertexSource.clear();

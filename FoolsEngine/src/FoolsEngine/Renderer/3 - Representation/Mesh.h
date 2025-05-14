@@ -54,17 +54,30 @@ namespace fe
 		static size_t DataSize(uint32_t indexCount, uint32_t vertexCount) { return (indexCount * sizeof(uint32_t)) + (vertexCount * sizeof(Vertex)); }
 	};
 
-	struct ACMeshSpecification final : public AssetComponent
+	struct ACMeshData final : public AssetComponent
 	{
 		uint32_t VertexCount;
 		uint32_t IndicesCount;
-		uint32_t Submeshes;
+		void* Data;
 
 		void Init()
 		{
 			VertexCount = 0;
 			IndicesCount = 0;
-			Submeshes = 0;
+			Data = nullptr;
+		}
+	};
+
+	struct MeshSpecification
+	{
+		uint32_t VertexCount;
+		uint32_t IndicesCount;
+		//VertexData::Layout VertexLayout; 
+
+		void Init()
+		{
+			VertexCount = 0;
+			IndicesCount = 0;
 		}
 	};
 
@@ -85,9 +98,9 @@ namespace fe
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
 
-		virtual void PlaceCoreComponents() final override;
+		virtual void PlaceCoreComponent() final override { Emplace<ACMeshData>().Init(); };
 		virtual void Release() final override;
 		void SendDataToGPU(GDIType GDI, void* data);
 		void UnloadFromCPU();

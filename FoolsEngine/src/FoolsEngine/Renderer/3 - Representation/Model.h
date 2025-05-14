@@ -3,6 +3,7 @@
 #include "FoolsEngine\Assets\AssetHandle.h"
 
 #include "Mesh.h"
+#include "RenderMesh.h"
 
 namespace fe
 {
@@ -12,54 +13,22 @@ namespace fe
 		Humanoid
 	};
 
-	struct ACModelSpecification : public AssetComponent
+	struct ACModelData final : public AssetComponent
 	{
-		uint32_t RenderMeshCount;
-
-		void Init()
-		{
-			RenderMeshCount = 0;
-		}
+		std::vector<AssetID> RenderMeshes;
 	};
 
-	//struct ACModelLoadingSettings : public AssetComponent
-	//{
-	//	int dummy;
-	//};
-
-	struct RenderMesh
-	{
-		AssetID MeshID;
-		AssetID MaterialInstanceID;
-
-		void Init()
-		{
-			MeshID = NullAssetID;
-			MaterialInstanceID = NullAssetID;
-		}
-	};
-
-	struct ACRenderMeshes : public AssetComponent
-	{
-		std::vector<RenderMesh> BaseRenderMeshes;
-	};
-
-	class Model : public Asset
+	class Model final : public Asset
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static AssetType GetTypeStatic() { return AssetType::ModelAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
 
-		virtual void PlaceCoreComponents() final override;
-		virtual void Release() final override;
-		void SendDataToGPU(GDIType GDI, void* data);
-		void UnloadFromCPU();
+		virtual void PlaceCoreComponent() final override;
+		virtual void Release() final override { };
 
-		const ACModelSpecification& GetSpecification() const { return Get<ACModelSpecification>(); }
-		      ACModelSpecification& GetSpecification()       { return Get<ACModelSpecification>(); }
-
-		//const ACModelLoadingSettings* GetImportSettings() const { return GetIfExist<ACModelLoadingSettings>(); }
-		//ACModelLoadingSettings& GetOrEmplaceImportSettings() { return GetOrEmplace<ACModelLoadingSettings>(); }
+		const std::vector<AssetID>& GetRenderMeshes() const { return Get<ACModelData>().RenderMeshes; }
+		      std::vector<AssetID>& GetRenderMeshes()       { return Get<ACModelData>().RenderMeshes; }
 		
 	protected:
 		Model(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}

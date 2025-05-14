@@ -332,12 +332,12 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Memory\Scratchpad.h" />
     <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Asset.cpp">
-      <Filter>FoolsEngine\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
@@ -533,5 +533,6 @@
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\ComponentRegistry.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
   </ItemGroup>
 </Project>

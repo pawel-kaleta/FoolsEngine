@@ -46,7 +46,7 @@ namespace fe
 
 			reg->emplace<ACUUID>(assetID);
 			reg->emplace<ACRefsCounters>(assetID);
-			reg->emplace<ACDataLocation>(assetID);
+			reg->emplace<ACAssetData>(assetID);
 			//reg->emplace<ACProxyFilepath>(assetID);
 
 			AssetUser<tnAsset>(ECS_handle(*reg, assetID)).PlaceCoreComponents();
