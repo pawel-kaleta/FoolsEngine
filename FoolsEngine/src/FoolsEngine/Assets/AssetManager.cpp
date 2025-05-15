@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "AssetManager.h"
 
+#include "AssetHandle.h"
+
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
@@ -12,20 +14,20 @@ namespace fe
 {
 	AssetManager* AssetManager::s_Instance;
 
-	AssetID AssetManager::GetAssetFromFilepath(const std::filesystem::path& filepath, AssetType type)
+	AssetID AssetManager::GetAssetFromFilepath(const std::filesystem::path& filepath)
 	{
-		auto& map = s_Instance->m_Data[type].MapByFilepath;
+		auto& map = s_Instance->m_MapByFilepath;
 		auto search_result = map.find(filepath);
 		if (search_result != map.end())
 			return search_result->second;
 		return NullAssetID;
 	}
 
-	AssetID AssetManager::GetAssetWithUUID(UUID uuid, AssetType type)
+	AssetID AssetManager::GetAssetWithUUID(UUID uuid)
 	{
 		FE_PROFILER_FUNC();
 	
-		auto& assetMap = s_Instance->m_Data[type].MapByUUID;
+		auto& assetMap = s_Instance->m_MapByUUID;
 		auto asset = assetMap.find(uuid);
 	
 		if (asset == assetMap.end())
@@ -39,17 +41,19 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto GDI = Renderer::GetActiveGDItype();
+		auto& reg = s_Instance->m_Registry;
 
+		for (auto id : GetAll())
 		{
-			FE_PROFILER_SCOPE("Texture2D");
-			// TO DO: doesnt need to be a view, make a group acctually
-			auto texturesView = s_Instance->m_Data[AssetType::Texture2DAsset].Registry.view<ACRefsCounters, ACFilepath>();
-			for (auto id : texturesView)
-			{
-				auto [acref, acfp] = texturesView.get(id);
+			auto& ref_counters = reg.get<ACRefsCounters>(id);
+			auto type = reg.get<ACAssetType>(id).Type;
 
+			switch (type)
+			{
+			case AssetType::Texture2DAsset:
+			{
 				auto textureUser = AssetHandle<Texture2D>(id).Use();
-				if (acref.LiveHandles == 0)
+				if (ref_counters.LiveHandles == 0)
 				{
 					textureUser.Release();
 				}
@@ -62,19 +66,12 @@ namespace fe
 						textureUser.UnloadFromCPU();
 					}
 				}
+				break;
 			}
-		}
-
-		{
-			FE_PROFILER_SCOPE("Shaders");
-			// TO DO: doesnt need to be a view, make a group acctually
-			auto shadersView = s_Instance->m_Data[AssetType::ShaderAsset].Registry.view<ACRefsCounters, ACFilepath>();
-			for (auto id : shadersView)
+			case AssetType::ShaderAsset:
 			{
-				auto [acref, acfp] = shadersView.get(id);
-
 				auto shaderUser = AssetHandle<Shader>(id).Use();
-				if (acref.LiveHandles == 0)
+				if (ref_counters.LiveHandles == 0)
 				{
 					shaderUser.Release();
 				}
@@ -86,20 +83,12 @@ namespace fe
 						ShaderLoader::CompileShader(GDI, shaderUser);
 					}
 				}
-				//shaderUser.UnloadFromCPU();
+				break;
 			}
-		}
-
-		{
-			FE_PROFILER_SCOPE("Meshes");
-			// TO DO: doesnt need to be a view, make a group acctually
-			auto meshesView = s_Instance->m_Data[AssetType::MeshAsset].Registry.view<ACRefsCounters, ACFilepath>();
-			for (auto id : meshesView)
+			case AssetType::MeshAsset:
 			{
-				auto [acref, acfp] = meshesView.get(id);
-
 				auto meshUser = AssetHandle<Mesh>(id).Use();
-				if (acref.LiveHandles == 0)
+				if (ref_counters.LiveHandles == 0)
 				{
 					meshUser.Release();
 				}
@@ -108,10 +97,11 @@ namespace fe
 					if (!meshUser.GetBuffers())
 					{
 						GeometryLoader::LoadMesh(meshUser);
-						meshUser.SendDataToGPU(GDI, meshUser.GetDataLocation().Data);
+						meshUser.SendDataToGPU(GDI);
 						meshUser.UnloadFromCPU();
 					}
 				}
+			}
 			}
 		}
 	}

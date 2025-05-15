@@ -12,6 +12,13 @@
 
 namespace fe
 {
+    void ACSourceCode::Init()
+    {
+        VertexSource.clear();
+        FragmentSource.clear();
+        ShaderSource.clear();
+    }
+
     void Shader::Bind(GDIType GDI)
     {
         switch (GDI)
@@ -120,4 +127,6 @@ namespace fe
             return;
         }
     }
+
+
 }

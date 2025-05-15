@@ -22,7 +22,7 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
 
-		virtual void PlaceCoreComponents() final override { Emplace<ACRenderMeshData>().Init(); };
+		virtual void PlaceCoreComponent() final override { Emplace<ACRenderMeshData>().Init(); };
 		virtual void Release() final override { };
 
 		const ACRenderMeshData& GetData() const { return Get<ACRenderMeshData>(); }

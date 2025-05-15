@@ -10,7 +10,7 @@ namespace fe
 	class AssetManager
 	{
 	public:
-		static AssetRegistry* GetRegistry(AssetType type) { return &(s_Instance->m_Data[type].Registry); }
+		static AssetRegistry& GetRegistry() { return s_Instance->m_Registry; }
 
 		template <typename tnAsset>
 		static AssetID CreateAsset(const std::filesystem::path& path)
@@ -52,23 +52,10 @@ namespace fe
 			return assetID;
 		}
 
-		template <typename tnAsset>
-		static auto GetAll() { return GetAll(tnAsset::GetTypeStatic()); }
-		static auto GetAll(AssetType type) { return GetRegistry(type)->view<AssetID>(); }
+		static auto GetAll() { return GetRegistry().view<AssetID>(); }
 		
-		template <typename tnAsset>
-		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath)
-		{
-			return GetAssetFromDataFilepath(filepath, tnAsset::GetTypeStatic());
-		}
-		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath, AssetType type);
-		
-		template <typename tnAsset>
-		static AssetID GetAssetWithUUID(UUID uuid)
-		{
-			return GetAssetWithUUID(uuid, tnAsset::GetTypeStatic());
-		}
-		static AssetID GetAssetWithUUID(UUID uuid, AssetType type);
+		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath);
+		static AssetID GetAssetWithUUID(UUID uuid);
 
 		static void EvaluateAndReload();
 	private:
@@ -77,21 +64,23 @@ namespace fe
 		void Shutdown() { };
 
 		static AssetManager* s_Instance;
-		struct Data
-		{
-			AssetRegistry Registry;
-			std::unordered_map<std::filesystem::path, AssetID> MapByFilepath;
-			std::unordered_map<UUID, AssetID> MapByUUID;
-		} m_Data[AssetType::Count];
 
-		friend class Asset;
-		static void AddByFilepathMapEntry(const std::filesystem::path& path, AssetID ID, AssetType type)
+		AssetRegistry m_Registry;
+		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
+		std::unordered_map<UUID, AssetID> m_MapByUUID;
+
+
+		static void AddByFilepathMapEntry(const std::filesystem::path& path, AssetID ID)
 		{
-			s_Instance->m_Data[type].MapByFilepath[path] = ID;
+			s_Instance->m_MapByFilepath[path] = ID;
 		}
 		static void RemoveByFilepathMapEntry(const std::filesystem::path& path, AssetType type)
 		{
-			s_Instance->m_Data[type].MapByFilepath.erase(path);
+			s_Instance->m_MapByFilepath.erase(path);
 		}
 	};
+
+	Asset::Asset(AssetType type, AssetID assetID) :
+		m_ECSHandle(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+	{ }
 }

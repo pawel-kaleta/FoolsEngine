@@ -11,7 +11,16 @@
 
 namespace fe
 {
-	void Mesh::SendDataToGPU(GDIType GDI, void* data)
+	void ACMeshData::Init()
+	{
+		Specification.Init();
+		if (Data) GeometryLoader::UnloadMesh(Data);
+		Data = nullptr;
+	}
+
+	ACMeshData::~ACMeshData() { if (Data) GeometryLoader::UnloadMesh(Data); }
+
+	void Mesh::SendDataToGPU(GDIType GDI)
 	{
 		if (AllOf<ACGPUBuffers>())
 		{
@@ -19,17 +28,16 @@ namespace fe
 			return;
 		}
 
-		FE_CORE_ASSERT(data, "Missing mesh data");
-
-		MeshData& meshData = *(MeshData*)GetDataLocation().Data;
-		auto& spec = GetSpecification();
-
+		auto& ACData = Get<ACMeshData>();
+		auto& spec = ACData.Specification;
 		auto& buffersComp = Emplace<ACGPUBuffers>();
 
-		buffersComp.VertexBuffer = VertexBuffer::Create(meshData.GetVertexArrayPtr(spec.IndicesCount), (spec.VertexCount * sizeof(Vertex)));
+		FE_CORE_ASSERT(ACData.Data, "Missing mesh data");
+
+		buffersComp.VertexBuffer = VertexBuffer::Create(ACData.GetVertexArrayPtr(), (spec.VertexCount * sizeof(Vertex)));
 		buffersComp.VertexBuffer->SetLayout(Vertex::GetLayout());
 
-		buffersComp.IndexBuffer = IndexBuffer::Create(meshData.GetIndexArrayPtr(), spec.IndicesCount);
+		buffersComp.IndexBuffer = IndexBuffer::Create(ACData.GetIndexArrayPtr(), spec.IndexCount);
 		buffersComp.IndexBuffer->Bind();
 
 		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
@@ -37,7 +45,7 @@ namespace fe
 
 	void Mesh::UnloadFromCPU()
 	{
-		auto& data = GetDataLocation().Data;
+		auto& data = Get<ACMeshData>().Data;
 		if (data)
 		{
 			GeometryLoader::UnloadMesh(data);
@@ -103,4 +111,6 @@ namespace fe
 		//gpuBuffers.IndexBuffer->Bind();
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
 	}
+
+
 }

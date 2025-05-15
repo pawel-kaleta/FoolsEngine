@@ -20,6 +20,8 @@ namespace fe
 		AssetObserver(ECS_AssetHandle ECS_handle) :
 			tnAsset(ECS_handle)
 		{
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
@@ -52,6 +54,8 @@ namespace fe
 		AssetUser(ECS_AssetHandle ECS_handle) :
 			tnAsset(ECS_handle)
 		{
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
@@ -75,7 +79,7 @@ namespace fe
 		LoadingPriority_Low = 1,
 		LoadingPriority_Standard = 10,
 		LoadingPriority_High = 100,
-		LoadingPriority_Critical = -1
+		LoadingPriority_Critical = (uint32_t)-1
 	};
 
 	class AssetHandleBase
@@ -160,7 +164,7 @@ namespace fe
 		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
-		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(*AssetManager::GetRegistry(GetTypeStatic()), m_ID); };
+		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::GetRegistry(), m_ID); };
 		
 	};
 }

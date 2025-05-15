@@ -42,43 +42,30 @@ namespace fe
 		}
 	};
 
-	// interface to raw memory containing arrays of indices and vertices
-	// use by casting
-	// allocated as float[ DataSize()/sizeof(float) ]
-	struct MeshData
-	{
-		MeshData() = delete;
-		~MeshData() = delete;
-		uint32_t* GetIndexArrayPtr() { return (uint32_t*)this; }
-		float* GetVertexArrayPtr(uint32_t indexCount) { return (float*)((uint32_t*)this + indexCount); }
-		static size_t DataSize(uint32_t indexCount, uint32_t vertexCount) { return (indexCount * sizeof(uint32_t)) + (vertexCount * sizeof(Vertex)); }
-	};
-
-	struct ACMeshData final : public AssetComponent
-	{
-		uint32_t VertexCount;
-		uint32_t IndicesCount;
-		void* Data;
-
-		void Init()
-		{
-			VertexCount = 0;
-			IndicesCount = 0;
-			Data = nullptr;
-		}
-	};
-
 	struct MeshSpecification
 	{
 		uint32_t VertexCount;
-		uint32_t IndicesCount;
+		uint32_t IndexCount;
 		//VertexData::Layout VertexLayout; 
 
 		void Init()
 		{
 			VertexCount = 0;
-			IndicesCount = 0;
+			IndexCount = 0;
 		}
+	};
+
+	struct ACMeshData final : public AssetComponent
+	{
+		MeshSpecification Specification;
+		void* Data; // allocated as float[ DataSize()/sizeof(float) ]
+
+		void Init();
+		~ACMeshData();
+
+		uint32_t* GetIndexArrayPtr() { return (uint32_t*)Data; }
+		float* GetVertexArrayPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
+		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Vertex)); }
 	};
 
 	//struct ACMeshLoadingSettings final : public AssetComponent
@@ -102,14 +89,14 @@ namespace fe
 
 		virtual void PlaceCoreComponent() final override { Emplace<ACMeshData>().Init(); };
 		virtual void Release() final override;
-		void SendDataToGPU(GDIType GDI, void* data);
+		void SendDataToGPU(GDIType GDI);
 		void UnloadFromCPU();
 
-		//const ACGPUBuffers* GetBuffers() { return GetIfExist<ACGPUBuffers>(); }
+		//ACGPUBuffers* GetBuffers() { return GetIfExist<ACGPUBuffers>(); }
 		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
 
-		const ACMeshSpecification& GetSpecification() const { return Get<ACMeshSpecification>(); }
-		      ACMeshSpecification& GetSpecification() { return Get<ACMeshSpecification>(); }
+		const MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
+		      MeshSpecification& GetSpecification()       { return Get<ACMeshData>().Specification; }
 
 		//const ACMeshLoadingSettings* GetImportSettings() { return GetIfExist<ACMeshLoadingSettings>(); }
 		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() { return GetOrEmplace<ACMeshLoadingSettings>(); }

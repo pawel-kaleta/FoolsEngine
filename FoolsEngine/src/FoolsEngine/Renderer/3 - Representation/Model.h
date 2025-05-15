@@ -18,7 +18,7 @@ namespace fe
 		std::vector<AssetID> RenderMeshes;
 	};
 
-	class Model final : public Asset
+	class Model : public Asset
 	{
 	public:
 		virtual AssetType GetType() const override { return GetTypeStatic(); }

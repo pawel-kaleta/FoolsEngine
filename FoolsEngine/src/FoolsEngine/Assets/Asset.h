@@ -49,12 +49,12 @@ namespace fe
 		UUID UUID;
 	};
 
-	struct ACMetaFilepath final : AssetComponent
+	struct ACFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
 	};
 
-	struct ACDataFilepath final : AssetComponent
+	struct ACSourceFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
 	};
@@ -70,6 +70,11 @@ namespace fe
 		// TO DO: split into 2 components
 	};
 
+	struct ACAssetType final : AssetComponent
+	{
+		AssetType Type = AssetType::None;
+	};
+
 	class Asset
 	{
 	public:
@@ -81,8 +86,8 @@ namespace fe
 		virtual AssetType GetType() const = 0;
 		static constexpr AssetType GetTypeStatic() { return AssetType::None; }
 
-		const ACDataFilepath* GetDataFilepath() const { return GetIfExist<ACDataFilepath>(); }
-		const std::filesystem::path& GetFilepath() const { return Get<ACMetaFilepath>().Filepath; }
+		const ACSourceFilepath* GetDataFilepath() const { return GetIfExist<ACSourceFilepath>(); }
+		const std::filesystem::path& GetFilepath() const { return Get<ACFilepath>().Filepath; }
 		
 		virtual void PlaceCoreComponent() = 0; // devirtualise this!
 		virtual void Release() = 0;
@@ -104,9 +109,10 @@ namespace fe
 		template <typename tnAsset>
 		friend class AssetHandle;
 		Asset() = default;
-		Asset(AssetType type, AssetID assetID) :
-			m_ECSHandle(ECS_AssetHandle(*AssetManager::GetRegistry(type), assetID))
-		{ }
+		Asset(AssetType type, AssetID assetID);
+		//:
+		//	m_ECSHandle(ECS_AssetHandle(*AssetManager::GetRegistry(type), assetID))
+		//{ }
 		Asset(ECS_AssetHandle ECS_handle) :
 			m_ECSHandle(std::move(ECS_handle))
 		{ }

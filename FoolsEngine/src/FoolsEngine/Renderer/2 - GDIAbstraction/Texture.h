@@ -46,9 +46,8 @@ namespace fe
 
 		void CreateGDITexture2D(GDIType gdi)
 		{
-			auto& spec = GetSpecification().Specification;
-			void* data = GetDataLocation().Data;
-			CreateGDITexture2D(gdi, spec, data);
+			auto& data = Get<ACTexture2DData>();
+			CreateGDITexture2D(gdi, data.Specification, data.Data);
 		}
 
 		void CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data);

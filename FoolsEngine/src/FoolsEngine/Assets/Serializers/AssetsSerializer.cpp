@@ -33,8 +33,8 @@ namespace fe
 			AssetType type = (AssetType)i;
 			emitter << YAML::Key << AssetTypeName(type);
 
-			auto reg = AssetManager::GetRegistry(type);
-			auto view = reg->view<ACUUID, ACFilepath>();
+			auto& reg = AssetManager::GetRegistry();
+			auto view = reg.view<ACUUID, ACFilepath>();
 			
 			emitter << YAML::Value << YAML::BeginSeq;
 			for (auto id : view)
@@ -73,7 +73,7 @@ namespace fe
 
 				AssetID id;// = AssetManager::CreateAsset(filepath, type);
 
-				FE_CORE_ASSERT(AssetManager::GetRegistry(type)->get<ACUUID>(id).UUID == uuid, "Asset import failed");
+				FE_CORE_ASSERT(AssetManager::GetRegistry().get<ACUUID>(id).UUID == uuid, "Asset import failed");
 			}
 		}
 

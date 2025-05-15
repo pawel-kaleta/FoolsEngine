@@ -10,10 +10,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Get<ACMaterial>().MaterialID = materialObserver.GetID();
-		auto& acUniformsData = Get<ACUniformsData>();
-		auto& data = acUniformsData.UniformsData;
-		auto& size = acUniformsData.UniformsDataSize;
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		mi_data.MaterialID = materialObserver.GetID();
+
+		auto& data = mi_data.UniformsData;
+		auto& size = mi_data.UniformsDataSize;
 
 		size = 0;
 		for (auto& uniform : materialObserver.GetUniforms())
@@ -29,27 +31,16 @@ namespace fe
 			this->SetUniformValue(uniform, nullptr);
 		}
 
-		auto& textures = Get<ACTextures>().Textures;
+		auto& textures = mi_data.Textures;
 		textures.clear();
 		textures.resize(materialObserver.GetTextureSlots().size());
-	}
-
-	void MaterialInstance::MakeMaterialInstance(AssetUser<MaterialInstance>& miUser)
-	{
-		// TO DO: create a file
-
-		miUser.Emplace<ACMaterial>();
-		miUser.Emplace<ACUniformsData>();
-		miUser.Emplace<ACTextures>();
-
-		return;
 	}
 
 	void* MaterialInstance::GetUniformValuePtr_Internal(const Uniform& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(Get<ACUniformsData>().UniformsData);
+		uint8_t* uniformDataPointer = (uint8_t*)(Get<ACMaterialInstanceData>().UniformsData);
 		bool uniformFound = false;
 
 		for (auto& uniform : GetMaterial().Observe().GetUniforms())
@@ -75,10 +66,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(Get<ACUniformsData>().UniformsData);
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		uint8_t* uniformDataPointer = (uint8_t*)(mi_data.UniformsData);
 		bool uniformFound = false;
 
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 
 		for (const auto& uniform : material_observer.GetUniforms())
 		{
@@ -101,11 +94,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* dest = (uint8_t*)(Get<ACUniformsData>().UniformsData);
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		uint8_t* dest = (uint8_t*)(mi_data.UniformsData);
 		size_t uniformSize = 0;
 		bool uniformFound = false;
 
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 
 		for (auto& uniform : material_observer.GetUniforms())
 		{
@@ -176,11 +171,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* dest = (uint8_t*)(Get<ACUniformsData>().UniformsData);
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		uint8_t* dest = (uint8_t*)(mi_data.UniformsData);
 		size_t uniformSize = 0;
 		bool uniformFound = false;
 
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID, LoadingPriority_None).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID, LoadingPriority_None).Observe();
 
 		for (auto& uniform : material_observer.GetUniforms())
 		{
@@ -204,10 +201,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& textures = Get<ACTextures>().Textures;
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		auto& textures = mi_data.Textures;
 
 		auto texturesIt = textures.begin();
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
 		{
@@ -225,10 +224,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& textures = Get<ACTextures>().Textures;
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		auto& textures = mi_data.Textures;
 
 		auto texturesIt = textures.begin();
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
 		{
@@ -246,10 +247,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& textures = Get<ACTextures>().Textures;
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		auto& textures = mi_data.Textures;
 
 		auto texturesIt = textures.begin();
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
 		{
@@ -267,10 +270,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& textures = Get<ACTextures>().Textures;
+		auto& mi_data = Get<ACMaterialInstanceData>();
+
+		auto& textures = mi_data.Textures;
 
 		auto texturesIt = textures.begin();
-		auto material_observer = AssetHandle<Material>(Get<ACMaterial>().MaterialID).Observe();
+		auto material_observer = AssetHandle<Material>(mi_data.MaterialID).Observe();
 		auto slotsIt = material_observer.GetTextureSlots().begin();
 		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
 		{
@@ -283,4 +288,5 @@ namespace fe
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
+	
 }

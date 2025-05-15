@@ -14,6 +14,8 @@ namespace fe
 		std::string VertexSource;
 		std::string FragmentSource;
 		std::string ShaderSource;
+
+		void Init();
 	};
 
 	class Shader : public Asset

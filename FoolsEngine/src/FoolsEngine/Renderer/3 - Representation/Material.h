@@ -10,9 +10,11 @@ namespace fe
 {
 	struct ACMaterialData final : public AssetComponent
 	{
-		AssetID ShaderID = NullAssetID;
+		AssetID ShaderID;
 		std::vector<Uniform> Uniforms;
 		std::vector<ShaderTextureSlot> TextureSlots;
+
+		void Init();
 	};
 
 	class Material : public Asset
@@ -30,7 +32,7 @@ namespace fe
 		      std::vector<ShaderTextureSlot>& GetTextureSlots()       { return Get<ACMaterialData>().TextureSlots; }
 		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACMaterialData>().TextureSlots; }
 
-		virtual void PlaceCoreComponents() final override;
+		virtual void PlaceCoreComponent() final override { Emplace<ACMaterialData>().Init(); }
 		virtual void Release() final override { };
 
 		void MakeMaterial(

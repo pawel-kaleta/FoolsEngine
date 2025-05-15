@@ -1,50 +1,24 @@
-20:29:36:531066 | FE  | info     | Logging innitialized!
-20:29:36:531646 | App | info     | Logging innitialized!
-20:29:36:531794 | FE  | info     | /////////////////////////////////////////////////////
-20:29:36:531906 | FE  | info     | ////////////////////// STARTUP //////////////////////
-20:29:36:532023 | FE  | info     | /////////////////////////////////////////////////////
-20:29:36:532178 | App | info     | Logging level set to 0 - all.
-20:29:36:532290 | FE  | info     | Logging level set to 0 - all.
-20:29:36:532708 | FE  | info     | Profiler session 'Startup' started.
-20:29:36:533327 | FE  | info     | Initializing GLFW
-20:29:36:562031 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
-20:29:36:724583 | FE  | debug    | Setting events callbacks for window.
-20:29:36:724751 | FE  | info     | Events callbacks for Win10Window setted up.
-20:29:36:725049 | FE  | info     | Creating rendering context
-20:29:36:728317 | FE  | info     | Rendering platform info:
-20:29:36:728448 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-20:29:36:728571 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-20:29:36:728682 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.10.1.241007
-20:29:36:728817 | FE  | info     | OpenGL Rendering Context created.
-20:29:36:729010 | FE  | info     | VSync disabled.
-20:29:36:729789 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-20:29:36:730626 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-20:29:36:732055 | FE  | debug    | Loading texture, AssetID: 0, Channels: 3
-20:29:36:736216 | FE  | debug    | OpenGLDeviceAPI creation!
-20:29:36:736763 | FE  | info     | OpenGLDeviceAPI Initialization.
-20:29:36:737154 | FE  | debug    | Uploding texture to GPU, RendererID: 1
-20:29:36:737332 | FE  | debug    | Uploding texture to GPU, RendererID: 2
-20:29:36:808406 | FE  | debug    | 3
-20:29:36:811601 | FE  | debug    | 4
-20:29:36:816567 | FE  | debug    | Loading texture, AssetID: 0, Channels: 4
-20:29:36:816881 | FE  | debug    | Loading texture, AssetID: 1, Channels: 4
-20:29:36:817170 | FE  | debug    | Loading texture, AssetID: 2, Channels: 4
-20:29:36:817839 | FE  | debug    | Uploding texture to GPU, RendererID: 3
-20:29:36:818899 | FE  | debug    | Uploding texture to GPU, RendererID: 4
-20:29:36:819502 | FE  | debug    | Uploding texture to GPU, RendererID: 5
-20:29:36:821138 | FE  | debug    | Loading texture, AssetID: 3, Channels: 4
-20:29:36:821605 | FE  | debug    | Loading texture, AssetID: 4, Channels: 4
-20:29:36:821787 | FE  | debug    | Uploding texture to GPU, RendererID: 6
-20:29:36:823719 | FE  | debug    | Uploding texture to GPU, RendererID: 7
-20:29:36:824695 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-20:29:36:824906 | App | info     | EditorLayer::OnAttach()
-20:29:36:826377 | FE  | info     | Scene initialization
-20:29:36:836445 | FE  | info     | World Creation
-20:29:36:839263 | FE  | info     | Profiler session 'Startup' closed.
-20:29:36:839398 | FE  | info     | /////////////////////////////////////////////////////
-20:29:36:839748 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-20:29:36:840102 | FE  | info     | /////////////////////////////////////////////////////
-20:29:36:840533 | App | info     | Logging level set to 1 - debug or higher.
-20:29:36:840883 | FE  | info     | Logging level set to 1 - debug or higher.
-20:29:36:841435 | FE  | info     | Profiler session 'Runtime' started.
-20:29:44:311846 | FE  | info     | Profiler session 'Runtime' closed.
+05:53:21:373242 | FE  | info     | Logging innitialized!
+05:53:21:374002 | App | info     | Logging innitialized!
+05:53:21:374100 | FE  | info     | /////////////////////////////////////////////////////
+05:53:21:374181 | FE  | info     | ////////////////////// STARTUP //////////////////////
+05:53:21:374254 | FE  | info     | /////////////////////////////////////////////////////
+05:53:21:374328 | App | info     | Logging level set to 0 - all.
+05:53:21:374407 | FE  | info     | Logging level set to 0 - all.
+05:53:21:374699 | FE  | info     | Profiler session 'Startup' started.
+05:53:21:376189 | FE  | info     | Initializing GLFW
+05:53:21:406792 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
+05:53:21:622762 | FE  | debug    | Setting events callbacks for window.
+05:53:21:622912 | FE  | info     | Events callbacks for Win10Window setted up.
+05:53:21:623170 | FE  | info     | Creating rendering context
+05:53:21:626822 | FE  | info     | Rendering platform info:
+05:53:21:626925 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+05:53:21:627020 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+05:53:21:627112 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+05:53:21:627221 | FE  | info     | OpenGL Rendering Context created.
+05:53:21:627381 | FE  | info     | VSync disabled.
+05:53:21:628556 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+05:53:21:629646 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+05:53:21:631227 | FE  | debug    | Loading texture, AssetID: 0, Channels: -858993460
+05:53:21:631336 | FE  | error    | CORE ASSERTION FAILED: in file TextureLoader.cpp in function void fe::TextureLoader::LoadTexture(const class std::filesystem::path &,class fe::AssetUser<class fe::Texture2D> &) at line 27.
+05:53:21:631431 | FE  | error    | Assertion Message: Failed to load image!

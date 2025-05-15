@@ -6,26 +6,24 @@
 
 namespace fe
 {
-	struct ACMaterial final : public AssetComponent
+	struct ACMaterialInstanceData
 	{
 		AssetID MaterialID;
-	};
-
-	struct ACUniformsData final : public AssetComponent
-	{
-		void* UniformsData = nullptr;
-		size_t UniformsDataSize = 0;
-
-		~ACUniformsData()
-		{
-			FE_PROFILER_FUNC();
-			operator delete(UniformsData);
-		}
-	};
-
-	struct ACTextures final : public AssetComponent
-	{
 		std::vector<AssetID> Textures;
+
+		void* UniformsData;
+		size_t UniformsDataSize;
+
+		void Init()
+		{
+			MaterialID = NullAssetID;
+			Textures.clear();
+			if (UniformsData) operator delete(UniformsData);
+			UniformsData = nullptr;
+			UniformsDataSize = 0;
+		}
+
+		~ACMaterialInstanceData() { if (UniformsData) operator delete(UniformsData); }
 	};
 
 	class MaterialInstance : public Asset
@@ -34,7 +32,7 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialInstanceAsset; }
 
-		virtual void PlaceCoreComponents() final override {};
+		virtual void PlaceCoreComponent() final override { Emplace<ACMaterialData>().Init(); };
 		virtual void Release() final override {};
 		void SendDataToGPU(GDIType GDI, void* data) { };
 		void UnloadFromCPU() {};
@@ -55,21 +53,16 @@ namespace fe
 		void SetTexture(const ShaderTextureSlot& textureSlot, AssetID textureID);
 		void SetTexture(const std::string& textureSlotName, AssetID textureID);
 
-		const std::vector<AssetID>& GetTextures() const { return Get<ACTextures>().Textures; }
-		      std::vector<AssetID>& GetTextures()       { return Get<ACTextures>().Textures; }
+		const std::vector<AssetID>& GetTextures() const { return Get<ACMaterialInstanceData>().Textures; }
+		      std::vector<AssetID>& GetTextures()       { return Get<ACMaterialInstanceData>().Textures; }
 		
-		AssetHandle<Material> GetMaterial() const { return AssetHandle<Material>(Get<ACMaterial>().MaterialID); }
+		AssetHandle<Material> GetMaterial() const { return AssetHandle<Material>(Get<ACMaterialInstanceData>().MaterialID); }
 
-		static void MakeMaterialInstance(AssetUser<MaterialInstance>& miUser);
 
 	protected:
 		friend class AssetObserver<MaterialInstance>;
 		friend class AssetUser<MaterialInstance>;
 		MaterialInstance(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
-
-
-		friend class AssetManager;
-		void Init() {};
 
 	private:
 

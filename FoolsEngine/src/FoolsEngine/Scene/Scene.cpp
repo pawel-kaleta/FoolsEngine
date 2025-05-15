@@ -55,7 +55,7 @@ namespace fe
 		gameplay_world->GetHierarchy().MakeGlobalTransformsCurrent();
 	}
 
-	void Scene::PlaceCoreComponents()
+	void Scene::PlaceCoreComponent()
 	{
 		Emplace<ACWorlds>();
 	}

@@ -28,7 +28,7 @@ namespace fe
 		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 
-		virtual void PlaceCoreComponents() override final;
+		virtual void PlaceCoreComponent() override final;
 		virtual void Release() override final;
 		void Initialize();
 
