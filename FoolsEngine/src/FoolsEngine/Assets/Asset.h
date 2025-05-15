@@ -49,6 +49,11 @@ namespace fe
 		UUID UUID;
 	};
 
+	struct ACParentAsset final : AssetComponent
+	{
+		AssetID Parent;
+	};
+
 	struct ACFilepath final : AssetComponent
 	{
 		std::filesystem::path Filepath;
@@ -85,11 +90,12 @@ namespace fe
 
 		virtual AssetType GetType() const = 0;
 		static constexpr AssetType GetTypeStatic() { return AssetType::None; }
+		static constexpr char* GetFileExtension() { return ""; }
 
 		const ACSourceFilepath* GetDataFilepath() const { return GetIfExist<ACSourceFilepath>(); }
 		const std::filesystem::path& GetFilepath() const { return Get<ACFilepath>().Filepath; }
 		
-		virtual void PlaceCoreComponent() = 0; // devirtualise this!
+		virtual void PlaceCoreComponent() = 0; // get rid of this? only ever called 1 per asset creation
 		virtual void Release() = 0;
 		
 		template<typename... tnAssetComponents>

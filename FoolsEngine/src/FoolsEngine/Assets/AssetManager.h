@@ -13,43 +13,65 @@ namespace fe
 		static AssetRegistry& GetRegistry() { return s_Instance->m_Registry; }
 
 		template <typename tnAsset>
+		static AssetID CreateInternalAsset(AssetID parent)
+		{
+			FE_PROFILER_FUNC();
+
+			AssetRegistry& reg = m_Registry;
+			AssetID assetID = reg.create();
+
+			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
+			data.MapByUUID[uuid] = assetID;
+
+			reg.emplace<ACParentAsset>(assetID).Parent = parent;
+
+			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponent();
+			return assetID;
+		}
+		template <typename tnAsset>
 		static AssetID CreateAsset(const std::filesystem::path& path)
 		{
 			FE_PROFILER_FUNC();
 
-			Data& data = s_Instance->m_Data[tnAsset::GetTypeStatic()];
-
-			AssetRegistry& reg = data.Registry;
+			AssetRegistry& reg = m_Registry;
 			AssetID assetID = reg.create();
 
 			reg.emplace<ACRefsCounters>(assetID);
-			reg.emplace<ACAssetData>(assetID);
+			reg.emplace<ACFilepath>(assetID).Filepath = path;
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
+
 
 			data.MapByUUID[uuid] = assetID;
 			data.MapByFilepath[path] = assetID;
 
-			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponents();
+			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponent();
 			return assetID;
 		}
-		template <typename tnAsset>
-		static AssetID CreateCompositeAsset(AssetID parentAssetID, AssetType parentAssetType)
+
+		void SetSourcePath(AssetID assetID, std::filesystem::path sourcePath)
 		{
-			FE_PROFILER_FUNC();
+			AssetRegistry& reg = m_Registry;
+			auto ac_path = reg.try_get<ACSourceFilepath>(assetID);
+			if (ac_path)
+			{
+				auto& assets = m_SourceFileRegistry[ac_path->Filepath];
+				auto it = assets.begin();
+				for (; it != assets.end(); it++)
+				{
+					if (*it == assetID)
+					{
+						assets.erase(it);
+						break;
+					}
+				}
+			}
+			else
+			{
+				ac_path = &(reg.emplace<ACSourceFilepath>(assetID));
+			}
 
-			Data& data = s_Instance->m_Data[tnAsset::GetTypeStatic()];
-
-			AssetRegistry& reg = data.Registry;
-			AssetID assetID = reg.create();
-
-			reg.emplace<ACAssetData>(assetID);
-
-			auto& ac_parent_asset = reg.emplace<ACParentAsset>(assetID);
-			ac_parent_asset.ParenAssetType = parentAssetType;
-			ac_parent_asset.ParentAssetID = parentAssetID;
-
-			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponents();
-			return assetID;
+			ac_path->Filepath = sourcePath;
+			m_SourceFileRegistry[sourcePath].push_back(assetID);
 		}
 
 		static auto GetAll() { return GetRegistry().view<AssetID>(); }
@@ -68,6 +90,8 @@ namespace fe
 		AssetRegistry m_Registry;
 		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
 		std::unordered_map<UUID, AssetID> m_MapByUUID;
+
+		std::unordered_map<std::filesystem::path, std::vector<AssetID>> m_SourceFileRegistry;
 
 
 		static void AddByFilepathMapEntry(const std::filesystem::path& path, AssetID ID)

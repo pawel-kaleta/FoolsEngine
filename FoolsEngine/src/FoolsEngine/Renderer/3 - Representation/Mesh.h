@@ -46,7 +46,7 @@ namespace fe
 	{
 		uint32_t VertexCount;
 		uint32_t IndexCount;
-		//VertexData::Layout VertexLayout; 
+		VertexData::Layout VertexLayout() { return Vertex::GetLayout(); };
 
 		void Init()
 		{
