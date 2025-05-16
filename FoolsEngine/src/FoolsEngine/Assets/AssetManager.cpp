@@ -43,9 +43,11 @@ namespace fe
 		auto GDI = Renderer::GetActiveGDItype();
 		auto& reg = s_Instance->m_Registry;
 
-		for (auto id : GetAll())
+		auto view = reg.view<ACRefsCounters>();
+
+		for (auto id : view)
 		{
-			auto& ref_counters = reg.get<ACRefsCounters>(id);
+			auto& ref_counters = view.get<ACRefsCounters>(id);
 			auto type = reg.get<ACAssetType>(id).Type;
 
 			switch (type)

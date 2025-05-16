@@ -6,7 +6,7 @@
 
 namespace fe
 {
-	void MaterialInstance::Init(const AssetObserver<Material>& materialObserver)
+	void MaterialInstance::MakeInstance(const AssetObserver<Material>& materialObserver)
 	{
 		FE_PROFILER_FUNC();
 
@@ -17,11 +17,6 @@ namespace fe
 		auto& data = mi_data.UniformsData;
 		auto& size = mi_data.UniformsDataSize;
 
-		size = 0;
-		for (auto& uniform : materialObserver.GetUniforms())
-		{
-			size += uniform.GetSize();
-		}
 		if (data)
 			operator delete(data);
 		data = operator new(size);
@@ -34,6 +29,10 @@ namespace fe
 		auto& textures = mi_data.Textures;
 		textures.clear();
 		textures.resize(materialObserver.GetTextureSlots().size());
+		for (auto& texture : textures)
+		{
+			texture = NullAssetID;
+		}
 	}
 
 	void* MaterialInstance::GetUniformValuePtr_Internal(const Uniform& targetUniform) const

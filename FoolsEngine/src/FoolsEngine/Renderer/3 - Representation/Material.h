@@ -14,6 +14,9 @@ namespace fe
 		std::vector<Uniform> Uniforms;
 		std::vector<ShaderTextureSlot> TextureSlots;
 
+		void* DefaultUniformsData;
+		size_t UniformsDataSize;
+
 		void Init();
 	};
 
@@ -25,6 +28,22 @@ namespace fe
 
 		AssetID GetShaderID()               const { return Get<ACMaterialData>().ShaderID; }
 		void    SetShader(AssetID shaderID)       { Get<ACMaterialData>().ShaderID = shaderID; }
+
+	public:
+		const void* GetUniformValuePtr(const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(targetUniform); };
+		      void* GetUniformValuePtr(const Uniform& targetUniform)       { return GetUniformValuePtr_Internal(targetUniform); };
+
+		const void* GetUniformValuePtr(const std::string& name) const { return GetUniformValuePtr_Internal(name); };
+		      void* GetUniformValuePtr(const std::string& name)       { return GetUniformValuePtr_Internal(name); };
+
+		void SetUniformValue(const Uniform& uniform, void* dataPointer);
+		void SetUniformValue(const std::string& name, void* dataPointer);
+
+	private:
+		void* GetUniformValuePtr_Internal(const Uniform& targetUniform) const;
+		void* GetUniformValuePtr_Internal(const std::string& name) const;
+
+	public:
 
 		      std::vector<Uniform>& GetUniforms()       { return Get<ACMaterialData>().Uniforms; }
 		const std::vector<Uniform>& GetUniforms() const { return Get<ACMaterialData>().Uniforms; }
@@ -42,10 +61,6 @@ namespace fe
 
 	protected:
 		Material(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
-
-
-		friend class AssetManager;
-		void Init() {};
 	};
 
 	

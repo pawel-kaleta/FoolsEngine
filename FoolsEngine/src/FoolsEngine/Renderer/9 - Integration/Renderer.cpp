@@ -106,9 +106,7 @@ namespace fe
 			auto miUser = handle1.Use();
 
 			// TO DO: save to file
-			MaterialInstance::MakeMaterialInstance(miUser);
-			auto material_observer = BaseAssets.Materials.Default.Observe();
-			miUser.Init(material_observer);
+			miUser.MakeInstance(BaseAssets.Materials.Default.Observe());
 			*(glm::vec3*)miUser.GetUniformValuePtr("u_BaseColor") = { 1.0f, 1.0f, 1.0f };
 		}
 	}

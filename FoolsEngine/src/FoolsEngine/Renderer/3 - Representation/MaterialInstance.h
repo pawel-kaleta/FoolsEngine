@@ -37,13 +37,13 @@ namespace fe
 		void SendDataToGPU(GDIType GDI, void* data) { };
 		void UnloadFromCPU() {};
 
-		void Init(const AssetObserver<Material>& materialObserver);
+		void MakeInstance(const AssetObserver<Material>& materialObserver);
 
 		const void* GetUniformValuePtr(const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(targetUniform); };
 		      void* GetUniformValuePtr(const Uniform& targetUniform)       { return GetUniformValuePtr_Internal(targetUniform); };
 
 		const void* GetUniformValuePtr(const std::string& name) const { return GetUniformValuePtr_Internal(name); };
-		      void* GetUniformValuePtr(const std::string& name)       { return GetUniformValuePtr_Internal(name); };;
+		      void* GetUniformValuePtr(const std::string& name)       { return GetUniformValuePtr_Internal(name); };
 
 		void SetUniformValue(const Uniform& uniform, void* dataPointer);
 		void SetUniformValue(const std::string& name, void* dataPointer);
@@ -66,7 +66,7 @@ namespace fe
 
 	private:
 
-		void* MaterialInstance::GetUniformValuePtr_Internal(const Uniform& targetUniform) const;
-		void* MaterialInstance::GetUniformValuePtr_Internal(const std::string& name) const;
+		void* GetUniformValuePtr_Internal(const Uniform& targetUniform) const;
+		void* GetUniformValuePtr_Internal(const std::string& name) const;
 	};
 }
