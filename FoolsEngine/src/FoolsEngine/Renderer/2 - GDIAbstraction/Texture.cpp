@@ -11,7 +11,7 @@
 
 namespace fe
 {
-	void Texture2D::SendDataToGPU(GDIType GDI, void* data)
+	void Texture2DUser::SendDataToGPU(GDIType GDI, void* data) const
 	{
 		switch (GDI)
 		{
@@ -26,7 +26,7 @@ namespace fe
 		}
 	}
 
-	void Texture2D::Bind(GDIType GDI, RenderTextureSlotID slotID)
+	void Texture2DUser::Bind(GDIType GDI, RenderTextureSlotID slotID) const
 	{
 		switch (GDI)
 		{
@@ -43,7 +43,7 @@ namespace fe
 		}
 	}
 
-	void Texture2D::UnloadFromCPU()
+	void Texture2DUser::UnloadFromCPU() const
 	{
 		auto& dataPtr = Get<ACTexture2DData>().Data;
 		if (dataPtr)
@@ -53,7 +53,7 @@ namespace fe
 		}
 	}
 
-	uint32_t Texture2D::GetRendererID(GDIType GDI) const
+	uint32_t Texture2DObserver::GetRendererID(GDIType GDI) const
 	{
 		switch (GDI)
 		{
@@ -70,7 +70,7 @@ namespace fe
 		return 0;
 	}
 
-	void Texture2D::CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data)
+	void Texture2DUser::CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data) const
 	{
 		switch (gdi)
 		{
@@ -84,7 +84,7 @@ namespace fe
 		}
 	}
 
-	void Texture2D::Release()
+	void Texture2DUser::Release() const
 	{
 		auto gdi = Renderer::GetActiveGDItype();
 		switch (gdi)

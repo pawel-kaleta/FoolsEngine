@@ -3,7 +3,7 @@
 
 namespace fe
 {
-	void Model::PlaceCoreComponent()
+	void ModelUser::PlaceCoreComponent() const
 	{
 		Emplace<ACModelData>();
 	}

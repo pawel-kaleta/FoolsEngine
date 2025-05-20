@@ -22,8 +22,8 @@ namespace fe
 		Texture2DAsset,
 
 		ShaderAsset,
+		ShadingModelAsset,
 		MaterialAsset,
-		MaterialInstanceAsset,
 
 		MeshAsset,
 		RenderMeshAsset,
@@ -42,6 +42,13 @@ namespace fe
 		None
 	};
 
+	class Asset
+	{
+	public:
+		Asset() = delete;
+		static constexpr AssetType GetTypeStatic() { return AssetType::None; } // derived classes cover this
+	};
+
 	struct AssetComponent { };
 
 	struct ACUUID final : AssetComponent
@@ -49,9 +56,9 @@ namespace fe
 		UUID UUID;
 	};
 
-	struct ACParentAsset final : AssetComponent
+	struct ACMasterAsset final : AssetComponent
 	{
-		AssetID Parent;
+		AssetID Master;
 	};
 
 	struct ACFilepath final : AssetComponent
@@ -77,10 +84,10 @@ namespace fe
 
 	struct ACAssetType final : AssetComponent
 	{
-		AssetType Type = AssetType::None;
+		AssetType Type;
 	};
 
-	class Asset
+	class AssetInterface
 	{
 	public:
 		bool IsValid() const { return (bool)m_ECSHandle; }
@@ -94,9 +101,6 @@ namespace fe
 
 		const ACSourceFilepath* GetDataFilepath() const { return GetIfExist<ACSourceFilepath>(); }
 		const std::filesystem::path& GetFilepath() const { return Get<ACFilepath>().Filepath; }
-		
-		virtual void PlaceCoreComponent() = 0; // get rid of this? only ever called 1 per asset creation
-		virtual void Release() = 0;
 		
 		template<typename... tnAssetComponents>
 		bool AllOf() const
@@ -112,19 +116,17 @@ namespace fe
 			return m_ECSHandle.any_of<tnAssetComponents...>();
 		}
 	protected:
-		template <typename tnAsset>
-		friend class AssetHandle;
-		Asset() = default;
-		Asset(AssetType type, AssetID assetID);
+		AssetInterface() = default;
+		AssetInterface(AssetType type, AssetID assetID);
 		//:
 		//	m_ECSHandle(ECS_AssetHandle(*AssetManager::GetRegistry(type), assetID))
 		//{ }
-		Asset(ECS_AssetHandle ECS_handle) :
+		AssetInterface(ECS_AssetHandle ECS_handle) :
 			m_ECSHandle(std::move(ECS_handle))
 		{ }
 
 		template<typename tnAssetComponent, typename... Args>
-		tnAssetComponent& Emplace(Args&&... args)
+		tnAssetComponent& Emplace(Args&&... args) const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -135,7 +137,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent, typename... Args>
-		tnAssetComponent& Replace(Args&&... args)
+		tnAssetComponent& Replace(Args&&... args) const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -144,7 +146,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent, typename... Args>
-		tnAssetComponent& EmplaceOrReplace(Args&&... args)
+		tnAssetComponent& EmplaceOrReplace(Args&&... args) const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -154,7 +156,7 @@ namespace fe
 		}
 
 		template<typename... tnAssetComponents>
-		auto& Get()
+		auto& Get() const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -163,7 +165,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent, typename... Args>
-		tnAssetComponent& GetOrEmplace(Args&&... args)
+		tnAssetComponent& GetOrEmplace(Args&&... args) const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -173,7 +175,7 @@ namespace fe
 		}
 
 		template<typename... tnAssetComponents>
-		auto GetIfExist()
+		auto GetIfExist() const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -181,7 +183,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent>
-		const auto& Get() const
+		auto& Get() const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -190,7 +192,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent>
-		const tnAssetComponent* GetIfExist() const
+		tnAssetComponent* GetIfExist() const
 		{
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 
@@ -198,7 +200,7 @@ namespace fe
 		}
 
 		template<typename tnAssetComponent>
-		void Erase() { m_ECSHandle.erase<tnAssetComponent>(); }
+		void Erase() const { m_ECSHandle.erase<tnAssetComponent>(); }
 
 		ECS_AssetHandle GetECSHandle() const { return m_ECSHandle; }
 

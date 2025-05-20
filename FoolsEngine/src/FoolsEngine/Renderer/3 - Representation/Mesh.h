@@ -7,10 +7,8 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
 
+#include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
-
-#include "FoolsEngine\Scene\ECS.h"
 
 #include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Assets\Asset.h"
@@ -81,29 +79,45 @@ namespace fe
 		Ref<IndexBuffer>  IndexBuffer;
 	};
 
+	class MeshObserver : public AssetInterface
+	{
+	public:
+		virtual AssetType GetType() const override final { return GetTypeStatic(); }
+		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+
+		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
+		const MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
+		//const ACMeshLoadingSettings* GetImportSettings() const { return GetIfExist<ACMeshLoadingSettings>(); }
+
+		void Draw(const AssetObserver<Material>& materialObserver) const;
+	protected:
+		MeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
+	};
+
+	class MeshUser : public MeshObserver
+	{
+	public:
+		void PlaceCoreComponent() const { Emplace<ACMeshData>().Init(); };
+		void Release() const;
+
+		void SendDataToGPU(GDIType GDI) const;
+		void UnloadFromCPU() const;
+
+		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
+		MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
+
+		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() const { return GetOrEmplace<ACMeshLoadingSettings>(); }
+
+	protected:
+		MeshUser(ECS_AssetHandle ECS_handle) : MeshObserver(ECS_handle) {}
+	};
+
 	class Mesh : public Asset
 	{
 	public:
-		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
 
-		virtual void PlaceCoreComponent() final override { Emplace<ACMeshData>().Init(); };
-		virtual void Release() final override;
-		void SendDataToGPU(GDIType GDI);
-		void UnloadFromCPU();
-
-		//ACGPUBuffers* GetBuffers() { return GetIfExist<ACGPUBuffers>(); }
-		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-
-		const MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
-		      MeshSpecification& GetSpecification()       { return Get<ACMeshData>().Specification; }
-
-		//const ACMeshLoadingSettings* GetImportSettings() { return GetIfExist<ACMeshLoadingSettings>(); }
-		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() { return GetOrEmplace<ACMeshLoadingSettings>(); }
-
-		void Draw(const AssetObserver<MaterialInstance>& miObserver);
-
-	protected:
-		Mesh(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
+		using Observer = MeshObserver;
+		using User = MeshUser;
 	};
 }

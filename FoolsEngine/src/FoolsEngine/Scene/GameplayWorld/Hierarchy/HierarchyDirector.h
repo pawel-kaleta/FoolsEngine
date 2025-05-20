@@ -21,7 +21,7 @@ namespace fe
 		bool IsOrderSafe()		{ return m_SafeOrder; }
 		void EnforceSafeOrder()	{ if (!m_SafeOrder)	RecreateStorageOrder(); }
 	private:
-		friend class Scene;
+		friend class SceneUser;
 		friend class GameplayWorld;
 		friend class Entity;
 		friend class SceneSerializerYAML;

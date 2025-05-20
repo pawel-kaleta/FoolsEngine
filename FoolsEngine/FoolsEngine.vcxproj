@@ -208,8 +208,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Model.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h" />
@@ -286,8 +286,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />

@@ -19,7 +19,7 @@ namespace fe
         ShaderSource.clear();
     }
 
-    void Shader::Bind(GDIType GDI)
+    void ShaderObserver::Bind(GDIType GDI) const
     {
         switch (GDI)
         {
@@ -33,7 +33,7 @@ namespace fe
         }
     }
 
-    void Shader::Unbind(GDIType GDI)
+    void ShaderObserver::Unbind(GDIType GDI) const
     {
         switch (GDI)
         {
@@ -47,7 +47,7 @@ namespace fe
         }
     }
 
-    void Shader::Release()
+    void ShaderUser::Release() const
     {
         auto gdi = Renderer::GetActiveGDItype();
         switch (gdi)
@@ -63,7 +63,7 @@ namespace fe
         }
     }
 
-    void Shader::UnloadFromCPU()
+    void ShaderUser::UnloadFromCPU() const
     {
         auto& sourceCode = Get<ACSourceCode>();
         sourceCode.ShaderSource.clear();
@@ -71,7 +71,7 @@ namespace fe
         sourceCode.FragmentSource.clear();
     }
 
-    uint32_t Shader::GetRendererID(GDIType GDI) const
+    uint32_t ShaderObserver::GetRendererID(GDIType GDI) const
     {
         switch (GDI)
         {
@@ -86,7 +86,7 @@ namespace fe
         return 0;
     }
 
-    void Shader::UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose)
+    void ShaderObserver::UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose) const
     {
         switch (GDI)
         {
@@ -100,7 +100,7 @@ namespace fe
         }
     }
 
-    void Shader::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count)
+    void ShaderObserver::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count) const
     {
         switch (GDI)
         {
@@ -114,7 +114,7 @@ namespace fe
         }
     }
 
-    void Shader::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot)
+    void ShaderObserver::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot) const
     {
         switch (GDI)
         {
@@ -127,6 +127,5 @@ namespace fe
             return;
         }
     }
-
 
 }

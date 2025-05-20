@@ -7,7 +7,7 @@
 
 namespace fe
 {
-	void Scene::Initialize()
+	void SceneUser::Initialize() const
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Scene initialization");
@@ -18,20 +18,20 @@ namespace fe
 	}
 
 	template <SimulationStages::Stages stage>
-	void Scene::Update()
+	void SceneUser::Update() const
 	{
 		FE_PROFILER_FUNC();
 
 		GetWorlds().GameplayWorld->Update<stage>();
 	}
 
-	template void Scene::Update<SimulationStages::Stages::FrameStart >();
-	template void Scene::Update<SimulationStages::Stages::PrePhysics >();
-	template void Scene::Update<SimulationStages::Stages::Physics    >();
-	template void Scene::Update<SimulationStages::Stages::PostPhysics>();
-	template void Scene::Update<SimulationStages::Stages::FrameEnd   >();
+	template void SceneUser::Update<SimulationStages::Stages::FrameStart >() const;
+	template void SceneUser::Update<SimulationStages::Stages::PrePhysics >() const;
+	template void SceneUser::Update<SimulationStages::Stages::Physics    >() const;
+	template void SceneUser::Update<SimulationStages::Stages::PostPhysics>() const;
+	template void SceneUser::Update<SimulationStages::Stages::FrameEnd   >() const;
 
-	void Scene::SimulationUpdate()
+	void SceneUser::SimulationUpdate() const
 	{
 		FE_PROFILER_FUNC();
 
@@ -42,7 +42,7 @@ namespace fe
 		Update<SimulationStages::Stages::FrameEnd   >();
 	}
 
-	void Scene::PostFrameUpdate()
+	void SceneUser::PostFrameUpdate() const
 	{
 		FE_PROFILER_FUNC();
 
@@ -55,12 +55,12 @@ namespace fe
 		gameplay_world->GetHierarchy().MakeGlobalTransformsCurrent();
 	}
 
-	void Scene::PlaceCoreComponent()
+	void SceneUser::PlaceCoreComponent() const
 	{
 		Emplace<ACWorlds>();
 	}
 
-	void Scene::Release()
+	void SceneUser::Release() const
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Scene release");

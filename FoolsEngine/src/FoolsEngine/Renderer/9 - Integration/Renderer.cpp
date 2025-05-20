@@ -5,7 +5,7 @@
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
+#include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
@@ -75,13 +75,13 @@ namespace fe
 		}
 
 		{
-			auto id1 = AssetManager::CreateAsset<Material>("assets/materials/Default.femat");
-			auto& handle1 = BaseAssets.Materials.Default;
-			new (&handle1) AssetHandle<Material>(id1, LoadingPriority_Critical);
-			auto materialUser = handle1.Use();
+			auto id1 = AssetManager::CreateAsset<ShadingModel>("assets/shading_models/Default.femat");
+			auto& handle1 = BaseAssets.ShadingModels.Default;
+			new (&handle1) AssetHandle<ShadingModel>(id1, LoadingPriority_Critical);
+			auto shading_model_user = handle1.Use();
 
 			// TO DO: read from a file
-			materialUser.MakeMaterial(
+			shading_model_user.MakeShadingModel(
 				BaseAssets.Shaders.Base3D.GetID(),
 				{
 					Uniform("u_BaseColor", ShaderData::Type::Float3),
@@ -100,14 +100,14 @@ namespace fe
 		}
 
 		{
-			auto id1 = AssetManager::CreateAsset<MaterialInstance>("DefaultMaterialInstance");
-			auto& handle1 = BaseAssets.MaterialInstances.Default;
-			new (&handle1) AssetHandle<MaterialInstance>(id1, LoadingPriority_Critical);
-			auto miUser = handle1.Use();
+			auto id1 = AssetManager::CreateAsset<Material>("DefaultMaterial");
+			auto& handle1 = BaseAssets.Materials.Default;
+			new (&handle1) AssetHandle<Material>(id1, LoadingPriority_Critical);
+			auto material_user = handle1.Use();
 
 			// TO DO: save to file
-			miUser.MakeInstance(BaseAssets.Materials.Default.Observe());
-			*(glm::vec3*)miUser.GetUniformValuePtr("u_BaseColor") = { 1.0f, 1.0f, 1.0f };
+			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
+			*(glm::vec3*)material_user.GetUniformValuePtr("u_BaseColor") = { 1.0f, 1.0f, 1.0f };
 		}
 	}
 
@@ -193,25 +193,27 @@ namespace fe
 		for (auto ID : viewMeshes)
 		{
 			auto [render_mesh_component, transform_component] = viewMeshes.get(ID);
-			if (!render_mesh_component.Mesh.IsValid())
+			if (!render_mesh_component.RenderMesh.IsValid())
 				continue;
 
 			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix();
 			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
 
-			auto miObserver = render_mesh_component.MaterialInstance.Observe();
+			auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
 
-			auto shaderID = miObserver.GetMaterial().Observe().GetShaderID();
+			auto& render_mesh_data = render_mesh_observer.GetDataComponent();
+			auto material_observer = AssetHandle<Material>(render_mesh_data.MaterialID, LoadingPriority_None).Observe();
+			auto shaderID = material_observer.GetShadingModel().Observe().GetShaderID();
 			{
-				auto shaderUser = AssetHandle<Shader>(shaderID, LoadingPriority_None).Use();
+				auto shader_observer = AssetHandle<Shader>(shaderID, LoadingPriority_None).Observe();
 
-				shaderUser.Bind(GDI);
-				shaderUser.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-				shaderUser.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
-				shaderUser.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+				shader_observer.Bind(GDI);
+				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
+				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 			}
 
-			render_mesh_component.Mesh.Use().Draw(miObserver);
+			AssetHandle<Mesh>(render_mesh_data.MeshID, LoadingPriority_None).Observe().Draw(material_observer);
 		}
 
 		framebuffer.Unbind();

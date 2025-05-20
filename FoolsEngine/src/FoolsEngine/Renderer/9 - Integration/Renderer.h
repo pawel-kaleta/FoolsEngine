@@ -11,9 +11,9 @@
 namespace fe
 {
 	class VertexBuffer;
-	class MaterialInstance;
+	class Material;
 
-	template <class MaterialInstance>
+	template <class Material>
 	class AssetHandle;
 
 	class Renderer
@@ -40,13 +40,13 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			AssetHandle<MaterialInstance> materialInstance,
+			AssetHandle<Material> material,
 			const glm::mat4& transform
 		);
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetHandle<MaterialInstance> materialInstance,
+			const AssetHandle<Material> material,
 			const glm::mat4& transform,
 			const glm::mat4& VPMatrix
 		);
@@ -64,12 +64,12 @@ namespace fe
 			} Shaders;
 
 			struct {
-				AssetHandle<Material> Default;
-			} Materials;
+				AssetHandle<ShadingModel> Default;
+			} ShadingModels;
 
 			struct {
-				AssetHandle<MaterialInstance> Default;
-			} MaterialInstances;
+				AssetHandle<Material> Default;
+			} Materials;
 		} BaseAssets;
 	private:
 		struct SceneData

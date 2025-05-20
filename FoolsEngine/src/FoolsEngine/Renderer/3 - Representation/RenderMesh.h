@@ -7,28 +7,44 @@ namespace fe
 	struct ACRenderMeshData final : public AssetComponent
 	{
 		AssetID MeshID;
-		AssetID MaterialInstanceID;
+		AssetID MaterialID;
 
 		void Init()
 		{
 			MeshID = NullAssetID;
-			MaterialInstanceID = NullAssetID;
+			MaterialID = NullAssetID;
 		}
+	};
+
+	class RenderMeshObserver : public AssetInterface
+	{
+	public:
+		virtual AssetType GetType() const override final { return GetTypeStatic(); }
+		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
+
+		const ACRenderMeshData& GetDataComponent() const { return Get<ACRenderMeshData>(); }
+
+	protected:
+		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
+	};
+
+	class RenderMeshUser : public RenderMeshObserver
+	{
+	public:
+		void PlaceCoreComponent() const { Emplace<ACRenderMeshData>().Init(); };
+
+		ACRenderMeshData& GetDataComponent() const { return Get<ACRenderMeshData>(); }
+
+	protected:
+		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }
 	};
 
 	class RenderMesh final : public Asset
 	{
 	public:
-		virtual AssetType GetType() const override { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
 
-		virtual void PlaceCoreComponent() final override { Emplace<ACRenderMeshData>().Init(); };
-		virtual void Release() final override { };
-
-		const ACRenderMeshData& GetData() const { return Get<ACRenderMeshData>(); }
-		      ACRenderMeshData& GetData()       { return Get<ACRenderMeshData>(); }
-
-	protected:
-		RenderMesh(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) { }
+		using Observer = RenderMeshObserver;
+		using User = RenderMeshUser;
 	};
 }

@@ -22,27 +22,45 @@ namespace fe
 
 	// observer can be used for drawing editor panels and other stuff during editing/playing scene
 	// user needed for initialization, serialization, deserialization and release
-	class Scene : public Asset
+	class SceneObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override { return GetTypeStatic(); }
+		virtual AssetType GetType() const override final { return GetTypeStatic(); }
 		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 
-		virtual void PlaceCoreComponent() override final;
-		virtual void Release() override final;
-		void Initialize();
-
-		void SimulationUpdate();
-		void PostFrameUpdate();
-
-		      ACWorlds& GetWorlds()       { return Get<ACWorlds>(); }
 		const ACWorlds& GetWorlds() const { return Get<ACWorlds>(); }
+
+	protected:
+		SceneObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
+	};
+
+	class SceneUser : public SceneObserver
+	{
+	public:
+		void PlaceCoreComponent() const;
+		void Release() const;
+
+		void Initialize() const;
+
+		void SimulationUpdate() const;
+		void PostFrameUpdate() const;
+
+		ACWorlds& GetWorlds() const { return Get<ACWorlds>(); }
 
 	private:
 		template <SimulationStages::Stages stage>
-		void Update();
+		void Update() const;
 
 	protected:
-		Scene(ECS_AssetHandle ECS_handle) : Asset(ECS_handle) {}
+		SceneUser(ECS_AssetHandle ECS_handle) : SceneObserver(ECS_handle) {}
+	};
+
+	class Scene : public Asset
+	{
+	public:
+		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
+
+		using Observer = SceneObserver;
+		using User = SceneUser;
 	};
 }

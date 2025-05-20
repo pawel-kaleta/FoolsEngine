@@ -2,38 +2,47 @@
 #include "Material.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
 namespace fe
 {
-	void ACMaterialData::Init()
-	{
-		ShaderID = 0;
-		Uniforms.clear();
-		TextureSlots.clear();
-	}
-	
-	void Material::MakeMaterial(AssetID shaderID, const std::initializer_list<Uniform>& uniforms, const std::initializer_list<ShaderTextureSlot>& textureSlots)
-	{
-		auto& ACData = Get<ACMaterialData>();
-		ACData.ShaderID = shaderID;
-		ACData.Uniforms = uniforms;
-		ACData.TextureSlots = textureSlots;
-		ACData.UniformsDataSize = 0;
-		for (const auto& uniform : uniforms)
-		{
-			ACData.UniformsDataSize += uniform.GetSize();
-		}
-	}
-
-	void* Material::GetUniformValuePtr_Internal(const Uniform& targetUniform) const
+	void MaterialUser::MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACMaterialData>();
-		uint8_t* uniformDataPointer = (uint8_t*)(data.DefaultUniformsData);
+		auto& data_component = Get<ACMaterialData>();
+
+		data_component.ShadingModelID = shadingModelObserver.GetID();
+
+		auto& data = data_component.UniformsData;
+		auto& size = data_component.UniformsDataSize;
+
+		if (data)
+			operator delete(data);
+		data = operator new(size);
+
+		for (const auto& uniform : shadingModelObserver.GetUniforms())
+		{
+			this->SetUniformValue(uniform, nullptr);
+		}
+
+		auto& textures = data_component.Textures;
+		textures.clear();
+		textures.resize(shadingModelObserver.GetTextureSlots().size());
+		for (auto& texture : textures)
+		{
+			texture = NullAssetID;
+		}
+	}
+
+	void* MaterialObserver::GetUniformValuePtr_Internal(const Uniform& targetUniform) const
+	{
+		FE_PROFILER_FUNC();
+
+		uint8_t* uniformDataPointer = (uint8_t*)(Get<ACMaterialData>().UniformsData);
 		bool uniformFound = false;
 
-		for (const auto& uniform : data.Uniforms)
+		for (const auto& uniform : GetShadingModel().Observe().GetUniforms())
 		{
 			if (&targetUniform == &uniform)
 			{
@@ -52,16 +61,18 @@ namespace fe
 		return (void*)uniformDataPointer;
 	}
 
-	void* Material::GetUniformValuePtr_Internal(const std::string& name) const
+	void* MaterialObserver::GetUniformValuePtr_Internal(const std::string& name) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACMaterialData>();
+		auto& data_component = Get<ACMaterialData>();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(data.DefaultUniformsData);
+		uint8_t* uniformDataPointer = (uint8_t*)(data_component.UniformsData);
 		bool uniformFound = false;
 
-		for (const auto& uniform : data.Uniforms)
+		 auto& shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+
+		for (const auto& uniform : shading_model_observer.GetUniforms())
 		{
 			if (name == uniform.GetName())
 			{
@@ -78,18 +89,19 @@ namespace fe
 		return (void*)uniformDataPointer;
 	}
 
-
-	void Material::SetUniformValue(const Uniform& targetUniform, void* dataPointer)
+	void MaterialUser::SetUniformValue(const Uniform& targetUniform, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACMaterialData>();
+		auto& data_component = Get<ACMaterialData>();
 
-		uint8_t* dest = (uint8_t*)(data.DefaultUniformsData);
-		size_t uniformSize = 0;
+		uint8_t* dest = (uint8_t*)(data_component.UniformsData);
+		size_t uniformSize;
+		
+		auto& shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+
 		bool uniformFound = false;
-
-		for (const auto& uniform : data.Uniforms)
+		for (const auto& uniform : shading_model_observer.GetUniforms())
 		{
 			if (&targetUniform == &uniform)
 			{
@@ -101,9 +113,10 @@ namespace fe
 		}
 		if (!uniformFound)
 		{
-			FE_CORE_ASSERT(false, "Uniform not found in material!");
+			FE_CORE_ASSERT(false, "Uniform not found in shading model!");
 			return;
 		}
+		
 
 		if (dataPointer)
 			std::memcpy((void*)dest, dataPointer, uniformSize);
@@ -154,17 +167,19 @@ namespace fe
 		}
 	}
 
-	void Material::SetUniformValue(const std::string& name, void* dataPointer)
+	void MaterialUser::SetUniformValue(const std::string& name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACMaterialData>();
+		auto& data_component = Get<ACMaterialData>();
 
-		uint8_t* dest = (uint8_t*)(data.DefaultUniformsData);
+		uint8_t* dest = (uint8_t*)(data_component.UniformsData);
 		size_t uniformSize = 0;
 		bool uniformFound = false;
 
-		for (const auto& uniform : data.Uniforms)
+		auto shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID, LoadingPriority_None).Observe();
+
+		for (const auto& uniform : shading_model_observer.GetUniforms())
 		{
 			if (name == uniform.GetName())
 			{
@@ -181,4 +196,97 @@ namespace fe
 		}
 		std::memcpy((void*)dest, dataPointer, uniformSize);
 	}
+
+	AssetHandle<Texture2D> MaterialObserver::GetTexture(const ShaderTextureSlot& textureSlot) const
+	{
+		FE_PROFILER_FUNC();
+
+		auto& data_component = Get<ACMaterialData>();
+
+		auto& textures = data_component.Textures;
+
+		auto texturesIt = textures.begin();
+		auto shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+		auto slotsIt = shading_model_observer.GetTextureSlots().begin();
+		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
+		{
+			if (slotsIt._Ptr == &textureSlot)
+			{
+				return AssetHandle<Texture2D>(*texturesIt);
+			}
+		}
+
+		FE_CORE_ASSERT(false, "Texture not found in material!");
+		return AssetHandle<Texture2D>();
+	}
+
+	AssetHandle<Texture2D> MaterialObserver::GetTexture(const std::string& textureSlotName) const
+	{
+		FE_PROFILER_FUNC();
+
+		auto& data_component = Get<ACMaterialData>();
+
+		auto& textures = data_component.Textures;
+
+		auto texturesIt = textures.begin();
+		auto shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+		auto slotsIt = shading_model_observer.GetTextureSlots().begin();
+		for (; texturesIt != textures.end(); ++texturesIt, ++slotsIt)
+		{
+			if (slotsIt->GetName() == textureSlotName)
+			{
+				return AssetHandle<Texture2D>(*texturesIt);
+			}
+		}
+
+		FE_CORE_ASSERT(false, "Texture not found in material!");
+		return AssetHandle<Texture2D>();
+	}
+
+	void MaterialUser::SetTexture(const ShaderTextureSlot& textureSlot, AssetID textureID) const
+	{
+		FE_PROFILER_FUNC();
+
+		auto& data_component = Get<ACMaterialData>();
+
+		auto& textures = data_component.Textures;
+
+		auto texturesIt = textures.begin();
+		auto shading_model_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+		auto slotsIt = shading_model_observer.GetTextureSlots().begin();
+		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
+		{
+			if (slotsIt._Ptr == &textureSlot)
+			{
+				*texturesIt = textureID;
+				return;
+			}
+		}
+
+		FE_CORE_ASSERT(false, "Texture not found in material!");
+	}
+
+	void MaterialUser::SetTexture(const std::string& textureSlotName, AssetID textureID) const
+	{
+		FE_PROFILER_FUNC();
+
+		auto& data_component = Get<ACMaterialData>();
+
+		auto& textures = data_component.Textures;
+
+		auto texturesIt = textures.begin();
+		auto material_observer = AssetHandle<ShadingModel>(data_component.ShadingModelID).Observe();
+		auto slotsIt = material_observer.GetTextureSlots().begin();
+		for (; texturesIt != textures.end(); texturesIt++, slotsIt++)
+		{
+			if (slotsIt->GetName() == textureSlotName)
+			{
+				*texturesIt = textureID;
+				return;
+			}
+		}
+
+		FE_CORE_ASSERT(false, "Texture not found in material!");
+	}
+	
 }

@@ -240,10 +240,10 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Camera.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Material.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.h">
@@ -458,10 +458,10 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\MaterialInstance.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp">

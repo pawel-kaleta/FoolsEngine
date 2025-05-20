@@ -5,7 +5,7 @@
 namespace fe
 {
 	template <typename tnAsset>
-	class AssetObserver final : public tnAsset
+	class AssetObserver final : public tnAsset::Observer
 	{
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
@@ -18,7 +18,7 @@ namespace fe
 		~AssetObserver() { if (IsValid()) GetRefCounters().ActiveObserversCount--; } //TODO: mutexes
 
 		AssetObserver(ECS_AssetHandle ECS_handle) :
-			tnAsset(ECS_handle)
+			Observer(ECS_handle)
 		{
 			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 
@@ -39,7 +39,7 @@ namespace fe
 	};
 
 	template <typename tnAsset>
-	class AssetUser final : public tnAsset
+	class AssetUser final : public tnAsset::User
 	{
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
@@ -52,7 +52,7 @@ namespace fe
 		~AssetUser() { if (IsValid()) GetRefCounters().ActiveUser = false; } //TODO: mutexes
 
 		AssetUser(ECS_AssetHandle ECS_handle) :
-			tnAsset(ECS_handle)
+			User(ECS_handle)
 		{
 			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 
@@ -160,8 +160,8 @@ namespace fe
 		bool IsValid() const { return (bool)GetECSHandle(); }
 		void SetLoadingPriority(AssetLoadingPriority priority) { m_LoadingPriority = priority; } // TO DO: add AssetLoadingPriority counting
 
-		const AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
-		      AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
+		AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
+		AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
 		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::GetRegistry(), m_ID); };

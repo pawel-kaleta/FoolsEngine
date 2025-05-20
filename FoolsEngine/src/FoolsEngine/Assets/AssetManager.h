@@ -104,7 +104,7 @@ namespace fe
 		}
 	};
 
-	Asset::Asset(AssetType type, AssetID assetID) :
+	AssetInterface::AssetInterface(AssetType type, AssetID assetID) :
 		m_ECSHandle(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
 	{ }
 }

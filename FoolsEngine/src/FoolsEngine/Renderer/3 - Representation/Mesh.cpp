@@ -20,7 +20,7 @@ namespace fe
 
 	ACMeshData::~ACMeshData() { if (Data) GeometryLoader::UnloadMesh(Data); }
 
-	void Mesh::SendDataToGPU(GDIType GDI)
+	void MeshUser::SendDataToGPU(GDIType GDI) const
 	{
 		if (AllOf<ACGPUBuffers>())
 		{
@@ -43,7 +43,7 @@ namespace fe
 		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
 	}
 
-	void Mesh::UnloadFromCPU()
+	void MeshUser::UnloadFromCPU() const
 	{
 		auto& data = Get<ACMeshData>().Data;
 		if (data)
@@ -53,14 +53,14 @@ namespace fe
 		}
 	}
 
-	void Mesh::Release()
+	void MeshUser::Release() const
 	{
 		if (!AllOf<ACGPUBuffers>()) return;
 
 		Erase<ACGPUBuffers>();
 	}
 
-	void Mesh::Draw(const AssetObserver<MaterialInstance>& miObserver)
+	void MeshObserver::Draw(const AssetObserver<Material>& materialObserver) const
 	{
 		if (!AllOf<ACGPUBuffers>())
 		{
@@ -68,27 +68,26 @@ namespace fe
 			return;
 		}
 
-		//auto& material_instance = materialInstance.Use();
-		auto& material = miObserver.GetMaterial().Observe();
-		auto& shader = AssetHandle<Shader>(material.GetShaderID()).Use();
+		auto shading_model_observer = materialObserver.GetShadingModel().Observe();
+		auto shader_user = AssetHandle<Shader>(shading_model_observer.GetShaderID()).Use();
 
 		auto GDI = Renderer::GetActiveGDItype();
 
-		for (auto& uniform : material.GetUniforms())
+		for (const auto& uniform : shading_model_observer.GetUniforms())
 		{
-			shader.UploadUniform(
+			shader_user.UploadUniform(
 				GDI,
 				uniform,
-				(void*)miObserver.GetUniformValuePtr(uniform)
+				(void*)materialObserver.GetUniformValuePtr(uniform)
 			);
 		}
 
-		auto& textureSlots = material.GetTextureSlots();
+		auto& textureSlots = shading_model_observer.GetTextureSlots();
 		RenderTextureSlotID rendererTextureSlot = 0;
 		
 		for (auto& textureSlot : textureSlots)
 		{
-			auto& texture = miObserver.GetTexture(textureSlot).Use();
+			auto& texture = materialObserver.GetTexture(textureSlot).Use();
 
 			if (texture.IsValid())
 			{
@@ -96,11 +95,11 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "Not implemented default texture");
-				//AssetHandle<Texture2D>((AssetID)BaseAssets::Textures2D::Default).Use().Bind(GDI, rendererTextureSlot);
+				FE_CORE_ASSERT(false, "Not implemented default texture");		
+				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, rendererTextureSlot);
 			}
 
-			shader.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
+			shader_user.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
 
 			rendererTextureSlot++;
 		}
@@ -108,9 +107,6 @@ namespace fe
 		auto gpuBuffers = Get<ACGPUBuffers>();
 
 		gpuBuffers.VertexBuffer->Bind();
-		//gpuBuffers.IndexBuffer->Bind();
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
 	}
-
-
 }

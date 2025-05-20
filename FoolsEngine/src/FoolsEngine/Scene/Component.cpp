@@ -286,32 +286,32 @@ namespace fe
 
 	void EditMaterialInstance()
 	{
-		AssetHandle<MaterialInstance> MaterialInstance;
+		AssetHandle<Material> material;
 
-		if (!MaterialInstance.IsValid())
+		if (!material.IsValid())
 		{
 			return;
 		}
 
-		auto miUser = MaterialInstance.Use();
-		auto material_current = miUser.GetMaterial();
+		auto material_user = material.Use();
+		auto shading_model_current = material_user.GetShadingModel();
 
-		if (ImGui::BeginCombo("Material", material_current.Observe().TryGetName()->Name.c_str()))
+		if (ImGui::BeginCombo("Shading Model", shading_model_current.Observe().GetFilepath().filename().string().c_str()))
 		{
 			bool is_selected;
 
-			auto materials = AssetManager::GetAll<Material>();
+			auto shading_models = AssetManager::GetRegistry().view<ACShadingModelData>();
 
-			for (auto id : materials)
+			for (auto id : shading_models)
 			{
-				AssetHandle<Material> material_handle(id);
-				auto material_observer = material_handle.Observe();
-				is_selected = (material_current.GetID() == id);
+				AssetHandle<ShadingModel> shading_model_handle(id);
+				auto shading_model_observer = shading_model_handle.Observe();
+				is_selected = (shading_model_current.GetID() == id);
 
-				if (ImGui::Selectable(material_observer.TryGetName()->Name.c_str(), is_selected))
+				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string().c_str(), is_selected))
 				{
-					miUser.Init(material_observer);
-					material_current = material_handle;
+					material_user.MakeMaterial(shading_model_observer);
+					shading_model_current = shading_model_handle;
 				}
 
 				if (is_selected)
@@ -321,37 +321,37 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		auto materialObserver = miUser.GetMaterial().Observe();
+		auto shading_model_observer = material_user.GetShadingModel().Observe();
 
-		auto& uniforms = materialObserver.GetUniforms();
+		auto& uniforms = shading_model_observer.GetUniforms();
 
 		for (auto& uniform : uniforms)
 		{
-			ImGuiLayer::RenderUniform(uniform, miUser.GetUniformValuePtr(uniform));
+			ImGuiLayer::RenderUniform(uniform, material_user.GetUniformValuePtr(uniform));
 		}
 
-		auto& textureSlots = materialObserver.GetTextureSlots();
+		auto& textureSlots = shading_model_observer.GetTextureSlots();
 
 		for (auto& textureSlot : textureSlots)
 		{
-			auto texture_current = miUser.GetTexture(textureSlot);
+			auto texture_current = material_user.GetTexture(textureSlot);
 			bool newSelection = false;
 
-			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().TryGetName()->Name.c_str();
+			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetFilepath().filename().string().c_str();
 			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
 			{
 				bool is_selected = !(texture_current.IsValid());
 
 				if (ImGui::Selectable("None", is_selected))
-					miUser.SetTexture(textureSlot, NullAssetID);
+					material_user.SetTexture(textureSlot, NullAssetID);
 
-				auto textures = AssetManager::GetAll<Texture2D>();
+				auto textures = AssetManager::GetRegistry().view<ACTexture2DData>();
 				for (auto id : textures)
 				{
 					auto textureHandle = AssetHandle<Texture2D>(id);
 					is_selected = (texture_current.GetID() == textureHandle.GetID());
 
-					if (ImGui::Selectable(textureHandle.Observe().TryGetName()->Name.c_str(), is_selected))
+					if (ImGui::Selectable(textureHandle.Observe().GetFilepath().filename().string().c_str(), is_selected))
 					{
 						newSelection = true;
 						texture_current = textureHandle;
@@ -366,7 +366,7 @@ namespace fe
 
 			if (newSelection)
 			{
-				miUser.SetTexture(textureSlot, texture_current.GetID());
+				material_user.SetTexture(textureSlot, texture_current.GetID());
 			}
 		}
 	}
@@ -390,7 +390,7 @@ namespace fe
 		Offset.Scale = node["Scale"].as<glm::vec3>();
 	}
 	
-	void CRenderModel::DrawInspectorWidget(BaseEntity entity) {}
-	void CRenderModel::Serialize(YAML::Emitter& emitter) {}
-	void CRenderModel::Deserialize(YAML::Node& data) {}
+	void CModel::DrawInspectorWidget(BaseEntity entity) {}
+	void CModel::Serialize(YAML::Emitter& emitter) {}
+	void CModel::Deserialize(YAML::Node& data) {}
 }

@@ -6,7 +6,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
 #include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\MaterialInstance.h"
+#include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Model.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
@@ -198,20 +198,18 @@ namespace fe
 	{
 		FE_COMPONENT_SETUP(CRenderMesh, "RenderMesh");
 
-		AssetHandle<Mesh> Mesh;
-		AssetHandle<MaterialInstance> MaterialInstance; // Default3D
+		AssetHandle<RenderMesh> RenderMesh;
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
 		virtual void Deserialize(YAML::Node& data) override;
 	};
 
-	struct CRenderModel final : SpatialComponent
+	struct CModel final : SpatialComponent
 	{
-		FE_COMPONENT_SETUP(CRenderModel, "RenderModel");
+		FE_COMPONENT_SETUP(CModel, "Model");
 
 		AssetHandle<Model> Model;
-		// list of material instances?
 
 		virtual void DrawInspectorWidget(BaseEntity entity) override;
 		virtual void Serialize(YAML::Emitter& emitter) override;
