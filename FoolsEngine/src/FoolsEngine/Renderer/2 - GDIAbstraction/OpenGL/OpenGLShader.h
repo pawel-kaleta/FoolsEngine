@@ -21,7 +21,7 @@ namespace fe
 
 		const GLuint& GetProgramID() const { return m_ProgramID; };
 
-		void UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false);
+		void UploadUniform(const Uniform& uniform, const void* dataPointer, uint32_t count = 1, bool transpose = false);
 		void BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count);
 		void BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot);
 	private:

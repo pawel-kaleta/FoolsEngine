@@ -28,19 +28,16 @@ namespace fe
 		virtual AssetType GetType() const override final { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModelAsset; }
 
-		AssetID GetShaderID() const { return Get<ACShadingModelData>().ShaderID; }
+		const ACShadingModelData& GetDataComponent() const { return Get<ACShadingModelData>(); }
 
-		const void* GetUniformValuePtr(const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(targetUniform); };
-		const void* GetUniformValuePtr(const std::string& name) const { return GetUniformValuePtr_Internal(name); };
+		const void* GetUniformValuePtr(const ACShadingModelData& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		const void* GetUniformValuePtr(const ACShadingModelData& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		const std::vector<Uniform>& GetUniforms() const { return Get<ACShadingModelData>().Uniforms; }
-		const std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACShadingModelData>().TextureSlots; }
-	
 	protected:
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
-		void* GetUniformValuePtr_Internal(const Uniform& targetUniform) const;
-		void* GetUniformValuePtr_Internal(const std::string& name) const;
+		void* GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const Uniform& targetUniform) const;
+		void* GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const std::string& name) const;
 	};
 
 	class ShadingModelUser : public ShadingModelObserver
@@ -51,21 +48,21 @@ namespace fe
 		void MakeShadingModel(
 			AssetID shaderID,
 			const std::initializer_list<Uniform>& uniforms,
-			const std::initializer_list<ShaderTextureSlot>& textureSlots) const; // this needs setting default valus for uniforms
+			const std::initializer_list<ShaderTextureSlot>& textureSlots) const; // this needs enforcing of setting default valus for uniforms
 		
-		void SetShader(AssetID shaderID) const { Get<ACShadingModelData>().ShaderID = shaderID; }
+		ACShadingModelData& GetDataComponent() const { return Get<ACShadingModelData>(); }
 
-		void* GetUniformValuePtr(const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(targetUniform); };
-		void* GetUniformValuePtr(const std::string& name) const { return GetUniformValuePtr_Internal(name); };
+		void* GetUniformValuePtr(const ACShadingModelData& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		void* GetUniformValuePtr(const ACShadingModelData& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		void SetUniformValue(const Uniform& uniform, void* dataPointer) const;
-		void SetUniformValue(const std::string& name, void* dataPointer) const;
-
-		std::vector<Uniform>& GetUniforms() const { return Get<ACShadingModelData>().Uniforms; }
-		std::vector<ShaderTextureSlot>& GetTextureSlots() const { return Get<ACShadingModelData>().TextureSlots; }
+		void SetUniformValue(const ACShadingModelData& dataComponent, const Uniform& uniform, void* dataPointer) const;
+		void SetUniformValue(const ACShadingModelData& dataComponent, const std::string& name, void* dataPointer) const;
 
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
+
+	private:
+		void InitUniformValue(const Uniform& uniform, void* dataPointer) const;
 	};
 
 	class ShadingModel : public Asset

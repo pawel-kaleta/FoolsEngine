@@ -118,7 +118,7 @@ namespace fe
 			return ((uint32_t)matrix % 3) + 2;
 		}
 		
-		constexpr uint32_t SizeOfType(Type type)
+		constexpr size_t SizeOfType(Type type)
 		{
 #ifdef FE_INTERNAL_BUILD
 			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {
@@ -141,18 +141,18 @@ namespace fe
 
 			return SDSizeOfTypeLookupTable[type];*/
 
-			uint32_t count = 0;
-			if ((uint32_t)type < 21) // not a matrix
+			size_t count = 0;
+			if ((size_t)type < 21) // not a matrix
 			{
-				count = (((uint32_t)type - 1) % 4) + 1;
-				bool ifDouble = (uint32_t)type >= 17;
-				return count * 4 * (1 + (uint32_t)ifDouble);
+				count = (((size_t)type - 1) % 4) + 1;
+				bool ifDouble = (size_t)type >= 17;
+				return count * 4 * (1 + (size_t)ifDouble);
 			}
 
 			return RowsOfMatrix(type) * ColumnsOfMatrix(type) * 4;
 		}
 
-		constexpr uint32_t SizeOfPrimitive(Primitive primitive)
+		constexpr size_t SizeOfPrimitive(Primitive primitive)
 		{
 			switch (primitive)
 			{

@@ -86,7 +86,7 @@ namespace fe
         return 0;
     }
 
-    void ShaderObserver::UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose) const
+    void ShaderObserver::UploadUniform(GDIType GDI, const Uniform& uniform, const void* dataPointer, uint32_t count, bool transpose) const
     {
         switch (GDI)
         {

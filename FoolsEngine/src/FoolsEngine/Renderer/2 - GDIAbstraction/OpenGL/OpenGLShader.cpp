@@ -30,7 +30,7 @@ namespace fe
         glUseProgram(0);
     }
 
-	void OpenGLShader::UploadUniform(const Uniform& uniform, void* dataPointer, uint32_t count, bool transpose)
+	void OpenGLShader::UploadUniform(const Uniform& uniform, const void* dataPointer, uint32_t count, bool transpose)
 	{
 		FE_PROFILER_FUNC();
 

@@ -40,13 +40,13 @@ namespace fe
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			AssetHandle<Material> material,
+			const AssetObserver<Material>& materialObserver,
 			const glm::mat4& transform
 		);
 
 		static void Draw(
 			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetHandle<Material> material,
+			const AssetObserver<Material>& materialObserver,
 			const glm::mat4& transform,
 			const glm::mat4& VPMatrix
 		);

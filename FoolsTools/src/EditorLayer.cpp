@@ -30,20 +30,20 @@ namespace fe
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
 
 		{
-			auto scene_observer = m_Scene.Observe();
+			auto scene_user = m_Scene.Use();
 			switch (m_EditorState)
 			{
 			case EditorState::Edit: 
 				break;
 			case EditorState::Play:
-				scene_observer.SimulationUpdate();
+				scene_user.SimulationUpdate();
 				break;
 			case EditorState::Pause:
 				break;
 			}
 
-			scene_observer.PostFrameUpdate();
-		}//scope to kill scene_observer
+			scene_user.PostFrameUpdate();
+		}//scope to kill scene_user
 
 		m_Viewports.EditViewport.OnUpdate();
 
@@ -202,10 +202,10 @@ namespace fe
 			return;
 
 		auto& current_scene_filepath = m_Scene.Observe().GetFilepath();
-		if (current_scene_filepath.Filepath == filepath)
+		if (current_scene_filepath == filepath)
 			return;
 		
-		AssetHandle<Scene> newScene = AssetHandle<Scene>(AssetManager::GetAssetFromFilepath<Scene>(filepath));
+		AssetHandle<Scene> newScene = AssetHandle<Scene>(AssetManager::GetAssetFromFilepath(filepath));
 		bool new_scene_opened = false;
 		if (newScene.IsValid())
 		{
@@ -251,12 +251,7 @@ namespace fe
 	
 		AssetHandle<Scene>(AssetManager::CreateAsset<Scene>(filepath));
 
-		{
-			auto scene_user = m_Scene.Use();
-
-			scene_user.SetName(filepath.stem().string());
-			scene_user.SetFilepath(filepath);
-		} //scope to kill scene user
+		FE_CORE_ASSERT(false, "Not implemented");
 		
 		SaveScene();
 	}
@@ -281,7 +276,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			if (!m_Scene.Use().GetWorlds().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
+			if (!m_Scene.Use().GetDataComponent().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
 				m_SelectedEntityID = NullEntityID;
 		}
 
@@ -330,7 +325,7 @@ namespace fe
 
 		auto scene_user = m_Scene.Use();
 
-		if (!scene_user.GetWorlds().GameplayWorld->GetEntityWithPrimaryCamera())
+		if (!scene_user.GetDataComponent().GameplayWorld->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
 		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_user);

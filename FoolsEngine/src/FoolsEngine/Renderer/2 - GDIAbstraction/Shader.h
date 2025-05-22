@@ -31,7 +31,7 @@ namespace fe
 		void Bind(GDIType GDI) const;
 		void Unbind(GDIType GDI) const;
 
-		void UploadUniform(GDIType GDI, const Uniform& uniform, void* dataPointer, uint32_t count = 1, bool transpose = false) const;
+		void UploadUniform(GDIType GDI, const Uniform& uniform, const void* dataPointer, uint32_t count = 1, bool transpose = false) const;
 		void BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count) const;
 		void BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot) const;
 	protected:

@@ -107,7 +107,7 @@ namespace fe
 
 			// TO DO: save to file
 			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
-			*(glm::vec3*)material_user.GetUniformValuePtr("u_BaseColor") = { 1.0f, 1.0f, 1.0f };
+			*(glm::vec3*)material_user.GetUniformValuePtr(material_user.GetDataComponent(), "u_BaseColor") = {1.0f, 1.0f, 1.0f};
 		}
 	}
 
@@ -167,7 +167,7 @@ namespace fe
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, Framebuffer& framebuffer)
 	{
-		auto cameraEntity = scene.GetWorlds().GameplayWorld->GetEntityWithPrimaryCamera();
+		auto cameraEntity = scene.GetDataComponent().GameplayWorld->GetEntityWithPrimaryCamera();
 		auto& cameraComponent = cameraEntity.Get<CCamera>();
 		auto& camera = cameraComponent.Camera;
 		auto cameraTransform = cameraEntity.GetTransformHandle().Global();
@@ -184,7 +184,7 @@ namespace fe
 
 		Renderer2D::RenderScene(scene, camera, cameraTransform, framebuffer);
 
-		auto& registry = scene.GetWorlds().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetDataComponent().GameplayWorld->GetRegistry();
 		auto viewMeshes = registry.view<CRenderMesh, CTransformGlobal>();
 		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
 
@@ -202,10 +202,10 @@ namespace fe
 			auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
 
 			auto& render_mesh_data = render_mesh_observer.GetDataComponent();
-			auto material_observer = AssetHandle<Material>(render_mesh_data.MaterialID, LoadingPriority_None).Observe();
-			auto shaderID = material_observer.GetShadingModel().Observe().GetShaderID();
+			auto material_observer = AssetObserver<Material>(render_mesh_data.MaterialID);
+			auto shaderID = AssetObserver<ShadingModel>(material_observer.GetDataComponent().ShadingModelID).GetDataComponent().ShaderID;
 			{
-				auto shader_observer = AssetHandle<Shader>(shaderID, LoadingPriority_None).Observe();
+				auto shader_observer = AssetObserver<Shader>(shaderID);
 
 				shader_observer.Bind(GDI);
 				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
@@ -213,7 +213,7 @@ namespace fe
 				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 			}
 
-			AssetHandle<Mesh>(render_mesh_data.MeshID, LoadingPriority_None).Observe().Draw(material_observer);
+			AssetObserver<Mesh>(render_mesh_data.MeshID).Draw(material_observer);
 		}
 
 		framebuffer.Unbind();
@@ -252,23 +252,23 @@ namespace fe
 		// TO DO: stats gathering
 	}
 
-	void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, AssetHandle<MaterialInstance> materialInstance, const glm::mat4& transform)
+	void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, const AssetObserver<Material>& materialObserver, const glm::mat4& transform)
 	{
-		Draw(vertexBuffer, materialInstance, transform, s_SceneData->VPMatrix);
+		Draw(vertexBuffer, materialObserver, transform, s_SceneData->VPMatrix);
 	}
 
 	void Renderer::Draw(
 		const Ref<VertexBuffer>& vertexBuffer,
-		AssetHandle<MaterialInstance> materialInstance,
+		const AssetObserver<Material>& materialObserver,
 		const glm::mat4& transform,
 		const glm::mat4& VPMatrix)
 	{
 		FE_PROFILER_FUNC();
 
-		auto miObserver = materialInstance.Observe();
-		auto materialObserver = miObserver.GetMaterial().Observe();
-
-		auto& shaderUser = AssetHandle<Shader>(materialObserver.GetShaderID()).Use();
+		auto& material_data = materialObserver.GetDataComponent();
+		auto sm_observer = AssetObserver<ShadingModel>(material_data.ShadingModelID);
+		auto& sm_data_component = sm_observer.GetDataComponent();
+		auto shaderUser = AssetUser<Shader>(sm_data_component.ShaderID);
 
 		shaderUser.Bind(s_ActiveGDI);
 
@@ -283,20 +283,20 @@ namespace fe
 			(void*)glm::value_ptr(transform)
 		);
 
-		for (auto& uniform : materialObserver.GetUniforms())
+		for (const auto& uniform : sm_data_component.Uniforms)
 		{
-			void* dataPointer = miObserver.GetUniformValuePtr(uniform);
+			auto dataPointer = materialObserver.GetUniformValuePtr(material_data, uniform);
 			shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
 		}
 
 		{
 			uint32_t rendererTextureSlot = 0;
-			auto shaderTextureSlotsIt = materialObserver.GetTextureSlots().begin();
+			auto shaderTextureSlotsIt = sm_data_component.TextureSlots.begin();
 
-			for (auto& texture : miObserver.GetTextures())
+			for (const auto& texture : material_data.Textures)
 			{
 				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
-				auto texture_handle = AssetHandle<Texture2D>(texture);
+				auto texture_handle = AssetHandle<Texture2D>(texture, LoadingPriority_None);
 				if (texture_handle.IsValid())
 				{
 					texture_handle.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
@@ -307,7 +307,6 @@ namespace fe
 					Renderer::BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
 					continue;
 				}
-
 			}
 		}
 

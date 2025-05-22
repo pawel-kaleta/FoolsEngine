@@ -86,7 +86,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
 
 		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		const MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
+		const ACMeshData& GetDataComponent() const { return Get<ACMeshData>(); }
 		//const ACMeshLoadingSettings* GetImportSettings() const { return GetIfExist<ACMeshLoadingSettings>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
@@ -104,7 +104,7 @@ namespace fe
 		void UnloadFromCPU() const;
 
 		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		MeshSpecification& GetSpecification() const { return Get<ACMeshData>().Specification; }
+		ACMeshData& GetDataComponent() const { return Get<ACMeshData>(); }
 
 		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() const { return GetOrEmplace<ACMeshLoadingSettings>(); }
 

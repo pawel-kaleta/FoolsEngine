@@ -5,11 +5,6 @@
 
 namespace fe
 {
-	template <typename>
-	class AssetHandle;
-	template <typename>
-	class AssetUser;
-
 	enum class GDIType;
 
 	struct ACTexture2DData final : public AssetComponent
@@ -32,8 +27,7 @@ namespace fe
 
 		uint32_t GetRendererID(GDIType GDI) const;
 
-		const TextureData::Specification& GetSpecification() const { return Get<ACTexture2DData>().Specification; }
-
+		const ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
 	protected:
 		Texture2DObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 	};
@@ -41,8 +35,7 @@ namespace fe
 	class Texture2DUser : public Texture2DObserver
 	{
 	public:
-		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		const ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
 
 		void PlaceCoreComponent() const { Emplace<ACTexture2DData>().Init(); }
 		void Release() const;
@@ -50,8 +43,6 @@ namespace fe
 		void SendDataToGPU(GDIType GDI, void* data) const;
 		void Bind(GDIType GDI, RenderTextureSlotID slotID = 0) const;
 		void UnloadFromCPU() const;
-
-		TextureData::Specification& GetSpecification() { return Get<ACTexture2DData>().Specification; }
 
 		template <typename tnGDITexture2D>
 		tnGDITexture2D& CreateGDITexture2D(const TextureData::Specification& spec, const void* data) { return Emplace<tnGDITexture2D>(spec, data); }

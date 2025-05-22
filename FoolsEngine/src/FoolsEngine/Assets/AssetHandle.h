@@ -17,6 +17,12 @@ namespace fe
 		AssetObserver& operator=(AssetObserver&& other)      = delete;
 		~AssetObserver() { if (IsValid()) GetRefCounters().ActiveObserversCount--; } //TODO: mutexes
 
+		AssetObserver(AssetID assetID) :
+			Observer(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+		{
+			FE_CORE_ASSERT(assetID, "NullAssetID!");
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+		}
 		AssetObserver(ECS_AssetHandle ECS_handle) :
 			Observer(ECS_handle)
 		{
@@ -51,6 +57,12 @@ namespace fe
 		AssetUser& operator=(AssetUser&& other)      = delete;
 		~AssetUser() { if (IsValid()) GetRefCounters().ActiveUser = false; } //TODO: mutexes
 
+		AssetUser(AssetID assetID) :
+			User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+		{
+			FE_CORE_ASSERT(assetID, "NullAssetID!");
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+		}
 		AssetUser(ECS_AssetHandle ECS_handle) :
 			User(ECS_handle)
 		{

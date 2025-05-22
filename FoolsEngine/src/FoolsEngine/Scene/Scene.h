@@ -15,7 +15,7 @@ namespace fe
 
 	class Entity;
 
-	struct ACWorlds : public AssetComponent
+	struct ACSceneData : public AssetComponent
 	{
 		Scope<GameplayWorld> GameplayWorld;
 	};
@@ -28,7 +28,7 @@ namespace fe
 		virtual AssetType GetType() const override final { return GetTypeStatic(); }
 		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 
-		const ACWorlds& GetWorlds() const { return Get<ACWorlds>(); }
+		const ACSceneData& GetDataComponent() const { return Get<ACSceneData>(); }
 
 	protected:
 		SceneObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -45,7 +45,7 @@ namespace fe
 		void SimulationUpdate() const;
 		void PostFrameUpdate() const;
 
-		ACWorlds& GetWorlds() const { return Get<ACWorlds>(); }
+		ACSceneData& GetDataComponent() const { return Get<ACSceneData>(); }
 
 	private:
 		template <SimulationStages::Stages stage>
@@ -58,7 +58,7 @@ namespace fe
 	class Scene : public Asset
 	{
 	public:
-		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
+		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 
 		using Observer = SceneObserver;
 		using User = SceneUser;

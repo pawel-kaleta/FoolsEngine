@@ -7,7 +7,7 @@ namespace fe
 {
 	void ACShadingModelData::Init()
 	{
-		Shader.Init();
+		ShaderID = NullAssetID;
 		Uniforms.clear();
 		TextureSlots.clear();
 
@@ -31,166 +31,138 @@ namespace fe
 			operator delete(ACData.DefaultUniformsData);
 		ACData.DefaultUniformsData = operator new(ACData.UniformsDataSize);
 
+		uint8_t* uniformDataPointer = (uint8_t*)(ACData.DefaultUniformsData);
 		for (const auto& uniform : uniforms)
 		{
-			this->SetUniformValue(uniform, nullptr);
+			InitUniformValue(uniform, uniformDataPointer);
+			uniformDataPointer += uniform.GetSize();
 		}
+
+		// where is setting of default values for uniforms?
 	}
 
-	void* ShadingModelObserver::GetUniformValuePtr_Internal(const Uniform& targetUniform) const
+	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const Uniform& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACShadingModelData>();
-		uint8_t* uniformDataPointer = (uint8_t*)(data.DefaultUniformsData);
-		bool uniformFound = false;
+		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.DefaultUniformsData);
 
-		for (const auto& uniform : data.Uniforms)
+		for (const auto& uniform : dataComponent.Uniforms)
 		{
 			if (&targetUniform == &uniform)
 			{
-				uniformFound = true;
-				break;
+				return (void*)uniformDataPointer;
 			}
 			uniformDataPointer += uniform.GetSize();
 		}
 
-		if (!uniformFound)
-		{
-			FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
-			return nullptr;
-		}
-
-		return (void*)uniformDataPointer;
+		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+		return nullptr;
 	}
 
-	void* ShadingModelObserver::GetUniformValuePtr_Internal(const std::string& name) const
+	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const std::string& name) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACShadingModelData>();
+		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.DefaultUniformsData);
 
-		uint8_t* uniformDataPointer = (uint8_t*)(data.DefaultUniformsData);
-		bool uniformFound = false;
-
-		for (const auto& uniform : data.Uniforms)
+		for (const auto& uniform : dataComponent.Uniforms)
 		{
 			if (name == uniform.GetName())
 			{
-				uniformFound = true;
-				break;
+				return (void*)uniformDataPointer;
 			}
 			uniformDataPointer += uniform.GetSize();
 		}
-		if (!uniformFound)
-		{
-			FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
-			return nullptr;
-		}
-		return (void*)uniformDataPointer;
+
+		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+		return nullptr;
 	}
 
-
-	void ShadingModelUser::SetUniformValue(const Uniform& targetUniform, void* dataPointer) const
+	void ShadingModelUser::SetUniformValue(const ACShadingModelData& dataComponent, const Uniform& targetUniform, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACShadingModelData>();
-
-		uint8_t* dest = (uint8_t*)(data.DefaultUniformsData);
-		size_t uniformSize = 0;
-		bool uniformFound = false;
-
-		for (const auto& uniform : data.Uniforms)
+		if (!dataPointer)
 		{
-			if (&targetUniform == &uniform)
-			{
-				uniformSize = uniform.GetSize();
-				uniformFound = true;
-				break;
-			}
-			dest += uniform.GetSize();
-		}
-		if (!uniformFound)
-		{
-			FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+			FE_CORE_ASSERT(false, "Pointer is null!");
 			return;
 		}
 
-		if (dataPointer)
-			std::memcpy((void*)dest, dataPointer, uniformSize);
-		else // uniform initialization
-		{
-			if (targetUniform.GetPrimitive() == ShaderData::Primitive::None)
-			{
-				FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
-				return;
-			}
-			if ((int)targetUniform.GetPrimitive() > 5)
-			{
-				FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
-				return;
-			}
-
-			auto type_size = ShaderData::SizeOfType(targetUniform.GetType());
-			auto primitive_size = ShaderData::SizeOfPrimitive(targetUniform.GetPrimitive());
-			auto elements_in_type = type_size / primitive_size;
-			auto elements = elements_in_type * targetUniform.GetCount();
-
-			for (size_t i = 0; i < elements; i++)
-			{
-				switch (targetUniform.GetPrimitive())
-				{
-				case ShaderData::Primitive::Bool:
-					*(uint32_t*)dest = 0;
-					dest += 4;
-					break;
-				case ShaderData::Primitive::Int:
-					*(int32_t*)dest = 0;
-					dest += 4;
-					break;
-				case ShaderData::Primitive::UInt:
-					*(uint32_t*)dest = 0;
-					dest += 4;
-					break;
-				case ShaderData::Primitive::Float:
-					*(float*)dest = 0.0f;
-					dest += 4;
-					break;
-				case ShaderData::Primitive::Double:
-					*(float*)dest = 0.0;
-					dest += 8;
-					break;
-				}
-			}
-		}
+		void* dest = GetUniformValuePtr_Internal(dataComponent, targetUniform);
+		std::memcpy((void*)dest, dataPointer, targetUniform.GetSize());
 	}
 
-	void ShadingModelUser::SetUniformValue(const std::string& name, void* dataPointer) const
+	void ShadingModelUser::SetUniformValue(const ACShadingModelData& dataComponent, const std::string& name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data = Get<ACShadingModelData>();
-
-		uint8_t* dest = (uint8_t*)(data.DefaultUniformsData);
-		size_t uniformSize = 0;
-		bool uniformFound = false;
-
-		for (const auto& uniform : data.Uniforms)
+		if (!dataPointer)
 		{
+			FE_CORE_ASSERT(false, "Pointer is null!");
+			return;
+		}
+
+		uint8_t* dest = (uint8_t*)(dataComponent.DefaultUniformsData);
+
+		for (const auto& uniform : dataComponent.Uniforms)
+		{
+			auto size = uniform.GetSize();
 			if (name == uniform.GetName())
 			{
-				uniformSize = uniform.GetSize();
-				uniformFound = true;
-				break;
+				std::memcpy((void*)dest, dataPointer, size);
+				return;
 			}
-			dest += uniform.GetSize();
+			dest += size;
 		}
-		if (!uniformFound)
+
+		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+	}
+
+	void ShadingModelUser::InitUniformValue(const Uniform& uniform, void* uniformDataPointer) const
+	{
+		if (uniform.GetPrimitive() == ShaderData::Primitive::None)
 		{
-			FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
 			return;
 		}
-		std::memcpy((void*)dest, dataPointer, uniformSize);
+		if ((int)uniform.GetPrimitive() > 5)
+		{
+			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
+			return;
+		}
+
+		auto type_size = ShaderData::SizeOfType(uniform.GetType());
+		auto primitive_size = ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		auto elements_in_type = type_size / primitive_size;
+		auto elements = elements_in_type * uniform.GetCount();
+		uint8_t* dest = (uint8_t*)(uniformDataPointer);
+
+		for (size_t i = 0; i < elements; i++)
+		{
+			switch (uniform.GetPrimitive())
+			{
+			case ShaderData::Primitive::Bool:
+				*(uint32_t*)uniformDataPointer = 0;
+				dest += 4;
+				break;
+			case ShaderData::Primitive::Int:
+				*(int32_t*)dest = 0;
+				dest += 4;
+				break;
+			case ShaderData::Primitive::UInt:
+				*(uint32_t*)dest = 0;
+				dest += 4;
+				break;
+			case ShaderData::Primitive::Float:
+				*(float*)dest = 0.0f;
+				dest += 4;
+				break;
+			case ShaderData::Primitive::Double:
+				*(float*)dest = 0.0;
+				dest += 8;
+				break;
+			}
+		}
 	}
 }

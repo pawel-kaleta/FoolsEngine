@@ -18,7 +18,7 @@ namespace fe
 		virtual AssetType GetType() const override final { return GetTypeStatic(); }
 		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
 
-		const std::vector<AssetID>& GetRenderMeshes() const { return Get<ACModelData>().RenderMeshes; }
+		const ACModelData& GetDataComponent() const { return Get<ACModelData>(); }
 		
 	protected:
 		ModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -29,7 +29,7 @@ namespace fe
 	public:
 		void PlaceCoreComponent() const;
 
-		std::vector<AssetID>& GetRenderMeshes() const { return Get<ACModelData>().RenderMeshes; }
+		ACModelData& GetDataComponent() const { return Get<ACModelData>(); }
 
 	protected:
 		ModelUser(ECS_AssetHandle ECS_handle) : ModelObserver(ECS_handle) {}
