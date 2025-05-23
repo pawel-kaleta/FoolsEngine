@@ -338,6 +338,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\Components\MeshComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Components\RenderingComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

@@ -68,7 +68,7 @@ namespace fe
 		emitter << YAML::EndMap; //Scene Properties
 		emitter << YAML::Key << "Worlds" << YAML::Value << YAML::BeginMap;
 		{
-			SerializeGameplayWorld(scene.GetDataComponent().GameplayWorld.get(), emitter);
+			SerializeGameplayWorld(scene.GetCoreComponent().GameplayWorld.get(), emitter);
 		}
 		emitter << YAML::EndMap; //Worlds
 	}
@@ -89,7 +89,7 @@ namespace fe
 
 		auto& worlds = node["Worlds"];
 		if (!worlds) return false;
-		if (!DeserializeGameplayWorld(scene.GetDataComponent().GameplayWorld.get(), worlds["GameplayWorld"]))
+		if (!DeserializeGameplayWorld(scene.GetCoreComponent().GameplayWorld.get(), worlds["GameplayWorld"]))
 			return false;
 
 		return true;

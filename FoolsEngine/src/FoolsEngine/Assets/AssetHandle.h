@@ -2,6 +2,8 @@
 
 #include "AssetManager.h"
 
+#include "FoolsEngine\Debug\Asserts.h"
+
 namespace fe
 {
 	template <typename tnAsset>
@@ -15,33 +17,53 @@ namespace fe
 		AssetObserver(AssetObserver&& other)      = delete;
 		AssetObserver& operator=(const AssetObserver& other) = delete;
 		AssetObserver& operator=(AssetObserver&& other)      = delete;
-		~AssetObserver() { if (IsValid()) GetRefCounters().ActiveObserversCount--; } //TODO: mutexes
+		~AssetObserver()
+		{
+			if (!IsValid()) return;
+
+			auto refs = GetRefCounters();
+			if (!refs) return;
+
+			refs->ActiveObserversCount--;
+		}
+		//TODO: mutexes
 
 		AssetObserver(AssetID assetID) :
 			tnAsset::Observer(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
 		{
-			FE_CORE_ASSERT(assetID, "NullAssetID!");
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			Init();
 		}
 		AssetObserver(ECS_AssetHandle ECS_handle) :
 			tnAsset::Observer(ECS_handle)
 		{
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			Init();
+		};
 
+		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
+
+	private:
+		void StackCheck()
+		{
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
 			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
 #endif // FE_INTERNAL_BUILD
+		}
 
-			if (IsValid())
-			{
-				ACRefsCounters& refs = GetRefCounters();
-				FE_CORE_ASSERT(!refs.ActiveUser, "Cannot read and write at the same time");
+		void Init()
+		{
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			if (!IsValid()) return;
 
-				refs.ActiveObserversCount++; //TODO: mutexes
-			}
-		};
+			StackCheck();
+
+			auto refs = GetRefCounters();
+			if (!refs) return; // internal assets are not reference counted
+
+			FE_CORE_ASSERT(!refs->ActiveUser, "Cannot read and write at the same time");
+			refs->ActiveObserversCount++; //TODO: mutexes
+		}
 	};
 
 	template <typename tnAsset>
@@ -55,35 +77,53 @@ namespace fe
 		AssetUser(AssetUser&& other)      = delete;
 		AssetUser& operator=(const AssetUser& other) = delete;
 		AssetUser& operator=(AssetUser&& other)      = delete;
-		~AssetUser() { if (IsValid()) GetRefCounters().ActiveUser = false; } //TODO: mutexes
+		~AssetUser()
+		{
+			if (!IsValid()) return;
+			auto refs = GetRefCounters();
+			if (!refs) return;
+			refs->ActiveUser = false;
+		}
+		//TODO: mutexes
 
 		AssetUser(AssetID assetID) :
 			tnAsset::User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
 		{
-			FE_CORE_ASSERT(assetID, "NullAssetID!");
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			Init();
 		}
 		AssetUser(ECS_AssetHandle ECS_handle) :
 			tnAsset::User(ECS_handle)
 		{
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			Init();
+		};
 
+		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
+
+	private:
+		void StackCheck()
+		{
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
 			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
 #endif // FE_INTERNAL_BUILD
+		}
 
-			if (IsValid())
-			{
-				ACRefsCounters& refs = GetRefCounters();
-				FE_CORE_ASSERT(!refs.ActiveObserversCount, "Cannot read and write at the same time");
-				FE_CORE_ASSERT(!refs.ActiveUser, "Cannot write concurently");
-				refs.ActiveUser = true; //TODO: mutexes
-			}
-		};
+		void Init()
+		{
+			if (!IsValid()) return;
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+
+			StackCheck();
+
+			auto refs = GetRefCounters();
+			if (!refs) return;
+
+			FE_CORE_ASSERT(!refs->ActiveObserversCount, "Cannot read and write at the same time");
+			FE_CORE_ASSERT(!refs->ActiveUser, "Cannot write concurently");
+			refs->ActiveUser = true; //TODO: mutexes
+		}
 	};
-
 
 	enum AssetLoadingPriority : uint32_t
 	{
@@ -122,21 +162,18 @@ namespace fe
 		AssetHandle(AssetID assetID, AssetLoadingPriority priority = LoadingPriority_Standard) :
 			AssetHandleBase(assetID, priority)
 		{
-			if (assetID && priority != LoadingPriority_None)
-				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
+			Init();
 		};
 
 		~AssetHandle()
 		{
-			if (m_ID && m_LoadingPriority != LoadingPriority_None)
-				GetECSHandle().get<ACRefsCounters>().LiveHandles--;
+			Deinit();
 		}
 
 		AssetHandle(const AssetHandle& other) :
 			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
 		{
-			if (other.m_ID && other.m_LoadingPriority != LoadingPriority_None)
-				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
+			Init();
 		};
 		AssetHandle(AssetHandle&& other) :
 			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
@@ -145,19 +182,19 @@ namespace fe
 		};
 		AssetHandle& operator=(const AssetHandle& other)
 		{
-			if (m_ID && m_LoadingPriority != LoadingPriority_None)
-				GetECSHandle().get<ACRefsCounters>().LiveHandles--;
+			Deinit();
 
 			m_ID = other.m_ID;
 			m_LoadingPriority = other.m_LoadingPriority;
 
-			if (other.m_ID && other.m_LoadingPriority != LoadingPriority_None)
-				GetECSHandle().get<ACRefsCounters>().LiveHandles++;
+			Init();
 
 			return *this;
 		}
 		AssetHandle& operator=(AssetHandle&& other)
 		{
+			Deinit();
+
 			m_ID = other.m_ID;
 			m_LoadingPriority = other.m_LoadingPriority;
 
@@ -168,15 +205,45 @@ namespace fe
 
 		bool operator==(const AssetHandle& other) const { return m_ID == other.m_ID; }
 		
-		UUID GetUUID() const { return GetECSHandle().get<ACUUID>().UUID; }
+		UUID GetUUID() const { return GetECSHandle().get<ACUUID>().UUID; } // ??? Do we have UUID on every asset?
 		bool IsValid() const { return (bool)GetECSHandle(); }
-		void SetLoadingPriority(AssetLoadingPriority priority) { m_LoadingPriority = priority; } // TO DO: add AssetLoadingPriority counting
+		void SetLoadingPriority(AssetLoadingPriority priority)
+		{
+			auto refs = GetECSHandle().try_get<ACRefsCounters>();
+			if (refs)
+			{
+				if (priority != LoadingPriority_None && m_LoadingPriority == LoadingPriority_None)
+					refs->LiveHandles++;
+				if (priority == LoadingPriority_None && m_LoadingPriority != LoadingPriority_None)
+					refs->LiveHandles--;
+			}
+			m_LoadingPriority = priority;
+		} // TO DO: add AssetLoadingPriority counting
 
 		AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
 		AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
 		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::GetRegistry(), m_ID); };
-		
+
+		void Init()
+		{
+			if (!m_ID) return;
+			if (m_LoadingPriority == LoadingPriority_None) return;
+			auto refs = GetECSHandle().try_get<ACRefsCounters>();
+			if (!refs) return;
+			refs->LiveHandles++;
+		}
+
+		void Deinit()
+		{
+			if (!m_ID) return;
+			if (m_LoadingPriority == LoadingPriority_None) return;
+			auto refs = GetECSHandle().try_get<ACRefsCounters>();
+			if (!refs) return;
+			refs->LiveHandles--;
+
+			m_ID = NullAssetID;
+		}
 	};
 }

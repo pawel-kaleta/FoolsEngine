@@ -3,7 +3,7 @@
 #include <FoolsEngine.h>
 #include "EditorState.h"
 
-#include "EditorAssetManager.h"
+#include "EditorAssetHandle.h"
 
 namespace fe
 {

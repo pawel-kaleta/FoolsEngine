@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
 
 namespace fe
 {
@@ -9,7 +10,7 @@ namespace fe
 	class ShaderTextureSlot;
 	using RenderTextureSlotID = uint32_t;
 
-	struct ACSourceCode final : public AssetComponent
+	struct ACShaderCore final : public AssetComponent
 	{
 		std::string VertexSource;
 		std::string FragmentSource;
@@ -21,10 +22,7 @@ namespace fe
 	class ShaderObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
-
-		const ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
+		const ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
 
 		uint32_t GetRendererID(GDIType GDI) const;
 
@@ -41,14 +39,12 @@ namespace fe
 	class ShaderUser : public ShaderObserver
 	{
 	public:
-		ACSourceCode* GetSourceCode() const { return GetIfExist<ACSourceCode>(); }
-		ACSourceCode& GetOrEmplaceSourceCode() const { return GetOrEmplace<ACSourceCode>(); }
+		ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
 
 		template <typename tnGDIShader, typename... Args>
 		tnGDIShader& CreateGDIShader(Args&&... args) const { return Emplace<tnGDIShader>(std::forward<Args>(args)...); }
 
-		void PlaceCoreComponent() const { };
-		void Release()  const;
+		void Release() const;
 
 		void SendDataToGPU(GDIType GDI, void* data) { FE_CORE_ASSERT(false, "Shader loading not implemented yet"); };
 		void UnloadFromCPU() const;
@@ -63,5 +59,6 @@ namespace fe
 
 		using Observer = ShaderObserver;
 		using User = ShaderUser;
+		using Core = ACShaderCore;
 	};
 }

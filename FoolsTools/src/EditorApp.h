@@ -18,9 +18,6 @@ namespace fe
 		static EditorApp& Get() { return (EditorApp&)Application::Get(); }
 
 	private:
-		friend class EditorAssetManager;
-		Scope<EditorAssetManager> m_EditorAssetManager;
-
 		Ref<EditorLayer> m_EditorLayer;
 	};
 

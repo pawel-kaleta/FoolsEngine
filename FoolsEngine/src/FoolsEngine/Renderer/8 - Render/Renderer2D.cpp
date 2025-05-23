@@ -132,7 +132,7 @@ namespace fe
 
 		BeginScene(camera, cameraTransform, framebuffer);
 
-		auto& registry = scene.GetDataComponent().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 
 		auto viewTiles = registry.view<CTile, CTransformGlobal>();
 
@@ -232,7 +232,7 @@ namespace fe
 		float aspectRatio;
 		{
 			auto texture_observer = quad.Texture.Observe();
-			auto& spec = texture_observer.GetDataComponent().Specification;
+			auto& spec = texture_observer.GetCoreComponent().Specification;
 			aspectRatio = (float)spec.Height / (float)spec.Width;
 		}
 

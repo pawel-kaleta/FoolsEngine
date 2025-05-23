@@ -40,6 +40,7 @@
 #include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
 #include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Memory\Scratchpad.h"
 

@@ -2,7 +2,6 @@
 
 #include <EntryPoint.h>
 
-#include "EditorAssetManager.h"
 #include "EditorLayer.h"
 
 namespace fe
@@ -15,7 +14,6 @@ namespace fe
 
 	void EditorApp::ClientAppStartup()
 	{
-		m_EditorAssetManager = Scope<EditorAssetManager>(new EditorAssetManager());
 		m_EditorLayer = CreateRef<EditorLayer>();
 		PushOuterLayer(m_EditorLayer);
 	}
@@ -24,7 +22,6 @@ namespace fe
 	{
 		PopOuterLayer(m_EditorLayer);
 		m_EditorLayer.reset();
-		m_EditorAssetManager.reset();
 	}
 
 	Application* CreateApplication()

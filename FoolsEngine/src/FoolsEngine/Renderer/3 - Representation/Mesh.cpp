@@ -1,7 +1,6 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
@@ -11,14 +10,14 @@
 
 namespace fe
 {
-	void ACMeshData::Init()
+	void ACMeshCore::Init()
 	{
 		Specification.Init();
 		if (Data) GeometryLoader::UnloadMesh(Data);
 		Data = nullptr;
 	}
 
-	ACMeshData::~ACMeshData() { if (Data) GeometryLoader::UnloadMesh(Data); }
+	ACMeshCore::~ACMeshCore() { if (Data) GeometryLoader::UnloadMesh(Data); }
 
 	void MeshUser::SendDataToGPU(GDIType GDI) const
 	{
@@ -28,7 +27,7 @@ namespace fe
 			return;
 		}
 
-		auto& ACData = Get<ACMeshData>();
+		auto& ACData = Get<ACMeshCore>();
 		auto& spec = ACData.Specification;
 		auto& buffersComp = Emplace<ACGPUBuffers>();
 
@@ -45,7 +44,7 @@ namespace fe
 
 	void MeshUser::UnloadFromCPU() const
 	{
-		auto& data = Get<ACMeshData>().Data;
+		auto& data = Get<ACMeshCore>().Data;
 		if (data)
 		{
 			GeometryLoader::UnloadMesh(data);
@@ -68,9 +67,9 @@ namespace fe
 			return;
 		}
 
-		auto& material_data = materialObserver.GetDataComponent();
+		auto& material_data = materialObserver.GetCoreComponent();
 		auto shading_model_observer = AssetObserver<ShadingModel>(material_data.ShadingModelID);
-		auto& sm_data = shading_model_observer.GetDataComponent();
+		auto& sm_data = shading_model_observer.GetCoreComponent();
 		auto shader_user = AssetUser<Shader>(sm_data.ShaderID);
 
 		auto GDI = Renderer::GetActiveGDItype();

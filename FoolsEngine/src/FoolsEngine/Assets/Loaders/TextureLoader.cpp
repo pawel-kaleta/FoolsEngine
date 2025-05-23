@@ -6,14 +6,14 @@
 
 namespace fe
 {
-	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Texture2D>& textureUser)
+	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser)
 	{
-		auto& acDataLocation = textureUser.GetDataComponent().Data;
+		auto& acDataLocation = textureUser.GetCoreComponent().Data;
 		if (acDataLocation)
 			return;
 
 		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.GetDataComponent().Specification;
+		auto& spec = textureUser.GetCoreComponent().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk

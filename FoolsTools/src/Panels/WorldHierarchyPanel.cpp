@@ -27,7 +27,7 @@ namespace fe
 		bool nodeClicked = false;
 
 		auto scene_observer = m_Scene.Observe();
-		auto& gameplay_world = scene_observer.GetDataComponent().GameplayWorld;
+		auto& gameplay_world = scene_observer.GetCoreComponent().GameplayWorld;
 		auto& hierarchy = gameplay_world->GetHierarchy();
 
 		hierarchy.EnforceSafeOrder();
@@ -65,7 +65,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& gameplay_world = sceneObserver.GetDataComponent().GameplayWorld;
+		auto& gameplay_world = sceneObserver.GetCoreComponent().GameplayWorld;
 		auto allGroup = gameplay_world->GetHierarchy().Group();
 		auto& node = allGroup.get<CEntityNode>(entityID);
 

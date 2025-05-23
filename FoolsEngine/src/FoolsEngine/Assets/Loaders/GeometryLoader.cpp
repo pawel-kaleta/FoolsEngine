@@ -76,7 +76,7 @@ namespace fe
 			aiProcess_FlipUVs 
 		);
 
-		auto& mesh_data_component = meshUser.GetDataComponent();
+		auto& mesh_data_component = meshUser.GetCoreComponent();
 
 		auto& dataLocation = mesh_data_component.Data;
 		if (dataLocation)

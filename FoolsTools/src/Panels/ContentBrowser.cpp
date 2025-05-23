@@ -10,18 +10,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_Icons.File = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
-		m_Icons.Folder = EditorAssetHandle<Texture2D>(EditorAssetManager::NewAsset<Texture2D>());
+		m_Icons.File = EditorAssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+		m_Icons.Folder = EditorAssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
 
-		auto fileUser = m_Icons.File.Use();
-		auto folderUser = m_Icons.Folder.Use();
-
-		TextureLoader::LoadTexture("resources/File.png", fileUser);
-		TextureLoader::LoadTexture("resources/Folder.png", folderUser);
+		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
+		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 		
 		auto GDI = Renderer::GetActiveGDItype();
-		fileUser.CreateGDITexture2D(GDI);
-		folderUser.CreateGDITexture2D(GDI);
+		m_Icons.File.CreateGDITexture2D(GDI);
+		m_Icons.Folder.CreateGDITexture2D(GDI);
 	}
 
 	void ContentBrowser::OnImGuiRender()
@@ -98,8 +95,7 @@ namespace fe
 		ImGuiStyle& style = ImGui::GetStyle();
 		auto gdi = Renderer::GetActiveGDItype();
 
-		auto textureUser = m_Icons.Folder.Use();
-		ImTextureID texture_id = (ImTextureID)(int64_t)textureUser.GetRendererID(gdi);
+		ImTextureID texture_id = (ImTextureID)(int64_t)m_Icons.Folder.GetRendererID(gdi);
 
 		if (m_CurrentPath.compare(m_AssetsPath))
 		{
@@ -164,8 +160,7 @@ namespace fe
 		ImGuiStyle& style = ImGui::GetStyle();
 		auto gdi = Renderer::GetActiveGDItype();
 
-		auto file_icon_user = m_Icons.File.Use();
-		ImTextureID file_icon_id = (ImTextureID)file_icon_user.GetRendererID(gdi);
+		ImTextureID file_icon_id = (ImTextureID)m_Icons.File.GetRendererID(gdi);
 
 		for (auto& file : *m_Files)
 		{

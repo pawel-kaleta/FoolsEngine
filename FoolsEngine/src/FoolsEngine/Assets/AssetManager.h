@@ -12,24 +12,32 @@ namespace fe
 	public:
 		static AssetRegistry& GetRegistry() { return s_Instance->m_Registry; }
 
+#ifdef FE_EDITOR
 		template <typename tnAsset>
-		static AssetID CreateInternalAsset(AssetID parent)
+		static AssetID CreateInternalAsset()
 		{
 			FE_PROFILER_FUNC();
 
 			AssetRegistry& reg = s_Instance->m_Registry;
 			AssetID assetID = reg.create();
 
-			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
-			s_Instance->MapByUUID[uuid] = assetID;
+			reg.emplace<tnAsset::Core>(assetID).Init();
 
-			reg.emplace<ACParentAsset>(assetID).Parent = parent;
+			return assetID;
+		}
+#endif
+		template <typename tnAsset>
+		static AssetID CreateInternalAsset(AssetID parent)
+		{
+			FE_PROFILER_FUNC();
 
-			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponent();
+			auto assetid = CreateInternalAsset<tnAsset>();
+			s_Instance->m_Registry.emplace<ACMasterAsset>(assetID).Parent = parent;
+
 			return assetID;
 		}
 		template <typename tnAsset>
-		static AssetID CreateAsset(const std::filesystem::path& path)
+		static AssetID CreateProjectAsset(const std::filesystem::path& path)
 		{
 			FE_PROFILER_FUNC();
 
@@ -40,11 +48,11 @@ namespace fe
 			reg.emplace<ACFilepath>(assetID).Filepath = path;
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
 
+			s_Instance->m_MapByUUID[uuid] = assetID;
+			s_Instance->m_MapByFilepath[path] = assetID;
 
-			s_Instance->MapByUUID[uuid] = assetID;
-			s_Instance->data.MapByFilepath[path] = assetID;
+			reg.emplace<tnAsset::Core>(assetID).Init();
 
-			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponent();
 			return assetID;
 		}
 
@@ -103,8 +111,4 @@ namespace fe
 			s_Instance->m_MapByFilepath.erase(path);
 		}
 	};
-
-	AssetInterface::AssetInterface(AssetType type, AssetID assetID) :
-		m_ECSHandle(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
-	{ }
 }

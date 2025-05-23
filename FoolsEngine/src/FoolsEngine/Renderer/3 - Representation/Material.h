@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
 #include "ShadingModel.h"
@@ -8,7 +9,7 @@
 
 namespace fe
 {
-	struct ACMaterialData
+	struct ACMaterialCore
 	{
 		AssetID ShadingModelID;
 		std::vector<AssetID> Textures;
@@ -16,58 +17,46 @@ namespace fe
 		void* UniformsData;
 		size_t UniformsDataSize;
 
-		void Init()
-		{
-			ShadingModelID =NullAssetID;
-			Textures.clear();
-			if (UniformsData) operator delete(UniformsData);
-			UniformsData = nullptr;
-			UniformsDataSize = 0;
-		}
+		void Init();
 
-		~ACMaterialData() { if (UniformsData) operator delete(UniformsData); }
+		~ACMaterialCore() { if (UniformsData) operator delete(UniformsData); }
 	};
 
 	class MaterialObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
+		const ACMaterialCore& GetCoreComponent() const { return Get<ACMaterialCore>(); }
 
-		const ACMaterialData& GetDataComponent() const { return Get<ACMaterialData>(); }
+		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		const void* GetUniformValuePtr(const ACMaterialData& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
-		const void* GetUniformValuePtr(const ACMaterialData& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
-
-		AssetHandle<Texture2D> GetTexture(const ACMaterialData& dataComponent, const ShaderTextureSlot& textureSlot) const;
-		AssetHandle<Texture2D> GetTexture(const ACMaterialData& dataComponent, const std::string& textureSlotName) const;
+		AssetHandle<Texture2D> GetTexture(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const;
+		AssetHandle<Texture2D> GetTexture(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const;
 
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
-		void* GetUniformValuePtr_Internal(const ACMaterialData& dataComponent, const Uniform& targetUniform) const;
-		void* GetUniformValuePtr_Internal(const ACMaterialData& dataComponent, const std::string& name) const;
+		void* GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const;
+		void* GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const std::string& name) const;
 	};
 	
 	class MaterialUser : public MaterialObserver
 	{
 	public:
-		void PlaceCoreComponent() const { Emplace<ACShadingModelData>().Init(); };
+		ACMaterialCore& GetCoreComponent() const { return Get<ACMaterialCore>(); }
 
 		void MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const;
 
-		ACMaterialData& GetDataComponent() const { return Get<ACMaterialData>(); }
+		void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		void* GetUniformValuePtr(const ACMaterialData& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
-		void* GetUniformValuePtr(const ACMaterialData& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
+		void SetUniformValue(const ACMaterialCore& dataComponent, const Uniform& uniform, void* dataPointer) const;
+		void SetUniformValue(const ACMaterialCore& dataComponent, const std::string& name, void* dataPointer) const;
 
-		void SetUniformValue(const ACMaterialData& dataComponent, const Uniform& uniform, void* dataPointer) const;
-		void SetUniformValue(const ACMaterialData& dataComponent, const std::string& name, void* dataPointer) const;
+		void SetTexture(ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const;
+		void SetTexture(ACMaterialCore& dataComponent, const std::string& textureSlotName, AssetID textureID) const;
 
-		void SetTexture(ACMaterialData& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const;
-		void SetTexture(ACMaterialData& dataComponent, const std::string& textureSlotName, AssetID textureID) const;
-
-		void ResetUniformValueToDefault(ACMaterialData& dataComponent, const Uniform& uniform) const;
+		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const;
 	protected:
 		MaterialUser(ECS_AssetHandle ECS_handle) : MaterialObserver(ECS_handle) {}
 	};
@@ -79,5 +68,6 @@ namespace fe
 
 		using User = MaterialUser;
 		using Observer = MaterialObserver;
+		using Core = ACMaterialCore;
 	};
 }

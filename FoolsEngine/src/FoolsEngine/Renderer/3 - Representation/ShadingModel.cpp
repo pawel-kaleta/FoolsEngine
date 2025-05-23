@@ -5,19 +5,21 @@
 
 namespace fe
 {
-	void ACShadingModelData::Init()
+	void ACShadingModelCore::Init()
 	{
 		ShaderID = NullAssetID;
 		Uniforms.clear();
 		TextureSlots.clear();
 
 		if (DefaultUniformsData) operator delete(DefaultUniformsData);
+		DefaultUniformsData = nullptr;
+
 		UniformsDataSize = 0;
 	}
 	
 	void ShadingModelUser::MakeShadingModel(AssetID shaderID, const std::initializer_list<Uniform>& uniforms, const std::initializer_list<ShaderTextureSlot>& textureSlots) const
 	{
-		auto& ACData = Get<ACShadingModelData>();
+		auto& ACData = Get<ACShadingModelCore>();
 		ACData.ShaderID = shaderID;
 		ACData.Uniforms = uniforms;
 		ACData.TextureSlots = textureSlots;
@@ -41,7 +43,7 @@ namespace fe
 		// where is setting of default values for uniforms?
 	}
 
-	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const Uniform& targetUniform) const
+	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -60,7 +62,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelData& dataComponent, const std::string& name) const
+	void* ShadingModelObserver::GetUniformValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -79,7 +81,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void ShadingModelUser::SetUniformValue(const ACShadingModelData& dataComponent, const Uniform& targetUniform, void* dataPointer) const
+	void ShadingModelUser::SetUniformValue(const ACShadingModelCore& dataComponent, const Uniform& targetUniform, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -93,7 +95,7 @@ namespace fe
 		std::memcpy((void*)dest, dataPointer, targetUniform.GetSize());
 	}
 
-	void ShadingModelUser::SetUniformValue(const ACShadingModelData& dataComponent, const std::string& name, void* dataPointer) const
+	void ShadingModelUser::SetUniformValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 

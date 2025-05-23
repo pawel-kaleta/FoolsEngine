@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <memory_resource>
 
-#include "EditorAssetManager.h"
+#include "EditorAssetHandle.h"
 
 namespace fe
 {

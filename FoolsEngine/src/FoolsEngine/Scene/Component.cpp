@@ -136,13 +136,13 @@ namespace fe
 		}
 
 		auto material_user = material.Use();
-		auto& shading_model_current = material_user.GetDataComponent().ShadingModelID;
+		auto& shading_model_current = material_user.GetCoreComponent().ShadingModelID;
 
 		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string().c_str()))
 		{
 			bool is_selected;
 
-			auto shading_models = AssetManager::GetRegistry().view<ACShadingModelData>();
+			auto shading_models = AssetManager::GetRegistry().view<ACShadingModelCore>();
 
 			for (auto id : shading_models)
 			{
@@ -164,8 +164,8 @@ namespace fe
 
 		auto shading_model_observer = AssetObserver<ShadingModel>(shading_model_current);
 
-		auto& sm_data_component = shading_model_observer.GetDataComponent();
-		auto& material_data_component = material_user.GetDataComponent();
+		auto& sm_data_component = shading_model_observer.GetCoreComponent();
+		auto& material_data_component = material_user.GetCoreComponent();
 
 		for (auto& uniform : sm_data_component.Uniforms)
 		{
@@ -185,7 +185,7 @@ namespace fe
 				if (ImGui::Selectable("None", is_selected))
 					material_user.SetTexture(material_data_component, textureSlot, NullAssetID);
 
-				auto textures = AssetManager::GetRegistry().view<ACTexture2DData>();
+				auto textures = AssetManager::GetRegistry().view<ACTexture2DCore>();
 				for (auto id : textures)
 				{
 					auto textureHandle = AssetHandle<Texture2D>(id);

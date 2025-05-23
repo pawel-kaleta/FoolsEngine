@@ -18,7 +18,7 @@ namespace fe
 			return;
 		}
 
-		auto& sourceCode = shaderUser.GetOrEmplaceSourceCode();
+		auto& sourceCode = shaderUser.GetCoreComponent();
 		auto& shaderSource = sourceCode.ShaderSource;
 		
 		in.seekg(0, std::ios::end);
@@ -64,14 +64,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto acShaderSource = shaderUser.GetSourceCode();
+		auto acShaderSource = shaderUser.GetCoreComponent();
 
-		if (!acShaderSource->ShaderSource.empty())
+		if (!acShaderSource.ShaderSource.empty())
 			PreProcess(shaderUser);
 
 		std::unordered_map<GLenum, const std::string*> shaderSources;
-		shaderSources[GL_VERTEX_SHADER] = &(acShaderSource->VertexSource);
-		shaderSources[GL_FRAGMENT_SHADER] = &(acShaderSource->FragmentSource);
+		shaderSources[GL_VERTEX_SHADER] = &(acShaderSource.VertexSource);
+		shaderSources[GL_FRAGMENT_SHADER] = &(acShaderSource.FragmentSource);
 
 		std::array<GLuint, 2> shaders;
 		int shadersCount = 0;
@@ -156,8 +156,8 @@ namespace fe
 
 	void ShaderLoader::PreProcess(AssetUser<Shader>& shaderUser)
 	{
-		auto acShaderSource = shaderUser.GetSourceCode();
-		auto& shaderSource = acShaderSource->ShaderSource;
+		auto acShaderSource = shaderUser.GetCoreComponent();
+		auto& shaderSource = acShaderSource.ShaderSource;
 
 		const char* typeToken = "#type";
 		size_t typeTokenLength = strlen(typeToken);
@@ -172,9 +172,9 @@ namespace fe
 			std::string* dataLocation = nullptr;
 
 			if (type == "vertex")
-				dataLocation = &(acShaderSource->VertexSource);
+				dataLocation = &(acShaderSource.VertexSource);
 			if (type == "fragment" || type == "pixel")
-				dataLocation = &(acShaderSource->FragmentSource);
+				dataLocation = &(acShaderSource.FragmentSource);
 
 			size_t nextLinePos = shaderSource.find_first_not_of("\r\n", eol);
 			FE_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");

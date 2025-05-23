@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
 #include "Mesh.h"
@@ -7,18 +8,17 @@
 
 namespace fe
 {
-	struct ACModelData final : public AssetComponent
+	struct ACModelCore final : public AssetComponent
 	{
 		std::vector<AssetID> RenderMeshes;
+
+		void Init() { }
 	};
 
 	class ModelObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
-
-		const ACModelData& GetDataComponent() const { return Get<ACModelData>(); }
+		const ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
 		
 	protected:
 		ModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -27,9 +27,12 @@ namespace fe
 	class ModelUser : public ModelObserver
 	{
 	public:
-		void PlaceCoreComponent() const;
+		void PlaceCoreComponent() const
+		{
+			Emplace<ACModelCore>();
+		}
 
-		ACModelData& GetDataComponent() const { return Get<ACModelData>(); }
+		ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
 
 	protected:
 		ModelUser(ECS_AssetHandle ECS_handle) : ModelObserver(ECS_handle) {}
@@ -42,5 +45,6 @@ namespace fe
 
 		using Observer = ModelObserver;
 		using User = ModelUser;
+		using Core = ACModelCore;
 	};
 }

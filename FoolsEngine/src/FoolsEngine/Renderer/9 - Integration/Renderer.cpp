@@ -110,7 +110,7 @@ namespace fe
 
 			// TO DO: save to file
 			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
-			*(glm::vec3*)material_user.GetUniformValuePtr(material_user.GetDataComponent(), "u_BaseColor") = {1.0f, 1.0f, 1.0f};
+			*(glm::vec3*)material_user.GetUniformValuePtr(material_user.GetCoreComponent(), "u_BaseColor") = {1.0f, 1.0f, 1.0f};
 		}
 	}
 
@@ -170,7 +170,7 @@ namespace fe
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, Framebuffer& framebuffer)
 	{
-		auto cameraEntity = scene.GetDataComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		auto cameraEntity = scene.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
 		auto& cameraComponent = cameraEntity.Get<CCamera>();
 		auto& camera = cameraComponent.Camera;
 		auto cameraTransform = cameraEntity.GetTransformHandle().Global();
@@ -187,7 +187,7 @@ namespace fe
 
 		Renderer2D::RenderScene(scene, camera, cameraTransform, framebuffer);
 
-		auto& registry = scene.GetDataComponent().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 		auto viewMeshes = registry.view<CRenderMesh, CTransformGlobal>();
 		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
 
@@ -204,9 +204,9 @@ namespace fe
 
 			auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
 
-			auto& render_mesh_data = render_mesh_observer.GetDataComponent();
+			auto& render_mesh_data = render_mesh_observer.GetCoreComponent();
 			auto material_observer = AssetObserver<Material>(render_mesh_data.MaterialID);
-			auto shaderID = AssetObserver<ShadingModel>(material_observer.GetDataComponent().ShadingModelID).GetDataComponent().ShaderID;
+			auto shaderID = AssetObserver<ShadingModel>(material_observer.GetCoreComponent().ShadingModelID).GetCoreComponent().ShaderID;
 			{
 				auto shader_observer = AssetObserver<Shader>(shaderID);
 
@@ -268,9 +268,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& material_data = materialObserver.GetDataComponent();
+		auto& material_data = materialObserver.GetCoreComponent();
 		auto sm_observer = AssetObserver<ShadingModel>(material_data.ShadingModelID);
-		auto& sm_data_component = sm_observer.GetDataComponent();
+		auto& sm_data_component = sm_observer.GetCoreComponent();
 		auto shaderUser = AssetUser<Shader>(sm_data_component.ShaderID);
 
 		shaderUser.Bind(s_ActiveGDI);

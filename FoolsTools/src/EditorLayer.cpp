@@ -187,7 +187,7 @@ namespace fe
 
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 
-		m_Scene = AssetHandle<Scene>(AssetManager::CreateAsset<Scene>(filepath), LoadingPriority_Critical);
+		m_Scene = AssetHandle<Scene>(AssetManager::CreateProjectAsset<Scene>(filepath), LoadingPriority_Critical);
 		m_Scene.Use().Initialize();
 
 		SetSceneContext(m_Scene);
@@ -249,7 +249,7 @@ namespace fe
 		
 		if (filepath.empty()) return;
 	
-		AssetHandle<Scene>(AssetManager::CreateAsset<Scene>(filepath));
+		AssetHandle<Scene>(AssetManager::CreateProjectAsset<Scene>(filepath));
 
 		FE_CORE_ASSERT(false, "Not implemented");
 		
@@ -276,7 +276,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			if (!m_Scene.Use().GetDataComponent().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
+			if (!m_Scene.Use().GetCoreComponent().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
 				m_SelectedEntityID = NullEntityID;
 		}
 
@@ -325,7 +325,7 @@ namespace fe
 
 		auto scene_user = m_Scene.Use();
 
-		if (!scene_user.GetDataComponent().GameplayWorld->GetEntityWithPrimaryCamera())
+		if (!scene_user.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
 		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_user);

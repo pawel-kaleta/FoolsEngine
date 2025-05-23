@@ -1,10 +1,11 @@
 #pragma once
 
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
 
 namespace fe
 {
-	struct ACRenderMeshData final : public AssetComponent
+	struct ACRenderMeshCore final : public AssetComponent
 	{
 		AssetID MeshID;
 		AssetID MaterialID;
@@ -19,10 +20,7 @@ namespace fe
 	class RenderMeshObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
-
-		const ACRenderMeshData& GetDataComponent() const { return Get<ACRenderMeshData>(); }
+		const ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
 
 	protected:
 		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
@@ -31,9 +29,7 @@ namespace fe
 	class RenderMeshUser : public RenderMeshObserver
 	{
 	public:
-		void PlaceCoreComponent() const { Emplace<ACRenderMeshData>().Init(); };
-
-		ACRenderMeshData& GetDataComponent() const { return Get<ACRenderMeshData>(); }
+		ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
 
 	protected:
 		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }
@@ -46,5 +42,6 @@ namespace fe
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;
+		using Core = ACRenderMeshCore;
 	};
 }

@@ -153,7 +153,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto scene_observer = m_Scene.Observe();
-		auto gameplay_world = scene_observer.GetDataComponent().GameplayWorld.get();
+		auto gameplay_world = scene_observer.GetCoreComponent().GameplayWorld.get();
 
 		Entity selectedEntity(m_SelectedEntityID, gameplay_world);
 

@@ -26,7 +26,7 @@
     </ClInclude>
     <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorApp.h" />
-    <ClInclude Include="src\EditorAssetManager.h" />
+    <ClInclude Include="src\EditorAssetHandle.h" />
     <ClInclude Include="src\EditorCameraController.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorState.h" />
@@ -66,7 +66,6 @@
     </ClCompile>
     <ClCompile Include="src\DockSpace.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
-    <ClCompile Include="src\EditorAssetManager.cpp" />
     <ClCompile Include="src\EditorCameraController.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ActorInspector.cpp">

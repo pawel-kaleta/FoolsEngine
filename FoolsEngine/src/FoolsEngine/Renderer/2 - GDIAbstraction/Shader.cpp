@@ -12,7 +12,7 @@
 
 namespace fe
 {
-    void ACSourceCode::Init()
+    void ACShaderCore::Init()
     {
         VertexSource.clear();
         FragmentSource.clear();
@@ -65,7 +65,7 @@ namespace fe
 
     void ShaderUser::UnloadFromCPU() const
     {
-        auto& sourceCode = Get<ACSourceCode>();
+        auto& sourceCode = Get<ACShaderCore>();
         sourceCode.ShaderSource.clear();
         sourceCode.VertexSource.clear();
         sourceCode.FragmentSource.clear();

@@ -2,12 +2,13 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\TextureData.h"
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
 
 namespace fe
 {
 	enum class GDIType;
 
-	struct ACTexture2DData final : public AssetComponent
+	struct ACTexture2DCore final : public AssetComponent
 	{
 		TextureData::Specification Specification;
 		void* Data;
@@ -22,12 +23,10 @@ namespace fe
 	class Texture2DObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		const ACTexture2DCore& GetCoreComponent() const { return Get<ACTexture2DCore>(); }
 
 		uint32_t GetRendererID(GDIType GDI) const;
 
-		const ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
 	protected:
 		Texture2DObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 	};
@@ -35,9 +34,8 @@ namespace fe
 	class Texture2DUser : public Texture2DObserver
 	{
 	public:
-		ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
+		ACTexture2DCore& GetCoreComponent() const { return Get<ACTexture2DCore>(); }
 
-		void PlaceCoreComponent() const { Emplace<ACTexture2DData>().Init(); }
 		void Release() const;
 
 		void SendDataToGPU(GDIType GDI, void* data) const;
@@ -49,7 +47,7 @@ namespace fe
 
 		void CreateGDITexture2D(GDIType gdi) const
 		{
-			auto& data = Get<ACTexture2DData>();
+			auto& data = Get<ACTexture2DCore>();
 			CreateGDITexture2D(gdi, data.Specification, data.Data);
 		}
 
@@ -74,5 +72,6 @@ namespace fe
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;
+		using Core = ACTexture2DCore;
 	};
 }

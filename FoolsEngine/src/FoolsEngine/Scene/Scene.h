@@ -2,9 +2,9 @@
 #include "ECS.h"
 
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
 
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
-#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
@@ -15,9 +15,11 @@ namespace fe
 
 	class Entity;
 
-	struct ACSceneData : public AssetComponent
+	struct ACSceneCore : public AssetComponent
 	{
 		Scope<GameplayWorld> GameplayWorld;
+
+		void Init() { }
 	};
 
 	// observer can be used for drawing editor panels and other stuff during editing/playing scene
@@ -25,10 +27,7 @@ namespace fe
 	class SceneObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static  AssetType GetTypeStatic() { return AssetType::SceneAsset; }
-
-		const ACSceneData& GetDataComponent() const { return Get<ACSceneData>(); }
+		const ACSceneCore& GetCoreComponent() const { return Get<ACSceneCore>(); }
 
 	protected:
 		SceneObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -37,15 +36,14 @@ namespace fe
 	class SceneUser : public SceneObserver
 	{
 	public:
-		void PlaceCoreComponent() const;
+		ACSceneCore& GetCoreComponent() const { return Get<ACSceneCore>(); }
+		
 		void Release() const;
 
 		void Initialize() const;
 
 		void SimulationUpdate() const;
 		void PostFrameUpdate() const;
-
-		ACSceneData& GetDataComponent() const { return Get<ACSceneData>(); }
 
 	private:
 		template <SimulationStages::Stages stage>
@@ -62,5 +60,6 @@ namespace fe
 
 		using Observer = SceneObserver;
 		using User = SceneUser;
+		using Core = ACSceneCore;
 	};
 }

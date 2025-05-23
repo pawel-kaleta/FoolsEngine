@@ -24,7 +24,7 @@ namespace fe
         m_SystemToRemove = nullptr;
 
         auto scene_observer = m_Scene.Observe();
-        auto& systemsDirector = scene_observer.GetDataComponent().GameplayWorld->GetSystems();
+        auto& systemsDirector = scene_observer.GetCoreComponent().GameplayWorld->GetSystems();
 
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))

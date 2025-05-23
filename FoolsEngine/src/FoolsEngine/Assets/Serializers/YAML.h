@@ -124,7 +124,7 @@ namespace YAML
 
 			fe::UUID uuid = node["UUID"].as<fe::UUID>();
 
-			fe::AssetID id = fe::AssetManager::GetAssetWithUUID<tnAsset>(uuid);
+			fe::AssetID id = fe::AssetManager::GetAssetWithUUID(uuid);
 
 			FE_CORE_ASSERT(id != fe::NullAssetID, "Failed to deserialize asset handle");
 

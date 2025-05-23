@@ -1,24 +1,17 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
-
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
-
-#include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
-#include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
-#include "FoolsEngine/Core/Core.h"
+#include "FoolsEngine\Core\Core.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <glm\glm.hpp>
 
 namespace fe
 {
@@ -53,13 +46,13 @@ namespace fe
 		}
 	};
 
-	struct ACMeshData final : public AssetComponent
+	struct ACMeshCore final : public AssetComponent
 	{
 		MeshSpecification Specification;
 		void* Data; // allocated as float[ DataSize()/sizeof(float) ]
 
 		void Init();
-		~ACMeshData();
+		~ACMeshCore();
 
 		uint32_t* GetIndexArrayPtr() { return (uint32_t*)Data; }
 		float* GetVertexArrayPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
@@ -82,11 +75,9 @@ namespace fe
 	class MeshObserver : public AssetInterface
 	{
 	public:
-		virtual AssetType GetType() const override final { return GetTypeStatic(); }
-		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+		const ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
 
 		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		const ACMeshData& GetDataComponent() const { return Get<ACMeshData>(); }
 		//const ACMeshLoadingSettings* GetImportSettings() const { return GetIfExist<ACMeshLoadingSettings>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
@@ -97,16 +88,15 @@ namespace fe
 	class MeshUser : public MeshObserver
 	{
 	public:
-		void PlaceCoreComponent() const { Emplace<ACMeshData>().Init(); };
+		ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
+
+		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
+		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() const { return GetOrEmplace<ACMeshLoadingSettings>(); }
+		
 		void Release() const;
 
 		void SendDataToGPU(GDIType GDI) const;
 		void UnloadFromCPU() const;
-
-		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		ACMeshData& GetDataComponent() const { return Get<ACMeshData>(); }
-
-		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() const { return GetOrEmplace<ACMeshLoadingSettings>(); }
 
 	protected:
 		MeshUser(ECS_AssetHandle ECS_handle) : MeshObserver(ECS_handle) {}
@@ -119,5 +109,6 @@ namespace fe
 
 		using Observer = MeshObserver;
 		using User = MeshUser;
+		using Core = ACMeshCore;
 	};
 }

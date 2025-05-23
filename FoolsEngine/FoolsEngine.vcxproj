@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h" />
     <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
     <ClInclude Include="src\EntryPoint.h" />

@@ -20,7 +20,7 @@ namespace fe
 			break;
 
 		case GDIType::OpenGL:
-			auto& spec = Get<ACTexture2DData>();
+			auto& spec = Get<ACTexture2DCore>();
 			Get<OpenGLTexture2D>().SendDataToGPU(data, spec.Specification);
 			break;
 		}
@@ -45,7 +45,7 @@ namespace fe
 
 	void Texture2DUser::UnloadFromCPU() const
 	{
-		auto& dataPtr = Get<ACTexture2DData>().Data;
+		auto& dataPtr = Get<ACTexture2DCore>().Data;
 		if (dataPtr)
 		{
 			TextureLoader::UnloadTexture(dataPtr);

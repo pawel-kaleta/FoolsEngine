@@ -29,7 +29,7 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		Entity cameraEntity = scene_observer.GetDataComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		Entity cameraEntity = scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
 		if (cameraEntity)
 		{
 			auto& cameraComponent = cameraEntity.Get<CCamera>();
