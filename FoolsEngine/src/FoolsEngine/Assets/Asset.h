@@ -182,22 +182,22 @@ namespace fe
 			return m_ECSHandle.try_get<tnAssetComponents...>();
 		}
 
-		template<typename tnAssetComponent>
-		auto& Get() const
-		{
-			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
+		//template<typename tnAssetComponent>
+		//auto& Get() const
+		//{
+		//	FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
+		//
+		//	FE_CORE_ASSERT(AllOf<tnAssetComponent>(), "This Asset does not have this component");
+		//	return m_ECSHandle.get<tnAssetComponent>();
+		//}
 
-			FE_CORE_ASSERT(AllOf<tnAssetComponent>(), "This Asset does not have this component");
-			return m_ECSHandle.get<tnAssetComponent>();
-		}
-
-		template<typename tnAssetComponent>
-		tnAssetComponent* GetIfExist() const
-		{
-			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
-
-			return m_ECSHandle.try_get<tnAssetComponent>();
-		}
+		//template<typename tnAssetComponent>
+		//tnAssetComponent* GetIfExist() const
+		//{
+		//	FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
+		//
+		//	return m_ECSHandle.try_get<tnAssetComponent>();
+		//}
 
 		template<typename tnAssetComponent>
 		void Erase() const { m_ECSHandle.erase<tnAssetComponent>(); }

@@ -201,7 +201,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("Test Scene Setup");
 
-		auto gameplay_world = sceneObserver.GetWorlds().GameplayWorld.get();
+		auto gameplay_world = sceneObserver.GetDataComponent().GameplayWorld.get();
 		Actor enviroActor = gameplay_world->CreateActor("Enviro");
 
 		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");

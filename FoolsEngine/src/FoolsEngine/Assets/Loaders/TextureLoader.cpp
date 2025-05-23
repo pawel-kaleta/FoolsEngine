@@ -8,12 +8,12 @@ namespace fe
 {
 	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Texture2D>& textureUser)
 	{
-		auto& acDataLocation = textureUser.GetDataLocation();
-		if (acDataLocation.Data)
+		auto& acDataLocation = textureUser.GetDataComponent().Data;
+		if (acDataLocation)
 			return;
 
 		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.GetSpecification().Specification;
+		auto& spec = textureUser.GetDataComponent().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
@@ -21,7 +21,7 @@ namespace fe
 
 		stbi_uc* data = stbi_load(sourceFilePath.string().c_str(), &width, &height, &channels, 0);
 
-		acDataLocation.Data = data;
+		acDataLocation = data;
 
 		FE_LOG_CORE_DEBUG("Loading texture, AssetID: {0}, Channels: {1}", textureUser.GetID(), channels);
 		FE_CORE_ASSERT(data, "Failed to load image!");

@@ -22,7 +22,7 @@ namespace fe
 		if (assetHandle.IsValid())
 		{
 			out << YAML::Key << "UUID" << YAML::Value << assetHandle.GetUUID();
-			out << YAML::Key << "Name" << YAML::Value << assetHandle.Observe().TryGetName()->Name;
+			out << YAML::Key << "Name" << YAML::Value << assetHandle.Observe().GetFilepath().filename().string().c_str();
 		}
 		else
 		{

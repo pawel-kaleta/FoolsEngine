@@ -2,6 +2,9 @@
 #include "ComponentTypesRegistry.h"
 
 #include "Component.h"
+#include "Components/RenderingComponents.h"
+#include "Components/2DComponents.h"
+#include "Components/MeshComponents.h"
 
 namespace fe
 {
@@ -12,10 +15,14 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		RegisterDataComponent<CCamera>();
+
 		RegisterDataComponent<CTile>();
 		RegisterDataComponent<CSprite>();
+
 		RegisterDataComponent<CRenderMesh>();
-		//RegisterDataComponent<CMaterialInstance>();
+		RegisterDataComponent<CRenderMeshView>();
+		RegisterDataComponent<CModel>();
+		RegisterDataComponent<CModelView>();
 	}
 
 }

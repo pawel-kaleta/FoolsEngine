@@ -28,7 +28,7 @@ namespace fe
 
 			ShaderData::Primitive Primitive() const { return ShaderData::PrimitiveInType(Type); }
 			ShaderData::Structure Structure() const { return ShaderData::StructureInType(Type); }
-			uint32_t Size() const { return ShaderData::SizeOfType(Type); }
+			size_t Size() const { return ShaderData::SizeOfType(Type); }
 		};
 
 		class Layout

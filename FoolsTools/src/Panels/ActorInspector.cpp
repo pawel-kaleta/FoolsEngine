@@ -22,7 +22,7 @@ namespace fe
         }
 
         auto scene_observer = m_Scene.Observe();
-        m_OpenedActorID = scene_observer.GetWorlds().GameplayWorld->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
+        m_OpenedActorID = scene_observer.GetDataComponent().GameplayWorld->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
     }
     
     void ActorInspector::DrawBehaviorWidget(Behavior* behavior, Actor actor)
@@ -104,7 +104,7 @@ namespace fe
 
         m_BehaviorToRemove = nullptr;
         auto scene_observer = m_Scene.Observe();
-        Actor actor(m_OpenedActorID, scene_observer.GetWorlds().GameplayWorld.get());
+        Actor actor(m_OpenedActorID, scene_observer.GetDataComponent().GameplayWorld.get());
 
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))

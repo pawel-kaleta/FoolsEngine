@@ -22,7 +22,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		GetWorlds().GameplayWorld->Update<stage>();
+		GetDataComponent().GameplayWorld->Update<stage>();
 	}
 
 	template void SceneUser::Update<SimulationStages::Stages::FrameStart >() const;

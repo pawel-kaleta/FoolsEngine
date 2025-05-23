@@ -14,7 +14,7 @@ namespace fe
 		static void LoadMesh(AssetUser<Mesh>& meshUser)
 		{
 			auto path = meshUser.GetFilepath();
-			LoadMesh(path.Filepath, meshUser);
+			LoadMesh(path, meshUser);
 		}
 		static void UnloadMesh(void* data) { delete[] (uint32_t*)data; }
 
@@ -22,7 +22,7 @@ namespace fe
 		static void LoadModel(AssetUser<Model>& modelUser)
 		{
 			auto path = modelUser.GetFilepath();
-			LoadModel(path.Filepath, modelUser);
+			LoadModel(path, modelUser);
 		}
 		static void UnloadModel(void* data);
 

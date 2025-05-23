@@ -17,11 +17,11 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
-			AssetRegistry& reg = m_Registry;
+			AssetRegistry& reg = s_Instance->m_Registry;
 			AssetID assetID = reg.create();
 
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
-			data.MapByUUID[uuid] = assetID;
+			s_Instance->MapByUUID[uuid] = assetID;
 
 			reg.emplace<ACParentAsset>(assetID).Parent = parent;
 
@@ -33,7 +33,7 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
-			AssetRegistry& reg = m_Registry;
+			AssetRegistry& reg = s_Instance->m_Registry;
 			AssetID assetID = reg.create();
 
 			reg.emplace<ACRefsCounters>(assetID);
@@ -41,8 +41,8 @@ namespace fe
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
 
 
-			data.MapByUUID[uuid] = assetID;
-			data.MapByFilepath[path] = assetID;
+			s_Instance->MapByUUID[uuid] = assetID;
+			s_Instance->data.MapByFilepath[path] = assetID;
 
 			AssetUser<tnAsset>(ECS_handle(reg, assetID)).PlaceCoreComponent();
 			return assetID;

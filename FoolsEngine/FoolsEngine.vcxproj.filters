@@ -335,6 +335,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Components\MeshComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\RenderingComponents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -534,5 +537,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\ComponentRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\MeshComponents.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\RenderingComponents.cpp" />
   </ItemGroup>
 </Project>

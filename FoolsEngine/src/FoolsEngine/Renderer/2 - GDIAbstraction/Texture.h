@@ -35,7 +35,7 @@ namespace fe
 	class Texture2DUser : public Texture2DObserver
 	{
 	public:
-		const ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
+		ACTexture2DData& GetDataComponent() const { return Get<ACTexture2DData>(); }
 
 		void PlaceCoreComponent() const { Emplace<ACTexture2DData>().Init(); }
 		void Release() const;

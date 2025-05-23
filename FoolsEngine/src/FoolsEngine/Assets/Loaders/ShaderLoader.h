@@ -13,7 +13,7 @@ namespace fe
 		static void LoadShader(AssetUser<Shader>& shaderUser)
 		{
 			auto& path = shaderUser.GetFilepath();
-			LoadShader(path.Filepath, shaderUser);
+			LoadShader(path, shaderUser);
 		}
 		static void CompileShader(GDIType GDI, AssetUser<Shader>& shaderUser);
 

@@ -4,6 +4,8 @@
 #include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
@@ -12,7 +14,10 @@
 #include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "FoolsEngine\Scene\Scene.h"
+
 #include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine\Scene\Components\RenderingComponents.h"
+#include "FoolsEngine\Scene\Components\2DComponents.h"
 
 #include <glad\glad.h>
 

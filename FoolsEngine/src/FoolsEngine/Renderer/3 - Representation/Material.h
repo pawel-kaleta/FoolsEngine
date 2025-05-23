@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine\Assets\AssetHandle.h"
+
 #include "ShadingModel.h"
 
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"

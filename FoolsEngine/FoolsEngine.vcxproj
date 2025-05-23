@@ -217,6 +217,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\MeshComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\RenderingComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ComponentTypesRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ECS.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.h" />
@@ -295,6 +298,9 @@
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\MeshComponents.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\RenderingComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.cpp" />

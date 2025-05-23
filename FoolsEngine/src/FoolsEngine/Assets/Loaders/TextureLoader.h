@@ -13,7 +13,7 @@ namespace fe
 		static void LoadTexture(const std::filesystem::path& sourceFilePath, AssetUser<Texture2D>& textureUser);
 		static void LoadTexture(AssetUser<Texture2D>& textureUser)
 		{
-			LoadTexture(textureUser.GetFilepath().Filepath, textureUser);
+			LoadTexture(textureUser.GetFilepath(), textureUser);
 		}
 		static void UnloadTexture(void* data);
 		static TextureData::Specification InspectTexture(const std::filesystem::path& filePath);

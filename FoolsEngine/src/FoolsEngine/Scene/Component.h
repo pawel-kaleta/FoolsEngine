@@ -5,11 +5,7 @@
 #include "FoolsEngine\Core\UUID.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
 #include "FoolsEngine\Math\Transform.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
-#include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+
 
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
@@ -44,16 +40,17 @@ namespace fe
 		static std::string GetNameStatic() { return "Uknown DataComponent"; }
 		virtual bool IsSpatial() const { return false; }
 
-		virtual void SerializeBase(YAML::Emitter& emitter) { Serialize(emitter); }
-		virtual void DeserializeBase(YAML::Node& data) { Deserialize(data); }
+		virtual void SerializeBase(YAML::Emitter& emitter) { Serialize(emitter); } // SpatialComponent overrides
+		virtual void DeserializeBase(YAML::Node& data)     { Deserialize(data); }
 
-		virtual void DrawInspectorWidget(BaseEntity entity);
 		virtual void Serialize(YAML::Emitter& emitter);
 		virtual void Deserialize(YAML::Node& data);
 
+		virtual void DrawInspectorWidget(BaseEntity entity);
+
 	protected:
 		template<typename tnAsset>
-		void DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag);
+		void DrawAssetHandle(const AssetHandle<tnAsset>& assetHandle, const std::string& nameTag);
 	};
 
 	struct SpatialComponent : DataComponent
@@ -155,36 +152,7 @@ namespace fe
 		FE_COMPONENT_SETUP(CTransformGlobal, "TransformGlobal");
 	};
 
-	struct CCamera final : SpatialComponent
-	{
-		Camera Camera;
-		bool IsPrimary = false;
 
-		FE_COMPONENT_SETUP(CCamera, "Camera");
-		virtual void DrawInspectorWidget(BaseEntity entity) override;
-		virtual void Serialize(YAML::Emitter& emitter) override;
-		virtual void Deserialize(YAML::Node& data) override;
-	};
-
-	struct CTile final : SpatialComponent
-	{
-		Renderer2D::Quad Tile;
-
-		FE_COMPONENT_SETUP(CTile, "Tile");
-		virtual void DrawInspectorWidget(BaseEntity entity) override;
-		virtual void Serialize(YAML::Emitter& emitter) override;
-		virtual void Deserialize(YAML::Node& data) override;
-	};
-
-	struct CSprite final : SpatialComponent
-	{
-		Renderer2D::Quad Sprite;
-
-		FE_COMPONENT_SETUP(CSprite, "Sprite");
-		virtual void DrawInspectorWidget(BaseEntity entity) override;
-		virtual void Serialize(YAML::Emitter& emitter) override;
-		virtual void Deserialize(YAML::Node& data) override;
-	};
 
 	struct CDestroyFlag final : FlagComponent {};
 
@@ -194,25 +162,4 @@ namespace fe
 	template <SimulationStages::Stages stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 
-	struct CRenderMesh final : SpatialComponent
-	{
-		FE_COMPONENT_SETUP(CRenderMesh, "RenderMesh");
-
-		AssetHandle<RenderMesh> RenderMesh;
-
-		virtual void DrawInspectorWidget(BaseEntity entity) override;
-		virtual void Serialize(YAML::Emitter& emitter) override;
-		virtual void Deserialize(YAML::Node& data) override;
-	};
-
-	struct CModel final : SpatialComponent
-	{
-		FE_COMPONENT_SETUP(CModel, "Model");
-
-		AssetHandle<Model> Model;
-
-		virtual void DrawInspectorWidget(BaseEntity entity) override;
-		virtual void Serialize(YAML::Emitter& emitter) override;
-		virtual void Deserialize(YAML::Node& data) override;
-	};
 }

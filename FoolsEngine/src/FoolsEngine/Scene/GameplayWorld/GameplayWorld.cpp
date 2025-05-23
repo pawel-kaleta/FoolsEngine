@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
 #include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\Components\RenderingComponents.h"
 
 #include <stack>
 

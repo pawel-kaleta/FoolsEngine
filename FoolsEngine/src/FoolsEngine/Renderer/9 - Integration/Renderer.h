@@ -3,10 +3,17 @@
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\3 - Representation\Material.h"
+#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
 
 #include "FoolsEngine\Math\Transform.h"
 #include "FoolsEngine\Scene\Scene.h"
+
+#include "FoolsEngine\Assets\AssetHandle.h"
 
 namespace fe
 {

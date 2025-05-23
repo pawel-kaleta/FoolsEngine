@@ -19,6 +19,9 @@
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 
+#include "FoolsEngine\Scene\Components\RenderingComponents.h"
+#include "FoolsEngine\Scene\Components\MeshComponents.h"
+
 #include <glad\glad.h>
 
 #include <glm\gtc\type_ptr.hpp>

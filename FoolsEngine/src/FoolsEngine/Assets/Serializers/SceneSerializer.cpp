@@ -23,13 +23,13 @@ namespace fe
 		Serialize(scene, emitter);
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(scene.GetFilepath().Filepath);
+		std::ofstream fout(scene.GetFilepath());
 		fout << emitter.c_str();
 	}
 
 	bool SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>& scene)
 	{
-		YAML::Node node = YAML::LoadFile(scene.GetFilepath().Filepath.string());
+		YAML::Node node = YAML::LoadFile(scene.GetFilepath().string());
 		//if (!AssetSerializer::Deserialize(node))
 		//	return false;
 		if (!Deserialize(scene, node))
@@ -60,17 +60,15 @@ namespace fe
 	{
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
-			auto name = scene.TryGetName();
-			if (name)
-				emitter << YAML::Key << "Name" << YAML::Value << name->Name;
-			else
-				emitter << YAML::Key << "Name" << YAML::Value << "";
+			auto name = scene.GetFilepath().filename();
+
+			emitter << YAML::Key << "Name" << YAML::Value << name.c_str();
 			emitter << YAML::Key << "UUID" << YAML::Value << scene.GetUUID();
 		}
 		emitter << YAML::EndMap; //Scene Properties
 		emitter << YAML::Key << "Worlds" << YAML::Value << YAML::BeginMap;
 		{
-			SerializeGameplayWorld(scene.GetWorlds().GameplayWorld.get(), emitter);
+			SerializeGameplayWorld(scene.GetDataComponent().GameplayWorld.get(), emitter);
 		}
 		emitter << YAML::EndMap; //Worlds
 	}
@@ -85,13 +83,13 @@ namespace fe
 			return false;
 		}
 
-		std::string name = sceneProps["Name"].as<std::string>();
-		if (!name.empty()) scene.SetName(name);
+		//std::string name = sceneProps["Name"].as<std::string>();
+		//if (!name.empty()) scene.SetName(name);
 		//scene.SetUUID((UUID)sceneProps["UUID"].as<uint64_t>());
 
 		auto& worlds = node["Worlds"];
 		if (!worlds) return false;
-		if (!DeserializeGameplayWorld(scene.GetWorlds().GameplayWorld.get(), worlds["GameplayWorld"]))
+		if (!DeserializeGameplayWorld(scene.GetDataComponent().GameplayWorld.get(), worlds["GameplayWorld"]))
 			return false;
 
 		return true;

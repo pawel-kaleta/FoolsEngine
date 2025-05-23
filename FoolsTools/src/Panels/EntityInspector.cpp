@@ -159,7 +159,7 @@ namespace fe
         }
 
         auto scene_Observer = m_Scene.Observe();
-        Entity entity(m_OpenedEntityID, scene_Observer.GetWorlds().GameplayWorld.get());
+        Entity entity(m_OpenedEntityID, scene_Observer.GetDataComponent().GameplayWorld.get());
 
         DrawComponentsTab(entity);
         
