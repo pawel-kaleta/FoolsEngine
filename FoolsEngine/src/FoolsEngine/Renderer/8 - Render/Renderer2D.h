@@ -73,7 +73,7 @@ namespace fe
 			QuadVerticesBatch::iterator QuadVeriticesIt;
 			uint32_t QuadIndexCount = 0;
 
-			std::array<AssetHandle<Texture2D>, ConstLimits::RendererTextureSlotsCount> Textures;
+			std::array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
 			uint32_t TexturesCount = 1;
 		};
 

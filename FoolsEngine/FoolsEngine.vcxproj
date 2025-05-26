@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
+    <ClInclude Include="src\FoolsEngine\Core\Project.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
+    <ClCompile Include="src\FoolsEngine\Core\Project.cpp" />
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\UUID.cpp" />

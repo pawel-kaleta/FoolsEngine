@@ -1,4 +1,6 @@
 #include "FE_pch.h"
+#ifdef FE_PLATFORM_WINDOWS
+
 #include "FoolsEngine/Platform/FileDialogs.h"
 
 #include <filesystem>
@@ -55,3 +57,5 @@ namespace fe
 		return std::filesystem::path();
 	}
 }
+
+#endif

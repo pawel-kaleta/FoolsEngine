@@ -22,6 +22,8 @@
 #include "FoolsEngine\Scene\Components\RenderingComponents.h"
 #include "FoolsEngine\Scene\Components\MeshComponents.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 #include <glad\glad.h>
 
 #include <glm\gtc\type_ptr.hpp>
@@ -45,43 +47,28 @@ namespace fe
 		Renderer2D::Shutdown();
 	}
 
+	template <typename tnAsset>
+	void MakeHandle(AssetHandle<tnAsset>& hande, const UUID& uuid)
+	{
+		hande = AssetHandle<tnAsset>(AssetManager::GetAssetWithUUID(uuid));
+	}
+
 	void Renderer::CreateBaseAssets()
 	{
 		FE_PROFILER_FUNC();
 
-		//////////////
-		//
-		// TO DO:
-		//
-		// MOVE THIS TO PROJECT CREATION
-		//
-		///////////////
+		auto& base_assets = Project::GetInstance().BaseAssets;
 
+		MakeHandle(BaseAssets.Textures.Default     , base_assets.Textures.Default);
+		MakeHandle(BaseAssets.Textures.FlatWhite   , base_assets.Textures.FlatWhite);
+		MakeHandle(BaseAssets.Shaders.Base2D       , base_assets.Shaders.Base2D);
+		MakeHandle(BaseAssets.Shaders.Base3D       , base_assets.Shaders.Base3D);
+		MakeHandle(BaseAssets.ShadingModels.Default, base_assets.ShadingModels.Default);
+		MakeHandle(BaseAssets.Materials.Default    , base_assets.Materials.Default);
+
+		// TO DO : move this
 		{
-			auto id1 = AssetManager::CreateAsset<Texture2D>("assets/textures/Default_Texture.png");
-			auto& handle1 = BaseAssets.Textures.Default;
-			new (&handle1) AssetHandle<Texture2D>(id1, LoadingPriority_Critical);
-
-			auto id2 = AssetManager::CreateAsset<Texture2D>("assets/textures/FlatWhite.png");
-			auto& handle2 = BaseAssets.Textures.FlatWhite;
-			new (&handle2) AssetHandle<Texture2D>(id2, LoadingPriority_Critical);
-		}
-
-		{
-			auto id1 = AssetManager::CreateAsset<Shader>("assets/shaders/Base2DShader.glsl");
-			auto& handle1 = BaseAssets.Shaders.Base2D;
-			new (&handle1) AssetHandle<Shader>(id1, LoadingPriority_Critical);
-
-			auto id2 = AssetManager::CreateAsset<Shader>("assets/shaders/Base3DShader.glsl");
-			auto& handle2 = BaseAssets.Shaders.Base3D;
-			new (&handle2) AssetHandle<Shader>(id2, LoadingPriority_Critical);
-		}
-
-		{
-			auto id1 = AssetManager::CreateAsset<ShadingModel>("assets/shading_models/Default.femat");
-			auto& handle1 = BaseAssets.ShadingModels.Default;
-			new (&handle1) AssetHandle<ShadingModel>(id1, LoadingPriority_Critical);
-			auto shading_model_user = handle1.Use();
+			auto shading_model_user = BaseAssets.ShadingModels.Default.Use();
 
 			// TO DO: read from a file
 			shading_model_user.MakeShadingModel(
@@ -103,14 +90,10 @@ namespace fe
 		}
 
 		{
-			auto id1 = AssetManager::CreateAsset<Material>("DefaultMaterial");
-			auto& handle1 = BaseAssets.Materials.Default;
-			new (&handle1) AssetHandle<Material>(id1, LoadingPriority_Critical);
-			auto material_user = handle1.Use();
+			auto material_user = BaseAssets.Materials.Default.Use();
 
-			// TO DO: save to file
+			// TO DO: read from file
 			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
-			*(glm::vec3*)material_user.GetUniformValuePtr(material_user.GetCoreComponent(), "u_BaseColor") = {1.0f, 1.0f, 1.0f};
 		}
 	}
 

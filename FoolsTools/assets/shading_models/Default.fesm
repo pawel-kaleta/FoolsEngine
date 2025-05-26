@@ -3,19 +3,23 @@ Uniforms:
   - Name: u_BaseColor
     Type: Float3
     Count: 1
-	DefaultValue: [1, 1, 1]
+	DefaultValue:
+	  - [1, 1, 1]
   - Name: u_Roughness
     Type: Float
     Count: 1
-	DefaultValue: 0
+	DefaultValue:
+	  - 0.5
   - Name: u_Metalness
     Type: Float
     Count: 1
-	DefaultValue: 0
+	DefaultValue:
+	  - 0.5
   - Name: u_AO
     Type: Float
     Count: 1
-	DefaultValue: 1
+	DefaultValue:
+	  - 0
 Shader Texture Slots:
   - u_BaseColorMap
   - u_RoughnessMap

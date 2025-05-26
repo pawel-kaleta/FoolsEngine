@@ -19,7 +19,7 @@ namespace fe
 		YAML::Emitter emitter;
 
 		emitter << YAML::BeginMap;
-		//AssetSerializer::Serialize(emitter);
+		
 		Serialize(scene, emitter);
 		emitter << YAML::EndMap;
 
@@ -30,8 +30,7 @@ namespace fe
 	bool SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>& scene)
 	{
 		YAML::Node node = YAML::LoadFile(scene.GetFilepath().string());
-		//if (!AssetSerializer::Deserialize(node))
-		//	return false;
+		
 		if (!Deserialize(scene, node))
 			return false;
 		AssetManager::EvaluateAndReload();

@@ -25,6 +25,7 @@ namespace fe
 	class SystemsRegistry;
 	class AssetManager;
 	class ApplicationLayer;
+	class Project;
 
 	class Application
 	{
@@ -67,13 +68,14 @@ namespace fe
 		MainEventDispacher	m_MainEventDispacher;
 		LayerStack			m_LayerStack;
 
-		ComponentTypesRegistry*	m_ComponentTypesRegistry;
-		BehaviorsRegistry*		m_BehaviorsRegistry;
-		SystemsRegistry*		m_SystemsRegistry;
-
 		Scope<Window>			m_Window;
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
+
+		ComponentTypesRegistry*	m_ComponentTypesRegistry;
+		BehaviorsRegistry*		m_BehaviorsRegistry;
+		SystemsRegistry*		m_SystemsRegistry;
+		Project*				m_Project;
 
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;

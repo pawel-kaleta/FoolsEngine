@@ -1,5 +1,8 @@
 #include "FE_pch.h"
-#include "FoolsEngine\Core\Application.h"
+#include "Application.h"
+#include "Project.h"
+
+#include "FoolsEngine\Platform\FileDialogs.h"
 
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
@@ -89,6 +92,19 @@ namespace fe
 		}
 
 		{
+			FE_PROFILER_SCOPE("Project");
+
+#ifdef FE_EDITOR
+			std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Project (*.feproj)\0*.feproj\0");
+#else
+			std::filesystem::path filepath = "SandboxProject.feproj";
+#endif
+			m_Project = new Project();
+			m_Project->Startup();
+			Project::Load(filepath);
+		}
+
+		{
 			FE_PROFILER_SCOPE("Rendering");
 			GDIType gdi = m_Window->GetGDIType();
 			Renderer::Startup();
@@ -175,6 +191,13 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Rendering");
 			Renderer::Shutdown();
+		}
+
+		{
+			FE_PROFILER_SCOPE("Project");
+			m_Project->Shutdown();
+			//Just giving back memory to OS.
+			//delete m_Project;
 		}
 
 		{

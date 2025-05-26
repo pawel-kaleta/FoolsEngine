@@ -52,8 +52,8 @@ namespace fe
 
 		void Init()
 		{
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 			if (!IsValid()) return;
+			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 
 			StackCheck();
 

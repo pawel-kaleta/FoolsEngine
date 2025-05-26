@@ -69,7 +69,7 @@ namespace fe
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data.BaseShaderSamplers[i] = i;
 
-		s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite;
+		s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
 	}
 
 	void Renderer2D::Shutdown()
@@ -203,11 +203,11 @@ namespace fe
 
 		uint32_t textureSampler = 0;
 
-		if (batch.Textures[0].GetID() != quad.Texture.GetID())
+		if (batch.Textures[0] != quad.Texture.GetID())
 		{
 			for (unsigned int i = 1; i < batch.TexturesCount; i++)
 			{
-				if (batch.Textures[i].GetID() == quad.Texture.GetID())
+				if (batch.Textures[i] == quad.Texture.GetID())
 				{
 					textureSampler = i;
 					break;
@@ -222,7 +222,7 @@ namespace fe
 				}
 				else
 				{
-					batch.Textures[batch.TexturesCount] = quad.Texture;
+					batch.Textures[batch.TexturesCount] = quad.Texture.GetID();
 					textureSampler = batch.TexturesCount;
 					batch.TexturesCount++;
 				}
@@ -287,7 +287,7 @@ namespace fe
 
 		for (unsigned int i = 0; i < batch.TexturesCount; i++)
 		{
-			batch.Textures[i].Use().Bind(GDI, i);
+			AssetUser<Texture2D>(batch.Textures[i]).Bind(GDI, i);
 		}
 
 		s_Data.QuadVertexBuffer->Bind();

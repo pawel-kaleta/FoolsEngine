@@ -45,9 +45,9 @@ namespace fe
 		switch (severity)
 		{
 		case GL_DEBUG_SEVERITY_HIGH:         FE_LOG_CORE_FATAL(logMessage); break;
-		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR(message); break;
-		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(message);  break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(message); break;
+		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR(logMessage); break;
+		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(logMessage);  break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(logMessage); break;
 		}
 		FE_LOG_CORE_DEBUG("Source: {0}, Type: {1}, ID: {2}", Sources[source], Types[type], id);
 
