@@ -331,7 +331,6 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Memory\Scratchpad.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClInclude>
@@ -339,6 +338,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Components\RenderingComponents.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -536,7 +536,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\ComponentRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\MeshComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />

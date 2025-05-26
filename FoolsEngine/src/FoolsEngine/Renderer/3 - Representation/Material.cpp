@@ -21,25 +21,26 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data_component = Get<ACMaterialCore>();
-		auto& sm_data_component = shadingModelObserver.GetCoreComponent();
+		
+		auto& core_component = GetCoreComponent();
+		auto& sm_core_component = shadingModelObserver.GetCoreComponent();
 
-		data_component.ShadingModelID = shadingModelObserver.GetID();
+		core_component.ShadingModelID = shadingModelObserver.GetID();
 
-		auto& data = data_component.UniformsData;
-		auto& size = data_component.UniformsDataSize;
+		auto& data = core_component.UniformsData;
+		auto& size = core_component.UniformsDataSize;
 
-		size = sm_data_component.UniformsDataSize;
+		size = sm_core_component.UniformsDataSize;
 
 		if (data)
 			operator delete(data);
 		data = operator new(size);
 
-		std::memcpy(data, sm_data_component.DefaultUniformsData, size);
+		std::memcpy(data, sm_core_component.DefaultUniformsData, size);
 
-		auto& textures = data_component.Textures;
+		auto& textures = core_component.Textures;
 		textures.clear();
-		textures.resize(sm_data_component.TextureSlots.size());
+		textures.resize(sm_core_component.TextureSlots.size());
 		for (auto& texture : textures)
 		{
 			texture = NullAssetID;

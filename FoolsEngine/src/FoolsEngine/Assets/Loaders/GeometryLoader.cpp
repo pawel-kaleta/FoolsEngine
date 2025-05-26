@@ -76,18 +76,18 @@ namespace fe
 			aiProcess_FlipUVs 
 		);
 
-		auto& mesh_data_component = meshUser.GetCoreComponent();
+		auto& mesh_core_component = meshUser.GetCoreComponent();
 
-		auto& dataLocation = mesh_data_component.Data;
+		auto& dataLocation = mesh_core_component.Data;
 		if (dataLocation)
 		{
 			FE_LOG_CORE_WARN("Reloading mesh");
 			delete dataLocation;
 		}
 
-		auto& spec = mesh_data_component.Specification;
+		auto& spec = mesh_core_component.Specification;
 		
-		dataLocation = (void*) new float[mesh_data_component.DataSize() / sizeof(float)];
+		dataLocation = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
 		float* index_ptr = (float*)dataLocation;
 		Vertex* first_vertex_ptr = (Vertex*)(index_ptr + spec.IndexCount);
 		Vertex* vertex_ptr = first_vertex_ptr;

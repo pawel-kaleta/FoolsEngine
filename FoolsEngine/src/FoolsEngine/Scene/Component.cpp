@@ -164,17 +164,17 @@ namespace fe
 
 		auto shading_model_observer = AssetObserver<ShadingModel>(shading_model_current);
 
-		auto& sm_data_component = shading_model_observer.GetCoreComponent();
-		auto& material_data_component = material_user.GetCoreComponent();
+		auto& sm_core_component = shading_model_observer.GetCoreComponent();
+		auto& material_core_component = material_user.GetCoreComponent();
 
-		for (auto& uniform : sm_data_component.Uniforms)
+		for (auto& uniform : sm_core_component.Uniforms)
 		{
-			ImGuiLayer::RenderUniform(uniform, material_user.GetUniformValuePtr(material_data_component, uniform));
+			ImGuiLayer::RenderUniform(uniform, material_user.GetUniformValuePtr(material_core_component, uniform));
 		}
 
-		for (auto& textureSlot : sm_data_component.TextureSlots)
+		for (auto& textureSlot : sm_core_component.TextureSlots)
 		{
-			auto texture_current = material_user.GetTexture(material_data_component, textureSlot);
+			auto texture_current = material_user.GetTexture(material_core_component, textureSlot);
 			bool newSelection = false;
 
 			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetFilepath().filename().string().c_str();
@@ -183,7 +183,7 @@ namespace fe
 				bool is_selected = !(texture_current.IsValid());
 
 				if (ImGui::Selectable("None", is_selected))
-					material_user.SetTexture(material_data_component, textureSlot, NullAssetID);
+					material_user.SetTexture(material_core_component, textureSlot, NullAssetID);
 
 				auto textures = AssetManager::GetRegistry().view<ACTexture2DCore>();
 				for (auto id : textures)
@@ -206,7 +206,7 @@ namespace fe
 
 			if (newSelection)
 			{
-				material_user.SetTexture(material_data_component, textureSlot, texture_current.GetID());
+				material_user.SetTexture(material_core_component, textureSlot, texture_current.GetID());
 			}
 		}
 	}

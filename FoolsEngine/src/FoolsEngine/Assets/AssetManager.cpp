@@ -54,7 +54,7 @@ namespace fe
 			{
 			case AssetType::Texture2DAsset:
 			{
-				auto textureUser = AssetHandle<Texture2D>(id).Use();
+				auto textureUser = AssetUser<Texture2D>(id);
 				if (ref_counters.LiveHandles == 0)
 				{
 					textureUser.Release();
@@ -72,7 +72,7 @@ namespace fe
 			}
 			case AssetType::ShaderAsset:
 			{
-				auto shaderUser = AssetHandle<Shader>(id).Use();
+				auto shaderUser = AssetUser<Shader>(id);
 				if (ref_counters.LiveHandles == 0)
 				{
 					shaderUser.Release();
@@ -89,7 +89,7 @@ namespace fe
 			}
 			case AssetType::MeshAsset:
 			{
-				auto meshUser = AssetHandle<Mesh>(id).Use();
+				auto meshUser = AssetUser<Mesh>(id);
 				if (ref_counters.LiveHandles == 0)
 				{
 					meshUser.Release();

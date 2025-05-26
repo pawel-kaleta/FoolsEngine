@@ -148,9 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\ComponentRegistry.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
@@ -244,7 +244,6 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FoolsEngine\Assets\ComponentRegistry.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

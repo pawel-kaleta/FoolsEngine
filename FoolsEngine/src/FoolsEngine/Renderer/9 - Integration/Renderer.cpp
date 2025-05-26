@@ -204,8 +204,8 @@ namespace fe
 
 			auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
 
-			auto& render_mesh_data = render_mesh_observer.GetCoreComponent();
-			auto material_observer = AssetObserver<Material>(render_mesh_data.MaterialID);
+			auto& render_mesh_core = render_mesh_observer.GetCoreComponent();
+			auto material_observer = AssetObserver<Material>(render_mesh_core.MaterialID);
 			auto shaderID = AssetObserver<ShadingModel>(material_observer.GetCoreComponent().ShadingModelID).GetCoreComponent().ShaderID;
 			{
 				auto shader_observer = AssetObserver<Shader>(shaderID);
@@ -216,7 +216,7 @@ namespace fe
 				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 			}
 
-			AssetObserver<Mesh>(render_mesh_data.MeshID).Draw(material_observer);
+			AssetObserver<Mesh>(render_mesh_core.MeshID).Draw(material_observer);
 		}
 
 		framebuffer.Unbind();
@@ -268,10 +268,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& material_data = materialObserver.GetCoreComponent();
-		auto sm_observer = AssetObserver<ShadingModel>(material_data.ShadingModelID);
-		auto& sm_data_component = sm_observer.GetCoreComponent();
-		auto shaderUser = AssetUser<Shader>(sm_data_component.ShaderID);
+		auto& material_core = materialObserver.GetCoreComponent();
+		auto sm_observer = AssetObserver<ShadingModel>(material_core.ShadingModelID);
+		auto& sm_core = sm_observer.GetCoreComponent();
+		auto shaderUser = AssetUser<Shader>(sm_core.ShaderID);
 
 		shaderUser.Bind(s_ActiveGDI);
 
@@ -286,23 +286,23 @@ namespace fe
 			(void*)glm::value_ptr(transform)
 		);
 
-		for (const auto& uniform : sm_data_component.Uniforms)
+		for (const auto& uniform : sm_core.Uniforms)
 		{
-			auto dataPointer = materialObserver.GetUniformValuePtr(material_data, uniform);
+			auto dataPointer = materialObserver.GetUniformValuePtr(material_core, uniform);
 			shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
 		}
 
 		{
 			uint32_t rendererTextureSlot = 0;
-			auto shaderTextureSlotsIt = sm_data_component.TextureSlots.begin();
+			auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
 
-			for (const auto& texture : material_data.Textures)
+			for (const auto& texture : material_core.Textures)
 			{
 				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
-				auto texture_handle = AssetHandle<Texture2D>(texture, LoadingPriority_None);
-				if (texture_handle.IsValid())
+
+				if (texture)
 				{
-					texture_handle.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
+					AssetUser<Texture2D>(texture).Bind(s_ActiveGDI, rendererTextureSlot++);
 				}
 				else
 				{

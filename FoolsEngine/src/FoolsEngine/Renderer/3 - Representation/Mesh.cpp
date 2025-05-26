@@ -67,27 +67,27 @@ namespace fe
 			return;
 		}
 
-		auto& material_data = materialObserver.GetCoreComponent();
-		auto shading_model_observer = AssetObserver<ShadingModel>(material_data.ShadingModelID);
-		auto& sm_data = shading_model_observer.GetCoreComponent();
-		auto shader_user = AssetUser<Shader>(sm_data.ShaderID);
+		auto& material_core = materialObserver.GetCoreComponent();
+		auto shading_model_observer = AssetObserver<ShadingModel>(material_core.ShadingModelID);
+		auto& sm_core = shading_model_observer.GetCoreComponent();
+		auto shader_user = AssetUser<Shader>(sm_core.ShaderID);
 
 		auto GDI = Renderer::GetActiveGDItype();
 
-		for (const auto& uniform : sm_data.Uniforms)
+		for (const auto& uniform : sm_core.Uniforms)
 		{
 			shader_user.UploadUniform(
 				GDI,
 				uniform,
-				(void*)materialObserver.GetUniformValuePtr(material_data, uniform)
+				(void*)materialObserver.GetUniformValuePtr(material_core, uniform)
 			);
 		}
 
 		RenderTextureSlotID rendererTextureSlot = 0;
 		
-		for (auto& textureSlot : sm_data.TextureSlots)
+		for (auto& textureSlot : sm_core.TextureSlots)
 		{
-			auto& texture = materialObserver.GetTexture(material_data, textureSlot).Use();
+			auto& texture = materialObserver.GetTexture(material_core, textureSlot).Use();
 
 			if (texture.IsValid())
 			{

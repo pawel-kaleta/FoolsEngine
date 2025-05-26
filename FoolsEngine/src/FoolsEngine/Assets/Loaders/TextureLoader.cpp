@@ -8,8 +8,8 @@ namespace fe
 {
 	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser)
 	{
-		auto& acDataLocation = textureUser.GetCoreComponent().Data;
-		if (acDataLocation)
+		auto& data_location = textureUser.GetCoreComponent().Data;
+		if (data_location)
 			return;
 
 		//TO DO: dont override specification, use import settings
@@ -21,7 +21,7 @@ namespace fe
 
 		stbi_uc* data = stbi_load(sourceFilePath.string().c_str(), &width, &height, &channels, 0);
 
-		acDataLocation = data;
+		data_location = data;
 
 		FE_LOG_CORE_DEBUG("Loading texture, AssetID: {0}, Channels: {1}", textureUser.GetID(), channels);
 		FE_CORE_ASSERT(data, "Failed to load image!");
