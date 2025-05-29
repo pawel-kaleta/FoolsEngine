@@ -39,7 +39,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		CreateBaseAssets();
+		AcquireBaseAssets();
 	}
 
 	void Renderer::Shutdown()
@@ -50,10 +50,10 @@ namespace fe
 	template <typename tnAsset>
 	void MakeHandle(AssetHandle<tnAsset>& hande, const UUID& uuid)
 	{
-		hande = AssetHandle<tnAsset>(AssetManager::GetAssetWithUUID(uuid));
+		hande = AssetHandle<tnAsset>(AssetManager::CreateBaseAsset<tnAsset>(uuid), AssetLoadingPriority::LoadingPriority_None);
 	}
 
-	void Renderer::CreateBaseAssets()
+	void Renderer::AcquireBaseAssets()
 	{
 		FE_PROFILER_FUNC();
 
@@ -66,11 +66,16 @@ namespace fe
 		MakeHandle(BaseAssets.ShadingModels.Default, base_assets.ShadingModels.Default);
 		MakeHandle(BaseAssets.Materials.Default    , base_assets.Materials.Default);
 
-		// TO DO : move this
+		TextureLoader::LoadTexture("assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
+		TextureLoader::LoadTexture("assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
+
+		ShaderLoader::LoadShader("assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
+		ShaderLoader::LoadShader("assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
+
+		// TO DO : read from a file "assets/shading_models/Default.femat"
 		{
 			auto shading_model_user = BaseAssets.ShadingModels.Default.Use();
 
-			// TO DO: read from a file
 			shading_model_user.MakeShadingModel(
 				BaseAssets.Shaders.Base3D.GetID(),
 				{
@@ -92,7 +97,6 @@ namespace fe
 		{
 			auto material_user = BaseAssets.Materials.Default.Use();
 
-			// TO DO: read from file
 			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 		}
 	}
@@ -102,11 +106,8 @@ namespace fe
 		BaseAssets.Textures.Default.Use().CreateGDITexture2D(GDI);
 		BaseAssets.Textures.FlatWhite.Use().CreateGDITexture2D(GDI);
 
-		auto assetUser1 = BaseAssets.Shaders.Base2D.Use();
-		ShaderLoader::CompileShader(GDI, assetUser1);
-
-		auto assetUser2 = BaseAssets.Shaders.Base3D.Use();
-		ShaderLoader::CompileShader(GDI, assetUser2);
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base2D.Use());
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
 	}
 
 	void Renderer::SetAPI(GDIType GDI)

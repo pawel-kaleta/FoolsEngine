@@ -29,7 +29,7 @@ namespace fe
 		const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
 
 		static void Startup();
-		static void CreateBaseAssets();
+		static void AcquireBaseAssets();
 		static void UploadBaseAssetsToGPU(GDIType GDI);
 		static void Shutdown();
 		static void SetAPI(GDIType GDI);

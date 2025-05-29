@@ -8,9 +8,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_IconPlay  = EditorAssetHandle<Texture2D>(AssetManager::CreateInternalAsset<Texture2D>());
-		m_IconStop  = EditorAssetHandle<Texture2D>(AssetManager::CreateInternalAsset<Texture2D>());
-		m_IconPause = EditorAssetHandle<Texture2D>(AssetManager::CreateInternalAsset<Texture2D>());
+		m_IconPlay  = EditorAssetHandle<Texture2D>(AssetManager::CreateEditorAsset<Texture2D>());
+		m_IconStop  = EditorAssetHandle<Texture2D>(AssetManager::CreateEditorAsset<Texture2D>());
+		m_IconPause = EditorAssetHandle<Texture2D>(AssetManager::CreateEditorAsset<Texture2D>());
 
 		TextureLoader::LoadTexture("resources/PlayButton.png" , m_IconPlay);
 		TextureLoader::LoadTexture("resources/StopButton.png" , m_IconStop);

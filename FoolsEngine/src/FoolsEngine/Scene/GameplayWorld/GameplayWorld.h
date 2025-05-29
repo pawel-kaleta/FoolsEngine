@@ -69,7 +69,5 @@ namespace fe
 		}
 
 		void UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID));
-
-
 	};
 }

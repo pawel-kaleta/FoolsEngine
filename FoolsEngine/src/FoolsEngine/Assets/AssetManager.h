@@ -14,25 +14,49 @@ namespace fe
 
 #ifdef FE_EDITOR
 		template <typename tnAsset>
-		static AssetID CreateInternalAsset()
+		static AssetID CreateEditorAsset()
 		{
 			FE_PROFILER_FUNC();
 
 			AssetRegistry& reg = s_Instance->m_Registry;
 			AssetID assetID = reg.create();
 
+			reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
 			reg.emplace<tnAsset::Core>(assetID).Init();
 
 			return assetID;
 		}
 #endif
 		template <typename tnAsset>
+		static AssetID CreateBaseAsset(UUID uuid)
+		{
+			FE_PROFILER_FUNC();
+
+			AssetRegistry& reg = s_Instance->m_Registry;
+			AssetID assetID = reg.create();
+
+			reg.emplace<ACUUID>(assetID).UUID = uuid;
+			s_Instance->m_MapByUUID[uuid] = assetID;
+
+			reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
+			reg.emplace<tnAsset::Core>(assetID).Init();
+
+			return assetID;
+		}
+		template <typename tnAsset>
 		static AssetID CreateInternalAsset(AssetID parent)
 		{
 			FE_PROFILER_FUNC();
 
-			auto assetid = CreateInternalAsset<tnAsset>();
-			s_Instance->m_Registry.emplace<ACMasterAsset>(assetID).Parent = parent;
+			AssetRegistry& reg = s_Instance->m_Registry;
+			AssetID assetID = reg.create();
+
+			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
+			s_Instance->m_MapByUUID[uuid] = assetID;
+
+			reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
+			reg.emplace<ACMasterAsset>(assetID).Parent = parent;
+			reg.emplace<tnAsset::Core>(assetID).Init();
 
 			return assetID;
 		}
@@ -44,6 +68,7 @@ namespace fe
 			AssetRegistry& reg = s_Instance->m_Registry;
 			AssetID assetID = reg.create();
 
+			reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
 			reg.emplace<ACRefsCounters>(assetID);
 			reg.emplace<ACFilepath>(assetID).Filepath = path;
 			auto uuid = reg.emplace<ACUUID>(assetID).UUID;
@@ -54,6 +79,24 @@ namespace fe
 			reg.emplace<tnAsset::Core>(assetID).Init();
 
 			return assetID;
+		}
+
+		template <typename tnAsset>
+		static AssetID GetOrCreateAssetWithUUID(UUID uuid)
+		{
+			FE_CORE_ASSERT(false, "Not implemented");
+
+			auto& Inst = *s_Instance;
+			auto result = Inst.m_MapByUUID.find(uuid);
+			if (result == Inst.m_MapByUUID.end())
+			{
+
+				return NullEntityID;
+			}
+
+			FE_CORE_ASSERT(Inst.m_Registry.get<ACAssetType>(result->second).Type == tnAsset::GetTypeStatic(), "Wrong asset type");
+
+			return result->second;
 		}
 
 		void SetSourcePath(AssetID assetID, std::filesystem::path sourcePath)
