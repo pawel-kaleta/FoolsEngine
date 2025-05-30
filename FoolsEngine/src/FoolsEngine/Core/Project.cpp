@@ -19,7 +19,7 @@ namespace fe
 		YAML::Emitter emitter;
 		
 		emitter << YAML::Key << "AssetsPath" << YAML::Value << inst.AssetsPath.string();
-		emitter << YAML::Key << "StartScene" << YAML::Value << inst.StartScene.string();
+		emitter << YAML::Key << "StartScene" << YAML::Value << inst.StartScene;
 
 		emitter << YAML::Key << "BaseAssets" << YAML::Value << YAML::BeginMap;
 			emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
@@ -50,7 +50,7 @@ namespace fe
 		YAML::Node main_node = YAML::LoadFile(path);
 
 		inst.AssetsPath = main_node["AssetsPath"].as<std::string>();
-		inst.AssetsPath = main_node["StartScene"].as<std::string>();
+		inst.StartScene = main_node["StartScene"].as<UUID>();
 
 		auto& base_assets_node = main_node["BaseAssets"];
 		

@@ -14,6 +14,21 @@ namespace fe
 {
 	AssetManager* AssetManager::s_Instance;
 
+	AssetID AssetManager::GetOrCreateAssetWithUUID(UUID uuid)
+	{
+		auto& inst = *s_Instance;
+		auto result = inst.m_MapByUUID.find(uuid);
+		if (result == inst.m_MapByUUID.end())
+		{
+			auto assetID = inst.m_Registry.create();
+			inst.m_Registry.emplace<ACUUID>(assetID).UUID = uuid;
+			inst.m_MapByUUID[uuid] = assetID;
+			return assetID;
+		}
+
+		return result->second;
+	}
+
 	AssetID AssetManager::GetAssetFromFilepath(const std::filesystem::path& filepath)
 	{
 		auto& map = s_Instance->m_MapByFilepath;
@@ -23,18 +38,58 @@ namespace fe
 		return NullAssetID;
 	}
 
-	AssetID AssetManager::GetAssetWithUUID(UUID uuid)
+	const std::vector<AssetID>* AssetManager::GetAssetsFromSourceFilepath(const std::filesystem::path& filepath)
 	{
-		FE_PROFILER_FUNC();
+		auto& map = s_Instance->m_SourceFileRegistry;
+		auto search_result = map.find(filepath);
+		if (search_result != map.end())
+			return &(search_result->second);
 	
-		auto& assetMap = s_Instance->m_MapByUUID;
-		auto asset = assetMap.find(uuid);
-	
-		if (asset == assetMap.end())
-			return NullAssetID;
-	
-		return asset->second;
+		return nullptr;
 	}
+
+	void AssetManager::SetFilepath(AssetID assetID, const std::filesystem::path& filepath)
+	{
+		auto& inst = *s_Instance;
+		AssetRegistry& reg = inst.m_Registry;
+		auto ac_path = reg.try_get<ACFilepath>(assetID);
+
+		if (!ac_path)
+		{
+			ac_path = &(reg.emplace<ACFilepath>(assetID));
+		}
+
+		ac_path->Filepath = filepath;
+		inst.m_MapByFilepath[ac_path->Filepath] = assetID;
+	}
+
+	void AssetManager::SetSourcePath(AssetID assetID, const std::filesystem::path& sourcePath)
+	{
+		auto& inst = *s_Instance;
+		AssetRegistry& reg = inst.m_Registry;
+		auto ac_path = reg.try_get<ACSourceFilepath>(assetID);
+		if (ac_path)
+		{
+			auto& assets = inst.m_SourceFileRegistry[ac_path->Filepath];
+			for (auto it = assets.begin(); it != assets.end(); it++)
+			{
+				if (*it == assetID)
+				{
+					assets.erase(it);
+					break;
+				}
+			}
+		}
+		else
+		{
+			ac_path = &(reg.emplace<ACSourceFilepath>(assetID));
+		}
+
+		ac_path->Filepath = sourcePath;
+		inst.m_SourceFileRegistry[sourcePath].push_back(assetID);
+	}
+
+
 
 	void AssetManager::EvaluateAndReload()
 	{

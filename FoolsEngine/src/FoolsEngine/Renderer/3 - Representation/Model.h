@@ -42,6 +42,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACModelCore>(assetID).Init(); }
 
 		using Observer = ModelObserver;
 		using User = ModelUser;

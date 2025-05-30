@@ -106,6 +106,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMeshCore>(assetID).Init(); }
 
 		using Observer = MeshObserver;
 		using User = MeshUser;

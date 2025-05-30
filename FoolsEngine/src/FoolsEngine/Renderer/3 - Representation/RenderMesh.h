@@ -39,6 +39,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;

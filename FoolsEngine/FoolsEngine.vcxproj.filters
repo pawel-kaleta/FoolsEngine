@@ -340,6 +340,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Core\Project.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetTypesRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -542,5 +543,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\RenderingComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Project.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\AssetTypesRegistry.cpp" />
   </ItemGroup>
 </Project>

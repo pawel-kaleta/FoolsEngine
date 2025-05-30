@@ -1,4 +1,5 @@
 Shader: assets/shaders/Base3DShader.glsl
+ShaderShouldBeJustUUID: asd
 Uniforms:
   - Name: u_BaseColor
     Type: Float3

@@ -40,7 +40,9 @@ namespace fe
 		std::filesystem::path File;
 		std::filesystem::path Directory;
 		std::filesystem::path AssetsPath;
-		std::filesystem::path StartScene;
+		UUID StartScene;
+
+		// tags list? (scene component)
 
 	private:
 		friend class Application;

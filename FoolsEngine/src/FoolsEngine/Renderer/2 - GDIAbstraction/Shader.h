@@ -56,6 +56,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShaderCore>(assetID).Init(); }
 
 		using Observer = ShaderObserver;
 		using User = ShaderUser;

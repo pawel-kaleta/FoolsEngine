@@ -65,6 +65,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMaterialCore>(assetID).Init(); }
 
 		using User = MaterialUser;
 		using Observer = MaterialObserver;

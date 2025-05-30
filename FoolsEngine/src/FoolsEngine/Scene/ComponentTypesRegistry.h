@@ -52,8 +52,8 @@ namespace fe
 			);
 		}
 
-		static std::vector<DataComponentRegistryItem>& GetDataCompItems() { return s_Instance->m_DataItems; };
-		static std::vector<FlagComponentRegistryItem>& GetFlagCompItems() { return s_Instance->m_FlagItems; };
+		static const std::vector<const DataComponentRegistryItem>& GetDataCompItems() { return s_Instance->m_DataItems; };
+		static const std::vector<const FlagComponentRegistryItem>& GetFlagCompItems() { return s_Instance->m_FlagItems; };
 		
 		
 	private:
@@ -64,8 +64,8 @@ namespace fe
 
 		static ComponentTypesRegistry* s_Instance;
 
-		std::vector<DataComponentRegistryItem> m_DataItems;
-		std::vector<FlagComponentRegistryItem> m_FlagItems;
+		std::vector<const DataComponentRegistryItem> m_DataItems;
+		std::vector<const FlagComponentRegistryItem> m_FlagItems;
 
 	};
 }

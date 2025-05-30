@@ -1,82 +1,111 @@
 #include "FE_pch.h"
 #include "AssetsSerializer.h"
+#include "YAML.h"
 
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 
-#include "YAML.h"
+#include "FoolsEngine\Assets\AssetTypesRegistry.h"
 
-namespace fe
+#include <string>
+
+namespace fe::AssetSerializer
 {
-	const char* AssetSerializer::AssetTypeName(AssetType type)
+	void SerializeRegistry(const std::filesystem::path& filepath)
 	{
-		const static char* names[AssetType::Count] = {
-			"Scenes",
-			"Textures",
-			"Textures2D",
-			"Meshes",
-			"Models",
-			"Shaders",
-			"Materials",
-			"MaterialInstances",
-			"Audio"
-		};
+		YAML::Emitter emitter;
+		auto& reg = AssetManager::GetRegistry();
 
-		return names[type];
-	}
-
-	void AssetSerializer::Serialize(YAML::Emitter& emitter)
-	{
-		emitter << YAML::Key << "Assets" << YAML::Value << YAML::BeginMap;
-		for (size_t i = 0; i < (size_t)AssetType::Count; i++)
+		emitter << YAML::Key << "Masters" << YAML::Value << YAML::BeginSeq;
+		auto paths_view = reg.view<ACFilepath>();
+		for (auto id : paths_view)
 		{
-			AssetType type = (AssetType)i;
-			emitter << YAML::Key << AssetTypeName(type);
+			auto [acpath] = paths_view.get(id);
+			auto& type = reg.get<ACAssetType>(id).Type;
 
-			auto& reg = AssetManager::GetRegistry();
-			auto view = reg.view<ACUUID, ACFilepath>();
-			
-			emitter << YAML::Value << YAML::BeginSeq;
-			for (auto id : view)
-			{
-				auto [CUUID, CFilepath] = view.get(id);
-
-				emitter << YAML::BeginMap;
-				emitter << YAML::Key << "UUID" << YAML::Value << CUUID.UUID;
-				emitter << YAML::Key << "Filepath" << YAML::Value << CFilepath.Filepath.string();
-				emitter << YAML::EndMap;
-			}
-			emitter << YAML::EndSeq;
+			emitter << YAML::BeginMap;
+			emitter << YAML::Key << "TypeName" << YAML::Value << AssetTypeName[type];
+			emitter << YAML::Key << "Type" << YAML::Value << type;
+			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
+			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string();
+			emitter << YAML::EndMap;
 		}
-		emitter << YAML::EndMap;
+		emitter << YAML::EndSeq;
+
+		emitter << YAML::Key << "Internals" << YAML::Value << YAML::BeginSeq;
+		auto masters_view = reg.view<ACMasterAsset>();
+		for (auto id : masters_view)
+		{
+			auto [acmaster] = masters_view.get(id);
+			auto& type = reg.get<ACAssetType>(id).Type;
+
+			emitter << YAML::BeginMap;
+			emitter << YAML::Key << "TypeName" << YAML::Value << AssetTypeName[type];
+			emitter << YAML::Key << "Type" << YAML::Value << type;
+			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
+			emitter << YAML::Key << "Master" << YAML::Value << reg.get<ACUUID>(acmaster.Master).UUID;
+			emitter << YAML::EndMap;
+		}
+		emitter << YAML::EndSeq;
+
+		std::ofstream fout(filepath);
+		fout << emitter.c_str();
 	}
 
-	bool AssetSerializer::Deserialize(YAML::Node& node)
+	bool DeserializeRegistry(const std::filesystem::path& filepath)
 	{
-		//AssetManager::ClearRegistries();
+		YAML::Node node = YAML::LoadFile(filepath.string());
+		if (!node["Masters"])   return false;
+		if (!node["Internals"]) return false;
 
-		auto& assets = node["Assets"];
+		auto& reg = AssetManager::GetRegistry();
 
-		for (size_t i = 0; i < (size_t)AssetType::Count; i++)
+		for (auto asset : node["Masters"])
 		{
-			AssetType type = (AssetType)i;
-			if (!assets[AssetTypeName(type)]) return false;
-			auto& assetsOfType = assets[AssetTypeName(type)];
+			if (!asset["TypeName"]) return false;
+			if (!asset["Type"])     return false;
+			if (!asset["UUID"])     return false;
+			if (!asset["Filepath"]) return false;
 
-			for (auto asset : assetsOfType)
-			{
-				if (!asset["UUID"])     return false;
-				if (!asset["Filepath"]) return false;
+			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
+			AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
+			reg.emplace<ACAssetType>(assetID).Type = (AssetType)(asset["Type"].as<int32_t>());
+			reg.emplace<ACRefsCounters>(assetID);
+		}
 
-				std::filesystem::path filepath = asset["Filepath"].as<std::string>();
-				UUID uuid = asset["UUID"].as<UUID>();
+		for (auto asset : node["Internals"])
+		{
+			if (!asset["TypeName"]) return false;
+			if (!asset["Type"])     return false;
+			if (!asset["UUID"])     return false;
+			if (!asset["Master"])   return false;
 
-				AssetID id;// = AssetManager::CreateAsset(filepath, type);
-
-				FE_CORE_ASSERT(AssetManager::GetRegistry().get<ACUUID>(id).UUID == uuid, "Asset import failed");
-			}
+			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
+			reg.emplace<ACAssetType>(assetID).Type = (AssetType)(asset["Type"].as<int32_t>());
+			reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
 		}
 
 		return true;
+	}
+
+	void LoadMetaData()
+	{
+		auto& reg = AssetManager::GetRegistry();
+		auto paths_view = reg.view<ACFilepath>();
+
+		for (auto assetID : paths_view)
+		{
+			auto [cfilepath] = paths_view.get(assetID);
+			auto type = reg.get<ACAssetType>(assetID).Type;
+
+			for (auto& item : AssetTypesRegistry::GetItems())
+			{
+				if (item.Type != type)
+					continue;
+
+				(*item.EmplaceCore)(assetID);
+				(*item.LoadMetadata)(assetID);
+			}
+		}
 	}
 }

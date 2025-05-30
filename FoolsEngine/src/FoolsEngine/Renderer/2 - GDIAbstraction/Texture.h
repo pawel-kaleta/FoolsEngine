@@ -69,6 +69,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;

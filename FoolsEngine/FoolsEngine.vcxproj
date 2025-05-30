@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\AssetTypesRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Core\Project.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.h" />
     <ClInclude Include="src\EntryPoint.h" />
@@ -249,6 +250,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\AssetTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp" />

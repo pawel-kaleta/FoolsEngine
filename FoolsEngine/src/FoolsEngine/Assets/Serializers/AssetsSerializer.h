@@ -1,21 +1,14 @@
 #pragma once
 
-namespace YAML
-{
-	class Emitter;
-	class Node;
-}
+#include <filesystem>
 
 namespace fe
 {
-	enum AssetType;
-
-	class AssetSerializer
+	namespace AssetSerializer
 	{
-	public:
-		static void Serialize(YAML::Emitter& emitter);
-		static bool Deserialize(YAML::Node& node);
-	private:
-		static const char* AssetTypeName(AssetType type);
+		void SerializeRegistry(const std::filesystem::path& filepath);
+		bool DeserializeRegistry(const std::filesystem::path& filepath);
+
+		void LoadMetaData();
 	};
 }

@@ -65,6 +65,7 @@ namespace fe
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModelAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShadingModelCore>(assetID).Init(); }
 
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;

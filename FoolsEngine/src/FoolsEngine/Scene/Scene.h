@@ -57,6 +57,7 @@ namespace fe
 	{
 	public:
 		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACSceneCore>(assetID).Init(); }
 
 		using Observer = SceneObserver;
 		using User = SceneUser;

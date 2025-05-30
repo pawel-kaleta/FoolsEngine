@@ -44,7 +44,7 @@ namespace fe
 			return assetID;
 		}
 		template <typename tnAsset>
-		static AssetID CreateInternalAsset(AssetID parent)
+		static AssetID CreateInternalAsset(AssetID master)
 		{
 			FE_PROFILER_FUNC();
 
@@ -55,7 +55,7 @@ namespace fe
 			s_Instance->m_MapByUUID[uuid] = assetID;
 
 			reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
-			reg.emplace<ACMasterAsset>(assetID).Parent = parent;
+			reg.emplace<ACMasterAsset>(assetID).Master = master;
 			reg.emplace<tnAsset::Core>(assetID).Init();
 
 			return assetID;
@@ -81,55 +81,14 @@ namespace fe
 			return assetID;
 		}
 
-		template <typename tnAsset>
-		static AssetID GetOrCreateAssetWithUUID(UUID uuid)
-		{
-			FE_CORE_ASSERT(false, "Not implemented");
-
-			auto& Inst = *s_Instance;
-			auto result = Inst.m_MapByUUID.find(uuid);
-			if (result == Inst.m_MapByUUID.end())
-			{
-
-				return NullEntityID;
-			}
-
-			FE_CORE_ASSERT(Inst.m_Registry.get<ACAssetType>(result->second).Type == tnAsset::GetTypeStatic(), "Wrong asset type");
-
-			return result->second;
-		}
-
-		void SetSourcePath(AssetID assetID, std::filesystem::path sourcePath)
-		{
-			AssetRegistry& reg = m_Registry;
-			auto ac_path = reg.try_get<ACSourceFilepath>(assetID);
-			if (ac_path)
-			{
-				auto& assets = m_SourceFileRegistry[ac_path->Filepath];
-				auto it = assets.begin();
-				for (; it != assets.end(); it++)
-				{
-					if (*it == assetID)
-					{
-						assets.erase(it);
-						break;
-					}
-				}
-			}
-			else
-			{
-				ac_path = &(reg.emplace<ACSourceFilepath>(assetID));
-			}
-
-			ac_path->Filepath = sourcePath;
-			m_SourceFileRegistry[sourcePath].push_back(assetID);
-		}
+		static AssetID GetOrCreateAssetWithUUID(UUID uuid);
+		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath);
+		static const std::vector<AssetID>* GetAssetsFromSourceFilepath(const std::filesystem::path& filepath);
+	
+		static void SetFilepath(AssetID assetID, const std::filesystem::path& filepath);
+		static void SetSourcePath(AssetID assetID, const std::filesystem::path& sourcePath);
 
 		static auto GetAll() { return GetRegistry().view<AssetID>(); }
-		
-		static AssetID GetAssetFromFilepath(const std::filesystem::path& filepath);
-		static AssetID GetAssetWithUUID(UUID uuid);
-
 		static void EvaluateAndReload();
 	private:
 		friend class Application;
@@ -139,19 +98,8 @@ namespace fe
 		static AssetManager* s_Instance;
 
 		AssetRegistry m_Registry;
-		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
 		std::unordered_map<UUID, AssetID> m_MapByUUID;
-
+		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
 		std::unordered_map<std::filesystem::path, std::vector<AssetID>> m_SourceFileRegistry;
-
-
-		static void AddByFilepathMapEntry(const std::filesystem::path& path, AssetID ID)
-		{
-			s_Instance->m_MapByFilepath[path] = ID;
-		}
-		static void RemoveByFilepathMapEntry(const std::filesystem::path& path, AssetType type)
-		{
-			s_Instance->m_MapByFilepath.erase(path);
-		}
 	};
 }
