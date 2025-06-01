@@ -37,34 +37,14 @@ namespace fe
 		virtual void OnInitialize() {};
 		virtual void OnActivate() {};
 
-		virtual void OnUpdate_FrameStart()	{};
-		virtual void OnUpdate_PrePhysics()  { FE_LOG_CORE_ERROR("Base OnUpdate!"); };
-		virtual void OnUpdate_Physics()		{};
-		virtual void OnUpdate_PostPhysics()	{};
-		virtual void OnUpdate_FrameEnd()	{};
+#define _BEHAVIOR_ON_UPDATE_DECLARATION(x) virtual void OnUpdate_##x() {};
+		FE_FOR_EACH(_BEHAVIOR_ON_UPDATE_DECLARATION, FE_SIMULATION_STAGES);
 
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 
 		template<SimulationStage::ValueType stage>
-		void RegisterForUpdate(uint32_t priority)
-		{
-			FE_PROFILER_FUNC();
-
-			FE_LOG_CORE_DEBUG("Behavior Update Register");
-
-			void (Behavior:: * onUpdateFuncPtr)() = nullptr;
-
-			if constexpr (stage == SimulationStage::FrameStart ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;
-			if constexpr (stage == SimulationStage::PrePhysics ) onUpdateFuncPtr = &Behavior::OnUpdate_PrePhysics;
-			if constexpr (stage == SimulationStage::Physics    ) onUpdateFuncPtr = &Behavior::OnUpdate_Physics;
-			if constexpr (stage == SimulationStage::PostPhysics) onUpdateFuncPtr = &Behavior::OnUpdate_PostPhysics;
-			if constexpr (stage == SimulationStage::FrameEnd   ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameEnd;
-			
-			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
-			
-			Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
-		}
+		void RegisterForUpdate(uint32_t priority);
 
 		template<SimulationStage::ValueType stage>
 		void UnregisterFromUpdate()

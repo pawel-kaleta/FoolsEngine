@@ -95,11 +95,8 @@ namespace fe
 		m_SystemsDirector->UpdateSystems(stage);
 	}
 
-	template void GameplayWorld::Update<SimulationStage::FrameStart >();
-	template void GameplayWorld::Update<SimulationStage::PrePhysics >();
-	template void GameplayWorld::Update<SimulationStage::Physics    >();
-	template void GameplayWorld::Update<SimulationStage::PostPhysics>();
-	template void GameplayWorld::Update<SimulationStage::FrameEnd   >();
+#define _GAMEPLAY_WORLD_UPDATE_DEF(x) template void GameplayWorld::Update<SimulationStage::x>();
+	FE_FOR_EACH(_GAMEPLAY_WORLD_UPDATE_DEF, FE_SIMULATION_STAGES);
 
 	void GameplayWorld::UpdateActors(SimulationStage stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID))
 	{

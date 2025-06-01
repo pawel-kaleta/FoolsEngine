@@ -39,51 +39,10 @@ namespace fe
 		Behavior* GetBehaviorFromUUID(UUID uuid);
 
 		template<SimulationStage::ValueType stage>
-		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
-		{
-			FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
-
-			auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
-			if (updateEnrolls.size() == 0)
-			{
-				Flag<CUpdateEnrollFlag<stage>>();
-			}
-			updateEnrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
-			SortUpdateEnrolls(stage);
-		}
+		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority);
 
 		template<SimulationStage::ValueType stage>
-		void RemoveUpdateEnroll(Behavior* behavior)
-		{
-			auto& enrolls =  m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
-
-			int found = false;
-			int enrollPos;
-			for (int j = 0; j < enrolls.size(); ++j)
-			{
-				if (enrolls[j].Behavior == behavior)
-				{
-					found = true;
-					enrollPos = j;
-					break;
-				}
-			}
-
-			if (found)
-			{
-				for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
-				{
-					std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
-				}
-
-				enrolls.pop_back();
-
-				if (enrolls.size() == 0)
-				{
-					UnFlag<CUpdateEnrollFlag<stage>>();
-				}
-			}
-		}
+		void RemoveUpdateEnroll(Behavior* behavior);
 
 	private:
 		friend class ActorInspector;

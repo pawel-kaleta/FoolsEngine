@@ -22,11 +22,8 @@ namespace fe
 
 		if (found)
 		{
-			RemoveUpdateEnroll<SimulationStage::Physics    >(behavior);
-			RemoveUpdateEnroll<SimulationStage::PostPhysics>(behavior);
-			RemoveUpdateEnroll<SimulationStage::PrePhysics >(behavior);
-			RemoveUpdateEnroll<SimulationStage::FrameStart >(behavior);
-			RemoveUpdateEnroll<SimulationStage::FrameEnd   >(behavior);
+#define _ACTOR_REMOVE_UPDATE_ENROLL_CALL(x) RemoveUpdateEnroll<SimulationStage::x>(behavior);
+			FE_FOR_EACH(_ACTOR_REMOVE_UPDATE_ENROLL_CALL, FE_SIMULATION_STAGES);
 
 			std::swap(behaviors[position], behaviors.back());
 			if (behavior->m_Active)
@@ -63,6 +60,59 @@ namespace fe
 		}
 		return nullptr;
 	}
+
+	template<SimulationStage::ValueType stage>
+	void Actor::EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
+	{
+		FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
+
+		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+		if (updateEnrolls.size() == 0)
+		{
+			Flag<CUpdateEnrollFlag<stage>>();
+		}
+		updateEnrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
+		SortUpdateEnrolls(stage);
+	}
+
+#define _ACTOR_ENROLL_FOR_UPDATE_DEF(x) template void Actor::EnrollForUpdate<SimulationStage::x>(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority);
+	FE_FOR_EACH(_ACTOR_ENROLL_FOR_UPDATE_DEF, FE_SIMULATION_STAGES);
+
+	template<SimulationStage::ValueType stage>
+	void Actor::RemoveUpdateEnroll(Behavior* behavior)
+	{
+		auto& enrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+
+		int found = false;
+		int enrollPos;
+		for (int j = 0; j < enrolls.size(); ++j)
+		{
+			if (enrolls[j].Behavior == behavior)
+			{
+				found = true;
+				enrollPos = j;
+				break;
+			}
+		}
+
+		if (found)
+		{
+			for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+			{
+				std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+			}
+
+			enrolls.pop_back();
+
+			if (enrolls.size() == 0)
+			{
+				UnFlag<CUpdateEnrollFlag<stage>>();
+			}
+		}
+	}
+
+#define _ACTOR_REMOVE_UPDATE_ENROLL_DEF(x) template void Actor::RemoveUpdateEnroll<SimulationStage::x>(Behavior* behavior);
+	FE_FOR_EACH(_ACTOR_REMOVE_UPDATE_ENROLL_DEF, FE_SIMULATION_STAGES);
 
 	void Actor::SortUpdateEnrolls(SimulationStage stage)
 	{

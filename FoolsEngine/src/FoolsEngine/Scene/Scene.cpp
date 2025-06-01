@@ -25,21 +25,15 @@ namespace fe
 		GetCoreComponent().GameplayWorld->Update<stage>();
 	}
 
-	template void SceneUser::Update<SimulationStage::FrameStart >() const;
-	template void SceneUser::Update<SimulationStage::PrePhysics >() const;
-	template void SceneUser::Update<SimulationStage::Physics    >() const;
-	template void SceneUser::Update<SimulationStage::PostPhysics>() const;
-	template void SceneUser::Update<SimulationStage::FrameEnd   >() const;
+#define _SCENE_UPDATE_DEF(x) template void SceneUser::Update<SimulationStage::x>() const;
+	FE_FOR_EACH(_SCENE_UPDATE_DEF, FE_SIMULATION_STAGES);
 
 	void SceneUser::SimulationUpdate() const
 	{
 		FE_PROFILER_FUNC();
 
-		Update<SimulationStage::FrameStart >();
-		Update<SimulationStage::PrePhysics >();
-		Update<SimulationStage::Physics    >();
-		Update<SimulationStage::PostPhysics>();
-		Update<SimulationStage::FrameEnd   >();
+#define _SCENE_UPDATE_CALL(x) Update<SimulationStage::x>();
+		FE_FOR_EACH(_SCENE_UPDATE_CALL, FE_SIMULATION_STAGES);
 	}
 
 	void SceneUser::PostFrameUpdate() const

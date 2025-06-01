@@ -39,11 +39,8 @@ namespace fe
 		virtual void OnInitialize() {};
 		virtual void OnActivate() {};
 
-		virtual void OnUpdate_FrameStart() {};
-		virtual void OnUpdate_PrePhysics()  {};
-		virtual void OnUpdate_Physics()     {};
-		virtual void OnUpdate_PostPhysics() {};
-		virtual void OnUpdate_FrameEnd()    {};
+#define _SYSTEM_ON_UPDATE_DECLARATION(x) virtual void OnUpdate_##x() {};
+		FE_FOR_EACH(_SYSTEM_ON_UPDATE_DECLARATION, FE_SIMULATION_STAGES);
 
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};

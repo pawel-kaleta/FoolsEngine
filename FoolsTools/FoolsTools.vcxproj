@@ -146,8 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetImport\FileHandler.h" />
-    <ClInclude Include="src\AssetImport\ImportData.h" />
     <ClInclude Include="src\AssetImport\GeometryImport.h" />
+    <ClInclude Include="src\AssetImport\ImportData.h" />
     <ClInclude Include="src\AssetImport\TextureImport.h" />
     <ClInclude Include="src\DockSpace.h" />
     <ClInclude Include="src\EditorApp.h" />

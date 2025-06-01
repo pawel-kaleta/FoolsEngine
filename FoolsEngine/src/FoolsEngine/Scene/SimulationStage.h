@@ -4,12 +4,11 @@
 
 namespace fe
 {
+#define FE_SIMULATION_STAGES FrameStart, PrePhysics, Physics, PostPhysics, FrameEnd
+
 	FE_DECLARE_ENUM(SimulationStage,
-		FrameStart,
-		PrePhysics,
-		Physics, 
-		PostPhysics,
-		FrameEnd,
+		FE_SIMULATION_STAGES,
 		Count
 	);
+
 }

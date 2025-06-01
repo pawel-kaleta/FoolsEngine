@@ -28,22 +28,16 @@ namespace fe
 
 		void (System:: * onUpdateFuncPtr)() = nullptr;
 
-		if constexpr (stage == SimulationStage::FrameStart ) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
-		if constexpr (stage == SimulationStage::PrePhysics ) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
-		if constexpr (stage == SimulationStage::Physics    ) onUpdateFuncPtr = &System::OnUpdate_Physics;
-		if constexpr (stage == SimulationStage::PostPhysics) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
-		if constexpr (stage == SimulationStage::FrameEnd   ) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
+#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) onUpdateFuncPtr = &System::OnUpdate_##x;
+		FE_FOR_EACH(_GET_ON_UPDATE_FUNK_PTR, FE_SIMULATION_STAGES);
 
 		FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 
 		m_SystemsDirector->EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
 	}
 
-	template void System::RegisterForUpdate<SimulationStage::FrameStart >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStage::PrePhysics >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStage::Physics    >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStage::PostPhysics>(uint32_t);
-	template void System::RegisterForUpdate<SimulationStage::FrameEnd   >(uint32_t);
+#define _SYSTEM_REGISTER_FOR_UPDATE_DEF(x) template void System::RegisterForUpdate<SimulationStage::x>(uint32_t);
+	FE_FOR_EACH(_SYSTEM_REGISTER_FOR_UPDATE_DEF, FE_SIMULATION_STAGES);
 
 	template<SimulationStage::ValueType stage>
 	void System::UnregisterFromUpdate()
@@ -55,11 +49,8 @@ namespace fe
 		m_SystemsDirector->RemoveUpdateEnroll<stage>(this);
 	}
 
-	template void System::UnregisterFromUpdate<SimulationStage::FrameStart >();
-	template void System::UnregisterFromUpdate<SimulationStage::PrePhysics >();
-	template void System::UnregisterFromUpdate<SimulationStage::Physics    >();
-	template void System::UnregisterFromUpdate<SimulationStage::PostPhysics>();
-	template void System::UnregisterFromUpdate<SimulationStage::FrameEnd   >();
+#define _SYSTEM_UREGISTER_FROM_UPDATE_DEF(x) template void System::UnregisterFromUpdate<SimulationStage::x>();
+	FE_FOR_EACH(_SYSTEM_UREGISTER_FROM_UPDATE_DEF, FE_SIMULATION_STAGES);
 
 	void System::Deactivate()
 	{
@@ -69,11 +60,8 @@ namespace fe
 		m_Active = false;
 		OnDeactivate();
 
-		UnregisterFromUpdate<SimulationStage::Physics    >();
-		UnregisterFromUpdate<SimulationStage::PostPhysics>();
-		UnregisterFromUpdate<SimulationStage::PrePhysics >();
-		UnregisterFromUpdate<SimulationStage::FrameStart >();
-		UnregisterFromUpdate<SimulationStage::FrameEnd   >();
+#define _SYSTEM_UREGISTER_FROM_UPDATE_CALL(x) UnregisterFromUpdate<SimulationStage::x>();
+		FE_FOR_EACH(_SYSTEM_UREGISTER_FROM_UPDATE_CALL, FE_SIMULATION_STAGES);
 	}
 
 	void System::Shutdown()

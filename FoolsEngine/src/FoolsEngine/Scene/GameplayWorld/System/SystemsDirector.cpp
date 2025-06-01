@@ -21,20 +21,17 @@ namespace fe
 	{
 		FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
 
-		m_SystemUpdateEnrolls[(size_t)stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
+		m_SystemUpdateEnrolls[stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
 		SortSystemUpdateEnrolls(stage);
 	}
 
-	template void SystemsDirector::EnrollForUpdate<SimulationStage::FrameStart >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStage::PrePhysics >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStage::Physics    >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStage::PostPhysics>(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStage::FrameEnd   >(System*, void(System::*)(), uint32_t);
+#define _SYSTEMS_DIRECTOR_ENROLL_FOR_UPDATE_DEF(x) template void SystemsDirector::EnrollForUpdate<SimulationStage::x>(System*, void(System::*)(), uint32_t);
+	FE_FOR_EACH(_SYSTEMS_DIRECTOR_ENROLL_FOR_UPDATE_DEF, FE_SIMULATION_STAGES);
 
 	template<SimulationStage::ValueType stage>
 	void SystemsDirector::RemoveUpdateEnroll(System* system)
 	{
-		auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
+		auto& enrolls = m_SystemUpdateEnrolls[stage];
 
 		int found = false;
 		int enrollPos;
@@ -59,11 +56,8 @@ namespace fe
 		}
 	}
 
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::FrameStart >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::PrePhysics >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::Physics    >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::PostPhysics>(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::FrameEnd   >(System*);
+#define _SYSTEMS_DIRECTOR_REMOVE_UPDATE_ENROLL(x) template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::x>(System*);
+	FE_FOR_EACH(_SYSTEMS_DIRECTOR_REMOVE_UPDATE_ENROLL, FE_SIMULATION_STAGES);
 
 	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
 	{

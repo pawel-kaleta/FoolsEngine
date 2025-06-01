@@ -4,6 +4,11 @@
 
 namespace fe
 {
+    void Behavior::Initialize()
+    {
+        OnInitialize();
+    }
+
     void Behavior::Activate()
     {
         if (m_Active)
@@ -21,21 +26,30 @@ namespace fe
         m_Active = false;
         OnDeactivate();
 
-        UnregisterFromUpdate<SimulationStage::Physics    >();
-        UnregisterFromUpdate<SimulationStage::PostPhysics>();
-        UnregisterFromUpdate<SimulationStage::PrePhysics >();
-        UnregisterFromUpdate<SimulationStage::FrameStart >();
-        UnregisterFromUpdate<SimulationStage::FrameEnd   >();
-    }
-
-    void Behavior::Initialize()
-    {
-        OnInitialize();
+#define _BEHAVIOR_UREGISTER_FROM_UPDATE_CALL(x) UnregisterFromUpdate<SimulationStage::x>();
+        FE_FOR_EACH(_BEHAVIOR_UREGISTER_FROM_UPDATE_CALL, FE_SIMULATION_STAGES);
     }
 
     void Behavior::Shutdown()
     {
         OnShutdown();
+    }
+
+    template<SimulationStage::ValueType stage>
+    void Behavior::RegisterForUpdate(uint32_t priority)
+    {
+        FE_PROFILER_FUNC();
+
+        FE_LOG_CORE_DEBUG("Behavior Update Register");
+
+        void (Behavior:: * onUpdateFuncPtr)() = nullptr;
+
+#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) onUpdateFuncPtr = &Behavior::OnUpdate_##x;
+        FE_FOR_EACH(_GET_ON_UPDATE_FUNK_PTR, FE_SIMULATION_STAGES);
+
+        FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
+
+        Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
     }
 
     bool Behavior::DrawEntity(Entity& entity, const std::string& name)

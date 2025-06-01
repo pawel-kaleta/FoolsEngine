@@ -15,10 +15,10 @@
     <ClInclude Include="src\AssetImport\FileHandler.h">
       <Filter>AssetImport</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\ImportData.h">
+    <ClInclude Include="src\AssetImport\GeometryImport.h">
       <Filter>AssetImport</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetImport\GeometryImport.h">
+    <ClInclude Include="src\AssetImport\ImportData.h">
       <Filter>AssetImport</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetImport\TextureImport.h">
