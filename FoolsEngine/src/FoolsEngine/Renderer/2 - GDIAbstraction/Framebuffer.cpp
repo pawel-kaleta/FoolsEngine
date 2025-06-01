@@ -12,9 +12,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		switch (Renderer::GetActiveGDItype())
+		switch (Renderer::GetActiveGDItype().Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:

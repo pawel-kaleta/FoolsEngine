@@ -5,8 +5,6 @@
 
 namespace fe
 {
-	enum AssetType;
-
 	namespace FileHandler
 	{
 		uint32_t GetSourceAliasAndLoaderIndex(const std::pmr::string& extension, std::pmr::string& outAlias);

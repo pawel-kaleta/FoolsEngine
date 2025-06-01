@@ -66,8 +66,8 @@ namespace fe
 		}
 
 		Specification spec;
-		spec.Components = (Components)channels;
-		spec.Format = (Format)channels;
+		spec.Components.FromInt(channels);
+		spec.Format.FromInt(channels);
 		spec.Width = width;
 		spec.Height = height;
 

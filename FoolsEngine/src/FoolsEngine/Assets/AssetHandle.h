@@ -112,7 +112,7 @@ namespace fe
 			auto refs = GetECSHandle().try_get<ACRefsCounters>();
 			if (!refs)
 			{
-				m_LoadingPriority = LoadingPriority_None
+				m_LoadingPriority = LoadingPriority_None;
 				return;
 			}
 			refs->LiveHandles++;

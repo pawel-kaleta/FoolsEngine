@@ -11,7 +11,7 @@ namespace fe
 	{
 		// TO DO: make this a static lookup table
 
-		switch (format)
+		switch (format.Value)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");
@@ -32,7 +32,7 @@ namespace fe
 	{
 		// TO DO: make this a static lookup table
 
-		switch (format)
+		switch (format.Value)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");

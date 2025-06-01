@@ -54,7 +54,7 @@ namespace fe
 		else
 			location = x->second;
 
-		switch (uniform.GetType())
+		switch (uniform.GetType().Value)
 		{
 		case ShaderData::Type::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Type of uniform!");

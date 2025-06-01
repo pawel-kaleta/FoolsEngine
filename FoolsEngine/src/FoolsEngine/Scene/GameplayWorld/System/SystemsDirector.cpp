@@ -6,17 +6,17 @@
 
 namespace fe
 {
-	void SystemsDirector::UpdateSystems(SimulationStages::Stages stage)
+	void SystemsDirector::UpdateSystems(SimulationStage stage)
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& updateEnroll : m_SystemUpdateEnrolls[(int)stage])
+		for (auto& updateEnroll : m_SystemUpdateEnrolls[stage.ToInt()])
 		{
 			(updateEnroll.System->*(updateEnroll.OnUpdateFuncPtr))();
 		}
 	}
 
-	template<SimulationStages::Stages stage>
+	template<SimulationStage::ValueType stage>
 	void SystemsDirector::EnrollForUpdate(System* system, void(System::* onUpdateFuncPtr)(), uint32_t priority)
 	{
 		FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
@@ -25,13 +25,13 @@ namespace fe
 		SortSystemUpdateEnrolls(stage);
 	}
 
-	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::FrameStart >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::PrePhysics >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::Physics    >(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::PostPhysics>(System*, void(System::*)(), uint32_t);
-	template void SystemsDirector::EnrollForUpdate<SimulationStages::Stages::FrameEnd   >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStage::FrameStart >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStage::PrePhysics >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStage::Physics    >(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStage::PostPhysics>(System*, void(System::*)(), uint32_t);
+	template void SystemsDirector::EnrollForUpdate<SimulationStage::FrameEnd   >(System*, void(System::*)(), uint32_t);
 
-	template<SimulationStages::Stages stage>
+	template<SimulationStage::ValueType stage>
 	void SystemsDirector::RemoveUpdateEnroll(System* system)
 	{
 		auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
@@ -59,11 +59,11 @@ namespace fe
 		}
 	}
 
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::FrameStart >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::PrePhysics >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::Physics    >(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::PostPhysics>(System*);
-	template void SystemsDirector::RemoveUpdateEnroll<SimulationStages::Stages::FrameEnd   >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::FrameStart >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::PrePhysics >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::Physics    >(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::PostPhysics>(System*);
+	template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::FrameEnd   >(System*);
 
 	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
 	{
@@ -100,11 +100,11 @@ namespace fe
 		return nullptr;
 	}
 
-	void SystemsDirector::SortSystemUpdateEnrolls(SimulationStages::Stages stage)
+	void SystemsDirector::SortSystemUpdateEnrolls(SimulationStage stage)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& enrolls = m_SystemUpdateEnrolls[(size_t)stage];
+		auto& enrolls = m_SystemUpdateEnrolls[stage.ToInt()];
 		std::sort(
 			enrolls.begin(),
 			enrolls.end(),

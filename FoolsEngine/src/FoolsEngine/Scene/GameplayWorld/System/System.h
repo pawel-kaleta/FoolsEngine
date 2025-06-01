@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Core\UUID.h"
 
+#include "FoolsEngine\Scene\SimulationStage.h"
 
 namespace YAML
 {
@@ -13,11 +14,6 @@ namespace fe
 {
 	class SystemsDirector;
 	class GameplayWorld;
-
-	namespace SimulationStages
-	{
-		enum class Stages;
-	}
 
 	class System
 	{
@@ -52,10 +48,10 @@ namespace fe
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 		
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void RegisterForUpdate(uint32_t priority);
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void UnregisterFromUpdate();
 
 	private:

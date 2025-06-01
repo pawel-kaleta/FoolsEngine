@@ -54,11 +54,12 @@ namespace fe
             }
             if (ImGui::BeginTabItem("Updates"))
             {
-                for (int stage = 0; stage < SimulationStages::Count; stage++)
+                for (int i = 0; i < SimulationStage::Count; i++)
                 {
-                    if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
+                    SimulationStage stage; stage.FromInt(i);
+                    if (ImGui::CollapsingHeader(stage.ToString().c_str(), ImGuiTreeNodeFlags_None))
                     {
-                        auto& updateEnrolls = systemsDirector.m_SystemUpdateEnrolls[stage];
+                        auto& updateEnrolls = systemsDirector.m_SystemUpdateEnrolls[i];
                         if (updateEnrolls.size() == 0)
                         {
                             ImGui::Text("None");
@@ -75,7 +76,7 @@ namespace fe
 
                             if (ImGui::InputInt(sys->GetName().c_str(), (int*)&updateEnroll.Priority))
                             {
-                                systemsDirector.SortSystemUpdateEnrolls((SimulationStages::Stages)stage);
+                                systemsDirector.SortSystemUpdateEnrolls(stage);
                             }
                             ImGui::PopID();
                         }

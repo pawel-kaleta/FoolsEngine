@@ -4,15 +4,12 @@
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
 
+#include "SimulationStage.h"
+
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
 namespace fe
 {
-	namespace SimulationStages
-	{
-		enum class Stage;
-	}
-
 	class Entity;
 
 	struct ACSceneCore : public AssetComponent
@@ -46,7 +43,7 @@ namespace fe
 		void PostFrameUpdate() const;
 
 	private:
-		template <SimulationStages::Stages stage>
+		template <SimulationStage::ValueType stage>
 		void Update() const;
 
 	protected:

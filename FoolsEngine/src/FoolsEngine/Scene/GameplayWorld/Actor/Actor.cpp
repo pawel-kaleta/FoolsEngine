@@ -22,11 +22,11 @@ namespace fe
 
 		if (found)
 		{
-			RemoveUpdateEnroll<SimulationStages::Stages::Physics    >(behavior);
-			RemoveUpdateEnroll<SimulationStages::Stages::PostPhysics>(behavior);
-			RemoveUpdateEnroll<SimulationStages::Stages::PrePhysics >(behavior);
-			RemoveUpdateEnroll<SimulationStages::Stages::FrameStart >(behavior);
-			RemoveUpdateEnroll<SimulationStages::Stages::FrameEnd   >(behavior);
+			RemoveUpdateEnroll<SimulationStage::Physics    >(behavior);
+			RemoveUpdateEnroll<SimulationStage::PostPhysics>(behavior);
+			RemoveUpdateEnroll<SimulationStage::PrePhysics >(behavior);
+			RemoveUpdateEnroll<SimulationStage::FrameStart >(behavior);
+			RemoveUpdateEnroll<SimulationStage::FrameEnd   >(behavior);
 
 			std::swap(behaviors[position], behaviors.back());
 			if (behavior->m_Active)
@@ -38,13 +38,13 @@ namespace fe
 		return;
 	}
 
-	void Actor::UpdateBehaviors(SimulationStages::Stages stage)
+	void Actor::UpdateBehaviors(SimulationStage stage)
 	{
 		FE_PROFILER_FUNC();
 
 		m_Data.GetAndCash();
 		
-		for (auto& updateEnroll : m_Data.GetCashed()->m_UpdateEnrolls[(int)stage])
+		for (auto& updateEnroll : m_Data.GetCashed()->m_UpdateEnrolls[stage.ToInt()])
 		{
 			auto& beahavior = updateEnroll.Behavior;
 			auto& funkPtr   = updateEnroll.OnUpdateFuncPtr;
@@ -64,11 +64,11 @@ namespace fe
 		return nullptr;
 	}
 
-	void Actor::SortUpdateEnrolls(SimulationStages::Stages stage)
+	void Actor::SortUpdateEnrolls(SimulationStage stage)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
+		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage.ToInt()];
 		std::sort(
 			updateEnrolls.begin(),
 			updateEnrolls.end(),

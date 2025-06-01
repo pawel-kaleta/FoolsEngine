@@ -15,7 +15,7 @@ namespace fe
 
 		UUID GetUUID() const { return Get<ACUUID>().UUID; }
 
-		const ACSourceFilepath* GetDataFilepath() const { return GetIfExist<ACSourceFilepath>(); }
+		const ACSourceFilepath* GetSourceFilepath() const { return GetIfExist<ACSourceFilepath>(); }
 		const std::filesystem::path& GetFilepath() const { return Get<ACFilepath>().Filepath; }
 
 		template<typename... tnAssetComponents>

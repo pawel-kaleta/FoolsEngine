@@ -6,16 +6,22 @@ namespace fe
 	namespace VertexData
 	{
 		Element::Element(const std::string& name, ShaderData::Primitive primitive, bool normalized)
-			: Name(name), Offset(0), ComponentCount(1), Normalized(normalized), Type((ShaderData::Type)(((int)primitive - 1) * 4 + 1))
-		{ }
+			: Name(name), Offset(0), ComponentCount(1), Normalized(normalized)
+		{
+			Type.FromInt((primitive.ToInt() - 1) * 4 + 1);
+		}
 
 		Element::Element(const std::string& name, ShaderData::Primitive primitive, int count, bool normalized)
-			: Name(name), Offset(0), ComponentCount(count), Normalized(normalized), Type((ShaderData::Type)(((int)primitive - 1) * 4 + count))
-		{ }
+			: Name(name), Offset(0), ComponentCount(count), Normalized(normalized)
+		{
+			Type.FromInt((primitive.ToInt() - 1) * 4 + count);
+		}
 
 		Element::Element(const std::string& name, ShaderData::Primitive primitive, uint32_t count, bool normalized)
-			: Name(name), Offset(0), ComponentCount(count), Normalized(normalized), Type((ShaderData::Type)(((int)primitive - 1) * 4 + count))
-		{ }
+			: Name(name), Offset(0), ComponentCount(count), Normalized(normalized)
+		{
+			Type.FromInt((primitive.ToInt() - 1) * 4 + count);
+		}
 
 		Element::Element(const std::string& name, int rows, int columns, bool normalized)
 			: Name(name), Offset(0), ComponentCount(rows * columns), Normalized(normalized), Type(ShaderData::TypeOfMatrix(rows, columns))
@@ -29,13 +35,13 @@ namespace fe
 			: Name(name), Offset(0), Normalized(normalized), Type(type)
 		{
 			bool ifDouble = Primitive() == ShaderData::Primitive::Double;
-			ComponentCount = Size() / (4 * (1 + (int)ifDouble));
+			ComponentCount = (uint32_t)Size() / (4 * (1 + (int)ifDouble));
 		}
 		Element::Element(ShaderData::Type type, const std::string& name, bool normalized)
 			: Name(name), Offset(0), Normalized(normalized), Type(type)
 		{
 			bool ifDouble = Primitive() == ShaderData::Primitive::Double;
-			ComponentCount = Size() / (4 * (1 + (int)ifDouble));
+			ComponentCount = (uint32_t)Size() / (4 * (1 + (int)ifDouble));
 		}
 
 		Layout::Layout(const std::initializer_list<Element>& elements)
@@ -47,14 +53,14 @@ namespace fe
 
 		void Layout::CalculateOffsetsAndStride()
 		{
-			uint32_t offset = 0;
+			size_t offset = 0;
 			m_Stride = 0;
 
 			for (auto& element : m_Elements)
 			{
-				element.Offset = offset;
+				element.Offset = (uint32_t)offset;
 				offset += element.Size();
-				m_Stride += element.Size();
+				m_Stride += (uint32_t)element.Size();
 			}
 		}
 	}

@@ -1,28 +1,19 @@
 #pragma once
 
+#include "FoolsEngine\Utils\DeclareEnum.h"
+
 namespace fe
 {
 	namespace ShaderData
 	{
-		enum class Primitive
-		{
-			None = 0,
-			Bool,
-			Int,
-			UInt,
-			Float,
-			Double
-		};
-		enum class Structure
-		{
-			None = 0,
-			Scalar,
-			Vector,
-			Matrix
-		};
-		enum class Type
-		{
-			None = 0,
+		FE_DECLARE_ENUM(Primitive,
+			None, Bool, Int, UInt, Float, Double);
+
+		FE_DECLARE_ENUM(Structure,
+			None, Scalar, Vector, Matrix);
+
+		FE_DECLARE_ENUM(Type,
+			None,
 			Bool, Bool2, Bool3, Bool4,
 			Int, Int2, Int3, Int4,
 			UInt, UInt2, UInt3, UInt4,
@@ -31,19 +22,19 @@ namespace fe
 			Mat2, Mat2x3, Mat2x4,
 			Mat3x2, Mat3, Mat3x4,
 			Mat4x2, Mat4x3, Mat4
-		};
+		);
 
 		const char* TypesArray[];
 
 		constexpr Primitive PrimitiveInType(Type type)
 		{
-			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {
+			if (type.ToInt() > 29 || type.ToInt() <= 0) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return Primitive::None;
 			}
 
-			if ((uint32_t)type > 20) return Primitive::Float;
-			switch (((uint32_t)type - 1) / 4)
+			if (type.ToInt() > 20) return Primitive::Float;
+			switch ((type.ToInt() - 1) / 4)
 			{
 			case 0: return Primitive::Bool;
 			case 1: return Primitive::Int;
@@ -58,13 +49,13 @@ namespace fe
 
 		constexpr Structure StructureInType(Type type)
 		{
-			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {
+			if (type.ToInt() > 29 || type.ToInt() <= 0) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return Structure::None;
 			}
 
-			if ((uint32_t)type > 20) return Structure::Matrix;
-			switch (((uint32_t)type - 1) % 4)
+			if (type.ToInt() > 20) return Structure::Matrix;
+			switch ((type.ToInt() - 1) % 4)
 			{
 			case 0: return Structure::Scalar;
 			case 1: return Structure::Vector;
@@ -86,42 +77,42 @@ namespace fe
 
 			return (Type)SDTypeOfMatrixLookupTable[rows-1][columns-1];*/
 
-
-			uint32_t type = 0;
-			type = 20;
-			type += columns - 1;
-			type += (rows - 2) * 3;
-			return (Type)type;
+			uint32_t result = 20;
+			result += columns - 1;
+			result += (rows - 2) * 3;
+			Type type = Type::None;
+			type.FromInt(result);
+			return type;
 		}
 
 		constexpr uint32_t RowsOfMatrix(Type matrix)
 		{
 #ifdef FE_INTERNAL_BUILD
-			if ((uint32_t)matrix > 29 || (uint32_t)matrix < 21) {
+			if (matrix.ToInt() > 29 || matrix.ToInt() < 21) {
 				FE_CORE_ASSERT(false, "It is not a matrix!");
 				return 0;
 			}
 #endif // FE_INTERNAL_BUILD
 
-			return ((uint32_t)matrix / 3) - 5;
+			return (matrix.ToInt() / 3) - 5;
 		}
 
 		constexpr uint32_t ColumnsOfMatrix(Type matrix)
 		{
 #ifdef FE_INTERNAL_BUILD
-			if ((uint32_t)matrix > 29 || (uint32_t)matrix < 21) {
+			if (matrix.ToInt() > 29 || matrix.ToInt() < 21) {
 				FE_CORE_ASSERT(false, "It is not a matrix!");
 				return 0;
 			}
 #endif // FE_INTERNAL_BUILD
 
-			return ((uint32_t)matrix % 3) + 2;
+			return (matrix.ToInt() % 3) + 2;
 		}
 		
 		constexpr size_t SizeOfType(Type type)
 		{
 #ifdef FE_INTERNAL_BUILD
-			if ((uint32_t)type > 29 || (uint32_t)type <= 0) {
+			if (type.ToInt() > 29 || type.ToInt() <= 0) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return 0;
 			}
@@ -142,11 +133,11 @@ namespace fe
 			return SDSizeOfTypeLookupTable[type];*/
 
 			size_t count = 0;
-			if ((size_t)type < 21) // not a matrix
+			if (type.ToInt() < 21) // not a matrix
 			{
-				count = (((size_t)type - 1) % 4) + 1;
-				bool ifDouble = (size_t)type >= 17;
-				return count * 4 * (1 + (size_t)ifDouble);
+				count = ((type.ToInt() - 1) % 4) + 1;
+				bool ifDouble = type.ToInt() >= 17;
+				return count * 4 * (1 + (int)ifDouble);
 			}
 
 			return RowsOfMatrix(type) * ColumnsOfMatrix(type) * 4;
@@ -154,7 +145,7 @@ namespace fe
 
 		constexpr size_t SizeOfPrimitive(Primitive primitive)
 		{
-			switch (primitive)
+			switch (primitive.Value)
 			{
 			case Primitive::None:
 				return 0;

@@ -10,9 +10,9 @@ namespace fe
 
 	Scope<DeviceAPI> RenderCommands::CreateAPI(GDIType GDI)
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_ASSERT(false, "Cannot create DeviceAPI for GDIType::none!");
 			return nullptr;
 		case GDIType::OpenGL:

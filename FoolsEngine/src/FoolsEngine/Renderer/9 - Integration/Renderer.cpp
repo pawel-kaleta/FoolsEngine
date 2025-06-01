@@ -32,7 +32,7 @@ namespace fe
 {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
-	GDIType Renderer::s_ActiveGDI = GDIType::none;
+	GDIType Renderer::s_ActiveGDI = GDIType::None;
 	std::unordered_map<GDIType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
 
 	void Renderer::Startup()
@@ -220,7 +220,7 @@ namespace fe
 		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
 		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
 
-		switch (s_ActiveGDI)
+		switch (s_ActiveGDI.Value)
 		{
 		case GDIType::OpenGL:
 			s_SceneData->VPMatrix = projection * glm::inverse(view);

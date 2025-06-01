@@ -6,7 +6,7 @@
 
 namespace fe
 {
-	enum class GDIType;
+	struct GDIType;
 
 	struct ACTexture2DCore final : public AssetComponent
 	{
@@ -45,11 +45,7 @@ namespace fe
 		template <typename tnGDITexture2D>
 		tnGDITexture2D& CreateGDITexture2D(const TextureData::Specification& spec, const void* data) { return Emplace<tnGDITexture2D>(spec, data); }
 
-		void CreateGDITexture2D(GDIType gdi) const
-		{
-			auto& data = Get<ACTexture2DCore>();
-			CreateGDITexture2D(gdi, data.Specification, data.Data);
-		}
+		void CreateGDITexture2D(GDIType gdi) const;
 
 		void CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data) const;
 
@@ -65,11 +61,18 @@ namespace fe
 		Texture2DUser(ECS_AssetHandle ECS_handle) : Texture2DObserver(ECS_handle) {}
 	};
 
+	template<typename>
+	class AssetObserver;
+	template<typename>
+	class AssetUser;
+
 	class Texture2D : public Asset
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<Texture2D>& assetObserver);
+		static bool Deserialize(const AssetUser<Texture2D>& assetUser);
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;

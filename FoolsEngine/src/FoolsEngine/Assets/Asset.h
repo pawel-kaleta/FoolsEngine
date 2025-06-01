@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Core/UUID.h"
 
+#include "FoolsEngine\Utils\DeclareEnum.h"
+
 #include <filesystem>
 #include <entt/entity/registry.hpp>
 #include <entt/entity/handle.hpp>
@@ -16,8 +18,7 @@ namespace fe
 	using ECS_AssetHandle = entt::basic_handle<AssetRegistry>;
 	using Const_ECS_AssetHandle = entt::basic_handle<const AssetRegistry>;
 
-	enum AssetType
-	{
+	FE_DECLARE_ENUM(AssetType,	
 		TextureAsset,
 		Texture2DAsset,
 
@@ -40,29 +41,29 @@ namespace fe
 
 		Count,
 		None
-	};
+	);
 
-	const char* AssetTypeName[AssetType::Count] = {
-		"TextureAsset",
-		"Texture2DAsset",
-
-		"ShaderAsset",
-		"ShadingModelAsset",
-		"MaterialAsset",
-
-		"MeshAsset",
-		"RenderMeshAsset",
-		"ModelAsset",
-
-		"SkeletonAsset",
-		"SkinnedModelAsset",
-		"AnimationAsset",
-
-		"SceneAsset",
-		"PrefabAsset",
-
-		"AudioAsset"
-	};
+	//const char* AssetTypeName[AssetType::Count] = {
+	//	"TextureAsset",
+	//	"Texture2DAsset",
+	//
+	//	"ShaderAsset",
+	//	"ShadingModelAsset",
+	//	"MaterialAsset",
+	//
+	//	"MeshAsset",
+	//	"RenderMeshAsset",
+	//	"ModelAsset",
+	//
+	//	"SkeletonAsset",
+	//	"SkinnedModelAsset",
+	//	"AnimationAsset",
+	//
+	//	"SceneAsset",
+	//	"PrefabAsset",
+	//
+	//	"AudioAsset"
+	//};
 
 	class Asset
 	{

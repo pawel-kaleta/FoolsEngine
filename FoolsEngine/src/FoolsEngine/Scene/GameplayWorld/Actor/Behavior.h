@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\SimulationStage.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
 
@@ -46,7 +46,7 @@ namespace fe
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void RegisterForUpdate(uint32_t priority)
 		{
 			FE_PROFILER_FUNC();
@@ -55,18 +55,18 @@ namespace fe
 
 			void (Behavior:: * onUpdateFuncPtr)() = nullptr;
 
-			if constexpr (stage == SimulationStages::Stages::FrameStart ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;
-			if constexpr (stage == SimulationStages::Stages::PrePhysics ) onUpdateFuncPtr = &Behavior::OnUpdate_PrePhysics;
-			if constexpr (stage == SimulationStages::Stages::Physics    ) onUpdateFuncPtr = &Behavior::OnUpdate_Physics;
-			if constexpr (stage == SimulationStages::Stages::PostPhysics) onUpdateFuncPtr = &Behavior::OnUpdate_PostPhysics;
-			if constexpr (stage == SimulationStages::Stages::FrameEnd   ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameEnd;
+			if constexpr (stage == SimulationStage::FrameStart ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameStart;
+			if constexpr (stage == SimulationStage::PrePhysics ) onUpdateFuncPtr = &Behavior::OnUpdate_PrePhysics;
+			if constexpr (stage == SimulationStage::Physics    ) onUpdateFuncPtr = &Behavior::OnUpdate_Physics;
+			if constexpr (stage == SimulationStage::PostPhysics) onUpdateFuncPtr = &Behavior::OnUpdate_PostPhysics;
+			if constexpr (stage == SimulationStage::FrameEnd   ) onUpdateFuncPtr = &Behavior::OnUpdate_FrameEnd;
 			
 			FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 			
 			Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
 		}
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void UnregisterFromUpdate()
 		{
 			FE_PROFILER_FUNC();

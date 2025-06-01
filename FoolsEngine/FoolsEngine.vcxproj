@@ -242,8 +242,9 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h" />
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
-    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStage.h" />
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp">
@@ -258,7 +259,6 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serializers\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Core.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Project.cpp" />
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
@@ -278,7 +278,6 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLDeviceAPI.cpp" />
@@ -307,7 +306,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\Components\RenderingComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp" />
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\ComponentDestructionManager.cpp" />

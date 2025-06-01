@@ -77,7 +77,7 @@ namespace fe
 
 		virtual void OnActivate() override
 		{
-			RegisterForUpdate<SimulationStages::Stages::PrePhysics>(10);
+			RegisterForUpdate<SimulationStage::PrePhysics>(10);
 		}
 
 		virtual EntityID DrawInspectorWidget() override
@@ -122,7 +122,7 @@ namespace fe
 
 		virtual void OnActivate() override
 		{
-			RegisterForUpdate<SimulationStages::Stages::PrePhysics>(9);
+			RegisterForUpdate<SimulationStage::PrePhysics>(9);
 		}
 
 		FE_BEHAVIOR_SETUP(TestBehavior, "TestBehavior");
@@ -138,7 +138,7 @@ namespace fe
 
 		virtual void OnActivate() override
 		{
-			RegisterForUpdate<SimulationStages::Stages::PrePhysics>(11);
+			RegisterForUpdate<SimulationStage::PrePhysics>(11);
 		}
 
 		FE_BEHAVIOR_SETUP(TestBehavior2, "TestBehavior2");
@@ -149,7 +149,7 @@ namespace fe
 	public:
 		virtual void OnActivate() override
 		{
-			RegisterForUpdate<SimulationStages::Stages::PostPhysics>(9);
+			RegisterForUpdate<SimulationStage::PostPhysics>(9);
 		}
 
 		virtual void DrawInspectorWidget() override
@@ -168,7 +168,7 @@ namespace fe
 	public:
 		virtual void OnActivate() override
 		{
-			RegisterForUpdate<SimulationStages::Stages::PostPhysics>(10);
+			RegisterForUpdate<SimulationStage::PostPhysics>(10);
 		}
 
 		virtual void DrawInspectorWidget() override

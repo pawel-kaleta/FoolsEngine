@@ -1,56 +1,20 @@
 #pragma once
 
+#include "FoolsEngine\Utils\DeclareEnum.h"
+
 namespace fe
 {
 	using RenderTextureSlotID = uint32_t;
 
 	namespace TextureData
 	{
-		enum class Type
-		{
-			None = 0,
-			Texture2D
-		};
-		
-		enum class Usage
-		{
-			None = 0,
-			RenderTarget_Depth,
-			RenderTarget_Color,
-			Map_Albedo,
-			Map_Roughness,
-			Map_Metalness,
-			Map_Normal,
-			Map_AO
-		};
+		FE_DECLARE_ENUM(Type, None, Texture2D);
 
-		enum class Components
-		{
-			None = 0,
+		FE_DECLARE_ENUM(Usage, None, RenderTarget_Depth, RenderTarget_Color, Map_Albedo, Map_Roughness, Map_Metalness, Map_Normal, Map_AO);
 
-			R    = 1,
-			RG   = 2,
-			RGB  = 3,
-			RGBA = 4,
+		FE_DECLARE_ENUM(Components, None, R, RG, RGB, RGBA, Depth, Stencil, DepthStencil);
 
-			Depth,
-			Stencil,
-			DepthStencil
-		};
-
-		enum class Format
-		{
-			None = 0,
-
-			R_8,
-			RG_8,
-			RGB_8,
-			RGBA_8,
-
-			R_UINT_32,
-			
-			DEPTH24STENCIL8
-		};
+		FE_DECLARE_ENUM(Format, None, R_8, RG_8, RGB_8, RGBA_8, R_UINT_32, DEPTH24STENCIL8);
 
 		struct Specification
 		{

@@ -4,7 +4,7 @@
 
 namespace fe
 {
-	enum class GDIType;
+	struct GDIType;
 
 	class RenderCommands
 	{

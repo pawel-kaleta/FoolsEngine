@@ -7,15 +7,18 @@
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine\Assets\AssetAccessors.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
+
+#include "FoolsEngine\Assets\Serializers\YAML.h"
 
 namespace fe
 {
 	void Texture2DUser::SendDataToGPU(GDIType GDI, void* data) const
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			break;
 
@@ -28,9 +31,9 @@ namespace fe
 
 	void Texture2DUser::Bind(GDIType GDI, RenderTextureSlotID slotID) const
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			break;
 
@@ -55,9 +58,9 @@ namespace fe
 
 	uint32_t Texture2DObserver::GetRendererID(GDIType GDI) const
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			return 0;
 
@@ -70,11 +73,17 @@ namespace fe
 		return 0;
 	}
 
+	void Texture2DUser::CreateGDITexture2D(GDIType gdi) const
+	{
+		auto& data = Get<ACTexture2DCore>();
+		CreateGDITexture2D(gdi, data.Specification, data.Data);
+	}
+
 	void Texture2DUser::CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data) const
 	{
-		switch (gdi)
+		switch (gdi.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			break;
 
@@ -87,9 +96,9 @@ namespace fe
 	void Texture2DUser::Release() const
 	{
 		auto gdi = Renderer::GetActiveGDItype();
-		switch (gdi)
+		switch (gdi.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			break;
 
@@ -101,5 +110,57 @@ namespace fe
 			}
 			break;
 		}
+	}
+
+	void Texture2D::Serialize(const AssetObserver<Texture2D>& assetObserver)
+	{
+		YAML::Emitter emitter;
+
+		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
+		emitter << YAML::Key << "Specification" << YAML::Value << YAML::BeginMap;
+		auto& spec = assetObserver.GetCoreComponent().Specification;
+			emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToString();
+			emitter << YAML::Key << "Components" << YAML::Value << spec.Components.ToString();
+			emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToString();
+			emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
+			emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
+			emitter << YAML::EndMap;
+
+		std::ofstream fout(assetObserver.GetFilepath());
+		fout << emitter.c_str();
+	}
+
+	bool Texture2D::Deserialize(const AssetUser<Texture2D>& assetUser)
+	{
+		YAML::Node node = YAML::LoadFile(assetUser.GetFilepath().string());
+
+		auto& uuid_node = node["UUID"];
+		if (!uuid_node) return false;
+		if (assetUser.GetUUID() != node["UUID"].as<UUID>())
+		{
+			FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+			return false;
+		}
+
+		auto& source_node = node["Source Filepath"];
+		if (!source_node) return false;
+		AssetManager::SetSourcePath(assetUser.GetID(), source_node.as<std::string>());
+
+		auto& spec_node = node["Specification"];
+		if (!spec_node) return false;
+		if (!spec_node["Usage"]) return false;
+		if (!spec_node["Components"]) return false;
+		if (!spec_node["Format"]) return false;
+		if (!spec_node["Width"]) return false;
+		if (!spec_node["Height"]) return false;
+		auto& spec = assetUser.GetCoreComponent().Specification;
+		spec.Usage.FromString(spec_node["Usage"].as<std::string>());
+		spec.Components.FromString(spec_node["Components"].as<std::string>());
+		spec.Format.FromString(spec_node["Format"].as<std::string>());
+		spec.Width = spec_node["Width"].as<uint32_t>();
+		spec.Height = spec_node["Height"].as<uint32_t>();
+
+		return true;
 	}
 }

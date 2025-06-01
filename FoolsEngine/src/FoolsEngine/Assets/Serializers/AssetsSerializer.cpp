@@ -24,8 +24,7 @@ namespace fe::AssetSerializer
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "TypeName" << YAML::Value << AssetTypeName[type];
-			emitter << YAML::Key << "Type" << YAML::Value << type;
+			emitter << YAML::Key << "Type" << YAML::Value << type.ToString();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string();
 			emitter << YAML::EndMap;
@@ -40,8 +39,7 @@ namespace fe::AssetSerializer
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "TypeName" << YAML::Value << AssetTypeName[type];
-			emitter << YAML::Key << "Type" << YAML::Value << type;
+			emitter << YAML::Key << "Type" << YAML::Value << type.ToString();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Master" << YAML::Value << reg.get<ACUUID>(acmaster.Master).UUID;
 			emitter << YAML::EndMap;
@@ -69,7 +67,7 @@ namespace fe::AssetSerializer
 
 			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
 			AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
-			reg.emplace<ACAssetType>(assetID).Type = (AssetType)(asset["Type"].as<int32_t>());
+			reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
 			reg.emplace<ACRefsCounters>(assetID);
 		}
 
@@ -81,7 +79,7 @@ namespace fe::AssetSerializer
 			if (!asset["Master"])   return false;
 
 			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
-			reg.emplace<ACAssetType>(assetID).Type = (AssetType)(asset["Type"].as<int32_t>());
+			reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
 			reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
 		}
 

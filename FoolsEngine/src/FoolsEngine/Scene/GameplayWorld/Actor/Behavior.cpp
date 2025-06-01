@@ -21,11 +21,11 @@ namespace fe
         m_Active = false;
         OnDeactivate();
 
-        UnregisterFromUpdate<SimulationStages::Stages::Physics    >();
-        UnregisterFromUpdate<SimulationStages::Stages::PostPhysics>();
-        UnregisterFromUpdate<SimulationStages::Stages::PrePhysics >();
-        UnregisterFromUpdate<SimulationStages::Stages::FrameStart >();
-        UnregisterFromUpdate<SimulationStages::Stages::FrameEnd   >();
+        UnregisterFromUpdate<SimulationStage::Physics    >();
+        UnregisterFromUpdate<SimulationStage::PostPhysics>();
+        UnregisterFromUpdate<SimulationStage::PrePhysics >();
+        UnregisterFromUpdate<SimulationStage::FrameStart >();
+        UnregisterFromUpdate<SimulationStage::FrameEnd   >();
     }
 
     void Behavior::Initialize()

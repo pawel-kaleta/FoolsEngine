@@ -26,7 +26,7 @@ namespace fe
 		}
 
 		constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[(int)Camera.GetProjectionType()];
+		const char* currentProjectionTypeString = projectionTypeStrings[Camera.GetProjectionType().ToInt()];
 
 		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 		{
@@ -36,7 +36,9 @@ namespace fe
 				if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
 				{
 					currentProjectionTypeString = projectionTypeStrings[i];
-					Camera.SetProjectionType((Camera::ProjectionType)i);
+					Camera::ProjectionType type;
+					type.FromInt(i);
+					Camera.SetProjectionType(type);
 				}
 
 				if (isSelected)
@@ -80,7 +82,7 @@ namespace fe
 	{
 		emitter << YAML::Key << "IsPrimary" << YAML::Value << IsPrimary;
 
-		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.GetProjectionType();
+		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.GetProjectionType().ToString();
 
 		emitter << YAML::Key << "PerspectiveNear" << YAML::Value << Camera.GetPerspectiveNearClip();
 		emitter << YAML::Key << "PerspectiveFar" << YAML::Value << Camera.GetPerspectiveFarClip();
@@ -95,7 +97,9 @@ namespace fe
 	{
 		IsPrimary = data["IsPrimary"].as<bool>();
 
-		Camera.SetProjectionType((Camera::ProjectionType)data["ProjectionType"].as<int>());
+		Camera::ProjectionType projection;
+		projection.FromString(data["ProjectionType"].as<std::string>());
+		Camera.SetProjectionType(projection);
 
 		Camera.SetPerspectiveNearClip(data["PerspectiveNear"].as<float>());
 		Camera.SetPerspectiveFarClip(data["PerspectiveFar"].as<float>());

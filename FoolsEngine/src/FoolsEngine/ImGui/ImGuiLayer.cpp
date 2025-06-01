@@ -127,7 +127,7 @@ namespace fe {
 		auto name = uniform.GetName().c_str();
 		ImGuiDataType ImGuiType = -1;
 
-		switch (uniform.GetPrimitive())
+		switch (uniform.GetPrimitive().Value)
 		{
 		case ShaderData::Primitive::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
@@ -162,7 +162,7 @@ namespace fe {
 			return;
 		}
 
-		int count = ShaderData::SizeOfType(uniform.GetType()) / ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		int count = (int)ShaderData::SizeOfType(uniform.GetType()) / ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
 		ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags);
 	}
 	

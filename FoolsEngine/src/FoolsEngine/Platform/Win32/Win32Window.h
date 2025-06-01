@@ -31,7 +31,7 @@ namespace fe
 	private:
 		GLFWwindow* m_Window;
 		RenderingContext* m_CurrentRenderingContext;
-		std::unordered_map<GDIType, Scope<RenderingContext>> m_RenderingContexts;
+		std::unordered_map<GDIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
 
 		struct WinData
 		{

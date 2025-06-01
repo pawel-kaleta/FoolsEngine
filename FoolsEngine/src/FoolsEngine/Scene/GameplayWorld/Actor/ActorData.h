@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Scene\ECS.h"
-#include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\SimulationStage.h"
 #include "FoolsEngine\Scene\Component.h"
 
 #include "Behavior.h"
@@ -41,7 +41,7 @@ namespace fe
 				FE_PROFILER_FUNC();
 				FE_LOG_CORE_DEBUG("CActorData destruction: {0}", m_ID);
 
-				for (size_t i = 0; i < SimulationStages::Count; i++)
+				for (size_t i = 0; i < SimulationStage::Count; i++)
 				{
 					m_UpdateEnrolls[i].clear();
 				}
@@ -65,7 +65,7 @@ namespace fe
 			void (Behavior::* OnUpdateFuncPtr)();
 			uint32_t Priority;
 		};
-		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, SimulationStages::Count>;
+		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, SimulationStage::Count>;
 
 		Behaviors		m_Behaviors;
 		UpdateEnrolls	m_UpdateEnrolls;

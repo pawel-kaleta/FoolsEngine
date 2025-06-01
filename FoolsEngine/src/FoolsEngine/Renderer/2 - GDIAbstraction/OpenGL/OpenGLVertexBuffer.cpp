@@ -10,7 +10,7 @@ namespace fe
 	GLenum SDPrimitiveToGLBaseType(ShaderData::Primitive primitive)
 	{
 		const static GLenum LookupTable[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
-		return LookupTable[(int)primitive - 1];
+		return LookupTable[primitive.ToInt() - 1];
 	};
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
@@ -90,7 +90,7 @@ namespace fe
 		{
 			ShaderData::Primitive primitive = element.Primitive();
 #pragma warning(disable : 4312)
-			switch (primitive)
+			switch (primitive.Value)
 			{
 			case ShaderData::Primitive::Bool:
 			case ShaderData::Primitive::Int:
@@ -119,7 +119,7 @@ namespace fe
 				break;
 
 			case ShaderData::Primitive::Float:
-				switch (element.Structure())
+				switch (element.Structure().Value)
 				{
 				case ShaderData::Structure::Scalar:
 				case ShaderData::Structure::Vector:

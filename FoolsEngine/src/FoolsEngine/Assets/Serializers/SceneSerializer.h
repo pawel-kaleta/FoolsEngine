@@ -40,13 +40,13 @@ namespace fe
 		static bool DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data);
 
 		static bool DeserializeSystems(GameplayWorld* world, YAML::Node& data);
-		template <SimulationStages::Stages stage>
+		template <SimulationStage::ValueType stage>
 		static bool DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director);
 
 		static bool DeserializeActors(GameplayWorld* world, YAML::Node& data);
 
 		static bool DeserializeBehaviors(Actor& actor, YAML::Node& data);
-		template <SimulationStages::Stages stage>
+		template <SimulationStage::ValueType stage>
 		static bool DeserializeBehaviorUpdates(const YAML::Node& stageUpdates, Actor& actor);
 
 		static bool DeserializeEntities(GameplayWorld* world, YAML::Node& data);

@@ -32,9 +32,9 @@ namespace fe
 
 	void ShaderLoader::CompileShader(GDIType GDI, AssetUser<Shader>& shaderUser)
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Unspecified GDIType");
 			return;
 

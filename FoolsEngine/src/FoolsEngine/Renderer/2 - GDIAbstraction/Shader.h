@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	enum class GDIType;
+	struct GDIType;
 	class Uniform;
 	class ShaderTextureSlot;
 	using RenderTextureSlotID = uint32_t;
@@ -46,7 +46,7 @@ namespace fe
 
 		void Release() const;
 
-		void SendDataToGPU(GDIType GDI, void* data) { FE_CORE_ASSERT(false, "Shader loading not implemented yet"); };
+		void SendDataToGPU(GDIType GDI, void* data);;
 		void UnloadFromCPU() const;
 	protected:
 		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}

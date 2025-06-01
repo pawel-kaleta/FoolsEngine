@@ -1,7 +1,6 @@
 #include "FE_pch.h"
 #include "System.h"
 
-#include "FoolsEngine\Scene\SimulationStages.h"
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
 namespace fe
@@ -20,7 +19,7 @@ namespace fe
 		OnActivate();
 	}
 
-	template<SimulationStages::Stages stage>
+	template<SimulationStage::ValueType stage>
 	void System::RegisterForUpdate(uint32_t priority)
 	{
 		FE_PROFILER_FUNC();
@@ -29,24 +28,24 @@ namespace fe
 
 		void (System:: * onUpdateFuncPtr)() = nullptr;
 
-		if constexpr (stage == SimulationStages::Stages::FrameStart) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
-		if constexpr (stage == SimulationStages::Stages::PrePhysics) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
-		if constexpr (stage == SimulationStages::Stages::Physics) onUpdateFuncPtr = &System::OnUpdate_Physics;
-		if constexpr (stage == SimulationStages::Stages::PostPhysics) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
-		if constexpr (stage == SimulationStages::Stages::FrameEnd) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
+		if constexpr (stage == SimulationStage::FrameStart ) onUpdateFuncPtr = &System::OnUpdate_FrameStart;
+		if constexpr (stage == SimulationStage::PrePhysics ) onUpdateFuncPtr = &System::OnUpdate_PrePhysics;
+		if constexpr (stage == SimulationStage::Physics    ) onUpdateFuncPtr = &System::OnUpdate_Physics;
+		if constexpr (stage == SimulationStage::PostPhysics) onUpdateFuncPtr = &System::OnUpdate_PostPhysics;
+		if constexpr (stage == SimulationStage::FrameEnd   ) onUpdateFuncPtr = &System::OnUpdate_FrameEnd;
 
 		FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
 
 		m_SystemsDirector->EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
 	}
 
-	template void System::RegisterForUpdate<SimulationStages::Stages::FrameStart >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStages::Stages::PrePhysics >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStages::Stages::Physics    >(uint32_t);
-	template void System::RegisterForUpdate<SimulationStages::Stages::PostPhysics>(uint32_t);
-	template void System::RegisterForUpdate<SimulationStages::Stages::FrameEnd   >(uint32_t);
+	template void System::RegisterForUpdate<SimulationStage::FrameStart >(uint32_t);
+	template void System::RegisterForUpdate<SimulationStage::PrePhysics >(uint32_t);
+	template void System::RegisterForUpdate<SimulationStage::Physics    >(uint32_t);
+	template void System::RegisterForUpdate<SimulationStage::PostPhysics>(uint32_t);
+	template void System::RegisterForUpdate<SimulationStage::FrameEnd   >(uint32_t);
 
-	template<SimulationStages::Stages stage>
+	template<SimulationStage::ValueType stage>
 	void System::UnregisterFromUpdate()
 	{
 		FE_PROFILER_FUNC();
@@ -56,11 +55,11 @@ namespace fe
 		m_SystemsDirector->RemoveUpdateEnroll<stage>(this);
 	}
 
-	template void System::UnregisterFromUpdate<SimulationStages::Stages::FrameStart >();
-	template void System::UnregisterFromUpdate<SimulationStages::Stages::PrePhysics >();
-	template void System::UnregisterFromUpdate<SimulationStages::Stages::Physics    >();
-	template void System::UnregisterFromUpdate<SimulationStages::Stages::PostPhysics>();
-	template void System::UnregisterFromUpdate<SimulationStages::Stages::FrameEnd   >();
+	template void System::UnregisterFromUpdate<SimulationStage::FrameStart >();
+	template void System::UnregisterFromUpdate<SimulationStage::PrePhysics >();
+	template void System::UnregisterFromUpdate<SimulationStage::Physics    >();
+	template void System::UnregisterFromUpdate<SimulationStage::PostPhysics>();
+	template void System::UnregisterFromUpdate<SimulationStage::FrameEnd   >();
 
 	void System::Deactivate()
 	{
@@ -70,11 +69,11 @@ namespace fe
 		m_Active = false;
 		OnDeactivate();
 
-		UnregisterFromUpdate<SimulationStages::Stages::Physics    >();
-		UnregisterFromUpdate<SimulationStages::Stages::PostPhysics>();
-		UnregisterFromUpdate<SimulationStages::Stages::PrePhysics >();
-		UnregisterFromUpdate<SimulationStages::Stages::FrameStart >();
-		UnregisterFromUpdate<SimulationStages::Stages::FrameEnd   >();
+		UnregisterFromUpdate<SimulationStage::Physics    >();
+		UnregisterFromUpdate<SimulationStage::PostPhysics>();
+		UnregisterFromUpdate<SimulationStage::PrePhysics >();
+		UnregisterFromUpdate<SimulationStage::FrameStart >();
+		UnregisterFromUpdate<SimulationStage::FrameEnd   >();
 	}
 
 	void System::Shutdown()

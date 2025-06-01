@@ -76,7 +76,7 @@ namespace fe
 
 	GLenum OpenGLFramebuffer::FormatToGLinternalFormat(TextureData::Format format)
 	{
-		switch (format)
+		switch (format.Value)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");
@@ -95,7 +95,7 @@ namespace fe
 
 	GLenum OpenGLFramebuffer::FormatToGLtype(TextureData::Format format)
 	{
-		switch (format)
+		switch (format.Value)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");
@@ -114,7 +114,7 @@ namespace fe
 
 	GLenum OpenGLFramebuffer::FormatToGLformat(TextureData::Format format)
 	{
-		switch (format)
+		switch (format.Value)
 		{
 		case TextureData::Format::None:
 			FE_CORE_ASSERT(false, "Not specified data format of attachment");

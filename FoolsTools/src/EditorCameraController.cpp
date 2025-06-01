@@ -150,7 +150,7 @@ namespace fe
 		ImGui::DragFloat3("Scale"   , glm::value_ptr(transform.Scale   ), 0.01f);
 
 		constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[(int)m_Camera.GetProjectionType()];
+		const char* currentProjectionTypeString = projectionTypeStrings[m_Camera.GetProjectionType().ToInt()];
 
 		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 		{
@@ -160,7 +160,9 @@ namespace fe
 				if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
 				{
 					currentProjectionTypeString = projectionTypeStrings[i];
-					m_Camera.SetProjectionType((Camera::ProjectionType)i);
+					Camera::ProjectionType projection;
+					projection.FromInt(i);
+					m_Camera.SetProjectionType(projection);
 				}
 
 				if (isSelected)

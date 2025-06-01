@@ -3,7 +3,6 @@
 
 #include "Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
-#include "FoolsEngine\Scene\SimulationStages.h"
 #include "FoolsEngine\Scene\Components\RenderingComponents.h"
 
 #include <stack>
@@ -87,7 +86,7 @@ namespace fe
 		return Actor(actorData, this);
 	}
 
-	template <SimulationStages::Stages stage>
+	template <SimulationStage::ValueType stage>
 	void GameplayWorld::Update()
 	{
 		FE_PROFILER_FUNC();
@@ -96,13 +95,13 @@ namespace fe
 		m_SystemsDirector->UpdateSystems(stage);
 	}
 
-	template void GameplayWorld::Update<SimulationStages::Stages::FrameStart >();
-	template void GameplayWorld::Update<SimulationStages::Stages::PrePhysics >();
-	template void GameplayWorld::Update<SimulationStages::Stages::Physics    >();
-	template void GameplayWorld::Update<SimulationStages::Stages::PostPhysics>();
-	template void GameplayWorld::Update<SimulationStages::Stages::FrameEnd   >();
+	template void GameplayWorld::Update<SimulationStage::FrameStart >();
+	template void GameplayWorld::Update<SimulationStage::PrePhysics >();
+	template void GameplayWorld::Update<SimulationStage::Physics    >();
+	template void GameplayWorld::Update<SimulationStage::PostPhysics>();
+	template void GameplayWorld::Update<SimulationStage::FrameEnd   >();
 
-	void GameplayWorld::UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID))
+	void GameplayWorld::UpdateActors(SimulationStage stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID))
 	{
 		FE_PROFILER_FUNC();
 

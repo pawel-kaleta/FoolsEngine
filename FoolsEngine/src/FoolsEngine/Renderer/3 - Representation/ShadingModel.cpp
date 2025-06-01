@@ -128,7 +128,7 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
 			return;
 		}
-		if ((int)uniform.GetPrimitive() > 5)
+		if (uniform.GetPrimitive().ToInt() > 5)
 		{
 			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
 			return;
@@ -142,7 +142,7 @@ namespace fe
 
 		for (size_t i = 0; i < elements; i++)
 		{
-			switch (uniform.GetPrimitive())
+			switch (uniform.GetPrimitive().Value)
 			{
 			case ShaderData::Primitive::Bool:
 				*(uint32_t*)uniformDataPointer = 0;

@@ -65,7 +65,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(m_ID != NullRenderingContextID && m_Type != GDIType::none && m_Window, "");
+		FE_CORE_ASSERT(m_ID != NullRenderingContextID && m_Type != GDIType::None && m_Window, "");
 
 		glfwMakeContextCurrent(Window());
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);

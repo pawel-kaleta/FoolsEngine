@@ -21,9 +21,9 @@ namespace fe
 
     void ShaderObserver::Bind(GDIType GDI) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 
@@ -35,9 +35,9 @@ namespace fe
 
     void ShaderObserver::Unbind(GDIType GDI) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 
@@ -50,9 +50,9 @@ namespace fe
     void ShaderUser::Release() const
     {
         auto gdi = Renderer::GetActiveGDItype();
-        switch (gdi)
+        switch (gdi.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 
@@ -61,6 +61,11 @@ namespace fe
                 Erase<OpenGLShader>();
             return;
         }
+    }
+
+    void ShaderUser::SendDataToGPU(GDIType GDI, void* data)
+    {
+        FE_CORE_ASSERT(false, "Shader loading not implemented yet");
     }
 
     void ShaderUser::UnloadFromCPU() const
@@ -73,9 +78,9 @@ namespace fe
 
     uint32_t ShaderObserver::GetRendererID(GDIType GDI) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return 0;
 
@@ -88,9 +93,9 @@ namespace fe
 
     void ShaderObserver::UploadUniform(GDIType GDI, const Uniform& uniform, const void* dataPointer, uint32_t count, bool transpose) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 
@@ -102,9 +107,9 @@ namespace fe
 
     void ShaderObserver::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 
@@ -116,9 +121,9 @@ namespace fe
 
     void ShaderObserver::BindTextureSlot(GDIType GDI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot) const
     {
-        switch (GDI)
+        switch (GDI.Value)
         {
-        case GDIType::none:
+        case GDIType::None:
             FE_CORE_ASSERT(false, "Unspecified GDIType");
             return;
 

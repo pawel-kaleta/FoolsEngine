@@ -1,11 +1,8 @@
 #pragma once
 
+#include "FoolsEngine\Utils\DeclareEnum.h"
+
 namespace fe
 {
-	enum class GDIType
-	{
-		none = 0,
-		OpenGL = 1
-	};
-
+	FE_DECLARE_ENUM(GDIType, None, OpenGL);
 }

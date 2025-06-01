@@ -23,6 +23,7 @@ namespace fe
 	class ComponentTypesRegistry;
 	class BehaviorsRegistry;
 	class SystemsRegistry;
+	class AssetTypesRegistry;
 	class AssetManager;
 	class ApplicationLayer;
 	class Project;
@@ -89,7 +90,8 @@ namespace fe
 		uint16_t	m_ProfilerFramesCount	= 0;
 #endif // FE_INTERNAL_BUILD
 
-		AssetManager* m_AssetManager;
+		AssetTypesRegistry* m_AssetTypesRegistry;
+		AssetManager*       m_AssetManager;
 	};
 
 	// To be defined in FoolsEngine application (game)

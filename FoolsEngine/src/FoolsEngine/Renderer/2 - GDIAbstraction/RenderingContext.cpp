@@ -9,9 +9,9 @@ namespace fe
 
 	Scope<RenderingContext> RenderingContext::Create(GDIType GDI, void* nativeWindow)
 	{
-		switch (GDI)
+		switch (GDI.Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "Cannot create GDI-less rendering context!");
 			return nullptr;
 		case GDIType::OpenGL:

@@ -34,11 +34,11 @@ namespace fe
 
 		void RemoveBehavior(Behavior* behavior);
 
-		void UpdateBehaviors(SimulationStages::Stages stage);
+		void UpdateBehaviors(SimulationStage stage);
 
 		Behavior* GetBehaviorFromUUID(UUID uuid);
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 		{
 			FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
@@ -52,7 +52,7 @@ namespace fe
 			SortUpdateEnrolls(stage);
 		}
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void RemoveUpdateEnroll(Behavior* behavior)
 		{
 			auto& enrolls =  m_Data.Get()->m_UpdateEnrolls[(size_t)stage];
@@ -91,7 +91,7 @@ namespace fe
 
 		CompPtr<CActorData> m_Data;
 
-		void SortUpdateEnrolls(SimulationStages::Stages stage);
+		void SortUpdateEnrolls(SimulationStage stage);
 
 		template <typename tnBehavior>
 		Behavior* CreateBehaviorAsBase()

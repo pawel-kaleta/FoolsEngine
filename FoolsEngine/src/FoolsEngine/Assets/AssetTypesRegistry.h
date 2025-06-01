@@ -16,20 +16,7 @@ namespace fe
 			AssetType Type;
 		};
 
-		template <typename tnAsset>
-		static void RegisterAssetType()
-		{
-			s_Instance->m_Items.push_back(
-				Item{
-					&tnAsset::EmplaceCore,
-					nullptr, //??
-					AssetTypeName[tnAsset::GetTypeStatic()],
-					tnAsset::GetTypeStatic()
-				}
-			);
-		}
-
-		static const std::vector<const Item> GetItems() { return s_Instance->m_Items; }
+		static const std::vector<Item> GetItems() { return s_Instance->m_Items; }
 
 	private:
 		friend class Application;
@@ -39,6 +26,19 @@ namespace fe
 
 		static AssetTypesRegistry* s_Instance;
 
-		std::vector<const Item> m_Items;
+		std::vector<Item> m_Items;
+
+		template <typename tnAsset>
+		static void RegisterAssetType()
+		{
+			s_Instance->m_Items.push_back(
+				Item{
+					&tnAsset::EmplaceCore,
+					nullptr, //??
+					tnAsset::GetTypeStatic().ToString(),
+					tnAsset::GetTypeStatic()
+				}
+			);
+		}
 	};
 }

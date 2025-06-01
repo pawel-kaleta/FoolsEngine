@@ -1,7 +1,7 @@
 #pragma once
 
 #include "System.h"
-#include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\SimulationStage.h"
 
 
 namespace fe
@@ -14,13 +14,13 @@ namespace fe
 		SystemsDirector() = default;
 		SystemsDirector(const SystemsDirector& other) = delete;
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority);
 
-		template<SimulationStages::Stages stage>
+		template<SimulationStage::ValueType stage>
 		void RemoveUpdateEnroll(System* system);
 
-		void UpdateSystems(SimulationStages::Stages stage);
+		void UpdateSystems(SimulationStage stage);
 
 		template <typename tnSystem>
 		tnSystem* CreateSystem()
@@ -54,12 +54,12 @@ namespace fe
 			void (System::* OnUpdateFuncPtr)();
 			uint32_t Priority;
 		};
-		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, SimulationStages::Count>;
+		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, SimulationStage::Count>;
 
 		Systems             m_Systems;
 		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
 
-		void SortSystemUpdateEnrolls(SimulationStages::Stages stage);
+		void SortSystemUpdateEnrolls(SimulationStage stage);
 		void RemoveSystem(System* system);
 
 		System* CreateSystemFromName(const std::string& systemTypeName);

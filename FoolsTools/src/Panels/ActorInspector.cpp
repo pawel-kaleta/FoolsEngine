@@ -136,11 +136,12 @@ namespace fe
             }
             if (ImGui::BeginTabItem("Updates"))
             {
-                for (int stage = 0; stage < SimulationStages::Count; stage++)
+                for (int i = 0; i < SimulationStage::Count; i++)
                 {
-                    if (ImGui::CollapsingHeader(SimulationStages::Names[stage], ImGuiTreeNodeFlags_None))
+                    SimulationStage stage; stage.FromInt(i);
+                    if (ImGui::CollapsingHeader(stage.ToString().c_str(), ImGuiTreeNodeFlags_None))
                     {
-                        auto& updateEnrolls = actor.m_Data.Get()->m_UpdateEnrolls[stage];
+                        auto& updateEnrolls = actor.m_Data.Get()->m_UpdateEnrolls[i];
                         if (updateEnrolls.size() == 0)
                         {
                             ImGui::Text("None");
@@ -157,7 +158,7 @@ namespace fe
 
                             if (ImGui::InputInt(beh->GetBehaviorName().c_str(), (int*)&updateEnroll.Priority))
                             {
-                                actor.SortUpdateEnrolls((SimulationStages::Stages)stage);
+                                actor.SortUpdateEnrolls(stage);
                             }
                             ImGui::PopID();
                         }

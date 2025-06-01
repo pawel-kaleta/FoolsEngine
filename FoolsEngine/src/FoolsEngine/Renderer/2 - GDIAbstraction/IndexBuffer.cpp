@@ -11,9 +11,9 @@ namespace fe
 	Scope<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		FE_PROFILER_FUNC();
-		switch (Renderer::GetActiveGDItype())
+		switch (Renderer::GetActiveGDItype().Value)
 		{
-		case GDIType::none:
+		case GDIType::None:
 			FE_CORE_ASSERT(false, "GDIType::none currently not supported!");
 			return nullptr;
 		case GDIType::OpenGL:

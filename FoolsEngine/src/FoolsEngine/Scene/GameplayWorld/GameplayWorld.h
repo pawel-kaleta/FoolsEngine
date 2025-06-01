@@ -6,13 +6,10 @@
 #include "ComponentDestructionManager.h"
 #include "System\SystemsDirector.h"
 
+#include "FoolsEngine\Scene\SimulationStage.h"
+
 namespace fe
 {
-	namespace SimulationStages
-	{
-		enum class Stages;
-	}
-
 	class GameplayWorld : public World
 	{
 	public:
@@ -38,7 +35,7 @@ namespace fe
 
 		void DestroyScheduledComponents() { m_DestructionManager.DestroyComponents(m_Registry); }
 
-		template <SimulationStages::Stages stage>
+		template <SimulationStage::ValueType stage>
 		void Update();
 
 		Entity	GetEntityWithPrimaryCamera() const;
@@ -61,13 +58,13 @@ namespace fe
 			m_DestructionManager.ScheduleErasure<tnComponent>(entityID);
 		}
 
-		template <SimulationStages::Stages stage>
+		template <SimulationStage::ValueType stage>
 		bool IsActorUpdateEnrolled(EntityID actor)
 		{
 			const auto& storage = m_Registry.storage<CUpdateEnrollFlag<stage>>();
 			return storage.contains(actor);
 		}
 
-		void UpdateActors(SimulationStages::Stages stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID));
+		void UpdateActors(SimulationStage stage, bool (GameplayWorld::* updateEnrollCheck)(EntityID));
 	};
 }

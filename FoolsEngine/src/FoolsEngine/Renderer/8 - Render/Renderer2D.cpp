@@ -87,7 +87,7 @@ namespace fe
 
 		auto GDI = Renderer::GetActiveGDItype();
 
-		switch (GDI)
+		switch (GDI.Value)
 		{
 		case GDIType::OpenGL:
 			s_Data.VPMatrix = projection * glm::inverse(view);

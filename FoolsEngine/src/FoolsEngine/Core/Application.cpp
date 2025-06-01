@@ -10,6 +10,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 
+#include "FoolsEngine\Assets\AssetTypesRegistry.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 
 #include "FoolsEngine\Events\Event.h"
@@ -74,6 +75,12 @@ namespace fe
 		
 			m_SystemsRegistry = new SystemsRegistry();
 			m_SystemsRegistry->RegisterSystems();
+		}
+
+		{
+			FE_PROFILER_SCOPE("Asset Type Registrie");
+			m_AssetTypesRegistry = new AssetTypesRegistry();
+			m_AssetTypesRegistry->RegisterAssetTypes();
 		}
 
 		{
@@ -180,7 +187,9 @@ namespace fe
 			}
 
 			m_LayerStack.m_Layers.clear();
+		}
 
+		{
 			FE_PROFILER_SCOPE("Core layers shutdown");
 			m_ImGuiLayer->Shutdown();
 			m_ImGuiLayer.reset();
@@ -196,15 +205,22 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Project");
 			m_Project->Shutdown();
-			//Just giving back memory to OS.
+			//Just leting OS reclame memory
 			//delete m_Project;
 		}
 
 		{
 			FE_PROFILER_SCOPE("Asset Manager");
 			m_AssetManager->Shutdown();
-			//Just giving back memory to OS.
+			//Just leting OS reclame memory
 			//delete m_AssetManager;
+		}
+
+		{
+			FE_PROFILER_SCOPE("Asset Types Registry");
+			m_AssetTypesRegistry->Shutdown();
+			//Just leting OS reclame memory
+			//delete m_AssetTypesRegistry;
 		}
 
 		{
@@ -213,7 +229,7 @@ namespace fe
 			m_BehaviorsRegistry->Shutdown();
 			m_SystemsRegistry->Shutdown();
 			/*
-			Just giving back memory to OS.
+			Just leting OS reclame memory
 		
 			delete m_ComponentTypesRegistry;
 			delete m_BehaviorsRegistry;

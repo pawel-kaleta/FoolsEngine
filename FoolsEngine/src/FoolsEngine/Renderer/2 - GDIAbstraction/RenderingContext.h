@@ -20,7 +20,7 @@ namespace fe
 
 		static Scope<RenderingContext> Create(GDIType GDI, void* nativeWindow);
 	protected:
-		GDIType m_Type = GDIType::none;
+		GDIType m_Type = GDIType::None;
 		RenderingContextID m_ID = -1;
 		void* m_Window = nullptr;
 		

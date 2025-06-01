@@ -105,7 +105,7 @@ namespace fe
 			auto& ref_counters = view.get<ACRefsCounters>(id);
 			auto type = reg.get<ACAssetType>(id).Type;
 
-			switch (type)
+			switch (type.Value)
 			{
 			case AssetType::Texture2DAsset:
 			{

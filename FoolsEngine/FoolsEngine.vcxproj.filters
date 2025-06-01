@@ -324,7 +324,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\SimulationStages.h">
+    <ClInclude Include="src\FoolsEngine\Scene\SimulationStage.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
@@ -341,6 +341,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Core\Project.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesRegistry.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -366,9 +367,6 @@
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Core.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp">
@@ -418,9 +416,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.cpp">
       <Filter>FoolsEngine\Renderer\1 - Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.cpp">
-      <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - GDIAbstraction</Filter>
@@ -492,9 +487,6 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Actor.cpp">
-      <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\ActorData.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.cpp">

@@ -2,16 +2,15 @@
 
 #include <glm\glm.hpp>
 
+#include "FoolsEngine\Utils\DeclareEnum.h"
+
 namespace fe
 {
+
 	class Camera
 	{
 	public:
-		enum ProjectionType
-		{
-			Orthographic,
-			Perspective
-		};
+		FE_DECLARE_ENUM(ProjectionType, Orthographic, Perspective);
 
 		Camera() { CalculateProjection(); }
 		~Camera() = default;

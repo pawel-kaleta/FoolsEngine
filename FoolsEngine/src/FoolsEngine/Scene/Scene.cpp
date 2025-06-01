@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #include "ECS.h"
-#include "FoolsEngine\Scene\SimulationStages.h"
+#include "FoolsEngine\Scene\SimulationStage.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
 
 namespace fe
@@ -17,7 +17,7 @@ namespace fe
 		gameplay_world->Initialize();
 	}
 
-	template <SimulationStages::Stages stage>
+	template <SimulationStage::ValueType stage>
 	void SceneUser::Update() const
 	{
 		FE_PROFILER_FUNC();
@@ -25,21 +25,21 @@ namespace fe
 		GetCoreComponent().GameplayWorld->Update<stage>();
 	}
 
-	template void SceneUser::Update<SimulationStages::Stages::FrameStart >() const;
-	template void SceneUser::Update<SimulationStages::Stages::PrePhysics >() const;
-	template void SceneUser::Update<SimulationStages::Stages::Physics    >() const;
-	template void SceneUser::Update<SimulationStages::Stages::PostPhysics>() const;
-	template void SceneUser::Update<SimulationStages::Stages::FrameEnd   >() const;
+	template void SceneUser::Update<SimulationStage::FrameStart >() const;
+	template void SceneUser::Update<SimulationStage::PrePhysics >() const;
+	template void SceneUser::Update<SimulationStage::Physics    >() const;
+	template void SceneUser::Update<SimulationStage::PostPhysics>() const;
+	template void SceneUser::Update<SimulationStage::FrameEnd   >() const;
 
 	void SceneUser::SimulationUpdate() const
 	{
 		FE_PROFILER_FUNC();
 
-		Update<SimulationStages::Stages::FrameStart >();
-		Update<SimulationStages::Stages::PrePhysics >();
-		Update<SimulationStages::Stages::Physics    >();
-		Update<SimulationStages::Stages::PostPhysics>();
-		Update<SimulationStages::Stages::FrameEnd   >();
+		Update<SimulationStage::FrameStart >();
+		Update<SimulationStage::PrePhysics >();
+		Update<SimulationStage::Physics    >();
+		Update<SimulationStage::PostPhysics>();
+		Update<SimulationStage::FrameEnd   >();
 	}
 
 	void SceneUser::PostFrameUpdate() const

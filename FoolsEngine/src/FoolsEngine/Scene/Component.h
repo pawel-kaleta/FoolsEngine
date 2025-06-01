@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ECS.h"
+#include "SimulationStage.h"
 
 #include "FoolsEngine\Core\UUID.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
 #include "FoolsEngine\Math\Transform.h"
-
 
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
@@ -19,10 +19,6 @@ namespace YAML
 
 namespace fe
 {
-	namespace SimulationStages
-	{
-		enum class Stages;
-	}
 	class BaseEntity;
 	
 
@@ -159,7 +155,7 @@ namespace fe
 	template <typename tnComponent>
 	struct CDirtyFlag final : FlagComponent {};
 
-	template <SimulationStages::Stages stage>
+	template <SimulationStage::ValueType stage>
 	struct CUpdateEnrollFlag final : FlagComponent {};
 
 }
