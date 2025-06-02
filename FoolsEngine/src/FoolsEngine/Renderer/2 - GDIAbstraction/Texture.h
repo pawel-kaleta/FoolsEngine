@@ -63,8 +63,6 @@ namespace fe
 
 	template<typename>
 	class AssetObserver;
-	template<typename>
-	class AssetUser;
 
 	class Texture2D : public Asset
 	{
@@ -72,7 +70,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
 		static void Serialize(const AssetObserver<Texture2D>& assetObserver);
-		static bool Deserialize(const AssetUser<Texture2D>& assetUser);
+		static bool Deserialize(AssetID assetID);
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;

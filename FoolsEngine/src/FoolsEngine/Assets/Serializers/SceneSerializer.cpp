@@ -421,11 +421,8 @@ namespace fe
 		return true;
 	}
 
-	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::FrameStart >(const YAML::Node&, SystemsDirector*);
-	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::PrePhysics >(const YAML::Node&, SystemsDirector*);
-	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::Physics    >(const YAML::Node&, SystemsDirector*);
-	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::PostPhysics>(const YAML::Node&, SystemsDirector*);
-	template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::FrameEnd   >(const YAML::Node&, SystemsDirector*);
+#define _SceneSerializerYAML_DeserializeSystemUpdates_DEF(x) template bool SceneSerializerYAML::DeserializeSystemUpdates<SimulationStage::x>(const YAML::Node&, SystemsDirector*);
+	FE_FOR_EACH(_SceneSerializerYAML_DeserializeSystemUpdates_DEF, FE_SIMULATION_STAGES);
 
 	bool SceneSerializerYAML::DeserializeActors(GameplayWorld* world, YAML::Node& data)
 	{
@@ -490,11 +487,10 @@ namespace fe
 		auto& behaviorUpdates = data["Updates"];
 		if (!behaviorUpdates) return false;
 		bool success = true;
-		success &= DeserializeBehaviorUpdates<SimulationStage::FrameStart >(behaviorUpdates["FrameStart" ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStage::PrePhysics >(behaviorUpdates["PrePhysics" ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStage::Physics    >(behaviorUpdates["Physics"    ], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStage::PostPhysics>(behaviorUpdates["PostPhysics"], actor);
-		success &= DeserializeBehaviorUpdates<SimulationStage::FrameEnd   >(behaviorUpdates["FrameEnd"   ], actor);
+
+#define _DeserializeBehaviorUpdates_CALL(x) success &= DeserializeBehaviorUpdates<SimulationStage::x>(behaviorUpdates["FrameStart" ], actor);
+		FE_FOR_EACH(_DeserializeBehaviorUpdates_CALL, FE_SIMULATION_STAGES);
+
 		return success;
 	}
 
@@ -520,12 +516,9 @@ namespace fe
 
 		return true;
 	}
-
-	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::FrameStart >(const YAML::Node&, Actor&);
-	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::PrePhysics >(const YAML::Node&, Actor&);
-	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::Physics    >(const YAML::Node&, Actor&);
-	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::PostPhysics>(const YAML::Node&, Actor&);
-	template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::FrameEnd   >(const YAML::Node&, Actor&);
+	
+#define _SceneSerializerYAML_DeserializeBehaviorUpdates_DEF(x) template bool SceneSerializerYAML::DeserializeBehaviorUpdates<SimulationStage::x>(const YAML::Node&, Actor&);
+	FE_FOR_EACH(_SceneSerializerYAML_DeserializeBehaviorUpdates_DEF, FE_SIMULATION_STAGES);
 
 	bool SceneSerializerYAML::DeserializeEntities(GameplayWorld* world, YAML::Node& data)
 	{

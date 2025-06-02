@@ -1,5 +1,5 @@
 Shader: assets/shaders/Base3DShader.glsl
-ShaderShouldBeJustUUID: asd
+Uniforms Data Size: 24
 Uniforms:
   - Name: u_BaseColor
     Type: Float3

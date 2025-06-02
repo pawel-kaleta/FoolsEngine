@@ -24,8 +24,6 @@ namespace fe
 			Mat4x2, Mat4x3, Mat4
 		);
 
-		const char* TypesArray[];
-
 		constexpr Primitive PrimitiveInType(Type type)
 		{
 			if (type.ToInt() > 29 || type.ToInt() <= 0) {
@@ -63,20 +61,22 @@ namespace fe
 			case 3: return Structure::Vector;
 			}
 
-			FE_CORE_ASSERT(false, "Failed to detect SDStructure in SDType.");
+			FE_CORE_ASSERT(false, "Failed to detect ShaderData::Structure in ShaderData::Type.");
 			return Structure::None;
+		}
+
+		constexpr uint32_t CountInVector(Type type)
+		{
+			if (type.ToInt() < 1 || type.ToInt() >= 21) {
+				FE_CORE_ASSERT(false, "It is not vector!");
+				return 0;
+			}
+
+			return type.ToInt() % 4;
 		}
 
 		constexpr Type TypeOfMatrix(uint32_t rows, uint32_t columns)
 		{
-			/*const static uint8_t SDTypeOfMatrixLookupTable[3][3] = {
-			{ SDType::Mat2,   SDType::Mat2x3, SDType::Mat2x4 },
-			{ SDType::Mat3x2, SDType::Mat3,   SDType::Mat3x4 },
-			{ SDType::Mat4x2, SDType::Mat4x3, SDType::Mat4   }
-			};
-
-			return (Type)SDTypeOfMatrixLookupTable[rows-1][columns-1];*/
-
 			uint32_t result = 20;
 			result += columns - 1;
 			result += (rows - 2) * 3;

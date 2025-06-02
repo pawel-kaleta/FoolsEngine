@@ -131,13 +131,18 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool Texture2D::Deserialize(const AssetUser<Texture2D>& assetUser)
+	bool Texture2D::Deserialize(AssetID assetID)
 	{
-		YAML::Node node = YAML::LoadFile(assetUser.GetFilepath().string());
+		auto& reg = AssetManager::GetRegistry();
+		ECS_AssetHandle ECS_handle(reg, assetID);
+
+		auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
+
+		YAML::Node node = YAML::LoadFile(filepath.string());
 
 		auto& uuid_node = node["UUID"];
 		if (!uuid_node) return false;
-		if (assetUser.GetUUID() != node["UUID"].as<UUID>())
+		if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
 		{
 			FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
 			return false;
@@ -145,7 +150,7 @@ namespace fe
 
 		auto& source_node = node["Source Filepath"];
 		if (!source_node) return false;
-		AssetManager::SetSourcePath(assetUser.GetID(), source_node.as<std::string>());
+		AssetManager::SetSourcePath(assetID, source_node.as<std::string>());
 
 		auto& spec_node = node["Specification"];
 		if (!spec_node) return false;
@@ -154,7 +159,8 @@ namespace fe
 		if (!spec_node["Format"]) return false;
 		if (!spec_node["Width"]) return false;
 		if (!spec_node["Height"]) return false;
-		auto& spec = assetUser.GetCoreComponent().Specification;
+
+		auto& spec = ECS_handle.get<ACTexture2DCore>().Specification;
 		spec.Usage.FromString(spec_node["Usage"].as<std::string>());
 		spec.Components.FromString(spec_node["Components"].as<std::string>());
 		spec.Format.FromString(spec_node["Format"].as<std::string>());

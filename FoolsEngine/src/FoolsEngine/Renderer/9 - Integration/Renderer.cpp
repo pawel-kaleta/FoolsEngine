@@ -72,33 +72,9 @@ namespace fe
 		ShaderLoader::LoadShader("assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
 		ShaderLoader::LoadShader("assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
 
-		// TO DO : read from a file "assets/shading_models/Default.femat"
-		{
-			auto shading_model_user = BaseAssets.ShadingModels.Default.Use();
+		ShadingModel::Deserialize(BaseAssets.ShadingModels.Default.GetID());
 
-			shading_model_user.MakeShadingModel(
-				BaseAssets.Shaders.Base3D.GetID(),
-				{
-					Uniform("u_BaseColor", ShaderData::Type::Float3),
-					Uniform("u_Roughness", ShaderData::Type::Float),
-					Uniform("u_Metalness", ShaderData::Type::Float),
-					Uniform("u_AO"       , ShaderData::Type::Float)
-				},
-				{
-					ShaderTextureSlot("u_BaseColorMap", TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_RoughnessMap", TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_MetalnessMap", TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_AOMap"       , TextureData::Type::Texture2D),
-					ShaderTextureSlot("u_NormalMap"   , TextureData::Type::Texture2D)
-				}
-			);
-		}
-
-		{
-			auto material_user = BaseAssets.Materials.Default.Use();
-
-			material_user.MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
-		}
+		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)

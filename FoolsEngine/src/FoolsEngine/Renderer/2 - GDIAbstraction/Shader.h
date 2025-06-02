@@ -52,11 +52,16 @@ namespace fe
 		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
 	};
 
+	template<typename>
+	class AssetObserver;
+
 	class Shader : public Asset
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShaderCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<Shader>& assetObserver) { };
+		static bool Deserialize(AssetID assetID) { };
 
 		using Observer = ShaderObserver;
 		using User = ShaderUser;

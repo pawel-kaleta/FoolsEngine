@@ -28,14 +28,14 @@ namespace fe
 	public:
 		const ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
-		const void* GetUniformValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
-		const void* GetUniformValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
+		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
+		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
 	protected:
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
-		void* GetUniformValuePtr_Internal(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const;
-		void* GetUniformValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const;
+		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const;
+		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const;
 	};
 
 	class ShadingModelUser : public ShadingModelObserver
@@ -43,29 +43,26 @@ namespace fe
 	public:
 		ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
-		void MakeShadingModel(
-			AssetID shaderID,
-			const std::initializer_list<Uniform>& uniforms,
-			const std::initializer_list<ShaderTextureSlot>& textureSlots) const; // this needs enforcing of setting default valus for uniforms
+		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
+		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
-		void* GetUniformValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
-		void* GetUniformValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
-
-		void SetUniformValue(const ACShadingModelCore& dataComponent, const Uniform& uniform, void* dataPointer) const;
-		void SetUniformValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
+		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Uniform& uniform, void* dataPointer) const;
+		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
 
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
-
-	private:
-		void InitUniformValue(const Uniform& uniform, void* dataPointer) const;
 	};
+
+	template<typename>
+	class AssetObserver;
 
 	class ShadingModel : public Asset
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModelAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShadingModelCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<ShadingModel>& assetObserver);
+		static bool Deserialize(AssetID assetID);
 
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;

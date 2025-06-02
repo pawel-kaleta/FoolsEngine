@@ -11,6 +11,8 @@ namespace fe
 	{
 		s_Instance->File = filepath.filename();
 		s_Instance->Directory = filepath.parent_path();
+
+		Deserialize();
 	}
 
 	void Project::Serialize()

@@ -12,6 +12,7 @@
 
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 #include "FoolsEngine\Assets\AssetManager.h"
+#include "FoolsEngine\Assets\Serializers\AssetsSerializer.h"
 
 #include "FoolsEngine\Events\Event.h"
 
@@ -109,6 +110,9 @@ namespace fe
 			m_Project = new Project();
 			m_Project->Startup();
 			Project::Load(filepath);
+
+			AssetSerializer::DeserializeRegistry(m_Project->AssetsPath);
+			AssetSerializer::LoadMetaData();
 		}
 
 		{

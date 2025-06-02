@@ -11,8 +11,9 @@ namespace fe
 
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Entity& entity);
 
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec1& v);
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v);
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v);
-
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v);
 	
 	template <typename tnAsset>
@@ -36,6 +37,52 @@ namespace fe
 
 namespace YAML
 {
+	template<>
+	struct convert<glm::vec1>
+	{
+		static Node encode(const glm::vec1& rhs)
+		{
+			Node node;
+			node.push_back(rhs.x);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec1& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 1)
+				return false;
+
+			rhs.x = node[0].as<float>();
+
+			return true;
+		}
+	};
+
+	template<>
+	struct convert<glm::vec2>
+	{
+		static Node encode(const glm::vec2& rhs)
+		{
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec2& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 2)
+				return false;
+
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+
+			return true;
+		}
+	};
+
 	template<>
 	struct convert<glm::vec3>
 	{
