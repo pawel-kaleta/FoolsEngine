@@ -2,6 +2,7 @@
 #include "ImportData.h"
 
 #include <assimp/pbrmaterial.h>
+#include <assimp/postprocess.h>
 
 #include <FoolsEngine.h>
 
@@ -54,12 +55,13 @@ namespace fe::GeometryImport
 			aiPostProcessSteps::aiProcess_OptimizeMeshes
 		);
 
-		AssetID assetID = AssetManager::CreateAsset<Model>();
+		FE_CORE_ASSERT(false, "not implemented yet");
+		AssetID assetID;// = AssetManager::CreateAsset();
 		AssetHandle<Model> model_handle(assetID);
 		auto model_user = model_handle.Use();
 
-		auto& spec = model_user.GetSpecification();
-		spec.RenderMeshCount = scene->mNumMeshes;
+		//auto& spec = model_user.GetSpecification();
+		//spec.RenderMeshCount = scene->mNumMeshes;
 
 		std::vector<ImportRenderMesh> render_meshes;
 
@@ -73,7 +75,7 @@ namespace fe::GeometryImport
 			render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
 		}
 
-		model_user.SetFilepath(importData->Filepath);
+		//model_user.SetFilepath(importData->Filepath);
 
 		if (importData->HandleToOverride && importData->Type == AssetType::ModelAsset)
 			*(AssetHandle<Model>*)(importData->HandleToOverride) = model_handle;
@@ -121,37 +123,38 @@ namespace fe::GeometryImport
 			aiPostProcessSteps::aiProcess_OptimizeMeshes
 		);
 		
-		AssetID assetID = AssetManager::CreateAsset<Mesh>();
+		FE_CORE_ASSERT(false, "Not implemented");
+		AssetID assetID;// = AssetManager::CreateAsset();
 		AssetHandle<Mesh> mesh_handle(assetID);
 		auto mesh_user = mesh_handle.Use();
 
-		mesh_user.SetFilepath(importData->Filepath);
+		//mesh_user.SetFilepath(importData->Filepath);
 
-		auto& specification = mesh_user.GetSpecification();
-		specification.Submeshes = scene->mNumMeshes;
-		for (size_t i = 0; i < scene->mNumMeshes; i++)
-		{
-			specification.VertexCount  += scene->mMeshes[i]->mNumVertices;
-			specification.IndicesCount += scene->mMeshes[i]->mNumFaces;
-		}
-		specification.IndicesCount *= 3;
-
-		if (importData->HandleToOverride && importData->Type == AssetType::MeshAsset)
-			*(AssetHandle<Mesh>*)(importData->HandleToOverride) = mesh_handle;
-
-		YAML::Emitter emitter;
-
-		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID"         << YAML::Value << mesh_handle.GetUUID();
-		emitter << YAML::Key << "Source File"  << YAML::Value << importData->Filepath.string();
-		emitter << YAML::Key << "Vertex Count" << YAML::Value << specification.VertexCount;
-		emitter << YAML::Key << "Index Count"  << YAML::Value << specification.IndicesCount;
-		emitter << YAML::Key << "Submeshes"    << YAML::Value << specification.Submeshes;
-		emitter << YAML::EndMap;
-
-		std::ofstream fout(filepath);
-		fout << emitter.c_str();
-		fout.close();
+		//auto& specification = mesh_user.GetSpecification();
+		//specification.Submeshes = scene->mNumMeshes;
+		//for (size_t i = 0; i < scene->mNumMeshes; i++)
+		//{
+		//	specification.VertexCount  += scene->mMeshes[i]->mNumVertices;
+		//	specification.IndicesCount += scene->mMeshes[i]->mNumFaces;
+		//}
+		//specification.IndicesCount *= 3;
+		//
+		//if (importData->HandleToOverride && importData->Type == AssetType::MeshAsset)
+		//	*(AssetHandle<Mesh>*)(importData->HandleToOverride) = mesh_handle;
+		//
+		//YAML::Emitter emitter;
+		//
+		//emitter << YAML::BeginMap;
+		//emitter << YAML::Key << "UUID"         << YAML::Value << mesh_handle.GetUUID();
+		//emitter << YAML::Key << "Source File"  << YAML::Value << importData->Filepath.string();
+		//emitter << YAML::Key << "Vertex Count" << YAML::Value << specification.VertexCount;
+		//emitter << YAML::Key << "Index Count"  << YAML::Value << specification.IndicesCount;
+		//emitter << YAML::Key << "Submeshes"    << YAML::Value << specification.Submeshes;
+		//emitter << YAML::EndMap;
+		//
+		//std::ofstream fout(filepath);
+		//fout << emitter.c_str();
+		//fout.close();
 	}
 
 

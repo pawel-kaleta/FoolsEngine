@@ -61,10 +61,10 @@ namespace fe
 
 	void CModelView::DrawInspectorWidget(BaseEntity entity)
 	{
-		for (const auto& render_mesh : RenderMeshes)
+		for (auto& render_mesh : RenderMeshes)
 		{
 			std::string name_tag = render_mesh.Observe().GetFilepath().filename().string();
-			DrawAssetHandle<fe::RenderMesh>(render_mesh, name_tag);
+			DrawAssetHandle<RenderMesh>(render_mesh, name_tag);
 		}
 	}
 

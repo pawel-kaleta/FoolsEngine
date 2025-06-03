@@ -57,7 +57,7 @@ namespace fe
 		    {
                 auto& loader_data = s_LoaderData[i];
 
-                if (AssetManager::GetAssetFromFilepath(filepath, loader_data.AssetType))
+                if (AssetManager::GetAssetFromFilepath(filepath))
                 {
                     //asset allready imported
                     return;
@@ -128,6 +128,7 @@ namespace fe
 
         void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle)
         {
+            FE_CORE_ASSERT(false, "Not implemented");
             s_ImportData = new ImportData;
 
             s_ImportData->Filepath = filepath;

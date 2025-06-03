@@ -46,7 +46,7 @@ namespace fe
 
 	protected:
 		template<typename tnAsset>
-		void DrawAssetHandle(const AssetHandle<tnAsset>& assetHandle, const std::string& nameTag);
+		void DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag);
 	};
 
 	struct SpatialComponent : DataComponent

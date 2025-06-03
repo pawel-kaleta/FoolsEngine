@@ -236,7 +236,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		SceneSerializerYAML::SerializeToFile(m_Scene.Use());
+		SceneSerializerYAML::SerializeToFile(m_Scene.Observe());
 	}
 
 	void EditorLayer::SaveSceneAs()
@@ -323,12 +323,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto scene_user = m_Scene.Use();
+		auto scene_observer = m_Scene.Observe();
 
-		if (!scene_user.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera())
+		if (!scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
-		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_user);
+		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_observer);
 	}
 
 	void EditorLayer::OnScenePlayPause()

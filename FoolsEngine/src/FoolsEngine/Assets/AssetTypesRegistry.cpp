@@ -12,6 +12,8 @@
 
 namespace fe
 {
+	AssetTypesRegistry* AssetTypesRegistry::s_Instance;
+
 	void AssetTypesRegistry::RegisterAssetTypes()
 	{
 		RegisterAssetType<Texture2D>();

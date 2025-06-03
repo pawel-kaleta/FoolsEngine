@@ -10,8 +10,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_Icons.File = EditorAssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
-		m_Icons.Folder = EditorAssetHandle<Texture2D>(AssetManager::NewAsset<Texture2D>());
+		m_Icons.File = EditorAssetHandle<Texture2D>(AssetManager::CreateEditorAsset<Texture2D>());
+		m_Icons.Folder = EditorAssetHandle<Texture2D>(AssetManager::CreateEditorAsset<Texture2D>());
 
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);

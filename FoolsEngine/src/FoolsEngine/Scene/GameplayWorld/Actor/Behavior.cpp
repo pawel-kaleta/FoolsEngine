@@ -52,6 +52,9 @@ namespace fe
         Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
     }
 
+#define _BEHAVIOR_REGISTER_FOR_UPDATE_DEF(x) template void Behavior::RegisterForUpdate<SimulationStage::x>(uint32_t priority);
+    FE_FOR_EACH(_BEHAVIOR_REGISTER_FOR_UPDATE_DEF, FE_SIMULATION_STAGES);
+
     bool Behavior::DrawEntity(Entity& entity, const std::string& name)
     {
         std::string entity_ID_and_name;

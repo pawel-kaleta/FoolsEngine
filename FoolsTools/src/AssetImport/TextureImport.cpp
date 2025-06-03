@@ -13,12 +13,13 @@ namespace fe
 
     static void Import(const ImportData* const importData)
     {
-        AssetID assetID = AssetManager::CreateAsset<Texture2D>();
+        FE_CORE_ASSERTION_BREAK(false, "Not implemented");
+        AssetID assetID;// = AssetManager::CreateAsset<Texture2D>();
         AssetHandle<Texture2D> textureHandle(assetID);
         auto texture_user = textureHandle.Use();
 
-        texture_user.GetSpecification().Specification = importData->TextureData.Specification;
-        texture_user.SetFilepath(importData->Filepath);
+        texture_user.GetCoreComponent().Specification = importData->TextureData.Specification;
+        //texture_user.SetFilepath(importData->Filepath);
 
         if (importData->HandleToOverride && importData->Type == AssetType::Texture2DAsset)
             *(AssetHandle<Texture2D>*)(importData->HandleToOverride) = textureHandle;

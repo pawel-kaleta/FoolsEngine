@@ -18,7 +18,7 @@ namespace fe
 {
 	namespace AssetImportModal
 	{
-		extern void OpenWindow(const std::filesystem::path& filepath, AssetType type, AssetHandleBase* optionalBaseHandle);
+		extern void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle);
 	}
 
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
@@ -56,7 +56,7 @@ namespace fe
 	}
 
 	template<typename tnAsset>
-	void DataComponent::DrawAssetHandle(const AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
+	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
 	{
 		std::string name;
 		if (!assetHandle.IsValid())
@@ -87,12 +87,14 @@ namespace fe
 				{
 					std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>();
 
-					uint32_t file_importer_idx = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
-					bool     is_asset_proxy    = FileHandler::GetAliasAndAssetTypeOfProxy(extension, std::pmr::string()) != AssetType::None;
+					FE_CORE_ASSERTION_BREAK(false, "Not implemented");
+
+					uint32_t file_importer_idx;// = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
+					bool     is_asset_proxy;// = FileHandler::GetAliasAndAssetTypeOfProxy(extension, std::pmr::string()) != AssetType::None;
 
 					if (is_asset_proxy || file_importer_idx != -1)
 					{
-						AssetID assetID = AssetManager::GetAssetFromFilepath<tnAsset>(filepath);
+						AssetID assetID = AssetManager::GetAssetFromFilepath(filepath);
 						if (assetID != NullAssetID)
 						{
 							assetHandle = AssetHandle<tnAsset>(assetID);
@@ -101,7 +103,8 @@ namespace fe
 						{
 							FE_CORE_ASSERT(!is_asset_proxy, "Dont import asset proxies!");
 
-							uint32_t file_importer_idx = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
+							FE_CORE_ASSERTION_BREAK(false, "Not implemented");
+							uint32_t file_importer_idx;// = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
 							if (file_importer_idx != -1)
 								AssetImportModal::OpenWindow(filepath, file_importer_idx, tnAsset::GetTypeStatic(), &assetHandle);
 						}
@@ -115,11 +118,11 @@ namespace fe
 		ImGui::SameLine();
 		ImGui::Text(nameTag.c_str());
 	}
-	template void DataComponent::DrawAssetHandle<Texture2D   >(const AssetHandle<Texture2D   >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Material    >(const AssetHandle<Material    >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Mesh        >(const AssetHandle<Mesh        >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<RenderMesh  >(const AssetHandle<RenderMesh  >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Model       >(const AssetHandle<Model       >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&, const std::string&);
 
 
 	
