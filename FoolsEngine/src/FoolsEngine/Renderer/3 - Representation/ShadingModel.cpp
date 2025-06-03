@@ -3,7 +3,8 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 
-#include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
 
 namespace fe
 {
@@ -96,36 +97,6 @@ namespace fe
 
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
 	}
-
-	template <typename data_type>
-	void EmitVector(YAML::Emitter& emitter, char* uniform_data_ptr, ShaderData::Type type)
-	{
-		emitter << YAML::Flow << YAML::BeginSeq;
-		for (size_t i = 0; i < ShaderData::CountInVector(type); ++i)
-		{
-			emitter << (data_type)*uniform_data_ptr;
-			uniform_data_ptr += ShaderData::SizeOfPrimitive(primitive);
-		}
-		emitter << YAML::EndSeq;
-	}
-
-	template <typename data_type>
-	void EmitMatrix(YAML::Emitter& emitter, char* uniform_data_ptr, ShaderData::Type type)
-	{
-		emitter << YAML::Flow << YAML::BeginSeq;
-		auto primitive_size = ShaderData::SizeOfPrimitive(primitive);
-		for (size_t i = 0; i < ShaderData::RowsOfMatrix(type); ++i)
-		{
-			emitter << YAML::Flow << YAML::BeginSeq;
-			for (size_t j = 0; j < ShaderData::ColumnsOfMatrix(type); ++j)
-			{
-				emitter << (data_type)*uniform_data_ptr;
-				uniform_data_ptr += primitive_size;
-			}
-			emitter << YAML::EndSeq;
-		}
-		emitter << YAML::EndSeq;
-	}
 	
 	void ShadingModel::Serialize(const AssetObserver<ShadingModel>& assetObserver)
 	{
@@ -146,48 +117,10 @@ namespace fe
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
 			emitter << YAML::Key << "Default Value" << YAML::Value << YAML::BeginSeq;
 
-			auto& type = uniform.GetType();
-			auto structure = uniform.GetStructure();
-			auto primitive = uniform.GetPrimitive();
+			auto type = uniform.GetType();
 			for (size_t i = 0; i < uniform.GetCount(); i++)
 			{
-				switch (structure)
-				{
-				case ShaderData::Structure::Scalar:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   emitter << (bool    )*uniform_data_ptr; break;
-					case ShaderData::Primitive::Int:    emitter << (int32_t )*uniform_data_ptr; break;
-					case ShaderData::Primitive::UInt:   emitter << (uint32_t)*uniform_data_ptr; break;
-					case ShaderData::Primitive::Float:  emitter << (float   )*uniform_data_ptr; break;
-					case ShaderData::Primitive::Double: emitter << (double  )*uniform_data_ptr; break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-					break;
-				case ShaderData::Structure::Vector:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   EmitVector<bool    >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Int:    EmitVector<int     >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::UInt:   EmitVector<uint32_t>(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Float:  EmitVector<float   >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Double: EmitVector<double  >(emitter, uniform_data_ptr, type); break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-					break;
-				case ShaderData::Structure::Matrix:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   EmitVector<bool    >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Int:    EmitVector<int     >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::UInt:   EmitVector<uint32_t>(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Float:  EmitVector<float   >(emitter, uniform_data_ptr, type); break;
-					case ShaderData::Primitive::Double: EmitVector<double  >(emitter, uniform_data_ptr, type); break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-				default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Structure");
-				}
-
+				EmitShaderDataType(emitter, uniform_data_ptr, type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
@@ -203,43 +136,6 @@ namespace fe
 
 		std::ofstream fout(assetObserver.GetFilepath());
 		fout << emitter.c_str();
-	}
-
-	template <typename data_type>
-	bool LoadVector(const YAML::Node& node, char* uniform_data_ptr, ShaderData::Type type)
-	{
-		size_t vector_size = ShaderData::CountInVector(type);
-		size_t primitive_size = ShaderData::SizeOfPrimitive(ShaderData::PrimitiveInType(type));
-
-		if (!node.IsSequence() || node.size() != vector_size) return false; 
-		for (size_t i = 0; i < vector_size; ++i)
-		{
-			*(data_type*)uniform_data_ptr = node[i].as<data_type>();
-			uniform_data_ptr += primitive_size;
-		}
-		return true;
-	}
-
-	template <typename data_type>
-	bool LoadMatrix(const YAML::Node& node, char* uniform_data_ptr, ShaderData::Type type)
-	{
-		size_t primitive_size = ShaderData::SizeOfPrimitive(ShaderData::PrimitiveInType(type));
-		size_t rows = ShaderData::RowsOfMatrix(type);
-		size_t columns = ShaderData::ColumnsOfMatrix(type);
-
-		if (!node.IsSequence() || node.size() != rows) return false;
-		for (size_t i = 0; i < rows; ++i)
-		{
-			const auto& row_node = node[i];
-			if (!row_node.IsSequence() || row_node.size() != columns) return false;
-			
-			for (size_t j = 0; j < columns; ++j)
-			{
-				*(data_type*)uniform_data_ptr = row_node[j].as<data_type>();
-				uniform_data_ptr += primitive_size;
-			}
-		}
-		return true;
 	}
 
 	bool ShadingModel::Deserialize(AssetID assetID)
@@ -289,52 +185,13 @@ namespace fe
 			core.Uniforms.emplace_back(uniform_name, uniform_type, uniform_count);
 
 			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
-			auto primitive = ShaderData::PrimitiveInType(uniform_type);
+			auto uniform_size = ShaderData::SizeOfType(uniform_type);
 			for (size_t i = 0; i < uniform_count; ++i)
 			{
-				const auto& uniform_instance_node = value_node[i];
-				auto structure = ShaderData::StructureInType(uniform_type);
-				bool success;
-
-				switch (structure)
-				{
-				case ShaderData::Structure::Scalar:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   *(bool*    )uniform_data_ptr = uniform_instance_node.as<bool    >(); break;
-					case ShaderData::Primitive::Int:    *(int*     )uniform_data_ptr = uniform_instance_node.as<int     >(); break;
-					case ShaderData::Primitive::UInt:   *(uint32_t*)uniform_data_ptr = uniform_instance_node.as<uint32_t>(); break;
-					case ShaderData::Primitive::Float:  *(float*   )uniform_data_ptr = uniform_instance_node.as<float   >(); break;
-					case ShaderData::Primitive::Double: *(double*  )uniform_data_ptr = uniform_instance_node.as<double  >(); break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-					break;
-				case ShaderData::Structure::Vector:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   success = LoadVector<bool    >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Int:    success = LoadVector<int     >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::UInt:   success = LoadVector<uint32_t>(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Float:  success = LoadVector<float   >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Double: success = LoadVector<double  >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-					break;
-				case ShaderData::Structure::Matrix:
-					switch (primitive)
-					{
-					case ShaderData::Primitive::Bool:   success = LoadMatrix<bool    >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Int:    success = LoadMatrix<int     >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::UInt:   success = LoadMatrix<uint32_t>(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Float:  success = LoadMatrix<float   >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					case ShaderData::Primitive::Double: success = LoadMatrix<double  >(uniform_instance_node, uniform_data_ptr, uniform_type); break;
-					default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
-					}
-				default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Structure");
-				}
+				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform_type);
 				if (!success) return false;
 
-				uniform_data_ptr += ShaderData::SizeOfType(uniform_type);
+				uniform_data_ptr += uniform_size;
 			}
 		}
 

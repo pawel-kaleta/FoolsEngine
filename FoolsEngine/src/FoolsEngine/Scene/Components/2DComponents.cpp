@@ -2,7 +2,7 @@
 #include "2DComponents.h"
 
 #include "FoolsEngine\Scene\BaseEntity.h"
-#include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include <glm\gtc\type_ptr.hpp>

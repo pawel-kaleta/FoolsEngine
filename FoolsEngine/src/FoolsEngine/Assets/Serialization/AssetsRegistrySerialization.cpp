@@ -1,5 +1,5 @@
 #include "FE_pch.h"
-#include "AssetsSerializer.h"
+#include "AssetsRegistrySerialization.h"
 #include "YAML.h"
 
 #include "FoolsEngine\Assets\Asset.h"

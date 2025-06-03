@@ -10,7 +10,7 @@
 #include "FoolsEngine\Assets\AssetAccessors.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
-#include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "FoolsEngine\Assets\Serialization\YAML.h"
 
 namespace fe
 {

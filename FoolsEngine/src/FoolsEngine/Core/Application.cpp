@@ -12,7 +12,7 @@
 
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 #include "FoolsEngine\Assets\AssetManager.h"
-#include "FoolsEngine\Assets\Serializers\AssetsSerializer.h"
+#include "FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h"
 
 #include "FoolsEngine\Events\Event.h"
 

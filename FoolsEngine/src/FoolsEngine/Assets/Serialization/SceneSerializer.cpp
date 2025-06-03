@@ -7,7 +7,7 @@
 #include "FoolsEngine\Scene\Component.h"
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
-#include "AssetsSerializer.h"
+#include "AssetsRegistrySerialization.h"
 
 #include <fstream>
 #include <stack>

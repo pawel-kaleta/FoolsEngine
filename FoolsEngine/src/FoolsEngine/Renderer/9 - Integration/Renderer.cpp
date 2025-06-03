@@ -33,7 +33,7 @@ namespace fe
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
 	GDIType Renderer::s_ActiveGDI = GDIType::None;
-	std::unordered_map<GDIType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
+	std::unordered_map<GDIType::ValueType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
 
 	void Renderer::Startup()
 	{

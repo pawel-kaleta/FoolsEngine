@@ -13,6 +13,7 @@ namespace fe
 	};
 
 	class AssetHandleBase;
+	struct AssetType;
 
 	namespace AssetImportModal
 	{

@@ -10,7 +10,7 @@
 #include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Model.h"
 
-#include "FoolsEngine\Assets\Serializers\YAML.h"
+#include "FoolsEngine\Assets\Serialization\YAML.h"
 
 #include <type_traits>
 

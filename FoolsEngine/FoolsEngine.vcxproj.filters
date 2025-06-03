@@ -114,13 +114,13 @@
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.h">
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.h">
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\YAML.h">
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Application.h">
@@ -370,6 +370,7 @@
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -388,13 +389,13 @@
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.cpp">
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.cpp">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.cpp">
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\YAML.cpp">
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp">
       <Filter>FoolsEngine\Assets\Serializers</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
@@ -574,5 +575,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.cpp" />
   </ItemGroup>
 </Project>

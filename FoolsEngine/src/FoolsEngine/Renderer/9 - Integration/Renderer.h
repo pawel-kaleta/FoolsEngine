@@ -86,6 +86,6 @@ namespace fe
 
 		static Scope<SceneData> s_SceneData;
 		static GDIType s_ActiveGDI;
-		static std::unordered_map<GDIType, Scope<DeviceAPI>> s_DeviceAPIs;
+		static std::unordered_map<GDIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};
 }

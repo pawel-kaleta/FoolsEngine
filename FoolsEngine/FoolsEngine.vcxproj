@@ -160,9 +160,10 @@
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Serializers\YAML.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Core\Application.h" />
     <ClInclude Include="src\FoolsEngine\Core\Core.h" />
     <ClInclude Include="src\FoolsEngine\Core\Layer.h" />
@@ -256,9 +257,10 @@
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\AssetsSerializer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\SceneSerializer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Serializers\YAML.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Project.cpp" />
