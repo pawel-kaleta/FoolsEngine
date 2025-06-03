@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "GeometryLoader.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -89,8 +91,8 @@ namespace fe
 		
 		dataLocation = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
 		float* index_ptr = (float*)dataLocation;
-		Vertex* first_vertex_ptr = (Vertex*)(index_ptr + spec.IndexCount);
-		Vertex* vertex_ptr = first_vertex_ptr;
+		VertexData::Vertex* first_vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
+		VertexData::Vertex* vertex_ptr = first_vertex_ptr;
 
 		uint32_t index_offset = 0;
 

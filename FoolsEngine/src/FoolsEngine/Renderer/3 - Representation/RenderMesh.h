@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
+#include "FoolsEngine\Assets\AssetAccessors.h"
 
 namespace fe
 {
@@ -40,6 +41,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<RenderMesh>& assetObserver);
+		static bool Deserialize(AssetID assetID);
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;

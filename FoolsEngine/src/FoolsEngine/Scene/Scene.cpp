@@ -4,6 +4,7 @@
 #include "ECS.h"
 #include "FoolsEngine\Scene\SimulationStage.h"
 #include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
+#include "FoolsEngine\Assets\Serialization\SceneSerializer.h"
 
 namespace fe
 {
@@ -54,5 +55,15 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Scene release");
 		GetCoreComponent().GameplayWorld.release();
+	}
+
+	void Scene::Serialize(const AssetObserver<Scene>& assetObserver)
+	{
+		SceneSerializerYAML::SerializeToFile(assetObserver);
+	}
+
+	bool Scene::Deserialize(AssetID assetID)
+	{
+		return SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>(assetID));
 	}
 }

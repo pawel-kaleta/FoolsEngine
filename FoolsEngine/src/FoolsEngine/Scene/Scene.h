@@ -55,6 +55,8 @@ namespace fe
 	public:
 		static AssetType GetTypeStatic() { return AssetType::SceneAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACSceneCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<Scene>& assetObserver);
+		static bool Deserialize(AssetID assetID);
 
 		using Observer = SceneObserver;
 		using User = SceneUser;

@@ -15,29 +15,11 @@
 
 namespace fe
 {
-	struct Vertex {
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec3 Tangent;
-		glm::vec2 UV0;
-		glm::vec2 UV1;
-
-		static VertexData::Layout GetLayout() {
-			return VertexData::Layout({
-				{ ShaderData::Type::Float3, "a_Position" },
-				{ ShaderData::Type::Float3, "a_Normal" },
-				{ ShaderData::Type::Float3, "a_Tangent" },
-				{ ShaderData::Type::Float2, "a_UV0" },
-				{ ShaderData::Type::Float2, "a_UV1" }
-			});
-		}
-	};
-
 	struct MeshSpecification
 	{
 		uint32_t VertexCount;
 		uint32_t IndexCount;
-		VertexData::Layout VertexLayout() { return Vertex::GetLayout(); };
+		VertexData::Layout VertexLayout() { return VertexData::Vertex::GetLayout(); };
 
 		void Init()
 		{
@@ -56,7 +38,7 @@ namespace fe
 
 		uint32_t* GetIndexArrayPtr() { return (uint32_t*)Data; }
 		float* GetVertexArrayPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
-		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Vertex)); }
+		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(VertexData::Vertex)); }
 	};
 
 	//struct ACMeshLoadingSettings final : public AssetComponent
@@ -107,6 +89,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::MeshAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMeshCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<Mesh>& assetObserver);
+		static bool Deserialize(AssetID assetID);
 
 		using Observer = MeshObserver;
 		using User = MeshUser;

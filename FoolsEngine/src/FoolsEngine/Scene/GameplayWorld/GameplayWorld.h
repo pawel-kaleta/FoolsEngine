@@ -16,8 +16,8 @@ namespace fe
 		GameplayWorld();
 		virtual void Initialize() final override;
 
-		HierarchyDirector& GetHierarchy() { return *m_Hierarchy.get(); }
-		SystemsDirector& GetSystems()     { return *m_SystemsDirector.get(); }
+		HierarchyDirector& GetHierarchy() const { return *m_Hierarchy.get(); }
+		SystemsDirector& GetSystems()     const { return *m_SystemsDirector.get(); }
 
 		Entity CreateEntity(EntityID parentEntity, const std::string& name = "Entity");
 		Actor CreateActor(EntityID attachmentEntityID = RootID, const std::string& name = "Actor");

@@ -576,5 +576,7 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@
 
 namespace fe
 {
-	void SceneSerializerYAML::SerializeToFile(AssetUser<Scene>& scene)
+	void SceneSerializerYAML::SerializeToFile(const AssetObserver<Scene>& scene)
 	{
 		YAML::Emitter emitter;
 
@@ -37,7 +37,7 @@ namespace fe
 		return true;
 	}
 
-	std::string SceneSerializerYAML::SerializeToString(AssetUser<Scene>& scene)
+	std::string SceneSerializerYAML::SerializeToString(const AssetObserver<Scene>& scene)
 	{
 		YAML::Emitter emitter;
 
@@ -55,7 +55,7 @@ namespace fe
 		return Deserialize(scene, node);
 	}
 	
-	void SceneSerializerYAML::Serialize(AssetUser<Scene>& scene, YAML::Emitter& emitter)
+	void SceneSerializerYAML::Serialize(const AssetObserver<Scene>& scene, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
@@ -94,7 +94,7 @@ namespace fe
 		return true;
 	}
 
-	void SceneSerializerYAML::SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeGameplayWorld(const GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
 
@@ -115,11 +115,11 @@ namespace fe
 		emitter << YAML::EndMap;
 	}
 
-	void SceneSerializerYAML::SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeSystems(const GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Systems" << YAML::Value << YAML::BeginSeq;
 		{
-			for (auto& system : world->GetSystems().m_Systems)
+			for (const auto& system : world->GetSystems().m_Systems)
 			{
 				emitter << YAML::BeginMap;
 
@@ -152,20 +152,20 @@ namespace fe
 		emitter << YAML::EndMap;
 	}
 
-	void SceneSerializerYAML::SerializeActors(GameplayWorld* world, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeActors(const GameplayWorld* world, YAML::Emitter& emitter)
 	{
-		auto& reg = world->GetRegistry();
-		auto& UUIDstorage = reg.storage<CUUID>();
-		auto& nameStorage = reg.storage<CEntityName>();
-		auto& actorStorage = reg.storage<CActorData>();
+		const auto& reg = world->GetRegistry();
+		const auto& UUIDstorage = reg.storage<CUUID>();
+		const auto& nameStorage = reg.storage<CEntityName>();
+		const auto& actorStorage = reg.storage<CActorData>();
 
 		emitter << YAML::Key << "Actors" << YAML::Value << YAML::BeginSeq;
 		
-		for (auto&& [actorID, actorData] : actorStorage.each())
+		for (const auto&& [actorID, actorData] : actorStorage->each())
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Actor" << YAML::Value << nameStorage.get(actorID).EntityName.c_str();
-			emitter << YAML::Key << "UUID" << YAML::Value << UUIDstorage.get(actorID).UUID;
+			emitter << YAML::Key << "Actor" << YAML::Value << nameStorage->get(actorID).EntityName.c_str();
+			emitter << YAML::Key << "UUID" << YAML::Value << UUIDstorage->get(actorID).UUID;
 			
 			SerializeBehaviors(actorData, emitter);
 			SerializeActorEntities(actorID, world, emitter);
@@ -175,7 +175,7 @@ namespace fe
 		emitter << YAML::EndSeq;
 	}
 
-	void SceneSerializerYAML::SerializeBehaviors(CActorData& actorData, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeBehaviors(const CActorData& actorData, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Behaviors" << YAML::Value << YAML::BeginSeq;
 		{
@@ -210,27 +210,27 @@ namespace fe
 		emitter << YAML::EndMap;
 	}
 
-	void SceneSerializerYAML::SerializeActorEntities(EntityID actorID, GameplayWorld* world, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeActorEntities(EntityID actorID, const GameplayWorld* world, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		
 		std::stack<EntityID> toSerialize;
 		auto& reg = world->GetRegistry();
-		auto& nodeStorage = world->GetRegistry().storage<CEntityNode>();
-		auto& actorStorage = reg.storage<CActorData>();
+		const auto& nodeStorage = world->GetRegistry().storage<CEntityNode>();
+		const auto& actorStorage = reg.storage<CActorData>();
 
 		//head entity
 		{
 			SerializeEntity(Entity(actorID, world), emitter);
 
-			EntityID firstSibling = nodeStorage.get(actorID).FirstChild;
+			EntityID firstSibling = nodeStorage->get(actorID).FirstChild;
 			EntityID current = firstSibling;
 
 			if (current != NullEntityID)
 				do
 				{
 					toSerialize.push(current);
-					current = nodeStorage.get(current).NextSibling;
+					current = nodeStorage->get(current).NextSibling;
 				} while (current != firstSibling && current != NullEntityID);
 		}
 
@@ -240,19 +240,19 @@ namespace fe
 			entityToSerialize = toSerialize.top();
 			toSerialize.pop();
 
-			if (actorStorage.contains(entityToSerialize))
+			if (actorStorage->contains(entityToSerialize))
 				continue;
 
 			SerializeEntity(Entity(entityToSerialize, world), emitter);
 
-			EntityID firstSibling = nodeStorage.get(entityToSerialize).FirstChild;
+			EntityID firstSibling = nodeStorage->get(entityToSerialize).FirstChild;
 			EntityID current = firstSibling;
 
 			if (current != NullEntityID)
 				do
 				{
 					toSerialize.push(current);
-					current = nodeStorage.get(current).NextSibling;
+					current = nodeStorage->get(current).NextSibling;
 				} while (current != firstSibling && current != NullEntityID);
 		}
 		
@@ -294,7 +294,7 @@ namespace fe
 		emitter << YAML::Key << "FirstChild"      << YAML::Value << Entity(node.FirstChild, world);
 	}
 
-	void SceneSerializerYAML::SerializeTransform(Transform transform, YAML::Emitter& emitter)
+	void SceneSerializerYAML::SerializeTransform(const Transform& transform, YAML::Emitter& emitter)
 	{
 		emitter << YAML::Key << "Shift"    << YAML::Value << transform.Shift;
 		emitter << YAML::Key << "Rotation" << YAML::Value << transform.Rotation;

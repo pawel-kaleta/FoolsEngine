@@ -14,8 +14,9 @@ namespace fe
 		World(bool isGameplayWorld = false);
 		virtual void Initialize() = 0;
 
-		Registry&	GetRegistry()		{ return m_Registry; }
-		bool		IsGameplayWorld()	{ return m_IsGameplayWorld; }
+		const Registry&	GetRegistry() const { return m_Registry; }
+		Registry& GetRegistry() { return m_Registry; }
+		bool IsGameplayWorld() const { return m_IsGameplayWorld; }
 
 		EntityID TranslateID(UUID uuid);
 

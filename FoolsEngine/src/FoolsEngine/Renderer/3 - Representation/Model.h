@@ -43,6 +43,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACModelCore>(assetID).Init(); }
+		static void Serialize(const AssetObserver<Model>& assetObserver);
+		static bool Deserialize(AssetID assetID);
 
 		using Observer = ModelObserver;
 		using User = ModelUser;

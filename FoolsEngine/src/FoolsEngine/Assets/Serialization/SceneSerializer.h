@@ -18,23 +18,23 @@ namespace fe
 	class SceneSerializerYAML
 	{
 	public:
-		static void SerializeToFile(AssetUser<Scene>& scene);
+		static void SerializeToFile(const AssetObserver<Scene>& scene);
 		static bool DeserializeFromFile(AssetUser<Scene>& scene);
 
-		static std::string SerializeToString(AssetUser<Scene>& scene);
+		static std::string SerializeToString(const AssetObserver<Scene>& scene);
 		static bool DeserializeFromString(AssetUser<Scene>& scene, const std::string& buffer);
 	private:
-		static void Serialize(AssetUser<Scene>& scene, YAML::Emitter& emitter);
+		static void Serialize(const AssetObserver<Scene>& scene, YAML::Emitter& emitter);
 		static bool Deserialize(AssetUser<Scene>& scene, YAML::Node& node);
 
-		static void SerializeGameplayWorld(GameplayWorld* world, YAML::Emitter& emitter);
-		static void SerializeSystems(GameplayWorld* world, YAML::Emitter& emitter);
-		static void SerializeActors(GameplayWorld* world, YAML::Emitter& emitter);
-		static void SerializeBehaviors(CActorData& actorData, YAML::Emitter& emitter);
-		static void SerializeActorEntities(EntityID actorID, GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeGameplayWorld(const GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeSystems(const GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeActors(const GameplayWorld* world, YAML::Emitter& emitter);
+		static void SerializeBehaviors(const CActorData& actorData, YAML::Emitter& emitter);
+		static void SerializeActorEntities(EntityID actorID, const GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeEntity(Entity entity, YAML::Emitter& emitter);
 		static void SerializeEntityNode(Entity entity, YAML::Emitter& emitter);
-		static void SerializeTransform(Transform transform, YAML::Emitter& emitter);
+		static void SerializeTransform(const Transform& transform, YAML::Emitter& emitter);
 		static void SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter);
 
 		static bool DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data);

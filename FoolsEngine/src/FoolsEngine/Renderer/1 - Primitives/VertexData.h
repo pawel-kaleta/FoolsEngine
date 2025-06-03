@@ -5,6 +5,8 @@
 
 #include "ShaderData.h"
 
+#include <glm/glm.hpp>
+
 namespace fe
 {
 	namespace VertexData
@@ -51,6 +53,24 @@ namespace fe
 			uint32_t m_Stride = 0;
 
 			void CalculateOffsetsAndStride();
+		};
+
+		struct Vertex {
+			glm::vec3 Position;
+			glm::vec3 Normal;
+			glm::vec3 Tangent;
+			glm::vec2 UV0;
+			glm::vec2 UV1;
+
+			static VertexData::Layout GetLayout() {
+				return VertexData::Layout({
+					{ ShaderData::Type::Float3, "a_Position" },
+					{ ShaderData::Type::Float3, "a_Normal" },
+					{ ShaderData::Type::Float3, "a_Tangent" },
+					{ ShaderData::Type::Float2, "a_UV0" },
+					{ ShaderData::Type::Float2, "a_UV1" }
+					});
+			}
 		};
 	}
 }

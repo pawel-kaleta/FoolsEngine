@@ -8,6 +8,8 @@
 
 #include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 
+#include "FoolsEngine\Assets\Serialization\YAML.h"
+
 namespace fe
 {
 	void ACMeshCore::Init()
@@ -33,8 +35,8 @@ namespace fe
 
 		FE_CORE_ASSERT(ACData.Data, "Missing mesh data");
 
-		buffersComp.VertexBuffer = VertexBuffer::Create(ACData.GetVertexArrayPtr(), (spec.VertexCount * sizeof(Vertex)));
-		buffersComp.VertexBuffer->SetLayout(Vertex::GetLayout());
+		buffersComp.VertexBuffer = VertexBuffer::Create(ACData.GetVertexArrayPtr(), (spec.VertexCount * sizeof(VertexData::Vertex)));
+		buffersComp.VertexBuffer->SetLayout(VertexData::Vertex::GetLayout());
 
 		buffersComp.IndexBuffer = IndexBuffer::Create(ACData.GetIndexArrayPtr(), spec.IndexCount);
 		buffersComp.IndexBuffer->Bind();
@@ -108,5 +110,43 @@ namespace fe
 
 		gpuBuffers.VertexBuffer->Bind();
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
+	}
+
+	void Mesh::Serialize(const AssetObserver<Mesh>& assetObserver)
+	{
+		auto& core = assetObserver.GetCoreComponent();
+
+		YAML::Emitter emitter;
+
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
+		emitter << YAML::Key << "Vartex Count" << YAML::Value << core.Specification.VertexCount;
+		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
+
+		std::ofstream fout(assetObserver.GetFilepath());
+		fout << emitter.c_str();
+	}
+
+	bool Mesh::Deserialize(AssetID assetID)
+	{
+		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
+
+		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
+		YAML::Node node = YAML::LoadFile(filepath.string());
+
+		const auto& source_filepath_node = node["Source Filepath"];
+		const auto& vertex_count_node = node["Vartex Count"];
+		const auto& index_count_node = node["Index Count"];
+
+		if (!source_filepath_node) return false;
+		if (!vertex_count_node) return false;
+		if (!index_count_node) return false;
+
+		auto& core = ECS_handle.get<ACMeshCore>();
+		core.Specification.VertexCount = vertex_count_node.as<uint32_t>();
+		core.Specification.IndexCount  =  index_count_node.as<uint32_t>();
+
+		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
+
+		return true;
 	}
 }

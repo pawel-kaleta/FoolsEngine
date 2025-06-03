@@ -297,6 +297,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
