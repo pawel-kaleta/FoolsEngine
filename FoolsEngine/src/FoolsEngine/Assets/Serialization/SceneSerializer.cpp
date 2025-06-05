@@ -27,7 +27,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>& scene)
+	bool SceneSerializerYAML::DeserializeFromFile(const AssetUser<Scene>& scene)
 	{
 		YAML::Node node = YAML::LoadFile(scene.GetFilepath().string());
 		
@@ -49,7 +49,7 @@ namespace fe
 		return out;
 	}
 
-	bool SceneSerializerYAML::DeserializeFromString(AssetUser<Scene>& scene, const std::string& buffer)
+	bool SceneSerializerYAML::DeserializeFromString(const AssetUser<Scene>& scene, const std::string& buffer)
 	{
 		YAML::Node node = YAML::Load(buffer);
 		return Deserialize(scene, node);
@@ -72,9 +72,9 @@ namespace fe
 		emitter << YAML::EndMap; //Worlds
 	}
 
-	bool SceneSerializerYAML::Deserialize(AssetUser<Scene>& scene, YAML::Node& node)
+	bool SceneSerializerYAML::Deserialize(const AssetUser<Scene>& scene, YAML::Node& node)
 	{
-		auto& sceneProps = node["Scene Properties"];
+		auto sceneProps = node["Scene Properties"];
 		if (!sceneProps)
 		{
 			FE_CORE_ASSERT(false, "Deserialization failed");
@@ -86,7 +86,7 @@ namespace fe
 		//if (!name.empty()) scene.SetName(name);
 		//scene.SetUUID((UUID)sceneProps["UUID"].as<uint64_t>());
 
-		auto& worlds = node["Worlds"];
+		auto worlds = node["Worlds"];
 		if (!worlds) return false;
 		if (!DeserializeGameplayWorld(scene.GetCoreComponent().GameplayWorld.get(), worlds["GameplayWorld"]))
 			return false;
@@ -318,9 +318,9 @@ namespace fe
 		}
 	}
 
-	bool SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data)
+	bool SceneSerializerYAML::DeserializeGameplayWorld(GameplayWorld* world, const YAML::Node& data)
 	{
-		auto& props = data["Properties"];
+		auto props = data["Properties"];
 
 		UUID rootUUID = props["RootID"].as<UUID>();
 		auto rootEntity = world->CreateOrGetEntityWithUUID(rootUUID);
@@ -332,14 +332,14 @@ namespace fe
 		rootEntity.Emplace<CHeadEntity>().HeadEntity = NullEntityID;
 
 		auto& rootNode = rootEntity.Emplace<CEntityNode>();
-		auto& rootData = props["RootNode"];
+		auto rootData = props["RootNode"];
 		if (!DeserializeEntityNode(rootData, rootNode, world))
 			return false;
 
 		auto cameraEntity = world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
 		world->m_PrimaryCameraEntityID = cameraEntity.ID();
 
-		auto& actors = data["Actors"];
+		auto actors = data["Actors"];
 		if (!actors)
 			return false;
 		
@@ -364,14 +364,14 @@ namespace fe
 		return true;
 	}
 
-	bool SceneSerializerYAML::DeserializeSystems(GameplayWorld* world, YAML::Node& data)
+	bool SceneSerializerYAML::DeserializeSystems(GameplayWorld* world, const YAML::Node& data)
 	{
-		auto& systems = data["Systems"];
+		auto systems = data["Systems"];
 		if (!systems)
 			return false;
 
 		auto director = world->m_SystemsDirector.get();
-		for (auto& system : systems)
+		for (auto system : systems)
 		{
 			auto systemType = system["System"].as<std::string>();
 
@@ -384,11 +384,11 @@ namespace fe
 			}
 			newSystem->m_UUID = system["UUID"].as<uint64_t>();
 			newSystem->m_Active = system["Active"].as<bool>();
-			newSystem->Deserialize((YAML::Node)system, world);
+			newSystem->Deserialize(system, world);
 			newSystem->Initialize();
 		}
 
-		auto& systemUpdates = data["System Updates"];
+		auto systemUpdates = data["System Updates"];
 		bool success = true;
 		success &= DeserializeSystemUpdates<SimulationStage::FrameStart >(systemUpdates["FrameStart" ], director);
 		success &= DeserializeSystemUpdates<SimulationStage::PrePhysics >(systemUpdates["PrePhysics" ], director);
@@ -434,14 +434,14 @@ namespace fe
 		bool x3 = data.IsSequence();
 		size_t x4 = data.size();
 
-		for (auto& actor : data)
+		for (auto actor : data)
 		{
 			if (!actor["UUID"])
 				return false;
 
 			Actor newActor = world->CreateActorWithUUID(actor["UUID"].as<UUID>());
 
-			auto& entities = actor["Entities"];
+			auto entities = actor["Entities"];
 			if (!entities)
 				return false;
 			
@@ -460,10 +460,10 @@ namespace fe
 		if (!actor || !data)
 			return false;
 
-		auto& behaviors = data["Behaviors"];
+		auto behaviors = data["Behaviors"];
 		if (!behaviors)	return false;
 
-		for (auto& behavior : behaviors)
+		for (auto behavior : behaviors)
 		{
 			if (!behavior["Behavior"] || !behavior["UUID"])
 				return false;
@@ -480,11 +480,11 @@ namespace fe
 			Behavior* newBehavior = (actor.*createFunkPtr)();
 			newBehavior->m_UUID = behavior["UUID"].as<UUID>();
 			newBehavior->m_Active = behavior["Active"].as<bool>();
-			newBehavior->Deserialize((YAML::Node)behavior, actor.GetWorld());
+			newBehavior->Deserialize(behavior, actor.GetWorld());
 			newBehavior->Initialize();
 		}
 
-		auto& behaviorUpdates = data["Updates"];
+		auto behaviorUpdates = data["Updates"];
 		if (!behaviorUpdates) return false;
 		bool success = true;
 
@@ -525,7 +525,7 @@ namespace fe
 		if (!data)
 			return false;
 
-		for (auto& entity : data)
+		for (auto entity : data)
 		{
 			if (!entity["UUID"] || !entity["Entity"] || !entity["Head"] || !entity["Tags"] || !entity["Node"] || !entity["Transform"])
 				return false;
@@ -572,7 +572,7 @@ namespace fe
 		return true;
 	}
 
-	bool SceneSerializerYAML::DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world)
+	bool SceneSerializerYAML::DeserializeEntityNode(const YAML::Node& data, CEntityNode& node, GameplayWorld* world)
 	{
 		bool success = true;
 		if (data["Parent"         ]) node.Parent          = world->CreateOrGetEntityWithUUID(data["Parent"         ].as<UUID>()).ID(); else success = false;
@@ -584,7 +584,7 @@ namespace fe
 		return success;
 	}
 
-	bool SceneSerializerYAML::DeserializeTransform(YAML::Node& data, Transform& transform)
+	bool SceneSerializerYAML::DeserializeTransform(const YAML::Node& data, Transform& transform)
 	{
 		bool success = true;
 		if(data["Shift"]) transform.Shift = data["Shift"].as<glm::vec3>();	else success = false;

@@ -1,0 +1,13 @@
+AssetsPath: assets\
+StartScene: 3793305017238133058
+BaseAssets:
+  Textures:
+    Default: 3793305017238133059
+    FlatWhite: 3793305017238133060
+  Shaders:
+    Base2D: 3793305017238133061
+    Base3D: 3793305017238133062
+  ShadingModels:
+    Default: 3793305017238133063
+  Materials:
+    Default: 3793305017238133064

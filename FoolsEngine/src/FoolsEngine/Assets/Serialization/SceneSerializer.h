@@ -19,13 +19,13 @@ namespace fe
 	{
 	public:
 		static void SerializeToFile(const AssetObserver<Scene>& scene);
-		static bool DeserializeFromFile(AssetUser<Scene>& scene);
+		static bool DeserializeFromFile(const AssetUser<Scene>& scene);
 
 		static std::string SerializeToString(const AssetObserver<Scene>& scene);
-		static bool DeserializeFromString(AssetUser<Scene>& scene, const std::string& buffer);
+		static bool DeserializeFromString(const AssetUser<Scene>& scene, const std::string& buffer);
 	private:
 		static void Serialize(const AssetObserver<Scene>& scene, YAML::Emitter& emitter);
-		static bool Deserialize(AssetUser<Scene>& scene, YAML::Node& node);
+		static bool Deserialize(const AssetUser<Scene>& scene, YAML::Node& node);
 
 		static void SerializeGameplayWorld(const GameplayWorld* world, YAML::Emitter& emitter);
 		static void SerializeSystems(const GameplayWorld* world, YAML::Emitter& emitter);
@@ -37,9 +37,9 @@ namespace fe
 		static void SerializeTransform(const Transform& transform, YAML::Emitter& emitter);
 		static void SerializeDataComponents(BaseEntity entity, YAML::Emitter& emitter);
 
-		static bool DeserializeGameplayWorld(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeGameplayWorld(GameplayWorld* world, const YAML::Node& data);
 
-		static bool DeserializeSystems(GameplayWorld* world, YAML::Node& data);
+		static bool DeserializeSystems(GameplayWorld* world, const YAML::Node& data);
 		template <SimulationStage::ValueType stage>
 		static bool DeserializeSystemUpdates(const YAML::Node& stageUpdates, SystemsDirector* director);
 
@@ -51,8 +51,8 @@ namespace fe
 
 		static bool DeserializeEntities(GameplayWorld* world, YAML::Node& data);
 
-		static bool DeserializeEntityNode(YAML::Node& data, CEntityNode& node, GameplayWorld* world);
-		static bool DeserializeTransform(YAML::Node& data, Transform& transform);
+		static bool DeserializeEntityNode(const YAML::Node& data, CEntityNode& node, GameplayWorld* world);
+		static bool DeserializeTransform(const YAML::Node& data, Transform& transform);
 	};
 	
 }

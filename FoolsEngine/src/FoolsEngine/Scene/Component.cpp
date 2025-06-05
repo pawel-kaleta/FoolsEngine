@@ -49,7 +49,7 @@ namespace fe
 
 	void SpatialComponent::DeserializeOffset(YAML::Node& data)
 	{
-		auto& node = data["Offset"];
+		auto node = data["Offset"];
 		Offset.Shift = node["Shift"].as<glm::vec3>();
 		Offset.Rotation = node["Rotation"].as<glm::vec3>();
 		Offset.Scale = node["Scale"].as<glm::vec3>();

@@ -82,7 +82,7 @@ namespace fe
 
 	void CModelView::Deserialize(YAML::Node& data)
 	{
-		for (auto& render_mesh : data["RenderMeshes"])
+		for (auto render_mesh : data["RenderMeshes"])
 		{
 			RenderMeshes.emplace_back() = render_mesh.as<AssetHandle<RenderMesh>>();
 		}

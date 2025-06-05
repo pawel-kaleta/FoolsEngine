@@ -121,7 +121,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("RenderStats");
 
-			auto& stats = Renderer2D::GetStats();
+			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.Quads);
 			ImGui::Text("Render Time: %F", stats.RenderTime.GetMilliseconds());

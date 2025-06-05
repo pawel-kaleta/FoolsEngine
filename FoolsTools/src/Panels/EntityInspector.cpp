@@ -257,7 +257,7 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        constexpr char* tagLabels[64] = {
+        constexpr const char* tagLabels[64] = {
             "Error",
             "Player",
             "Very very very very long Tag name test",

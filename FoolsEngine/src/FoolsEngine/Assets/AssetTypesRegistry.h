@@ -10,7 +10,7 @@ namespace fe
 		struct Item
 		{
 			void (* EmplaceCore)(AssetID);
-			void (* LoadMetadata)(AssetID); //???
+			bool (* LoadMetadata)(AssetID); //???
 			// load data too? (for AssetManager::EvaluateAndReload)
 			std::string TypeName;
 			AssetType Type;
@@ -34,7 +34,7 @@ namespace fe
 			s_Instance->m_Items.push_back(
 				Item{
 					&tnAsset::EmplaceCore,
-					nullptr, //??
+					&tnAsset::Deserialize,
 					tnAsset::GetTypeStatic().ToString(),
 					tnAsset::GetTypeStatic()
 				}

@@ -19,7 +19,6 @@ int main(int argc, char** argv);
 
 namespace fe
 {
-	class Scene;
 	class ComponentTypesRegistry;
 	class BehaviorsRegistry;
 	class SystemsRegistry;

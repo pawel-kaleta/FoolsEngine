@@ -159,7 +159,7 @@ project "yaml-cpp"
 	location "_projects_of_externals/yaml-cpp"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")

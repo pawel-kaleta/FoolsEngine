@@ -52,8 +52,9 @@ namespace fe
 		template <typename tnGDITexture2D>
 		tnGDITexture2D& CreateGDITexture2D() const
 		{
-			auto& spec = GetOrEmplaceSpecification().Specification;
-			void* data = GetDataLocation().Data;
+			auto& core = GetCoreComponent();
+			auto& spec = core.Specification;
+			void* data = core.Data;
 			return Emplace<tnGDITexture2D>(spec, data);
 		}
 

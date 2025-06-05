@@ -18,7 +18,7 @@ namespace fe
 		{
 			auto& nameFunkPtr = item.GetName;
 
-			auto& string1 = (*nameFunkPtr)();
+			auto string1 = (*nameFunkPtr)();
 			if (string1.compare(name) == 0)
 			{
 				return &item;

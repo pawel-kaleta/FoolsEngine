@@ -83,7 +83,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("GLFW_Initialization");
 			FE_LOG_CORE_INFO("Initializing GLFW");
-
+			
 			
 			if (!glfwInit())
 			{

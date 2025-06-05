@@ -1,0 +1,257 @@
+Scene Properties:
+  Name: Untitled Scene
+  UUID: 3793305017238133058
+Worlds:
+  GameplayWorld:
+    Properties:
+      RootID: 14380651569816070889
+      RootNode:
+        Parent: 0
+        HierarchyLvl: 0
+        PreviousSibling: 0
+        NextSibling: 0
+        ChildrenCount: 2
+        FirstChild: 14670524396616024285
+      Primary Camera: 4692859201027233055
+    Systems:
+      []
+    System Updates:
+      FrameStart:
+        []
+      PrePhysics:
+        []
+      Physics:
+        []
+      PostPhysics:
+        []
+      FrameEnd:
+        []
+    Actors:
+      - Actor: Player
+        UUID: 4692859201027233055
+        Behaviors:
+          - Behavior: PlayerMovement
+            UUID: 17097313323016577129
+            Active: true
+            MovementComponent: 4692859201027233055
+            Player Root entity: 4692859201027233055
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            - Behavior: 17097313323016577129
+              Priority: 10
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Player
+            UUID: 4692859201027233055
+            Head: 4692859201027233055
+            Tags: 0
+            Node:
+              Parent: 14380651569816070889
+              HierarchyLvl: 1
+              PreviousSibling: 14670524396616024285
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0, -0.109798536, 1.37]
+              Rotation: [0, -0, 0]
+              Scale: [1, 1, 1]
+            Camera:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [-10, 0, 0]
+                Scale: [1, 1, 1]
+              IsPrimary: true
+              ProjectionType: 1
+              PerspectiveNear: 0.00999999978
+              PerspectiveFar: 1000
+              PerspectiveFOV: 0.785398185
+              OrthographicNear: -1
+              OrthographicFar: 1
+              OrthographicZoom: 1
+            Movement:
+              MoveSpeed: 0.5
+              RotationSpeed: 80
+      - Actor: Enviro
+        UUID: 14670524396616024285
+        Behaviors:
+          []
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            []
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Enviro
+            UUID: 14670524396616024285
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 14380651569816070889
+              HierarchyLvl: 1
+              PreviousSibling: 0
+              NextSibling: 4692859201027233055
+              ChildrenCount: 4
+              FirstChild: 728370304522204812
+            Transform:
+              Shift: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+          - Entity: Grass
+            UUID: 3327011339061320568
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 14670524396616024285
+              HierarchyLvl: 2
+              PreviousSibling: 10116741037657637289
+              NextSibling: 0
+              ChildrenCount: 2
+              FirstChild: 3041038974836884132
+            Transform:
+              Shift: [0, 0, 0]
+              Rotation: [0, 0, 0]
+              Scale: [1, 1, 1]
+          - Entity: Grass_2
+            UUID: 482747556766818270
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 3327011339061320568
+              HierarchyLvl: 3
+              PreviousSibling: 3041038974836884132
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [-0.292925835, -0.367158711, -0.289755493]
+              Rotation: [0, -0, 0]
+              Scale: [0.350000024, 0.350000024, 0.350000024]
+            Sprite:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 18112934642992629188
+                Name: grass2
+              Tiling: 1
+          - Entity: Grass_1
+            UUID: 3041038974836884132
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 3327011339061320568
+              HierarchyLvl: 3
+              PreviousSibling: 0
+              NextSibling: 482747556766818270
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0.543197632, -0.432673216, 0.444167197]
+              Rotation: [0, -0, 0]
+              Scale: [0.224400014, 0.224400014, 0.224400014]
+            Sprite:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 2406470786547939043
+                Name: grass1
+              Tiling: 1
+          - Entity: Tree_2
+            UUID: 10116741037657637289
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 14670524396616024285
+              HierarchyLvl: 2
+              PreviousSibling: 2049454600494468118
+              NextSibling: 3327011339061320568
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [-0.735420227, -0.0173067749, 0]
+              Rotation: [0, -0, 0]
+              Scale: [1.01639998, 1.01639998, 1.01639998]
+            Sprite:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 3147587995776764887
+                Name: tree2
+              Tiling: 1
+          - Entity: Tree_1
+            UUID: 2049454600494468118
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 14670524396616024285
+              HierarchyLvl: 2
+              PreviousSibling: 728370304522204812
+              NextSibling: 10116741037657637289
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0.644805491, -0.0813303292, -0.508278191]
+              Rotation: [0, -0, 0]
+              Scale: [1, 1, 1]
+            Sprite:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 7011469824264952867
+                Name: tree1
+              Tiling: 1
+          - Entity: Ground
+            UUID: 728370304522204812
+            Head: 14670524396616024285
+            Tags: 0
+            Node:
+              Parent: 14670524396616024285
+              HierarchyLvl: 2
+              PreviousSibling: 0
+              NextSibling: 2049454600494468118
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0, -0.537189901, -3.20190132e-08]
+              Rotation: [-90, -0, 0]
+              Scale: [2.01178026, 2.01143599, 2.01143599]
+            Tile:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [1, 1, 1]
+              Color: [1, 1, 1, 1]
+              Texture:
+                Type: 2
+                UUID: 16144042178780554263
+                Name: grassland
+              Tiling: 1

@@ -1,23 +1,25 @@
-19:02:44:199141 | FE  | info     | Logging innitialized!
-19:02:44:199584 | App | info     | Logging innitialized!
-19:02:44:199846 | FE  | info     | /////////////////////////////////////////////////////
-19:02:44:200120 | FE  | info     | ////////////////////// STARTUP //////////////////////
-19:02:44:200420 | FE  | info     | /////////////////////////////////////////////////////
-19:02:44:200628 | App | info     | Logging level set to 0 - all.
-19:02:44:200820 | FE  | info     | Logging level set to 0 - all.
-19:02:44:202483 | FE  | info     | Profiler session 'Startup' started.
-19:02:44:203091 | FE  | info     | Initializing GLFW
-19:02:44:249103 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
-19:02:45:411724 | FE  | debug    | Setting events callbacks for window.
-19:02:45:412196 | FE  | info     | Events callbacks for Win10Window setted up.
-19:02:45:412753 | FE  | info     | Creating rendering context
-19:02:45:416599 | FE  | info     | Rendering platform info:
-19:02:45:417040 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-19:02:45:417287 | FE  | info     | 	Renderer:	AMD Radeon RX 640
-19:02:45:417531 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
-19:02:45:417825 | FE  | info     | OpenGL Rendering Context created.
-19:02:45:418186 | FE  | info     | VSync disabled.
-19:02:45:419427 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-19:02:45:421045 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-19:02:45:704263 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
-19:02:56:502085 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
+06:34:18:664598 | FE  | info     | Logging innitialized!
+06:34:18:666143 | App | info     | Logging innitialized!
+06:34:18:666254 | FE  | info     | /////////////////////////////////////////////////////
+06:34:18:666359 | FE  | info     | ////////////////////// STARTUP //////////////////////
+06:34:18:666454 | FE  | info     | /////////////////////////////////////////////////////
+06:34:18:666548 | App | info     | Logging level set to 0 - all.
+06:34:18:666643 | FE  | info     | Logging level set to 0 - all.
+06:34:18:666935 | FE  | info     | Profiler session 'Startup' started.
+06:34:18:667278 | FE  | info     | Initializing GLFW
+06:34:18:764154 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
+06:34:19:085370 | FE  | debug    | Setting events callbacks for window.
+06:34:19:086601 | FE  | info     | Events callbacks for Win10Window setted up.
+06:34:19:086865 | FE  | info     | Creating rendering context
+06:34:19:090587 | FE  | info     | Rendering platform info:
+06:34:19:090719 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+06:34:19:090838 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+06:34:19:090949 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+06:34:19:091075 | FE  | info     | OpenGL Rendering Context created.
+06:34:19:091234 | FE  | info     | VSync disabled.
+06:34:19:091853 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+06:34:19:092417 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+06:34:19:092663 | FE  | debug    | OpenGLDeviceAPI creation!
+06:34:19:092833 | FE  | info     | OpenGLDeviceAPI Initialization.
+06:34:19:151521 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
+06:34:21:701697 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus

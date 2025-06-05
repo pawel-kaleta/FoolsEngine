@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetManager.h"
+#include "AssetInterface.h"
 #include "FoolsEngine\Debug\Asserts.h"
 
 namespace fe
@@ -18,9 +19,9 @@ namespace fe
 		AssetObserver& operator=(AssetObserver&& other) = delete;
 		~AssetObserver()
 		{
-			if (!IsValid()) return;
+			if (!tnAsset::Observer::IsValid()) return;
 
-			auto refs = GetRefCounters();
+			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return;
 
 			refs->ActiveObserversCount--;
@@ -50,14 +51,14 @@ namespace fe
 #endif // FE_INTERNAL_BUILD
 		}
 
-		void Init()
+		inline void Init()
 		{
-			if (!IsValid()) return;
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			if (!tnAsset::Observer::IsValid()) return;
+			FE_CORE_ASSERT(AssetInterface::Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 
 			StackCheck();
 
-			auto refs = GetRefCounters();
+			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return; // internal assets are not reference counted
 
 			FE_CORE_ASSERT(!refs->ActiveUser, "Cannot read and write at the same time");
@@ -78,8 +79,8 @@ namespace fe
 		AssetUser& operator=(AssetUser&& other) = delete;
 		~AssetUser()
 		{
-			if (!IsValid()) return;
-			auto refs = GetRefCounters();
+			if (!tnAsset::User::IsValid()) return;
+			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return;
 			refs->ActiveUser = false;
 		}
@@ -110,12 +111,12 @@ namespace fe
 
 		void Init()
 		{
-			if (!IsValid()) return;
-			FE_CORE_ASSERT(Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
+			if (!tnAsset::User::IsValid()) return;
+			FE_CORE_ASSERT(AssetInterface::Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
 
 			StackCheck();
 
-			auto refs = GetRefCounters();
+			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return;
 
 			FE_CORE_ASSERT(!refs->ActiveObserversCount, "Cannot read and write at the same time");

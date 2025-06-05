@@ -39,7 +39,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		AcquireBaseAssets();
+		
 	}
 
 	void Renderer::Shutdown()
@@ -75,6 +75,8 @@ namespace fe
 		ShadingModel::Deserialize(BaseAssets.ShadingModels.Default.GetID());
 
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
+
+		UploadBaseAssetsToGPU(Renderer::GetActiveGDItype());
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)
@@ -119,8 +121,6 @@ namespace fe
 		auto& deviceAPI = s_DeviceAPIs.at(GDI);
 
 		deviceAPI->Init();
-
-		UploadBaseAssetsToGPU(GDI);
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

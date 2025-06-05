@@ -24,7 +24,7 @@ namespace fe
 
 	Timer::~Timer()
 	{
-		if (!m_Stopped)
+		if (!m_Stopped && Profiler::Get().m_ActiveSession)
 			Stop();
 	}
 
@@ -96,10 +96,22 @@ namespace fe
 		{
 			std::stringstream buffer;
 			buffer << std::setprecision(3) << std::fixed;
-			buffer << ",{\n"
+			buffer
+				<< ",{\n"
 				<< "\"cat\": \"function\",\n"
 				<< "\"dur\": " << result.DurationElapsed.count() << ",\n"
-				<< "\"name\": \"" << result.Name << "\",\n"
+				<< "\"name\": \"";
+			
+			auto name = std::string(result.Name);
+			auto beg = name.find("__cdecl ");
+			if (beg != std::string::npos)
+			{
+				name.erase(beg, 8);
+			}
+				
+			buffer
+				<< name
+				<< "\",\n"
 				<< "\"ph\": \"X\",\n"
 				<< "\"pid\": 0,\n"
 				<< "\"tid\": " << result.ThreadID << ",\n"

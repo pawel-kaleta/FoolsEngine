@@ -8,7 +8,7 @@
 
 namespace fe
 {
-	void ShaderLoader::LoadShader(const std::filesystem::path& filePath, AssetUser<Shader>& shaderUser)
+	void ShaderLoader::LoadShader(const std::filesystem::path& filePath, const AssetUser<Shader>& shaderUser)
 	{
 		std::ifstream in(filePath, std::ios::in, std::ios::binary);
 
@@ -30,7 +30,7 @@ namespace fe
 		return;
 	}
 
-	void ShaderLoader::CompileShader(GDIType GDI, AssetUser<Shader>& shaderUser)
+	void ShaderLoader::CompileShader(GDIType GDI, const AssetUser<Shader>& shaderUser)
 	{
 		switch (GDI.Value)
 		{
@@ -60,7 +60,7 @@ namespace fe
 		return false;
 	}
 
-	void ShaderLoader::GLCompileShader(AssetUser<Shader>& shaderUser)
+	void ShaderLoader::GLCompileShader(const AssetUser<Shader>& shaderUser)
 	{
 		FE_PROFILER_FUNC();
 
@@ -154,7 +154,7 @@ namespace fe
 		shaderUser.CreateGDIShader<OpenGLShader>(programID);
 	}
 
-	void ShaderLoader::PreProcess(AssetUser<Shader>& shaderUser)
+	void ShaderLoader::PreProcess(const AssetUser<Shader>& shaderUser)
 	{
 		auto shader_core = shaderUser.GetCoreComponent();
 		auto& shaderSource = shader_core.ShaderSource;

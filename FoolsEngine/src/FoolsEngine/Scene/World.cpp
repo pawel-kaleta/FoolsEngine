@@ -40,7 +40,7 @@ namespace fe
 
 	BaseEntity World::CreateOrGetEntityWithUUID(UUID uuid)
 	{
-		if (0 == uuid)
+		if (UUID(0) == uuid)
 		{
 			return BaseEntity();
 		}

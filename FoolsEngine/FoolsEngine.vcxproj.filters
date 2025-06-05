@@ -10,8 +10,8 @@
     <Filter Include="FoolsEngine\Assets\Loaders">
       <UniqueIdentifier>{39128283-2522-2E54-8EDB-92727A0A1DED}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Assets\Serializers">
-      <UniqueIdentifier>{DC409652-C866-60B9-B1AC-E5849D718585}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Assets\Serialization">
+      <UniqueIdentifier>{CD82E250-B9D3-CD92-E237-BC54CEE760FC}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Core">
       <UniqueIdentifier>{36A8C180-22A1-E0D2-4BD3-C557372BC0DE}</UniqueIdentifier>
@@ -115,13 +115,16 @@
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.h">
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Core\Application.h">
       <Filter>FoolsEngine\Core</Filter>
@@ -369,8 +372,9 @@
     <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\ForEach.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\ForEach.h">
+      <Filter>FoolsEngine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -390,13 +394,16 @@
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.cpp">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.cpp">
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp">
-      <Filter>FoolsEngine\Assets\Serializers</Filter>
+      <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
       <Filter>FoolsEngine\Core</Filter>
@@ -506,6 +513,12 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Mesh.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\ShadingModel.cpp">
       <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
     </ClCompile>
@@ -575,8 +588,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Serialization\ShaderDataSerialization.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\RenderMesh.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Model.cpp" />
   </ItemGroup>
 </Project>

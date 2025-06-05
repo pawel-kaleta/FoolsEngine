@@ -52,7 +52,7 @@ namespace fe::AssetSerializer
 
 	bool DeserializeRegistry(const std::filesystem::path& filepath)
 	{
-		YAML::Node node = YAML::LoadFile(filepath.string());
+		YAML::Node node = YAML::LoadFile((filepath/"AssetsRegistry.fear").string());
 		if (!node["Masters"])   return false;
 		if (!node["Internals"]) return false;
 
@@ -103,6 +103,8 @@ namespace fe::AssetSerializer
 
 				(*item.EmplaceCore)(assetID);
 				(*item.LoadMetadata)(assetID);
+
+				break;
 			}
 		}
 	}

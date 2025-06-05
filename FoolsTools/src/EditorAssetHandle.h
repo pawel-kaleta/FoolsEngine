@@ -35,12 +35,12 @@ namespace fe
 
 		EditorAssetHandle& operator=(const EditorAssetHandle& other)
 		{
-			m_ECSHandle = other.m_ECSHandle;
+			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
 			return *this;
 		}
 		EditorAssetHandle& operator=(EditorAssetHandle&& other)
 		{
-			m_ECSHandle = other.m_ECSHandle;
+			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
 			other.m_ECSHandle = ECS_AssetHandle();
 
 			return *this;

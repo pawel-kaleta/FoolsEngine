@@ -65,7 +65,7 @@ namespace fe
 		{
 			Scratchpad::Init();
 		}
-
+		
 		{
 			FE_PROFILER_SCOPE("Type Registries");
 			m_ComponentTypesRegistry = new ComponentTypesRegistry();
@@ -100,6 +100,15 @@ namespace fe
 		}
 
 		{
+			FE_PROFILER_SCOPE("Rendering");
+			GDIType gdi = m_Window->GetGDIType();
+			Renderer::Startup();
+			Renderer::CreateAPI(gdi);
+			Renderer::InitAPI(gdi);
+			Renderer::SetAPI(gdi);
+		}
+
+		{
 			FE_PROFILER_SCOPE("Project");
 
 #ifdef FE_EDITOR
@@ -110,18 +119,10 @@ namespace fe
 			m_Project = new Project();
 			m_Project->Startup();
 			Project::Load(filepath);
+			Renderer::AcquireBaseAssets();
 
 			AssetSerializer::DeserializeRegistry(m_Project->AssetsPath);
 			AssetSerializer::LoadMetaData();
-		}
-
-		{
-			FE_PROFILER_SCOPE("Rendering");
-			GDIType gdi = m_Window->GetGDIType();
-			Renderer::Startup();
-			Renderer::CreateAPI(gdi);
-			Renderer::InitAPI(gdi);
-			Renderer::SetAPI(gdi);
 		}
 
 		{
@@ -177,6 +178,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		//fe::Timer timer184(std::source_location::current().function_name());
+
 		{
 			FE_PROFILER_SCOPE("Client app shutdown");
 			ClientAppShutdown();
@@ -202,15 +205,15 @@ namespace fe
 		}
 
 		{
-			FE_PROFILER_SCOPE("Rendering");
-			Renderer::Shutdown();
-		}
-
-		{
 			FE_PROFILER_SCOPE("Project");
 			m_Project->Shutdown();
 			//Just leting OS reclame memory
 			//delete m_Project;
+		}
+
+		{
+			FE_PROFILER_SCOPE("Rendering");
+			Renderer::Shutdown();
 		}
 
 		{

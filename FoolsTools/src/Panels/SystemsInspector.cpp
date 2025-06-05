@@ -102,7 +102,7 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        auto& name = system->GetName();
+        auto name = system->GetName();
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;

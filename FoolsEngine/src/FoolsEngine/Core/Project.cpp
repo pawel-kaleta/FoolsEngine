@@ -45,21 +45,32 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	void Project::Deserialize()
+	bool Project::Deserialize()
 	{
 		auto& inst = *s_Instance;
 		auto path = (inst.Directory / inst.File).string();
 		YAML::Node main_node = YAML::LoadFile(path);
 
+		const auto assets_node      = main_node["AssetsPath"];
+		const auto start_scene_node = main_node["StartScene"];
+		const auto base_assets_node = main_node["BaseAssets"];
+
+		if (!assets_node) return false;
+		if (!start_scene_node) return false;
+		if (!base_assets_node) return false;
+
 		inst.AssetsPath = main_node["AssetsPath"].as<std::string>();
 		inst.StartScene = main_node["StartScene"].as<UUID>();
 
-		auto& base_assets_node = main_node["BaseAssets"];
-		
-		auto& textures_node       = base_assets_node["Textures"];
-		auto& shaders_node        = base_assets_node["Shaders"];
-		auto& shading_models_node = base_assets_node["ShadingModels"];
-		auto& materials_node      = base_assets_node["Materials"];
+		const auto textures_node       = base_assets_node["Textures"];
+		const auto shaders_node        = base_assets_node["Shaders"];
+		const auto shading_models_node = base_assets_node["ShadingModels"];
+		const auto materials_node      = base_assets_node["Materials"];
+
+		if (!textures_node) return false;
+		if (!shaders_node) return false;
+		if (!shading_models_node) return false;
+		if (!materials_node) return false;
 
 		inst.BaseAssets.Textures.Default = textures_node["Default"].as<UUID>();
 		inst.BaseAssets.Textures.FlatWhite = textures_node["FlatWhite"].as<UUID>();

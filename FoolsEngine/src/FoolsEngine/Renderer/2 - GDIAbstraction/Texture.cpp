@@ -140,7 +140,7 @@ namespace fe
 
 		YAML::Node node = YAML::LoadFile(filepath.string());
 
-		auto& uuid_node = node["UUID"];
+		auto uuid_node = node["UUID"];
 		if (!uuid_node) return false;
 		if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
 		{
@@ -148,11 +148,11 @@ namespace fe
 			return false;
 		}
 
-		auto& source_node = node["Source Filepath"];
+		auto source_node = node["Source Filepath"];
 		if (!source_node) return false;
 		AssetManager::SetSourcePath(assetID, source_node.as<std::string>());
 
-		auto& spec_node = node["Specification"];
+		auto spec_node = node["Specification"];
 		if (!spec_node) return false;
 		if (!spec_node["Usage"]) return false;
 		if (!spec_node["Components"]) return false;

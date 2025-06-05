@@ -89,7 +89,7 @@ namespace fe
 		
 		for (auto& textureSlot : sm_core.TextureSlots)
 		{
-			auto& texture = materialObserver.GetTexture(material_core, textureSlot).Use();
+			auto texture = materialObserver.GetTexture(material_core, textureSlot).Use();
 
 			if (texture.IsValid())
 			{

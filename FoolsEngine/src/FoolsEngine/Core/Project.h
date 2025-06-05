@@ -14,7 +14,7 @@ namespace fe
 		static void Load(const std::filesystem::path& filepath);
 
 		static void Serialize();
-		static void Deserialize();
+		static bool Deserialize();
 
 		struct
 		{

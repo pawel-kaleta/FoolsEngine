@@ -25,7 +25,7 @@ namespace fe
 					((GameplayWorld*)world)->SetPrimaryCameraEntity(Entity(entity));
 		}
 
-		constexpr char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
+		constexpr const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
 		const char* currentProjectionTypeString = projectionTypeStrings[Camera.GetProjectionType().ToInt()];
 
 		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
