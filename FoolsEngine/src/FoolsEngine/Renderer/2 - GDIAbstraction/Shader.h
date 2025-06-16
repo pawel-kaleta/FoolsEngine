@@ -60,8 +60,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShaderCore>(assetID).Init(); }
-		static void Serialize(const AssetObserver<Shader>& assetObserver) { };
-		static bool Deserialize(AssetID assetID) { return true; };
+		static void SaveMetadata(AssetID assetID) { };
+		static bool LoadMetadata(AssetID assetID) { return true; };
 
 		using Observer = ShaderObserver;
 		using User = ShaderUser;

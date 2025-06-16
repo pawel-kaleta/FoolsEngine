@@ -60,7 +60,6 @@ namespace fe::AssetSerializer
 
 		for (auto asset : node["Masters"])
 		{
-			if (!asset["TypeName"]) return false;
 			if (!asset["Type"])     return false;
 			if (!asset["UUID"])     return false;
 			if (!asset["Filepath"]) return false;
@@ -73,7 +72,6 @@ namespace fe::AssetSerializer
 
 		for (auto asset : node["Internals"])
 		{
-			if (!asset["TypeName"]) return false;
 			if (!asset["Type"])     return false;
 			if (!asset["UUID"])     return false;
 			if (!asset["Master"])   return false;

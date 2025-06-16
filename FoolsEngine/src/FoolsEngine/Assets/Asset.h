@@ -43,28 +43,6 @@ namespace fe
 		None
 	);
 
-	//const char* AssetTypeName[AssetType::Count] = {
-	//	"TextureAsset",
-	//	"Texture2DAsset",
-	//
-	//	"ShaderAsset",
-	//	"ShadingModelAsset",
-	//	"MaterialAsset",
-	//
-	//	"MeshAsset",
-	//	"RenderMeshAsset",
-	//	"ModelAsset",
-	//
-	//	"SkeletonAsset",
-	//	"SkinnedModelAsset",
-	//	"AnimationAsset",
-	//
-	//	"SceneAsset",
-	//	"PrefabAsset",
-	//
-	//	"AudioAsset"
-	//};
-
 	class Asset
 	{
 	public:

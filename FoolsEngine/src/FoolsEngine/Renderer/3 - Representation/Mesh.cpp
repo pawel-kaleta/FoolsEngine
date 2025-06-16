@@ -112,8 +112,9 @@ namespace fe
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
 	}
 
-	void Mesh::Serialize(const AssetObserver<Mesh>& assetObserver)
+	void Mesh::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<Mesh>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
@@ -126,7 +127,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool Mesh::Deserialize(AssetID assetID)
+	bool Mesh::LoadMetadata(AssetID assetID)
 	{
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 

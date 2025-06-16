@@ -112,8 +112,10 @@ namespace fe
 		}
 	}
 
-	void Texture2D::Serialize(const AssetObserver<Texture2D>& assetObserver)
+	void Texture2D::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<Texture2D>(assetID);
+
 		YAML::Emitter emitter;
 
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
@@ -131,7 +133,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool Texture2D::Deserialize(AssetID assetID)
+	bool Texture2D::LoadMetadata(AssetID assetID)
 	{
 		auto& reg = AssetManager::GetRegistry();
 		ECS_AssetHandle ECS_handle(reg, assetID);

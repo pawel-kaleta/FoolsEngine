@@ -11,8 +11,22 @@ namespace fe
 	{
 		s_Instance->File = filepath.filename();
 		s_Instance->Directory = filepath.parent_path();
+		s_Instance->AssetsPath = s_Instance->Directory / "assets";
+
+		FE_LOG_CORE_WARN("StartScene not implemented");
 
 		Deserialize();
+	}
+
+	void Project::Create(const std::filesystem::path& filepath)
+	{
+		s_Instance->File = filepath.filename();
+		s_Instance->Directory = filepath.parent_path();
+		s_Instance->AssetsPath = s_Instance->Directory / "assets";
+
+		FE_LOG_CORE_WARN("StartScene not implemented");
+
+		Serialize();
 	}
 
 	void Project::Serialize()
@@ -20,7 +34,7 @@ namespace fe
 		auto& inst = *s_Instance;
 		YAML::Emitter emitter;
 		
-		emitter << YAML::Key << "AssetsPath" << YAML::Value << inst.AssetsPath.string();
+		//emitter << YAML::Key << "AssetsPath" << YAML::Value << inst.AssetsPath.string();
 		emitter << YAML::Key << "StartScene" << YAML::Value << inst.StartScene;
 
 		emitter << YAML::Key << "BaseAssets" << YAML::Value << YAML::BeginMap;
@@ -51,15 +65,15 @@ namespace fe
 		auto path = (inst.Directory / inst.File).string();
 		YAML::Node main_node = YAML::LoadFile(path);
 
-		const auto assets_node      = main_node["AssetsPath"];
+		//const auto assets_node      = main_node["AssetsPath"];
 		const auto start_scene_node = main_node["StartScene"];
 		const auto base_assets_node = main_node["BaseAssets"];
 
-		if (!assets_node) return false;
+		//if (!assets_node) return false;
 		if (!start_scene_node) return false;
 		if (!base_assets_node) return false;
 
-		inst.AssetsPath = main_node["AssetsPath"].as<std::string>();
+		//inst.AssetsPath = main_node["AssetsPath"].as<std::string>();
 		inst.StartScene = main_node["StartScene"].as<UUID>();
 
 		const auto textures_node       = base_assets_node["Textures"];

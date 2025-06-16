@@ -212,8 +212,9 @@ namespace fe
 		std::memcpy(dest, src, uniform.GetSize());
 	}
 
-	void Material::Serialize(const AssetObserver<Material>& assetObserver)
+	void Material::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<Material>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
@@ -260,7 +261,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool Material::Deserialize(AssetID assetID)
+	bool Material::LoadMetadata(AssetID assetID)
 	{
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 

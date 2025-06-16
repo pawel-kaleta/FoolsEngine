@@ -10,8 +10,9 @@ namespace fe
 	{
 	public:
 		static const Project& GetInstance() { return *s_Instance; }
-		
+
 		static void Load(const std::filesystem::path& filepath);
+		static void Create(const std::filesystem::path& filepath);
 
 		static void Serialize();
 		static bool Deserialize();

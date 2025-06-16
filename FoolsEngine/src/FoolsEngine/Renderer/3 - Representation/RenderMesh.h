@@ -41,8 +41,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
-		static void Serialize(const AssetObserver<RenderMesh>& assetObserver);
-		static bool Deserialize(AssetID assetID);
+		static void SaveMetadata(AssetID assetID);
+		static bool LoadMetadata(AssetID assetID);
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;

@@ -48,10 +48,10 @@ namespace fe
 
 		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
-		// this is castable to AssetObserver<tnAsset>& and AssetUser<tnAsset>&
+		// this is castable to AssetObserver<tnAsset>& and AssetUser<tnAsset>&, as all 3 are empty wrappers around AssetInterface
 		// note the refs!
 		// don't let it die as one of those (automated reference casting)
-		operator const AssetUser    <tnAsset>& () { return *this; }
-		operator const AssetObserver<tnAsset>& () { return *this; }
+		operator const AssetUser<tnAsset>& ()     { return *reinterpret_cast<AssetUser<tnAsset>*>(this); }
+		operator const AssetObserver<tnAsset>& () { return *reinterpret_cast<AssetObserver<tnAsset>*>(this); }
 	};
 }

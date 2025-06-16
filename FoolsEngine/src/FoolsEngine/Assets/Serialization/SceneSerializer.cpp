@@ -59,9 +59,6 @@ namespace fe
 	{
 		emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
 		{
-			auto name = scene.GetFilepath().filename();
-
-			emitter << YAML::Key << "Name" << YAML::Value << name.c_str();
 			emitter << YAML::Key << "UUID" << YAML::Value << scene.GetUUID();
 		}
 		emitter << YAML::EndMap; //Scene Properties
@@ -82,9 +79,16 @@ namespace fe
 			return false;
 		}
 
-		//std::string name = sceneProps["Name"].as<std::string>();
-		//if (!name.empty()) scene.SetName(name);
-		//scene.SetUUID((UUID)sceneProps["UUID"].as<uint64_t>());
+		auto uuid_node = sceneProps["UUID"];
+
+		if (uuid_node)
+		{
+			FE_CORE_ASSERT(uuid_node.as<UUID>() == scene.GetUUID(), "");
+		}
+		else
+		{
+			FE_CORE_ASSERT(false, "Missing uuid in scene file");
+		}
 
 		auto worlds = node["Worlds"];
 		if (!worlds) return false;

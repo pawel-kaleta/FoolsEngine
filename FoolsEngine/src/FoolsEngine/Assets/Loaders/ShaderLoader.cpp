@@ -64,7 +64,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto shader_core = shaderUser.GetCoreComponent();
+		auto& shader_core = shaderUser.GetCoreComponent();
 
 		if (!shader_core.ShaderSource.empty())
 			PreProcess(shaderUser);
@@ -156,7 +156,7 @@ namespace fe
 
 	void ShaderLoader::PreProcess(const AssetUser<Shader>& shaderUser)
 	{
-		auto shader_core = shaderUser.GetCoreComponent();
+		auto& shader_core = shaderUser.GetCoreComponent();
 		auto& shaderSource = shader_core.ShaderSource;
 
 		const char* typeToken = "#type";

@@ -21,7 +21,15 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		NewScene();
+		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::GetInstance().StartScene);
+		m_Scene = AssetHandle<Scene>(sceneID);
+		{
+			auto scene_user = m_Scene.Use();
+			scene_user.Initialize();
+			auto success = scene_user.Deserialize(scene_user);
+			FE_CORE_ASSERT(success, "scene loading failed");
+		}
+		SetSceneContext(m_Scene);
 	}
 
 	void EditorLayer::OnUpdate()

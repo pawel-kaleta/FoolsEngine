@@ -72,7 +72,7 @@ namespace fe
 		ShaderLoader::LoadShader("assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
 		ShaderLoader::LoadShader("assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
 
-		ShadingModel::Deserialize(BaseAssets.ShadingModels.Default.GetID());
+		ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "assets/shading_models/Default.fesm");
 
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 
@@ -84,8 +84,14 @@ namespace fe
 		BaseAssets.Textures.Default.Use().CreateGDITexture2D(GDI);
 		BaseAssets.Textures.FlatWhite.Use().CreateGDITexture2D(GDI);
 
-		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
+		{
+			auto shader_user = BaseAssets.Shaders.Base2D.Use();
+			//ShaderLoader::
+			ShaderLoader::CompileShader(GDI, shader_user);
+		}
+		{
+			ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
+		}
 	}
 
 	void Renderer::SetAPI(GDIType GDI)

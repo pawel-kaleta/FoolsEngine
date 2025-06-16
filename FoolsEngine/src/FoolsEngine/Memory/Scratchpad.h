@@ -35,7 +35,7 @@ namespace fe
 		{
 			p->~U();
 			//std::pmr::polymorphic_allocator<U> alloc(this);
-			//alloc.deallocate(p, 1); // this->do_deallocate() is no-op
+			//alloc.deallocate(p, 1); // just calls this->do_deallocate() that is no-op
 		}
 
 		virtual ~Scratchpad() final override
@@ -52,6 +52,7 @@ namespace fe
 		static uint32_t s_Count;
 
 		friend class Application;
+		static void Shutdown() {};
 		static void Init()
 		{
 			s_Free = s_Buffer;

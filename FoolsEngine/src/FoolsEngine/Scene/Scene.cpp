@@ -57,13 +57,13 @@ namespace fe
 		GetCoreComponent().GameplayWorld.release();
 	}
 
-	void Scene::Serialize(const AssetObserver<Scene>& assetObserver)
+	void SceneUser::Serialize(const AssetObserver<Scene>& assetObserver)
 	{
 		SceneSerializerYAML::SerializeToFile(assetObserver);
 	}
 
-	bool Scene::Deserialize(AssetID assetID)
+	bool SceneUser::Deserialize(const AssetUser<Scene>& assetUser)
 	{
-		return SceneSerializerYAML::DeserializeFromFile(AssetUser<Scene>(assetID));
+		return SceneSerializerYAML::DeserializeFromFile(assetUser);
 	}
 }

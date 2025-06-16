@@ -22,6 +22,8 @@
 
 namespace fe
 {
+	WindowAttributes* s_WindowAttributes = nullptr; //TO DO: get rid of this
+
 	namespace Time
 	{
 		extern TimePoint s_LastFrameTimePoint;
@@ -53,21 +55,56 @@ namespace fe
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = Window::Create(attributes);
-		m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, & m_MainEventDispacher, std::placeholders::_1));
-		m_Window->CreateRenderingContext();
+		s_WindowAttributes = new WindowAttributes;
+		*s_WindowAttributes = attributes;
+
+		
 	}
 
 	void Application::Startup()
 	{
 		FE_PROFILER_FUNC();
 
+		// Allocators
 		{
+			FE_PROFILER_SCOPE("Allocators");
 			Scratchpad::Init();
 		}
-		
+
+		// Rendering, Window and Platform Layer
 		{
-			FE_PROFILER_SCOPE("Type Registries");
+			{
+				// Platform layer
+			}
+
+			{
+				// Default:
+				//  - Graphics API
+				//  - Render Device
+				//  - Window
+				//  - Render Context
+				//  - Swapchain
+			}
+
+			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
+
+			m_Window = Window::Create(*s_WindowAttributes);
+			delete s_WindowAttributes;
+			s_WindowAttributes = nullptr;
+			m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
+			m_Window->CreateRenderingContext();
+
+			GDIType gdi = m_Window->GetGDIType();
+			Renderer::Startup();
+			Renderer::CreateAPI(gdi);
+			Renderer::InitAPI(gdi);
+			Renderer::SetAPI(gdi);
+		}
+		
+		//Types Registries
+		{
+			FE_PROFILER_SCOPE("Types Registries");
+
 			m_ComponentTypesRegistry = new ComponentTypesRegistry();
 			m_ComponentTypesRegistry->RegisterComponents();
 
@@ -76,19 +113,18 @@ namespace fe
 		
 			m_SystemsRegistry = new SystemsRegistry();
 			m_SystemsRegistry->RegisterSystems();
-		}
 
-		{
-			FE_PROFILER_SCOPE("Asset Type Registrie");
 			m_AssetTypesRegistry = new AssetTypesRegistry();
 			m_AssetTypesRegistry->RegisterAssetTypes();
 		}
 
+		// Asset manager
 		{
 			FE_PROFILER_SCOPE("Asset manager");
 			m_AssetManager = new AssetManager();
 		}
 
+		// Core layers
 		{
 			FE_PROFILER_SCOPE("Core layers");
 			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
@@ -99,29 +135,36 @@ namespace fe
 			m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 		}
 
-		{
-			FE_PROFILER_SCOPE("Rendering");
-			GDIType gdi = m_Window->GetGDIType();
-			Renderer::Startup();
-			Renderer::CreateAPI(gdi);
-			Renderer::InitAPI(gdi);
-			Renderer::SetAPI(gdi);
-		}
 
 		{
 			FE_PROFILER_SCOPE("Project");
 
-#ifdef FE_EDITOR
-			std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Project (*.feproj)\0*.feproj\0");
-#else
-			std::filesystem::path filepath = "SandboxProject.feproj";
-#endif
 			m_Project = new Project();
 			m_Project->Startup();
+			
+			// TO DO: redesign and rearchitect this filepath thing, ugh
+#ifdef FE_EDITOR
+			std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Project (*.feproj)\0*.feproj\0");
+			if (filepath.empty())
+			{
+				filepath = FileDialogs::SaveFile("", "FoolsEngine Project (*.feproj)\0*.feproj\0");
+				FE_CORE_ASSERT(filepath.empty(), "No filepath chosen");
+				Project::Create(filepath);
+			}
+			else
+			{
+				Project::Load(filepath);
+			}
+#else
+			std::filesystem::path filepath = "SandboxProject.feproj";
+			FE_CORE_ASSERT(false, "Not implemented");
 			Project::Load(filepath);
+#endif
+
 			Renderer::AcquireBaseAssets();
 
-			AssetSerializer::DeserializeRegistry(m_Project->AssetsPath);
+			auto result = AssetSerializer::DeserializeRegistry(m_Project->AssetsPath);
+			FE_CORE_ASSERT(result, "Deserialization of asset registry failed");
 			AssetSerializer::LoadMetaData();
 		}
 
@@ -178,8 +221,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		//fe::Timer timer184(std::source_location::current().function_name());
-
 		{
 			FE_PROFILER_SCOPE("Client app shutdown");
 			ClientAppShutdown();
@@ -197,14 +238,6 @@ namespace fe
 		}
 
 		{
-			FE_PROFILER_SCOPE("Core layers shutdown");
-			m_ImGuiLayer->Shutdown();
-			m_ImGuiLayer.reset();
-			m_AppLayer->Shutdown();
-			m_AppLayer.reset();
-		}
-
-		{
 			FE_PROFILER_SCOPE("Project");
 			m_Project->Shutdown();
 			//Just leting OS reclame memory
@@ -212,8 +245,11 @@ namespace fe
 		}
 
 		{
-			FE_PROFILER_SCOPE("Rendering");
-			Renderer::Shutdown();
+			FE_PROFILER_SCOPE("Core layers shutdown");
+			m_ImGuiLayer->Shutdown();
+			m_ImGuiLayer.reset();
+			m_AppLayer->Shutdown();
+			m_AppLayer.reset();
 		}
 
 		{
@@ -224,24 +260,32 @@ namespace fe
 		}
 
 		{
-			FE_PROFILER_SCOPE("Asset Types Registry");
-			m_AssetTypesRegistry->Shutdown();
-			//Just leting OS reclame memory
-			//delete m_AssetTypesRegistry;
-		}
+			FE_PROFILER_SCOPE("Types Registries");
 
-		{
-			FE_PROFILER_SCOPE("Type Registers");
+			m_AssetTypesRegistry->Shutdown();
 			m_ComponentTypesRegistry->Shutdown();
 			m_BehaviorsRegistry->Shutdown();
 			m_SystemsRegistry->Shutdown();
+
 			/*
 			Just leting OS reclame memory
 		
+			//delete m_AssetTypesRegistry;
 			delete m_ComponentTypesRegistry;
 			delete m_BehaviorsRegistry;
 			delete m_SystemsRegistry;
 			*/
+		}
+
+		{
+			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
+			Renderer::Shutdown();
+			m_Window.release();
+		}
+
+		{
+			FE_PROFILER_SCOPE("Allocators");
+			Scratchpad::Shutdown();
 		}
 	}
 

@@ -7,8 +7,9 @@
 
 namespace fe
 {
-	void Model::Serialize(const AssetObserver<Model>& assetObserver)
+	void Model::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<Model>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
@@ -24,7 +25,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool Model::Deserialize(AssetID assetID)
+	bool Model::LoadMetadata(AssetID assetID)
 	{
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 

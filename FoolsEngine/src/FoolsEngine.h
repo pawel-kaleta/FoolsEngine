@@ -9,6 +9,7 @@
 #include "FoolsEngine\Core\Application.h"
 #include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Core\Layer.h"
+#include "FoolsEngine\Core\Project.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 #include "FoolsEngine\Platform\InputCodes.h"
 #include "FoolsEngine\Platform\InputPolling.h"

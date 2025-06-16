@@ -61,11 +61,16 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModelAsset; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShadingModelCore>(assetID).Init(); }
-		static void Serialize(const AssetObserver<ShadingModel>& assetObserver);
-		static bool Deserialize(AssetID assetID);
+		static void SaveMetadata(AssetID assetID);
+		static bool LoadMetadata(AssetID assetID);
 
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;
 		using Core = ACShadingModelCore;
+
+	private:
+		friend class Renderer;
+		// used only by renderer to create base assets during startup
+		static bool DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath);
 	};
 }

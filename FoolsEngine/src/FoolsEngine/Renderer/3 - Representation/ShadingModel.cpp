@@ -98,8 +98,9 @@ namespace fe
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
 	}
 	
-	void ShadingModel::Serialize(const AssetObserver<ShadingModel>& assetObserver)
+	void ShadingModel::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<ShadingModel>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
@@ -138,11 +139,17 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool ShadingModel::Deserialize(AssetID assetID)
+	bool ShadingModel::LoadMetadata(AssetID assetID)
+	{
+		const auto& filepath = ECS_AssetHandle(AssetManager::GetRegistry(), assetID).get<ACFilepath>().Filepath;
+
+		return DeserializeFromFile(assetID, filepath);
+	}
+
+	bool ShadingModel::DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath)
 	{
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
-		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
 		auto& core = ECS_handle.get<ACShadingModelCore>();
 
 		YAML::Node node = YAML::LoadFile(filepath.string());

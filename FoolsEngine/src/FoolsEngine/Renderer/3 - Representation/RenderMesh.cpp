@@ -8,20 +8,21 @@
 
 namespace fe
 {
-	void RenderMesh::Serialize(const AssetObserver<RenderMesh>& assetObserver)
+	void RenderMesh::SaveMetadata(AssetID assetID)
 	{
+		auto assetObserver = AssetObserver<RenderMesh>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
 
-		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetObserver<Mesh    >(core.MeshID    ).GetUUID();
-		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetObserver<Material>(core.MaterialID).GetUUID();
+		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetHandle<Mesh    >(core.MeshID    , AssetLoadingPriority::LoadingPriority_None).GetUUID();
+		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetHandle<Material>(core.MaterialID, AssetLoadingPriority::LoadingPriority_None).GetUUID();
 
 		std::ofstream fout(assetObserver.GetFilepath());
 		fout << emitter.c_str();
 	}
 
-	bool RenderMesh::Deserialize(AssetID assetID)
+	bool RenderMesh::LoadMetadata(AssetID assetID)
 	{
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
