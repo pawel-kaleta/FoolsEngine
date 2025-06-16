@@ -1,49 +1,34 @@
-07:41:03:735119 | FE  | info     | Logging innitialized!
-07:41:03:735982 | App | info     | Logging innitialized!
-07:41:03:736097 | FE  | info     | /////////////////////////////////////////////////////
-07:41:03:736197 | FE  | info     | ////////////////////// STARTUP //////////////////////
-07:41:03:736293 | FE  | info     | /////////////////////////////////////////////////////
-07:41:03:736392 | App | info     | Logging level set to 0 - all.
-07:41:03:736489 | FE  | info     | Logging level set to 0 - all.
-07:41:03:736789 | FE  | info     | Profiler session 'Startup' started.
-07:41:03:737213 | FE  | info     | Initializing GLFW
-07:41:03:795177 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
-07:41:04:005076 | FE  | debug    | Setting events callbacks for window.
-07:41:04:005439 | FE  | info     | Events callbacks for Win10Window setted up.
-07:41:04:005729 | FE  | info     | Creating rendering context
-07:41:04:009128 | FE  | info     | Rendering platform info:
-07:41:04:009258 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-07:41:04:009379 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-07:41:04:009496 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-07:41:04:009623 | FE  | info     | OpenGL Rendering Context created.
-07:41:04:009785 | FE  | info     | VSync disabled.
-07:41:04:009996 | FE  | debug    | OpenGLDeviceAPI creation!
-07:41:04:010154 | FE  | info     | OpenGLDeviceAPI Initialization.
-07:41:04:013866 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-07:41:04:015636 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-07:41:04:031549 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
-07:41:06:293024 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
-07:41:06:412681 | FE  | warning  | StartScene not implemented
-07:41:06:416443 | FE  | debug    | Loading texture, AssetID: 0, Channels: 3
-07:41:06:416682 | FE  | debug    | Loading texture, AssetID: 1, Channels: 4
-07:41:06:420229 | FE  | debug    | Uploding texture to GPU, RendererID: 1
-07:41:06:420381 | FE  | debug    | Uploding texture to GPU, RendererID: 2
-07:41:06:487340 | FE  | debug    | 3
-07:41:06:490149 | FE  | debug    | 4
-07:41:06:491902 | FE  | debug    | Loading texture, AssetID: 7, Channels: 4
-07:41:06:492136 | FE  | debug    | Loading texture, AssetID: 8, Channels: 4
-07:41:06:492465 | FE  | debug    | Loading texture, AssetID: 9, Channels: 4
-07:41:06:492734 | FE  | debug    | Uploding texture to GPU, RendererID: 3
-07:41:06:493047 | FE  | debug    | Uploding texture to GPU, RendererID: 4
-07:41:06:493378 | FE  | debug    | Uploding texture to GPU, RendererID: 5
-07:41:06:494336 | FE  | debug    | Loading texture, AssetID: 10, Channels: 4
-07:41:06:494838 | FE  | debug    | Loading texture, AssetID: 11, Channels: 4
-07:41:06:494990 | FE  | debug    | Uploding texture to GPU, RendererID: 6
-07:41:06:495324 | FE  | debug    | Uploding texture to GPU, RendererID: 7
-07:41:06:496061 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-07:41:06:496172 | App | info     | EditorLayer::OnAttach()
-07:41:10:389356 | FE  | info     | Scene initialization
-07:41:10:390180 | FE  | info     | World Creation
-07:41:10:416880 | FE  | debug    | Entity Creation with UUID
-07:41:40:558273 | FE  | debug    | Entity Creation with UUID
-07:41:42:391901 | FE  | debug    | Entity Creation with UUID
+19:55:46:592552 | FE  | info     | Logging innitialized!
+19:55:46:593931 | App | info     | Logging innitialized!
+19:55:46:594687 | FE  | info     | /////////////////////////////////////////////////////
+19:55:46:596781 | FE  | info     | ////////////////////// STARTUP //////////////////////
+19:55:46:598404 | FE  | info     | /////////////////////////////////////////////////////
+19:55:46:598845 | App | info     | Logging level set to 0 - all.
+19:55:46:599157 | FE  | info     | Logging level set to 0 - all.
+19:55:46:600883 | FE  | info     | Profiler session 'Startup' started.
+19:55:46:601929 | FE  | info     | Initializing GLFW
+19:55:46:669797 | FE  | info     | Creating Window FoolsTools - FoolsEngine Editor (1920, 1080)
+19:55:47:300505 | FE  | debug    | Setting events callbacks for window.
+19:55:47:300965 | FE  | info     | Events callbacks for Win10Window setted up.
+19:55:47:301752 | FE  | info     | Creating rendering context
+19:55:47:307574 | FE  | info     | Rendering platform info:
+19:55:47:308278 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+19:55:47:308678 | FE  | info     | 	Renderer:	AMD Radeon RX 640
+19:55:47:309590 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
+19:55:47:311002 | FE  | info     | OpenGL Rendering Context created.
+19:55:47:311647 | FE  | info     | VSync disabled.
+19:55:47:312247 | FE  | debug    | OpenGLDeviceAPI creation!
+19:55:47:312624 | FE  | info     | OpenGLDeviceAPI Initialization.
+19:55:47:318590 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+19:55:47:319588 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+19:55:47:585537 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
+19:55:52:805135 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
+19:55:52:895795 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
+19:55:54:308526 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
+19:55:54:380352 | FE  | warning  | StartScene not implemented
+19:55:54:386820 | FE  | debug    | Loading texture, AssetID: 0, Channels: 3
+19:55:54:389443 | FE  | debug    | Loading texture, AssetID: 1, Channels: 4
+19:55:54:443278 | FE  | debug    | Uploding texture to GPU, RendererID: 1
+19:55:54:443995 | FE  | debug    | Uploding texture to GPU, RendererID: 2
+19:55:54:619303 | FE  | debug    | 3
+19:55:54:624232 | FE  | debug    | 4
