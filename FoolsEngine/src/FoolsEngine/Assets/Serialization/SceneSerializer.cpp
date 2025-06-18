@@ -358,8 +358,7 @@ namespace fe
 
 				for (auto actor_node : actors)
 				{
-					if (!actor_node["UUID"])
-						return false;
+					if (!actor_node["UUID"]) return false;
 
 					Actor newActor = gameplay_world->CreateActorWithUUID(actor_node["UUID"].as<UUID>());
 

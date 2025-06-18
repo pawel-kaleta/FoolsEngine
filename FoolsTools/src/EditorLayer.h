@@ -32,6 +32,7 @@ namespace fe
 		virtual void OnEvent(Ref<Events::Event> event)	override;
 
 	private:
+		friend class EditorApp;
 		AssetHandle<Scene> m_Scene;
 		std::string m_SceneBackup;
 

@@ -8,20 +8,33 @@ namespace fe
 {
 	EditorApp::EditorApp(const ApplicationSpecification& spec)
 		: Application(spec)
-	{
-		
-	}
+	{ }
 
 	void EditorApp::ClientAppStartup()
 	{
 		m_EditorLayer = CreateRef<EditorLayer>();
-		PushOuterLayer(m_EditorLayer);
 	}
 
 	void EditorApp::ClientAppShutdown()
 	{
-		PopOuterLayer(m_EditorLayer);
+		if (m_LayerAttached)
+			PopOuterLayer(m_EditorLayer);
 		m_EditorLayer.reset();
+	}
+
+	bool EditorApp::ClientAppProjectInit()
+	{
+		if (ImGui::Begin("New/Open Project"))
+		{
+
+			ImGui::End();
+		}
+		return true;
+
+		{
+			PushOuterLayer(m_EditorLayer);
+			return false;
+		}
 	}
 
 	Application* CreateApplication(const ApplicationCommandLineArgs& args)

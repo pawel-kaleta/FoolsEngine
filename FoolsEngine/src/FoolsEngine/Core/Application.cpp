@@ -132,39 +132,6 @@ namespace fe
 			m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 		}
 
-		// Project
-		{
-			FE_PROFILER_SCOPE("Project");
-
-			m_Project = new Project();
-			m_Project->Startup();
-			
-			// TO DO: redesign and rearchitect this filepath thing, ugh
-#ifdef FE_EDITOR
-			std::filesystem::path filepath = FileDialogs::OpenFile("FoolsEngine Project (*.feproj)\0*.feproj\0");
-			if (filepath.empty())
-			{
-				filepath = FileDialogs::SaveFile("", "FoolsEngine Project (*.feproj)\0*.feproj\0");
-				FE_CORE_ASSERT(filepath.empty(), "No filepath chosen");
-				Project::Create(filepath);
-			}
-			else
-			{
-				Project::Load(filepath);
-			}
-#else
-			std::filesystem::path filepath = "SandboxProject.feproj";
-			FE_CORE_ASSERT(false, "Not implemented");
-			Project::Load(filepath);
-#endif
-
-			Renderer::AcquireBaseAssets();
-
-			auto result = AssetSerializer::DeserializeRegistry(m_Project->AssetsPath);
-			FE_CORE_ASSERT(result, "Deserialization of asset registry failed");
-			AssetSerializer::LoadMetaData();
-		}
-
 		// Client Application
 		{
 			FE_PROFILER_SCOPE("Client app startup");
@@ -174,7 +141,15 @@ namespace fe
 
 	void Application::Run()
 	{
-		FE_PROFILER_FUNC();
+		m_ImGuiLayer->Begin();
+		while (ClientAppProjectInit() && m_Running)
+		{
+			m_ImGuiLayer->End();
+			m_MainEventDispacher.DispachEvents(m_LayerStack);
+			m_Window->OnUpdate();
+			m_ImGuiLayer->Begin();
+		}
+		m_ImGuiLayer->End();
 
 #ifdef FE_INTERNAL_BUILD
 		FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
@@ -233,6 +208,14 @@ namespace fe
 				}
 #endif // FE_INTERNAL_BUILD
 		}
+
+#ifdef FE_INTERNAL_BUILD
+		if (m_ActiveProfiler && !m_Running)
+		{
+			FE_PROFILER_SESSION_END();
+			m_ActiveProfiler = false;
+		}
+#endif // FE_INTERNAL_BUILD
 	}
 
 	void Application::ShutDown()
@@ -255,14 +238,6 @@ namespace fe
 			}
 
 			m_LayerStack.m_Layers.clear();
-		}
-
-		// Project
-		{
-			FE_PROFILER_SCOPE("Project");
-			m_Project->Shutdown();
-			//Just leting OS reclame memory
-			//delete m_Project;
 		}
 
 		// Core Layers
@@ -320,25 +295,43 @@ namespace fe
 		FE_PROFILER_FUNC();
 	}
 
-	void Application::ProjectNew()
+	void Application::ProjectNew(const std::filesystem::path& filepath)
 	{
-		if (m_Project)
-		{
-			m_Project->Shutdown();
-			delete m_Project;
-			m_Project = nullptr;
-		}
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_START("ProjectCreation", "Logs/ProfileData_ProjectCreation.json");
+#endif // FE_INTERNAL_BUILD
 
-		m_Project = new Project();
-		m_Project->Startup();
+		Project::Create(filepath);
+		Renderer::AcquireBaseAssets();
+
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_END();
+#endif // FE_INTERNAL_BUILD
 	}
 
-	void Application::ProjectLoad()
+	void Application::ProjectLoad(const std::filesystem::path& filepath)
 	{
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_START("ProjectLoading", "Logs/ProfileData_ProjectLoading.json");
+#endif // FE_INTERNAL_BUILD
+
+		Project::Load(filepath);
+		Renderer::AcquireBaseAssets();
+
+		auto result = AssetSerializer::DeserializeRegistry(Project::GetInstance()->AssetsPath);
+		if (result)
+			AssetSerializer::LoadMetaData();
+
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_END();
+#endif // FE_INTERNAL_BUILD
+		
+		FE_CORE_ASSERT(result, "Deserialization of asset registry failed");
 	}
 
 	void Application::ProjectSave()
 	{
+		Project::Save();
 	}
 
 	void Application::OnEvent(Ref<Events::Event> event)

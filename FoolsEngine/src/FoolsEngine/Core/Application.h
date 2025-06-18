@@ -62,14 +62,15 @@ namespace fe
 	protected:
 		virtual void ClientAppStartup() {};
 		virtual void ClientAppShutdown() {};
+		virtual bool ClientAppProjectInit() = 0;
 
 		void PushInnerLayer	(Ref<Layer> layer)	{ m_LayerStack.PushInnerLayer(layer);	}
 		void PushOuterLayer	(Ref<Layer> layer)	{ m_LayerStack.PushOuterLayer(layer);	}
 		void PopInnerLayer	(Ref<Layer> layer)	{ m_LayerStack.PopInnerLayer(layer); }
 		void PopOuterLayer	(Ref<Layer> layer)	{ m_LayerStack.PopOuterLayer(layer); }
 
-		void ProjectNew();
-		void ProjectLoad();
+		void ProjectNew(const std::filesystem::path& filepath);
+		void ProjectLoad(const std::filesystem::path& filepath);
 		void ProjectSave();
 
 		static Application& Get() { return *s_Instance; }
@@ -101,7 +102,6 @@ namespace fe
 		AssetTypesRegistry*     m_AssetTypesRegistry;
 
 		AssetManager*	m_AssetManager;
-		Project*		m_Project;
 
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;

@@ -21,7 +21,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::GetInstance().StartScene);
+		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::GetInstance()->StartScene);
 		m_Scene = AssetHandle<Scene>(sceneID);
 		{
 			auto scene_user = m_Scene.Use();

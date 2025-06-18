@@ -9,7 +9,7 @@ namespace fe
 	class Project
 	{
 	public:
-		static const Project& GetInstance() { return *s_Instance; }
+		static Project* GetInstance() { return s_Instance; }
 
 		static void Create(const std::filesystem::path& filepath);
 		static void Load(const std::filesystem::path& filepath);
@@ -47,10 +47,8 @@ namespace fe
 		// tags list? (scene component)
 
 	private:
-		friend class Application;
-		Project() { }
-		void Startup() { s_Instance = this; };
-		void Shutdown() { };
+		Project(const std::filesystem::path& filepath);
+		~Project();
 		static Project* s_Instance;
 	};
 }

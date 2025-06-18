@@ -7,8 +7,14 @@ namespace fe
 {
 	Project* Project::s_Instance = nullptr;
 
-	void Project::Create(const std::filesystem::path& filepath)
+	Project::Project(const std::filesystem::path& filepath)
 	{
+		if (s_Instance)
+		{
+			FE_CORE_ASSERT(false, "One project per app launch");
+			delete s_Instance;
+		}
+
 		s_Instance->File = filepath.filename();
 		s_Instance->Directory = filepath.parent_path();
 		s_Instance->AssetsPath = s_Instance->Directory / "assets";
@@ -16,13 +22,21 @@ namespace fe
 		FE_LOG_CORE_WARN("StartScene not implemented");
 	}
 
+	Project::~Project()
+	{
+		s_Instance = nullptr;
+	}
+
+	void Project::Create(const std::filesystem::path& filepath)
+	{
+		new Project(filepath);
+
+		Serialize();
+	}
+
 	void Project::Load(const std::filesystem::path& filepath)
 	{
-		s_Instance->File = filepath.filename();
-		s_Instance->Directory = filepath.parent_path();
-		s_Instance->AssetsPath = s_Instance->Directory / "assets";
-
-		FE_LOG_CORE_WARN("StartScene not implemented");
+		new Project(filepath);
 
 		Deserialize();
 	}

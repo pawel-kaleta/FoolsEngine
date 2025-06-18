@@ -57,7 +57,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& base_assets = Project::GetInstance().BaseAssets;
+		auto& base_assets = Project::GetInstance()->BaseAssets;
 
 		MakeHandle(BaseAssets.Textures.Default     , base_assets.Textures.Default);
 		MakeHandle(BaseAssets.Textures.FlatWhite   , base_assets.Textures.FlatWhite);
