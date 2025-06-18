@@ -6,8 +6,8 @@
 
 namespace fe
 {
-	EditorApp::EditorApp(const std::string& name)
-		: Application(name, WindowAttributes{ name, 1920, 1080, GDIType::OpenGL })
+	EditorApp::EditorApp(const ApplicationSpecification& spec)
+		: Application(spec)
 	{
 		
 	}
@@ -24,8 +24,14 @@ namespace fe
 		m_EditorLayer.reset();
 	}
 
-	Application* CreateApplication()
+	Application* CreateApplication(const ApplicationCommandLineArgs& args)
 	{
-		return new EditorApp("FoolsTools - FoolsEngine Editor");
+		ApplicationSpecification app_spec;
+
+		app_spec.CommandLineArgs = args;
+		app_spec.Name = "FoolsTools";
+		app_spec.WindowAttributes = { "FoolsTools", 1920, 1080, GDIType::OpenGL };
+
+		return new EditorApp(app_spec);
 	}
 }

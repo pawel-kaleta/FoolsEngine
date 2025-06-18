@@ -22,7 +22,7 @@
 
 namespace fe
 {
-	WindowAttributes* s_WindowAttributes = nullptr; //TO DO: get rid of this
+	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
 
 	namespace Time
 	{
@@ -47,18 +47,16 @@ namespace fe
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const std::string& name, WindowAttributes attributes)
-		: m_Name(name)
+	Application::Application(const ApplicationSpecification& appSpecification)
+		: m_Name(appSpecification.Name)
 	{
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		s_WindowAttributes = new WindowAttributes;
-		*s_WindowAttributes = attributes;
-
-		
+		s_ApplicationSpecification = new ApplicationSpecification;
+		*s_ApplicationSpecification = appSpecification;
 	}
 
 	void Application::Startup()
@@ -88,9 +86,8 @@ namespace fe
 
 			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
 
-			m_Window = Window::Create(*s_WindowAttributes);
-			delete s_WindowAttributes;
-			s_WindowAttributes = nullptr;
+			m_Window = Window::Create(s_ApplicationSpecification->WindowAttributes);
+
 			m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
 			m_Window->CreateRenderingContext();
 
@@ -101,7 +98,7 @@ namespace fe
 			Renderer::SetAPI(gdi);
 		}
 		
-		//Types Registries
+		// Types Registries
 		{
 			FE_PROFILER_SCOPE("Types Registries");
 
@@ -135,7 +132,7 @@ namespace fe
 			m_LayerStack.PushOuterLayer(m_ImGuiLayer);
 		}
 
-
+		// Project
 		{
 			FE_PROFILER_SCOPE("Project");
 
@@ -168,6 +165,7 @@ namespace fe
 			AssetSerializer::LoadMetaData();
 		}
 
+		// Client Application
 		{
 			FE_PROFILER_SCOPE("Client app startup");
 			ClientAppStartup();
@@ -201,8 +199,28 @@ namespace fe
 
 			if (!m_Minimized)
 			{
-				UpdateLayers();
-				UpdateImGui();
+				// Layers Update
+				{
+					FE_PROFILER_SCOPE("Layers Update");
+
+					for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+					{
+						(*layer_it)->OnUpdate();
+					}
+				}
+
+				// ImGUI Update
+				if (m_ImGuiLayer->m_Attached)
+				{
+					FE_PROFILER_SCOPE("ImGUI Update");
+
+					m_ImGuiLayer->Begin();
+
+					for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++)
+						(*layer_it)->OnImGuiRender();
+
+					m_ImGuiLayer->End();
+				}
 			}
 			m_Window->OnUpdate();
 
@@ -221,11 +239,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		// Client Application
 		{
 			FE_PROFILER_SCOPE("Client app shutdown");
 			ClientAppShutdown();
 		}
 
+		// Layers detaching
 		{
 			FE_PROFILER_SCOPE("layers detaching");
 			for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
@@ -237,6 +257,7 @@ namespace fe
 			m_LayerStack.m_Layers.clear();
 		}
 
+		// Project
 		{
 			FE_PROFILER_SCOPE("Project");
 			m_Project->Shutdown();
@@ -244,6 +265,7 @@ namespace fe
 			//delete m_Project;
 		}
 
+		// Core Layers
 		{
 			FE_PROFILER_SCOPE("Core layers shutdown");
 			m_ImGuiLayer->Shutdown();
@@ -252,6 +274,7 @@ namespace fe
 			m_AppLayer.reset();
 		}
 
+		// Asset manager
 		{
 			FE_PROFILER_SCOPE("Asset Manager");
 			m_AssetManager->Shutdown();
@@ -259,6 +282,7 @@ namespace fe
 			//delete m_AssetManager;
 		}
 
+		// Types Registries
 		{
 			FE_PROFILER_SCOPE("Types Registries");
 
@@ -277,12 +301,14 @@ namespace fe
 			*/
 		}
 
+		// Rendering, Window and Platform Layer
 		{
 			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
 			Renderer::Shutdown();
 			m_Window.release();
 		}
 
+		// Allocators
 		{
 			FE_PROFILER_SCOPE("Allocators");
 			Scratchpad::Shutdown();
@@ -292,6 +318,27 @@ namespace fe
 	Application::~Application()
 	{
 		FE_PROFILER_FUNC();
+	}
+
+	void Application::ProjectNew()
+	{
+		if (m_Project)
+		{
+			m_Project->Shutdown();
+			delete m_Project;
+			m_Project = nullptr;
+		}
+
+		m_Project = new Project();
+		m_Project->Startup();
+	}
+
+	void Application::ProjectLoad()
+	{
+	}
+
+	void Application::ProjectSave()
+	{
 	}
 
 	void Application::OnEvent(Ref<Events::Event> event)
@@ -350,30 +397,5 @@ namespace fe
 
 		m_Minimized = false;
 		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
-	}
-
-	void Application::UpdateLayers()
-	{
-		FE_PROFILER_FUNC();
-
-		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
-		{
-			(*layer_it)->OnUpdate();
-		}
-	}
-
-	void Application::UpdateImGui()
-	{
-		FE_PROFILER_FUNC();
-
-		if (!m_ImGuiLayer->m_Attached)
-			return;
-
-		m_ImGuiLayer->Begin();
-
-		for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++)
-			(*layer_it)->OnImGuiRender();
-
-		m_ImGuiLayer->End();
 	}
 }

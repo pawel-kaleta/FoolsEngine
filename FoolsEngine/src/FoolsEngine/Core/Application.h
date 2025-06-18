@@ -7,18 +7,37 @@
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"
 
-namespace Events
-{
-	class Event;
-	class WindowCloseEvent;
-	class KeyPressedEvent;
-	class WindowResizeEvent;
-}
-
 int main(int argc, char** argv);
-
 namespace fe
 {
+	namespace Events
+	{
+		class Event;
+		class WindowCloseEvent;
+		class KeyPressedEvent;
+		class WindowResizeEvent;
+	}
+
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			FE_CORE_ASSERT(index < Count, "ApplicationCommandLineArgs index out of scope");
+			return Args[index];
+		}
+	};
+
+	struct ApplicationSpecification
+	{
+		std::string Name = "FoolsEngine Application";
+		std::string WorkingDirectory;
+		WindowAttributes WindowAttributes;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
+
 	class ComponentTypesRegistry;
 	class BehaviorsRegistry;
 	class SystemsRegistry;
@@ -30,7 +49,7 @@ namespace fe
 	class Application
 	{
 	public:
-				 Application(const std::string& name = "Fools Engine Application", WindowAttributes attributes = WindowAttributes());
+				 Application(const ApplicationSpecification& appSpecification);
 		virtual ~Application();
 
 		static void				Close()					{ Get().m_Running = false; }
@@ -39,6 +58,7 @@ namespace fe
 		static ImGuiLayer*		GetImguiLayer()			{ return Get().m_ImGuiLayer.get(); }
 		static uint32_t			GetFrameCount()			{ return Get().m_FrameCount; }
 
+		
 	protected:
 		virtual void ClientAppStartup() {};
 		virtual void ClientAppShutdown() {};
@@ -48,7 +68,12 @@ namespace fe
 		void PopInnerLayer	(Ref<Layer> layer)	{ m_LayerStack.PopInnerLayer(layer); }
 		void PopOuterLayer	(Ref<Layer> layer)	{ m_LayerStack.PopOuterLayer(layer); }
 
+		void ProjectNew();
+		void ProjectLoad();
+		void ProjectSave();
+
 		static Application& Get() { return *s_Instance; }
+
 	private:
 		static Application* s_Instance;
 
@@ -57,8 +82,6 @@ namespace fe
 		void Run();
 		void ShutDown();
 
-		void UpdateLayers();
-		void UpdateImGui();
 		void OnEvent(Ref<Events::Event> event);
 		void OnWindowCloseEvent(Ref<Events::WindowCloseEvent> event);
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
@@ -75,7 +98,10 @@ namespace fe
 		ComponentTypesRegistry*	m_ComponentTypesRegistry;
 		BehaviorsRegistry*		m_BehaviorsRegistry;
 		SystemsRegistry*		m_SystemsRegistry;
-		Project*				m_Project;
+		AssetTypesRegistry*     m_AssetTypesRegistry;
+
+		AssetManager*	m_AssetManager;
+		Project*		m_Project;
 
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;
@@ -89,12 +115,10 @@ namespace fe
 		uint16_t	m_ProfilerFramesCount	= 0;
 #endif // FE_INTERNAL_BUILD
 
-		AssetTypesRegistry* m_AssetTypesRegistry;
-		AssetManager*       m_AssetManager;
 	};
 
 	// To be defined in FoolsEngine application (game)
-	Application* CreateApplication();
+	Application* CreateApplication(const ApplicationCommandLineArgs& args);
 
 	//namespace Time
 	//{

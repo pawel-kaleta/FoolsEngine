@@ -1,10 +1,12 @@
 #pragma once
 
+#include "FoolsEngine\Core\Application.h"
+
 #ifdef FE_PLATFORM_WINDOWS
 
 namespace fe
 {
-	extern Application* CreateApplication();
+	extern Application* CreateApplication(const ApplicationCommandLineArgs& args);
 }
 
 int main(int argc, char** argv)
@@ -19,7 +21,7 @@ int main(int argc, char** argv)
 	fe::Log::SetCoreLoggingLevel(spdlog::level::trace);
 
 	FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
-	auto app = fe::CreateApplication();
+	auto app = fe::CreateApplication({ argc, argv });
 	app->Startup();
 	FE_PROFILER_SESSION_END();
 

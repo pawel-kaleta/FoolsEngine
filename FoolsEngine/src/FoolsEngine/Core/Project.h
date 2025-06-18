@@ -11,8 +11,9 @@ namespace fe
 	public:
 		static const Project& GetInstance() { return *s_Instance; }
 
-		static void Load(const std::filesystem::path& filepath);
 		static void Create(const std::filesystem::path& filepath);
+		static void Load(const std::filesystem::path& filepath);
+		static void Save();
 
 		static void Serialize();
 		static bool Deserialize();
@@ -47,9 +48,9 @@ namespace fe
 
 	private:
 		friend class Application;
-		Project() { s_Instance = this; }
-		void Startup() {};
-		void Shutdown() {};
+		Project() { }
+		void Startup() { s_Instance = this; };
+		void Shutdown() { };
 		static Project* s_Instance;
 	};
 }

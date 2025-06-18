@@ -6,8 +6,8 @@
 class SandboxApp : public fe::Application
 {
 public:
-	SandboxApp(const std::string& name)
-		: fe::Application(name)
+	SandboxApp(const fe::ApplicationSpecification& spec)
+		: fe::Application(spec)
 	{
 		PushInnerLayer(fe::CreateScope<LayerExample>());
 	}
@@ -19,7 +19,13 @@ public:
 
 };
 
-fe::Application* fe::CreateApplication()
+fe::Application* fe::CreateApplication(const ApplicationCommandLineArgs& args)
 {
-	return new SandboxApp("Sandbox - FoolsEngine Application");
+	fe::ApplicationSpecification app_spec;
+
+	app_spec.CommandLineArgs = args;
+	app_spec.Name = "Sandbox - FoolsEngine Application";
+	app_spec.WindowAttributes = { "Sandbox - FoolsEngine Application", 1920, 1080, GDIType::OpenGL };
+
+	return new SandboxApp(app_spec);
 }

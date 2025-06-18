@@ -5,7 +5,16 @@
 
 namespace fe
 {
-	Project* Project::s_Instance;
+	Project* Project::s_Instance = nullptr;
+
+	void Project::Create(const std::filesystem::path& filepath)
+	{
+		s_Instance->File = filepath.filename();
+		s_Instance->Directory = filepath.parent_path();
+		s_Instance->AssetsPath = s_Instance->Directory / "assets";
+
+		FE_LOG_CORE_WARN("StartScene not implemented");
+	}
 
 	void Project::Load(const std::filesystem::path& filepath)
 	{
@@ -18,14 +27,8 @@ namespace fe
 		Deserialize();
 	}
 
-	void Project::Create(const std::filesystem::path& filepath)
+	void Project::Save()
 	{
-		s_Instance->File = filepath.filename();
-		s_Instance->Directory = filepath.parent_path();
-		s_Instance->AssetsPath = s_Instance->Directory / "assets";
-
-		FE_LOG_CORE_WARN("StartScene not implemented");
-
 		Serialize();
 	}
 
@@ -53,7 +56,6 @@ namespace fe
 				emitter << YAML::Key << "Default" << YAML::Value << inst.BaseAssets.Materials.Default;
 			emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
-
 
 		std::ofstream fout(inst.Directory / inst.File);
 		fout << emitter.c_str();
