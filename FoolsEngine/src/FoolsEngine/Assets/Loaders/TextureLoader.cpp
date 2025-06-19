@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "TextureLoader.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 

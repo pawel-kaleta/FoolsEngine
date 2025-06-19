@@ -14,10 +14,11 @@ namespace fe
 			FE_CORE_ASSERT(false, "One project per app launch");
 			delete s_Instance;
 		}
+		s_Instance = this;
 
-		s_Instance->File = filepath.filename();
-		s_Instance->Directory = filepath.parent_path();
-		s_Instance->AssetsPath = s_Instance->Directory / "assets";
+		File = filepath.filename();
+		Directory = filepath.parent_path();
+		AssetsPath = s_Instance->Directory / "assets";
 
 		FE_LOG_CORE_WARN("StartScene not implemented");
 	}

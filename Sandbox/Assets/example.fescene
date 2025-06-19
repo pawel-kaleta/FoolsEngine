@@ -69,7 +69,7 @@ Worlds:
                 Rotation: [-10, 0, 0]
                 Scale: [1, 1, 1]
               IsPrimary: true
-              ProjectionType: 1
+              ProjectionType: Perspective
               PerspectiveNear: 0.00999999978
               PerspectiveFar: 1000
               PerspectiveFOV: 0.785398185
@@ -147,7 +147,6 @@ Worlds:
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]
               Texture:
-                Type: 2
                 UUID: 18112934642992629188
                 Name: grass2
               Tiling: 1
@@ -173,7 +172,6 @@ Worlds:
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]
               Texture:
-                Type: 2
                 UUID: 2406470786547939043
                 Name: grass1
               Tiling: 1
@@ -199,7 +197,6 @@ Worlds:
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]
               Texture:
-                Type: 2
                 UUID: 3147587995776764887
                 Name: tree2
               Tiling: 1
@@ -225,7 +222,6 @@ Worlds:
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]
               Texture:
-                Type: 2
                 UUID: 7011469824264952867
                 Name: tree1
               Tiling: 1
@@ -251,7 +247,6 @@ Worlds:
                 Scale: [1, 1, 1]
               Color: [1, 1, 1, 1]
               Texture:
-                Type: 2
                 UUID: 16144042178780554263
                 Name: grassland
               Tiling: 1

@@ -66,7 +66,8 @@ namespace fe::AssetSerializer
 
 			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
 			AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
-			reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
+			auto& debug = reg.emplace<ACAssetType>(assetID);
+			debug.Type.FromString(asset["Type"].as<std::string>());
 			reg.emplace<ACRefsCounters>(assetID);
 		}
 

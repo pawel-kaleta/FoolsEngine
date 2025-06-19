@@ -9,6 +9,8 @@
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "AssetsRegistrySerialization.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 #include <memory_resource>
 #include <fstream>
 #include <stack>
@@ -30,7 +32,9 @@ namespace fe
 
 	bool SceneSerializerYAML::DeserializeFromFile(const AssetUser<Scene>& scene)
 	{
-		YAML::Node node = YAML::LoadFile(scene.GetFilepath().string());
+		auto filepath = Project::GetInstance()->AssetsPath;
+		filepath /= scene.GetFilepath();
+		YAML::Node node = YAML::LoadFile(filepath.string());
 		
 		if (!Deserialize(scene, node))
 			return false;

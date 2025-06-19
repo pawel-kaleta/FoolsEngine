@@ -77,6 +77,9 @@ namespace fe
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 
 		UploadBaseAssetsToGPU(Renderer::GetActiveGDItype());
+
+		Renderer2D::s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
+		Renderer2D::s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)

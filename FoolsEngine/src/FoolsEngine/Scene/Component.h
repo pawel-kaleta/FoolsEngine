@@ -78,7 +78,7 @@ namespace fe
 		CEntityName(const std::string& name)
 			: EntityName(name) {}
 
-		std::string EntityName = std::string();
+		std::string EntityName;
 
 		operator       std::string& () { return EntityName; }
 		operator const std::string& () { return EntityName; }

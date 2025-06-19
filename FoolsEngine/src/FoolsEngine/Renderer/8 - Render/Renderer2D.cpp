@@ -63,13 +63,17 @@ namespace fe
 		s_Data.QuadVertexBuffer->SetIndexBuffer(quadIB);
 		delete quadIndices;
 
-		s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
+		//s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
+		// moved to Renderer::AcquireBaseAssets()
+		// to do: fix this bad architecture
 
 		s_Data.BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Data.BaseShaderSamplers[i] = i;
 
-		s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
+		//s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
+		// moved to Renderer::AcquireBaseAssets()
+		// to do: fix this bad architecture
 	}
 
 	void Renderer2D::Shutdown()

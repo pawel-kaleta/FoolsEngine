@@ -5,7 +5,7 @@
 
 namespace fe
 {
-#define _FROM_STRING(x) if (string == #x) Value = x;
+#define _FROM_STRING(x) if (string == #x) { Value = x; return; }
 #define _TO_STRING(x) case x: return #x;
 
 #define FE_DECLARE_ENUM(name, ...)                                                                    \
@@ -38,6 +38,7 @@ struct name                                                                     
     void FromString(const std::string& string)                                                        \
     {                                                                                                 \
         FE_FOR_EACH(_FROM_STRING, __VA_ARGS__)                                                        \
+        FE_CORE_ASSERT(false, "Unrecognised string reresentation onf enum");                          \
     }                                                                                                 \
                                                                                                       \
     std::string ToString() const                                                                      \

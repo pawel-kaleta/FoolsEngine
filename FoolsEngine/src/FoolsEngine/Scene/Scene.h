@@ -36,6 +36,7 @@ namespace fe
 		ACSceneCore& GetCoreComponent() const { return Get<ACSceneCore>(); }
 		
 		void Initialize() const;
+		void InitializeNew() const;
 		void Release() const;
 
 		void SimulationUpdate() const;

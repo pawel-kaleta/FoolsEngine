@@ -196,7 +196,7 @@ namespace fe
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 
 		m_Scene = AssetHandle<Scene>(AssetManager::CreateProjectAsset<Scene>(filepath), LoadingPriority_Critical);
-		m_Scene.Use().Initialize();
+		m_Scene.Use().InitializeNew();
 
 		SetSceneContext(m_Scene);
 	}

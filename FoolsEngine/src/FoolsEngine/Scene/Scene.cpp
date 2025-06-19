@@ -15,6 +15,15 @@ namespace fe
 
 		auto& gameplay_world = GetCoreComponent().GameplayWorld;
 		gameplay_world = CreateScope<GameplayWorld>();
+	}
+
+	void SceneUser::InitializeNew() const
+	{
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Scene initialization");
+
+		auto& gameplay_world = GetCoreComponent().GameplayWorld;
+		gameplay_world = CreateScope<GameplayWorld>();
 		gameplay_world->Initialize();
 	}
 

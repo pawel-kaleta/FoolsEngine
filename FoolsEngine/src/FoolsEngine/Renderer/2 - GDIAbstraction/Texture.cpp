@@ -11,6 +11,7 @@
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine\Core\Project.h"
 
 namespace fe
 {
@@ -138,8 +139,8 @@ namespace fe
 		auto& reg = AssetManager::GetRegistry();
 		ECS_AssetHandle ECS_handle(reg, assetID);
 
-		auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
-
+		auto filepath = Project::GetInstance()->AssetsPath;
+		filepath /= ECS_handle.get<ACFilepath>().Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
 
 		auto uuid_node = node["UUID"];
