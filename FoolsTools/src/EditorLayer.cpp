@@ -30,6 +30,9 @@ namespace fe
 			FE_CORE_ASSERT(success, "scene loading failed");
 		}
 		SetSceneContext(m_Scene);
+
+		m_Panels.ContentBrowser.m_AssetsPath = Project::GetInstance()->AssetsPath;
+		m_Panels.ContentBrowser.m_CurrentPath = Project::GetInstance()->AssetsPath;
 	}
 
 	void EditorLayer::OnUpdate()
@@ -337,6 +340,7 @@ namespace fe
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
 		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_observer);
+		m_EditorState = EditorState::Play;
 	}
 
 	void EditorLayer::OnScenePlayPause()

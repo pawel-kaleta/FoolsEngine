@@ -16,9 +16,10 @@ namespace fe
 		void OnImGuiRender();
 
 	private:
+		friend class EditorLayer;
 
-		std::filesystem::path m_AssetsPath = "assets"; //TO DO: project relative
-		std::filesystem::path m_CurrentPath = "assets";
+		std::filesystem::path m_AssetsPath;
+		std::filesystem::path m_CurrentPath;
 
 		struct Settings
 		{

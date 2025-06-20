@@ -10,6 +10,8 @@ namespace fe
 {
 	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser)
 	{
+		FE_PROFILER_FUNC();
+
 		auto& data_location = textureUser.GetCoreComponent().Data;
 		if (data_location)
 			return;

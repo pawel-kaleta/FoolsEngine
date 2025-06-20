@@ -30,6 +30,8 @@ namespace fe
 
 	void Project::Create(const std::filesystem::path& filepath)
 	{
+		FE_PROFILER_FUNC();
+
 		new Project(filepath);
 
 		Serialize();
@@ -37,6 +39,8 @@ namespace fe
 
 	void Project::Load(const std::filesystem::path& filepath)
 	{
+		FE_PROFILER_FUNC();
+
 		new Project(filepath);
 
 		Deserialize();
@@ -78,6 +82,8 @@ namespace fe
 
 	bool Project::Deserialize()
 	{
+		FE_PROFILER_FUNC();
+
 		auto& inst = *s_Instance;
 		auto path = (inst.Directory / inst.File).string();
 		YAML::Node main_node = YAML::LoadFile(path);

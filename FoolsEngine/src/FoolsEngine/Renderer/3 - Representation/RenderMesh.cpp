@@ -24,6 +24,8 @@ namespace fe
 
 	bool RenderMesh::LoadMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
 		auto& filepath = ECS_handle.get<ACFilepath>().Filepath;

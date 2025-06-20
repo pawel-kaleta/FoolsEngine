@@ -159,6 +159,15 @@ namespace fe
 
 		while (m_Running)
 		{
+#ifdef FE_INTERNAL_BUILD
+			if (m_ActiveProfiler)
+				if (++m_ProfilerFramesCount >= 15)
+				{
+					FE_PROFILER_SESSION_END();
+					m_ActiveProfiler = false;
+				}
+#endif // FE_INTERNAL_BUILD
+
 			FE_PROFILER_SCOPE("FRAME");
 
 			Time::TimePoint now = Time::Now();
@@ -198,15 +207,6 @@ namespace fe
 				}
 			}
 			m_Window->OnUpdate();
-
-#ifdef FE_INTERNAL_BUILD
-			if (m_ActiveProfiler)
-				if (++m_ProfilerFramesCount >= 5)
-				{
-					FE_PROFILER_SESSION_END();
-					m_ActiveProfiler = false;
-				}
-#endif // FE_INTERNAL_BUILD
 		}
 
 #ifdef FE_INTERNAL_BUILD
@@ -319,8 +319,7 @@ namespace fe
 		Renderer::AcquireBaseAssets();
 
 		auto result = AssetSerializer::DeserializeRegistry(Project::GetInstance()->AssetsPath);
-		if (result)
-			AssetSerializer::LoadMetaData();
+		if (result)   AssetSerializer::LoadMetaData();
 
 #ifdef FE_INTERNAL_BUILD
 		FE_PROFILER_SESSION_END();

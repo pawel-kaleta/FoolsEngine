@@ -24,7 +24,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		
 		auto& core_component = GetCoreComponent();
 		auto& sm_core_component = shadingModelObserver.GetCoreComponent();
 
@@ -263,6 +262,8 @@ namespace fe
 
 	bool Material::LoadMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
 		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
@@ -291,6 +292,7 @@ namespace fe
 
 		for (auto& uniform_node : uniforms_node)
 		{
+			FE_PROFILER_SCOPE("Uniform");
 			const auto& name_node  = uniform_node["Name"];
 			const auto& type_node  = uniform_node["Type"];
 			const auto& count_node = uniform_node["Count"];
@@ -318,6 +320,7 @@ namespace fe
 
 		for (auto& texture_node : textures_node)
 		{
+			FE_PROFILER_SCOPE("Texture");
 			const auto& texture_slot_node = texture_node["Shader Texture Slot"];
 			const auto& texture_filepath_node = texture_node["Filepath"];
 			const auto& texture_UUID_node = texture_node["UUID"];

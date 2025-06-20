@@ -52,34 +52,45 @@ namespace fe::AssetSerializer
 
 	bool DeserializeRegistry(const std::filesystem::path& filepath)
 	{
+		FE_PROFILER_FUNC();
+
 		YAML::Node node = YAML::LoadFile((filepath/"AssetsRegistry.fear").string());
 		if (!node["Masters"])   return false;
 		if (!node["Internals"]) return false;
 
 		auto& reg = AssetManager::GetRegistry();
 
-		for (auto asset : node["Masters"])
 		{
-			if (!asset["Type"])     return false;
-			if (!asset["UUID"])     return false;
-			if (!asset["Filepath"]) return false;
+			FE_PROFILER_SCOPE("Masters");
+			for (auto asset : node["Masters"])
+			{
+				FE_PROFILER_SCOPE("Asset");
+				if (!asset["Type"])     return false;
+				if (!asset["UUID"])     return false;
+				if (!asset["Filepath"]) return false;
 
-			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
-			AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
-			auto& debug = reg.emplace<ACAssetType>(assetID);
-			debug.Type.FromString(asset["Type"].as<std::string>());
-			reg.emplace<ACRefsCounters>(assetID);
+				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
+				AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
+				auto& debug = reg.emplace<ACAssetType>(assetID);
+				debug.Type.FromString(asset["Type"].as<std::string>());
+				reg.emplace<ACRefsCounters>(assetID);
+			}
 		}
 
-		for (auto asset : node["Internals"])
-		{
-			if (!asset["Type"])     return false;
-			if (!asset["UUID"])     return false;
-			if (!asset["Master"])   return false;
 
-			AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
-			reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
-			reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
+		{
+			FE_PROFILER_SCOPE("Internals");
+			for (auto asset : node["Internals"])
+			{
+				FE_PROFILER_SCOPE("Asset");
+				if (!asset["Type"])     return false;
+				if (!asset["UUID"])     return false;
+				if (!asset["Master"])   return false;
+
+				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
+				reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
+				reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
+			}
 		}
 
 		return true;
@@ -87,11 +98,15 @@ namespace fe::AssetSerializer
 
 	void LoadMetaData()
 	{
+		FE_PROFILER_FUNC();
+
 		auto& reg = AssetManager::GetRegistry();
 		auto paths_view = reg.view<ACFilepath>();
 
 		for (auto assetID : paths_view)
 		{
+			FE_PROFILER_SCOPE("Asset");
+
 			auto [cfilepath] = paths_view.get(assetID);
 			auto type = reg.get<ACAssetType>(assetID).Type;
 
@@ -101,7 +116,7 @@ namespace fe::AssetSerializer
 					continue;
 
 				(*item.EmplaceCore)(assetID);
-				(*item.LoadMetadata)(assetID);
+				FE_CORE_ASSERT((*item.LoadMetadata)(assetID), "Failed to load asset metadata");
 
 				break;
 			}

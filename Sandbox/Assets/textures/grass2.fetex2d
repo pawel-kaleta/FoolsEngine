@@ -1,6 +1,7 @@
 UUID: 18112934642992629188
-Source File: assets\textures\grass2.png
-Components: 4
-Format: 4
+Source Filepath: textures\grass2.png
+Usage: Map_BaseColor
+Components: RGBA
+Format: RGBA_8
 Width: 512
 Height: 512

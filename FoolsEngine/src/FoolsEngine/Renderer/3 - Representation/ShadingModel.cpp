@@ -141,6 +141,8 @@ namespace fe
 
 	bool ShadingModel::LoadMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		const auto& filepath = ECS_AssetHandle(AssetManager::GetRegistry(), assetID).get<ACFilepath>().Filepath;
 
 		return DeserializeFromFile(assetID, filepath);
@@ -148,6 +150,8 @@ namespace fe
 
 	bool ShadingModel::DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath)
 	{
+		FE_PROFILER_FUNC();
+
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
 		auto& core = ECS_handle.get<ACShadingModelCore>();
@@ -175,6 +179,8 @@ namespace fe
 
 		for (auto& uniform_node : uniforms_node)
 		{
+			FE_PROFILER_SCOPE("Uniform");
+
 			const auto& name_node  = uniform_node["Name"];
 			const auto& type_node  = uniform_node["Type"];
 			const auto& count_node = uniform_node["Count"];

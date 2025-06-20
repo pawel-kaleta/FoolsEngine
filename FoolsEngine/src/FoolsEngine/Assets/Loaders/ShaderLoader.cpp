@@ -10,6 +10,8 @@ namespace fe
 {
 	void ShaderLoader::LoadShader(const std::filesystem::path& filePath, const AssetUser<Shader>& shaderUser)
 	{
+		FE_PROFILER_FUNC();
+
 		std::ifstream in(filePath, std::ios::in, std::ios::binary);
 
 		if (!in.good())
@@ -88,13 +90,13 @@ namespace fe
 			const GLchar* sourceCStr = (const GLchar*)source->c_str();
 			glShaderSource(shader, 1, &sourceCStr, 0);
 
+			GLint isCompiled = 0;
 			{
 				FE_PROFILER_SCOPE("OpenGL shader compilation");
 				glCompileShader(shader);
+				glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
 			}
 
-			GLint isCompiled = 0;
-			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
 			if (isCompiled == GL_FALSE)
 			{
 				GLint maxLength = 0;
@@ -118,13 +120,13 @@ namespace fe
 		for (int i = 0; i < shadersCount; i++)
 			glAttachShader(programID, shaders[i]);
 
+		GLint isLinked = 0;
 		{
 			FE_PROFILER_SCOPE("OpenGL Shader linking");
 			glLinkProgram(programID);
+			glGetProgramiv(programID, GL_LINK_STATUS, (int*)&isLinked);
 		}
 
-		GLint isLinked = 0;
-		glGetProgramiv(programID, GL_LINK_STATUS, (int*)&isLinked);
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;

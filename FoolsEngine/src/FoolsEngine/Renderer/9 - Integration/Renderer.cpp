@@ -84,17 +84,14 @@ namespace fe
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)
 	{
+		FE_PROFILER_FUNC();
+
 		BaseAssets.Textures.Default.Use().CreateGDITexture2D(GDI);
 		BaseAssets.Textures.FlatWhite.Use().CreateGDITexture2D(GDI);
 
-		{
-			auto shader_user = BaseAssets.Shaders.Base2D.Use();
-			//ShaderLoader::
-			ShaderLoader::CompileShader(GDI, shader_user);
-		}
-		{
-			ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
-		}
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base2D.Use());
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
+		
 	}
 
 	void Renderer::SetAPI(GDIType GDI)

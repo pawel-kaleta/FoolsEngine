@@ -10,7 +10,7 @@ namespace fe
 	{
 		FE_DECLARE_ENUM(Type, None, Texture2D);
 
-		FE_DECLARE_ENUM(Usage, None, RenderTarget_Depth, RenderTarget_Color, Map_Albedo, Map_Roughness, Map_Metalness, Map_Normal, Map_AO);
+		FE_DECLARE_ENUM(Usage, None, RenderTarget_Depth, RenderTarget_Color, Map_BaseColor, Map_Roughness, Map_Metalness, Map_Normal, Map_AO);
 
 		FE_DECLARE_ENUM(Components, None, R, RG, RGB, RGBA, Depth, Stencil, DepthStencil);
 

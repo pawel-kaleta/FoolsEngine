@@ -136,6 +136,8 @@ namespace fe
 
 	bool Texture2D::LoadMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		auto& reg = AssetManager::GetRegistry();
 		ECS_AssetHandle ECS_handle(reg, assetID);
 
@@ -155,20 +157,18 @@ namespace fe
 		if (!source_node) return false;
 		AssetManager::SetSourcePath(assetID, source_node.as<std::string>());
 
-		auto spec_node = node["Specification"];
-		if (!spec_node) return false;
-		if (!spec_node["Usage"]) return false;
-		if (!spec_node["Components"]) return false;
-		if (!spec_node["Format"]) return false;
-		if (!spec_node["Width"]) return false;
-		if (!spec_node["Height"]) return false;
+		if (!node["Usage"]) return false;
+		if (!node["Components"]) return false;
+		if (!node["Format"]) return false;
+		if (!node["Width"]) return false;
+		if (!node["Height"]) return false;
 
 		auto& spec = ECS_handle.get<ACTexture2DCore>().Specification;
-		spec.Usage.FromString(spec_node["Usage"].as<std::string>());
-		spec.Components.FromString(spec_node["Components"].as<std::string>());
-		spec.Format.FromString(spec_node["Format"].as<std::string>());
-		spec.Width = spec_node["Width"].as<uint32_t>();
-		spec.Height = spec_node["Height"].as<uint32_t>();
+		spec.Usage.FromString(node["Usage"].as<std::string>());
+		spec.Components.FromString(node["Components"].as<std::string>());
+		spec.Format.FromString(node["Format"].as<std::string>());
+		spec.Width = node["Width"].as<uint32_t>();
+		spec.Height = node["Height"].as<uint32_t>();
 
 		return true;
 	}

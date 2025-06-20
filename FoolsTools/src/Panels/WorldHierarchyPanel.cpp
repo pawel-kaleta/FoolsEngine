@@ -33,14 +33,6 @@ namespace fe
 		hierarchy.EnforceSafeOrder();
 		auto group = hierarchy.Group();
 
-		for (auto current = group.rbegin(); current != group.rend(); ++current)
-		{
-			FE_LOG_CORE_DEBUG("{0}", *current);
-			auto entity = Entity(*current, gameplay_world.get());
-			auto& x = entity.Get<CHeadEntity>().HeadEntity;
-			FE_LOG_CORE_DEBUG("{0}", x);
-		}
-
 		for (auto current = ++group.rbegin(); current != group.rend(); ++current) { //first entity is root
 			auto& node = group.get<CEntityNode>(*current);
 			if (node.HierarchyLvl > 1) // other levels drawn recursively

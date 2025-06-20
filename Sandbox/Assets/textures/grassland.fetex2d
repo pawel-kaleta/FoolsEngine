@@ -1,6 +1,7 @@
 UUID: 16144042178780554263
-Source File: assets\textures\grassland.jpg
-Components: 3
-Format: 3
+Source Filepath: textures\grassland.jpg
+Usage: Map_BaseColor
+Components: RGB
+Format: RGB_8
 Width: 4500
 Height: 4500

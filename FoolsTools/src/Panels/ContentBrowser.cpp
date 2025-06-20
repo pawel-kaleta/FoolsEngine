@@ -54,7 +54,15 @@ namespace fe
 		
 		ImGui::Checkbox("Display Files", &(m_Settings.DisplayFiles));
 
-		RenderFolderNode(std::filesystem::directory_entry(m_AssetsPath));
+		for (auto& p : std::filesystem::directory_iterator(m_AssetsPath))
+		{
+			if (!p.is_directory())
+				continue;
+
+			RenderFolderNode(p);
+		}
+
+		//RenderFolderNode(std::filesystem::directory_entry(m_AssetsPath));
 		ImGui::EndChild();
 	}
 

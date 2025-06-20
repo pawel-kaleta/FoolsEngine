@@ -129,6 +129,8 @@ namespace fe
 
 	bool Mesh::LoadMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
 		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
