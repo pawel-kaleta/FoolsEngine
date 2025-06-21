@@ -51,8 +51,6 @@ namespace fe
 		{
 			FE_PROFILER_FUNC();
 
-			FE_LOG_CORE_DEBUG("Behavior Update Unregister");
-
 			Actor(m_HeadEntity).RemoveUpdateEnroll<stage>(this);
 		}
 

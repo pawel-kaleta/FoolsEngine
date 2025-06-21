@@ -40,8 +40,6 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        FE_LOG_CORE_DEBUG("Behavior Update Register");
-
         void (Behavior:: * onUpdateFuncPtr)() = nullptr;
 
 #define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) onUpdateFuncPtr = &Behavior::OnUpdate_##x;

@@ -375,6 +375,7 @@
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -588,5 +589,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp" />
   </ItemGroup>
 </Project>

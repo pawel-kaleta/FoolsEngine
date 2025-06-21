@@ -39,18 +39,18 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		
 	}
 
 	void Renderer::Shutdown()
 	{
+		FE_PROFILER_FUNC();
 		Renderer2D::Shutdown();
 	}
 
 	template <typename tnAsset>
 	void MakeHandle(AssetHandle<tnAsset>& hande, const UUID& uuid)
 	{
-		hande = AssetHandle<tnAsset>(AssetManager::CreateBaseAsset<tnAsset>(uuid), AssetLoadingPriority::LoadingPriority_None);
+		hande = AssetHandle<tnAsset>(AssetManager::AssetCreation::BaseAsset<tnAsset>(uuid), AssetLoadingPriority::LoadingPriority_None);
 	}
 
 	void Renderer::AcquireBaseAssets()
@@ -66,13 +66,13 @@ namespace fe
 		MakeHandle(BaseAssets.ShadingModels.Default, base_assets.ShadingModels.Default);
 		MakeHandle(BaseAssets.Materials.Default    , base_assets.Materials.Default);
 
-		TextureLoader::LoadTexture("assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
-		TextureLoader::LoadTexture("assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
+		TextureLoader::LoadTexture("base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
+		TextureLoader::LoadTexture("base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
 
-		ShaderLoader::LoadShader("assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::LoadShader("assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
+		ShaderLoader::LoadShader("base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
+		ShaderLoader::LoadShader("base_assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
 
-		ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "assets/shading_models/Default.fesm");
+		ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "base_assets/shading_models/Default.fesm");
 
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 

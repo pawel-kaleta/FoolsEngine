@@ -20,8 +20,6 @@ namespace fe
 		template <typename tnBehavior>
 		tnBehavior* CreateBehavior()
 		{
-			FE_PROFILER_FUNC();
-			FE_LOG_CORE_DEBUG("Behavior creation");
 			static_assert(std::is_base_of_v<Behavior, tnBehavior>, "This is not a behavior!");
 
 			tnBehavior* behavior = new tnBehavior();

@@ -89,8 +89,6 @@ namespace fe
 		inst.m_SourceFileRegistry[sourcePath].push_back(assetID);
 	}
 
-
-
 	void AssetManager::EvaluateAndReload()
 	{
 		FE_PROFILER_FUNC();
@@ -102,8 +100,11 @@ namespace fe
 
 		for (auto id : view)
 		{
-			auto& ref_counters = view.get<ACRefsCounters>(id);
 			auto type = reg.get<ACAssetType>(id).Type;
+
+			FE_PROFILER_SCOPE(type.ToConstCharPtr());
+
+			auto& ref_counters = view.get<ACRefsCounters>(id);
 
 			switch (type.Value)
 			{

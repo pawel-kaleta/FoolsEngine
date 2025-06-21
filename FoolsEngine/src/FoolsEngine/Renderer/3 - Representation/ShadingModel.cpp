@@ -100,6 +100,8 @@ namespace fe
 	
 	void ShadingModel::SaveMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		auto assetObserver = AssetObserver<ShadingModel>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
@@ -156,7 +158,12 @@ namespace fe
 
 		auto& core = ECS_handle.get<ACShadingModelCore>();
 
-		YAML::Node node = YAML::LoadFile(filepath.string());
+		YAML::Node node;
+		
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(filepath.string());
+		}
 
 		const auto& shader_node        = node["Shader"];
 		const auto& data_size_node     = node["Uniforms Data Size"];
@@ -208,9 +215,12 @@ namespace fe
 			}
 		}
 
-		for (const auto& texture_slot_node : texture_slots_node)
 		{
-			core.TextureSlots.emplace_back(texture_slot_node.as<std::string>(), TextureData::Type::Texture2D);
+			FE_PROFILER_SCOPE("Texture Slots");
+			for (const auto& texture_slot_node : texture_slots_node)
+			{
+				core.TextureSlots.emplace_back(texture_slot_node.as<std::string>(), TextureData::Type::Texture2D);
+			}
 		}
 
 		return true;

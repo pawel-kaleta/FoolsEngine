@@ -9,6 +9,8 @@ namespace fe
 
 	Project::Project(const std::filesystem::path& filepath)
 	{
+		FE_PROFILER_FUNC();
+
 		if (s_Instance)
 		{
 			FE_CORE_ASSERT(false, "One project per app launch");
@@ -86,7 +88,12 @@ namespace fe
 
 		auto& inst = *s_Instance;
 		auto path = (inst.Directory / inst.File).string();
-		YAML::Node main_node = YAML::LoadFile(path);
+		YAML::Node main_node;
+		
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			main_node = YAML::LoadFile(path);
+		}
 
 		//const auto assets_node      = main_node["AssetsPath"];
 		const auto start_scene_node = main_node["StartScene"];

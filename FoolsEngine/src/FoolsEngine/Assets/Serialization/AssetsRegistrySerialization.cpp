@@ -54,7 +54,13 @@ namespace fe::AssetSerializer
 	{
 		FE_PROFILER_FUNC();
 
-		YAML::Node node = YAML::LoadFile((filepath/"AssetsRegistry.fear").string());
+		YAML::Node node;
+		
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile((filepath / "AssetsRegistry.fear").string());
+		}
+
 		if (!node["Masters"])   return false;
 		if (!node["Internals"]) return false;
 

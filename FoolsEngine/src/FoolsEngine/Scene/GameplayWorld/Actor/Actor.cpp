@@ -64,8 +64,6 @@ namespace fe
 	template<SimulationStage::ValueType stage>
 	void Actor::EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 	{
-		FE_LOG_CORE_DEBUG("Actor: behavior EnrollForUpdate");
-
 		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
 		if (updateEnrolls.size() == 0)
 		{

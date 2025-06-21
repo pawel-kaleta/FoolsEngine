@@ -52,6 +52,8 @@ namespace fe
 
 	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& specification)
 	{
+		FE_PROFILER_FUNC();
+
 		m_Format = FormatToGlFormat(specification.Format);
 		m_InternalFormat = FormatToGLinternalFormat(specification.Format);
 
@@ -67,27 +69,35 @@ namespace fe
 
 	OpenGLTexture2D::OpenGLTexture2D(const TextureData::Specification& spec, const void* data)
 	{
+		FE_PROFILER_FUNC();
+
 		FE_CORE_ASSERT(data, "No texture data");
 
 		m_Format = FormatToGlFormat(spec.Format);
 		m_InternalFormat = FormatToGLinternalFormat(spec.Format);
 
-		glGenTextures(1, &m_ID);
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		{
+			FE_PROFILER_SCOPE("GPU Texture Creation");
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glGenTextures(1, &m_ID);
+			glBindTexture(GL_TEXTURE_2D, m_ID);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, spec.Width, spec.Height, 0, m_Format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		}
 
-		FE_LOG_CORE_DEBUG("Uploding texture to GPU, RendererID: {0}", m_ID);
+		{
+			FE_PROFILER_SCOPE("GPU Texture Upload");
+			glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, spec.Width, spec.Height, 0, m_Format, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		FE_PROFILER_FUNC();
 		if(m_ID)
 		{
 			auto x = m_ID;
@@ -98,11 +108,13 @@ namespace fe
 
 	void OpenGLTexture2D::SendDataToGPU(void* data, const TextureData::Specification& spec)
 	{
+		FE_PROFILER_FUNC();
 		glTextureSubImage2D(m_ID, 0, 0, 0, spec.Width, spec.Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
 
 	void OpenGLTexture2D::Bind(RenderTextureSlotID slotID) const
 	{
+		FE_PROFILER_FUNC();
 		glBindTextureUnit(slotID, m_ID);
 	}
 }

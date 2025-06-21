@@ -44,24 +44,33 @@ namespace fe
 		});
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
-		QuadsIndexBufferData* quadIndices = new QuadsIndexBufferData();
-		uint32_t offset = 0;
-		for (auto indicesPtr = quadIndices->begin(); indicesPtr != quadIndices->end(); )
+		QuadsIndexBufferData* quadIndices;
 		{
-			*(indicesPtr++) = offset + 0;
-			*(indicesPtr++) = offset + 1;
-			*(indicesPtr++) = offset + 2;
-
-			*(indicesPtr++) = offset + 2;
-			*(indicesPtr++) = offset + 3;
-			*(indicesPtr++) = offset + 0;
-
-			offset += 4;
+			FE_PROFILER_SCOPE("QuadsIndexBufferData allocation");
+			quadIndices = new QuadsIndexBufferData();
+		}
+		{
+			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");
+						
+			size_t quad_count = quadIndices->size() / 6;
+			for (size_t i = 0; i < quad_count; i++)
+			{
+				(*quadIndices)[i * 6 + 0] = i * 4 + 0;
+				(*quadIndices)[i * 6 + 1] = i * 4 + 1;
+				(*quadIndices)[i * 6 + 2] = i * 4 + 2;
+			
+				(*quadIndices)[i * 6 + 3] = i * 4 + 2;
+				(*quadIndices)[i * 6 + 4] = i * 4 + 3;
+				(*quadIndices)[i * 6 + 5] = i * 4 + 0;
+			}
 		}
 
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices->data(), ConstLimits::MaxIndices);
 		s_Data.QuadVertexBuffer->SetIndexBuffer(quadIB);
-		delete quadIndices;
+		{
+			FE_PROFILER_SCOPE("QuadsIndexBufferData deallocation");
+			delete quadIndices;
+		}
 
 		//s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
@@ -78,6 +87,7 @@ namespace fe
 
 	void Renderer2D::Shutdown()
 	{
+		FE_PROFILER_FUNC();
 		delete &s_Data;
 	}
 

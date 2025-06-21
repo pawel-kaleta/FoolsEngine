@@ -78,7 +78,6 @@ namespace fe
 	Actor GameplayWorld::CreateActorWithUUID(UUID uuid)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_DEBUG("Actor Creation with UUID");
 
 		Entity ent = CreateOrGetEntityWithUUID(uuid);
 

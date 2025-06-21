@@ -151,8 +151,6 @@ namespace fe
 			glDeleteShader(shaders[i]);
 		}
 
-		FE_LOG_CORE_DEBUG("{0}", programID);
-
 		shaderUser.CreateGDIShader<OpenGLShader>(programID);
 	}
 

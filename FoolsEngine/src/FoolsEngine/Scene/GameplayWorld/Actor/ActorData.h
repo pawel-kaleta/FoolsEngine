@@ -14,9 +14,7 @@ namespace fe
 		CActorData() = delete;
 		CActorData(EntityID entityID)
 			: m_ID(entityID)
-		{
-			FE_LOG_CORE_DEBUG("CActorData construction");
-		};
+		{ };
 		CActorData& operator=(CActorData&& other)
 		{
 			m_Behaviors = std::move(other.m_Behaviors);

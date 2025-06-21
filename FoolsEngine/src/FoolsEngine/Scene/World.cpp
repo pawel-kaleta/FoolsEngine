@@ -28,7 +28,6 @@ namespace fe
 	BaseEntity World::CreateEntityWithUUID(UUID uuid)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_DEBUG("Entity Creation with UUID");
 
 		BaseEntity entity(m_Registry.create(), this);
 

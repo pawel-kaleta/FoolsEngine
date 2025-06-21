@@ -17,7 +17,7 @@ namespace fe
 		const GLchar* message,
 		const void* userParam)
 	{
-		static std::map<GLenum, const GLchar*> Sources =
+		const static std::map<GLenum, const GLchar*> Sources =
 		{
 			{GL_DEBUG_SOURCE_API, "API"},
 			{GL_DEBUG_SOURCE_WINDOW_SYSTEM, "WINDOW_SYSTEM"},
@@ -27,7 +27,7 @@ namespace fe
 			{GL_DEBUG_SOURCE_OTHER, "OTHER"}
 		};
 
-		static std::map<GLenum, const GLchar*> Types =
+		const static std::map<GLenum, const GLchar*> Types =
 		{
 			{GL_DEBUG_TYPE_ERROR, "ERROR"},
 			{GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR, "DEPRECATED_BEHAVIOR"},
@@ -49,7 +49,7 @@ namespace fe
 		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(logMessage);  break;
 		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(logMessage); break;
 		}
-		FE_LOG_CORE_DEBUG("Source: {0}, Type: {1}, ID: {2}", Sources[source], Types[type], id);
+		FE_LOG_CORE_DEBUG("Source: {0}, Type: {1}, ID: {2}", Sources.at(source), Types.at(type), id);
 
 		FE_ASSERTION_BREAK();
 	}
@@ -66,27 +66,38 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(m_ID != NullRenderingContextID && m_Type != GDIType::None && m_Window, "");
+		{
+			FE_PROFILER_SCOPE("glfwMakeContextCurrent");
+			glfwMakeContextCurrent(Window());
+		}
 
-		glfwMakeContextCurrent(Window());
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
+		{
+			FE_PROFILER_SCOPE("gladLoadGLLoader");
+			int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
+		}
 
-		FE_LOG_CORE_INFO("Rendering platform info:");
-		FE_LOG_CORE_INFO("	Vendor:		{0}", (const char*)glGetString(GL_VENDOR));
-		FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
-		FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
-		//GL_PROF
-
-		FE_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Minimal required OpenGL version is 4.5!");
+		{
+			FE_PROFILER_SCOPE("OpenGL platform info");
+			FE_LOG_CORE_INFO("Rendering platform info:");
+			FE_LOG_CORE_INFO("	Vendor:		{0}", (const char*)glGetString(GL_VENDOR));
+			FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
+			FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
+		
+			FE_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Minimal required OpenGL version is 4.5!");
+		}
 
 #ifdef FE_INTERNAL_BUILD
-		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
-		glEnable(GL_DEBUG_OUTPUT);
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_TRUE); 
+		{
+			FE_PROFILER_SCOPE("OpenGL debug setup");
+			glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+			glEnable(GL_DEBUG_OUTPUT);
+			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_TRUE);
+		}
 #endif // FE_INTERNAL_BUILD
 
-		FE_LOG_CORE_INFO("OpenGL Rendering Context created.");
+		FE_LOG_CORE_INFO("OpenGL Rendering Context created");
 	}
 
 	void OpenGLRenderingContext::SwapBuffers()

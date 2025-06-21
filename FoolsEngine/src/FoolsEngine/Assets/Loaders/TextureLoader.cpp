@@ -22,32 +22,40 @@ namespace fe
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
 		stbi_set_flip_vertically_on_load(1);
-
-		stbi_uc* data = stbi_load(sourceFilePath.string().c_str(), &width, &height, &channels, 0);
-
-		data_location = data;
-
-		FE_LOG_CORE_DEBUG("Loading texture, AssetID: {0}, Channels: {1}", textureUser.GetID(), channels);
-		FE_CORE_ASSERT(data, "Failed to load image!");
-		spec.Width = width;
-		spec.Height = height;
-
-		switch (channels)
+		stbi_uc* data;
 		{
-		case 1:
-			spec.Components = TextureData::Components::R;
-			spec.Format = TextureData::Format::R_8;
-			return;
-		case 3:
-			spec.Components = TextureData::Components::RGB;
-			spec.Format = TextureData::Format::RGB_8;
-			return;
-		case 4:
-			spec.Components = TextureData::Components::RGBA;
-			spec.Format = TextureData::Format::RGBA_8;
-			return;
-		default:
-			FE_CORE_ASSERT(false, "Unimplemented texture format");
+			std::string filename = "stbi_load - " + sourceFilePath.filename().string();
+			FE_PROFILER_SCOPE(filename.c_str());
+			std::string file_path = sourceFilePath.string();
+			data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+		}
+
+		{
+			FE_PROFILER_SCOPE("Specification Init");
+
+			data_location = data;
+
+			FE_CORE_ASSERT(data, "Failed to load image!");
+			spec.Width = width;
+			spec.Height = height;
+
+			switch (channels)
+			{
+			case 1:
+				spec.Components = TextureData::Components::R;
+				spec.Format = TextureData::Format::R_8;
+				return;
+			case 3:
+				spec.Components = TextureData::Components::RGB;
+				spec.Format = TextureData::Format::RGB_8;
+				return;
+			case 4:
+				spec.Components = TextureData::Components::RGBA;
+				spec.Format = TextureData::Format::RGBA_8;
+				return;
+			default:
+				FE_CORE_ASSERT(false, "Unimplemented texture format");
+			}
 		}
 	}
 

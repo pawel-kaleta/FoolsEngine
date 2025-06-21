@@ -32,6 +32,10 @@ namespace fe
 
 	bool SceneSerializerYAML::DeserializeFromFile(const AssetUser<Scene>& scene)
 	{
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_START("SceneLoading", "Logs/ProfileData_SceneLoading.json");
+#endif // FE_INTERNAL_BUILD
+
 		auto filepath = Project::GetInstance()->AssetsPath;
 		filepath /= scene.GetFilepath();
 		YAML::Node node = YAML::LoadFile(filepath.string());
@@ -39,6 +43,11 @@ namespace fe
 		if (!Deserialize(scene, node))
 			return false;
 		AssetManager::EvaluateAndReload();
+
+#ifdef FE_INTERNAL_BUILD
+		FE_PROFILER_SESSION_END();
+#endif // FE_INTERNAL_BUILD
+
 		return true;
 	}
 
@@ -295,6 +304,8 @@ namespace fe
 
 	bool SceneSerializerYAML::Deserialize(const AssetUser<Scene>& scene, YAML::Node& node)
 	{
+		FE_PROFILER_FUNC();
+
 		// Scene Properties
 		{
 			auto sceneProps = node["Scene Properties"];
@@ -322,6 +333,8 @@ namespace fe
 
 		// Gameplay World
 		{
+			FE_PROFILER_SCOPE("Gameplay World");
+
 			auto gameplay_world_node = worlds["GameplayWorld"];
 			if (!gameplay_world_node) return false;
 			auto gameplay_world = scene.GetCoreComponent().GameplayWorld.get();
@@ -352,6 +365,8 @@ namespace fe
 
 			// Actors
 			{
+				FE_PROFILER_SCOPE("Actors");
+
 				auto actors = gameplay_world_node["Actors"];
 				if (!actors) return false;
 
@@ -362,6 +377,11 @@ namespace fe
 
 				for (auto actor_node : actors)
 				{
+					if (!actor_node["Actor"]) return false;
+
+					std::string actor_name = actor_node["Actor"].as<std::string>();
+					FE_PROFILER_SCOPE(actor_name.c_str());
+
 					if (!actor_node["UUID"]) return false;
 
 					Actor newActor = gameplay_world->CreateActorWithUUID(actor_node["UUID"].as<UUID>());
@@ -438,7 +458,6 @@ namespace fe
 							auto* item = BehaviorsRegistry::GetItemFromName(behaviorType);
 							if (!item)
 							{
-								//FE_CORE_ASSERT(false, "Deserialization failed");
 								FE_LOG_CORE_ERROR("Deserialization of {0} failed", behaviorType);
 								continue;
 							}
@@ -465,6 +484,8 @@ namespace fe
 
 			// Systems
 			{
+				FE_PROFILER_SCOPE("Systems");
+
 				auto systems = gameplay_world_node["Systems"];
 				if (!systems) return false;
 

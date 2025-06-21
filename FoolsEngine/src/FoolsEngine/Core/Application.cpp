@@ -40,7 +40,7 @@ namespace fe
 
 		void OnEvent(Ref<Events::Event> event) override { m_Callback(event); };
 
-		void Shutdown() { }
+		void Shutdown() { FE_PROFILER_FUNC(); }
 	private:
 		std::function<void(Ref<Events::Event>)> m_Callback;
 	};
@@ -121,15 +121,21 @@ namespace fe
 			m_AssetManager = new AssetManager();
 		}
 
+		// Layers Stack
+		{
+			FE_PROFILER_SCOPE("Layer Stack");
+			m_LayerStack = new LayerStack();
+		}
+
 		// Core layers
 		{
 			FE_PROFILER_SCOPE("Core layers");
 			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-			m_LayerStack.PushOuterLayer(m_AppLayer);
+			m_LayerStack->PushOuterLayer(m_AppLayer);
 
 			m_ImGuiLayer = CreateRef<ImGuiLayer>();
 			m_ImGuiLayer->Startup();
-			m_LayerStack.PushOuterLayer(m_ImGuiLayer);
+			m_LayerStack->PushOuterLayer(m_ImGuiLayer);
 		}
 
 		// Client Application
@@ -145,7 +151,7 @@ namespace fe
 		while (ClientAppProjectInit() && m_Running)
 		{
 			m_ImGuiLayer->End();
-			m_MainEventDispacher.DispachEvents(m_LayerStack);
+			m_MainEventDispacher.DispachEvents(*m_LayerStack);
 			m_Window->OnUpdate();
 			m_ImGuiLayer->Begin();
 		}
@@ -179,7 +185,7 @@ namespace fe
 
 			m_FrameCount++;
 
-			m_MainEventDispacher.DispachEvents(m_LayerStack);
+			m_MainEventDispacher.DispachEvents(*m_LayerStack);
 
 			if (!m_Minimized)
 			{
@@ -187,7 +193,7 @@ namespace fe
 				{
 					FE_PROFILER_SCOPE("Layers Update");
 
-					for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+					for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 					{
 						(*layer_it)->OnUpdate();
 					}
@@ -200,7 +206,7 @@ namespace fe
 
 					m_ImGuiLayer->Begin();
 
-					for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++)
+					for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++)
 						(*layer_it)->OnImGuiRender();
 
 					m_ImGuiLayer->End();
@@ -231,13 +237,13 @@ namespace fe
 		// Layers detaching
 		{
 			FE_PROFILER_SCOPE("layers detaching");
-			for (auto layer_it = m_LayerStack.begin(); layer_it != m_LayerStack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+			for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 			{
 				(*layer_it)->OnDetach();
 				(*layer_it).reset();
 			}
 
-			m_LayerStack.m_Layers.clear();
+			m_LayerStack->m_Layers.clear();
 		}
 
 		// Core Layers
@@ -249,10 +255,16 @@ namespace fe
 			m_AppLayer.reset();
 		}
 
+		// Layer Stack
+		{
+			FE_PROFILER_SCOPE("Layer Stack");
+			//Just leting OS reclame memory
+			//delete m_LayerStack;
+		}
+
 		// Asset manager
 		{
 			FE_PROFILER_SCOPE("Asset Manager");
-			m_AssetManager->Shutdown();
 			//Just leting OS reclame memory
 			//delete m_AssetManager;
 		}

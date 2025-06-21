@@ -17,6 +17,8 @@ namespace fe
 {
 	void Texture2DUser::SendDataToGPU(GDIType GDI, void* data) const
 	{
+		FE_PROFILER_FUNC();
+
 		switch (GDI.Value)
 		{
 		case GDIType::None:
@@ -49,6 +51,8 @@ namespace fe
 
 	void Texture2DUser::UnloadFromCPU() const
 	{
+		FE_PROFILER_FUNC();
+
 		auto& dataPtr = Get<ACTexture2DCore>().Data;
 		if (dataPtr)
 		{
@@ -76,12 +80,15 @@ namespace fe
 
 	void Texture2DUser::CreateGDITexture2D(GDIType gdi) const
 	{
+		FE_PROFILER_FUNC();
 		auto& data = Get<ACTexture2DCore>();
 		CreateGDITexture2D(gdi, data.Specification, data.Data);
 	}
 
 	void Texture2DUser::CreateGDITexture2D(GDIType gdi, const TextureData::Specification& spec, const void* data) const
 	{
+		FE_PROFILER_FUNC();
+
 		switch (gdi.Value)
 		{
 		case GDIType::None:
@@ -96,6 +103,8 @@ namespace fe
 
 	void Texture2DUser::Release() const
 	{
+		FE_PROFILER_FUNC();
+
 		auto gdi = Renderer::GetActiveGDItype();
 		switch (gdi.Value)
 		{
@@ -115,6 +124,8 @@ namespace fe
 
 	void Texture2D::SaveMetadata(AssetID assetID)
 	{
+		FE_PROFILER_FUNC();
+
 		auto assetObserver = AssetObserver<Texture2D>(assetID);
 
 		YAML::Emitter emitter;

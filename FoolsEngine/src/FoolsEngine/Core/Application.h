@@ -33,7 +33,6 @@ namespace fe
 	struct ApplicationSpecification
 	{
 		std::string Name = "FoolsEngine Application";
-		std::string WorkingDirectory;
 		WindowAttributes WindowAttributes;
 		ApplicationCommandLineArgs CommandLineArgs;
 	};
@@ -52,11 +51,10 @@ namespace fe
 				 Application(const ApplicationSpecification& appSpecification);
 		virtual ~Application();
 
-		static void				Close()					{ Get().m_Running = false; }
-		static Window&			GetWindow()				{ return *(Get().m_Window); }
-		//static Time::TimeStep	GetLastFrameTimeStep()	{ return Get().m_LastFrameTimeStep; }
-		static ImGuiLayer*		GetImguiLayer()			{ return Get().m_ImGuiLayer.get(); }
-		static uint32_t			GetFrameCount()			{ return Get().m_FrameCount; }
+		static void			Close()			{ Get().m_Running = false; }
+		static Window&		GetWindow()		{ return *(Get().m_Window); }
+		static ImGuiLayer*	GetImguiLayer()	{ return Get().m_ImGuiLayer.get(); }
+		static uint32_t		GetFrameCount()	{ return Get().m_FrameCount; }
 
 		
 	protected:
@@ -64,10 +62,10 @@ namespace fe
 		virtual void ClientAppShutdown() {};
 		virtual bool ClientAppProjectInit() = 0;
 
-		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack.PushInnerLayer(layer);	}
-		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack.PushOuterLayer(layer); }
-		void PopInnerLayer(Ref<Layer> layer)  { m_LayerStack.PopInnerLayer(layer); }
-		void PopOuterLayer(Ref<Layer> layer)  { m_LayerStack.PopOuterLayer(layer); }
+		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack->PushInnerLayer(layer);	}
+		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack->PushOuterLayer(layer); }
+		void PopInnerLayer(Ref<Layer> layer)  { m_LayerStack->PopInnerLayer(layer); }
+		void PopOuterLayer(Ref<Layer> layer)  { m_LayerStack->PopOuterLayer(layer); }
 
 		void ProjectNew(const std::filesystem::path& filepath);
 		void ProjectLoad(const std::filesystem::path& filepath);
@@ -90,25 +88,22 @@ namespace fe
 
 		std::string			m_Name;
 		MainEventDispacher	m_MainEventDispacher;
-		LayerStack			m_LayerStack;
+		LayerStack*			m_LayerStack = nullptr;
 
 		Scope<Window>			m_Window;
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
 
-		ComponentTypesRegistry*	m_ComponentTypesRegistry;
-		BehaviorsRegistry*		m_BehaviorsRegistry;
-		SystemsRegistry*		m_SystemsRegistry;
-		AssetTypesRegistry*     m_AssetTypesRegistry;
+		ComponentTypesRegistry*	m_ComponentTypesRegistry = nullptr;
+		BehaviorsRegistry*		m_BehaviorsRegistry = nullptr;
+		SystemsRegistry*		m_SystemsRegistry = nullptr;
+		AssetTypesRegistry*		m_AssetTypesRegistry = nullptr;
 
-		AssetManager*	m_AssetManager;
+		AssetManager* m_AssetManager = nullptr;
 
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;
 		uint32_t	m_FrameCount	= 1;
-
-		//Time::TimePoint	m_LastFrameTimePoint;
-		//Time::TimeStep	m_LastFrameTimeStep;
 
 #ifdef FE_INTERNAL_BUILD
 		bool		m_ActiveProfiler		= false;
@@ -119,9 +114,4 @@ namespace fe
 
 	// To be defined in FoolsEngine application (game)
 	Application* CreateApplication(const ApplicationCommandLineArgs& args);
-
-	//namespace Time
-	//{
-	//	extern inline float DeltaTime() { return Application::GetLastFrameTimeStep().GetSeconds(); }
-	//}
 }

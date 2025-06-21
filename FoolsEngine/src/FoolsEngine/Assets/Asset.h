@@ -18,7 +18,7 @@ namespace fe
 	using ECS_AssetHandle = entt::basic_handle<AssetRegistry>;
 	using Const_ECS_AssetHandle = entt::basic_handle<const AssetRegistry>;
 
-	FE_DECLARE_ENUM(AssetType,	
+	FE_DECLARE_ENUM(AssetType,
 		TextureAsset,
 		Texture2DAsset,
 

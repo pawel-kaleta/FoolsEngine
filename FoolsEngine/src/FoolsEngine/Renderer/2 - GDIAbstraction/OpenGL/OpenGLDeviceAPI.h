@@ -9,7 +9,7 @@ namespace fe
 	class OpenGLDeviceAPI : public DeviceAPI
 	{
 	public:
-		OpenGLDeviceAPI() { FE_LOG_CORE_DEBUG("OpenGLDeviceAPI creation!"); };
+		OpenGLDeviceAPI() { FE_LOG_CORE_INFO("OpenGLDeviceAPI creation!"); };
 		virtual void Init() override;
 
 		virtual void SetClearColor(const glm::vec4& color) override;

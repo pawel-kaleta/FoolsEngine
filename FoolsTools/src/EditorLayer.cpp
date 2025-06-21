@@ -198,7 +198,7 @@ namespace fe
 
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 
-		m_Scene = AssetHandle<Scene>(AssetManager::CreateProjectAsset<Scene>(filepath), LoadingPriority_Critical);
+		m_Scene = AssetHandle<Scene>(AssetManager::AssetCreation::ProjectAsset<Scene>(filepath), LoadingPriority_Critical);
 		m_Scene.Use().InitializeNew();
 
 		SetSceneContext(m_Scene);
@@ -260,7 +260,7 @@ namespace fe
 		
 		if (filepath.empty()) return;
 	
-		AssetHandle<Scene>(AssetManager::CreateProjectAsset<Scene>(filepath));
+		AssetHandle<Scene>(AssetManager::AssetCreation::ProjectAsset<Scene>(filepath));
 
 		FE_CORE_ASSERT(false, "Not implemented");
 		

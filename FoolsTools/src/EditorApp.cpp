@@ -27,7 +27,7 @@ namespace fe
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		static bool load_not_create = true;
-		static char load_path_buffer[128] = "";
+		static char load_path_buffer[128] = "..\\Sandbox\\SandboxProject.feproj";
 		static char create_path_buffer[128] = "";
 
 		if (load_not_create)

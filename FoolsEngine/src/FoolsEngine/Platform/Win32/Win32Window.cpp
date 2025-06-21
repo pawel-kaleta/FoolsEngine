@@ -119,8 +119,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_DEBUG("Setting events callbacks for window.");
+		FE_LOG_CORE_INFO("Setting events callbacks for window:");
 
+		FE_LOG_CORE_INFO("	WindowResizeEvent");
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
@@ -130,14 +131,14 @@ namespace fe
 				FE_NEW_EVENT(data.EventCallback, event, Events::WindowResizeEvent, width, height);
 			});
 
+		FE_LOG_CORE_INFO("	WindowCloseEvent");
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, Events::WindowCloseEvent);
-				//FE_LOG_CORE_TRACE("EVENT CREATION");
-				//FE_LOG_CORE_TRACE(event.GetEventType());
 			});
 
+		FE_LOG_CORE_INFO("	WindowFocusChangeEvents");
 		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focus)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
@@ -151,6 +152,7 @@ namespace fe
 				}
 			});
 
+		FE_LOG_CORE_INFO("	KeyEvents");
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int modes)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
@@ -175,12 +177,14 @@ namespace fe
 				}
 			});
 
+		FE_LOG_CORE_INFO("	KeyTypedEvent");
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, Events::KeyTypedEvent, keycode);
 			});
 
+		FE_LOG_CORE_INFO("	MouseButtonEvents");
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
@@ -200,19 +204,19 @@ namespace fe
 				}
 			});
 
+		FE_LOG_CORE_INFO("	MouseScrolledEvent");
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double x_offset, double y_offset)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, Events::MouseScrolledEvent, (float)x_offset, (float)y_offset);
 			});
 
+		FE_LOG_CORE_INFO("	MouseMovedEvent");
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x_position, double y_position)
 			{
 				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
 				FE_NEW_EVENT(data.EventCallback, event, Events::MouseMovedEvent, (float)x_position, (float)y_position);
 			});
-
-		FE_LOG_CORE_INFO("Events callbacks for Win10Window setted up.");
 	}
 
 	void Win32Window::ShutDown()

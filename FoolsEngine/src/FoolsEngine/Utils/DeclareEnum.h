@@ -38,7 +38,7 @@ struct name                                                                     
     void FromString(const std::string& string)                                                        \
     {                                                                                                 \
         FE_FOR_EACH(_FROM_STRING, __VA_ARGS__)                                                        \
-        FE_CORE_ASSERT(false, "Unrecognised string reresentation onf enum");                          \
+        FE_CORE_ASSERT(false, "Unrecognised string representation of enum");                          \
     }                                                                                                 \
                                                                                                       \
     std::string ToString() const                                                                      \
@@ -46,7 +46,20 @@ struct name                                                                     
         switch (Value)                                                                                \
         {                                                                                             \
         FE_FOR_EACH(_TO_STRING, __VA_ARGS__)                                                          \
-        default: return "";                                                                           \
+        default:                                                                                      \
+            FE_CORE_ASSERT(false, "Unrecognised value of enum");                                      \
+            return "";                                                                                \
+        }                                                                                             \
+    }                                                                                                 \
+                                                                                                      \
+    constexpr const char* ToConstCharPtr()                                                            \
+    {                                                                                                 \
+        switch (Value)                                                                                \
+        {                                                                                             \
+        FE_FOR_EACH(_TO_STRING, __VA_ARGS__)                                                          \
+        default:                                                                                      \
+            FE_CORE_ASSERT(false, "Unrecognised value of enum");                                      \
+            return "";                                                                                \
         }                                                                                             \
     }                                                                                                 \
                                                                                                       \
