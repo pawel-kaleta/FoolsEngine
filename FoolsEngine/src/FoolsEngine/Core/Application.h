@@ -101,13 +101,14 @@ namespace fe
 
 		AssetManager* m_AssetManager = nullptr;
 
+		uint32_t	m_FrameCount	= 1;
 		bool		m_Running		= true;
 		bool		m_Minimized		= false;
-		uint32_t	m_FrameCount	= 1;
 
 #ifdef FE_INTERNAL_BUILD
-		bool		m_ActiveProfiler		= false;
 		uint16_t	m_ProfilerFramesCount	= 0;
+		bool		m_ActiveProfiler		= false;
+		bool		m_ActivateProfiler		= true;
 #endif // FE_INTERNAL_BUILD
 
 	};

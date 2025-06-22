@@ -12,8 +12,8 @@ namespace fe
 		Scratchpad() :
 			m_Begin(s_Free),
 			m_End(s_Free),
-			m_FlagMask(((uint64_t)1) << (63 - s_Count)),		// ???????
-			m_FrontFlagsMask(((uint64_t)-1) >> (s_Count + 1))	// ???????????
+			m_FlagMask(((uint64_t)1) << (63 - s_Count)),
+			m_FrontFlagsAntiMask((uint64_t)-1 << (63 - s_Count))
 		{
 			s_RollbackFlags |= m_FlagMask;
 			s_Count++;
@@ -62,11 +62,11 @@ namespace fe
 		std::byte* m_Begin;
 		std::byte* m_End;
 		const uint64_t m_FlagMask;
-		const uint64_t m_FrontFlagsMask;
+		const uint64_t m_FrontFlagsAntiMask;
 
 		virtual void* do_allocate(std::size_t bytes, std::size_t alignment) final override 
 		{
-			s_RollbackFlags &= m_FrontFlagsMask;
+			s_RollbackFlags &= m_FrontFlagsAntiMask;
 
 			const bool at_front = m_End == s_Free;
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;

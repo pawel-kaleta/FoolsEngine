@@ -39,7 +39,8 @@ namespace fe
 	class RenderMesh final : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMeshAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMesh; }
+		static constexpr const char* GetMetaFileExtension() { return ".ferm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);

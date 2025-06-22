@@ -52,7 +52,7 @@ struct name                                                                     
         }                                                                                             \
     }                                                                                                 \
                                                                                                       \
-    constexpr const char* ToConstCharPtr()                                                            \
+    constexpr const char* ToConstCharPtr() const                                                      \
     {                                                                                                 \
         switch (Value)                                                                                \
         {                                                                                             \

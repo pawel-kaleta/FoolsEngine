@@ -1,20 +1,20 @@
 Masters:
-  - Type: SceneAsset
+  - Type: Scene
     UUID: 3793305017238133058
     Filepath: example.fescene
-  - Type: Texture2DAsset
+  - Type: Texture2D
     UUID: 18112934642992629188
     Filepath: textures\grass2.fetex2d
-  - Type: Texture2DAsset
+  - Type: Texture2D
     UUID: 2406470786547939043
     Filepath: textures\grass1.fetex2d
-  - Type: Texture2DAsset
+  - Type: Texture2D
     UUID: 3147587995776764887
     Filepath: textures\tree2.fetex2d
-  - Type: Texture2DAsset
+  - Type: Texture2D
     UUID: 7011469824264952867
     Filepath: textures\tree1.fetex2d
-  - Type: Texture2DAsset
+  - Type: Texture2D
     UUID: 16144042178780554263
     Filepath: textures\grassland.fetex2d
 Internals:

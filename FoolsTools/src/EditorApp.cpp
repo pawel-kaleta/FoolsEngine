@@ -32,7 +32,14 @@ namespace fe
 
 		if (load_not_create)
 		{
-			if (ImGui::Begin("New/Open Project"))
+			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+			ImGuiWindowFlags_ window_flags = (ImGuiWindowFlags_)(
+				ImGuiWindowFlags_NoCollapse |
+				ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoResize);
+			if (ImGui::Begin("New/Open Project", nullptr, window_flags))
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.DisabledAlpha);
 				if (ImGui::Button("New Project"))
@@ -48,7 +55,7 @@ namespace fe
 				ImGui::Text("Path");
 				ImGui::SameLine();
 
-				 ImGui::InputText("##filepath", load_path_buffer, 128);
+				ImGui::InputText("##filepath", load_path_buffer, 128);
 				ImGui::SameLine();
 
 				std::filesystem::path filepath;

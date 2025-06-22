@@ -157,12 +157,6 @@ namespace fe
 		}
 		m_ImGuiLayer->End();
 
-#ifdef FE_INTERNAL_BUILD
-		FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
-		m_ProfilerFramesCount = 0;
-		m_ActiveProfiler = true;
-#endif // FE_INTERNAL_BUILD
-
 		while (m_Running)
 		{
 #ifdef FE_INTERNAL_BUILD
@@ -172,6 +166,14 @@ namespace fe
 					FE_PROFILER_SESSION_END();
 					m_ActiveProfiler = false;
 				}
+			
+			if (m_ActivateProfiler)
+			{
+				FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
+				m_ProfilerFramesCount = 0;
+				m_ActiveProfiler = true;
+				m_ActivateProfiler = false;
+			}
 #endif // FE_INTERNAL_BUILD
 
 			FE_PROFILER_SCOPE("FRAME");
@@ -377,12 +379,7 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 		if (event->GetKeyCode() == InputCodes::P)
 		{
-			if (!m_ActiveProfiler)
-			{
-				FE_PROFILER_SESSION_START("Runtime", "Logs/ProfileData_Runtime.json");
-				m_ProfilerFramesCount = 0;
-				m_ActiveProfiler = true;
-			}
+			m_ActivateProfiler = true;
 		}
 #endif // FE_INTERNAL_BUILD
 	}

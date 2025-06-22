@@ -15,6 +15,7 @@ namespace fe
 		ContentBrowser();
 		void OnImGuiRender();
 
+
 	private:
 		friend class EditorLayer;
 
@@ -29,27 +30,18 @@ namespace fe
 			bool DisplayDirectories	= true;
 		} m_Settings;
 
-		struct Icons
+		struct
 		{
 			EditorAssetHandle<Texture2D> File;
 			EditorAssetHandle<Texture2D> Folder;
+			void* FileID;
+			void* FolderID;
 		} m_Icons;
 
-		Scratchpad* m_SP;
-		
-		using PmrVecString = std::pmr::vector<std::pmr::string>;
-		PmrVecString* m_Files;
-		PmrVecString* m_Directories;
-
-		void RenderFolderHierarchy();
-		void RenderFolderContent();
-
-		void RenderFolders();
+		void RenderFiles(std::pmr::vector<std::pmr::string>* file_names);
+		void RenderFolders(Scratchpad* sp, std::pmr::vector<std::pmr::string>* file_names);
 		void RenderFiles();
-
-		void ReadFolder();
-
+		void RenderUPFolder();
 		void RenderFolderNode(const std::filesystem::directory_entry& dir);
-		void RenderFileNode(const std::filesystem::directory_entry& file);
 	};
 }

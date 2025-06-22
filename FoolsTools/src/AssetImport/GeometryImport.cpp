@@ -22,7 +22,7 @@ namespace fe::GeometryImport
 	{
 		importData->GeometryData.Scene = GeometryLoader::InspectSourceFile(importData->Filepath);
 
-		if (importData->HandleToOverride != nullptr && importData->Type == AssetType::MeshAsset)
+		if (importData->HandleToOverride != nullptr && importData->Type == AssetType::Mesh)
 			importData->GeometryData.ImportVariant = ImportVariant_Mesh;
 		else
 			importData->GeometryData.ImportVariant = ImportVariant_Model;
@@ -77,7 +77,7 @@ namespace fe::GeometryImport
 
 		//model_user.SetFilepath(importData->Filepath);
 
-		if (importData->HandleToOverride && importData->Type == AssetType::ModelAsset)
+		if (importData->HandleToOverride && importData->Type == AssetType::Model)
 			*(AssetHandle<Model>*)(importData->HandleToOverride) = model_handle;
 
 		YAML::Emitter emitter;
@@ -139,7 +139,7 @@ namespace fe::GeometryImport
 		//}
 		//specification.IndicesCount *= 3;
 		//
-		//if (importData->HandleToOverride && importData->Type == AssetType::MeshAsset)
+		//if (importData->HandleToOverride && importData->Type == AssetType::Mesh)
 		//	*(AssetHandle<Mesh>*)(importData->HandleToOverride) = mesh_handle;
 		//
 		//YAML::Emitter emitter;

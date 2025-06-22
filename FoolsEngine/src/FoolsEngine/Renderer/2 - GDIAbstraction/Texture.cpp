@@ -13,6 +13,8 @@
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Core\Project.h"
 
+#include "FoolsEngine\Memory\Scratchpad.h"
+
 namespace fe
 {
 	void Texture2DUser::SendDataToGPU(GDIType GDI, void* data) const
@@ -129,19 +131,21 @@ namespace fe
 		auto assetObserver = AssetObserver<Texture2D>(assetID);
 
 		YAML::Emitter emitter;
+		
+		Scratchpad sp;
 
+		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
-		emitter << YAML::Key << "Specification" << YAML::Value << YAML::BeginMap;
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
 		auto& spec = assetObserver.GetCoreComponent().Specification;
-			emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToString();
-			emitter << YAML::Key << "Components" << YAML::Value << spec.Components.ToString();
-			emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToString();
-			emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
-			emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
-			emitter << YAML::EndMap;
+		emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
+		emitter << YAML::Key << "Components" << YAML::Value << spec.Components.ToConstCharPtr();
+		emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToConstCharPtr();
+		emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
+		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
+		emitter << YAML::EndMap;
 
-		std::ofstream fout(assetObserver.GetFilepath());
+		std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
 		fout << emitter.c_str();
 	}
 

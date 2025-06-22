@@ -108,7 +108,7 @@ namespace fe
 
 			switch (type.Value)
 			{
-			case AssetType::Texture2DAsset:
+			case AssetType::Texture2D:
 			{
 				auto textureUser = AssetUser<Texture2D>(id);
 				if (ref_counters.LiveHandles == 0)
@@ -126,7 +126,7 @@ namespace fe
 				}
 				break;
 			}
-			case AssetType::ShaderAsset:
+			case AssetType::Shader:
 			{
 				auto shaderUser = AssetUser<Shader>(id);
 				if (ref_counters.LiveHandles == 0)
@@ -143,7 +143,7 @@ namespace fe
 				}
 				break;
 			}
-			case AssetType::MeshAsset:
+			case AssetType::Mesh:
 			{
 				auto meshUser = AssetUser<Mesh>(id);
 				if (ref_counters.LiveHandles == 0)

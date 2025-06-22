@@ -65,7 +65,8 @@ namespace fe
 	class Material : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::MaterialAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::Material; }
+		static constexpr const char* GetMetaFileExtension() { return ".femat"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMaterialCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);

@@ -12,8 +12,10 @@ namespace fe
 			void (* EmplaceCore)(AssetID);
 			bool (* LoadMetadata)(AssetID);
 			void (* SaveMetadata)(AssetID);
+			const char* (*GetMetaFileExtension)();
 			// load data too? (for AssetManager::EvaluateAndReload)
 			AssetType Type;
+			const char* TypeConstCharPtr;
 		};
 
 		static const std::vector<Item> GetItems() { return s_Instance->m_Items; }
@@ -36,7 +38,9 @@ namespace fe
 					&tnAsset::EmplaceCore,
 					&tnAsset::LoadMetadata,
 					&tnAsset::SaveMetadata,
-					tnAsset::GetTypeStatic()
+					&tnAsset::GetMetaFileExtension,
+					tnAsset::GetTypeStatic(),
+					tnAsset::GetTypeStatic().ToConstCharPtr()
 				}
 			);
 		}

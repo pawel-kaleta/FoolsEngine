@@ -12,9 +12,9 @@ namespace fe
 
 	namespace TextureImport
 	{
-		void RenderWindow(ImportData* const importData);
+		void RenderWindow(ImportData* importData);
 
-		void InitImport(ImportData* const importData);
+		void InitImport(ImportData* importData);
 
 		struct Data
 		{

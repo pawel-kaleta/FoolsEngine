@@ -68,7 +68,8 @@ namespace fe
 	class Texture2D : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2DAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
+		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);

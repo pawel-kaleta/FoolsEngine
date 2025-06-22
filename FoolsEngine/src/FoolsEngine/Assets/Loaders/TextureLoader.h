@@ -15,8 +15,6 @@ namespace fe
 		static void LoadTexture(const AssetUser<Texture2D>& textureUser)
 		{
 			auto filepath = Project::GetInstance()->AssetsPath;
-			auto tmp = textureUser.GetFilepath();
-			auto tmp2 = textureUser.GetCoreComponent();
 			auto source =  textureUser.GetSourceFilepath();
 			FE_CORE_ASSERT(source, "AAAAAAA");
 			filepath /= source->Filepath;

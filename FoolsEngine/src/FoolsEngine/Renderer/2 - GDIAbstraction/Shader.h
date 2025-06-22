@@ -58,7 +58,8 @@ namespace fe
 	class Shader : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
+		static constexpr const char* GetMetaFileExtension() { return ""; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShaderCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID) { };
 		static bool LoadMetadata(AssetID assetID) { return true; };

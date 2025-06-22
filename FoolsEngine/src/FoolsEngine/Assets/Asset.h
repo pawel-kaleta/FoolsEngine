@@ -19,25 +19,25 @@ namespace fe
 	using Const_ECS_AssetHandle = entt::basic_handle<const AssetRegistry>;
 
 	FE_DECLARE_ENUM(AssetType,
-		TextureAsset,
-		Texture2DAsset,
+		Texture,
+		Texture2D,
 
-		ShaderAsset,
-		ShadingModelAsset,
-		MaterialAsset,
+		Shader,
+		ShadingModel,
+		Material,
 
-		MeshAsset,
-		RenderMeshAsset,
-		ModelAsset,
+		Mesh,
+		RenderMesh,
+		Model,
 
-		SkeletonAsset,
-		SkinnedModelAsset,
-		AnimationAsset,
+		Skeleton,
+		SkinnedModel,
+		Animation,
 		
-		SceneAsset,
-		PrefabAsset,
+		Scene,
+		Prefab,
 		
-		AudioAsset,
+		Audio,
 
 		Count,
 		None

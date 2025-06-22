@@ -59,7 +59,8 @@ namespace fe
 	class ShadingModel : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModelAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }
+		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShadingModelCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);

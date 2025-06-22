@@ -41,7 +41,8 @@ namespace fe
 	class Model : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::ModelAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::Model; }
+		static constexpr const char* GetMetaFileExtension() { return ".femodel"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACModelCore>(assetID).Init(); }
 		static void SaveMetadata(AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
