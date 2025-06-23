@@ -1,55 +1,56 @@
-15:05:13:945265 | FE  | info     | Logging innitialized!
-15:05:13:945779 | App | info     | Logging innitialized!
-15:05:13:945875 | FE  | info     | /////////////////////////////////////////////////////
-15:05:13:945980 | FE  | info     | ////////////////////// STARTUP //////////////////////
-15:05:13:946062 | FE  | info     | /////////////////////////////////////////////////////
-15:05:13:946160 | App | info     | Logging level set to 0 - all.
-15:05:13:946237 | FE  | info     | Logging level set to 0 - all.
-15:05:13:946622 | FE  | info     | Profiler session 'Startup' started.
-15:05:13:947178 | FE  | info     | Initializing GLFW
-15:05:13:980700 | FE  | info     | Creating Window FoolsTools (1920, 1080)
-15:05:14:155257 | FE  | info     | Setting events callbacks for window:
-15:05:14:155638 | FE  | info     | 	WindowResizeEvent
-15:05:14:155766 | FE  | info     | 	WindowCloseEvent
-15:05:14:155868 | FE  | info     | 	WindowFocusChangeEvents
-15:05:14:155968 | FE  | info     | 	KeyEvents
-15:05:14:156064 | FE  | info     | 	KeyTypedEvent
-15:05:14:156152 | FE  | info     | 	MouseButtonEvents
-15:05:14:156238 | FE  | info     | 	MouseScrolledEvent
-15:05:14:156323 | FE  | info     | 	MouseMovedEvent
-15:05:14:156591 | FE  | info     | Creating rendering context
-15:05:14:159968 | FE  | info     | Rendering platform info:
-15:05:14:160078 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-15:05:14:160204 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-15:05:14:160305 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-15:05:14:160509 | FE  | info     | OpenGL Rendering Context created
-15:05:14:160646 | FE  | info     | VSync disabled.
-15:05:14:160852 | FE  | info     | OpenGLDeviceAPI creation!
-15:05:14:160998 | FE  | info     | OpenGLDeviceAPI Initialization.
-15:05:14:162912 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-15:05:14:163705 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-15:05:14:168359 | FE  | info     | Profiler session 'Startup' closed.
-15:05:14:180288 | FE  | info     | /////////////////////////////////////////////////////
-15:05:14:181151 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-15:05:14:181488 | FE  | info     | /////////////////////////////////////////////////////
-15:05:14:181855 | App | info     | Logging level set to 1 - debug or higher.
-15:05:14:182751 | FE  | info     | Logging level set to 1 - debug or higher.
-15:05:15:423999 | FE  | info     | Profiler session 'ProjectLoading' started.
-15:05:15:424495 | FE  | warning  | StartScene not implemented
-15:05:15:509644 | FE  | info     | Profiler session 'ProjectLoading' closed.
-15:05:15:509998 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-15:05:15:510313 | App | info     | EditorLayer::OnAttach()
-15:05:15:510710 | FE  | info     | Scene initialization
-15:05:15:511020 | FE  | info     | World Creation
-15:05:15:511679 | FE  | info     | Profiler session 'SceneLoading' started.
-15:05:17:770404 | FE  | info     | Profiler session 'SceneLoading' closed.
-15:05:17:773051 | FE  | info     | Profiler session 'Runtime' started.
-15:05:17:855804 | FE  | info     | Profiler session 'Runtime' closed.
-15:06:09:427269 | FE  | info     | Window Close Event
-15:06:09:429473 | FE  | info     | /////////////////////////////////////////////////////
-15:06:09:429591 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-15:06:09:429974 | FE  | info     | /////////////////////////////////////////////////////
-15:06:09:430429 | App | info     | Logging level set to 0 - all.
-15:06:09:430798 | FE  | info     | Logging level set to 0 - all.
-15:06:09:431295 | FE  | info     | Profiler session 'Shutdown' started.
-15:06:09:433016 | FE  | info     | Profiler session 'Shutdown' closed.
+15:16:00:222652 | FE  | info     | Logging innitialized!
+15:16:00:223202 | App | info     | Logging innitialized!
+15:16:00:223302 | FE  | info     | /////////////////////////////////////////////////////
+15:16:00:223382 | FE  | info     | ////////////////////// STARTUP //////////////////////
+15:16:00:223455 | FE  | info     | /////////////////////////////////////////////////////
+15:16:00:223530 | App | info     | Logging level set to 0 - all.
+15:16:00:223603 | FE  | info     | Logging level set to 0 - all.
+15:16:00:223883 | FE  | info     | Profiler session 'Startup' started.
+15:16:00:224242 | FE  | info     | Initializing GLFW
+15:16:00:257130 | FE  | info     | Creating Window FoolsTools (1920, 1080)
+15:16:00:503983 | FE  | info     | Setting events callbacks for window:
+15:16:00:504109 | FE  | info     | 	WindowResizeEvent
+15:16:00:504200 | FE  | info     | 	WindowCloseEvent
+15:16:00:504283 | FE  | info     | 	WindowFocusChangeEvents
+15:16:00:504362 | FE  | info     | 	KeyEvents
+15:16:00:504440 | FE  | info     | 	KeyTypedEvent
+15:16:00:504519 | FE  | info     | 	MouseButtonEvents
+15:16:00:504600 | FE  | info     | 	MouseScrolledEvent
+15:16:00:505317 | FE  | info     | 	MouseMovedEvent
+15:16:00:505568 | FE  | info     | Creating rendering context
+15:16:00:509364 | FE  | info     | Rendering platform info:
+15:16:00:509467 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+15:16:00:509562 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+15:16:00:509654 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+15:16:00:509842 | FE  | info     | OpenGL Rendering Context created
+15:16:00:509977 | FE  | info     | VSync disabled.
+15:16:00:510157 | FE  | info     | OpenGLDeviceAPI creation!
+15:16:00:510283 | FE  | info     | OpenGLDeviceAPI Initialization.
+15:16:00:511844 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+15:16:00:512442 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+15:16:00:516795 | FE  | info     | Profiler session 'Startup' closed.
+15:16:00:516892 | FE  | info     | /////////////////////////////////////////////////////
+15:16:00:517221 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+15:16:00:517538 | FE  | info     | /////////////////////////////////////////////////////
+15:16:00:517860 | App | info     | Logging level set to 1 - debug or higher.
+15:16:00:518169 | FE  | info     | Logging level set to 1 - debug or higher.
+15:16:09:251909 | FE  | info     | Profiler session 'ProjectLoading' started.
+15:16:09:252248 | FE  | warning  | StartScene not implemented
+15:16:09:339538 | FE  | info     | Profiler session 'ProjectLoading' closed.
+15:16:09:339889 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+15:16:09:340306 | App | info     | EditorLayer::OnAttach()
+15:16:09:340728 | FE  | info     | Scene initialization
+15:16:09:341071 | FE  | info     | World Creation
+15:16:09:341710 | FE  | info     | Profiler session 'SceneLoading' started.
+15:16:11:624341 | FE  | info     | Profiler session 'SceneLoading' closed.
+15:16:11:626895 | FE  | info     | Profiler session 'Runtime' started.
+15:16:11:708007 | FE  | info     | Profiler session 'Runtime' closed.
+15:16:41:370109 | FE  | info     | Profiler session 'Runtime' started.
+15:16:41:479286 | FE  | info     | Profiler session 'Runtime' closed.
+15:16:45:187513 | FE  | info     | /////////////////////////////////////////////////////
+15:16:45:187827 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+15:16:45:188208 | FE  | info     | /////////////////////////////////////////////////////
+15:16:45:188636 | App | info     | Logging level set to 0 - all.
+15:16:45:189081 | FE  | info     | Logging level set to 0 - all.
+15:16:45:189559 | FE  | info     | Profiler session 'Shutdown' started.
+15:16:45:191366 | FE  | info     | Profiler session 'Shutdown' closed.

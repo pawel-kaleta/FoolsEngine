@@ -1,6 +1,6 @@
 # FoolsEngine
 
-'FoolsEngine' is meant to be a lightwaight, but fairly powerful C++ game engine beeing written mostly as part of a game engine development learning process. It can be used as a technology demonstrator, an educational tool or a R&D framework.
+'FoolsEngine' is meant to be a lightwaight, but fairly powerful C++ game engine being written mostly as part of a game engine development learning process. It can be used as a technology demonstrator, an educational tool or a R&D framework.
 
 ![FoolsTools - FoolsEngine's editor](./Documentation/FoolsTools.jpg)
 
@@ -29,8 +29,8 @@ If your goal is to make a game, you are better of using off-the-shelf, fully fea
 - Hybrid Actor/GameObject/ECS scene representation and execution model
 - Placeholder 2D renderer
 - Editor features
-	- Basic UI setup
-	- Viewport and camera
+	- UI setup
+	- Viewports and Editor Camera
 	- Performance stats
 	- Scene hierarchy vidget
 	- Actor inspector
@@ -80,16 +80,18 @@ Program structure isolates engine and application into separate exe/dll files.
 ## Documentation
 
 `FoolsEngine` architectual design is documented in `./Documentation` folder.
+- Core architecture
 - Event system
 - Scene representation and execution model
 - Rendering (mostly planned)
 - Asset system
+- Memory management
 
 ## Profiling data
 
 Build-in solution is an intrusive logging of profiling data into `.json` files. Profiling data can be visually inspected using Chorme build-in profiling tool - `chrome://tracing`.
 
-There are automatic dedicated profiling sessions for startup, shutdown and first 30 frames of runtime. Additionall 30 frames long runtime session can be launched with `P` keybord shortcut.
+There are automatic dedicated profiling sessions for startup, project loading, scene loading, shutdown and first 15 frames of runtime. Additionall 15 frames long runtime session can be launched with `P` keybord shortcut.
 
 ![FoolsTools - FoolsEngine's editor](./Documentation/Profiler.jpg)
 
