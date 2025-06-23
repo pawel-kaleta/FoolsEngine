@@ -3,6 +3,7 @@
 #include <EntryPoint.h>
 
 #include "EditorLayer.h"
+#include "AssetImport\FileHandler.h"
 
 namespace fe
 {
@@ -12,6 +13,7 @@ namespace fe
 
 	void EditorApp::ClientAppStartup()
 	{
+		AssetImportModal::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
 	}
 
@@ -151,7 +153,7 @@ namespace fe
 
 		app_spec.CommandLineArgs = args;
 		app_spec.Name = "FoolsTools";
-		app_spec.WindowAttributes = { "FoolsTools", 1920, 1080, GDIType::OpenGL };
+		app_spec.WindowAttributes = { "FoolsTools", 1900, 1000, GDIType::OpenGL };
 
 		return new EditorApp(app_spec);
 	}

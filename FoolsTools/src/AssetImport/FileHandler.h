@@ -9,10 +9,7 @@ namespace fe
 {
 	namespace FileHandler
 	{
-		uint32_t GetSourceAliasAndLoaderIndex(const std::pmr::string& extension, std::pmr::string& outAlias);
-		const AssetTypesRegistry::Item* GetMetaAliasAndRegistryItemPtr(const std::pmr::string& extension, std::pmr::string& outAlias);
-
-		void OpenFile(const std::filesystem::path& filepath, uint32_t loaderIndex = -1);
+		void OpenFile(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr);
 	};
 
 	class AssetHandleBase;
@@ -20,7 +17,8 @@ namespace fe
 
 	namespace AssetImportModal
 	{
+		void Init();
 		void OnImGuiRender();
-		void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type = AssetType::None, AssetHandleBase* optionalBaseHandle = nullptr);
+		void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr, AssetType type = AssetType::None, AssetHandleBase* optionalBaseHandle = nullptr);
 	};
 }

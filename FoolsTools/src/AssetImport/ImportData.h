@@ -15,7 +15,7 @@ namespace fe
         const std::vector<AssetID>* ImportedAssets = nullptr;
         AssetHandleBase* HandleToOverride = nullptr;
         AssetType Type = AssetType::None;
-        uint32_t LoaderIndex = -1;
+        const LoadersRegistry::Item* LoaderItemPtr = nullptr;
         bool Finished = false;
 
         union

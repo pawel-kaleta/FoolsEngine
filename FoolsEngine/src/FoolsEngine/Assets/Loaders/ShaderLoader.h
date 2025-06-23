@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include "FoolsEngine\Assets\Loaders\LoaderType.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 
@@ -9,6 +10,8 @@ namespace fe
 	class ShaderLoader
 	{
 	public:
+		static constexpr LoaderType GetTypeStatic() { return LoaderType::Shader; }
+		static constexpr AssetType GetAssetTypeStatic() { return AssetType::Shader; }
 		static void LoadShader(const std::filesystem::path& filePath, const AssetUser<Shader>& shaderUser);
 		static void LoadShader(const AssetUser<Shader>& shaderUser)
 		{
@@ -18,6 +21,7 @@ namespace fe
 		static void CompileShader(GDIType GDI, const AssetUser<Shader>& shaderUser);
 
 		static bool IsKnownExtension(const std::pmr::string& extension);
+		static bool IsKnownAssetType(AssetType assetType);
 
 		static const char* GetExtensionAlias() { return "Shader Source"; }
 	private:

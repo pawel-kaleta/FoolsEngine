@@ -6,59 +6,9 @@
 
 namespace fe
 {
-    constexpr static size_t LoadersCount = 3;
-
     namespace FileHandler
-    {
-        struct LoaderData
-        {
-            bool (* const IsKnownExtensionFunkPtr)(const std::pmr::string&);
-            const char* SourceExtensionAlias;
-            AssetType AssetType;
-        };
-        
-        const static LoaderData s_LoaderData[LoadersCount] =
-        {
-            { & TextureLoader::IsKnownExtension,  TextureLoader::GetExtensionAlias(),  AssetType::Texture2D },
-            { & GeometryLoader::IsKnownExtension, GeometryLoader::GetExtensionAlias(), AssetType::None }, // multiple asset types
-            { & ShaderLoader::IsKnownExtension,   ShaderLoader::GetExtensionAlias(),   AssetType::Shader }
-        };
-       
-        uint32_t GetSourceAliasAndLoaderIndex(const std::pmr::string& extension, std::pmr::string& outAlias)
-        {
-            for (size_t i = 0; i < LoadersCount; i++)
-            {
-                auto& loader_data = s_LoaderData[i];
-                if (!loader_data.IsKnownExtensionFunkPtr)
-                    continue;
-
-                if ((*loader_data.IsKnownExtensionFunkPtr)(extension))
-                {
-                    outAlias = loader_data.SourceExtensionAlias;
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        const AssetTypesRegistry::Item* GetMetaAliasAndRegistryItemPtr(const std::pmr::string& extension, std::pmr::string& outAlias)
-        {
-            auto& x = AssetTypesRegistry::GetItems();
-
-            for (auto& item : AssetTypesRegistry::GetItems())
-            {
-                if (extension.compare((*item.GetMetaFileExtension)()) == 0)
-                {
-                    outAlias = item.TypeConstCharPtr;
-                    return &item;
-                }
-            }
-
-            return nullptr;
-        }
-
-	    void OpenFile(const std::filesystem::path& filepath, uint32_t loaderIndex)
+    {     
+	    void OpenFile(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr)
 	    {
 		    if (filepath.empty())
 		    {
@@ -66,26 +16,16 @@ namespace fe
 			    return;
 		    }
 
-            if (loaderIndex == -1)
+            if (!loaderItemPtr)
             {
                 Scratchpad sp;
-		        for (size_t i = 0; i < LoadersCount; i++)
-		        {
-                    auto& loader_data = s_LoaderData[i];
-
-			        if (!loader_data.IsKnownExtensionFunkPtr)
-				        continue;
-
-			        if ((*loader_data.IsKnownExtensionFunkPtr)(filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp)))
-			        {
-				        AssetImportModal::OpenWindow(filepath, i);
-				        return;
-			        }
-		        }
+                const auto item = LoadersRegistry::GetItem(filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
+				AssetImportModal::OpenWindow(filepath, item);
+				return;
             }
             else
             {
-                AssetImportModal::OpenWindow(filepath, loaderIndex);
+                AssetImportModal::OpenWindow(filepath, loaderItemPtr);
             }
 	    }
     }
@@ -96,16 +36,19 @@ namespace fe
 
         struct ImporterData
         {
-            void (* const InitImportFunkPtr)(ImportData* const);
-            void (* const RenderWindowFunkPtr)(ImportData* const);
+            void (* InitImportFunkPtr)(ImportData* const);
+            void (* RenderWindowFunkPtr)(ImportData* const);
         };
 
-        const static ImporterData s_ImporterData[LoadersCount] =
+        static ImporterData s_ImporterData[LoaderType::Count];
+
+        void Init()
         {
-            { & TextureImport::InitImport,  & TextureImport::RenderWindow },
-            { & GeometryImport::InitImport, & GeometryImport::RenderWindow },
-            { nullptr, nullptr }
-        };
+            for (auto& importerData : s_ImporterData) importerData = { nullptr, nullptr };
+
+            s_ImporterData[LoaderType::Texture  ] = { &  TextureImport::InitImport,  &  TextureImport::RenderWindow };
+            s_ImporterData[LoaderType::Geometry ] = { & GeometryImport::InitImport, & GeometryImport::RenderWindow };
+        }
 
         void OnImGuiRender()
         {
@@ -117,7 +60,7 @@ namespace fe
             if (ImGui::BeginPopupModal("Asset Import", NULL, 0))
             {
                 FE_CORE_ASSERT(s_ImportData, "");
-                auto& render_window_funk = s_ImporterData[s_ImportData->LoaderIndex].RenderWindowFunkPtr;
+                auto& render_window_funk = s_ImporterData[s_ImportData->LoaderItemPtr->Type.ToInt()].RenderWindowFunkPtr;
                 (*render_window_funk)(s_ImportData);
 
                 if (s_ImportData->Finished)
@@ -140,7 +83,7 @@ namespace fe
             }
         }
 
-        void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle)
+        void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr, AssetType type, AssetHandleBase* optionalBaseHandle)
         {
             if (s_ImportData)
             {
@@ -148,18 +91,24 @@ namespace fe
                 delete s_ImportData;
             }
 
+            auto& init_import_funk = s_ImporterData[loaderItemPtr->Type.ToInt()].InitImportFunkPtr;
+
+            if (!init_import_funk)
+            {
+                FE_CORE_ASSERT(false, "Import of this asset type not implemented");
+                return;
+            }
 
             s_ImportData = new ImportData();
 
             s_ImportData->Filepath = filepath;
             s_ImportData->Type = type;
             s_ImportData->HandleToOverride = optionalBaseHandle;
-            s_ImportData->LoaderIndex = loaderIndex;
+            s_ImportData->LoaderItemPtr = loaderItemPtr;
             s_ImportData->ImportedAssets = AssetManager::GetAssetsFromSourceFilepath(filepath);
             Scratchpad sp;
             strncpy_s(s_ImportData->AssetName, filepath.stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), sizeof(s_ImportData->AssetName));
 
-            auto& init_import_funk = s_ImporterData[loaderIndex].InitImportFunkPtr;
             (*init_import_funk)(s_ImportData);
         }
     }

@@ -11,6 +11,7 @@
 #include "FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h"
 
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
+#include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h"
 
@@ -113,6 +114,9 @@ namespace fe
 
 			m_AssetTypesRegistry = new AssetTypesRegistry();
 			m_AssetTypesRegistry->RegisterAssetTypes();
+
+			m_LoadersRegistry = new LoadersRegistry();
+			m_LoadersRegistry->RegisterLoaders();
 		}
 
 		// Asset manager
@@ -275,6 +279,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Types Registries");
 
+			m_LoadersRegistry->Shutdown();
 			m_AssetTypesRegistry->Shutdown();
 			m_ComponentTypesRegistry->Shutdown();
 			m_BehaviorsRegistry->Shutdown();
@@ -398,5 +403,7 @@ namespace fe
 
 		m_Minimized = false;
 		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
+
+		FE_LOG_CORE_INFO("Window resize (width: {0}, height: {1})", event->GetWidth(), event->GetHeight());
 	}
 }

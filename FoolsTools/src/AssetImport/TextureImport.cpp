@@ -18,7 +18,7 @@ namespace fe
             FE_CORE_ASSERT(!importData->HandleToOverride, "Attempt to init texture import with asset type set to None in importData");
         }
         
-        importData->TextureData.Specification = TextureLoader::InspectTexture(Project::GetInstance()->AssetsPath / importData->Filepath);
+        importData->TextureData.Specification = TextureLoader::InspectTexture(importData->Filepath);
 	}
 
     static void Import(const ImportData* importData)
@@ -86,7 +86,7 @@ namespace fe
             ImGui::BeginDisabled();
             name_conflict = true;
         }
-        else
+        else if (importData->ImportedAssets)
         {
             Scratchpad sp2;
             for (auto& assetID : *importData->ImportedAssets)

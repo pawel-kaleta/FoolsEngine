@@ -6,6 +6,28 @@
 
 namespace fe
 {
+	glm::vec4 AssetTypeColors[AssetType::Count];
+	glm::vec4 LoaderColors[LoaderType::Count];
+
+	void InitColors()
+	{
+		//https://flatuicolors.com/palette/us
+
+		for (auto& color : AssetTypeColors) color = { 1, 1, 1, 1 };
+		AssetTypeColors[AssetType::Texture2D	] = FE_RGBA(  0, 184, 148, 1.0);
+		AssetTypeColors[AssetType::Shader		] = FE_RGBA(  0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::ShadingModel	] = FE_RGBA(  0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::Mesh			] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::RenderMesh	] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Model		] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Scene		] = FE_RGBA(108,  92, 231, 1.0);
+
+		for (auto& color : LoaderColors) color = { 1, 1, 1, 1 };
+		LoaderColors[LoaderType::Texture	] = FE_RGBA( 85, 239, 196, 1.0);
+		LoaderColors[LoaderType::Shader		] = FE_RGBA(129, 236, 236, 1.0);
+		LoaderColors[LoaderType::Geometry	] = FE_RGBA(116, 185, 255, 1.0);
+	}
+	
 	ContentBrowser::ContentBrowser()
 	{
 		FE_PROFILER_FUNC();
@@ -22,6 +44,8 @@ namespace fe
 
 		m_Icons.FileID   = (void*)m_Icons.File.GetRendererID(GDI);
 		m_Icons.FolderID = (void*)m_Icons.Folder.GetRendererID(GDI);
+
+		InitColors();
 	}
 
 	void ContentBrowser::OnImGuiRender()
@@ -75,11 +99,32 @@ namespace fe
 				// this avoids iterating directory twice - expensive (OSI)
 
 				RenderFolders(&sp, file_names);
-				RenderFiles(file_names);
+
+				for (const auto& file : *file_names)
+				{
+					Scratchpad sp2;
+
+					const auto dot_pos = file.rfind(".");
+					const std::pmr::string stem(file.c_str(), dot_pos, &sp2);
+					const std::pmr::string extension(file.c_str() + dot_pos, file.length() - dot_pos, &sp2);
+
+					RenderFile(stem, extension);
+				}
 			}
 			else
 			{
-				RenderFiles();
+				Scratchpad sp;
+
+				for (auto& dir_entry : std::filesystem::directory_iterator(m_CurrentPath))
+				{
+					if (dir_entry.is_directory())
+						continue;
+
+					const auto stem = dir_entry.path().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+					const auto extension = dir_entry.path().extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+
+					RenderFile(stem, extension);
+				}
 			}
 
 			ImGui::PopStyleColor(2);
@@ -90,91 +135,103 @@ namespace fe
 		ImGui::End();
 	}
 
-	void ContentBrowser::RenderFiles()
+	void ContentBrowser::RenderFile(const std::pmr::string& stem, const std::pmr::string& extension)
 	{
 		FE_PROFILER_FUNC();
 
+		Scratchpad sp;
 		auto& tnSize = m_Settings.ThumbnailSize;
 		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		Scratchpad sp;
-		for (auto& dir_entry : std::filesystem::directory_iterator(m_CurrentPath))
+		auto loader_registry_item_ptr = LoadersRegistry::GetItem(extension);
+		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(extension);
+
+		const std::pmr::string file_name(stem + extension, &sp);
+		const std::filesystem::path file_path = m_CurrentPath / file_name;
+
+		if (loader_registry_item_ptr || asset_types_registry_item_ptr)
 		{
-			FE_PROFILER_SCOPE("Dir Entry");
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
+			ImGui::BeginTable(stem.c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)(tnSize + 9), 0 });
+			ImGui::PopStyleVar();
+			ImGui::TableNextColumn();
 
-			if (dir_entry.is_directory())
-				continue;
+			// thumbnail in the future
 
-			const auto file_name = dir_entry.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-			const auto extension = dir_entry.path().extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				// Set payload to carry the asset filepath of our item (could be anything)
+				static std::filesystem::path payload;
+				payload = file_path;
+				ImGui::SetDragDropPayload("AssetPath", &payload, sizeof(payload));
+
+				// Display preview (could be anything, e.g. when dragging an image we could decide to display
+				// the filename and a small preview of the image, etc.)
+				ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, { 32,32 }, { 0,1 }, { 1,0 });
+				ImGui::Text(stem.c_str());
+
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && loader_registry_item_ptr)
+			{
+				FileHandler::OpenFile(file_path, loader_registry_item_ptr);
+			}
+
+			ImGui::BeginTable(file_name.c_str(), 1, ImGuiTableFlags_PadOuterX);
+			ImGui::TableNextRow(ImGuiTableRowFlags_None, 25.f);
+			ImGui::TableNextColumn();
+			ImGui::TextWrapped(stem.c_str());
+			ImGui::TableNextColumn();
 
 			std::pmr::string alias(&sp);
 
-			auto loader_index = FileHandler::GetSourceAliasAndLoaderIndex(extension, alias);
-			auto asset_types_registry_item_ptr = FileHandler::GetMetaAliasAndRegistryItemPtr(extension, alias);
-
-			if (loader_index != 1 || asset_types_registry_item_ptr)
+			if (loader_registry_item_ptr)
 			{
-				const auto stem = dir_entry.path().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-
-				ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
-				ImGui::BeginTable(file_name.c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)(tnSize + 9), 0 });
-				ImGui::PopStyleVar();
-				ImGui::TableNextColumn();
-
-				// thumbnail in the future
-
-				ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
-
-				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-				{
-					// Set payload to carry the asset filepath of our item (could be anything)
-					static std::filesystem::path payload;
-					payload = dir_entry.path();
-					ImGui::SetDragDropPayload("AssetPath", &payload, sizeof(payload));
-
-					// Display preview (could be anything, e.g. when dragging an image we could decide to display
-					// the filename and a small preview of the image, etc.)
-					ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, { 32,32 }, { 0,1 }, { 1,0 });
-					ImGui::Text(stem.c_str());
-
-					ImGui::EndDragDropSource();
-				}
-
-				if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0))
-				{
-					FileHandler::OpenFile(dir_entry.path());
-				}
-
-				ImGui::BeginTable(file_name.c_str(), 1, ImGuiTableFlags_PadOuterX);
-				ImGui::TableNextRow(ImGuiTableRowFlags_None, 25.f);
-				ImGui::TableNextColumn();
-				ImGui::TextWrapped(stem.c_str());
-				ImGui::TableNextColumn();
-
+				alias = loader_registry_item_ptr->SourceExtensionAlias;
+				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&LoaderColors[loader_registry_item_ptr->Type.ToInt()]);
 				ImGui::TextWrapped(alias.c_str());
-				ImGui::EndTable();
-
-				ImGui::EndTable();
+				ImGui::PopStyleColor();
+			}
+			else if (asset_types_registry_item_ptr)
+			{
+				alias = asset_types_registry_item_ptr->TypeConstCharPtr;
+				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&AssetTypeColors[asset_types_registry_item_ptr->Type.ToInt()]);
+				ImGui::TextWrapped(alias.c_str());
+				ImGui::PopStyleColor();
 			}
 			else
 			{
-				ImGui::BeginTable(file_name.c_str(), 1, 0, { (float)(tnSize + 9), 0 });
-				ImGui::TableNextColumn();
-				ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
-				ImGui::TableNextColumn();
-				ImGui::TextWrapped(file_name.c_str());
-				ImGui::EndTable();
+				FE_CORE_ASSERT(false, "How did we got here?");
+
+				auto error_color = FE_RGBA(214, 48, 49, 1.0);
+				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&error_color);
+				ImGui::TextWrapped("Error");
+				ImGui::PopStyleColor();
 			}
 
-			float last_button_x2 = ImGui::GetItemRectMax().x;
-			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next button was on same line
-			if (next_button_x2 < window_visible_x2)
-				ImGui::SameLine();
+			ImGui::EndTable();
+
+			ImGui::EndTable();
 		}
-		
+		else
+		{
+			ImGui::BeginTable(file_name.c_str(), 1, 0, { (float)(tnSize + 9), 0 });
+			ImGui::TableNextColumn();
+			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+			ImGui::TableNextColumn();
+			ImGui::TextWrapped(file_name.c_str());
+			ImGui::EndTable();
+		}
+
+		float last_button_x2 = ImGui::GetItemRectMax().x;
+		float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next button was on same line
+		if (next_button_x2 < window_visible_x2)
+			ImGui::SameLine();
 	}
 
 	void ContentBrowser::RenderUPFolder()
@@ -207,7 +264,6 @@ namespace fe
 		float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next element was on same line
 		if (next_button_x2 < window_visible_x2)
 			ImGui::SameLine();
-		
 	}
 
 	void ContentBrowser::RenderFolders(Scratchpad* sp, std::pmr::vector<std::pmr::string>* file_names)
@@ -254,90 +310,6 @@ namespace fe
 				file_names->push_back(std::move(entry_name));
 			}
 		}
-	}
-
-	void ContentBrowser::RenderFiles(std::pmr::vector<std::pmr::string>* file_names)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& tnSize = m_Settings.ThumbnailSize;
-		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
-		ImGuiStyle& style = ImGui::GetStyle();
-		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-
-		Scratchpad sp2;
-		for (const auto& file : *file_names)
-		{
-			FE_PROFILER_SCOPE("File");
-
-			const auto dot_pos = file.rfind(".");
-			const std::pmr::string extension(file.c_str() + dot_pos, file.length() - dot_pos, &sp2);
-
-			std::pmr::string alias(&sp2);
-
-			auto loader_index = FileHandler::GetSourceAliasAndLoaderIndex(extension, alias);
-			auto asset_types_registry_item_ptr = FileHandler::GetMetaAliasAndRegistryItemPtr(extension, alias);
-
-			if (loader_index != -1 || asset_types_registry_item_ptr)
-			{
-				const std::pmr::string stem(file.c_str(), dot_pos, &sp2);
-
-				ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
-				ImGui::BeginTable(file.c_str(), 1, ImGuiTableFlags_BordersOuter, { (float)(tnSize + 9), 0 });
-				ImGui::PopStyleVar();
-				ImGui::TableNextColumn();
-
-				// thumbnail in the future
-
-				ImGui::ImageButton(file.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
-
-				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-				{
-					// Set payload to carry the asset filepath of our item (could be anything)
-					static std::filesystem::path payload;
-					payload = m_CurrentPath / file;
-					ImGui::SetDragDropPayload("AssetPath", &payload, sizeof(payload));
-
-					// Display preview (could be anything, e.g. when dragging an image we could decide to display
-					// the filename and a small preview of the image, etc.)
-					ImGui::ImageButton(file.c_str(), m_Icons.FileID, { 32,32 }, { 0,1 }, { 1,0 });
-					ImGui::Text(stem.c_str());
-
-					ImGui::EndDragDropSource();
-				}
-
-				if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && loader_index != -1)
-				{
-					FileHandler::OpenFile(m_CurrentPath.lexically_relative(m_AssetsPath) / file, loader_index);
-				}
-
-				ImGui::BeginTable(file.c_str(), 1, ImGuiTableFlags_PadOuterX);
-				ImGui::TableNextRow(ImGuiTableRowFlags_None, 25.f);
-				ImGui::TableNextColumn();
-				ImGui::TextWrapped(stem.c_str());
-				ImGui::TableNextColumn();
-
-				ImGui::TextWrapped(alias.c_str());
-				ImGui::EndTable();
-
-				ImGui::EndTable();
-			}
-			else
-			{
-				ImGui::BeginTable(file.c_str(), 1, 0, { (float)(tnSize + 9), 0 });
-				ImGui::TableNextColumn();
-				ImGui::ImageButton(file.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
-				ImGui::TableNextColumn();
-				ImGui::TextWrapped(file.c_str());
-				ImGui::EndTable();
-			}
-
-			float last_button_x2 = ImGui::GetItemRectMax().x;
-			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + tnSize + 9; // Expected position if next button was on same line
-			if (next_button_x2 < window_visible_x2)
-				ImGui::SameLine();
-		}
-		
 	}
 
 	void ContentBrowser::RenderFolderNode(const std::filesystem::directory_entry& dir)

@@ -62,6 +62,23 @@ namespace fe
 		return false;
 	}
 
+	bool ShaderLoader::IsKnownAssetType(AssetType assetType)
+	{
+		static const AssetType knownTypes[] = {
+			AssetType::Shader
+		};
+
+		for (const auto& knownType : knownTypes)
+		{
+			if (knownType == assetType)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void ShaderLoader::GLCompileShader(const AssetUser<Shader>& shaderUser)
 	{
 		FE_PROFILER_FUNC();

@@ -98,7 +98,7 @@ namespace fe
 
 	bool TextureLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static std::pmr::string knownExtensions[] = {
+		static const char const* knownExtensions[] = {
 			".jpg",
 			".jpeg",
 			".png",
@@ -109,9 +109,26 @@ namespace fe
 			".pgm"
 		};
 
-		for (auto& knownExtension : knownExtensions)
+		for (const auto& knownExtension : knownExtensions)
 		{
 			if (extension == knownExtension)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool TextureLoader::IsKnownAssetType(AssetType assetType)
+	{
+		static const AssetType knownTypes[] = {
+			AssetType::Texture2D
+		};
+
+		for (const auto& knownType : knownTypes)
+		{
+			if (knownType == assetType)
 			{
 				return true;
 			}

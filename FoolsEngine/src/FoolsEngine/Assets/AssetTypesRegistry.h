@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Asset.h"
+#include "Loaders\LoaderType.h"
 
 namespace fe
 {
@@ -12,14 +13,15 @@ namespace fe
 			void (* EmplaceCore)(AssetID);
 			bool (* LoadMetadata)(AssetID);
 			void (* SaveMetadata)(AssetID);
-			const char* (*GetMetaFileExtension)();
+			const char* MetaFileExtension;
 			// load data too? (for AssetManager::EvaluateAndReload)
-			AssetType Type;
 			const char* TypeConstCharPtr;
+			AssetType Type;
 		};
 
 		static const std::vector<Item> GetItems() { return s_Instance->m_Items; }
-
+		static const Item* GetItem(AssetType assetType);
+		static const Item* GetItem(const std::pmr::string extension);
 	private:
 		friend class Application;
 		AssetTypesRegistry() { s_Instance = this; };
@@ -38,9 +40,9 @@ namespace fe
 					&tnAsset::EmplaceCore,
 					&tnAsset::LoadMetadata,
 					&tnAsset::SaveMetadata,
-					&tnAsset::GetMetaFileExtension,
-					tnAsset::GetTypeStatic(),
-					tnAsset::GetTypeStatic().ToConstCharPtr()
+					tnAsset::GetMetaFileExtension(),
+					tnAsset::GetTypeStatic().ToConstCharPtr(),
+					tnAsset::GetTypeStatic()
 				}
 			);
 		}

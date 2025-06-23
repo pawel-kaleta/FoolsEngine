@@ -41,6 +41,7 @@ namespace fe
 	class BehaviorsRegistry;
 	class SystemsRegistry;
 	class AssetTypesRegistry;
+	class LoadersRegistry;
 	class AssetManager;
 	class ApplicationLayer;
 	class Project;
@@ -94,10 +95,11 @@ namespace fe
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
 
-		ComponentTypesRegistry*	m_ComponentTypesRegistry = nullptr;
-		BehaviorsRegistry*		m_BehaviorsRegistry = nullptr;
-		SystemsRegistry*		m_SystemsRegistry = nullptr;
-		AssetTypesRegistry*		m_AssetTypesRegistry = nullptr;
+		ComponentTypesRegistry*	m_ComponentTypesRegistry	= nullptr;
+		BehaviorsRegistry*		m_BehaviorsRegistry			= nullptr;
+		SystemsRegistry*		m_SystemsRegistry			= nullptr;
+		AssetTypesRegistry*		m_AssetTypesRegistry		= nullptr;
+		LoadersRegistry*		m_LoadersRegistry			= nullptr;
 
 		AssetManager* m_AssetManager = nullptr;
 

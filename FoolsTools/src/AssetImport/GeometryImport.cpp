@@ -218,8 +218,9 @@ namespace fe::GeometryImport
 	{
 		constexpr ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 
-		if (ImGui::BeginTable("MeshesTable", 4, flags))
+		if (ImGui::BeginTable("MeshesTable", 5, flags))
 		{
+			ImGui::TableSetupColumn("No.", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Material", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Vertex Count", ImGuiTableColumnFlags_NoHide);
@@ -234,10 +235,13 @@ namespace fe::GeometryImport
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
+				std::string no = std::to_string(i);
+				ImGui::Text(no.c_str());
+				ImGui::TableNextColumn();
 				ImGui::Text(mesh->mName.C_Str());
 				ImGui::TableNextColumn();
 				const auto name = scene->mMaterials[matIndex]->GetName();
-				const std::string nameLabel = std::to_string(i) + ". " + std::string(name.C_Str());
+				const std::string nameLabel = std::to_string(matIndex) + ". " + std::string(name.C_Str());
 				ImGui::Text(nameLabel.c_str());
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", mesh->mNumVertices);
@@ -318,46 +322,45 @@ namespace fe::GeometryImport
 		float     roughness = 0;  mat->Get(AI_MATKEY_ROUGHNESS_FACTOR,  roughness ); if (roughness)                                   ImGui::InputFloat("Roughness",          &roughness);
 		float     anisotropy = 0; mat->Get(AI_MATKEY_ANISOTROPY_FACTOR, anisotropy); if (anisotropy)                                  ImGui::InputFloat("Anisotropy",         &anisotropy);
 
-		bool b0; mat->Get(AI_MATKEY_USE_COLOR_MAP, b0); if (b0)
+		bool b0 = false; mat->Get(AI_MATKEY_USE_COLOR_MAP, b0); if (b0)
 		{
 			aiString base_color_map; mat->GetTexture(aiTextureType_BASE_COLOR, 0, &base_color_map);
-			ImGui::InputText("Base Color Map", (char*)base_color_map.C_Str(), base_color_map.length + 1);
+			if (base_color_map.length) ImGui::InputText("Base Color Map", (char*)base_color_map.C_Str(), base_color_map.length + 1);
 
 			aiString diffuse_map; mat->GetTexture(aiTextureType_DIFFUSE, 0, &diffuse_map);
-			if (base_color_map != diffuse_map) ImGui::InputText("Diffuse Map", (char*)diffuse_map.C_Str(), diffuse_map.length + 1);
+			if (diffuse_map.length) ImGui::InputText("Diffuse Map", (char*)diffuse_map.C_Str(), diffuse_map.length + 1);
 		}
 
 		if (importData->GeometryData.GLTFTexturePacking)
 		{
 			aiString omr_map; mat->GetTexture(aiTextureType_UNKNOWN, 0, &omr_map);
-			ImGui::InputText("Occlusion-Metalness-Roughness Map", (char*)omr_map.C_Str(), omr_map.length + 1);
+			if (omr_map.length) ImGui::InputText("Occlusion-Metalness-Roughness Map", (char*)omr_map.C_Str(), omr_map.length + 1);
 		}
 		else
 		{
-			bool b1; mat->Get(AI_MATKEY_USE_METALLIC_MAP, b1); if (b1)
+			bool b1 = false; mat->Get(AI_MATKEY_USE_METALLIC_MAP, b1); if (b1)
 			{
 				aiString metalness_map; mat->GetTexture(aiTextureType_DIFFUSE, 0, &metalness_map);
 				if (metalness_map.length) ImGui::InputText("Metalness Map", (char*)metalness_map.C_Str(), metalness_map.length + 1);
 			}
 
-			bool b2; mat->Get(AI_MATKEY_USE_ROUGHNESS_MAP, b2); if (b2)
+			bool b2 = false; mat->Get(AI_MATKEY_USE_ROUGHNESS_MAP, b2); if (b2)
 			{
 				aiString roughness_map; mat->GetTexture(aiTextureType_DIFFUSE, 0, &roughness_map);
 				if (roughness_map.length) ImGui::InputText("Roughness Map", (char*)roughness_map.C_Str(), roughness_map.length + 1);
 			}
 
-			bool b3; mat->Get(AI_MATKEY_USE_AO_MAP, b3); if (b3)
+			bool b3 = false; mat->Get(AI_MATKEY_USE_AO_MAP, b3); if (b3)
 			{
 				aiString occlusion_map; mat->GetTexture(aiTextureType_DIFFUSE, 0, &occlusion_map);
 				if (occlusion_map.length) ImGui::InputText("Occlusion Map", (char*)occlusion_map.C_Str(), occlusion_map.length + 1);
 			}
 		}
 
-		bool b4; mat->Get(AI_MATKEY_USE_EMISSIVE_MAP, b4); if (b4)
+		bool b4 = false; mat->Get(AI_MATKEY_USE_EMISSIVE_MAP, b4); if (b4)
 		{
 			aiString emissive_map; mat->GetTexture(aiTextureType_EMISSION_COLOR, 0, &emissive_map);
-			if (emissive_map.length)
-				ImGui::InputText("Emissive Map", (char*)emissive_map.C_Str(), emissive_map.length + 1);
+			if (emissive_map.length) ImGui::InputText("Emissive Map", (char*)emissive_map.C_Str(), emissive_map.length + 1);
 		}
 		
 		aiString normal_map_a; mat->GetTexture(aiTextureType_NORMAL_CAMERA, 0, &normal_map_a);

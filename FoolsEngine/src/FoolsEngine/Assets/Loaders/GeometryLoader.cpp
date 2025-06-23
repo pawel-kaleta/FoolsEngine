@@ -35,6 +35,25 @@ namespace fe
 			return false;
 		}
 
+	bool GeometryLoader::IsKnownAssetType(AssetType assetType)
+	{
+		static const AssetType knownTypes[] = {
+			AssetType::Mesh,
+			AssetType::RenderMesh,
+			AssetType::Model
+		};
+
+		for (const auto& knownType : knownTypes)
+		{
+			if (knownType == assetType)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	const aiScene* GeometryLoader::InspectSourceFile(const std::filesystem::path& filePath, uint32_t loadFlags)
 		{
 			static Assimp::Importer s_Inspector;

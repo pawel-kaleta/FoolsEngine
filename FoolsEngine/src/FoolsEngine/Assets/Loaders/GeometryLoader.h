@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FoolsEngine\Assets\Loaders\LoaderType.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Model.h"
 
@@ -10,6 +11,8 @@ namespace fe
 	class GeometryLoader
 	{
 	public:
+		static constexpr LoaderType GetTypeStatic() { return LoaderType::Geometry; }
+		static constexpr AssetType GetAssetTypeStatic() { return AssetType::None; }
 		static void LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser);
 		static void LoadMesh(AssetUser<Mesh>& meshUser)
 		{
@@ -27,6 +30,7 @@ namespace fe
 		static void UnloadModel(void* data);
 
 		static bool IsKnownExtension(const std::pmr::string& extension);
+		static bool IsKnownAssetType(AssetType assetType);
 		static const char* GetExtensionAlias() { return "Geometry Source"; }
 		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath, uint32_t loadFlags = 0);
 	};

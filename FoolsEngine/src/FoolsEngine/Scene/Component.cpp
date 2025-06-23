@@ -12,13 +12,15 @@
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
+#include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
+
 #include <type_traits>
 
 namespace fe
 {
 	namespace AssetImportModal
 	{
-		extern void OpenWindow(const std::filesystem::path& filepath, uint32_t loaderIndex, AssetType type, AssetHandleBase* optionalBaseHandle);
+		extern void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr, AssetType type = AssetType::None, AssetHandleBase* optionalBaseHandle = nullptr);
 	}
 
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
@@ -104,9 +106,9 @@ namespace fe
 							FE_CORE_ASSERT(!is_asset_proxy, "Dont import asset proxies!");
 
 							FE_CORE_ASSERTION_BREAK(false, "Not implemented");
-							uint32_t file_importer_idx;// = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
-							if (file_importer_idx != -1)
-								AssetImportModal::OpenWindow(filepath, file_importer_idx, tnAsset::GetTypeStatic(), &assetHandle);
+							auto loader_registry_item_ptr = LoadersRegistry::GetItem(tnAsset::GetTypeStatic());
+							if (loader_registry_item_ptr)
+								AssetImportModal::OpenWindow(filepath, loader_registry_item_ptr, tnAsset::GetTypeStatic(), &assetHandle);
 						}
 					}
 				}

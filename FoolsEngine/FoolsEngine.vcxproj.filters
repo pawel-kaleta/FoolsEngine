@@ -376,6 +376,9 @@
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypes.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\Colors.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h" />
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -590,5 +593,6 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.cpp" />
   </ItemGroup>
 </Project>

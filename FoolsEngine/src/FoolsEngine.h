@@ -37,14 +37,17 @@
 #include "FoolsEngine\Assets\Serialization\SceneSerializer.h"
 #include "FoolsEngine\Platform\FileDialogs.h"
 #include "FoolsEngine\Math\Math.h"
+#include "FoolsEngine\Assets\Loaders\LoaderType.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 #include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
+#include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine\Utils\Colors.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"
