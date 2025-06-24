@@ -11,8 +11,7 @@ namespace fe
 {
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string nameTag = "Texture";
-		DrawAssetHandle<Texture2D>(Tile.Texture, nameTag);
+		DrawAssetHandle<Texture2D>(Tile.Texture, "Texture", NullAssetID);
 
 		if (Tile.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{
@@ -42,8 +41,7 @@ namespace fe
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string nameTag = "Texture";
-		DrawAssetHandle<Texture2D>(Sprite.Texture, nameTag);
+		DrawAssetHandle<Texture2D>(Sprite.Texture, "Texture", NullAssetID);
 
 		if (Sprite.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{

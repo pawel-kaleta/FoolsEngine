@@ -5,12 +5,13 @@
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
+#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+
 namespace fe
 {
 	void CRenderMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string name_tag = RenderMesh.Observe().GetFilepath().filename().string();
-		DrawAssetHandle<fe::RenderMesh>(RenderMesh, name_tag);
+		DrawAssetHandle<fe::RenderMesh>(RenderMesh, "Render Mesh", NullAssetID);
 	}
 
 	void CRenderMesh::Serialize(YAML::Emitter& emitter)
@@ -25,10 +26,8 @@ namespace fe
 
 	void CRenderMeshView::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string material_name_tag = Material.Observe().GetFilepath().filename().string();
-		std::string     mesh_name_tag = Mesh.Observe().GetFilepath().filename().string();
-		DrawAssetHandle<fe::Material>(Material, mesh_name_tag);
-		DrawAssetHandle<fe::Mesh    >(Mesh, mesh_name_tag);
+		DrawAssetHandle<fe::Material>(Material, "Material", Renderer::BaseAssets.Materials.Default.GetID());
+		DrawAssetHandle<fe::Mesh>(Mesh, "Mesh", NullAssetID);
 	}
 
 	void CRenderMeshView::Serialize(YAML::Emitter& emitter)
@@ -45,8 +44,7 @@ namespace fe
 
 	void CModel::DrawInspectorWidget(BaseEntity entity)
 	{
-		std::string name_tag = Model.Observe().GetFilepath().filename().string();
-		DrawAssetHandle<fe::Model>(Model, name_tag);
+		DrawAssetHandle<fe::Model>(Model, "Model", NullAssetID);
 	}
 
 	void CModel::Serialize(YAML::Emitter& emitter)
@@ -63,8 +61,7 @@ namespace fe
 	{
 		for (auto& render_mesh : RenderMeshes)
 		{
-			std::string name_tag = render_mesh.Observe().GetFilepath().filename().string();
-			DrawAssetHandle<RenderMesh>(render_mesh, name_tag);
+			DrawAssetHandle<RenderMesh>(render_mesh, "RenderMesh", NullAssetID);
 		}
 	}
 

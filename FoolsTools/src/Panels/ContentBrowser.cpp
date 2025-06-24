@@ -297,7 +297,7 @@ namespace fe
 				}
 
 				ImGui::TableNextColumn();
-				ImGui::Text(entry_name.c_str());
+				ImGui::TextWrapped(entry_name.c_str());
 				ImGui::EndTable();
 
 				float last_button_x2 = ImGui::GetItemRectMax().x;
@@ -316,6 +316,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		// this is not working correctly
 		if (dir.path().compare(m_CurrentPath) != 0 && m_Settings.DisplayDirectories)
 			ImGui::SetNextItemOpen(false);
 		if (dir.path().lexically_relative(m_CurrentPath).compare("..") == 0) // this is expensive
@@ -324,6 +325,7 @@ namespace fe
 			ImGui::SetNextItemOpen(true);
 		if (dir.path().compare(m_AssetsPath) == 0)
 			ImGui::SetNextItemOpen(true);
+		// this is not working correctly
 
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;

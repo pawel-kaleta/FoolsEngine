@@ -10,6 +10,8 @@
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 namespace fe
 {
 	void ACMeshCore::Init()
@@ -97,7 +99,7 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "Not implemented default texture");		
+				//FE_CORE_ASSERT(false, "Not implemented default texture");		
 				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, rendererTextureSlot);
 			}
 
@@ -119,11 +121,14 @@ namespace fe
 
 		YAML::Emitter emitter;
 
+		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
 		emitter << YAML::Key << "Vartex Count" << YAML::Value << core.Specification.VertexCount;
 		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
+		emitter << YAML::EndMap;
 
-		std::ofstream fout(assetObserver.GetFilepath());
+		auto x = Project::GetInstance()->AssetsPath / assetObserver.GetFilepath();
+		std::ofstream fout(x);
 		fout << emitter.c_str();
 	}
 

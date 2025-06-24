@@ -1,4 +1,4 @@
-Shader: assets/shaders/Base3DShader.glsl
+Shader: base_assets/shaders/Base3DShader.glsl
 Uniforms Data Size: 24
 Uniforms:
   - Name: u_BaseColor

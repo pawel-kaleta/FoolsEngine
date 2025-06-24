@@ -121,18 +121,18 @@ namespace fe
 
 		auto structure = ShaderData::StructureInType(type);
 		auto primitive = ShaderData::PrimitiveInType(type);
-		bool success;
+		bool success = false;
 
 		switch (structure)
 		{
 		case ShaderData::Structure::Scalar:
 			switch (primitive)
 			{
-			case ShaderData::Primitive::Bool:   *(bool*    )dataPtr = node.as<bool    >(); break;
-			case ShaderData::Primitive::Int:    *(int*     )dataPtr = node.as<int     >(); break;
-			case ShaderData::Primitive::UInt:   *(uint32_t*)dataPtr = node.as<uint32_t>(); break;
-			case ShaderData::Primitive::Float:  *(float*   )dataPtr = node.as<float   >(); break;
-			case ShaderData::Primitive::Double: *(double*  )dataPtr = node.as<double  >(); break;
+			case ShaderData::Primitive::Bool:   *(bool*    )dataPtr = node.as<bool    >(); success = true; break;
+			case ShaderData::Primitive::Int:    *(int*     )dataPtr = node.as<int     >(); success = true; break;
+			case ShaderData::Primitive::UInt:   *(uint32_t*)dataPtr = node.as<uint32_t>(); success = true; break;
+			case ShaderData::Primitive::Float:  *(float*   )dataPtr = node.as<float   >(); success = true; break;
+			case ShaderData::Primitive::Double: *(double*  )dataPtr = node.as<double  >(); success = true; break;
 			default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
 			}
 			break;

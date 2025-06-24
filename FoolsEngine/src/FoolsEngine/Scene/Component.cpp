@@ -13,6 +13,8 @@
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
 #include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
+#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine\Core\Project.h"
 
 #include <type_traits>
 
@@ -58,9 +60,10 @@ namespace fe
 	}
 
 	template<typename tnAsset>
-	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag)
+	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::string& nameTag, AssetID defaultAsset)
 	{
-		std::string name;
+		Scratchpad sp;
+		std::pmr::string name(&sp);
 		if (!assetHandle.IsValid())
 		{
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
@@ -68,15 +71,25 @@ namespace fe
 		}
 		else
 		{
-			name = std::to_string(assetHandle.GetID()) + ": " + assetHandle.Observe().GetFilepath().filename().string();
+			auto observer = assetHandle.Observe();
+			name = std::to_string(assetHandle.GetID());
+			name += ": ";
+			if (observer.AllOf<ACFilepath>())
+				name += observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>();
+			else
+				name += "default";
 		}
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+		bool reset = ImGui::Button("x"); ImGui::SameLine();
 		bool selected = ImGui::Button(name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
 		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 		if (!assetHandle.IsValid())
 			ImGui::PopStyleColor();
+
+		if (reset)
+			assetHandle.SetID(defaultAsset);
 
 #ifdef FE_EDITOR
 		if (ImGui::BeginDragDropTarget())
@@ -87,28 +100,18 @@ namespace fe
 				const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
 				if (!filepath.empty())
 				{
-					std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>();
+					std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 
-					FE_CORE_ASSERTION_BREAK(false, "Not implemented");
-
-					uint32_t file_importer_idx;// = FileHandler::GetSourceAliasAndLoaderIndex(extension, std::pmr::string());
-					bool     is_asset_proxy;// = FileHandler::GetAliasAndAssetTypeOfProxy(extension, std::pmr::string()) != AssetType::None;
-
-					if (is_asset_proxy || file_importer_idx != -1)
+					if (tnAsset::GetMetaFileExtension() == extension)
 					{
-						AssetID assetID = AssetManager::GetAssetFromFilepath(filepath);
+						AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
 						if (assetID != NullAssetID)
 						{
-							assetHandle = AssetHandle<tnAsset>(assetID);
+							assetHandle.SetID(assetID);
 						}
 						else
 						{
-							FE_CORE_ASSERT(!is_asset_proxy, "Dont import asset proxies!");
-
-							FE_CORE_ASSERTION_BREAK(false, "Not implemented");
-							auto loader_registry_item_ptr = LoadersRegistry::GetItem(tnAsset::GetTypeStatic());
-							if (loader_registry_item_ptr)
-								AssetImportModal::OpenWindow(filepath, loader_registry_item_ptr, tnAsset::GetTypeStatic(), &assetHandle);
+							FE_CORE_ASSERT(false, "Dont import asset proxies!");
 						}
 					}
 				}
@@ -120,11 +123,11 @@ namespace fe
 		ImGui::SameLine();
 		ImGui::Text(nameTag.c_str());
 	}
-	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&, const std::string&);
-	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&, const std::string&);
+	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&, const std::string&, AssetID);
+	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&, const std::string&, AssetID);
+	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&, const std::string&, AssetID);
+	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&, const std::string&, AssetID);
+	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&, const std::string&, AssetID);
 
 
 	

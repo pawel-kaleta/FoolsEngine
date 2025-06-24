@@ -20,7 +20,7 @@ namespace fe
 		AssetLoadingPriority GetLoadingPriority() const { return m_LoadingPriority; }
 	protected:
 		AssetHandleBase() :
-			m_ID(NullAssetID) { };
+			m_ID(NullAssetID), m_LoadingPriority(LoadingPriority_Standard) { };
 		AssetHandleBase(AssetID id, AssetLoadingPriority priority) :
 			m_ID(id), m_LoadingPriority(priority) { };
 		
@@ -37,7 +37,7 @@ namespace fe
 
 		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
-		AssetHandle() { };
+		AssetHandle() = default;
 		AssetHandle(AssetID assetID, AssetLoadingPriority priority = LoadingPriority_Standard) :
 			AssetHandleBase(assetID, priority)
 		{
@@ -49,8 +49,8 @@ namespace fe
 			Deinit();
 		}
 
-		AssetHandle(const AssetHandle& other) :
-			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
+		AssetHandle(const AssetHandle& other, AssetLoadingPriority priority = LoadingPriority_Standard) :
+			AssetHandleBase(other.m_ID, priority)
 		{
 			Init();
 		};
@@ -64,7 +64,6 @@ namespace fe
 			Deinit();
 
 			m_ID = other.m_ID;
-			m_LoadingPriority = other.m_LoadingPriority;
 
 			Init();
 
@@ -98,6 +97,12 @@ namespace fe
 			}
 			m_LoadingPriority = priority;
 		} // TO DO: add AssetLoadingPriority counting
+		void SetID(AssetID assetID)
+		{
+			Deinit();
+			m_ID = assetID;
+			Init();
+		}
 
 		AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
 		AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }

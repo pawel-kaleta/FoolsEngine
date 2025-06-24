@@ -17,8 +17,8 @@ namespace fe
 
 		enum ImportVariant
 		{
-			ImportVariant_Prefab,
 			ImportVariant_Model,
+			ImportVariant_RenderMesh,
 			ImportVariant_Mesh
 		};
 
@@ -27,7 +27,7 @@ namespace fe
 			const aiScene* Scene;
 			ImportVariant ImportVariant;
 			uint32_t MaterialPreviewItemSelectedIndex;
-			bool ImportMaterials;
+			//bool Merge;
 			bool GLTFTexturePacking;
 		};
 	};

@@ -16,7 +16,7 @@ namespace fe
 		static void LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser);
 		static void LoadMesh(AssetUser<Mesh>& meshUser)
 		{
-			auto path = meshUser.GetFilepath();
+			auto path = meshUser.GetSourceFilepath()->Filepath;
 			LoadMesh(path, meshUser);
 		}
 		static void UnloadMesh(void* data) { delete[] (uint32_t*)data; }

@@ -191,7 +191,7 @@ namespace fe
 			const auto& name_node  = uniform_node["Name"];
 			const auto& type_node  = uniform_node["Type"];
 			const auto& count_node = uniform_node["Count"];
-			const auto& value_node = uniform_node["Default Value"];
+			const auto& value_node = uniform_node["DefaultValue"];
 
 			if (!name_node) return false;
 			if (!type_node) return false;
@@ -199,7 +199,7 @@ namespace fe
 			if (!value_node) return false;
 
 			const auto uniform_name = name_node.as<std::string>();
-			ShaderData::Type uniform_type; uniform_type.FromInt(type_node.as<int>());
+			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
 			const auto uniform_count = count_node.as<uint32_t>();
 
 			core.Uniforms.emplace_back(uniform_name, uniform_type, uniform_count);

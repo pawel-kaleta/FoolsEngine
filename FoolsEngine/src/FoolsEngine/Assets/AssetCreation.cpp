@@ -25,23 +25,25 @@ namespace fe
 
 
 	template <typename tnAsset>
-	static AssetID AssetManager::AssetCreation::BaseAsset(UUID uuid)
+	static AssetID AssetManager::AssetCreation::BaseAsset(const std::filesystem::path& path, UUID uuid)
 	{
 		FE_PROFILER_FUNC();
 
 		AssetRegistry& reg = s_Instance->m_Registry;
 		AssetID assetID = reg.create();
 
+		reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
+		reg.emplace<ACFilepath>(assetID).Filepath = path;
 		reg.emplace<ACUUID>(assetID).UUID = uuid;
+		s_Instance->m_MapByFilepath[path] = assetID;
 		s_Instance->m_MapByUUID[uuid] = assetID;
 
-		reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
 		reg.emplace<tnAsset::Core>(assetID).Init();
 
 		return assetID;
 	}
 
-#define _CREATE_BASE_ASSET_DEF(x) template AssetID AssetManager::AssetCreation::BaseAsset<x>(UUID uuid);
+#define _CREATE_BASE_ASSET_DEF(x) template AssetID AssetManager::AssetCreation::BaseAsset<x>(const std::filesystem::path& path, UUID uuid);
 	FE_FOR_EACH(_CREATE_BASE_ASSET_DEF, FE_ASSET_TYPES_LIST);
 
 

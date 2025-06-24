@@ -48,9 +48,9 @@ namespace fe
 	}
 
 	template <typename tnAsset>
-	void MakeHandle(AssetHandle<tnAsset>& hande, const UUID& uuid)
+	void MakeHandle(const std::filesystem::path& path, AssetHandle<tnAsset>& hande, const UUID& uuid)
 	{
-		hande = AssetHandle<tnAsset>(AssetManager::AssetCreation::BaseAsset<tnAsset>(uuid), AssetLoadingPriority::LoadingPriority_None);
+		hande = AssetHandle<tnAsset>(AssetManager::AssetCreation::BaseAsset<tnAsset>(path, uuid), AssetLoadingPriority::LoadingPriority_None);
 	}
 
 	void Renderer::AcquireBaseAssets()
@@ -59,12 +59,13 @@ namespace fe
 
 		auto& base_assets = Project::GetInstance()->BaseAssets;
 
-		MakeHandle(BaseAssets.Textures.Default     , base_assets.Textures.Default);
-		MakeHandle(BaseAssets.Textures.FlatWhite   , base_assets.Textures.FlatWhite);
-		MakeHandle(BaseAssets.Shaders.Base2D       , base_assets.Shaders.Base2D);
-		MakeHandle(BaseAssets.Shaders.Base3D       , base_assets.Shaders.Base3D);
-		MakeHandle(BaseAssets.ShadingModels.Default, base_assets.ShadingModels.Default);
-		MakeHandle(BaseAssets.Materials.Default    , base_assets.Materials.Default);
+		MakeHandle("base_assets/textures/Default_Texture.png",	BaseAssets.Textures.Default,		base_assets.Textures.Default);
+		MakeHandle("base_assets/textures/FlatWhite.png",		BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
+		MakeHandle("base_assets/shaders/Base2DShader.glsl",		BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
+		MakeHandle("base_assets/shaders/Base3DShader.glsl",		BaseAssets.Shaders.Base3D,			base_assets.Shaders.Base3D);
+		MakeHandle("base_assets/shading_models/Default.fesm",	BaseAssets.ShadingModels.Default,	base_assets.ShadingModels.Default);
+		MakeHandle("Default.femat",								BaseAssets.Materials.Default,		base_assets.Materials.Default);
+		// "_Default.femat" is a dummy path
 
 		TextureLoader::LoadTexture("base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
 		TextureLoader::LoadTexture("base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
@@ -72,7 +73,8 @@ namespace fe
 		ShaderLoader::LoadShader("base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
 		ShaderLoader::LoadShader("base_assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
 
-		ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "base_assets/shading_models/Default.fesm");
+		bool succes = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "base_assets/shading_models/Default.fesm");
+		FE_CORE_ASSERT(succes, "Failed to load default shading model");
 
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 
@@ -184,6 +186,38 @@ namespace fe
 
 			AssetObserver<Mesh>(render_mesh_core.MeshID).Draw(material_observer);
 		}
+
+		auto viewViewMeshes = registry.view<CRenderMeshView, CTransformGlobal>();
+		for (auto ID : viewViewMeshes)
+		{
+			auto [renderViewMesh_component, transform_component] = viewViewMeshes.get(ID);
+			if (!renderViewMesh_component.Material.IsValid())
+				continue;
+			if (!renderViewMesh_component.Mesh.IsValid())
+				continue;
+
+			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix();
+			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+
+			auto material_observer = renderViewMesh_component.Material.Observe();
+			auto mesh_observer = renderViewMesh_component.Mesh.Observe();
+
+			auto y = material_observer.GetCoreComponent().ShadingModelID;
+			auto x = AssetObserver<ShadingModel>(y);
+			auto shaderID = x.GetCoreComponent().ShaderID;
+
+			{
+				auto shader_observer = AssetObserver<Shader>(shaderID);
+
+				shader_observer.Bind(GDI);
+				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
+				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+			}
+
+			mesh_observer.Draw(material_observer);
+		}
+
 
 		framebuffer.Unbind();
 

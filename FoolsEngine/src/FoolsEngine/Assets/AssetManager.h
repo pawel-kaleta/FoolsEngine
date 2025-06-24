@@ -20,7 +20,7 @@ namespace fe
 #endif
 
 			template <typename tnAsset>
-			static AssetID BaseAsset(UUID uuid);
+			static AssetID BaseAsset(const std::filesystem::path& path, UUID uuid);
 
 			template <typename tnAsset>
 			static AssetID InternalAsset(AssetID master);

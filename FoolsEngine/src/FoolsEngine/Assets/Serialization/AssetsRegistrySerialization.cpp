@@ -17,10 +17,10 @@ namespace fe::AssetSerializer
 		auto& reg = AssetManager::GetRegistry();
 
 		emitter << YAML::Key << "Masters" << YAML::Value << YAML::BeginSeq;
-		auto paths_view = reg.view<ACFilepath>();
+		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 		for (auto id : paths_view)
 		{
-			auto [acpath] = paths_view.get(id);
+			auto& acpath = paths_view.get<ACFilepath>(id);
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
@@ -107,13 +107,13 @@ namespace fe::AssetSerializer
 		FE_PROFILER_FUNC();
 
 		auto& reg = AssetManager::GetRegistry();
-		auto paths_view = reg.view<ACFilepath>();
+		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 
 		for (auto assetID : paths_view)
 		{
 			FE_PROFILER_SCOPE("Asset");
 
-			auto [cfilepath] = paths_view.get(assetID);
+			auto& cfilepath = paths_view.get<ACFilepath>(assetID);
 			auto type = reg.get<ACAssetType>(assetID).Type;
 
 			for (auto& item : AssetTypesRegistry::GetItems())
