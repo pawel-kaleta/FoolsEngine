@@ -156,36 +156,36 @@ namespace fe
 		Renderer2D::RenderScene(scene, camera, cameraTransform, framebuffer);
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
-		auto viewMeshes = registry.view<CRenderMesh, CTransformGlobal>();
 		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
-
 		auto GDI = Renderer::GetActiveGDItype();
 
-		for (auto ID : viewMeshes)
-		{
-			auto [render_mesh_component, transform_component] = viewMeshes.get(ID);
-			if (!render_mesh_component.RenderMesh.IsValid())
-				continue;
 
-			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix();
-			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
-
-			auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
-
-			auto& render_mesh_core = render_mesh_observer.GetCoreComponent();
-			auto material_observer = AssetObserver<Material>(render_mesh_core.MaterialID);
-			auto shaderID = AssetObserver<ShadingModel>(material_observer.GetCoreComponent().ShadingModelID).GetCoreComponent().ShaderID;
-			{
-				auto shader_observer = AssetObserver<Shader>(shaderID);
-
-				shader_observer.Bind(GDI);
-				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
-				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
-			}
-
-			AssetObserver<Mesh>(render_mesh_core.MeshID).Draw(material_observer);
-		}
+		//auto viewMeshes = registry.view<CRenderMesh, CTransformGlobal>();
+		//for (auto ID : viewMeshes)
+		//{
+		//	auto [render_mesh_component, transform_component] = viewMeshes.get(ID);
+		//	if (!render_mesh_component.RenderMesh.IsValid())
+		//		continue;
+		//
+		//	glm::mat4 modelTransform = transform_component.GetRef().GetMatrix();
+		//	void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+		//
+		//	auto render_mesh_observer = render_mesh_component.RenderMesh.Observe();
+		//
+		//	auto& render_mesh_core = render_mesh_observer.GetCoreComponent();
+		//	auto material_observer = AssetObserver<Material>(render_mesh_core.MaterialID);
+		//	auto shaderID = AssetObserver<ShadingModel>(material_observer.GetCoreComponent().ShadingModelID).GetCoreComponent().ShaderID;
+		//	{
+		//		auto shader_observer = AssetObserver<Shader>(shaderID);
+		//
+		//		shader_observer.Bind(GDI);
+		//		shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
+		//		shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+		//		shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+		//	}
+		//
+		//	AssetObserver<Mesh>(render_mesh_core.MeshID).Draw(material_observer);
+		//}
 
 		auto viewViewMeshes = registry.view<CRenderMeshView, CTransformGlobal>();
 		for (auto ID : viewViewMeshes)
@@ -220,6 +220,11 @@ namespace fe
 
 
 		framebuffer.Unbind();
+
+		GLenum error = glGetError();
+
+		if (error)
+			FE_LOG_CORE_INFO("{0}", error);
 
 		EndScene();
 	}

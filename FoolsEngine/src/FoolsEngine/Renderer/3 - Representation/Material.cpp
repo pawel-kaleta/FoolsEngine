@@ -177,6 +177,8 @@ namespace fe
 				texture = textureID;
 
 			++slotsIt;
+
+			return;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");

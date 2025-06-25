@@ -1,5 +1,6 @@
 #include "GeometryImport.h"
 #include "ImportData.h"
+#include "FileHandler.h"
 
 #include <assimp/pbrmaterial.h>
 #include <assimp/postprocess.h>
@@ -64,9 +65,6 @@ namespace fe::GeometryImport
 		}
 
 		//model_user.SetFilepath(importData->Filepath);
-
-		if (importData->HandleToOverride && importData->Type == AssetType::Model)
-			*(AssetHandle<Model>*)(importData->HandleToOverride) = model_handle;
 
 		YAML::Emitter emitter;
 
@@ -133,9 +131,6 @@ namespace fe::GeometryImport
 			}
 			specification.IndexCount *= 3;
 		}
-		
-		if (importData->HandleToOverride && importData->Type == AssetType::Mesh)
-			*(AssetHandle<Mesh>*)(importData->HandleToOverride) = mesh_handle;
 		
 		Mesh::SaveMetadata(assetID);
 	}
@@ -448,13 +443,18 @@ namespace fe::GeometryImport
 			break;
 		}
 
-		if (importData->GeometryData.GLTFTexturePacking)
+		// setting textures mapping to shader samplers and chanel Swizzle masks
+		if (importData->GeometryData.ImportVariant == ImportVariant_Model ||
+			importData->GeometryData.ImportVariant == ImportVariant_RenderMesh)
 		{
+			if (importData->GeometryData.GLTFTexturePacking)
+			{
 
-		}
-		else
-		{
-			// setting textures mapping to shader samplers and chanel Swizzle masks
+			}
+			else
+			{
+
+			}
 		}
 		
 
@@ -462,30 +462,17 @@ namespace fe::GeometryImport
 		if (ImGui::Button("Import As..."))
 		{
 			Scratchpad sp;
-			std::pmr::string alias(&sp);
-			std::pmr::string extension(&sp);
+			std::filesystem::path defaultFilepath;
+			std::pmr::string filter(&sp);
+			
 			switch (importData->GeometryData.ImportVariant)
 			{
-			case ImportVariant_Model:
-				alias = AssetType(AssetType::Model).ToConstCharPtr();
-				extension = Model::GetMetaFileExtension();
-				break;
-			case ImportVariant_RenderMesh:
-				alias = AssetType(AssetType::RenderMesh).ToConstCharPtr();
-				extension = RenderMesh::GetMetaFileExtension();
-				break;
-			case ImportVariant_Mesh:
-				alias = AssetType(AssetType::Mesh).ToConstCharPtr();
-				extension = Mesh::GetMetaFileExtension();
-				break;
+			case ImportVariant_Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->Filepath, filter);	break;
+			case ImportVariant_RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->Filepath, filter);	break;
+			case ImportVariant_Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->Filepath, filter);	break;
 			}
 
-			std::pmr::string filter = alias + " (" + extension + ")" + std::pmr::string(1, '\0', &sp) + "*" + extension + std::pmr::string(1, '\0', &sp);
-			std::filesystem::path defaultFilepath = importData->Filepath;
-
-			defaultFilepath.replace_extension(std::filesystem::path(extension));
-
-			std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string().c_str(), filter.c_str());
+			std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
 
 			if (!newAssetFilepath.empty())
 			{
@@ -495,7 +482,7 @@ namespace fe::GeometryImport
 				case ImportVariant_RenderMesh:	ImportAsRenderMesh(newAssetFilepath, importData); break;
 				case ImportVariant_Mesh:		ImportAsMesh(newAssetFilepath, importData); break;
 				}
-
+				
 				importData->Finished = true;
 			}
 		}

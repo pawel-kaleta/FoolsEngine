@@ -10,11 +10,11 @@ namespace fe
 {
     struct ImportData
     {
-        char AssetName[64] = "";
+        //char AssetName[64] = "";
         std::filesystem::path Filepath;
-        const std::vector<AssetID>* ImportedAssets = nullptr;
-        AssetHandleBase* HandleToOverride = nullptr;
-        AssetType Type = AssetType::None;
+        //const std::vector<AssetID>* ImportedAssets = nullptr;
+        //AssetHandleBase* HandleToOverride = nullptr;
+        //AssetType Type = AssetType::None;
         const LoadersRegistry::Item* LoaderItemPtr = nullptr;
         bool Finished = false;
 

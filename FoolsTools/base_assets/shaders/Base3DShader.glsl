@@ -10,7 +10,6 @@ layout (location = 4) in vec2 a_UV1;
 // Geometry
 uniform mat4 u_ViewProjection;
 uniform mat4 u_ModelTransform;
-uniform vec3 u_Position;
 
 // Material
 uniform vec3 u_BaseColor;
@@ -66,8 +65,6 @@ uniform sampler2D u_NormalMap;
 
 void main()
 {
-	
 	o_color = vec4(v_BaseColor, 1) * texture(u_BaseColorMap, v_TexCoord);
-	//o_color = vec4(v_BaseColor, 1);
 	o_entityID = v_EntityID;
 }

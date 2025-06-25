@@ -9,6 +9,89 @@
 
 namespace fe
 {
+	void EditMaterial(const AssetHandle<Material>& material)
+	{
+		if (!material.IsValid())
+		{
+			return;
+		}
+
+		auto material_user = material.Use();
+		auto& shading_model_current = material_user.GetCoreComponent().ShadingModelID;
+
+		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string().c_str()))
+		{
+			bool is_selected;
+
+			auto shading_models = AssetManager::GetRegistry().view<ACShadingModelCore>();
+
+			for (auto id : shading_models)
+			{
+				auto shading_model_observer = AssetObserver<ShadingModel>(id);
+				is_selected = (shading_model_current == id);
+
+				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string().c_str(), is_selected))
+				{
+					material_user.MakeMaterial(shading_model_observer);
+					shading_model_current = id;
+				}
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		auto shading_model_observer = AssetObserver<ShadingModel>(shading_model_current);
+
+		auto& sm_core_component = shading_model_observer.GetCoreComponent();
+		auto& material_core_component = material_user.GetCoreComponent();
+
+		for (auto& uniform : sm_core_component.Uniforms)
+		{
+			ImGuiLayer::RenderUniform(uniform, material_user.GetUniformValuePtr(material_core_component, uniform));
+		}
+
+		for (auto& textureSlot : sm_core_component.TextureSlots)
+		{
+			auto texture_current = material_user.GetTexture(material_core_component, textureSlot);
+			bool newSelection = false;
+
+			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetFilepath().filename().string().c_str();
+			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
+			{
+				bool is_selected = !(texture_current.IsValid());
+
+				if (ImGui::Selectable("None", is_selected))
+					material_user.SetTexture(material_core_component, textureSlot, NullAssetID);
+
+				auto textures = AssetManager::GetRegistry().view<ACTexture2DCore, ACRefsCounters>();
+				for (auto id : textures)
+				{
+					auto textureHandle = AssetHandle<Texture2D>(id);
+					is_selected = (texture_current.GetID() == textureHandle.GetID());
+
+					if (ImGui::Selectable(textureHandle.Observe().GetFilepath().filename().string().c_str(), is_selected))
+					{
+						newSelection = true;
+						texture_current = textureHandle;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (newSelection)
+			{
+				material_user.SetTexture(material_core_component, textureSlot, texture_current.GetID());
+			}
+		}
+	}
+
 	void CRenderMesh::DrawInspectorWidget(BaseEntity entity)
 	{
 		DrawAssetHandle<fe::RenderMesh>(RenderMesh, "Render Mesh", NullAssetID);
@@ -28,6 +111,8 @@ namespace fe
 	{
 		DrawAssetHandle<fe::Material>(Material, "Material", Renderer::BaseAssets.Materials.Default.GetID());
 		DrawAssetHandle<fe::Mesh>(Mesh, "Mesh", NullAssetID);
+
+		EditMaterial(Material);
 	}
 
 	void CRenderMeshView::Serialize(YAML::Emitter& emitter)

@@ -41,7 +41,6 @@ namespace fe
 		buffersComp.VertexBuffer->SetLayout(VertexData::Vertex::GetLayout());
 
 		buffersComp.IndexBuffer = IndexBuffer::Create(ACData.GetIndexArrayPtr(), spec.IndexCount);
-		buffersComp.IndexBuffer->Bind();
 
 		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
 	}

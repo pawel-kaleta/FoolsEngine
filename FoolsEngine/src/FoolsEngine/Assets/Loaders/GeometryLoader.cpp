@@ -109,7 +109,8 @@ namespace fe
 		auto& spec = mesh_core_component.Specification;
 		
 		dataLocation = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
-		float* index_ptr = (float*)dataLocation;
+		uint32_t* first_index = (uint32_t*)dataLocation;
+		uint32_t* index_ptr = (uint32_t*)dataLocation;
 		VertexData::Vertex* first_vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
 		VertexData::Vertex* vertex_ptr = first_vertex_ptr;
 
@@ -165,6 +166,9 @@ namespace fe
 			}
 			index_offset = vertex_ptr - first_vertex_ptr;
 		}
+
+		
+		
 
 		return;
 	}

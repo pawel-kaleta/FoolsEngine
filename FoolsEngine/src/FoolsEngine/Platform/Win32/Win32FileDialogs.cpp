@@ -10,6 +10,7 @@
 #include <GLFW/glfw3native.h>
 
 #include "FoolsEngine/Core/Application.h"
+#include "FoolsEngine\Memory\Scratchpad.h"
 
 namespace fe
 {
@@ -36,8 +37,11 @@ namespace fe
 		return std::filesystem::path();
 	}
 
+	//defaultpath should be absolute
 	std::filesystem::path FileDialogs::SaveFile(const char* defaultpath, const char* filter)
 	{
+		Scratchpad sp;
+
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -46,6 +50,10 @@ namespace fe
 		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::GetWindow().GetNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
+		CHAR currentDir[256] = { 0 };
+		auto def_path = std::filesystem::path(defaultpath).parent_path().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+		strncpy_s(currentDir, def_path.c_str(), sizeof(currentDir));
+		ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;

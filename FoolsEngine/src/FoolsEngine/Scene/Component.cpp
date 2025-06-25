@@ -20,11 +20,6 @@
 
 namespace fe
 {
-	namespace AssetImportModal
-	{
-		extern void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr, AssetType type = AssetType::None, AssetHandleBase* optionalBaseHandle = nullptr);
-	}
-
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
 		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetName());
@@ -111,7 +106,7 @@ namespace fe
 						}
 						else
 						{
-							FE_CORE_ASSERT(false, "Dont import asset proxies!");
+							FE_CORE_ASSERT(false, "This asset was imported to a different project!");
 						}
 					}
 				}
