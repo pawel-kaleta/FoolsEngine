@@ -14,6 +14,41 @@ namespace fe
 {
 	AssetManager* AssetManager::s_Instance;
 
+	AssetManager::AssetManager()
+	{
+		s_Instance = this;
+
+		m_LoadingGroups.Unload = m_Registry.group<>(
+			entt::get<ACLoadedFlag>,
+			entt::exclude<
+			ACLoadFlag<AssetLoadingPriority::Low>,
+			ACLoadFlag<AssetLoadingPriority::Standard>,
+			ACLoadFlag<AssetLoadingPriority::High>,
+			ACLoadFlag<AssetLoadingPriority::Critical>
+			>
+		);
+
+		m_LoadingGroups.Low = m_Registry.group<>(
+			entt::get<ACLoadFlag<AssetLoadingPriority::Low>>,
+			entt::exclude<ACLoadedFlag>
+		);
+
+		m_LoadingGroups.Standard = m_Registry.group<>(
+			entt::get< ACLoadFlag<AssetLoadingPriority::Standard>>,
+			entt::exclude<ACLoadedFlag>
+		);
+
+		m_LoadingGroups.High = m_Registry.group<>(
+			entt::get<ACLoadFlag<AssetLoadingPriority::High>>,
+			entt::exclude<ACLoadedFlag>
+		);
+
+		m_LoadingGroups.Critical = m_Registry.group<>(
+			entt::get<ACLoadFlag<AssetLoadingPriority::Critical>>,
+			entt::exclude<ACLoadedFlag>
+		);
+	}
+
 	AssetID AssetManager::GetOrCreateAssetWithUUID(UUID uuid)
 	{
 		auto& inst = *s_Instance;
@@ -163,4 +198,6 @@ namespace fe
 			}
 		}
 	}
+
+	
 }

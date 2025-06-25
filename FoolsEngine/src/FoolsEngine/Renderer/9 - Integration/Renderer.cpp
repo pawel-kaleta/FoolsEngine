@@ -50,7 +50,7 @@ namespace fe
 	template <typename tnAsset>
 	void MakeHandle(const std::filesystem::path& path, AssetHandle<tnAsset>& hande, const UUID& uuid)
 	{
-		hande = AssetHandle<tnAsset>(AssetManager::AssetCreation::BaseAsset<tnAsset>(path, uuid), AssetLoadingPriority::LoadingPriority_None);
+		hande = AssetHandle<tnAsset>(AssetManager::AssetCreation::BaseAsset<tnAsset>(path, uuid), AssetLoadingPriority::None);
 	}
 
 	void Renderer::AcquireBaseAssets()

@@ -82,7 +82,7 @@ namespace fe
 	{
 		emitter << YAML::Key << "IsPrimary" << YAML::Value << IsPrimary;
 
-		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.GetProjectionType().ToString();
+		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.GetProjectionType().ToConstCharPtr();
 
 		emitter << YAML::Key << "PerspectiveNear" << YAML::Value << Camera.GetPerspectiveNearClip();
 		emitter << YAML::Key << "PerspectiveFar" << YAML::Value << Camera.GetPerspectiveFarClip();

@@ -1,51 +1,57 @@
-02:19:02:545574 | FE  | info     | Logging innitialized!
-02:19:02:545919 | App | info     | Logging innitialized!
-02:19:02:546018 | FE  | info     | /////////////////////////////////////////////////////
-02:19:02:546097 | FE  | info     | ////////////////////// STARTUP //////////////////////
-02:19:02:546172 | FE  | info     | /////////////////////////////////////////////////////
-02:19:02:546264 | App | info     | Logging level set to 0 - all.
-02:19:02:546342 | FE  | info     | Logging level set to 0 - all.
-02:19:02:546700 | FE  | info     | Profiler session 'Startup' started.
-02:19:02:547250 | FE  | info     | Initializing GLFW
-02:19:02:579436 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-02:19:02:742330 | FE  | info     | Setting events callbacks for window:
-02:19:02:742480 | FE  | info     | 	WindowResizeEvent
-02:19:02:742589 | FE  | info     | 	WindowCloseEvent
-02:19:02:742768 | FE  | info     | 	WindowFocusChangeEvents
-02:19:02:742892 | FE  | info     | 	KeyEvents
-02:19:02:742993 | FE  | info     | 	KeyTypedEvent
-02:19:02:743088 | FE  | info     | 	MouseButtonEvents
-02:19:02:743190 | FE  | info     | 	MouseScrolledEvent
-02:19:02:743297 | FE  | info     | 	MouseMovedEvent
-02:19:02:743583 | FE  | info     | Creating rendering context
-02:19:02:747008 | FE  | info     | Rendering platform info:
-02:19:02:747120 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-02:19:02:747221 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-02:19:02:747311 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-02:19:02:747490 | FE  | info     | OpenGL Rendering Context created
-02:19:02:747621 | FE  | info     | VSync disabled.
-02:19:02:747815 | FE  | info     | OpenGLDeviceAPI creation!
-02:19:02:747954 | FE  | info     | OpenGLDeviceAPI Initialization.
-02:19:02:749844 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-02:19:02:750988 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-02:19:02:755723 | FE  | info     | Profiler session 'Startup' closed.
-02:19:02:755864 | FE  | info     | /////////////////////////////////////////////////////
-02:19:02:756302 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-02:19:02:756624 | FE  | info     | /////////////////////////////////////////////////////
-02:19:02:756947 | App | info     | Logging level set to 1 - debug or higher.
-02:19:02:757255 | FE  | info     | Logging level set to 1 - debug or higher.
-02:19:08:991195 | FE  | info     | Profiler session 'ProjectLoading' started.
-02:19:08:991659 | FE  | warning  | StartScene not implemented
-02:19:09:079108 | FE  | info     | Profiler session 'ProjectLoading' closed.
-02:19:09:079453 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-02:19:09:079765 | App | info     | EditorLayer::OnAttach()
-02:19:09:080191 | FE  | info     | Scene initialization
-02:19:09:080506 | FE  | info     | World Creation
-02:19:09:081170 | FE  | info     | Profiler session 'SceneLoading' started.
-02:19:11:365935 | FE  | info     | Profiler session 'SceneLoading' closed.
-02:19:11:368580 | FE  | info     | Profiler session 'Runtime' started.
-02:19:11:454621 | FE  | info     | Profiler session 'Runtime' closed.
-02:20:13:219400 | FE  | debug    | Actor Creation
-02:20:13:219698 | FE  | debug    | Entity Creation
-02:20:57:340835 | FE  | error    | CORE ASSERTION FAILED: in file Texture.cpp in function void __cdecl fe::Texture2DUser::Bind(struct fe::GDIType,unsigned int) const at line 47.
-02:20:57:341863 | FE  | error    | Assertion Message: Trying to bind texture not loaded to GPU
+17:14:10:796334 | FE  | info     | Logging innitialized!
+17:14:10:796863 | App | info     | Logging innitialized!
+17:14:10:797193 | FE  | info     | /////////////////////////////////////////////////////
+17:14:10:797502 | FE  | info     | ////////////////////// STARTUP //////////////////////
+17:14:10:797833 | FE  | info     | /////////////////////////////////////////////////////
+17:14:10:798108 | App | info     | Logging level set to 0 - all.
+17:14:10:798366 | FE  | info     | Logging level set to 0 - all.
+17:14:10:799853 | FE  | info     | Profiler session 'Startup' started.
+17:14:10:800705 | FE  | info     | Initializing GLFW
+17:14:10:854878 | FE  | info     | Creating Window FoolsTools (1900, 1000)
+17:14:11:196232 | FE  | info     | Setting events callbacks for window:
+17:14:11:196586 | FE  | info     | 	WindowResizeEvent
+17:14:11:197151 | FE  | info     | 	WindowCloseEvent
+17:14:11:197401 | FE  | info     | 	WindowFocusChangeEvents
+17:14:11:197721 | FE  | info     | 	KeyEvents
+17:14:11:197987 | FE  | info     | 	KeyTypedEvent
+17:14:11:198275 | FE  | info     | 	MouseButtonEvents
+17:14:11:198583 | FE  | info     | 	MouseScrolledEvent
+17:14:11:199253 | FE  | info     | 	MouseMovedEvent
+17:14:11:200739 | FE  | info     | Creating rendering context
+17:14:11:205485 | FE  | info     | Rendering platform info:
+17:14:11:205977 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+17:14:11:206256 | FE  | info     | 	Renderer:	AMD Radeon RX 640
+17:14:11:206519 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
+17:14:11:207090 | FE  | info     | OpenGL Rendering Context created
+17:14:11:207450 | FE  | info     | VSync disabled.
+17:14:11:207985 | FE  | info     | OpenGLDeviceAPI creation!
+17:14:11:208668 | FE  | info     | OpenGLDeviceAPI Initialization.
+17:14:11:212770 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+17:14:11:215887 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+17:14:11:302143 | FE  | info     | Profiler session 'Startup' closed.
+17:14:11:302577 | FE  | info     | /////////////////////////////////////////////////////
+17:14:11:302872 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+17:14:11:303225 | FE  | info     | /////////////////////////////////////////////////////
+17:14:11:303634 | App | info     | Logging level set to 1 - debug or higher.
+17:14:11:303962 | FE  | info     | Logging level set to 1 - debug or higher.
+17:14:13:618516 | FE  | info     | /////////////////////////////////////////////////////
+17:14:13:619277 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+17:14:13:619587 | FE  | info     | /////////////////////////////////////////////////////
+17:14:13:619854 | App | info     | Logging level set to 0 - all.
+17:14:13:620396 | FE  | info     | Logging level set to 0 - all.
+17:14:13:622532 | FE  | info     | Profiler session 'Shutdown' started.
+17:14:13:626634 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:627369 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:627811 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:628196 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:628438 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:629309 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:629588 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:635206 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:639279 | FE  | info     | Profiler session 'Shutdown' closed.
+17:14:13:646124 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:664036 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:666440 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:666824 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:667155 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?
+17:14:13:667371 | FE  | warning  | AssetHandle::Deinit() without ACRefCounters - is this behavior by design?

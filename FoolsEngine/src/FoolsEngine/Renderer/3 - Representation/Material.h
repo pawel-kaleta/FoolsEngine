@@ -12,8 +12,8 @@ namespace fe
 {
 	struct ACMaterialCore
 	{
-		AssetID ShadingModelID;
-		std::vector<AssetID> Textures;
+		AssetHandle<ShadingModel> ShadingModelHandle;
+		std::vector<AssetHandle<Texture2D>> Textures;
 
 		void* UniformsData;
 		size_t UniformsDataSize;

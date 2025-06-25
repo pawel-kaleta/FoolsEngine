@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetAccessors.h"
 
@@ -8,14 +9,10 @@ namespace fe
 {
 	struct ACRenderMeshCore final : public AssetComponent
 	{
-		AssetID MeshID;
-		AssetID MaterialID;
+		AssetHandle<Mesh	> MeshHandle	 = AssetHandle<Mesh		>(NullAssetID, AssetLoadingPriority::None);
+		AssetHandle<Material> MaterialHandle = AssetHandle<Material	>(NullAssetID, AssetLoadingPriority::None);
 
-		void Init()
-		{
-			MeshID = NullAssetID;
-			MaterialID = NullAssetID;
-		}
+		void Init() {}
 	};
 
 	class RenderMeshObserver : public AssetInterface

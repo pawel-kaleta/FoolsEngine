@@ -24,7 +24,7 @@ namespace fe::AssetSerializer
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Type" << YAML::Value << type.ToString();
+			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string();
 			emitter << YAML::EndMap;
@@ -39,7 +39,7 @@ namespace fe::AssetSerializer
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Type" << YAML::Value << type.ToString();
+			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Master" << YAML::Value << reg.get<ACUUID>(acmaster.Master).UUID;
 			emitter << YAML::EndMap;

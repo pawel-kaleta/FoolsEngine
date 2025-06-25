@@ -10,9 +10,9 @@ namespace fe
 {
 	struct ACModelCore final : public AssetComponent
 	{
-		std::vector<AssetID> RenderMeshes;
+		std::vector<AssetHandle<RenderMesh>> RenderMeshes;
 
-		void Init() { }
+		void Init()	{ }
 	};
 
 	class ModelObserver : public AssetInterface

@@ -76,14 +76,24 @@ namespace fe
 		std::filesystem::path Filepath;
 	};
 
+	FE_DECLARE_ENUM(AssetLoadingPriority,
+		Low, Standard, High, Critical,
+		Count,
+		None
+	);
+
+	template <AssetLoadingPriority::ValueType loadingPriority>
+	struct ACLoadFlag final : AssetComponent {};
+
+	struct ACLoadedFlag final : AssetComponent {};
+
 	struct ACRefsCounters final : AssetComponent
 	{
 		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
 		std::atomic<int> ActiveObserversCount = 0;
 
 		// TO DO: add AssetLoadingPriority counting
-		std::atomic<int> LiveHandles = 0;
-
-		// TO DO: split into 2 components ?
+		std::atomic<int> LiveHandles[AssetLoadingPriority::Count] = {};
 	};
+
 }

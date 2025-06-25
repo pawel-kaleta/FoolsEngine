@@ -41,13 +41,6 @@ namespace fe
 		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(VertexData::Vertex)); }
 	};
 
-	//struct ACMeshLoadingSettings final : public AssetComponent
-	//{
-	//	// -1 means aiProcess_PreTransformVertices and merge as one mesh
-	//	uint32_t AssimpMeshIndex = -1; 
-	//	//uint32_t AssimpImportFlags = 0; // aiPostProcessSteps
-	//};
-
 	struct ACGPUBuffers final : public AssetComponent
 	{
 		Ref<VertexBuffer> VertexBuffer;

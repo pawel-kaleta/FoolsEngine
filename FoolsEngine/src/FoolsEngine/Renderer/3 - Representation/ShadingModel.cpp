@@ -10,7 +10,7 @@ namespace fe
 {
 	void ACShadingModelCore::Init()
 	{
-		ShaderID = NullAssetID;
+		ShaderHandle.SetLoadingPriority(AssetLoadingPriority::None);
 		Uniforms.clear();
 		TextureSlots.clear();
 
@@ -107,7 +107,7 @@ namespace fe
 
 		YAML::Emitter emitter;
 
-		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderID).Filepath.string();
+		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderHandle.GetID()).Filepath.string();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
 		
@@ -116,7 +116,7 @@ namespace fe
 		{
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Name" << YAML::Value << uniform.GetName();
-			emitter << YAML::Key << "Type" << YAML::Value << uniform.GetType().ToString();
+			emitter << YAML::Key << "Type" << YAML::Value << uniform.GetType().ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
 			emitter << YAML::Key << "Default Value" << YAML::Value << YAML::BeginSeq;
 
@@ -177,7 +177,7 @@ namespace fe
 		if (!texture_slots_node.IsSequence()) return false;
 
 		std::filesystem::path shader_filepath = shader_node.as<std::string>();
-		core.ShaderID = AssetManager::GetAssetFromFilepath(shader_filepath);
+		core.ShaderHandle.SetID(AssetManager::GetAssetFromFilepath(shader_filepath));
 
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.DefaultUniformsData = operator new(core.UniformsDataSize);

@@ -33,11 +33,11 @@ namespace fe
 		{
 			Init();
 		}
-		AssetObserver(ECS_AssetHandle ECS_handle) :
-			tnAsset::Observer(ECS_handle)
-		{
-			Init();
-		};
+		//AssetObserver(ECS_AssetHandle ECS_handle) :
+		//	tnAsset::Observer(ECS_handle)
+		//{
+		//	Init();
+		//};
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
@@ -51,7 +51,7 @@ namespace fe
 #endif // FE_INTERNAL_BUILD
 		}
 
-		inline void Init()
+		void Init()
 		{
 			if (!tnAsset::Observer::IsValid()) return;
 			FE_CORE_ASSERT(AssetInterface::Get<ACAssetType>().Type == tnAsset::GetTypeStatic(), "This is not asset of this type!");
@@ -91,11 +91,11 @@ namespace fe
 		{
 			Init();
 		}
-		AssetUser(ECS_AssetHandle ECS_handle) :
-			tnAsset::User(ECS_handle)
-		{
-			Init();
-		};
+		//AssetUser(ECS_AssetHandle ECS_handle) :
+		//	tnAsset::User(ECS_handle)
+		//{
+		//	Init();
+		//};
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

@@ -122,7 +122,7 @@ namespace fe
 						for (int i = 0; i < SimulationStage::Count; i++)
 						{
 							SimulationStage stage; stage.FromInt(i);
-							emitter << YAML::Key << stage.ToString() << YAML::Value << YAML::BeginSeq;
+							emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
 							for (auto& updateEnroll : gameplay_world->GetSystems().m_SystemUpdateEnrolls[i])
 							{
 								emitter << YAML::BeginMap;
@@ -172,7 +172,7 @@ namespace fe
 								for (int i = 0; i < SimulationStage::Count; i++)
 								{
 									SimulationStage stage; stage.FromInt(i);
-									emitter << YAML::Key << stage.ToString() << YAML::Value << YAML::BeginSeq;
+									emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
 									for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
 									{
 										emitter << YAML::BeginMap;

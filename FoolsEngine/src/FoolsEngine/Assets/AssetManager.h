@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Asset.h"
+#include <tuple>
 
 namespace fe
 {
@@ -38,10 +39,11 @@ namespace fe
 
 		static auto GetAll() { return GetRegistry().view<AssetID>(); }
 		static void EvaluateAndReload();
+
 	private:
 		friend class Application;
 		//friend class decltype(AssetCreation);
-		AssetManager() { s_Instance = this; }
+		AssetManager();
 
 		static AssetManager* s_Instance;
 
@@ -49,5 +51,41 @@ namespace fe
 		std::unordered_map<UUID, AssetID> m_MapByUUID;
 		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
 		std::unordered_map<std::filesystem::path, std::vector<AssetID>> m_SourceFileRegistry;
+
+		struct 
+		{
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadedFlag>,
+				entt::exclude<
+					ACLoadFlag<AssetLoadingPriority::Low>,
+					ACLoadFlag<AssetLoadingPriority::Standard>,
+					ACLoadFlag<AssetLoadingPriority::High>,
+					ACLoadFlag<AssetLoadingPriority::Critical>
+				>
+			)) Unload;
+
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::Low>>,
+				entt::exclude<ACLoadedFlag>
+			)) Low;
+
+			decltype(m_Registry.group<>(
+				entt::get< ACLoadFlag<AssetLoadingPriority::Standard>>,
+				entt::exclude<ACLoadedFlag>
+			)) Standard;
+
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::High>>,
+				entt::exclude<ACLoadedFlag>
+			)) High;
+
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::Critical>>,
+				entt::exclude<ACLoadedFlag>
+			)) Critical;
+
+
+		} m_LoadingGroups;
+
 	};
 }

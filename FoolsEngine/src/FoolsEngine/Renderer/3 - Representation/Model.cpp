@@ -15,9 +15,9 @@ namespace fe
 		YAML::Emitter emitter;
 
 		emitter << YAML::BeginSeq;
-		for (const auto& renderMeshID : core.RenderMeshes)
+		for (const auto& renderMeshHandle : core.RenderMeshes)
 		{
-			emitter << AssetObserver<RenderMesh>(renderMeshID).GetUUID();
+			emitter << renderMeshHandle.GetUUID();
 		}
 		emitter << YAML::EndSeq;
 
@@ -38,7 +38,8 @@ namespace fe
 
 		for (const auto& render_mesh_node : node)
 		{
-			core.RenderMeshes.push_back(AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>()));
+			auto assetID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>());
+			core.RenderMeshes.emplace_back(assetID, AssetLoadingPriority::None);
 		}
 
 		return true;

@@ -116,9 +116,8 @@ namespace fe::GeometryImport
 		auto x = filepath.lexically_relative(z);
 		auto w = x.lexically_relative(y);
 		const AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Mesh>(w);
-		const AssetHandle<Mesh> mesh_handle(assetID, LoadingPriority_None);
 		{
-			auto mesh_user = mesh_handle.Use();
+			auto mesh_user = AssetUser<Mesh>(assetID);
 
 			AssetManager::SetSourcePath(assetID, importData->Filepath);
 			auto& core = mesh_user.GetCoreComponent();

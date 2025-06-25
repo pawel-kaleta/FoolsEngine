@@ -15,8 +15,8 @@ namespace fe
 
 		YAML::Emitter emitter;
 
-		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetHandle<Mesh    >(core.MeshID    , AssetLoadingPriority::LoadingPriority_None).GetUUID();
-		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetHandle<Material>(core.MaterialID, AssetLoadingPriority::LoadingPriority_None).GetUUID();
+		emitter << YAML::Key << "MeshID"     << YAML::Value << core.MeshHandle.GetUUID();
+		emitter << YAML::Key << "MaterialID" << YAML::Value << core.MaterialHandle.GetUUID();
 
 		std::ofstream fout(assetObserver.GetFilepath());
 		fout << emitter.c_str();
@@ -39,8 +39,8 @@ namespace fe
 		if (!materialID_node) return false;
 
 		auto& core = ECS_handle.get<ACRenderMeshCore>();
-		core.MeshID     = AssetManager::GetOrCreateAssetWithUUID(meshID_node.as<UUID>());
-		core.MaterialID = AssetManager::GetOrCreateAssetWithUUID(materialID_node.as<UUID>());
+		core.MeshHandle.SetID(AssetManager::GetOrCreateAssetWithUUID(meshID_node.as<UUID>()));
+		core.MaterialHandle.SetID(AssetManager::GetOrCreateAssetWithUUID(materialID_node.as<UUID>()));
 
 		return true;
 	}
