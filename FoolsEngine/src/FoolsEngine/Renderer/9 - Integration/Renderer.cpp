@@ -202,9 +202,8 @@ namespace fe
 			auto material_observer = renderViewMesh_component.Material.Observe();
 			auto mesh_observer = renderViewMesh_component.Mesh.Observe();
 
-			auto y = material_observer.GetCoreComponent().ShadingModelID;
-			auto x = AssetObserver<ShadingModel>(y);
-			auto shaderID = x.GetCoreComponent().ShaderID;
+			auto shading_model_observer = material_observer.GetCoreComponent().ShadingModelHandle.Observe();
+			auto shaderID = shading_model_observer.GetCoreComponent().ShaderHandle.GetID();
 
 			{
 				auto shader_observer = AssetObserver<Shader>(shaderID);
@@ -274,9 +273,9 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& material_core = materialObserver.GetCoreComponent();
-		auto sm_observer = AssetObserver<ShadingModel>(material_core.ShadingModelID);
+		auto sm_observer = material_core.ShadingModelHandle.Observe();
 		auto& sm_core = sm_observer.GetCoreComponent();
-		auto shaderUser = AssetUser<Shader>(sm_core.ShaderID);
+		auto shaderUser = sm_core.ShaderHandle.Use();
 
 		shaderUser.Bind(s_ActiveGDI);
 
@@ -301,13 +300,13 @@ namespace fe
 			uint32_t rendererTextureSlot = 0;
 			auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
 
-			for (const auto& texture : material_core.Textures)
+			for (const auto& textureHandle : material_core.Textures)
 			{
 				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
 
-				if (texture)
+				if (textureHandle.IsValid())
 				{
-					AssetUser<Texture2D>(texture).Bind(s_ActiveGDI, rendererTextureSlot++);
+					textureHandle.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
 				}
 				else
 				{

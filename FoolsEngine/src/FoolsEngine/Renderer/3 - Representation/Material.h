@@ -31,8 +31,8 @@ namespace fe
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		AssetHandle<Texture2D> GetTexture(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const;
-		AssetHandle<Texture2D> GetTexture(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const;
+		AssetID GetTextureID(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const;
+		AssetID GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const;
 
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}

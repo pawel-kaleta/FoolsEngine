@@ -57,12 +57,26 @@ namespace fe
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadedFlag>,
 				entt::exclude<
+					ACLoadedAsDependence,
+					ACLoadFlag<AssetLoadingPriority::Minimal>,
+					ACLoadFlag<AssetLoadingPriority::VeryLow>,
 					ACLoadFlag<AssetLoadingPriority::Low>,
 					ACLoadFlag<AssetLoadingPriority::Standard>,
 					ACLoadFlag<AssetLoadingPriority::High>,
+					ACLoadFlag<AssetLoadingPriority::VeryHigh>,
 					ACLoadFlag<AssetLoadingPriority::Critical>
 				>
 			)) Unload;
+
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::Minimal>>,
+				entt::exclude<ACLoadedFlag>
+			)) Minimal;
+
+			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::VeryLow>>,
+				entt::exclude<ACLoadedFlag>
+			)) VeryLow;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Low>>,
@@ -70,7 +84,7 @@ namespace fe
 			)) Low;
 
 			decltype(m_Registry.group<>(
-				entt::get< ACLoadFlag<AssetLoadingPriority::Standard>>,
+				entt::get<ACLoadFlag<AssetLoadingPriority::Standard>>,
 				entt::exclude<ACLoadedFlag>
 			)) Standard;
 
@@ -80,12 +94,15 @@ namespace fe
 			)) High;
 
 			decltype(m_Registry.group<>(
+				entt::get<ACLoadFlag<AssetLoadingPriority::VeryHigh>>,
+				entt::exclude<ACLoadedFlag>
+			)) VeryHigh;
+
+			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Critical>>,
 				entt::exclude<ACLoadedFlag>
 			)) Critical;
 
-
 		} m_LoadingGroups;
-
 	};
 }

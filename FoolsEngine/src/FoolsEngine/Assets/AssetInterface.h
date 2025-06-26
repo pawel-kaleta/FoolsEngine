@@ -40,6 +40,20 @@ namespace fe
 			m_ECSHandle(std::move(ECS_handle))
 		{ }
 
+		template<typename tnAssetFlagComponent>
+		void Flag() const
+		{
+			static_assert(std::is_base_of_v<AssetFlagComponent, tnAssetFlagComponent>, "This is not a flag component!");
+			FE_CORE_ASSERT(!AnyOf<tnAssetFlagComponent>(), "This Entity already have this flag component");
+			m_ECSHandle.emplace<tnAssetFlagComponent>();
+		}
+
+		template<typename tnAssetFlagComponent>
+		void UnFlag() const
+		{
+			m_ECSHandle.remove<tnAssetFlagComponent>();
+		}
+
 		template<typename tnAssetComponent, typename... Args>
 		tnAssetComponent& Emplace(Args&&... args) const
 		{

@@ -17,7 +17,7 @@ namespace fe
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v);
 	
 	template <typename tnAsset>
-	YAML::Emitter& operator<<(YAML::Emitter& out, const AssetHandle<tnAsset> assetHandle)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const AssetHandle<tnAsset>& assetHandle)
 	{
 		out << YAML::BeginMap;
 		if (assetHandle.IsValid())

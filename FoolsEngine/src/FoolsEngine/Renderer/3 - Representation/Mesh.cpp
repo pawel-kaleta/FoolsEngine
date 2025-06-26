@@ -71,9 +71,9 @@ namespace fe
 		}
 
 		auto& material_core = materialObserver.GetCoreComponent();
-		auto shading_model_observer = AssetObserver<ShadingModel>(material_core.ShadingModelID);
+		auto shading_model_observer = material_core.ShadingModelHandle.Observe();
 		auto& sm_core = shading_model_observer.GetCoreComponent();
-		auto shader_user = AssetUser<Shader>(sm_core.ShaderID);
+		auto shader_user = sm_core.ShaderHandle.Use();
 
 		auto GDI = Renderer::GetActiveGDItype();
 
@@ -90,7 +90,8 @@ namespace fe
 		
 		for (auto& textureSlot : sm_core.TextureSlots)
 		{
-			auto texture = materialObserver.GetTexture(material_core, textureSlot).Use();
+			auto textureID = materialObserver.GetTextureID(material_core, textureSlot);
+			AssetUser<Texture2D> texture(textureID);
 
 			if (texture.IsValid())
 			{

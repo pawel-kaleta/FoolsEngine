@@ -91,11 +91,11 @@ namespace fe
 		{
 			Init();
 		}
-		//AssetUser(ECS_AssetHandle ECS_handle) :
-		//	tnAsset::User(ECS_handle)
-		//{
-		//	Init();
-		//};
+		
+		void FlagLoaded(bool dependency = false)	{ Flag<ACLoadedFlag>(); }
+		void FlagLoadedAsDependency()				{ Flag<ACLoadedAsDependence>(); }
+		void FlagUnloaded()							{ UnFlag<ACLoadedFlag>(); }
+		void ReleaseDependencyLoad()				{ UnFlag<ACLoadedAsDependence>(); }
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

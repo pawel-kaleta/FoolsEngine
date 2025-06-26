@@ -12,12 +12,11 @@ namespace fe
 	void GeometryLoader::UnloadModel(void* data)
 	{
 		FE_CORE_ASSERT(false, "Not implemented");
-
 	}
 
 	bool GeometryLoader::IsKnownExtension(const std::pmr::string& extension)
 		{
-			static std::pmr::string knownExtensions[] = {
+			constexpr static const char * knownExtensions[] = {
 				".obj",
 				".fbx",
 				".glb",
@@ -37,7 +36,7 @@ namespace fe
 
 	bool GeometryLoader::IsKnownAssetType(AssetType assetType)
 	{
-		static const AssetType knownTypes[] = {
+		constexpr static const AssetType knownTypes[] = {
 			AssetType::Mesh,
 			AssetType::RenderMesh,
 			AssetType::Model
@@ -167,8 +166,7 @@ namespace fe
 			index_offset = vertex_ptr - first_vertex_ptr;
 		}
 
-		
-		
+		meshUser.FlagLoaded();
 
 		return;
 	}

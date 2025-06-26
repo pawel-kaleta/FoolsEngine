@@ -2,10 +2,9 @@
 #include "MeshComponents.h"
 
 #include "FoolsEngine\Scene\BaseEntity.h"
-
 #include "FoolsEngine\Assets\Serialization\YAML.h"
-
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Memory\Scratchpad.h"
 
 namespace fe
 {
@@ -16,10 +15,12 @@ namespace fe
 			return;
 		}
 
-		auto material_user = material.Use();
-		auto& shading_model_current = material_user.GetCoreComponent().ShadingModelID;
+		Scratchpad sp;
 
-		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string().c_str()))
+		auto material_user = material.Use();
+		auto& shading_model_current = material_user.GetCoreComponent().ShadingModelHandle;
+
+		if (ImGui::BeginCombo("Shading Model", shading_model_current.Observe().GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
 		{
 			bool is_selected;
 
@@ -28,12 +29,12 @@ namespace fe
 			for (auto id : shading_models)
 			{
 				auto shading_model_observer = AssetObserver<ShadingModel>(id);
-				is_selected = (shading_model_current == id);
+				is_selected = (shading_model_current.GetID() == id);
 
-				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string().c_str(), is_selected))
+				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), is_selected))
 				{
 					material_user.MakeMaterial(shading_model_observer);
-					shading_model_current = id;
+					shading_model_current.SetID(id);
 				}
 
 				if (is_selected)
@@ -43,7 +44,7 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		auto shading_model_observer = AssetObserver<ShadingModel>(shading_model_current);
+		auto shading_model_observer = shading_model_current.Observe();
 
 		auto& sm_core_component = shading_model_observer.GetCoreComponent();
 		auto& material_core_component = material_user.GetCoreComponent();
@@ -55,13 +56,15 @@ namespace fe
 
 		for (auto& textureSlot : sm_core_component.TextureSlots)
 		{
-			auto texture_current = material_user.GetTexture(material_core_component, textureSlot);
+			auto texture_current = material_user.GetTextureID(material_core_component, textureSlot);
 			bool newSelection = false;
 
-			const char* texture_combo_preview = !texture_current.IsValid() ? "None" : texture_current.Observe().GetFilepath().filename().string().c_str();
+			bool validID = texture_current != NullAssetID;
+
+			const char* texture_combo_preview = !validID ? "None" : AssetObserver<Texture2D>(texture_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
 			if (ImGui::BeginCombo(textureSlot.GetName().c_str(), texture_combo_preview))
 			{
-				bool is_selected = !(texture_current.IsValid());
+				bool is_selected = validID;
 
 				if (ImGui::Selectable("None", is_selected))
 					material_user.SetTexture(material_core_component, textureSlot, NullAssetID);
@@ -70,12 +73,12 @@ namespace fe
 				for (auto id : textures)
 				{
 					auto textureHandle = AssetHandle<Texture2D>(id);
-					is_selected = (texture_current.GetID() == textureHandle.GetID());
+					is_selected = (texture_current == textureHandle.GetID());
 
-					if (ImGui::Selectable(textureHandle.Observe().GetFilepath().filename().string().c_str(), is_selected))
+					if (ImGui::Selectable(textureHandle.Observe().GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), is_selected))
 					{
 						newSelection = true;
-						texture_current = textureHandle;
+						texture_current = textureHandle.GetID();
 					}
 
 					if (is_selected)
@@ -87,7 +90,7 @@ namespace fe
 
 			if (newSelection)
 			{
-				material_user.SetTexture(material_core_component, textureSlot, texture_current.GetID());
+				material_user.SetTexture(material_core_component, textureSlot, texture_current);
 			}
 		}
 	}

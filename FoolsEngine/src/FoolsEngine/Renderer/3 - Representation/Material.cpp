@@ -126,7 +126,7 @@ namespace fe
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
 	}
 
-	AssetHandle<Texture2D> MaterialObserver::GetTexture(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const
+	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -136,16 +136,16 @@ namespace fe
 		for (const auto& texture : dataComponent.Textures)
 		{
 			if (slotsIt._Ptr == &textureSlot)
-				return texture;
+				return texture.GetID();
 
 			++slotsIt;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
-		return AssetHandle<Texture2D>();
+		return NullAssetID;
 	}
 
-	AssetHandle<Texture2D> MaterialObserver::GetTexture(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const
+	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -155,13 +155,13 @@ namespace fe
 		for (const auto& texture : dataComponent.Textures)
 		{
 			if (slotsIt->GetName() == textureSlotName)
-				return texture;
+				return texture.GetID();
 
 			++slotsIt;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
-		return AssetHandle<Texture2D>();
+		return NullAssetID;
 	}
 
 	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const

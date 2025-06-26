@@ -22,7 +22,7 @@ namespace fe
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
 		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::GetInstance()->StartScene);
-		m_Scene = AssetHandle<Scene>(sceneID);
+		m_Scene = AssetHandle<Scene>(sceneID, AssetLoadingPriority::Critical);
 		{
 			auto scene_user = m_Scene.Use();
 			scene_user.Initialize();

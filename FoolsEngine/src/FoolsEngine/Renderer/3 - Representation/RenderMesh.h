@@ -4,13 +4,14 @@
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetAccessors.h"
+#include "Mesh.h"
 
 namespace fe
 {
 	struct ACRenderMeshCore final : public AssetComponent
 	{
-		AssetHandle<Mesh	> MeshHandle	 = AssetHandle<Mesh		>(NullAssetID, AssetLoadingPriority::None);
-		AssetHandle<Material> MaterialHandle = AssetHandle<Material	>(NullAssetID, AssetLoadingPriority::None);
+		AssetHandle<Mesh	> MeshHandle;
+		AssetHandle<Material> MaterialHandle;
 
 		void Init() {}
 	};

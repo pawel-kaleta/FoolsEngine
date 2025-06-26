@@ -51,6 +51,8 @@ namespace fe
 
 	struct AssetComponent { };
 
+	struct AssetFlagComponent : AssetComponent { };
+
 	struct ACAssetType final : AssetComponent
 	{
 		AssetType Type;
@@ -77,15 +79,17 @@ namespace fe
 	};
 
 	FE_DECLARE_ENUM(AssetLoadingPriority,
-		Low, Standard, High, Critical,
-		Count,
-		None
+		None,
+		Minimal, VeryLow, Low, Standard, High, VeryHigh, Critical,
+		Count
 	);
 
 	template <AssetLoadingPriority::ValueType loadingPriority>
-	struct ACLoadFlag final : AssetComponent {};
+	struct ACLoadFlag final : AssetFlagComponent {};
 
-	struct ACLoadedFlag final : AssetComponent {};
+	struct ACLoadedFlag final : AssetFlagComponent {};
+
+	struct ACLoadedAsDependence final : AssetFlagComponent {};
 
 	struct ACRefsCounters final : AssetComponent
 	{
