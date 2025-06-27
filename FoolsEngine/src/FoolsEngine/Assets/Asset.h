@@ -93,11 +93,13 @@ namespace fe
 
 	struct ACRefsCounters final : AssetComponent
 	{
-		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
-		std::atomic<int> ActiveObserversCount = 0;
-
-		// TO DO: add AssetLoadingPriority counting
+		// LiveHandles[ AssetLoadingPriority::None ]
+		// is used to count how many assets keep this asset loaded as dependence
+		// so the first can load and last unload this asset
 		std::atomic<int> LiveHandles[AssetLoadingPriority::Count] = {};
+
+		std::atomic<int> ActiveObserversCount = 0;
+		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
 	};
 
 }

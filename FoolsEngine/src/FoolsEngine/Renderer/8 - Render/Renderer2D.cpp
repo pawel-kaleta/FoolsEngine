@@ -156,6 +156,7 @@ namespace fe
 		{
 			noTiles = false;
 			auto [tile, entityTransform] = viewTiles.get(ID);
+			if (!tile.Tile.Texture.IsValid()) continue;
 			Transform transform = entityTransform.GetRef() + tile.Offset;
 			BatchQuadDrawCall(tile.Tile, transform, ID);
 		}

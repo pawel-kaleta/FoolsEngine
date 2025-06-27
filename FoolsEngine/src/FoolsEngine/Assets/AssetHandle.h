@@ -79,47 +79,10 @@ namespace fe
 		void SetLoadingPriority(AssetLoadingPriority priority)
 		{
 			if (priority == m_LoadingPriority) return;
+
+			Deinit();
 			m_LoadingPriority = priority;
-			if (m_ID == NullAssetID) return;
-
-			auto ECSHandle = GetECSHandle();
-
-			auto refs = ECSHandle.try_get<ACRefsCounters>();
-			if (refs)
-			{
-				if (priority != AssetLoadingPriority::None)
-				{
-					if (refs->LiveHandles[priority].fetch_add(1) == 0)
-					{
-						switch (priority)
-						{
-						case AssetLoadingPriority::Minimal:		ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::Minimal>>();		break;
-						case AssetLoadingPriority::VeryLow:		ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::VeryLow>>();		break;
-						case AssetLoadingPriority::Low:			ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::Low>>();			break;
-						case AssetLoadingPriority::Standard:	ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::Standard>>();	break;
-						case AssetLoadingPriority::High:		ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::High>>();		break;
-						case AssetLoadingPriority::VeryHigh:	ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::VeryHigh>>();	break;
-						case AssetLoadingPriority::Critical:	ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::Critical>>();	break;
-						}
-					}
-				}
-				if (m_LoadingPriority != AssetLoadingPriority::None)
-				{
-					if (refs->LiveHandles[m_LoadingPriority].fetch_sub(1) == 1)
-					{
-						switch (m_LoadingPriority)
-						{
-						case AssetLoadingPriority::Minimal:		ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::Minimal>>();	break;
-						case AssetLoadingPriority::VeryLow:		ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::VeryLow>>();	break;
-						case AssetLoadingPriority::Low:			ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::Low>>();		break;
-						case AssetLoadingPriority::Standard:	ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::Standard>>();	break;
-						case AssetLoadingPriority::High:		ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::High>>();		break;
-						case AssetLoadingPriority::VeryHigh:	ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::VeryHigh>>();	break;
-						case AssetLoadingPriority::Critical:	ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::Critical>>();	break;
-						}
-					}
-				}
-			}
+			Init();
 		}
 		void SetID(AssetID assetID)
 		{
@@ -142,12 +105,7 @@ namespace fe
 			if (m_LoadingPriority == AssetLoadingPriority::None) return;
 			auto ECSHandle = GetECSHandle();
 			auto refs = ECSHandle.try_get<ACRefsCounters>();
-			if (!refs)
-			{
-				FE_LOG_CORE_WARN("AssetHandle::Init() without ACRefCounters - is this behavior by design?");
-				m_LoadingPriority = AssetLoadingPriority::None;
-				return;
-			}
+			if (!refs) return;
 			if (refs->LiveHandles[m_LoadingPriority].fetch_add(1) == 0)
 			{
 				switch (m_LoadingPriority)
@@ -169,11 +127,7 @@ namespace fe
 			if (m_LoadingPriority == AssetLoadingPriority::None) return;
 			auto ECSHandle = GetECSHandle();
 			auto refs = ECSHandle.try_get<ACRefsCounters>();
-			if (!refs)
-			{
-				FE_LOG_CORE_WARN("AssetHandle::Deinit() without ACRefCounters - is this behavior by design?");
-				return;
-			}
+			if (!refs) return;
 			if (refs->LiveHandles[m_LoadingPriority].fetch_sub(1) == 1)
 			{
 				switch (m_LoadingPriority)
@@ -188,7 +142,6 @@ namespace fe
 				}
 			}
 
-			m_ID = NullAssetID;
 		}
 	};
 }

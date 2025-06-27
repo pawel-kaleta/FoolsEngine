@@ -23,6 +23,7 @@ namespace fe
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
 		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetName());
+		ImGui::TextWrapped("UI widget drawing not implemented");
 	}
 
 	void DataComponent::Serialize(YAML::Emitter& emitter)
@@ -55,115 +56,142 @@ namespace fe
 	}
 
 	template<typename tnAsset>
-	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle, const std::pmr::string& nameTag, AssetID defaultAsset)
+	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle)
 	{
 		Scratchpad sp;
+		ImGui::PushID((const void *) & assetHandle);
+		
+		auto flags =
+			ImGuiChildFlags_Border |
+			ImGuiChildFlags_AutoResizeY;
 
-		ImGui::SeparatorText(nameTag.c_str());
+		ImGui::BeginChild("AssetHandleWindow", ImVec2(0, 0), flags);
 
-		std::pmr::string name(&sp);
-		if (!assetHandle.IsValid())
-		{
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
-			name = "-";
-		}
-		else
-		{
-			auto observer = assetHandle.Observe();
-			name = std::to_string(assetHandle.GetID());
-			name += ": ";
-			if (observer.AllOf<ACFilepath>())
-				name += observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-			else
-				name += "default";
-		}
-		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-		bool reset = ImGui::Button("x"); ImGui::SameLine();
-		bool selected = ImGui::Button(name.c_str(), { ImGui::GetContentRegionAvail().x / 2, 0 }); ImGui::SameLine();
+		ImGui::Text(tnAsset::GetTypeStatic().ToConstCharPtr());
 
-#ifdef FE_EDITOR
-		if (ImGui::BeginDragDropTarget())
+		ImGuiStyle& style = ImGui::GetStyle();
+		const float square_button_size = ImGui::GetFrameHeight();
+		const ImVec2 square_button_dimentions = { square_button_size, square_button_size };
+		const float button_width__handle			= (ImGui::GetContentRegionAvail().x / 2) -		(style.ItemInnerSpacing.x + square_button_size);
+		const float button_width__loading_priority	= (ImGui::GetContentRegionAvail().x / 2) - 2 *	(style.ItemInnerSpacing.x + square_button_size);
+		bool handle_valid = assetHandle.IsValid();
+		bool reset_handle = false;
+
+		// asset handle
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPath"))
+			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+
+			std::pmr::string asset_name(&sp); {
+				if (!handle_valid)	asset_name = "<empty>";
+				else				asset_name = assetHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+			ImGui::Button(asset_name.c_str(), { button_width__handle, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::PopStyleVar();
+
+			// Editor Drag Drop handling
 			{
-				IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
-				const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
-				if (!filepath.empty())
+#ifdef FE_EDITOR
+				if (ImGui::BeginDragDropTarget())
 				{
-					std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-
-					if (tnAsset::GetMetaFileExtension() == extension)
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPath"))
 					{
-						AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
-						if (assetID != NullAssetID)
+						IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
+						const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
+						if (!filepath.empty())
 						{
-							assetHandle.SetID(assetID);
+							std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+
+							if (tnAsset::GetMetaFileExtension() == extension)
+							{
+								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
+								if (assetID != NullAssetID)
+								{
+									assetHandle.SetID(assetID);
+								}
+								else
+								{
+									FE_CORE_ASSERT(false, "This asset was imported to a different project!");
+								}
+							}
 						}
-						else
-						{
-							FE_CORE_ASSERT(false, "This asset was imported to a different project!");
-						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+#endif // FE_EDITOR
+			}
+
+			ImGui::Text("Asset");
+		}
+
+		// loading priority
+		{
+			auto loading_priority = assetHandle.GetLoadingPriority();
+			
+			std::pmr::string loading_priority_string(&sp); {
+				loading_priority_string += std::to_string(loading_priority.ToInt());
+				loading_priority_string += " - ";
+				loading_priority_string += loading_priority.ToConstCharPtr();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+			ImGui::Button(loading_priority_string.c_str(), { button_width__loading_priority, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::PopStyleVar();
+
+			// dicrease priority
+			{
+				if (loading_priority == AssetLoadingPriority::None)
+				{
+					ImGui::BeginDisabled();
+					ImGui::Button("-", square_button_dimentions);
+					ImGui::EndDisabled();
+				}
+				else
+				{
+					if (ImGui::Button("-", square_button_dimentions))
+					{
+						loading_priority.FromInt(loading_priority.ToInt() - 1);
+						assetHandle.SetLoadingPriority(loading_priority);
 					}
 				}
 			}
-			ImGui::EndDragDropTarget();
-		}
-#endif // FE_EDITOR
 
-		ImGui::Text("Asset");
+			ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-		auto loading_priority = assetHandle.GetLoadingPriority();
-		ImGui::Button(loading_priority.ToConstCharPtr(), {ImGui::GetContentRegionAvail().x / 2, 0}); ImGui::SameLine();
-		if (loading_priority == AssetLoadingPriority::None)
-		{
-			ImGui::BeginDisabled();
-			ImGui::Button("-");
-			ImGui::EndDisabled();
-		}
-		else
-		{
-			if (ImGui::Button("-"))
+			// increase priority
 			{
-				loading_priority.FromInt(loading_priority.ToInt()-1);
-				assetHandle.SetLoadingPriority(loading_priority);
+				if (loading_priority == AssetLoadingPriority::Critical)
+				{
+					ImGui::BeginDisabled();
+					ImGui::Button("+", square_button_dimentions);
+					ImGui::EndDisabled();
+				}
+				else
+				{
+					if (ImGui::Button("+", square_button_dimentions))
+					{
+						loading_priority.FromInt(loading_priority.ToInt() + 1);
+						assetHandle.SetLoadingPriority(loading_priority);
+					}
+				}
 			}
+
+			ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::Text("Loading Priority");
 		}
 
-		ImGui::SameLine();
+		if (reset_handle)
+			assetHandle.SetID(NullAssetID);
 
-		if (loading_priority == AssetLoadingPriority::Critical)
-		{
-			ImGui::BeginDisabled();
-			ImGui::Button("+");
-			ImGui::EndDisabled();
-		}
-		else
-		{
-			if (ImGui::Button("+"))
-			{
-				loading_priority.FromInt(loading_priority.ToInt()+1);
-				assetHandle.SetLoadingPriority(loading_priority);
-			}
-		}
-
-		ImGui::SameLine();
-		ImGui::Text("Loading Priority");
-
-		ImGui::PopStyleVar();
-		
-		if (!assetHandle.IsValid())
-			ImGui::PopStyleColor();
-
-		if (reset)
-			assetHandle.SetID(defaultAsset);
-
-		ImGui::Separator();
+		ImGui::EndChild();
+		ImGui::PopID();
 	}
-	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&, const std::pmr::string&, AssetID);
-	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&, const std::pmr::string&, AssetID);
-	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&, const std::pmr::string&, AssetID);
-	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&, const std::pmr::string&, AssetID);
-	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&, const std::pmr::string&, AssetID);
+	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&);
+	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&);
+	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&);
+	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&);
+	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&);
 
 
 	

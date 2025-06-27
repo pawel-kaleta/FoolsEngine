@@ -69,11 +69,11 @@ namespace fe
                     ImGui::DragFloat3("Scale", glm::value_ptr(offset.Scale), 0.01f, 0, 0, "%.2f");
                     ImGui::TreePop();
                 }
-                ImGui::Separator();
+                //ImGui::Separator();
             }
-            ImGui::TreePush("Comp data");
+            //ImGui::TreePush("Comp data");
             component->DrawInspectorWidget(entity);
-            ImGui::TreePop();
+            //ImGui::TreePop();
             
         }
 

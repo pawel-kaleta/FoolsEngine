@@ -14,15 +14,14 @@ namespace fe
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
     {
-        auto y = Project::GetInstance()->AssetsPath;
-        auto z = std::filesystem::current_path();
-        auto x = filepath.lexically_relative(z);
-        auto w = x.lexically_relative(y);
+        auto assets_path = Project::GetInstance()->AssetsPath;
+        auto x = filepath.lexically_relative(std::filesystem::current_path());
+        auto w = x.lexically_relative(assets_path);
 
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
         AssetHandle<Texture2D> textureHandle(assetID);
         textureHandle.Use().GetCoreComponent().Specification = importData->TextureData.Specification;
-        AssetManager::SetSourcePath(assetID, importData->Filepath);
+        AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(assets_path));
 
         Texture2D::SaveMetadata(assetID);
     }

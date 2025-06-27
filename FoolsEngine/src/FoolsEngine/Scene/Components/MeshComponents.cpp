@@ -97,7 +97,7 @@ namespace fe
 
 	void CRenderMesh::DrawInspectorWidget(BaseEntity entity)
 	{
-		DrawAssetHandle<fe::RenderMesh>(RenderMesh, "Render Mesh", NullAssetID);
+		DrawAssetHandle<fe::RenderMesh>(RenderMesh);
 	}
 
 	void CRenderMesh::Serialize(YAML::Emitter& emitter)
@@ -112,8 +112,8 @@ namespace fe
 
 	void CRenderMeshView::DrawInspectorWidget(BaseEntity entity)
 	{
-		DrawAssetHandle<fe::Material>(Material, "Material", Renderer::BaseAssets.Materials.Default.GetID());
-		DrawAssetHandle<fe::Mesh>(Mesh, "Mesh", NullAssetID);
+		DrawAssetHandle<fe::Material>(Material);
+		DrawAssetHandle<fe::Mesh>(Mesh);
 
 		EditMaterial(Material);
 	}
@@ -132,7 +132,7 @@ namespace fe
 
 	void CModel::DrawInspectorWidget(BaseEntity entity)
 	{
-		DrawAssetHandle<fe::Model>(Model, "Model", NullAssetID);
+		DrawAssetHandle<fe::Model>(Model);
 	}
 
 	void CModel::Serialize(YAML::Emitter& emitter)
@@ -149,7 +149,7 @@ namespace fe
 	{
 		for (auto& render_mesh : RenderMeshes)
 		{
-			DrawAssetHandle<RenderMesh>(render_mesh, "RenderMesh", NullAssetID);
+			DrawAssetHandle<RenderMesh>(render_mesh);
 		}
 	}
 

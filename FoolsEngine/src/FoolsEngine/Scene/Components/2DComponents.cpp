@@ -11,8 +11,8 @@ namespace fe
 {
 	void CTile::DrawInspectorWidget(BaseEntity entity)
 	{
-		DrawAssetHandle<Texture2D>(Tile.Texture, "Texture", NullAssetID);
-
+		DrawAssetHandle<Texture2D>(Tile.Texture);
+		ImGui::SeparatorText("Quad");
 		if (Tile.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{
 			ImGui::ColorEdit3("Color", glm::value_ptr(Tile.Color));
@@ -41,8 +41,8 @@ namespace fe
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
 	{
-		DrawAssetHandle<Texture2D>(Sprite.Texture, "Texture", NullAssetID);
-
+		DrawAssetHandle<Texture2D>(Sprite.Texture);
+		ImGui::SeparatorText("Quad");
 		if (Sprite.Texture == Renderer::BaseAssets.Textures.FlatWhite)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(Sprite.Color));

@@ -20,7 +20,7 @@ namespace fe
 		virtual void Deserialize(YAML::Node& data) override;
 	};
 
-	struct CRenderMeshView final : DataComponent
+	struct CRenderMeshView final : SpatialComponent
 	{
 		FE_COMPONENT_SETUP(CRenderMeshView, "RenderMeshView");
 
