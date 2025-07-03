@@ -53,7 +53,6 @@ namespace fe
 		const ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
 
 		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		//const ACMeshLoadingSettings* GetImportSettings() const { return GetIfExist<ACMeshLoadingSettings>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -66,11 +65,10 @@ namespace fe
 		ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
 
 		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
-		//ACMeshLoadingSettings& GetOrEmplaceImportSettings() const { return GetOrEmplace<ACMeshLoadingSettings>(); }
 		
 		void Release() const;
 
-		void SendDataToGPU(GDIType GDI) const;
+		bool SendDataToGPU(GDIType GDI) const;
 		void UnloadFromCPU() const;
 
 	protected:

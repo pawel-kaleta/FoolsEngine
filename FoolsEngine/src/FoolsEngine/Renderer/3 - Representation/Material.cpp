@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 #include "Material.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
@@ -211,6 +212,22 @@ namespace fe
 		void* src = (std::byte*)shading_model_observer.GetCoreComponent().DefaultUniformsData + offset;
 
 		std::memcpy(dest, src, uniform.GetSize());
+	}
+
+	bool MaterialUser::SendDataToGPU(GDIType GDI) const
+	{
+		auto& core = Get<ACMaterialCore>();
+		
+		if (!core.ShadingModelHandle.IsValid())
+			return false;
+
+		for (const auto& texture_handle : core.Textures)
+		{
+			if (!texture_handle.IsValid())
+				return false;
+		}
+
+		core.ShadingModelHandle.Use().SendDataToGPU(GDI);
 	}
 
 	void Material::SaveMetadata(AssetID assetID)

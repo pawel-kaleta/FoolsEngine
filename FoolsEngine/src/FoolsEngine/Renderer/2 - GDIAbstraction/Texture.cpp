@@ -17,9 +17,14 @@
 
 namespace fe
 {
-	void Texture2DUser::SendDataToGPU(GDIType GDI, void* data) const
+	bool Texture2DUser::SendDataToGPU(GDIType GDI) const
 	{
 		FE_PROFILER_FUNC();
+
+		auto& core = GetCoreComponent();
+
+		if (!core.Data)
+			return false;
 
 		switch (GDI.Value)
 		{
@@ -29,9 +34,11 @@ namespace fe
 
 		case GDIType::OpenGL:
 			auto& spec = Get<ACTexture2DCore>();
-			Get<OpenGLTexture2D>().SendDataToGPU(data, spec.Specification);
+			Get<OpenGLTexture2D>().SendDataToGPU(core.Data, spec.Specification);
 			break;
 		}
+
+		return true;
 	}
 
 	void Texture2DUser::Bind(GDIType GDI, RenderTextureSlotID slotID) const

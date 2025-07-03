@@ -23,7 +23,7 @@ namespace fe
 
 	ACMeshCore::~ACMeshCore() { if (Data) GeometryLoader::UnloadMesh(Data); }
 
-	void MeshUser::SendDataToGPU(GDIType GDI) const
+	bool MeshUser::SendDataToGPU(GDIType GDI) const
 	{
 		if (AllOf<ACGPUBuffers>())
 		{
@@ -35,7 +35,8 @@ namespace fe
 		auto& spec = ACData.Specification;
 		auto& buffersComp = Emplace<ACGPUBuffers>();
 
-		FE_CORE_ASSERT(ACData.Data, "Missing mesh data");
+		if (!ACData.Data)
+			return false;
 
 		buffersComp.VertexBuffer = VertexBuffer::Create(ACData.GetVertexArrayPtr(), (spec.VertexCount * sizeof(VertexData::Vertex)));
 		buffersComp.VertexBuffer->SetLayout(VertexData::Vertex::GetLayout());
@@ -43,6 +44,8 @@ namespace fe
 		buffersComp.IndexBuffer = IndexBuffer::Create(ACData.GetIndexArrayPtr(), spec.IndexCount);
 
 		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
+
+		return true;
 	}
 
 	void MeshUser::UnloadFromCPU() const

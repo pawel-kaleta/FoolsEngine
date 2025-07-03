@@ -31,6 +31,8 @@ namespace fe
 			FE_CORE_ASSERT(IsValid(), "AssetHandle is not valid!");
 			return m_ECSHandle.any_of<tnAssetComponents...>();
 		}
+
+		auto GetRefCounters() const { return GetIfExist<ACRefsCounters>(); }
 	protected:
 		AssetInterface() = default;
 		AssetInterface(AssetType type, AssetID assetID) :
@@ -113,8 +115,6 @@ namespace fe
 
 		template<typename tnAssetComponent>
 		void Erase() const { m_ECSHandle.erase<tnAssetComponent>(); }
-
-		auto GetRefCounters() { return GetIfExist<ACRefsCounters>(); }
 
 		ECS_AssetHandle m_ECSHandle;
 	};

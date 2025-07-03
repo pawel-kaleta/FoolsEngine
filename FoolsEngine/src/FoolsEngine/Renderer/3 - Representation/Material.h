@@ -58,6 +58,8 @@ namespace fe
 		void SetTexture(ACMaterialCore& dataComponent, const std::string& textureSlotName, AssetID textureID) const;
 
 		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const;
+
+		bool SendDataToGPU(GDIType GDI) const;;
 	protected:
 		MaterialUser(ECS_AssetHandle ECS_handle) : MaterialObserver(ECS_handle) {}
 	};

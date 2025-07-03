@@ -8,6 +8,8 @@
 #include "Loaders\ShaderLoader.h"
 #include "Loaders\GeometryLoader.h"
 
+#include "FoolsEngine\Memory\Scratchpad.h"
+
 #include "Serialization\YAML.h"
 
 namespace fe
@@ -143,6 +145,14 @@ namespace fe
 		inst.m_SourceFileRegistry[sourcePath].push_back(assetID);
 	}
 
+	template <typename tnAsset>
+	void Unload(AssetID id)
+	{
+		AssetUser<tnAsset> asset_user(id);
+		asset_user.Release();
+		asset_user.UnloadFromCPU();
+	}
+
 	void AssetManager::EvaluateAndReload()
 	{
 		FE_PROFILER_FUNC();
@@ -150,73 +160,77 @@ namespace fe
 		auto GDI = Renderer::GetActiveGDItype();
 		auto& reg = s_Instance->m_Registry;
 
-		auto view = reg.view<ACRefsCounters>();
+		auto& groups = s_Instance->m_LoadingGroups;
 
-		for (auto id : view)
+		Scratchpad sp;
+
+		std::pmr::vector<AssetID> entities_to_unload(&sp);
+
+		entities_to_unload.reserve(groups.Unload.size());
+		for (auto id : groups.Unload)
 		{
-			auto type = reg.get<ACAssetType>(id).Type;
+			entities_to_unload.emplace_back(id);
+		}
 
-			FE_PROFILER_SCOPE(type.ToConstCharPtr());
+		reg.storage<ACLoadedFlag>().clear();
 
-			auto& ref_counters = view.get<ACRefsCounters>(id);
+		for (auto id : entities_to_unload)
+		{
+			switch (reg.get<ACAssetType>(id).Type)
+			{
+			case AssetType::Texture2D:	Unload<Texture2D>(id);	break;
+			case AssetType::Mesh:		Unload<Mesh>(id);		break;
+			//...
+			}
+		}
 
-			switch (type.Value)
+		std::pmr::vector<AssetID> entities_to_load(&sp);
+
+		for (auto id : groups.Critical	) entities_to_load.emplace_back(id);
+		for (auto id : groups.VeryHigh	) entities_to_load.emplace_back(id);
+		for (auto id : groups.High		) entities_to_load.emplace_back(id);
+		for (auto id : groups.Standard	) entities_to_load.emplace_back(id);
+		for (auto id : groups.Low		) entities_to_load.emplace_back(id);
+		for (auto id : groups.VeryLow	) entities_to_load.emplace_back(id);
+		for (auto id : groups.Minimal	) entities_to_load.emplace_back(id);
+
+		for (auto id : entities_to_load)
+		{
+			switch (reg.get<ACAssetType>(id).Type)
 			{
 			case AssetType::Texture2D:
 			{
 				auto textureUser = AssetUser<Texture2D>(id);
-				if (ref_counters.LiveHandles == 0)
+				if (!textureUser.GetRendererID(GDI))
 				{
-					textureUser.Release();
+					TextureLoader::LoadTexture(textureUser);
+					textureUser.CreateGDITexture2D(GDI);
+					textureUser.UnloadFromCPU();
+					textureUser.FlagLoaded();
 				}
 				else
 				{
-					if (!textureUser.GetRendererID(GDI))
-					{
-						TextureLoader::LoadTexture(textureUser);
-						textureUser.CreateGDITexture2D(GDI);
-						textureUser.UnloadFromCPU();
-					}
-				}
-				break;
-			}
-			case AssetType::Shader:
-			{
-				auto shaderUser = AssetUser<Shader>(id);
-				if (ref_counters.LiveHandles == 0)
-				{
-					shaderUser.Release();
-				}
-				else
-				{
-					if (!shaderUser.GetRendererID(GDI))
-					{
-						ShaderLoader::LoadShader(shaderUser);
-						ShaderLoader::CompileShader(GDI, shaderUser);
-					}
+					FE_LOG_CORE_WARN("Texture allready loaded");
 				}
 				break;
 			}
 			case AssetType::Mesh:
-			{
 				auto meshUser = AssetUser<Mesh>(id);
-				if (ref_counters.LiveHandles == 0)
+				if (!meshUser.GetBuffers())
 				{
-					meshUser.Release();
+					GeometryLoader::LoadMesh(meshUser);
+					meshUser.SendDataToGPU(GDI);
+					meshUser.UnloadFromCPU();
+					meshUser.FlagLoaded();
 				}
 				else
 				{
-					if (!meshUser.GetBuffers())
-					{
-						GeometryLoader::LoadMesh(meshUser);
-						meshUser.SendDataToGPU(GDI);
-						meshUser.UnloadFromCPU();
-					}
+					FE_LOG_CORE_WARN("Mesh allready loaded");
 				}
+				break;
 			}
-			}
+
+
 		}
 	}
-
-	
 }

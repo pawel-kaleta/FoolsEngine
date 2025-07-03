@@ -24,7 +24,6 @@ namespace fe
 	{
 	public:
 		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
-		// TO DO: add AssetLoadingPriority counting
 
 		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

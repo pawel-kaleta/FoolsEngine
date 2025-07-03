@@ -38,7 +38,7 @@ namespace fe
 
 		void Release() const;
 
-		void SendDataToGPU(GDIType GDI, void* data) const;
+		bool SendDataToGPU(GDIType GDI) const;
 		void Bind(GDIType GDI, RenderTextureSlotID slotID = 0) const;
 		void UnloadFromCPU() const;
 

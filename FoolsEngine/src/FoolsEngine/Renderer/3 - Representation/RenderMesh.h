@@ -30,6 +30,10 @@ namespace fe
 	public:
 		ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
 
+		void Release() const;
+
+		bool SendDataToGPU(GDIType GDI) const;
+		void UnloadFromCPU() const;
 	protected:
 		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }
 	};
