@@ -28,7 +28,7 @@ namespace fe
 		if (AllOf<ACGPUBuffers>())
 		{
 			FE_CORE_ASSERT(false, "Already on GPU");
-			return;
+			return false;
 		}
 
 		auto& ACData = Get<ACMeshCore>();

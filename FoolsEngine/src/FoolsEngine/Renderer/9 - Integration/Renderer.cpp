@@ -78,10 +78,10 @@ namespace fe
 
 		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
 
-		UploadBaseAssetsToGPU(Renderer::GetActiveGDItype());
+		UploadBaseAssetsToGPU(GetActiveGDItype());
 
-		Renderer2D::s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
-		Renderer2D::s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
+		Renderer2D::s_Data.BaseShader = BaseAssets.Shaders.Base2D;
+		Renderer2D::s_Data.Batch.Textures[0] = BaseAssets.Textures.FlatWhite.GetID();
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)
@@ -157,7 +157,7 @@ namespace fe
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GDI = GetActiveGDItype();
 
 
 		//auto viewMeshes = registry.view<CRenderMesh, CTransformGlobal>();
@@ -311,7 +311,7 @@ namespace fe
 				else
 				{
 					FE_LOG_CORE_WARN("Uninitialized texture!");
-					Renderer::BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
+					BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
 					continue;
 				}
 			}

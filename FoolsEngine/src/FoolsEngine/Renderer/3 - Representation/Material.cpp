@@ -227,7 +227,8 @@ namespace fe
 				return false;
 		}
 
-		core.ShadingModelHandle.Use().SendDataToGPU(GDI);
+		//core.ShadingModelHandle.Use().SendDataToGPU(GDI);
+		FE_LOG_CORE_ERROR("Material to gpu upload not implemented... I think...");
 	}
 
 	void Material::SaveMetadata(AssetID assetID)
@@ -347,7 +348,7 @@ namespace fe
 			if (!texture_slot_node) return false;
 			if (!texture_filepath_node) return false;
 			if (!texture_UUID_node) return false;
-			//To do: compare (assert) texture_slot_node with whader texture slot in shading model
+			//To do: compare (assert) texture_slot_node with texture slot in shading model
 			//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 
 			core.Textures.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));

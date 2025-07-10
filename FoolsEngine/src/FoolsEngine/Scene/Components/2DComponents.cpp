@@ -37,6 +37,9 @@ namespace fe
 		Tile.Color = data["Color"].as<glm::vec4>();
 		Tile.Texture = data["Texture"].as<AssetHandle<Texture2D>>();
 		Tile.TextureTilingFactor = data["Tiling"].as<float>();
+
+		// TO DO: this is temporary, proper (de)serialization should be here
+		Tile.Texture.SetLoadingPriority(AssetLoadingPriority::Standard);
 	}
 
 	void CSprite::DrawInspectorWidget(BaseEntity entity)
@@ -67,5 +70,7 @@ namespace fe
 		Sprite.Color = data["Color"].as<glm::vec4>();
 		Sprite.Texture = data["Texture"].as<AssetHandle<Texture2D>>();
 		Sprite.TextureTilingFactor = data["Tiling"].as<float>();
+		// TO DO: this is temporary, proper (de)serialization should be here
+		Sprite.Texture.SetLoadingPriority(AssetLoadingPriority::Standard);
 	}
 }

@@ -170,9 +170,8 @@ namespace fe
 		for (auto id : groups.Unload)
 		{
 			entities_to_unload.emplace_back(id);
+			reg.storage<ACLoadedFlag>().erase(id);
 		}
-
-		reg.storage<ACLoadedFlag>().clear();
 
 		for (auto id : entities_to_unload)
 		{
@@ -196,7 +195,8 @@ namespace fe
 
 		for (auto id : entities_to_load)
 		{
-			switch (reg.get<ACAssetType>(id).Type)
+			auto& type = reg.get<ACAssetType>(id).Type;
+			switch (type)
 			{
 			case AssetType::Texture2D:
 			{
@@ -215,6 +215,7 @@ namespace fe
 				break;
 			}
 			case AssetType::Mesh:
+			{
 				auto meshUser = AssetUser<Mesh>(id);
 				if (!meshUser.GetBuffers())
 				{
@@ -228,6 +229,9 @@ namespace fe
 					FE_LOG_CORE_WARN("Mesh allready loaded");
 				}
 				break;
+			}
+			default:
+				int what;
 			}
 
 
