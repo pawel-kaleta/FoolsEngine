@@ -62,9 +62,6 @@ namespace fe
 		Texture2DUser(ECS_AssetHandle ECS_handle) : Texture2DObserver(ECS_handle) {}
 	};
 
-	template<typename>
-	class AssetObserver;
-
 	class Texture2D : public Asset
 	{
 	public:
@@ -76,6 +73,6 @@ namespace fe
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;
-		using Core = ACTexture2DCore;
+		typedef ACTexture2DCore Core;
 	};
 }

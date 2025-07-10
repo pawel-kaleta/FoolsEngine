@@ -102,10 +102,19 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetTypes.h">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesRegistry.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h">
+      <Filter>FoolsEngine\Assets\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h">
+      <Filter>FoolsEngine\Assets\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h">
@@ -369,19 +378,21 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Utils\Colors.h">
+      <Filter>FoolsEngine\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\AssetTypes.h" />
-    <ClInclude Include="src\FoolsEngine\Utils\Colors.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
+    <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp">
+      <Filter>FoolsEngine\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
@@ -389,6 +400,9 @@
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp">
+      <Filter>FoolsEngine\Assets\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp">
@@ -592,7 +606,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.cpp" />
   </ItemGroup>
 </Project>

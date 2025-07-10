@@ -6,6 +6,10 @@
 
 namespace fe
 {
+	// AssetObserver<> and AssetUser<> are not using AssetConcept as a 'constraint',
+	// because their argument is sometimes forward declared (incomplete type fails constraint verification)
+	// instead there should be static_assert(AssetConcept<tnAsset>) for every tnAsset class in AssetTypes.h
+
 	template <typename tnAsset>
 	class AssetObserver final : public tnAsset::Observer
 	{
@@ -92,10 +96,10 @@ namespace fe
 			Init();
 		}
 		
-		void FlagLoaded()				{ Flag<ACLoadedFlag>(); }
-		void FlagLoadedAsDependency()	{ Flag<ACLoadedAsDependence>(); }
-		void FlagUnloaded()				{ UnFlag<ACLoadedFlag>(); }
-		void ReleaseDependencyLoad()	{ UnFlag<ACLoadedAsDependence>(); }
+		void FlagLoaded()				{ this->Flag<ACLoadedFlag>(); }
+		void FlagLoadedAsDependency()	{ this->Flag<ACLoadedAsDependence>(); }
+		void FlagUnloaded()				{ this->UnFlag<ACLoadedFlag>(); }
+		void ReleaseDependencyLoad()	{ this->UnFlag<ACLoadedAsDependence>(); }
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

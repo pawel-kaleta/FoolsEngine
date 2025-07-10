@@ -26,7 +26,7 @@ namespace fe
 		{
 			auto scene_user = m_Scene.Use();
 			scene_user.Initialize();
-			auto success = scene_user.Deserialize(scene_user);
+			auto success = SceneSerializerYAML::DeserializeFromFile(scene_user);
 			FE_CORE_ASSERT(success, "scene loading failed");
 		}
 		SetSceneContext(m_Scene);

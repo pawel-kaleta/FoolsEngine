@@ -58,7 +58,7 @@ namespace fe
 			const glm::mat4& VPMatrix
 		);
 
-		static struct
+		static struct BaseAssets // starting from C++20 msvc is unhappy about anonymus static properties :(
 		{
 			struct {
 				AssetHandle<Texture2D> Default;

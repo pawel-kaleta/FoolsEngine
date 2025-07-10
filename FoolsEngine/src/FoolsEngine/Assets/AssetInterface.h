@@ -118,4 +118,17 @@ namespace fe
 
 		ECS_AssetHandle m_ECSHandle;
 	};
+
+	template <typename tnAsset>
+	concept AssetConcept = requires(tnAsset asset, tnAsset::User user, tnAsset::Observer observer, tnAsset::Core core)
+	{
+		std::is_base_of_v<Asset, tnAsset>;
+		std::is_base_of_v<AssetInterface, decltype(observer)>;
+		std::is_base_of_v<decltype(observer), decltype(user)>;
+		asset.GetTypeStatic();
+	};
+
+	// AssetObserver<> and AssetUser<> are not using AssetConcept as a 'constraint',
+	// because their argument is sometimes forward declared (incomplete type fails constraint verification)
+	// instead there should be static_assert(AssetConcept<tnAsset>) for every tnAsset class in AssetTypes.h
 }

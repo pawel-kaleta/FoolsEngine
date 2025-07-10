@@ -79,7 +79,6 @@ namespace fe
 
 		struct Renderer2DData
 		{
-
 			glm::mat4 VPMatrix;
 
 			Ref<VertexBuffer> QuadVertexBuffer;

@@ -12,4 +12,7 @@
 namespace fe
 {
 #define FE_ASSET_TYPES_LIST Texture2D, Shader, ShadingModel, Material, Mesh, RenderMesh, Model, Scene
+
+#define _ASSET_CONCEPT_VERIFICATION(x) static_assert(AssetConcept<x>);
+	FE_FOR_EACH(_ASSET_CONCEPT_VERIFICATION, FE_ASSET_TYPES_LIST);
 }

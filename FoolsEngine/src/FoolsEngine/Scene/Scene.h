@@ -42,9 +42,6 @@ namespace fe
 		void SimulationUpdate() const;
 		void PostFrameUpdate() const;
 
-		void Serialize(const AssetObserver<Scene>& assetObserver);
-		bool Deserialize(const AssetUser<Scene>& assetUser);
-
 	private:
 		template <SimulationStage::ValueType stage>
 		void Update() const;

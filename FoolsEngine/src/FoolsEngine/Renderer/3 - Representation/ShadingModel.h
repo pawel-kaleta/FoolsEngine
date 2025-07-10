@@ -53,9 +53,6 @@ namespace fe
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
 	};
 
-	template<typename>
-	class AssetObserver;
-
 	class ShadingModel : public Asset
 	{
 	public:

@@ -52,9 +52,6 @@ namespace fe
 		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
 	};
 
-	template<typename>
-	class AssetObserver;
-
 	class Shader : public Asset
 	{
 	public:

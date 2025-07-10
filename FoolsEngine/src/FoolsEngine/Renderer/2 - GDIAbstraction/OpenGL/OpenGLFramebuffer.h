@@ -39,6 +39,7 @@ namespace fe
                 if (m_Specification.ColorAttachments[i].Name == name)
                     return i;
             }
+
             FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer {1}", name, m_Name);
             return 0;
         }

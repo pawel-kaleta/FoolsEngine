@@ -65,14 +65,4 @@ namespace fe
 		FE_LOG_CORE_INFO("Scene release");
 		GetCoreComponent().GameplayWorld.release();
 	}
-
-	void SceneUser::Serialize(const AssetObserver<Scene>& assetObserver)
-	{
-		SceneSerializerYAML::SerializeToFile(assetObserver);
-	}
-
-	bool SceneUser::Deserialize(const AssetUser<Scene>& assetUser)
-	{
-		return SceneSerializerYAML::DeserializeFromFile(assetUser);
-	}
 }

@@ -5,7 +5,6 @@
 
 namespace fe
 {
-	class Scene;
 	class Entity;
 	class GameplayWorld;
 

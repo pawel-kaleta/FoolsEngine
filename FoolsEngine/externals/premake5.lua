@@ -98,7 +98,7 @@ project "imgui"
 	location "_projects_of_externals/imgui"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -133,7 +133,7 @@ project "stb"
 	location "_projects_of_externals/stb"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -159,7 +159,7 @@ project "yaml-cpp"
 	location "_projects_of_externals/yaml-cpp"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -193,7 +193,7 @@ project "ImGuizmo"
 	location "_projects_of_externals/%{prj.name}"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -228,7 +228,7 @@ project "assimp"
 	kind "StaticLib"
 	warnings "Off"
 	optimize "Speed"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")

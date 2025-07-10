@@ -14,7 +14,8 @@ namespace fe
 		AssetID assetID = reg.create();
 
 		reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
-		reg.emplace<tnAsset::Core>(assetID).Init();
+		using core = tnAsset::Core;
+		reg.emplace<core>(assetID).Init();
 
 		return assetID;
 	}
@@ -38,7 +39,8 @@ namespace fe
 		s_Instance->m_MapByFilepath[path] = assetID;
 		s_Instance->m_MapByUUID[uuid] = assetID;
 
-		reg.emplace<tnAsset::Core>(assetID).Init();
+		using core = tnAsset::Core;
+		reg.emplace<core>(assetID).Init();
 
 		return assetID;
 	}
@@ -60,7 +62,8 @@ namespace fe
 
 		reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();
 		reg.emplace<ACMasterAsset>(assetID).Master = master;
-		reg.emplace<tnAsset::Core>(assetID).Init();
+		using core = tnAsset::Core;
+		reg.emplace<core>(assetID).Init();
 
 		return assetID;
 	}
@@ -85,7 +88,8 @@ namespace fe
 		s_Instance->m_MapByUUID[uuid] = assetID;
 		s_Instance->m_MapByFilepath[path] = assetID;
 
-		reg.emplace<tnAsset::Core>(assetID).Init();
+		using core = tnAsset::Core;
+		reg.emplace<core>(assetID).Init();
 
 		return assetID;
 	}
