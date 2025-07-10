@@ -59,7 +59,7 @@ namespace fe
 		
 			return *this;
 		}
-		AssetHandle& operator=(AssetHandle&& other)
+		AssetHandle& operator=(AssetHandle&& other) 
 		{
 			Deinit();
 

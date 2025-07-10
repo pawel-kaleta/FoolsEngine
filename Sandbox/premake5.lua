@@ -3,6 +3,7 @@ project "Sandbox"
 	language "C++"
 	cppdialect "C++20"
 	staticruntime "on"
+	exceptionhandling ("Off")
 
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")

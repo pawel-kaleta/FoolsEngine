@@ -229,6 +229,7 @@ namespace fe
 
 		//core.ShadingModelHandle.Use().SendDataToGPU(GDI);
 		FE_LOG_CORE_ERROR("Material to gpu upload not implemented... I think...");
+		return false;
 	}
 
 	void Material::SaveMetadata(AssetID assetID)

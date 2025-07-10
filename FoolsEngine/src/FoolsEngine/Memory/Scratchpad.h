@@ -42,7 +42,7 @@ namespace fe
 		{
 			s_Count--;
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			s_Free = (std::byte*)((uint64_t)m_Begin * rollback_flag + (uint64_t)s_Free * !rollback_flag);
+			s_Free = (std::byte*)((uint64_t)m_Begin * (uint64_t)rollback_flag + (uint64_t)s_Free * (uint64_t)!rollback_flag);
 		}
 	private:
 		constexpr const static size_t s_BufferSize = 524'288;

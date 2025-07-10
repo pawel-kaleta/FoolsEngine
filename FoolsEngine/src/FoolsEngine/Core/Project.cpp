@@ -122,5 +122,7 @@ namespace fe
 		inst.BaseAssets.Shaders.Base3D = shaders_node["Base3D"].as<UUID>();
 		inst.BaseAssets.ShadingModels.Default = shading_models_node["Default"].as<UUID>();
 		inst.BaseAssets.Materials.Default = materials_node["Default"].as<UUID>();
+
+		return true;
 	}
 }

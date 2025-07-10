@@ -409,8 +409,8 @@ namespace fe
 
 							newEntity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
 
-							auto& node = newEntity.Emplace<CEntityNode>();
-							if (!DeserializeEntityNode(entity["Node"], node, gameplay_world))
+							auto& entity_node = newEntity.Emplace<CEntityNode>();
+							if (!DeserializeEntityNode(entity["Node"], entity_node, gameplay_world))
 								return false;
 
 							// Transform

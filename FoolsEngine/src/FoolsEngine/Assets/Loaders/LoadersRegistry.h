@@ -12,7 +12,7 @@ namespace fe
 		{
 			bool (* const IsKnownExtensionFunkPtr)(const std::pmr::string&);
 			bool (* const IsKnownAssetType)(AssetType assetType);
-			const char const* SourceExtensionAlias;
+			const char* SourceExtensionAlias;
 			const LoaderType Type;
 			// AssetType::None means multiple types 
 			const AssetType AssetType;

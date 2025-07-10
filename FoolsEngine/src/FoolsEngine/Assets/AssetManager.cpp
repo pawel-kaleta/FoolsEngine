@@ -233,8 +233,6 @@ namespace fe
 			default:
 				int what;
 			}
-
-
 		}
 	}
 }

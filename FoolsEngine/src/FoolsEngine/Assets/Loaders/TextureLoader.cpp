@@ -88,17 +88,17 @@ namespace fe
 		}
 
 		Specification spec;
-		spec.Components.FromInt(channels);
-		spec.Format.FromInt(channels);
 		spec.Width = width;
 		spec.Height = height;
+		spec.Components.FromInt(channels);
+		spec.Format.FromInt(channels);
 
 		return spec;
 	}
 
 	bool TextureLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static const char const* knownExtensions[] = {
+		static const char* knownExtensions[] = {
 			".jpg",
 			".jpeg",
 			".png",

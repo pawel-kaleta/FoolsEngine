@@ -31,6 +31,8 @@ namespace fe
 			if (item.AssetType == assetType)
 				return &item;
 		}
+
+		return nullptr;
 	}
 
 	void LoadersRegistry::RegisterLoaders()

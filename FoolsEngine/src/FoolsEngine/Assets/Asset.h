@@ -21,15 +21,15 @@ namespace fe
 	FE_DECLARE_ENUM(AssetType,
 		Texture,
 		Texture2D,
-
+	
 		Shader,
 		ShadingModel,
 		Material,
-
+	
 		Mesh,
 		RenderMesh,
 		Model,
-
+	
 		Skeleton,
 		SkinnedModel,
 		Animation,
@@ -38,7 +38,7 @@ namespace fe
 		Prefab,
 		
 		Audio,
-
+	
 		Count,
 		None
 	);

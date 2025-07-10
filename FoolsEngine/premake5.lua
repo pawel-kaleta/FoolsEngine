@@ -5,6 +5,7 @@ project "FoolsEngine"
 	staticruntime "on"
 	externalwarnings "off"
 	externalanglebrackets "on"
+	exceptionhandling ("Off")
 
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")

@@ -14,6 +14,7 @@ namespace fe
 			if (item.Type == assetType)
 				return &item;
 		}
+		return nullptr;
 	}
 
 	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(const std::pmr::string extension)
