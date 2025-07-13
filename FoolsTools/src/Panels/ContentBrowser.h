@@ -34,13 +34,11 @@ namespace fe
 		{
 			EditorAssetHandle<Texture2D> File;
 			EditorAssetHandle<Texture2D> Folder;
-			void* FileID;
-			void* FolderID;
+			void* FileID = nullptr;
+			void* FolderID = nullptr;
 		} m_Icons;
 
-		void RenderFiles(std::pmr::vector<std::pmr::string>* file_names);
 		void RenderFolders(Scratchpad* sp, std::pmr::vector<std::pmr::string>* file_names);
-		void RenderFiles();
 		void RenderFile(const std::pmr::string& stem, const std::pmr::string& extension);
 		void RenderUPFolder();
 		void RenderFolderNode(const std::filesystem::directory_entry& dir);

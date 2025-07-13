@@ -15,8 +15,8 @@ namespace fe
 		AssetHandle<ShadingModel> ShadingModelHandle;
 		std::vector<AssetHandle<Texture2D>> Textures;
 
-		void* UniformsData;
-		size_t UniformsDataSize;
+		void* UniformsData = 0;
+		size_t UniformsDataSize = 0;
 
 		void Init();
 

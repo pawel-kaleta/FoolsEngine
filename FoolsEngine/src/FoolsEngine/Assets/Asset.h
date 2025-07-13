@@ -33,10 +33,10 @@ namespace fe
 		Skeleton,
 		SkinnedModel,
 		Animation,
-		
+	
 		Scene,
 		Prefab,
-		
+	
 		Audio,
 	
 		Count,

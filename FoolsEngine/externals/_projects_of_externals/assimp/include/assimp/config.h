@@ -3,7 +3,7 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2024, assimp team
+Copyright (c) 2006-2025, assimp team
 
 All rights reserved.
 
@@ -677,6 +677,19 @@ enum aiComponent
     "AI_CONFIG_FBX_CONVERT_TO_M"
 
 // ---------------------------------------------------------------------------
+/** @brief  Set whether the FBX importer shall ignore the provided axis configuration
+ *
+ * If this property is set to true, the axis directions provided in the FBX file
+ * will be ignored and the file will be loaded as is.
+ *
+ * Set to true for Assimp 5.3.x and earlier behavior
+ * Equivalent to AI_CONFIG_IMPORT_COLLADA_IGNORE_UP_DIRECTION
+ * Property type: Bool. Default value: false.
+ */
+#define AI_CONFIG_IMPORT_FBX_IGNORE_UP_DIRECTION \
+    "AI_CONFIG_IMPORT_FBX_IGNORE_UP_DIRECTION"
+
+// ---------------------------------------------------------------------------
 /** @brief  Will enable the skeleton struct to store bone data.
  *
  *  This will decouple the bone coupling to the mesh. This feature is
@@ -724,6 +737,12 @@ enum aiComponent
  */
 #define AI_CONFIG_IMPORT_MDL_HL1_READ_ANIMATION_EVENTS "IMPORT_MDL_HL1_READ_ANIMATION_EVENTS"
 
+// ---------------------------------------------------------------------------
+/** @brief Set whether you want to convert the HS1 coordinate system in a special way.
+ * The default value is true (S1)
+ * Property type: bool
+ */
+#define AI_CONFIG_IMPORT_MDL_HL1_TRANSFORM_COORD_SYSTEM "TRANSFORM COORDSYSTEM FOR HS! MODELS"
 // ---------------------------------------------------------------------------
 /** @brief Set whether the MDL (HL1) importer will read blend controllers.
  * \note This property requires AI_CONFIG_IMPORT_MDL_HL1_READ_ANIMATIONS to be set to true.
@@ -1112,6 +1131,16 @@ enum aiComponent
  */
 #define AI_CONFIG_EXPORT_GLTF_UNLIMITED_SKINNING_BONES_PER_VERTEX \
         "USE_UNLIMITED_BONES_PER VERTEX"
+
+/** @brief Specifies whether to write the value referenced to opacity in TransparencyFactor of each material. 
+ *
+ * When this flag is not defined, the TransparencyFactor value of each meterial is 1.0.
+ * By enabling this flag, the value is 1.0 - opacity;
+
+ * Property type: Bool. Default value: false.
+ */
+#define AI_CONFIG_EXPORT_FBX_TRANSPARENCY_FACTOR_REFER_TO_OPACITY \
+        "EXPORT_FBX_TRANSPARENCY_FACTOR_REFER_TO_OPACITY"
 
 /**
  * @brief Specifies the blob name, assimp uses for exporting.

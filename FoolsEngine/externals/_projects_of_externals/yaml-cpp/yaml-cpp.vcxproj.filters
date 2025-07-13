@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\exceptions.h">
       <Filter>include\yaml-cpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\fptostring.h">
+      <Filter>include\yaml-cpp</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\mark.h">
       <Filter>include\yaml-cpp</Filter>
     </ClInclude>
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="..\..\yaml-cpp\src\collectionstack.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\yaml-cpp\src\contrib\dragonbox.h">
+      <Filter>src\contrib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\yaml-cpp\src\contrib\graphbuilderadapter.h">
       <Filter>src\contrib</Filter>
@@ -240,6 +246,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\yaml-cpp\src\exp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\yaml-cpp\src\fptostring.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\yaml-cpp\src\memory.cpp">

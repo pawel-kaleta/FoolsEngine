@@ -103,7 +103,7 @@ namespace fe
         FE_PROFILER_FUNC();
 
         auto name = system->GetName();
-        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
@@ -115,7 +115,7 @@ namespace fe
         static System* system_of_popup = nullptr;
         bool widget_of_popup = system_of_popup == system;
 
-        ImGuiDir button_arrow_dir = popup_open && widget_of_popup ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
+        ImGuiDir button_arrow_dir = popup_open && widget_of_popup ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
         bool open_new_popup = false;
         if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
         {

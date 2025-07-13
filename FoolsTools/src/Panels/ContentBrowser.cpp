@@ -9,7 +9,7 @@ namespace fe
 	glm::vec4 AssetTypeColors[AssetType::Count];
 	glm::vec4 LoaderColors[LoaderType::Count];
 
-	void InitColors()
+	static void InitColors()
 	{
 		//https://flatuicolors.com/palette/us
 
@@ -42,8 +42,8 @@ namespace fe
 		m_Icons.File.CreateGDITexture2D(GDI);
 		m_Icons.Folder.CreateGDITexture2D(GDI);
 
-		m_Icons.FileID   = (void*)m_Icons.File.GetRendererID(GDI);
-		m_Icons.FolderID = (void*)m_Icons.Folder.GetRendererID(GDI);
+		m_Icons.FileID   = (void*)(uint64_t)m_Icons.File.GetRendererID(GDI);
+		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetRendererID(GDI);
 
 		InitColors();
 	}
@@ -53,21 +53,26 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("Content Browser");
+		if (!ImGui::Begin("Content Browser"))
+		{
+			ImGui::PopStyleVar();
+			return;
+		}
+
 		ImGui::PopStyleVar();
 
 		// Render Folder Hierarchy
 		{
 			FE_PROFILER_SCOPE("Render Folder Hierarchy");
 
-			if (ImGui::BeginChild("Folders Hierarchy", ImVec2(-FLT_MIN, ImGui::GetContentRegionAvail().y), ImGuiChildFlags_ResizeX | ImGuiChildFlags_Border))
+			if (ImGui::BeginChild("Folders Hierarchy", {0,0}, ImGuiChildFlags_ResizeX | ImGuiChildFlags_Border))
 			{
 				ImGui::Checkbox("Display Files", &(m_Settings.DisplayFiles));
 				
 				RenderFolderNode(std::filesystem::directory_entry(m_AssetsPath));
 
-				ImGui::EndChild();
 			}
+			ImGui::EndChild();
 		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 0,0 });
@@ -128,9 +133,8 @@ namespace fe
 			}
 
 			ImGui::PopStyleColor(2);
-
-			ImGui::EndChild();
 		}
+		ImGui::EndChild();
 
 		ImGui::End();
 	}

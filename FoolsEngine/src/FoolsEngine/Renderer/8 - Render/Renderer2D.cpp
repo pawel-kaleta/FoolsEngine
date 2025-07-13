@@ -55,13 +55,13 @@ namespace fe
 			size_t quad_count = quadIndices->size() / 6;
 			for (size_t i = 0; i < quad_count; i++)
 			{
-				(*quadIndices)[i * 6 + 0] = i * 4 + 0;
-				(*quadIndices)[i * 6 + 1] = i * 4 + 1;
-				(*quadIndices)[i * 6 + 2] = i * 4 + 2;
+				(*quadIndices)[i * 6 + 0] = (uint32_t)(i * 4 + 0);
+				(*quadIndices)[i * 6 + 1] = (uint32_t)(i * 4 + 1);
+				(*quadIndices)[i * 6 + 2] = (uint32_t)(i * 4 + 2);
 			
-				(*quadIndices)[i * 6 + 3] = i * 4 + 2;
-				(*quadIndices)[i * 6 + 4] = i * 4 + 3;
-				(*quadIndices)[i * 6 + 5] = i * 4 + 0;
+				(*quadIndices)[i * 6 + 3] = (uint32_t)(i * 4 + 2);
+				(*quadIndices)[i * 6 + 4] = (uint32_t)(i * 4 + 3);
+				(*quadIndices)[i * 6 + 5] = (uint32_t)(i * 4 + 0);
 			}
 		}
 

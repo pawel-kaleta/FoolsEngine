@@ -3,6 +3,10 @@ project "glfw"
 	kind "StaticLib"
 	language "C"
 
+	buildoptions {
+		"/utf-8"
+	}
+
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
@@ -68,6 +72,10 @@ project "glad"
 	kind "StaticLib"
 	language "C"
 
+	buildoptions {
+		"/utf-8"
+	}
+
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
@@ -100,6 +108,10 @@ project "imgui"
 	language "C++"
 	cppdialect "C++20"
 	exceptionhandling ("Off")
+
+	buildoptions {
+		"/utf-8"
+	}
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -137,6 +149,10 @@ project "stb"
 	cppdialect "C++20"
 	exceptionhandling ("Off")
 
+	buildoptions {
+		"/utf-8"
+	}
+
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
@@ -163,6 +179,10 @@ project "yaml-cpp"
 	language "C++"
 	cppdialect "C++20"
 	exceptionhandling ("Off")
+
+	buildoptions {
+		"/utf-8"
+	}
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -198,6 +218,10 @@ project "ImGuizmo"
 	language "C++"
 	cppdialect "C++20"
 	exceptionhandling ("Off")
+
+	buildoptions {
+		"/utf-8"
+	}
 
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
@@ -235,6 +259,10 @@ project "assimp"
 	cppdialect "C++20"
 	exceptionhandling ("Off")
 
+	buildoptions {
+		"/utf-8"
+	}
+
 	targetdir ("../../bin/"     .. outputdir .. "/externals/%{prj.name}")
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
@@ -270,6 +298,8 @@ project "assimp"
 		'assimp/code/AssetLib/glTF/**.h', -- glTF has some .inl files, we are skipping them to prevent compiling them like .cpp files
 		'assimp/code/AssetLib/glTF2/**.cpp', 
 		'assimp/code/AssetLib/glTF2/**.h', -- glTF has some .inl files, we are skipping them to prevent compiling them like .cpp files
+		'assimp/code/AssetLib/glTFCommon/**.cpp', 
+		'assimp/code/AssetLib/glTFCommon/**.h',
 		'assimp/code/AssetLib/Assbin/**' -- For caching
 	}
 	-- Importers
@@ -323,6 +353,7 @@ project "assimp"
 		'ASSIMP_BUILD_NO_STEP_IMPORTER',
 		'ASSIMP_BUILD_NO_STL_IMPORTER',
 		'ASSIMP_BUILD_NO_TERRAGEN_IMPORTER',
+		'ASSIMP_BUILD_NO_USD_IMPORTER',
 		'ASSIMP_BUILD_NO_X_IMPORTER',
 		'ASSIMP_BUILD_NO_X3D_IMPORTER',
 		'ASSIMP_BUILD_NO_XGL_IMPORTER'
@@ -343,7 +374,8 @@ project "assimp"
 		'ASSIMP_BUILD_NO_FBX_EXPORTER',
 		'ASSIMP_BUILD_NO_M3D_EXPORTER',
 		'ASSIMP_BUILD_NO_3MF_EXPORTER',
-		'ASSIMP_BUILD_NO_ASSJSON_EXPORTER'
+		'ASSIMP_BUILD_NO_ASSJSON_EXPORTER',
+		'ASSIMP_BUILD_NO_PBRT_EXPORTER'
 	}
 
 	filter "system:windows"

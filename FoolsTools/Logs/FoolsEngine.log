@@ -1,36 +1,55 @@
-18:48:09:356986 | FE  | info     | Logging innitialized!
-18:48:09:357691 | App | info     | Logging innitialized!
-18:48:09:358012 | FE  | info     | /////////////////////////////////////////////////////
-18:48:09:358249 | FE  | info     | ////////////////////// STARTUP //////////////////////
-18:48:09:358508 | FE  | info     | /////////////////////////////////////////////////////
-18:48:09:358832 | App | info     | Logging level set to 0 - all.
-18:48:09:359161 | FE  | info     | Logging level set to 0 - all.
-18:48:09:360170 | FE  | info     | Profiler session 'Startup' started.
-18:48:09:360763 | FE  | info     | Initializing GLFW
-18:48:09:412337 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-18:48:09:715931 | FE  | info     | Setting events callbacks for window:
-18:48:09:716371 | FE  | info     | 	WindowResizeEvent
-18:48:09:716695 | FE  | info     | 	WindowCloseEvent
-18:48:09:717004 | FE  | info     | 	WindowFocusChangeEvents
-18:48:09:717293 | FE  | info     | 	KeyEvents
-18:48:09:717577 | FE  | info     | 	KeyTypedEvent
-18:48:09:717830 | FE  | info     | 	MouseButtonEvents
-18:48:09:718058 | FE  | info     | 	MouseScrolledEvent
-18:48:09:718302 | FE  | info     | 	MouseMovedEvent
-18:48:09:718866 | FE  | info     | Creating rendering context
-18:48:09:722282 | FE  | info     | Rendering platform info:
-18:48:09:722557 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-18:48:09:722753 | FE  | info     | 	Renderer:	AMD Radeon RX 640
-18:48:09:722936 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
-18:48:09:723320 | FE  | info     | OpenGL Rendering Context created
-18:48:09:723623 | FE  | info     | VSync disabled.
-18:48:09:724003 | FE  | info     | OpenGLDeviceAPI creation!
-18:48:09:724329 | FE  | info     | OpenGLDeviceAPI Initialization.
-18:48:09:727656 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-18:48:09:731810 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-18:48:09:751714 | FE  | info     | Profiler session 'Startup' closed.
-18:48:09:752570 | FE  | info     | /////////////////////////////////////////////////////
-18:48:09:752926 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-18:48:09:753321 | FE  | info     | /////////////////////////////////////////////////////
-18:48:09:753617 | App | info     | Logging level set to 1 - debug or higher.
-18:48:09:754077 | FE  | info     | Logging level set to 1 - debug or higher.
+03:26:26:828289 | FE  | info     | Logging innitialized!
+03:26:26:829055 | App | info     | Logging innitialized!
+03:26:26:829143 | FE  | info     | /////////////////////////////////////////////////////
+03:26:26:829211 | FE  | info     | ////////////////////// STARTUP //////////////////////
+03:26:26:829279 | FE  | info     | /////////////////////////////////////////////////////
+03:26:26:829353 | App | info     | Logging level set to 0 - all.
+03:26:26:829416 | FE  | info     | Logging level set to 0 - all.
+03:26:26:829661 | FE  | info     | Profiler session 'Startup' started.
+03:26:26:830008 | FE  | info     | Initializing GLFW
+03:26:26:868266 | FE  | info     | Creating Window FoolsTools (1900, 1000)
+03:26:27:061185 | FE  | info     | Setting events callbacks for window:
+03:26:27:061566 | FE  | info     | 	WindowResizeEvent
+03:26:27:061701 | FE  | info     | 	WindowCloseEvent
+03:26:27:061814 | FE  | info     | 	WindowFocusChangeEvents
+03:26:27:061926 | FE  | info     | 	KeyEvents
+03:26:27:062030 | FE  | info     | 	KeyTypedEvent
+03:26:27:062117 | FE  | info     | 	MouseButtonEvents
+03:26:27:062193 | FE  | info     | 	MouseScrolledEvent
+03:26:27:062264 | FE  | info     | 	MouseMovedEvent
+03:26:27:062504 | FE  | info     | Creating rendering context
+03:26:27:065540 | FE  | info     | Rendering platform info:
+03:26:27:065644 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+03:26:27:065736 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+03:26:27:065814 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+03:26:27:065970 | FE  | info     | OpenGL Rendering Context created
+03:26:27:066081 | FE  | info     | VSync disabled.
+03:26:27:066247 | FE  | info     | OpenGLDeviceAPI creation!
+03:26:27:066398 | FE  | info     | OpenGLDeviceAPI Initialization.
+03:26:27:068323 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+03:26:27:068854 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+03:26:27:072565 | FE  | info     | Profiler session 'Startup' closed.
+03:26:27:072655 | FE  | info     | /////////////////////////////////////////////////////
+03:26:27:072962 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+03:26:27:073244 | FE  | info     | /////////////////////////////////////////////////////
+03:26:27:073527 | App | info     | Logging level set to 1 - debug or higher.
+03:26:27:073803 | FE  | info     | Logging level set to 1 - debug or higher.
+03:26:29:868646 | FE  | info     | Profiler session 'ProjectLoading' started.
+03:26:29:868949 | FE  | warning  | StartScene not implemented
+03:26:29:948818 | FE  | info     | Profiler session 'ProjectLoading' closed.
+03:26:29:949110 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+03:26:29:949860 | App | info     | EditorLayer::OnAttach()
+03:26:29:950320 | FE  | info     | Scene initialization
+03:26:29:950469 | FE  | info     | World Creation
+03:26:29:950963 | FE  | info     | Profiler session 'SceneLoading' started.
+03:26:32:006558 | FE  | info     | Profiler session 'SceneLoading' closed.
+03:26:32:008840 | FE  | info     | Profiler session 'Runtime' started.
+03:26:32:089757 | FE  | info     | Profiler session 'Runtime' closed.
+03:26:34:439157 | FE  | info     | Window Close Event
+03:26:34:440976 | FE  | info     | /////////////////////////////////////////////////////
+03:26:34:441081 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+03:26:34:441375 | FE  | info     | /////////////////////////////////////////////////////
+03:26:34:441656 | App | info     | Logging level set to 0 - all.
+03:26:34:441938 | FE  | info     | Logging level set to 0 - all.
+03:26:34:442404 | FE  | info     | Profiler session 'Shutdown' started.
+03:26:34:444006 | FE  | info     | Profiler session 'Shutdown' closed.

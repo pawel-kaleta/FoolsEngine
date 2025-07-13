@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iterator>
+
 #include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Debug/Log.h"
 
@@ -95,11 +97,13 @@ namespace fe
 // EXAMPLE
 // dispacher.Dispach<fe::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(LayerExample::OnKeyPressedEvent));
 
-	inline std::ostream& operator<<(std::ostream& os, const Events::Event& e)
-	{
-		return os << e.ToString();
-	}
 }
+
+inline std::ostream& operator<<(std::ostream& os, const fe::Events::Event& e)
+{
+	return os << e.ToString();
+}
+template <> struct fmt::formatter<fe::Events::Event> : fmt::ostream_formatter {};
 
 #define FE_NEW_EVENT(callback, localName, type, ...) fe::Ref<type> localName = fe::CreateRef<type>(__VA_ARGS__);\
                                                      callback(localName);

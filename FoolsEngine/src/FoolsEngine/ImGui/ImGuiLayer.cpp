@@ -171,7 +171,7 @@ namespace fe {
 			return;
 		}
 
-		int count = (int)ShaderData::SizeOfType(uniform.GetType()) / ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		int count = (int)ShaderData::SizeOfType(uniform.GetType()) / (int)ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
 		ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags);
 	}
 	

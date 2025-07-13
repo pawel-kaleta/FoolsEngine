@@ -34,7 +34,7 @@ namespace fe
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
 
-        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
 
@@ -43,7 +43,7 @@ namespace fe
         static Behavior* behavior_of_popup = nullptr;
         bool widget_of_popup = behavior_of_popup == behavior;
 
-        ImGuiDir button_arrow_dir = popup_open && widget_of_popup ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
+        ImGuiDir button_arrow_dir = popup_open && widget_of_popup ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
         bool open_new_popup = false;
         if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
         {
@@ -115,7 +115,7 @@ namespace fe
 
                 DrawCNameWidget(actor);
 
-                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+                float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
                 ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
 
                 if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))

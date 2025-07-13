@@ -31,7 +31,7 @@ namespace fe
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
 
-        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
 
@@ -41,7 +41,7 @@ namespace fe
         static DataComponent* (BaseEntity::* getter_of_component_of_popup)() const = nullptr;
         bool widget_of_popup = getter_of_component_of_popup == getter;
 
-        ImGuiDir button_arrow_dir = widget_of_popup && popup_open ? ImGuiDir_::ImGuiDir_Down : ImGuiDir_::ImGuiDir_Right;
+        ImGuiDir button_arrow_dir = widget_of_popup && popup_open ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
         bool open_new_popup = false;
         if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
         {
@@ -120,8 +120,8 @@ namespace fe
         ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
 
         DrawCNameWidget(entity);
-
-        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        
+        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
 
         if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))

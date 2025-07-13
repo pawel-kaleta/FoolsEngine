@@ -10,7 +10,7 @@ namespace fe
 			float MoveSpeed = 0.5f;
 			float RotationSpeed = 80.0f;
 
-			Transform CalculateNewTransform(Transform transform)
+			Transform CalculateNewTransform(Transform transform) const
 			{
 				auto& position = transform.Shift;
 				auto& rotation = transform.Rotation;

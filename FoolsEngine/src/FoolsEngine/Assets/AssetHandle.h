@@ -44,7 +44,7 @@ namespace fe
 		{
 			Init();
 		};
-		AssetHandle(AssetHandle&& other) :
+		AssetHandle(AssetHandle&& other) noexcept :
 			AssetHandleBase(other.m_ID, other.m_LoadingPriority)
 		{
 			other.m_ID = NullAssetID;
@@ -59,7 +59,7 @@ namespace fe
 		
 			return *this;
 		}
-		AssetHandle& operator=(AssetHandle&& other) 
+		AssetHandle& operator=(AssetHandle&& other) noexcept
 		{
 			Deinit();
 

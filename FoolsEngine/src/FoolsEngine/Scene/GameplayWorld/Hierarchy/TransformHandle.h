@@ -12,9 +12,9 @@ namespace fe
 	// Local recalculated upon change, Global recalculated upon access if needed (has changed)
 	// Local is always accurate, Global appears as always accurate
 	//
-	// DirtyFlag component Marks Global part as „outdated”
+	// DirtyFlag component Marks Global part as "outdated"
 	// Emplaced in all descendant Entities upon Global modification (Local modification implies Global modification)
-	// Global is recalculated upon access if necessary (if marked as „dirty”) using hierarchy chain starting from closest „clean” ancestor
+	// Global is recalculated upon access if necessary (if marked as "dirty") using hierarchy chain starting from closest "clean" ancestor
 
 	class TransformHandle
 	{

@@ -4,6 +4,8 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
+#include "FoolsEngine\Memory\Scratchpad.h"
+
 #include <glad\glad.h>
 
 namespace fe
@@ -12,11 +14,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+
 		std::ifstream in(filePath, std::ios::in, std::ios::binary);
 
 		if (!in.good())
 		{
-			FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", filePath);
+			Scratchpad sp;
+			FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
 			return;
 		}
 

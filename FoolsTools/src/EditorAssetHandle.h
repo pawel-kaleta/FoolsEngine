@@ -27,7 +27,7 @@ namespace fe
 		EditorAssetHandle(const EditorAssetHandle& other) :
 			tnAsset::User(other.m_ECSHandle)
 		{ };
-		EditorAssetHandle(EditorAssetHandle&& other) :
+		EditorAssetHandle(EditorAssetHandle&& other) noexcept :
 			tnAsset::User(other.m_ECSHandle)
 		{
 			other.m_ECSHandle = ECS_AssetHandle();
@@ -38,7 +38,7 @@ namespace fe
 			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
 			return *this;
 		}
-		EditorAssetHandle& operator=(EditorAssetHandle&& other)
+		EditorAssetHandle& operator=(EditorAssetHandle&& other) noexcept
 		{
 			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
 			other.m_ECSHandle = ECS_AssetHandle();

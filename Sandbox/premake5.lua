@@ -3,7 +3,13 @@ project "Sandbox"
 	language "C++"
 	cppdialect "C++20"
 	staticruntime "on"
+	externalwarnings "off"
+	externalanglebrackets "on"
 	exceptionhandling ("Off")
+
+	buildoptions {
+		"/utf-8"
+	}
 
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")

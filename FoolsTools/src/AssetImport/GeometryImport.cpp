@@ -45,7 +45,7 @@ namespace fe::GeometryImport
 		);
 
 		FE_CORE_ASSERT(false, "not implemented yet");
-		AssetID assetID;// = AssetManager::CreateAsset();
+		AssetID assetID = NullAssetID;// = AssetManager::CreateAsset();
 		AssetHandle<Model> model_handle(assetID);
 		auto model_user = model_handle.Use();
 
@@ -58,7 +58,7 @@ namespace fe::GeometryImport
 		{
 			auto& render_mesh = render_meshes.emplace_back();
 
-			render_mesh.AssimpMeshIndex = i;
+			render_mesh.AssimpMeshIndex = (uint32_t)i;
 			render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
 			render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
 			render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
@@ -283,7 +283,7 @@ namespace fe::GeometryImport
 				label += ". " + std::pmr::string(name.C_Str());
 
 				if (ImGui::Selectable(label.c_str(), is_selected))
-					selected_idx = n;
+					selected_idx = (uint32_t)n;
 
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 				if (is_selected)
@@ -359,7 +359,7 @@ namespace fe::GeometryImport
 				ImGui::Text("First texture may be Occlusion-Metalness-Roughness Map");
 			for (size_t i = 0; i < unknown_textures_count; i++)
 			{
-				aiString unknown_map; mat->GetTexture(aiTextureType_UNKNOWN, i, &unknown_map);
+				aiString unknown_map; mat->GetTexture(aiTextureType_UNKNOWN, (unsigned int)i, &unknown_map);
 				ImGui::Text("%s", unknown_map.C_Str());
 			}
 		}

@@ -15,7 +15,7 @@ namespace fe
 		CActorData(EntityID entityID)
 			: m_ID(entityID)
 		{ };
-		CActorData& operator=(CActorData&& other)
+		CActorData& operator=(CActorData&& other) noexcept
 		{
 			m_Behaviors = std::move(other.m_Behaviors);
 			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
@@ -23,7 +23,7 @@ namespace fe
 			other.m_ID = NullEntityID;
 			return *this;
 		};
-		CActorData(CActorData&& other)
+		CActorData(CActorData&& other) noexcept
 		{
 			m_Behaviors = std::move(other.m_Behaviors);
 			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);

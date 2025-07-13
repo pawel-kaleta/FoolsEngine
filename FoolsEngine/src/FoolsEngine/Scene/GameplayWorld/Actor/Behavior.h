@@ -71,7 +71,9 @@ namespace fe
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, {0.25f,0.25f,0.25f,1.0f});
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
+			ImGui::PushID(name.c_str());
 			bool selected = ImGui::Button(entity_ID_and_name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+			ImGui::PopID();
 			
 			if (ImGui::BeginDragDropTarget())
 			{

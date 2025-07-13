@@ -371,7 +371,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_TRACE("{0}", event);
+		FE_LOG_TRACE("{0}", *event.get());
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));

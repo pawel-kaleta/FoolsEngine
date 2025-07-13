@@ -83,6 +83,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -105,6 +106,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -125,6 +127,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -146,6 +149,7 @@
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\emitterstyle.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\eventhandler.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\exceptions.h" />
+    <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\fptostring.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\mark.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\node\convert.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\node\detail\impl.h" />
@@ -171,6 +175,7 @@
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\traits.h" />
     <ClInclude Include="..\..\yaml-cpp\include\yaml-cpp\yaml.h" />
     <ClInclude Include="..\..\yaml-cpp\src\collectionstack.h" />
+    <ClInclude Include="..\..\yaml-cpp\src\contrib\dragonbox.h" />
     <ClInclude Include="..\..\yaml-cpp\src\contrib\graphbuilderadapter.h" />
     <ClInclude Include="..\..\yaml-cpp\src\directives.h" />
     <ClInclude Include="..\..\yaml-cpp\src\emitterstate.h" />
@@ -207,6 +212,7 @@
     <ClCompile Include="..\..\yaml-cpp\src\emitterutils.cpp" />
     <ClCompile Include="..\..\yaml-cpp\src\exceptions.cpp" />
     <ClCompile Include="..\..\yaml-cpp\src\exp.cpp" />
+    <ClCompile Include="..\..\yaml-cpp\src\fptostring.cpp" />
     <ClCompile Include="..\..\yaml-cpp\src\memory.cpp" />
     <ClCompile Include="..\..\yaml-cpp\src\node.cpp" />
     <ClCompile Include="..\..\yaml-cpp\src\node_data.cpp" />

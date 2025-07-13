@@ -34,6 +34,7 @@ project "FoolsEngine"
 
 	buildoptions {
 		"/analyze:external-",
+		"/utf-8"
 	}
 
 	defines {

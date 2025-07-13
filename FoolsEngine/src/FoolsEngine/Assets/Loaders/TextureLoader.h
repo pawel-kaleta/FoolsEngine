@@ -19,9 +19,16 @@ namespace fe
 		{
 			auto filepath = Project::GetInstance()->AssetsPath;
 			auto source =  textureUser.GetSourceFilepath();
-			FE_CORE_ASSERT(source, "AAAAAAA");
-			filepath /= source->Filepath;
-			LoadTexture(filepath, textureUser);
+			if (!source)
+			{
+				FE_CORE_ASSERT(false, "AAAAAAA");
+				return;
+			}
+			else
+			{
+				filepath /= source->Filepath;
+				LoadTexture(filepath, textureUser);
+			}
 		}
 		static void UnloadTexture(void* data);
 		static TextureData::Specification InspectTexture(const std::filesystem::path& filePath);

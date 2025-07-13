@@ -7,6 +7,10 @@ project "FoolsTools"
 	externalanglebrackets "on"
 	exceptionhandling ("Off")
 
+	buildoptions {
+		"/utf-8"
+	}
+
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")
 
