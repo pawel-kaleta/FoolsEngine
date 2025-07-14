@@ -25,7 +25,7 @@ namespace fe
         m_OpenedActorID = scene_observer.GetCoreComponent().GameplayWorld->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
     }
     
-    void ActorInspector::DrawBehaviorWidget(Behavior* behavior, Actor actor)
+    void ActorInspector::DrawBehaviorWidget(Behavior* behavior, const Actor& actor)
     {
         FE_PROFILER_FUNC();
 
@@ -180,7 +180,7 @@ namespace fe
         }
 	}
 
-    void ActorInspector::AddBehaviorPopupMenu(Actor actor)
+    void ActorInspector::AddBehaviorPopupMenu(Actor& actor)
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
@@ -201,11 +201,11 @@ namespace fe
         }
     }
 
-    void ActorInspector::DrawCNameWidget(Entity entity)
+    void ActorInspector::DrawCNameWidget(const Actor& actor)
     {
         FE_PROFILER_FUNC();
 
-        auto& name = entity.Get<CEntityName>();
+        auto& name = actor.Get<CEntityName>();
         static char buffer[256];
         memset(buffer, 0, sizeof(buffer));
         strncpy_s(buffer, name.EntityName.c_str(), sizeof(buffer));

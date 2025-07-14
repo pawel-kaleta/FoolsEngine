@@ -23,9 +23,9 @@ namespace fe
 		EntityID   m_SelectedEntityID = NullEntityID;
 		EntityID   m_EntityIDSelectionRequest = NullEntityID;
 
-		static void AddBehaviorPopupMenu(Actor actor);
-		void DrawBehaviorWidget(Behavior* behavior, Actor actor);
+		static void AddBehaviorPopupMenu(Actor& actor);
+		void DrawBehaviorWidget(Behavior* behavior, const Actor& actor);
 
-		void DrawCNameWidget(Entity entity);
+		void DrawCNameWidget(const Actor& actor);
 	};
 }

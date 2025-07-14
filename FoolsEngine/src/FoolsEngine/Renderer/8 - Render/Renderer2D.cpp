@@ -150,13 +150,11 @@ namespace fe
 
 		auto viewTiles = registry.view<CTile, CTransformGlobal>();
 
-		bool noTiles = true;
-
 		for (auto ID : viewTiles)
 		{
-			noTiles = false;
 			auto [tile, entityTransform] = viewTiles.get(ID);
 			if (!tile.Tile.Texture.IsValid()) continue;
+			if (tile.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entityTransform.GetRef() + tile.Offset;
 			BatchQuadDrawCall(tile.Tile, transform, ID);
 		}
@@ -185,11 +183,9 @@ namespace fe
 
 		for (auto ID : viewSprites)
 		{
-			if (noTiles)
-			{
-				int dummy = 0;
-			}
 			auto [sprite, entityTransform] = viewSprites.get(ID);
+			if (!sprite.Sprite.Texture.IsValid()) continue;
+			if (sprite.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entityTransform.GetRef() + sprite.Offset;
 			BatchQuadDrawCall(sprite.Sprite, transform, ID);
 			Flush();

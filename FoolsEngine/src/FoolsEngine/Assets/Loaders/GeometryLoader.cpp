@@ -160,9 +160,6 @@ namespace fe
 				*(index_ptr + 0) = (uint32_t)(face.mIndices[0] + index_offset);
 				*(index_ptr + 1) = (uint32_t)(face.mIndices[1] + index_offset);
 				*(index_ptr + 2) = (uint32_t)(face.mIndices[2] + index_offset);
-				//index_ptr[0] = face.mIndices[0] + index_offset;
-				//index_ptr[1] = face.mIndices[1] + index_offset;
-				//index_ptr[2] = face.mIndices[2] + index_offset;
 
 				index_ptr += 3;
 			}

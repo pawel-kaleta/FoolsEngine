@@ -102,12 +102,7 @@ namespace fe
             s_ImportData = new ImportData();
 
             s_ImportData->Filepath = filepath;
-            //s_ImportData->Type = type;
-            //s_ImportData->HandleToOverride = optionalBaseHandle;
             s_ImportData->LoaderItemPtr = loaderItemPtr;
-            //s_ImportData->ImportedAssets = AssetManager::GetAssetsFromSourceFilepath(filepath);
-            //Scratchpad sp;
-            //strncpy_s(s_ImportData->AssetName, filepath.stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), sizeof(s_ImportData->AssetName));
 
             (*init_import_funk)(s_ImportData);
         }

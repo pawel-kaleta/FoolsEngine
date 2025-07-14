@@ -98,10 +98,9 @@ namespace fe
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		FE_PROFILER_FUNC();
-		if(m_ID)
+		if(m_ID) // objects that where moved out from are still destroyed 
 		{
-			auto x = m_ID;
-			FE_LOG_CORE_DEBUG("Unloading OpenGLTexture from GPU, RendererID: {0}", x);
+			FE_LOG_CORE_DEBUG("Unloading OpenGLTexture from GPU, RendererID: {0}", m_ID);
 			glDeleteTextures(1, &m_ID);
 		}
 	}
@@ -109,12 +108,14 @@ namespace fe
 	void OpenGLTexture2D::SendDataToGPU(void* data, const TextureData::Specification& spec)
 	{
 		FE_PROFILER_FUNC();
+		FE_CORE_ASSERT(m_ID, "TextureID == 0");
 		glTextureSubImage2D(m_ID, 0, 0, 0, spec.Width, spec.Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
 
 	void OpenGLTexture2D::Bind(RenderTextureSlotID slotID) const
 	{
 		FE_PROFILER_FUNC();
+		FE_CORE_ASSERT(m_ID, "TextureID == 0");
 		glBindTextureUnit(slotID, m_ID);
 	}
 }

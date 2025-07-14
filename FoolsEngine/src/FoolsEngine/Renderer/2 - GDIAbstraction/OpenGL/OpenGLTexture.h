@@ -21,18 +21,18 @@ namespace fe
 		OpenGLTexture2D(const TextureData::Specification& spec, const void* data);
 		~OpenGLTexture2D();
 
-		OpenGLTexture2D(OpenGLTexture2D&& other) { m_ID = other.m_ID; m_Format = other.m_Format; m_InternalFormat = other.m_InternalFormat; other.m_ID = 0; };
+		OpenGLTexture2D(OpenGLTexture2D&& other) noexcept { m_ID = other.m_ID; m_Format = other.m_Format; m_InternalFormat = other.m_InternalFormat; other.m_ID = 0; };
 		OpenGLTexture2D(const OpenGLTexture2D& other) = delete;
-		OpenGLTexture2D& operator=(OpenGLTexture2D&& other) { m_ID = other.m_ID; m_Format = other.m_Format; m_InternalFormat = other.m_InternalFormat; other.m_ID = 0; return *this; };
+		OpenGLTexture2D& operator=(OpenGLTexture2D&& other) noexcept { m_ID = other.m_ID; m_Format = other.m_Format; m_InternalFormat = other.m_InternalFormat; other.m_ID = 0; return *this; };
 		OpenGLTexture2D& operator=(const OpenGLTexture2D& other) = delete;
 
 		void SendDataToGPU(void* data, const TextureData::Specification& spec);
 
 		void Bind(RenderTextureSlotID slotID = 0) const;
 
-		OpenGLID GetOpenGLID() const { return m_ID; }
+		OpenGLID GetOpenGLID() const { FE_CORE_ASSERT(m_ID, "TextureID == 0"); return m_ID; }
 
-		uint32_t GetID() const { return m_ID; }
+		uint32_t GetID() const { FE_CORE_ASSERT(m_ID, "TextureID == 0"); return m_ID; }
 	private:
 		OpenGLID m_ID = 0;
 

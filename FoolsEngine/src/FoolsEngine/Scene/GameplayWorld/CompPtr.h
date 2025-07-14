@@ -30,7 +30,7 @@ namespace fe
 			return m_Component;
 		}
 
-		tnComponent* GetCashed() { return m_Component; }
+		tnComponent* GetCashed() const { return m_Component; }
 
 		void Set(Entity entity)
 		{

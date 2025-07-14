@@ -2,7 +2,8 @@
 
 #include <FoolsEngine.h>
 
-#include "AssetImport\FileHandler.h"
+#include "Asset\FileHandler.h"
+#include "Asset\CreateAsset.h"
 
 namespace fe
 {
@@ -14,20 +15,20 @@ namespace fe
 		//https://flatuicolors.com/palette/us
 
 		for (auto& color : AssetTypeColors) color = { 1, 1, 1, 1 };
-		AssetTypeColors[AssetType::Texture2D	] = FE_RGBA(  0, 184, 148, 1.0);
-		AssetTypeColors[AssetType::Shader		] = FE_RGBA(  0, 206, 201, 1.0);
-		AssetTypeColors[AssetType::ShadingModel	] = FE_RGBA(  0, 206, 201, 1.0);
-		AssetTypeColors[AssetType::Mesh			] = FE_RGBA(  9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::RenderMesh	] = FE_RGBA(  9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::Model		] = FE_RGBA(  9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::Scene		] = FE_RGBA(108,  92, 231, 1.0);
+		AssetTypeColors[AssetType::Texture2D] = FE_RGBA(0, 184, 148, 1.0);
+		AssetTypeColors[AssetType::Shader] = FE_RGBA(0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::ShadingModel] = FE_RGBA(0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::Mesh] = FE_RGBA(9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::RenderMesh] = FE_RGBA(9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Model] = FE_RGBA(9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Scene] = FE_RGBA(108, 92, 231, 1.0);
 
 		for (auto& color : LoaderColors) color = { 1, 1, 1, 1 };
-		LoaderColors[LoaderType::Texture	] = FE_RGBA( 85, 239, 196, 1.0);
-		LoaderColors[LoaderType::Shader		] = FE_RGBA(129, 236, 236, 1.0);
-		LoaderColors[LoaderType::Geometry	] = FE_RGBA(116, 185, 255, 1.0);
+		LoaderColors[LoaderType::Texture] = FE_RGBA(85, 239, 196, 1.0);
+		LoaderColors[LoaderType::Shader] = FE_RGBA(129, 236, 236, 1.0);
+		LoaderColors[LoaderType::Geometry] = FE_RGBA(116, 185, 255, 1.0);
 	}
-	
+
 	ContentBrowser::ContentBrowser()
 	{
 		FE_PROFILER_FUNC();
@@ -42,7 +43,7 @@ namespace fe
 		m_Icons.File.CreateGDITexture2D(GDI);
 		m_Icons.Folder.CreateGDITexture2D(GDI);
 
-		m_Icons.FileID   = (void*)(uint64_t)m_Icons.File.GetRendererID(GDI);
+		m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetRendererID(GDI);
 		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetRendererID(GDI);
 
 		InitColors();
@@ -65,10 +66,10 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Render Folder Hierarchy");
 
-			if (ImGui::BeginChild("Folders Hierarchy", {0,0}, ImGuiChildFlags_ResizeX | ImGuiChildFlags_Border))
+			if (ImGui::BeginChild("Folders Hierarchy", { 0,0 }, ImGuiChildFlags_ResizeX | ImGuiChildFlags_Border))
 			{
 				ImGui::Checkbox("Display Files", &(m_Settings.DisplayFiles));
-				
+
 				RenderFolderNode(std::filesystem::directory_entry(m_AssetsPath));
 
 			}
@@ -133,6 +134,22 @@ namespace fe
 			}
 
 			ImGui::PopStyleColor(2);
+
+			if (ImGui::IsWindowHovered() && !ImGui::IsAnyItemHovered())
+			{
+				if (ImGui::IsMouseClicked(1))
+					ImGui::OpenPopup("Context menu popup");
+			}
+
+			if (ImGui::BeginPopup("Context menu popup"))
+			{
+				if (ImGui::MenuItem("Create Material"))
+				{
+					CreateAsset::OpenWindow();
+				}
+
+				ImGui::EndPopup();
+			}
 		}
 		ImGui::EndChild();
 

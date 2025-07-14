@@ -1,7 +1,8 @@
 #include "EditorLayer.h"
 #include "SceneTesting.h"
 
-#include "AssetImport\FileHandler.h"
+#include "Asset\FileHandler.h"
+#include "Asset\CreateAsset.h"
 
 #include <string>
 #include <filesystem>
@@ -77,6 +78,7 @@ namespace fe
 		m_Viewports.EditViewport.OnImGuiRender();
 
 		AssetImportModal::OnImGuiRender();
+		CreateAsset::OnImGuiRender();
 
 		GetSelection();
 		

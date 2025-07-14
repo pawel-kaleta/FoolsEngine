@@ -3,6 +3,7 @@
 #include "FoolsEngine/Debug/Asserts.h"
 
 #include <memory_resource>
+#include <bitset>
 
 namespace fe
 {
@@ -12,8 +13,8 @@ namespace fe
 		Scratchpad() :
 			m_Begin(s_Free),
 			m_End(s_Free),
-			m_FlagMask(((uint64_t)1) << (63 - s_Count)),
-			m_FrontFlagsAntiMask((uint64_t)-1 << (63 - s_Count))
+			m_FlagMask(uint64_t{1} << (63 - s_Count)),
+			m_FrontFlagsAntiMask(uint64_t(-1) << (63 - s_Count))
 		{
 			s_RollbackFlags |= m_FlagMask;
 			s_Count++;
@@ -42,14 +43,19 @@ namespace fe
 		{
 			s_Count--;
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			s_Free = (std::byte*)((uint64_t)m_Begin * (uint64_t)rollback_flag + (uint64_t)s_Free * (uint64_t)!rollback_flag);
+#pragma warning(disable : 6323)
+			s_Free = (std::byte*)((uintptr_t)m_Begin * rollback_flag + (uintptr_t)s_Free * !rollback_flag);
+#pragma warning(default : 6323)
 		}
 	private:
 		constexpr const static size_t s_BufferSize = 524'288;
 		static std::byte s_Buffer[s_BufferSize];
 		static std::byte* s_Free;
-		static uint64_t s_RollbackFlags;
 		static uint32_t s_Count;
+		static uint64_t s_RollbackFlags;
+		// we don't use std::bitset, because it handles any number of bits
+		// solution for specific size that fits in one non-array type is slightly faster
+		// this is very hot code
 
 		friend class Application;
 		static void Shutdown() {};
@@ -72,10 +78,12 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 			
-			m_Begin = (std::byte*)(((uint64_t)s_Free * (reset_begin)) + ((uint64_t)m_Begin * !reset_begin));
+#pragma warning(disable : 6323)
+			m_Begin = (std::byte*)(((uintptr_t)s_Free * reset_begin) + ((uintptr_t)m_Begin * !reset_begin));
+#pragma warning(default : 6323)
 			s_RollbackFlags |= m_FlagMask;
 
-			std::byte* const aligned = (std::byte*)(((uint64_t)s_Free + (alignment - 1)) & ~(alignment - 1));
+			std::byte* const aligned = (std::byte*)(((uintptr_t)s_Free + (alignment - 1)) & ~(alignment - 1));
 			s_Free = aligned + bytes;
 			m_End = s_Free;
 

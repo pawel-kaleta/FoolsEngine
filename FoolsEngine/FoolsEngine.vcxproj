@@ -288,7 +288,6 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\ShaderData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Primitives\VertexData.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.cpp" />

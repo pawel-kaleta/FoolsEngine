@@ -3,7 +3,8 @@
 #include <EntryPoint.h>
 
 #include "EditorLayer.h"
-#include "AssetImport\FileHandler.h"
+#include "Asset\FileHandler.h"
+#include "Asset\CreateAsset.h"
 
 namespace fe
 {
@@ -14,6 +15,7 @@ namespace fe
 	void EditorApp::ClientAppStartup()
 	{
 		AssetImportModal::Init();
+		CreateAsset::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
 	}
 
