@@ -5,8 +5,11 @@
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
+#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 namespace fe
 {
@@ -175,11 +178,11 @@ namespace fe
 		for (auto& texture : dataComponent.Textures)
 		{
 			if (slotsIt._Ptr == &textureSlot)
+			{
 				texture.SetID(textureID);
-
+				return;
+			}
 			++slotsIt;
-
-			return;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
@@ -195,8 +198,10 @@ namespace fe
 		for (auto& texture : dataComponent.Textures)
 		{
 			if (slotsIt->GetName() == textureSlotName)
+			{
 				texture.SetID(textureID);
-
+				return;
+			}
 			++slotsIt;
 		}
 
@@ -225,11 +230,32 @@ namespace fe
 		{
 			if (!texture_handle.IsValid())
 				return false;
+
+			auto texture_user = texture_handle.Use();
+			TextureLoader::LoadTexture(texture_user);
+			texture_user.CreateGDITexture2D(GDI);
+			texture_user.UnloadFromCPU();
+			texture_user.FlagLoadedAsDependency();
+			texture_user.FlagLoaded();
 		}
 
-		//core.ShadingModelHandle.Use().SendDataToGPU(GDI);
+		
 		FE_LOG_CORE_ERROR("Material to gpu upload not implemented... I think...");
 		return false;
+	}
+
+	void MaterialUser::Release() const
+	{
+		auto& core = Get<ACMaterialCore>();
+
+		for (const auto& texture_handle : core.Textures)
+		{
+			if (!texture_handle.IsValid())
+				continue;
+
+			auto texture_user = texture_handle.Use();
+			texture_user.ReleaseDependencyLoad();
+		}
 	}
 
 	void Material::SaveMetadata(AssetID assetID)
@@ -242,6 +268,7 @@ namespace fe
 		const auto shading_model_observer = core.ShadingModelHandle.Observe();
 		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
 
+		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
@@ -270,14 +297,23 @@ namespace fe
 		{
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Shader Texture Slot" << YAML::Value << shading_model_core.TextureSlots[i].GetName();
-			const auto texture_observer = core.Textures[i].Observe();
-			emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetFilepath().string();
-			emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
+			if (core.Textures[i].IsValid())
+			{
+				const auto texture_observer = core.Textures[i].Observe();
+				emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetFilepath().string();
+				emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
+			}
+			else
+			{
+				emitter << YAML::Key << "Filepath" << YAML::Value << "";
+				emitter << YAML::Key << "UUID" << YAML::Value << 0;
+			}
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
+		emitter << YAML::EndMap;
 
-		std::ofstream fout(assetObserver.GetFilepath());
+		std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
 		fout << emitter.c_str();
 	}
 
@@ -287,9 +323,10 @@ namespace fe
 
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
-		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
 		auto& core = ECS_handle.get<ACMaterialCore>();
 
+		auto filepath = Project::GetInstance()->AssetsPath;
+		filepath /= ECS_handle.get<ACFilepath>().Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
 
 		const auto& shading_model_node = node["Shading Model"];
@@ -352,7 +389,10 @@ namespace fe
 			//To do: compare (assert) texture_slot_node with texture slot in shading model
 			//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 
-			core.Textures.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
+			if (texture_UUID_node.as<UUID>() == UUID(0))
+				core.Textures.emplace_back();			
+			else
+				core.Textures.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
 		}
 
 		return true;

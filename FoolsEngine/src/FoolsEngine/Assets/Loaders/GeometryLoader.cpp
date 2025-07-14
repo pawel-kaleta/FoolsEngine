@@ -166,8 +166,6 @@ namespace fe
 			index_offset = (uint32_t)(vertex_ptr - first_vertex_ptr);
 		}
 
-		meshUser.FlagLoaded();
-
 		return;
 	}
 

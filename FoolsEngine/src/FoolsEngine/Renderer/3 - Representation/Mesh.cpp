@@ -69,7 +69,7 @@ namespace fe
 	{
 		if (!AllOf<ACGPUBuffers>())
 		{
-			FE_CORE_ASSERT(false, "Mesh not uploaded to GPU");
+			//FE_CORE_ASSERT(false, "Mesh not uploaded to GPU");
 			return;
 		}
 

@@ -114,8 +114,6 @@ namespace fe
 	{
 		DrawAssetHandle<fe::Material>(Material);
 		DrawAssetHandle<fe::Mesh>(Mesh);
-
-		EditMaterial(Material);
 	}
 
 	void CRenderMeshView::Serialize(YAML::Emitter& emitter)

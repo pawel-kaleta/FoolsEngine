@@ -20,7 +20,7 @@ namespace fe
 
 		File = filepath.filename();
 		Directory = filepath.parent_path();
-		AssetsPath = s_Instance->Directory / "assets";
+		AssetsPath = s_Instance->Directory / "Assets";
 
 		FE_LOG_CORE_WARN("StartScene not implemented");
 	}

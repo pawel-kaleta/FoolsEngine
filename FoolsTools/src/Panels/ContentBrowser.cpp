@@ -145,7 +145,8 @@ namespace fe
 			{
 				if (ImGui::MenuItem("Create Material"))
 				{
-					CreateAsset::OpenWindow();
+					//CreateAsset::OpenWindow(m_CurrentPath, AssetType::Material);
+					CreateAsset::CreateMaterial(m_CurrentPath);
 				}
 
 				ImGui::EndPopup();

@@ -47,23 +47,23 @@ namespace fe
 		{
 		case EditorState::Edit:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPlay", m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Play;
 			break;
 		case EditorState::Play:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPause", m_IconPause.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPause", (ImTextureID)m_IconPause.GetRendererID(GDI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Pause;
 			ImGui::SameLine();
-			if (ImGui::ImageButton("m_IconStop", m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Stop;
 			break;
 		case EditorState::Pause:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPlay", m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Play;
 			ImGui::SameLine();
-			if (ImGui::ImageButton("m_IconStop", m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Stop;
 		}
 		ImGui::PopStyleVar(2);

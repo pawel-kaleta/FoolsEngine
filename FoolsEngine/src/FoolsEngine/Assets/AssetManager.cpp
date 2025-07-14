@@ -179,6 +179,7 @@ namespace fe
 			{
 			case AssetType::Texture2D:	Unload<Texture2D>(id);	break;
 			case AssetType::Mesh:		Unload<Mesh>(id);		break;
+			case AssetType::Material:	Unload<Material>(id);	break;
 			//...
 			}
 		}
@@ -229,6 +230,12 @@ namespace fe
 					FE_LOG_CORE_WARN("Mesh allready loaded");
 				}
 				break;
+			}
+			case AssetType::Material:
+			{
+				auto material_user = AssetUser<Material>(id);
+				material_user.SendDataToGPU(GDI);
+				material_user.FlagLoaded();
 			}
 			default:
 				int what;

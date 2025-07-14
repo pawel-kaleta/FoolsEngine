@@ -1,0 +1,23 @@
+Shading Model: 3793305017238133063
+Uniforms Data Size: 24
+Uniforms:
+  - Name: u_BaseColor
+    Type: Float3
+    Count: 1
+    Value:
+      - [0, 0, 0]
+    ? Name: u_Roughness
+      Type: Float
+      Count: 1
+      Value:
+        - 0
+      ? Name: u_Metalness
+        Type: Float
+        Count: 1
+        Value:
+          - 0
+        ? Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0

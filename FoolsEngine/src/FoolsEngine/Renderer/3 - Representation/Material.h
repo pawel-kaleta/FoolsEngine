@@ -59,7 +59,9 @@ namespace fe
 
 		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const;
 
-		bool SendDataToGPU(GDIType GDI) const;;
+		bool SendDataToGPU(GDIType GDI) const;
+		void Release() const;
+		void UnloadFromCPU() const { };
 	protected:
 		MaterialUser(ECS_AssetHandle ECS_handle) : MaterialObserver(ECS_handle) {}
 	};
