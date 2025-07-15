@@ -285,10 +285,12 @@ namespace fe
 			auto type = uniform.GetType();
 			for (size_t i = 0; i < uniform.GetCount(); i++)
 			{
+				float* test = (float*)uniform_data_ptr;
 				EmitShaderDataType(emitter, uniform_data_ptr, type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
+			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
 
@@ -363,7 +365,7 @@ namespace fe
 
 			const auto uniform_name = name_node.as<std::string>();
 			// to do: compare (assert) with uniform's name in shading model
-			ShaderData::Type uniform_type; uniform_type.FromInt(type_node.as<int>());
+			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
 			const auto uniform_count = count_node.as<uint32_t>();
 
 			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;

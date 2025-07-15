@@ -38,7 +38,7 @@ namespace fe
 			ImGuiSliderFlags Flags = ImGuiSelectableFlags_::ImGuiSelectableFlags_None;
 		};
 
-		static void RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
+		static bool RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
 	private:
 		friend class Application;
 		//float m_Time = 0.0f;

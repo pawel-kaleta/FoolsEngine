@@ -337,7 +337,7 @@ namespace fe
 		Project::Load(filepath);
 		Renderer::AcquireBaseAssets();
 
-		auto result = AssetSerializer::DeserializeRegistry(Project::GetInstance()->AssetsPath);
+		auto result = AssetSerializer::DeserializeRegistry();
 		if (result)   AssetSerializer::LoadMetaData();
 
 #ifdef FE_INTERNAL_BUILD

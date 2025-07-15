@@ -78,7 +78,6 @@ namespace fe
 		m_Viewports.EditViewport.OnImGuiRender();
 
 		AssetImportModal::OnImGuiRender();
-		CreateAsset::OnImGuiRender();
 
 		GetSelection();
 		

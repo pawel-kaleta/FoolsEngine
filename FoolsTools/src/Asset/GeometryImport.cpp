@@ -39,10 +39,7 @@ namespace fe::GeometryImport
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
-		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath,
-			aiPostProcessSteps::aiProcess_PreTransformVertices |
-			aiPostProcessSteps::aiProcess_OptimizeMeshes
-		);
+		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath);
 
 		FE_CORE_ASSERT(false, "not implemented yet");
 		AssetID assetID = NullAssetID;// = AssetManager::CreateAsset();
@@ -103,13 +100,7 @@ namespace fe::GeometryImport
 
 	static void ImportAsMesh(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
-		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath,
-			aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
-			aiPostProcessSteps::aiProcess_OptimizeMeshes |
-			aiPostProcessSteps::aiProcess_PreTransformVertices |
-			aiPostProcessSteps::aiProcess_RemoveRedundantMaterials |
-			aiPostProcessSteps::aiProcess_Triangulate
-		);
+		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath);
 		
 		auto y = Project::GetInstance()->AssetsPath;
 		auto z = std::filesystem::current_path();
@@ -119,7 +110,7 @@ namespace fe::GeometryImport
 		{
 			auto mesh_user = AssetUser<Mesh>(assetID);
 
-			AssetManager::SetSourcePath(assetID, importData->Filepath);
+			AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(y));
 			auto& core = mesh_user.GetCoreComponent();
 			auto& specification = core.Specification;
 

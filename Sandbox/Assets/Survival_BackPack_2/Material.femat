@@ -5,19 +5,35 @@ Uniforms:
     Type: Float3
     Count: 1
     Value:
-      - [0, 0, 0]
-    ? Name: u_Roughness
-      Type: Float
-      Count: 1
-      Value:
-        - 0
-      ? Name: u_Metalness
-        Type: Float
-        Count: 1
-        Value:
-          - 0
-        ? Name: u_AO
-          Type: Float
-          Count: 1
-          Value:
-            - 0
+      - [1, 1, 1]
+  - Name: u_Roughness
+    Type: Float
+    Count: 1
+    Value:
+      - 0.5
+  - Name: u_Metalness
+    Type: Float
+    Count: 1
+    Value:
+      - 0.5
+  - Name: u_AO
+    Type: Float
+    Count: 1
+    Value:
+      - 0
+Textures:
+  - Shader Texture Slot: u_BaseColorMap
+    Filepath: Survival_BackPack_2\1001_albedo.fetex2d
+    UUID: 7533288542743074609
+  - Shader Texture Slot: u_RoughnessMap
+    Filepath: ""
+    UUID: 0
+  - Shader Texture Slot: u_MetalnessMap
+    Filepath: ""
+    UUID: 0
+  - Shader Texture Slot: u_AOMap
+    Filepath: ""
+    UUID: 0
+  - Shader Texture Slot: u_NormalMap
+    Filepath: ""
+    UUID: 0

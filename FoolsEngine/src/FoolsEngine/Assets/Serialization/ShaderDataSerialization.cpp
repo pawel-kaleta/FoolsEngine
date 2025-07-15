@@ -11,7 +11,7 @@ namespace fe
 		const auto primitive_size = ShaderData::SizeOfPrimitive(ShaderData::PrimitiveInType(type));
 		for (size_t i = 0; i < ShaderData::CountInVector(type); ++i)
 		{
-			emitter << (data_type)*dataPtr;
+			emitter << *(data_type*)dataPtr;
 			dataPtr += primitive_size;
 		}
 		emitter << YAML::EndSeq;
@@ -27,7 +27,7 @@ namespace fe
 			emitter << YAML::Flow << YAML::BeginSeq;
 			for (size_t j = 0; j < ShaderData::ColumnsOfMatrix(type); ++j)
 			{
-				emitter << (data_type)*dataPtr;
+				emitter << *(data_type*)dataPtr;
 				dataPtr += primitive_size;
 			}
 			emitter << YAML::EndSeq;
@@ -45,11 +45,11 @@ namespace fe
 		case ShaderData::Structure::Scalar:
 			switch (primitive)
 			{
-			case ShaderData::Primitive::Bool:   emitter << (bool    )*dataPtr; break;
-			case ShaderData::Primitive::Int:    emitter << (int32_t )*dataPtr; break;
-			case ShaderData::Primitive::UInt:   emitter << (uint32_t)*dataPtr; break;
-			case ShaderData::Primitive::Float:  emitter << (float   )*dataPtr; break;
-			case ShaderData::Primitive::Double: emitter << (double  )*dataPtr; break;
+			case ShaderData::Primitive::Bool:   emitter << *(bool    *)dataPtr; break;
+			case ShaderData::Primitive::Int:    emitter << *(int32_t *)dataPtr; break;
+			case ShaderData::Primitive::UInt:   emitter << *(uint32_t*)dataPtr; break;
+			case ShaderData::Primitive::Float:  emitter << *(float   *)dataPtr; break;
+			case ShaderData::Primitive::Double: emitter << *(double  *)dataPtr; break;
 			default: FE_CORE_ASSERT(false, "Unrecognized ShaderData::Primitive");
 			}
 			break;

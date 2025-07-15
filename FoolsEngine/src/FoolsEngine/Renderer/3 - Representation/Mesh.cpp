@@ -142,7 +142,7 @@ namespace fe
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
 		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
-		YAML::Node node = YAML::LoadFile(filepath.string());
+		YAML::Node node = YAML::LoadFile((Project::GetInstance()->AssetsPath / filepath).string());
 
 		const auto& source_filepath_node = node["Source Filepath"];
 		const auto& vertex_count_node = node["Vartex Count"];

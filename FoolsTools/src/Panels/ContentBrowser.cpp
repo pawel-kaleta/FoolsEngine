@@ -15,18 +15,19 @@ namespace fe
 		//https://flatuicolors.com/palette/us
 
 		for (auto& color : AssetTypeColors) color = { 1, 1, 1, 1 };
-		AssetTypeColors[AssetType::Texture2D] = FE_RGBA(0, 184, 148, 1.0);
-		AssetTypeColors[AssetType::Shader] = FE_RGBA(0, 206, 201, 1.0);
-		AssetTypeColors[AssetType::ShadingModel] = FE_RGBA(0, 206, 201, 1.0);
-		AssetTypeColors[AssetType::Mesh] = FE_RGBA(9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::RenderMesh] = FE_RGBA(9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::Model] = FE_RGBA(9, 132, 227, 1.0);
-		AssetTypeColors[AssetType::Scene] = FE_RGBA(108, 92, 231, 1.0);
+		AssetTypeColors[AssetType::Texture2D	] = FE_RGBA(  0, 184, 148, 1.0);
+		AssetTypeColors[AssetType::Shader		] = FE_RGBA(  0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::ShadingModel	] = FE_RGBA(  0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::Material		] = FE_RGBA(  0, 206, 201, 1.0);
+		AssetTypeColors[AssetType::Mesh			] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::RenderMesh	] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Model		] = FE_RGBA(  9, 132, 227, 1.0);
+		AssetTypeColors[AssetType::Scene		] = FE_RGBA(108,  92, 231, 1.0);
 
 		for (auto& color : LoaderColors) color = { 1, 1, 1, 1 };
-		LoaderColors[LoaderType::Texture] = FE_RGBA(85, 239, 196, 1.0);
-		LoaderColors[LoaderType::Shader] = FE_RGBA(129, 236, 236, 1.0);
-		LoaderColors[LoaderType::Geometry] = FE_RGBA(116, 185, 255, 1.0);
+		LoaderColors[LoaderType::Texture	] = FE_RGBA( 85, 239, 196, 1.0);
+		LoaderColors[LoaderType::Shader		] = FE_RGBA(129, 236, 236, 1.0);
+		LoaderColors[LoaderType::Geometry	] = FE_RGBA(116, 185, 255, 1.0);
 	}
 
 	ContentBrowser::ContentBrowser()

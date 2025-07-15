@@ -1,6 +1,8 @@
 #include "FE_pch.h"
 #include "AssetManager.h"
 #include "AssetTypes.h"
+#include "Serialization\AssetsRegistrySerialization.h"
+#include "FoolsEngine\Core\Project.h"
 
 namespace fe
 {
@@ -90,6 +92,8 @@ namespace fe
 
 		using core = tnAsset::Core;
 		reg.emplace<core>(assetID).Init();
+
+		AssetSerializer::SerializeRegistry();
 
 		return assetID;
 	}

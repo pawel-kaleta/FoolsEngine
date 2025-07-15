@@ -7,15 +7,18 @@
 
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 #include <string>
 
 namespace fe::AssetSerializer
 {
-	void SerializeRegistry(const std::filesystem::path& filepath)
+	void SerializeRegistry()
 	{
 		YAML::Emitter emitter;
 		auto& reg = AssetManager::GetRegistry();
 
+		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Masters" << YAML::Value << YAML::BeginSeq;
 		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 		for (auto id : paths_view)
@@ -45,12 +48,13 @@ namespace fe::AssetSerializer
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
+		emitter << YAML::EndMap;
 
-		std::ofstream fout(filepath);
+		std::ofstream fout(Project::GetInstance()->AssetsPath / "AssetsRegistry.fear");
 		fout << emitter.c_str();
 	}
 
-	bool DeserializeRegistry(const std::filesystem::path& filepath)
+	bool DeserializeRegistry()
 	{
 		FE_PROFILER_FUNC();
 
@@ -58,7 +62,7 @@ namespace fe::AssetSerializer
 		
 		{
 			FE_PROFILER_SCOPE("YAML::LoadFile");
-			node = YAML::LoadFile((filepath / "AssetsRegistry.fear").string());
+			node = YAML::LoadFile((Project::GetInstance()->AssetsPath / "AssetsRegistry.fear").string());
 		}
 
 		if (!node["Masters"])   return false;
@@ -113,7 +117,7 @@ namespace fe::AssetSerializer
 		{
 			FE_PROFILER_SCOPE("Asset");
 
-			auto& cfilepath = paths_view.get<ACFilepath>(assetID);
+			//auto& cfilepath = paths_view.get<ACFilepath>(assetID);
 			auto type = reg.get<ACAssetType>(assetID).Type;
 
 			for (auto& item : AssetTypesRegistry::GetItems())

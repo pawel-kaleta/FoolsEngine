@@ -15,7 +15,6 @@ namespace fe
 	void EditorApp::ClientAppStartup()
 	{
 		AssetImportModal::Init();
-		CreateAsset::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
 	}
 

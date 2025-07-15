@@ -24,11 +24,13 @@ namespace fe
 		{
 			out << YAML::Key << "UUID" << YAML::Value << assetHandle.GetUUID();
 			out << YAML::Key << "Name" << YAML::Value << assetHandle.Observe().GetFilepath().filename().string().c_str();
+			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToConstCharPtr();
 		}
 		else
 		{
 			out << YAML::Key << "UUID" << YAML::Value << UUID(0);
 			out << YAML::Key << "Name" << YAML::Value << "empty handle";
+			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToConstCharPtr();
 		}
 		out << YAML::EndMap;
 		return out;
@@ -171,11 +173,14 @@ namespace YAML
 
 			fe::UUID uuid = node["UUID"].as<fe::UUID>();
 
+			fe::AssetLoadingPriority loading_priority; loading_priority.FromString(node["Loading Priority"].as<std::string>());
+
 			fe::AssetID id = fe::AssetManager::GetOrCreateAssetWithUUID(uuid);
 
 			FE_CORE_ASSERT(id != fe::NullAssetID, "Failed to deserialize asset handle");
 
 			rhs = fe::AssetHandle<tnAsset>(id);
+			rhs.SetLoadingPriority(loading_priority);
 
 			return true;
 		}

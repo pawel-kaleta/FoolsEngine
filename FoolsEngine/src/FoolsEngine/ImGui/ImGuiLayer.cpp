@@ -128,10 +128,12 @@ namespace fe {
 		}
 	}
 
-	void ImGuiLayer::RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options)
+	bool ImGuiLayer::RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options)
 	{
 		FE_PROFILER_FUNC();
 		// TO DO: handle uniform.GetCount() > 1;
+
+		bool changed = false;
 
 		auto name = uniform.GetName().c_str();
 		ImGuiDataType ImGuiType = -1;
@@ -140,17 +142,21 @@ namespace fe {
 		{
 		case ShaderData::Primitive::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
-			return;
+			return false;
 		
 		case ShaderData::Primitive::Bool:
 		{
 			bool* dataPtr = (bool*)uniformDataPtr;
 			for (unsigned int i = 1; i < uniform.GetCount(); i++)
 			{
-				ImGui::Checkbox("", dataPtr++); ImGui::SameLine();
+				if (ImGui::Checkbox("", dataPtr++))
+					changed = true;
+				
+				ImGui::SameLine();
 			}
-			ImGui::Checkbox(name, dataPtr);
-			return;
+			if (ImGui::Checkbox(name, dataPtr))
+				changed = true;
+			return changed;
 		}
 
 		case ShaderData::Primitive::Int:
@@ -168,11 +174,14 @@ namespace fe {
 
 		default:
 			FE_CORE_ASSERT(false, "Unrecognised Shader Data Primitive of uniform!");
-			return;
+			return false;
 		}
 
 		int count = (int)ShaderData::SizeOfType(uniform.GetType()) / (int)ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
-		ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags);
+		if (ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
+			changed = true;
+
+		return changed;
 	}
 	
 }

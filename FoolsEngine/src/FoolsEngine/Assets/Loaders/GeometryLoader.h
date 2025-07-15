@@ -19,19 +19,19 @@ namespace fe
 			auto path = meshUser.GetSourceFilepath()->Filepath;
 			LoadMesh(path, meshUser);
 		}
-		static void UnloadMesh(void* data) { delete[] (uint32_t*)data; }
+		static void UnloadMesh(void* data) { delete[] (float*)data; }
 
-		static void LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser);
-		static void LoadModel(AssetUser<Model>& modelUser)
-		{
-			auto path = modelUser.GetFilepath();
-			LoadModel(path, modelUser);
-		}
-		static void UnloadModel(void* data);
+		//static void LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser);
+		//static void LoadModel(AssetUser<Model>& modelUser)
+		//{
+		//	auto path = modelUser.GetFilepath();
+		//	LoadModel(path, modelUser);
+		//}
+		//static void UnloadModel(void* data);
 
 		static bool IsKnownExtension(const std::pmr::string& extension);
 		static bool IsKnownAssetType(AssetType assetType);
 		static const char* GetExtensionAlias() { return "Geometry Source"; }
-		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath, uint32_t loadFlags = 0);
+		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath);
 	};
 }

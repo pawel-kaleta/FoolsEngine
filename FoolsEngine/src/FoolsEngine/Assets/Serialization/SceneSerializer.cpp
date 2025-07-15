@@ -26,7 +26,7 @@ namespace fe
 		Serialize(scene, emitter);
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(scene.GetFilepath());
+		std::ofstream fout(Project::GetInstance()->AssetsPath / scene.GetFilepath());
 		fout << emitter.c_str();
 	}
 

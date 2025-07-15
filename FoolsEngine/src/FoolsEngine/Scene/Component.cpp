@@ -55,9 +55,11 @@ namespace fe
 		Offset.Scale = node["Scale"].as<glm::vec3>();
 	}
 
-	static void EditMaterial(const AssetUser<Material>& materialUser)
+	static bool EditMaterial(const AssetUser<Material>& materialUser)
 	{
 		Scratchpad sp;
+
+		bool modified = false;
 
 		auto& shading_model_current = materialUser.GetCoreComponent().ShadingModelHandle;
 		if (ImGui::BeginCombo("Shading Model", shading_model_current.Observe().GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
@@ -77,6 +79,7 @@ namespace fe
 				{
 					materialUser.MakeMaterial(shading_model_observer);
 					shading_model_current.SetID(id);
+					modified = true;
 				}
 
 				if (is_selected)
@@ -93,7 +96,8 @@ namespace fe
 
 		for (auto& uniform : sm_core_component.Uniforms)
 		{
-			ImGuiLayer::RenderUniform(uniform, materialUser.GetUniformValuePtr(material_core_component, uniform));
+			if (ImGuiLayer::RenderUniform(uniform, materialUser.GetUniformValuePtr(material_core_component, uniform)))
+				modified = true;
 		}
 
 		for (size_t i=0; i<material_core_component.Textures.size(); i++)
@@ -137,6 +141,7 @@ namespace fe
 								if (assetID != NullAssetID)
 								{
 									textureHandle.SetID(assetID);
+									modified = true;
 								}
 								else
 								{
@@ -148,12 +153,20 @@ namespace fe
 					ImGui::EndDragDropTarget();
 				}
 #endif // FE_EDITOR
+
+				if (reset_handle)
+				{
+					textureHandle.SetID(NullAssetID);
+					modified = true;
+				}
 			}
 
 			ImGui::Text(sm_core_component.TextureSlots[i].GetName().c_str());
 
 			ImGui::PopID();
 		}
+
+		return modified;		
 	}
 
 	template<typename tnAsset>
@@ -284,10 +297,17 @@ namespace fe
 
 		if (handle_valid)
 		{
+			if constexpr (tnAsset::GetTypeStatic() == AssetType::Texture2D)
+			{
+				//
+			}
 			if constexpr (tnAsset::GetTypeStatic() == AssetType::Material)
 			{
 				ImGui::SeparatorText("Material parameters");
-				EditMaterial(assetHandle.Use());
+				if (EditMaterial(assetHandle.Use()))
+				{
+					Material::SaveMetadata(assetHandle.GetID());
+				}
 			}
 		}
 

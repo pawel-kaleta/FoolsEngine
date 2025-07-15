@@ -2,6 +2,7 @@
 #include "GeometryLoader.h"
 
 #include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
+#include "FoolsEngine\Core\Project.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -9,30 +10,30 @@
 
 namespace fe
 {
-	void GeometryLoader::UnloadModel(void* data)
-	{
-		FE_CORE_ASSERT(false, "Not implemented");
-	}
+	//void GeometryLoader::UnloadModel(void* data)
+	//{
+	//	FE_CORE_ASSERT(false, "Not implemented");
+	//}
 
 	bool GeometryLoader::IsKnownExtension(const std::pmr::string& extension)
+	{
+		constexpr static const char * knownExtensions[] = {
+			".obj",
+			".fbx",
+			".glb",
+			".gltf"
+		};
+
+		for (auto& knownExtension : knownExtensions)
 		{
-			constexpr static const char * knownExtensions[] = {
-				".obj",
-				".fbx",
-				".glb",
-				".gltf"
-			};
-
-			for (auto& knownExtension : knownExtensions)
+			if (extension == knownExtension)
 			{
-				if (extension == knownExtension)
-				{
-					return true;
-				}
+				return true;
 			}
-
-			return false;
 		}
+
+		return false;
+	}
 
 	bool GeometryLoader::IsKnownAssetType(AssetType assetType)
 	{
@@ -53,22 +54,23 @@ namespace fe
 		return false;
 	}
 
-	const aiScene* GeometryLoader::InspectSourceFile(const std::filesystem::path& filePath, uint32_t loadFlags)
+	constexpr static uint32_t s_assimp_load_flags =
+		aiPostProcessSteps::aiProcess_Triangulate |
+		aiPostProcessSteps::aiProcess_RemoveRedundantMaterials |
+		aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
+		aiPostProcessSteps::aiProcess_PreTransformVertices |
+		aiPostProcessSteps::aiProcess_ImproveCacheLocality |
+		aiPostProcessSteps::aiProcess_OptimizeMeshes |
+		aiPostProcessSteps::aiProcess_GenSmoothNormals |
+		aiPostProcessSteps::aiProcess_CalcTangentSpace |
+		aiPostProcessSteps::aiProcess_GenUVCoords |
+		aiPostProcessSteps::aiProcess_TransformUVCoords;
+
+	const aiScene* GeometryLoader::InspectSourceFile(const std::filesystem::path& filePath)
 		{
 			static Assimp::Importer s_Inspector;
-			loadFlags |= 
-				aiProcess_Triangulate |
-				aiProcess_ValidateDataStructure |
-				aiProcess_RemoveRedundantMaterials |
-				aiProcess_JoinIdenticalVertices |
-				aiProcess_ImproveCacheLocality |
-				aiProcess_GenSmoothNormals |
-				aiProcess_CalcTangentSpace |
-				aiProcess_GenUVCoords |
-				aiProcess_TransformUVCoords |
-				aiProcess_FlipUVs;
 
-			const aiScene* scene = s_Inspector.ReadFile(filePath.string().c_str(), loadFlags);
+			const aiScene* scene = s_Inspector.ReadFile(filePath.string().c_str(), s_assimp_load_flags);
 
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 			{
@@ -82,19 +84,7 @@ namespace fe
 	void GeometryLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(sourceFilePath.string().c_str(),
-			aiProcess_Triangulate |
-			aiProcess_ValidateDataStructure |
-			aiProcess_RemoveRedundantMaterials |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_PreTransformVertices |
-			aiProcess_ImproveCacheLocality |
-			aiProcess_GenSmoothNormals |
-			aiProcess_CalcTangentSpace |
-			aiProcess_GenUVCoords |
-			aiProcess_TransformUVCoords |
-			aiProcess_FlipUVs 
-		);
+		const aiScene* scene = importer.ReadFile((Project::GetInstance()->AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
 
 		auto& mesh_core_component = meshUser.GetCoreComponent();
 
@@ -108,6 +98,7 @@ namespace fe
 		auto& spec = mesh_core_component.Specification;
 		
 		dataLocation = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
+		auto last = (float*)dataLocation + (mesh_core_component.DataSize() / sizeof(float));
 		uint32_t* first_index = (uint32_t*)dataLocation;
 		uint32_t* index_ptr = (uint32_t*)dataLocation;
 		VertexData::Vertex* first_vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
@@ -169,8 +160,8 @@ namespace fe
 		return;
 	}
 
-	void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
-	{
-		FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
-	}
+	//void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
+	//{
+	//	FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
+	//}
 }
