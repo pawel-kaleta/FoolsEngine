@@ -35,6 +35,7 @@ namespace fe
 		AssetObserver(AssetID assetID) :
 			tnAsset::Observer(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
 		{
+			FE_CORE_ASSERT(assetID != NullAssetID, "Cannot create AssetObserver from NullAssetID");
 			Init();
 		}
 		//AssetObserver(ECS_AssetHandle ECS_handle) :
@@ -93,6 +94,7 @@ namespace fe
 		AssetUser(AssetID assetID) :
 			tnAsset::User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
 		{
+			FE_CORE_ASSERT(assetID != NullAssetID, "Cannot create AssetUser from NullAssetID");
 			Init();
 		}
 		

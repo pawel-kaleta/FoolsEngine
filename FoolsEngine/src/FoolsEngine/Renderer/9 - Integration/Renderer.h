@@ -39,10 +39,10 @@ namespace fe
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void RenderScene(const AssetObserver<Scene>& scene, Framebuffer& framebuffer);
+		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
 		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
 
-		static void BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer);
+		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();
 
 		static void Draw(

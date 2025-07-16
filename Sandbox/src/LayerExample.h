@@ -15,7 +15,7 @@ public:
 	void OnImGuiRender() override;
 
 private:
-	fe::Ref<fe::Scene> m_Scene;
-
-	fe::Entity m_ColorSprite;
+	fe::AssetHandle<fe::Scene> m_Scene;
+	fe::Scope<fe::Framebuffer> m_Framebuffer;
+	struct { uint32_t x; uint32_t y; } m_FramebufferSize = { 0, 0 };
 };

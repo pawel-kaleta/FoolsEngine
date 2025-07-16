@@ -91,11 +91,9 @@ namespace fe
 		delete &s_Data;
 	}
 
-	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer)
+	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view)
 	{
 		FE_PROFILER_FUNC();
-
-		framebuffer.Bind();
 
 		RenderCommands::SetDepthTest(true);
 
@@ -140,11 +138,11 @@ namespace fe
 		s_Data.Batch.QuadVeriticesIt = s_Data.Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
+	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform)
 	{
 		FE_PROFILER_FUNC();
 
-		BeginScene(camera, cameraTransform, framebuffer);
+		BeginScene(camera, cameraTransform);
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 
@@ -191,10 +189,10 @@ namespace fe
 			Flush();
 		}
 
-		EndScene(framebuffer);
+		EndScene();
 	}
 
-	void Renderer2D::EndScene(Framebuffer& framebuffer)
+	void Renderer2D::EndScene()
 	{
 		FE_PROFILER_FUNC();
 

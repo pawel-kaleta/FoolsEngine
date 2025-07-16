@@ -40,7 +40,7 @@ namespace fe
 		static void Init();
 		static void Shutdown();
 
-		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
+		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
 
 		static RenderStats GetStats() { return s_Stats; }
 
@@ -92,11 +92,11 @@ namespace fe
 
 		static Renderer2DData& s_Data;
 
-		static void BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer);
+		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void ClearBatch();
 		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
 		static void Flush();
-		static void EndScene(Framebuffer& framebuffer);
+		static void EndScene();
 
 		static RenderStats s_Stats;
 		static Time::TimePoint m_RenderStartTimePoint;

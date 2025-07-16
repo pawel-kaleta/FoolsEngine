@@ -94,10 +94,10 @@ namespace fe
 		for (auto& textureSlot : sm_core.TextureSlots)
 		{
 			auto textureID = materialObserver.GetTextureID(material_core, textureSlot);
-			AssetUser<Texture2D> texture(textureID);
 
-			if (texture.IsValid())
+			if (textureID != NullAssetID)
 			{
+				AssetUser<Texture2D> texture(textureID);
 				texture.Bind(GDI, rendererTextureSlot);
 			}
 			else

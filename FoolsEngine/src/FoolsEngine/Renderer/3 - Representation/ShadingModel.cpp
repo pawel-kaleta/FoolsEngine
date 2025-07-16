@@ -177,7 +177,9 @@ namespace fe
 		if (!texture_slots_node.IsSequence()) return false;
 
 		std::filesystem::path shader_filepath = shader_node.as<std::string>();
-		core.ShaderHandle.SetID(AssetManager::GetAssetFromFilepath(shader_filepath));
+		auto shaderID = AssetManager::GetAssetFromFilepath(shader_filepath);
+		FE_CORE_ASSERT(shaderID != NullAssetID, "Failed to recognize shader asset during shading model deserialization");
+		core.ShaderHandle.SetID(shaderID);
 
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.DefaultUniformsData = operator new(core.UniformsDataSize);

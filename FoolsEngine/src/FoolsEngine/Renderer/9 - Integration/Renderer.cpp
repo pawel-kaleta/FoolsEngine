@@ -136,24 +136,27 @@ namespace fe
 		RenderCommands::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::RenderScene(const AssetObserver<Scene>& scene, Framebuffer& framebuffer)
-	{
-		auto cameraEntity = scene.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
-		auto& cameraComponent = cameraEntity.Get<CCamera>();
-		auto& camera = cameraComponent.Camera;
-		auto cameraTransform = cameraEntity.GetTransformHandle().Global();
-		cameraTransform.Scale = { 1.f,1.f,1.f };
-		cameraTransform = cameraTransform + cameraComponent.Offset;
-		RenderScene(scene, camera, cameraTransform, framebuffer);
-	}
+
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
 	{
+		framebuffer.Bind();
+
+		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
+		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
+
+		RenderScene(scene, camera, cameraTransform);
+
+		framebuffer.Unbind();
+	}
+
+	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform)
+	{
 		FE_PROFILER_FUNC();
 
-		BeginScene(camera, cameraTransform, framebuffer);
+		BeginScene(camera, cameraTransform);
 
-		Renderer2D::RenderScene(scene, camera, cameraTransform, framebuffer);
+		Renderer2D::RenderScene(scene, camera, cameraTransform);
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
@@ -198,28 +201,15 @@ namespace fe
 			mesh_observer.Draw(material_observer);
 		}
 
-
-		framebuffer.Unbind();
-
-		GLenum error = glGetError();
-
-		if (error)
-			FE_LOG_CORE_INFO("{0}", error);
-
 		EndScene();
 	}
 
-	void Renderer::BeginScene(const glm::mat4& projection, const glm::mat4& view, Framebuffer& framebuffer)
+	void Renderer::BeginScene(const glm::mat4& projection, const glm::mat4& view)
 	{
 		FE_PROFILER_FUNC();
-
-		framebuffer.Bind();
 		
 		RenderCommands::Clear();
 		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
-
-		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
-		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
 
 		switch (s_ActiveGDI.Value)
 		{
@@ -238,6 +228,11 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		// TO DO: stats gathering
+
+		GLenum error = glGetError();
+
+		if (error)
+			FE_LOG_CORE_INFO("{0}", error);
 	}
 
 	void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, const AssetObserver<Material>& materialObserver, const glm::mat4& transform)

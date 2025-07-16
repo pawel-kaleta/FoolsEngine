@@ -62,7 +62,7 @@ namespace fe
 		Application::GetImguiLayer()->BlockEvents(!(m_VieportFocus || m_VieportHover) && m_IsVisible);
 
 		auto vidgetSize = ImGui::GetContentRegionAvail();
-		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different librarys
+		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different libraries
 
 		if (m_ViewportSize != newViewPortSize)
 		{
@@ -71,6 +71,12 @@ namespace fe
 			if (newViewPortSize.x == 0 || newViewPortSize.y == 0)
 				newViewPortSize = { 1, 1 };
 
+			auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+			if (camera_entity)
+			{
+				auto& cameraComponent = camera_entity.Get<CCamera>();
+				cameraComponent.Camera.SetViewportSize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
+			}
 			m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
 			m_ViewportSize = newViewPortSize;
 		}

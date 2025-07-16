@@ -20,12 +20,15 @@ project "Sandbox"
 	}
 
 	includedirs {
-		common_includedirs
+		common_includedirs,
+		"src"
 	}
 
 	links {
 		"FoolsEngine"
 	}
+
+	defines "YAML_CPP_STATIC_DEFINE"
 
 	filter "system:windows"
 		systemversion "latest"
