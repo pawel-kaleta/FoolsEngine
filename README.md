@@ -27,7 +27,7 @@ If your goal is to make a game, you are better of using off-the-shelf, fully fea
 	- profiling
 	- assertions
 - Hybrid Actor/GameObject/ECS scene representation and execution model
-- Placeholder 2D renderer
+- Placeholder renderer
 - Editor features
 	- UI setup
 	- Viewports and Editor Camera
@@ -70,7 +70,7 @@ Program structure isolates engine and application into separate exe/dll files.
 	- Implements IoC (inversion of control) using layers stack
 	- Includes entry point
 	- Provides core layers: main application layer, ImGui layer
-- **Application EXE** - `Sandbox` (outdated, may not compile)
+- **Application EXE** - `Sandbox`
 	- Extends main application layer
 	- Provides additionall layers
 	- May separate it's parts into hot-reloadable DLLs
@@ -96,7 +96,7 @@ There are automatic dedicated profiling sessions for startup, project loading, s
 ![FoolsTools - FoolsEngine's editor](./Documentation/Profiler.jpg)
 
 ## Technologies
-- C++17
+- C++20
 - VisualStudio 2022
 - PreMake (config in LUA)
 - ImGui
