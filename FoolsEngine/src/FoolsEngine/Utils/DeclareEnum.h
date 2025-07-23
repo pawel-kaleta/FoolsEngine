@@ -26,12 +26,12 @@ struct name                                                                     
     constexpr name& operator=(const name& other) { this->Value = other.Value; return *this; }         \
     constexpr name& operator=(const ValueType& other) { this->Value = other; return *this; }          \
                                                                                                       \
-    constexpr name& operator=(name&& other) noexcept { this->Value = other.Value; return *this; }              \
+    constexpr name& operator=(name&& other) noexcept { this->Value = other.Value; return *this; }     \
     constexpr name& operator=(ValueType&& other) { this->Value = other; return *this; }               \
                                                                                                       \
     name() = default;                                                                                 \
     constexpr name(const name& other) : Value(other.Value) { }                                        \
-    constexpr name(name&& other) noexcept : Value(other.Value) { }                                             \
+    constexpr name(name&& other) noexcept : Value(other.Value) { }                                    \
     constexpr name(const ValueType& other) : Value(other) { }                                         \
     constexpr name(ValueType&& other) : Value(other) { }                                              \
                                                                                                       \

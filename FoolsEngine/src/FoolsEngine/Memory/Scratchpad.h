@@ -3,7 +3,6 @@
 #include "FoolsEngine/Debug/Asserts.h"
 
 #include <memory_resource>
-#include <bitset>
 
 namespace fe
 {

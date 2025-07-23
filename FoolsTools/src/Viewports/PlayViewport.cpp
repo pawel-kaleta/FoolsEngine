@@ -86,4 +86,16 @@ namespace fe
 
 		ImGui::End();
 	}
+
+	void PlayViewport::OnScenePlayStop()
+	{
+		FE_PROFILER_FUNC();
+
+		auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		if (camera_entity)
+		{
+			auto& cameraComponent = camera_entity.Get<CCamera>();
+			cameraComponent.Camera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+	}
 }

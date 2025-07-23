@@ -11,6 +11,7 @@ namespace fe
 
 		void RenderScene();
 		void OnImGuiRender();
+		void OnScenePlayStop();
 
 		void SetScene(const AssetHandle<Scene>& scene) { m_Scene = scene; }
 

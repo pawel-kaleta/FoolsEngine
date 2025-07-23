@@ -360,12 +360,16 @@ namespace fe
 
 		m_EditorState = EditorState::Edit;
 
-		auto scene_user = m_Scene.Use();
-		scene_user.Release();
-		scene_user.Initialize();
-		bool deserialization_result = SceneSerializerYAML::DeserializeFromString(scene_user, m_SceneBackup);
-		FE_CORE_ASSERT(deserialization_result, "Scene recovery after play stop failed.");
+		{
+			auto scene_user = m_Scene.Use();
+			scene_user.Release();
+			scene_user.Initialize();
+			bool deserialization_result = SceneSerializerYAML::DeserializeFromString(scene_user, m_SceneBackup);
+			FE_CORE_ASSERT(deserialization_result, "Scene recovery after play stop failed.");
+		}
 		m_SceneBackup.clear();
+
+		m_Viewports.PlayViewport.OnScenePlayStop();
 	}
 
 	void EditorLayer::OnEvent(Ref<Events::Event> event)

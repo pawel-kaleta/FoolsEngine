@@ -126,7 +126,8 @@ namespace fe::AssetSerializer
 					continue;
 
 				(*item.EmplaceCore)(assetID);
-				FE_CORE_ASSERT((*item.LoadMetadata)(assetID), "Failed to load asset metadata");
+				bool result = (*item.LoadMetadata)(assetID);
+				FE_CORE_ASSERT(result, "Failed to load asset metadata");
 
 				break;
 			}
