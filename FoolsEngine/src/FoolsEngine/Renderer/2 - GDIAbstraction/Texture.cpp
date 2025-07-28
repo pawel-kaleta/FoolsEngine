@@ -168,11 +168,17 @@ namespace fe
 		YAML::Node node = YAML::LoadFile(filepath.string());
 
 		auto uuid_node = node["UUID"];
-		if (!uuid_node) return false;
-		if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
-			return false;
+			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in Texture file");
 		}
 
 		auto source_node = node["Source Filepath"];

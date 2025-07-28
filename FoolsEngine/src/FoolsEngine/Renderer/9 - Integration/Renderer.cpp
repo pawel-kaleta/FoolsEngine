@@ -82,6 +82,8 @@ namespace fe
 
 		Renderer2D::s_Data.BaseShader = BaseAssets.Shaders.Base2D;
 		Renderer2D::s_Data.Batch.Textures[0] = BaseAssets.Textures.FlatWhite.GetID();
+
+		FE_LOG_CORE_INFO("Base Assets acquired");
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(GDIType GDI)

@@ -165,6 +165,20 @@ namespace fe
 			node = YAML::LoadFile(filepath.string());
 		}
 
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in ShadingModel file");
+		}
+
 		const auto& shader_node        = node["Shader"];
 		const auto& data_size_node     = node["Uniforms Data Size"];
 		const auto& uniforms_node      = node["Uniforms"];

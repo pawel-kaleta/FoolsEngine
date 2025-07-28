@@ -36,6 +36,20 @@ namespace fe
 		YAML::Node node = YAML::LoadFile(filepath.string());
 		auto& core = ECS_handle.get<ACModelCore>();
 
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in Model file");
+		}
+
 		for (const auto& render_mesh_node : node)
 		{
 			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>());

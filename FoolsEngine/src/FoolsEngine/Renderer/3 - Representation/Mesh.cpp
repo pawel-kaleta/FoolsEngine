@@ -154,6 +154,10 @@ namespace fe
 				return false;
 			}
 		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in Mesh file");
+		}
 
 		const auto& source_filepath_node = node["Source Filepath"];
 		const auto& vertex_count_node = node["Vartex Count"];

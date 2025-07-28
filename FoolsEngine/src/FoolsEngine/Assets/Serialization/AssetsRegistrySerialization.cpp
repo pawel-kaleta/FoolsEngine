@@ -103,6 +103,8 @@ namespace fe::AssetSerializer
 			}
 		}
 
+		FE_LOG_CORE_INFO("Asset Registry deserialized");
+
 		return true;
 	}
 
@@ -132,5 +134,7 @@ namespace fe::AssetSerializer
 				break;
 			}
 		}
+
+		FE_LOG_CORE_INFO("Assets' meta data loaded");
 	}
 }

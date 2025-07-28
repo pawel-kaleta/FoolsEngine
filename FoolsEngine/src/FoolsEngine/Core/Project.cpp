@@ -21,8 +21,6 @@ namespace fe
 		File = filepath.filename();
 		Directory = filepath.parent_path();
 		AssetsPath = s_Instance->Directory / "Assets";
-
-		FE_LOG_CORE_WARN("StartScene not implemented");
 	}
 
 	Project::~Project()
@@ -122,6 +120,8 @@ namespace fe
 		inst.BaseAssets.Shaders.Base3D = shaders_node["Base3D"].as<UUID>();
 		inst.BaseAssets.ShadingModels.Default = shading_models_node["Default"].as<UUID>();
 		inst.BaseAssets.Materials.Default = materials_node["Default"].as<UUID>();
+
+		FE_LOG_CORE_INFO("Project deserialized");
 
 		return true;
 	}
