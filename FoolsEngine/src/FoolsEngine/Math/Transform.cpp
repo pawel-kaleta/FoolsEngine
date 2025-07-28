@@ -23,7 +23,7 @@ namespace fe
 	Transform operator- (const Transform& a, const Transform& b)
 	{
 		Transform newTransform;
-		newTransform.Shift = glm::rotate(glm::quat(-1.0f * b.Rotation), (a.Shift - b.Shift));
+		newTransform.Shift = glm::rotate(glm::quat(-1.0f * b.Rotation), (a.Shift - b.Shift) / b.Scale);
 		newTransform.Rotation = a.Rotation - b.Rotation;
 		newTransform.Scale = a.Scale / b.Scale;
 		return newTransform;

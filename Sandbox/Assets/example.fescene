@@ -26,6 +26,71 @@ Worlds:
       FrameEnd:
         []
     Actors:
+      - Actor: Player
+        UUID: 4692859201027233055
+        Behaviors:
+          - Behavior: PlayerMovement
+            UUID: 17097313323016577129
+            Active: true
+            MovementComponent: 4692859201027233055
+            Player Root entity: 4692859201027233055
+        Updates:
+          FrameStart:
+            []
+          PrePhysics:
+            - Behavior: 17097313323016577129
+              Priority: 10
+          Physics:
+            []
+          PostPhysics:
+            []
+          FrameEnd:
+            []
+        Entities:
+          - Entity: Player
+            UUID: 4692859201027233055
+            Head: 4692859201027233055
+            Tags: 0
+            Node:
+              Parent: 14380651569816070889
+              HierarchyLvl: 1
+              PreviousSibling: 14670524396616024285
+              NextSibling: 0
+              ChildrenCount: 0
+              FirstChild: 0
+            Transform:
+              Shift: [0, -0.42, 0.36116433]
+              Rotation: [0, -0, 0]
+              Scale: [0.043522656, 0.043522656, 0.043522656]
+            Camera:
+              Offset:
+                Shift: [0, 0.2, 0.42]
+                Rotation: [-20.1, 0, 0]
+                Scale: [1, 1, 1]
+              IsPrimary: true
+              ProjectionType: Perspective
+              PerspectiveNear: 0.01
+              PerspectiveFar: 1000
+              PerspectiveFOV: 0.7853982
+              OrthographicNear: -1
+              OrthographicFar: 1
+              OrthographicZoom: 1
+            RenderMeshView:
+              Offset:
+                Shift: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                Scale: [0.01, 0.01, 0.01]
+              Material:
+                UUID: 12079571074305468052
+                Name: Material.femat
+                Loading Priority: Minimal
+              Mesh:
+                UUID: 12471327083499578500
+                Name: Survival_BackPack_2.femesh
+                Loading Priority: Minimal
+            Movement:
+              MoveSpeed: 0.5
+              RotationSpeed: 80
       - Actor: Enviro
         UUID: 14670524396616024285
         Behaviors:
@@ -202,68 +267,3 @@ Worlds:
                 Name: grassland.fetex2d
                 Loading Priority: Standard
               Tiling: 1
-      - Actor: Player
-        UUID: 4692859201027233055
-        Behaviors:
-          - Behavior: PlayerMovement
-            UUID: 17097313323016577129
-            Active: true
-            MovementComponent: 4692859201027233055
-            Player Root entity: 4692859201027233055
-        Updates:
-          FrameStart:
-            []
-          PrePhysics:
-            - Behavior: 17097313323016577129
-              Priority: 10
-          Physics:
-            []
-          PostPhysics:
-            []
-          FrameEnd:
-            []
-        Entities:
-          - Entity: Player
-            UUID: 4692859201027233055
-            Head: 4692859201027233055
-            Tags: 0
-            Node:
-              Parent: 14380651569816070889
-              HierarchyLvl: 1
-              PreviousSibling: 14670524396616024285
-              NextSibling: 0
-              ChildrenCount: 0
-              FirstChild: 0
-            Transform:
-              Shift: [0, -0.42, 0.36116433]
-              Rotation: [0, -0, 0]
-              Scale: [0.00049, 0.00049, 0.00049]
-            Camera:
-              Offset:
-                Shift: [0, 0.2, 0.42]
-                Rotation: [-20.1, 0, 0]
-                Scale: [1, 1, 1]
-              IsPrimary: true
-              ProjectionType: Perspective
-              PerspectiveNear: 0.01
-              PerspectiveFar: 1000
-              PerspectiveFOV: 0.7853982
-              OrthographicNear: -1
-              OrthographicFar: 1
-              OrthographicZoom: 1
-            RenderMeshView:
-              Offset:
-                Shift: [0, 0, 0]
-                Rotation: [0, 0, 0]
-                Scale: [1, 1, 1]
-              Material:
-                UUID: 12079571074305468052
-                Name: Material.femat
-                Loading Priority: Minimal
-              Mesh:
-                UUID: 12471327083499578500
-                Name: Survival_BackPack_2.femesh
-                Loading Priority: Minimal
-            Movement:
-              MoveSpeed: 0.5
-              RotationSpeed: 80

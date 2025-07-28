@@ -125,6 +125,7 @@ namespace fe
 		YAML::Emitter emitter;
 
 		emitter << YAML::BeginMap;
+		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
 		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
 		emitter << YAML::Key << "Vartex Count" << YAML::Value << core.Specification.VertexCount;
 		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
@@ -143,6 +144,16 @@ namespace fe
 
 		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
 		YAML::Node node = YAML::LoadFile((Project::GetInstance()->AssetsPath / filepath).string());
+
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
 
 		const auto& source_filepath_node = node["Source Filepath"];
 		const auto& vertex_count_node = node["Vartex Count"];

@@ -183,7 +183,7 @@ namespace fe
 			if (!mesh_observer.AllOf<ACLoadedFlag>())
 				continue;
 			
-			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix();
+			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix() * renderViewMesh_component.Offset.GetMatrix();
 			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
 
 			auto shading_model_observer = material_observer.GetCoreComponent().ShadingModelHandle.Observe();

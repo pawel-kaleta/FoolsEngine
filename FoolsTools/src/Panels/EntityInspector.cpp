@@ -240,7 +240,8 @@ namespace fe
 
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_None))
         {
-            auto transform = entity.GetTransformHandle().Local();
+            auto handle = entity.GetTransformHandle();
+            auto transform = handle.Local();
 
             bool change = false;
 
@@ -249,7 +250,7 @@ namespace fe
             change = change || ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
 
             if (change)
-                entity.GetTransformHandle().SetLocal(transform);
+                handle.SetLocal(transform);
         }
     }
 
@@ -410,6 +411,19 @@ namespace fe
             ImGui::DragInt("PreviousSibling", (int*)&node.PreviousSibling);
             ImGui::EndDisabled();
 
+            ImGui::PopItemWidth();
+        }
+
+        if (ImGui::CollapsingHeader("Global Transform", ImGuiTreeNodeFlags_None))
+        {
+            Transform& transform = (Transform&)entity.GetTransformHandle().GetGlobal();
+
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+            ImGui::BeginDisabled();
+            ImGui::DragFloat3("Shift", glm::value_ptr(transform.Shift), 0.01f, 0, 0, "%.2f");
+            ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f, 0, 0, "%.2f");
+            ImGui::DragFloat3("Scale", glm::value_ptr(transform.Scale), 0.01f, 0, 0, "%.2f");
+            ImGui::EndDisabled();
             ImGui::PopItemWidth();
         }
     }

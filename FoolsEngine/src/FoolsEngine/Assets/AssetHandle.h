@@ -116,6 +116,7 @@ namespace fe
 				case AssetLoadingPriority::High:		ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::High		>>(); break;
 				case AssetLoadingPriority::VeryHigh:	ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::VeryHigh	>>(); break;
 				case AssetLoadingPriority::Critical:	ECSHandle.emplace<ACLoadFlag<AssetLoadingPriority::Critical	>>(); break;
+				default:								FE_CORE_ASSERT(false, "Unrecognized AssetLoadingPriority value");
 				}
 			}
 		}
@@ -138,6 +139,7 @@ namespace fe
 				case AssetLoadingPriority::High:		ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::High		>>(); break;
 				case AssetLoadingPriority::VeryHigh:	ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::VeryHigh	>>(); break;
 				case AssetLoadingPriority::Critical:	ECSHandle.erase<ACLoadFlag<AssetLoadingPriority::Critical	>>(); break;
+				default:								FE_CORE_ASSERT(false, "Unrecognized AssetLoadingPriority value");
 				}
 			}
 
