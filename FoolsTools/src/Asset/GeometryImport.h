@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <memory_resource>
 #include <FoolsEngine.h>
 
 struct aiScene;
@@ -15,20 +16,39 @@ namespace fe
 
 		void InitImport(ImportData* const importData);
 
-		enum ImportVariant
+		FE_DECLARE_ENUM(ImportVariant, Model, RenderMesh, Mesh);
+
+		struct Textures
 		{
-			ImportVariant_Model,
-			ImportVariant_RenderMesh,
-			ImportVariant_Mesh
+			Textures() = delete;
+
+			uint32_t BaseColor;
+			uint32_t Normal;
+			uint32_t Emissive;
+			union
+			{
+				uint32_t PackedOMR;
+				struct
+				{
+					uint32_t Occlusion;
+					uint32_t Metalness;
+					uint32_t Roughness;
+				} NonPackedOMR;
+			};
 		};
 
 		struct Data
 		{
-			const aiScene* Scene;
+			struct
+			{
+				bool GLTFTexturePacking;
+				uint32_t PreviewItemSelectedIndex;
+				std::pmr::vector<uint32_t>* SetTextures; // materials_count * 6
+				std::pmr::vector<std::pmr::vector<aiString>>* RecognizedTextures;
+			} Materials;
 			ImportVariant ImportVariant;
-			uint32_t MaterialPreviewItemSelectedIndex;
-			//bool Merge;
-			bool GLTFTexturePacking;
+			const aiScene* Scene;
+			
 		};
 	};
 }

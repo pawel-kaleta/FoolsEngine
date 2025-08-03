@@ -24,10 +24,7 @@ namespace fe
 		template<class U, class... CtorArgs>
 		U* NewObject(CtorArgs&&... ctor_args)
 		{
-			U* p = (U*)do_allocate(sizeof(U), alignof(U));
-			std::pmr::polymorphic_allocator<U> alloc(this);
-			alloc.construct(p, std::forward<CtorArgs>(ctor_args)...);
-			return p;
+			return std::pmr::polymorphic_allocator(this).new_object<U>(std::forward<CtorArgs>(ctor_args)...);
 		}
 
 		template<class U>

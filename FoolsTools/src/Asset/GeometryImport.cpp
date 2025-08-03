@@ -21,21 +21,118 @@ namespace fe::GeometryImport
 
 	void InitImport(ImportData* const importData)
 	{
-		importData->GeometryData.Scene = GeometryLoader::InspectSourceFile(importData->Filepath);
-		importData->GeometryData.ImportVariant = ImportVariant_Mesh;
-		//importData->GeometryData.Merge = true;
-		importData->GeometryData.GLTFTexturePacking = IsGuaranteedStandardTexturePacking(importData->Filepath);
-		importData->GeometryData.MaterialPreviewItemSelectedIndex = 0;
+		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath);
+		auto texture_packing = IsGuaranteedStandardTexturePacking(importData->Filepath);
+		
+		auto& data = importData->GeometryData;
+		auto& set_textures = data.Materials.SetTextures;
+		auto& recognized_textures = data.Materials.RecognizedTextures;
+
+		std::pmr::polymorphic_allocator alloc(&importData->Arena);
+		       set_textures = alloc.new_object<std::pmr::vector<uint32_t>>();
+		recognized_textures = alloc.new_object<std::pmr::vector<std::pmr::vector<aiString>>>();
+		
+		data.Scene = scene;
+		data.ImportVariant = ImportVariant::Mesh;
+		data.Materials.GLTFTexturePacking = texture_packing;
+		data.Materials.PreviewItemSelectedIndex = 0;
+
+		set_textures->resize(scene->mNumMaterials * 6, -1);
+		recognized_textures->resize(scene->mNumMaterials);
+
+		for (size_t i = 0; i < scene->mNumMaterials; i++)
+		{
+			auto& mat = scene->mMaterials[i];
+			auto& set_textures_in_material = *(Textures*)&((*set_textures)[i*6]);
+			auto& recognized_textures_in_material = (*recognized_textures)[i];
+
+			for (unsigned int j = 1; j <= AI_TEXTURE_TYPE_MAX; j++)
+			{
+				aiTextureType& texture_type = (aiTextureType&)j;
+				if (mat->GetTextureCount(texture_type) > 1)
+					FE_LOG_CORE_WARN("No support for layered materials!");
+
+				aiString new_texture;
+				if (AI_SUCCESS != mat->GetTexture(texture_type, 0, &new_texture))
+					continue;
+
+				// alpha channel handling
+				{
+					int texture_flags; if (AI_SUCCESS == mat->Get(AI_MATKEY_TEXFLAGS(texture_type, 0), texture_flags))
+					{
+						int a = 0;
+					}
+
+					aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC(texture_type, 0), blend_mode))
+					{
+						int a = 0;
+					}
+
+					aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
+					{
+						int a = 0;
+					}
+
+					float gltf_aphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_aphacutoff))
+					{
+						int a = 0;
+					}
+				}
+				
+				auto new_index = recognized_textures_in_material.size();
+				bool found = false;
+				for (size_t n=0; n<recognized_textures_in_material.size(); n++)
+				{
+					if (recognized_textures_in_material[n] == new_texture)
+					{
+						new_index = n;
+						found = true;
+						break;
+					}
+				}
+
+				switch (j)
+				{
+				case aiTextureType_BASE_COLOR:
+					set_textures_in_material.BaseColor = new_index;
+					break;
+				case aiTextureType_NORMALS:
+				case aiTextureType_NORMAL_CAMERA:
+					set_textures_in_material.Normal = new_index;
+					break;
+				case aiTextureType_EMISSION_COLOR:
+				case aiTextureType_EMISSIVE:
+					set_textures_in_material.Emissive = new_index;
+					break;
+				default:
+					if (texture_packing)
+					{
+						if (j == aiTextureType_GLTF_METALLIC_ROUGHNESS)
+							set_textures_in_material.PackedOMR = new_index;
+						break;
+					}
+					
+					switch (j)
+					{
+					case aiTextureType_AMBIENT_OCCLUSION:
+					case aiTextureType_AMBIENT:
+					case aiTextureType_LIGHTMAP:
+						set_textures_in_material.NonPackedOMR.Occlusion = new_index;
+						break;
+					case aiTextureType_METALNESS:
+						set_textures_in_material.NonPackedOMR.Metalness = new_index;
+						break;
+					case aiTextureType_DIFFUSE_ROUGHNESS:
+						set_textures_in_material.NonPackedOMR.Roughness = new_index;
+						break;
+					}
+				}
+
+				if (!found)
+					recognized_textures_in_material.push_back(std::move(new_texture));
+			}
+		}
 	}
-
-
-	struct ImportRenderMesh
-	{
-		uint32_t AssimpMeshIndex;
-		uint32_t AssimpMaterialIndex;
-		uint32_t VertexCount;
-		uint32_t IndexCount;
-	};
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
@@ -49,17 +146,17 @@ namespace fe::GeometryImport
 		//auto& spec = model_user.GetSpecification();
 		//spec.RenderMeshCount = scene->mNumMeshes;
 
-		std::vector<ImportRenderMesh> render_meshes;
-
-		for (size_t i = 0; i < scene->mNumMeshes; i++)
-		{
-			auto& render_mesh = render_meshes.emplace_back();
-
-			render_mesh.AssimpMeshIndex = (uint32_t)i;
-			render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
-			render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
-			render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
-		}
+		//std::vector<ImportRenderMesh> render_meshes;
+		//
+		//for (size_t i = 0; i < scene->mNumMeshes; i++)
+		//{
+		//	auto& render_mesh = render_meshes.emplace_back();
+		//
+		//	render_mesh.AssimpMeshIndex = (uint32_t)i;
+		//	render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
+		//	render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
+		//	render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
+		//}
 
 		//model_user.SetFilepath(importData->Filepath);
 
@@ -68,22 +165,22 @@ namespace fe::GeometryImport
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID"              << YAML::Value << model_handle.GetUUID();
 		emitter << YAML::Key << "Source File"       << YAML::Value << importData->Filepath.string();
-		emitter << YAML::Key << "Render Mesh Count" << YAML::Value << render_meshes.size();
+		//emitter << YAML::Key << "Render Mesh Count" << YAML::Value << render_meshes.size();
 		emitter << YAML::Key << "Meshes"            << YAML::Value << YAML::BeginSeq;
-		for (auto& renderMesh : render_meshes)
-		{
-			emitter << YAML::BeginMap;
-
-			emitter << YAML::Key << "AssimpMeshIndex" << YAML::Value << renderMesh.AssimpMeshIndex;
-
-			//if (importData->GeometryData.ImportMaterials)
-			//	emitter << YAML::Key << "Assimp Material Index" << YAML::Value << renderMesh.AssimpMaterialIndex;
-
-			emitter << YAML::Key << "Index Count"  << YAML::Value << renderMesh.IndexCount;
-			emitter << YAML::Key << "Vertex Count" << YAML::Value << renderMesh.VertexCount;
-
-			emitter << YAML::EndMap;
-		}
+		//for (auto& renderMesh : render_meshes)
+		//{
+		//	emitter << YAML::BeginMap;
+		//
+		//	emitter << YAML::Key << "AssimpMeshIndex" << YAML::Value << renderMesh.AssimpMeshIndex;
+		//
+		//	//if (importData->GeometryData.ImportMaterials)
+		//	//	emitter << YAML::Key << "Assimp Material Index" << YAML::Value << renderMesh.AssimpMaterialIndex;
+		//
+		//	emitter << YAML::Key << "Index Count"  << YAML::Value << renderMesh.IndexCount;
+		//	emitter << YAML::Key << "Vertex Count" << YAML::Value << renderMesh.VertexCount;
+		//
+		//	emitter << YAML::EndMap;
+		//}
 		emitter << YAML::EndSeq;
 
 		emitter << YAML::EndMap;
@@ -125,15 +222,17 @@ namespace fe::GeometryImport
 		Mesh::SaveMetadata(assetID);
 	}
 
-
-	static void DisplayNode(const aiScene* const scene, const aiNode* const node)
+	static void DisplayNode(const aiScene* const scene, const aiNode* const node, uint32_t* meshRowIndex)
 	{
 		constexpr ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_SpanAllColumns | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAllColumns;
 
 		ImGui::TableNextRow();
+		ImGui::PushID(*meshRowIndex);
+		(*meshRowIndex)++;
+
 		ImGui::TableNextColumn();
 
-		if (node->mNumChildren > 0)
+		if (node->mNumChildren > 0 || node->mNumMeshes > 0)
 		{
 			bool open = ImGui::TreeNodeEx(node->mName.C_Str(), tree_node_flags);
 			ImGui::TableNextColumn();
@@ -147,7 +246,19 @@ namespace fe::GeometryImport
 			if (open)
 			{
 				for (size_t i = 0; i < node->mNumChildren; i++)
-					DisplayNode(scene, node->mChildren[i]);
+				{
+					DisplayNode(scene, node->mChildren[i], meshRowIndex);
+				}
+
+				for (size_t i = 0; i < node->mNumMeshes; i++)
+				{
+					ImGui::TreePush(&i);
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::TextWrapped(scene->mMeshes[node->mMeshes[i]]->mName.C_Str());
+					ImGui::TreePop();
+				}
+
 				ImGui::TreePop();
 			}
 
@@ -163,20 +274,25 @@ namespace fe::GeometryImport
 			ImGui::TableNextColumn();
 			ImGui::Text("%i", node->mNumMeshes);
 		}
+
+		ImGui::PopID();
 	}
 
 	static void RenderHierarchy(const aiScene* const scene)
 	{
 		constexpr ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 
-		if (ImGui::BeginTable("NodesTable", 4, flags))
+		if (ImGui::BeginTable("NodesTable", 3, flags))
 		{
+			uint32_t mesh_row_index = 0;
+
+			//ImGui::TableSetupColumn("No.", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Transform", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Mesh Count", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableHeadersRow();
 
-			DisplayNode(scene, scene->mRootNode);
+			DisplayNode(scene, scene->mRootNode, &mesh_row_index);
 
 			ImGui::EndTable();
 		}
@@ -198,16 +314,17 @@ namespace fe::GeometryImport
 			Scratchpad sp;
 			for (size_t i = 0; i < scene->mNumMeshes; i++)
 			{
+				ImGui::PushID(i);
+
 				auto& mesh = scene->mMeshes[i];
 				auto matIndex = mesh->mMaterialIndex;
 				meshCountPerMaterial[matIndex]++;
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string no = std::to_string(i);
-				ImGui::Text(no.c_str());
+				ImGui::Text("%i", i);
 				ImGui::TableNextColumn();
-				ImGui::Text(mesh->mName.C_Str());
+				ImGui::TextWrapped(mesh->mName.C_Str());
 				ImGui::TableNextColumn();
 				const auto name = scene->mMaterials[matIndex]->GetName();
 				std::pmr::string nameLabel(std::to_string(matIndex), &sp);
@@ -218,6 +335,8 @@ namespace fe::GeometryImport
 				ImGui::Text("%i", mesh->mNumVertices);
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", mesh->mNumFaces);
+
+				ImGui::PopID();
 			}
 
 			ImGui::EndTable();
@@ -237,16 +356,17 @@ namespace fe::GeometryImport
 
 			for (size_t i = 0; i < scene->mNumMaterials; i++)
 			{
+				ImGui::PushID(i);
 				const auto& mat = scene->mMaterials[i];
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string no = std::to_string(i);
-				ImGui::Text(no.c_str());
+				ImGui::Text("%i", i);
 				ImGui::TableNextColumn();
 				const auto name = mat->GetName();
 				ImGui::Text(name.C_Str());
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", meshCountPerMaterial[i]);
+				ImGui::PopID();
 			}
 
 			ImGui::EndTable();
@@ -255,18 +375,22 @@ namespace fe::GeometryImport
 
 	static void RenderMaterialPreview(ImportData* const importData)
 	{
-		auto& selected_idx = importData->GeometryData.MaterialPreviewItemSelectedIndex;
-		auto& scene = importData->GeometryData.Scene;
+		ImGui::PushID("Material Preview");
+
+		auto& data = importData->GeometryData;
+		auto& selected_idx = data.Materials.PreviewItemSelectedIndex;
+		auto& scene = data.Scene;
 		
 		const auto selected_material_name = scene->mMaterials[selected_idx]->GetName();
 		Scratchpad sp;
 		std::pmr::string preview(std::to_string(selected_idx), &sp);
 		preview += ". " + std::pmr::string(selected_material_name.C_Str(), &sp);
 
-		if (ImGui::BeginCombo("mat prev", preview.c_str()))
+		if (ImGui::BeginCombo("Material Selection", preview.c_str()))
 		{
 			for (size_t n = 0; n < scene->mNumMaterials; n++)
 			{
+				ImGui::PushID(n);
 				const bool is_selected = (selected_idx == n);
 				auto name = scene->mMaterials[n]->GetName();
 
@@ -279,86 +403,257 @@ namespace fe::GeometryImport
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
+				ImGui::PopID();
 			}
 			ImGui::EndCombo();
 		}
 
 		auto& mat = scene->mMaterials[selected_idx];
 
+		ImGui::BeginDisabled();
+
+		ImGui::SeparatorText("Parameters");
 		ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoPicker;
+
+		aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC, blend_mode)) ImGui::InputInt("Blend Mode", (int*)&blend_mode);
+		//AI_MATKEY_GLTF_ALPHAMODE
+
+		aiColor3D base_color; if (AI_SUCCESS == mat->Get(AI_MATKEY_BASE_COLOR,     base_color)) ImGui::ColorEdit3("Base Color", (float*)&base_color, flags);
+		aiColor3D ambient;    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT,  ambient   )) ImGui::ColorEdit3("Ambient",    (float*)&ambient,    flags);
+		aiColor3D emissive;   if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive  )) ImGui::ColorEdit3("Emissive",   (float*)&emissive,   flags);
+
+		float metalness; if (AI_SUCCESS == mat->Get(AI_MATKEY_METALLIC_FACTOR,  metalness )) ImGui::InputFloat("Metalness", &metalness);
+		float roughness; if (AI_SUCCESS == mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness )) ImGui::InputFloat("Roughness", &roughness);
+
+		ImGui::SeparatorText("Textures");
 		
-		aiColor3D base_color;     mat->Get(AI_MATKEY_BASE_COLOR,        base_color); if (!base_color.IsBlack())                       ImGui::ColorEdit3("Base Color", (float*)&base_color, flags);
-		aiColor3D diffuse;        mat->Get(AI_MATKEY_COLOR_DIFFUSE,     diffuse   ); if (diffuse != base_color && !diffuse.IsBlack()) ImGui::ColorEdit3("Diffuse",    (float*)&diffuse,    flags);
-		aiColor3D specular;       mat->Get(AI_MATKEY_COLOR_SPECULAR,    specular  ); if (!specular.IsBlack())                         ImGui::ColorEdit3("Specular",   (float*)&specular,   flags);
-		aiColor3D ambient;        mat->Get(AI_MATKEY_COLOR_AMBIENT,     ambient   ); if (!ambient.IsBlack())                          ImGui::ColorEdit3("Ambient",    (float*)&ambient,    flags);
-		aiColor3D emissive;       mat->Get(AI_MATKEY_COLOR_EMISSIVE,    emissive  ); if (!emissive.IsBlack())                         ImGui::ColorEdit3("Emissive",   (float*)&emissive,   flags);
-		float     metalness = 0;  mat->Get(AI_MATKEY_METALLIC_FACTOR,   metalness ); if (metalness)                                   ImGui::InputFloat("Metalness",          &metalness);
-		float     roughness = 0;  mat->Get(AI_MATKEY_ROUGHNESS_FACTOR,  roughness ); if (roughness)                                   ImGui::InputFloat("Roughness",          &roughness);
-		float     anisotropy = 0; mat->Get(AI_MATKEY_ANISOTROPY_FACTOR, anisotropy); if (anisotropy)                                  ImGui::InputFloat("Anisotropy",         &anisotropy);
+		auto& recognized_textures = (*data.Materials.RecognizedTextures)[selected_idx];
 
-		bool b0 = false; mat->Get(AI_MATKEY_USE_COLOR_MAP, b0); if (!b0) // for some reason this returns the opposite...
+		for (auto& texture : recognized_textures)
 		{
-			aiString base_color_map; mat->GetTexture(aiTextureType_BASE_COLOR, 0, &base_color_map);
-			if (base_color_map.length) ImGui::InputText("Base Color Map", (char*)base_color_map.C_Str(), base_color_map.length + 1);
+			ImGui::Text(texture.C_Str());
 		}
+		
+		ImGui::EndDisabled();
 
-		if (importData->GeometryData.GLTFTexturePacking)
+		ImGui::PopID();
+	}
+
+	static void RenderVariantSelection(ImportData* const importData)
+	{
+		ImGui::SeparatorText("Import as:");
+
+		auto& variant = importData->GeometryData.ImportVariant;
+
+		if (importData->GeometryData.Scene->mNumMaterials > 1)
 		{
-			aiString omr_map; mat->GetTexture(aiTextureType_UNKNOWN, 0, &omr_map);
-			if (omr_map.length) ImGui::InputText("Occlusion-Metalness-Roughness Map", (char*)omr_map.C_Str(), omr_map.length + 1);
+			ImGui::RadioButton("Model", (int*)&variant, ImportVariant::Model);
 		}
 		else
 		{
-			bool b1 = false; mat->Get(AI_MATKEY_USE_METALLIC_MAP, b1); if (b1)
-			{
-				aiString metalness_map; mat->GetTexture(aiTextureType_METALNESS, 0, &metalness_map);
-				if (metalness_map.length) ImGui::InputText("Metalness Map", (char*)metalness_map.C_Str(), metalness_map.length + 1);
-				else ImGui::Text("Metalness Map is missing and assimp indicates to use it");
-			}
-
-			bool b2 = false; mat->Get(AI_MATKEY_USE_ROUGHNESS_MAP, b2); if (b2)
-			{
-				aiString roughness_map; mat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &roughness_map);
-				if (roughness_map.length) ImGui::InputText("Roughness Map", (char*)roughness_map.C_Str(), roughness_map.length + 1);
-				else ImGui::Text("Roughness Map is missing and assimp indicates to use it");
-			}
-
-			bool b3 = false; mat->Get(AI_MATKEY_USE_AO_MAP, b3); if (b3)
-			{
-				aiString occlusion_map; mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &occlusion_map);
-				if (occlusion_map.length) ImGui::InputText("Occlusion Map", (char*)occlusion_map.C_Str(), occlusion_map.length + 1);
-				else ImGui::Text("Occlusion Map is missing and assimp indicates to use it");
-			}
+			ImGui::BeginDisabled();
+			ImGui::RadioButton("Model", (int*)&variant, ImportVariant::Model);
+			ImGui::EndDisabled();
 		}
+		ImGui::SameLine();
 
-		bool b4 = false; mat->Get(AI_MATKEY_USE_EMISSIVE_MAP, b4); if (b4)
+		if (importData->GeometryData.Scene->mNumMaterials == 1)
 		{
-			aiString emissive_map; mat->GetTexture(aiTextureType_EMISSION_COLOR, 0, &emissive_map);
-			if (emissive_map.length) ImGui::InputText("Emissive Map", (char*)emissive_map.C_Str(), emissive_map.length + 1);
-			else ImGui::Text("Emissive Map is missing and assimp indicates to use it");
+			ImGui::RadioButton("RenderMesh", (int*)&variant, ImportVariant::RenderMesh);
 		}
-		
-		aiString normal_map_camera; mat->GetTexture(aiTextureType_NORMAL_CAMERA, 0, &normal_map_camera);
-		if (normal_map_camera.length) ImGui::InputText("Normal Map Camera", (char*)normal_map_camera.C_Str(), normal_map_camera.length + 1);
-		aiString normal_map_tangent; mat->GetTexture(aiTextureType_NORMALS, 0, &normal_map_tangent);
-		if (normal_map_tangent.length) ImGui::InputText("Normal Map Tangent", (char*)normal_map_tangent.C_Str(), normal_map_tangent.length + 1);
-		
-		int unknown_textures_count = mat->GetTextureCount(aiTextureType_UNKNOWN);
-		if (unknown_textures_count)
+		else
 		{
-			if (importData->GeometryData.GLTFTexturePacking)
-				ImGui::Text("First texture may be Occlusion-Metalness-Roughness Map");
-			for (size_t i = 0; i < unknown_textures_count; i++)
-			{
-				aiString unknown_map; mat->GetTexture(aiTextureType_UNKNOWN, (unsigned int)i, &unknown_map);
-				ImGui::Text("%s", unknown_map.C_Str());
-			}
+			ImGui::BeginDisabled();
+			ImGui::RadioButton("RenderMesh", (int*)&variant, ImportVariant::RenderMesh);
+			ImGui::EndDisabled();
 		}
+		ImGui::SameLine();
+
+		ImGui::RadioButton("Mesh", (int*)&variant, ImportVariant::Mesh);
+	}
+
+	static void RenderMaterialsTexturesSettingsOverview(ImportData* const importData)
+	{
+		ImGui::SeparatorText("Materials' Textures");
+
+		auto& data = importData->GeometryData;
+
+		constexpr ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
+		uint32_t column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed;
+
+		int colums_count = data.Materials.GLTFTexturePacking ? 6 : 8;
+		if (ImGui::BeginTable("TexturesTable", colums_count, flags))
+		{
+			ImGui::TableSetupColumn("No.", ImGuiTableColumnFlags_NoHide);
+			ImGui::TableSetupColumn("Material Name", ImGuiTableColumnFlags_NoHide);
+			ImGui::TableSetupColumn("BaseColor", ImGuiTableColumnFlags_NoHide);
+			ImGui::TableSetupColumn("Normal", ImGuiTableColumnFlags_NoHide);
+			ImGui::TableSetupColumn("Emissive", ImGuiTableColumnFlags_NoHide);
+			if (data.Materials.GLTFTexturePacking)
+				ImGui::TableSetupColumn("PackedOMR", ImGuiTableColumnFlags_NoHide);
+			else
+			{
+				ImGui::TableSetupColumn("Occlusion", ImGuiTableColumnFlags_NoHide);
+				ImGui::TableSetupColumn("Metalness", ImGuiTableColumnFlags_NoHide);
+				ImGui::TableSetupColumn("Roughness", ImGuiTableColumnFlags_NoHide);
+			}
+
+			ImGui::TableHeadersRow();
+
+			ImGui::BeginDisabled();
+
+			for (size_t i = 0; i < data.Scene->mNumMaterials; i++)
+			{
+				ImGui::TableNextRow();
+				ImGui::PushID(i);
+
+				ImGui::TableNextColumn();
+				ImGui::Text("%i", i);
+
+				ImGui::TableNextColumn();
+				ImGui::Text(data.Scene->mMaterials[i]->GetName().C_Str());
+
+				auto texture_index = i * 6;
+				auto& set_textures = data.Materials.SetTextures;
+				auto& set_textures_in_material = *(Textures*)&((*set_textures)[i * 6]);
+
+				ImGui::TableNextColumn();
+				bool base_color = set_textures_in_material.BaseColor != -1;
+				ImGui::Checkbox("##1", &base_color);
+				
+				ImGui::TableNextColumn();
+				bool normal = set_textures_in_material.Normal != -1;
+				ImGui::Checkbox("##2", &normal);
+
+				ImGui::TableNextColumn();
+				bool emissive = set_textures_in_material.Emissive != -1;
+				ImGui::Checkbox("##3", &emissive);
+
+				if (data.Materials.GLTFTexturePacking)
+				{
+					ImGui::TableNextColumn();
+					bool omr = set_textures_in_material.PackedOMR != -1;
+					ImGui::Checkbox("##4", &omr);
+				}
+				else
+				{
+					ImGui::TableNextColumn();
+					bool occlusion = set_textures_in_material.NonPackedOMR.Occlusion != -1;
+					ImGui::Checkbox("##5", &occlusion);
+
+					ImGui::TableNextColumn();
+					bool metalness = set_textures_in_material.NonPackedOMR.Metalness != -1;
+					ImGui::Checkbox("##6", &metalness);
+
+					ImGui::TableNextColumn();
+					bool roughness = set_textures_in_material.NonPackedOMR.Roughness != -1;
+					ImGui::Checkbox("##7", &roughness);
+				}
+
+				ImGui::PopID();
+			}
+
+			ImGui::EndDisabled();
+
+			ImGui::EndTable();
+		}
+	}
+
+	static void RenderMaterialsTexturesSettings(ImportData* const importData)
+	{
+		ImGui::PushID("Material Settings");
+
+		ImGui::SeparatorText("Material Settings");
+
+		auto& data = importData->GeometryData;
+		auto& scene = data.Scene;
+		Scratchpad sp;
+
+		static size_t selected_material_index = 0;
+		const auto selected_material_name = scene->mMaterials[selected_material_index]->GetName();
+
+		std::pmr::string preview(std::to_string(selected_material_index), &sp);
+		preview += ". " + std::pmr::string(selected_material_name.C_Str(), &sp);
+
+		if (ImGui::BeginCombo("Material Selection", preview.c_str()))
+		{
+			for (size_t n = 0; n < scene->mNumMaterials; n++)
+			{
+				ImGui::PushID(n);
+				const bool is_selected = (selected_material_index == n);
+				auto name = scene->mMaterials[n]->GetName();
+
+				std::pmr::string label(std::to_string(n), &sp);
+				label += ". " + std::pmr::string(name.C_Str());
+
+				if (ImGui::Selectable(label.c_str(), is_selected))
+					selected_material_index = n;
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+				ImGui::PopID();
+			}
+			ImGui::EndCombo();
+		}
+
+		static const char* texture_types_names[] =
+		{
+			"BaseColor",
+			"Normal",
+			"Emissive",
+			"PackedOMR",
+			"Occlusion",
+			"Metalness",
+			"Roughness"
+		};
+
+		auto& set_textures = *data.Materials.SetTextures;
+		auto& recognized_textures = (*data.Materials.RecognizedTextures)[selected_material_index];
+		auto texture_index = selected_material_index * 6;
+
+		ImGui::Text("Textures:");
+		for (size_t i = 0; i < 7; i++)
+		{
+			if (i == 3 && !data.Materials.GLTFTexturePacking)
+				continue;
+
+			const char* combo_preview_value = set_textures[texture_index] != -1 ? recognized_textures[set_textures[texture_index]].C_Str() : "<none>";
+
+			if (ImGui::BeginCombo(texture_types_names[i], combo_preview_value))
+			{
+				bool is_none_selected = set_textures[texture_index] == -1;
+				if (ImGui::Selectable("<none>", is_none_selected))
+					set_textures[texture_index] = -1;
+
+				if (is_none_selected)
+					ImGui::SetItemDefaultFocus();
+
+				for (unsigned int n = 0; n < recognized_textures.size(); n++)
+				{
+					const bool is_selected = (set_textures[texture_index] == n);
+					if (ImGui::Selectable(recognized_textures[n].C_Str(), is_selected))
+						set_textures[texture_index] = n;
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (i == 3 && data.Materials.GLTFTexturePacking)
+				break;
+
+			texture_index++;
+		}
+
+		ImGui::PopID();
 	}
 
 	void RenderWindow(ImportData* const importData)
 	{
-		auto& scene = importData->GeometryData.Scene;
+		auto& data = importData->GeometryData;
+		auto& scene = data.Scene;
 
 		ImGui::SeparatorText("Geometry Info");
 		ImGui::Text("File: %s", importData->Filepath.string().c_str());
@@ -391,89 +686,46 @@ namespace fe::GeometryImport
 			}
 		}
 
-		ImGui::SeparatorText("Import Settings");
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::CollapsingHeader("Import Settings"))
+		{
+			RenderVariantSelection(importData);
 
-		ImGui::Text("Import as:");
+			auto& variant = importData->GeometryData.ImportVariant;
 
-		int* import_variant = (int*)&importData->GeometryData.ImportVariant;
-		
-		if (scene->mNumMaterials > 1)
-		{
-			ImGui::RadioButton("Model", import_variant, ImportVariant_Model);
-		}
-		else
-		{
-			ImGui::BeginDisabled();
-			ImGui::RadioButton("Model", import_variant, ImportVariant_Model);
-			ImGui::EndDisabled();
-		}
-		ImGui::SameLine();
-
-		if (scene->mNumMaterials == 1)
-		{
-			ImGui::RadioButton("RenderMesh", import_variant, ImportVariant_RenderMesh);
-		}
-		else
-		{
-			ImGui::BeginDisabled();
-			ImGui::RadioButton("RenderMesh", import_variant, ImportVariant_RenderMesh);
-			ImGui::EndDisabled();
-		}
-		ImGui::SameLine();
-		
-		ImGui::RadioButton("Mesh", import_variant, ImportVariant_Mesh);
-		
-		switch (importData->GeometryData.ImportVariant)
-		{
-		case ImportVariant_Model:
-			break;
-		case ImportVariant_RenderMesh:
-			break;
-		case ImportVariant_Mesh:
-			break;
-		}
-
-		// setting textures mapping to shader samplers and chanel Swizzle masks
-		if (importData->GeometryData.ImportVariant == ImportVariant_Model ||
-			importData->GeometryData.ImportVariant == ImportVariant_RenderMesh)
-		{
-			if (importData->GeometryData.GLTFTexturePacking)
+			if (variant == ImportVariant::Model || variant == ImportVariant::RenderMesh)
 			{
-
+				RenderMaterialsTexturesSettingsOverview(importData);
+				RenderMaterialsTexturesSettings(importData);
 			}
-			else
+
+			ImGui::SeparatorText("##1");
+			if (ImGui::Button("Import As..."))
 			{
-
-			}
-		}
-		
-
-		ImGui::Separator();
-		if (ImGui::Button("Import As..."))
-		{
-			Scratchpad sp;
-			std::filesystem::path defaultFilepath;
-			std::pmr::string filter(&sp);
+				Scratchpad sp;
+				std::filesystem::path defaultFilepath;
+				std::pmr::string filter(&sp);
 			
-			switch (importData->GeometryData.ImportVariant)
-			{
-			case ImportVariant_Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->Filepath, filter);	break;
-			case ImportVariant_RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->Filepath, filter);	break;
-			case ImportVariant_Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->Filepath, filter);	break;
-			}
-
-			std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
-
-			if (!newAssetFilepath.empty())
-			{
-				switch (importData->GeometryData.ImportVariant)
+				switch (variant)
 				{
-				case ImportVariant_Model:		ImportAsModel(newAssetFilepath, importData); break;
-				case ImportVariant_RenderMesh:	ImportAsRenderMesh(newAssetFilepath, importData); break;
-				case ImportVariant_Mesh:		ImportAsMesh(newAssetFilepath, importData); break;
+				case ImportVariant::Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->Filepath, filter);	break;
+				case ImportVariant::RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->Filepath, filter);	break;
+				case ImportVariant::Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->Filepath, filter);	break;
 				}
+
+				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+
+				if (!newAssetFilepath.empty())
+				{
+					switch (variant)
+					{
+					case ImportVariant::Model:		ImportAsModel(newAssetFilepath, importData); break;
+					case ImportVariant::RenderMesh:	ImportAsRenderMesh(newAssetFilepath, importData); break;
+					case ImportVariant::Mesh:		ImportAsMesh(newAssetFilepath, importData); break;
+					}
 				
-				importData->Finished = true;
+					importData->Finished = true;
+				}
 			}
 		}
 	}

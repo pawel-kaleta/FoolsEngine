@@ -59,6 +59,7 @@ namespace fe
 		aiPostProcessSteps::aiProcess_RemoveRedundantMaterials |
 		aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
 		aiPostProcessSteps::aiProcess_PreTransformVertices |
+		aiPostProcessSteps::aiProcess_FindInstances |
 		aiPostProcessSteps::aiProcess_ImproveCacheLocality |
 		aiPostProcessSteps::aiProcess_OptimizeMeshes |
 		aiPostProcessSteps::aiProcess_GenSmoothNormals |
@@ -67,19 +68,19 @@ namespace fe
 		aiPostProcessSteps::aiProcess_TransformUVCoords;
 
 	const aiScene* GeometryLoader::InspectSourceFile(const std::filesystem::path& filePath)
+	{
+		static Assimp::Importer s_Inspector;
+		
+		const aiScene* scene = s_Inspector.ReadFile(filePath.string().c_str(), s_assimp_load_flags);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			static Assimp::Importer s_Inspector;
-
-			const aiScene* scene = s_Inspector.ReadFile(filePath.string().c_str(), s_assimp_load_flags);
-
-			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-			{
-				FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", s_Inspector.GetErrorString());
-				return nullptr;
-			}
-
-			return scene;
+			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", s_Inspector.GetErrorString());
+			return nullptr;
 		}
+
+		return scene;
+	}
 	
 	void GeometryLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
 	{
