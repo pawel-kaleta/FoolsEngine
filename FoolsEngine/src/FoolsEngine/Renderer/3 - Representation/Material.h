@@ -10,6 +10,8 @@
 
 namespace fe
 {
+	FE_DECLARE_ENUM(AlphaMode, Opaque, Mask, Blend);
+
 	struct ACMaterialCore
 	{
 		AssetHandle<ShadingModel> ShadingModelHandle;

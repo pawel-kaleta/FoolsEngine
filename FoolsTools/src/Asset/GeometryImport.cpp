@@ -57,25 +57,14 @@ namespace fe::GeometryImport
 					continue;
 
 				// alpha channel handling
+				if (texture_type == aiTextureType_BASE_COLOR)
 				{
 					int texture_flags; if (AI_SUCCESS == mat->Get(AI_MATKEY_TEXFLAGS(texture_type, 0), texture_flags))
 					{
-						int a = 0;
-					}
-
-					aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC(texture_type, 0), blend_mode))
-					{
-						int a = 0;
-					}
-
-					aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
-					{
-						int a = 0;
-					}
-
-					float gltf_aphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_aphacutoff))
-					{
-						int a = 0;
+						if (aiTextureFlags::aiTextureFlags_UseAlpha & texture_flags)
+						{
+							int a = 0;
+						}
 					}
 				}
 				
@@ -91,7 +80,7 @@ namespace fe::GeometryImport
 					}
 				}
 
-				switch (j)
+				switch (texture_type)
 				{
 				case aiTextureType_BASE_COLOR:
 					set_textures_in_material.BaseColor = new_index;
@@ -107,12 +96,12 @@ namespace fe::GeometryImport
 				default:
 					if (texture_packing)
 					{
-						if (j == aiTextureType_GLTF_METALLIC_ROUGHNESS)
+						if (texture_type == aiTextureType_GLTF_METALLIC_ROUGHNESS)
 							set_textures_in_material.PackedOMR = new_index;
 						break;
 					}
 					
-					switch (j)
+					switch (texture_type)
 					{
 					case aiTextureType_AMBIENT_OCCLUSION:
 					case aiTextureType_AMBIENT:
@@ -415,8 +404,18 @@ namespace fe::GeometryImport
 		ImGui::SeparatorText("Parameters");
 		ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoPicker;
 
-		aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC, blend_mode)) ImGui::InputInt("Blend Mode", (int*)&blend_mode);
-		//AI_MATKEY_GLTF_ALPHAMODE
+		//aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC, blend_mode)) ImGui::InputInt("Blend Mode", (int*)&blend_mode);
+
+		aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
+		{
+			"OPAQUE", "MASK", "BLEND";
+				int a = 0;
+		}
+
+		float gltf_alphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_alphacutoff))
+		{
+			int a = 0;
+		}
 
 		aiColor3D base_color; if (AI_SUCCESS == mat->Get(AI_MATKEY_BASE_COLOR,     base_color)) ImGui::ColorEdit3("Base Color", (float*)&base_color, flags);
 		aiColor3D ambient;    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT,  ambient   )) ImGui::ColorEdit3("Ambient",    (float*)&ambient,    flags);

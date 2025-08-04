@@ -18,6 +18,7 @@ namespace fe
 
 		FE_DECLARE_ENUM(ImportVariant, Model, RenderMesh, Mesh);
 
+
 		struct Textures
 		{
 			Textures() = delete;
@@ -35,6 +36,13 @@ namespace fe
 					uint32_t Roughness;
 				} NonPackedOMR;
 			};
+		};
+		
+		struct MaterialData
+		{
+
+			std::pmr::vector<aiString>* RecognizedTextures;
+			Textures SetTextures;
 		};
 
 		struct Data
