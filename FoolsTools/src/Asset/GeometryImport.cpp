@@ -31,6 +31,7 @@ namespace fe::GeometryImport
 		std::pmr::polymorphic_allocator alloc(&importData->Arena);
 		       set_textures = alloc.new_object<std::pmr::vector<uint32_t>>();
 		recognized_textures = alloc.new_object<std::pmr::vector<std::pmr::vector<aiString>>>();
+		data.MaterialsData = alloc.new_object<std::pmr::vector<MaterialData>>();
 		
 		data.Scene = scene;
 		data.ImportVariant = ImportVariant::Mesh;
@@ -39,6 +40,7 @@ namespace fe::GeometryImport
 
 		set_textures->resize(scene->mNumMaterials * 6, -1);
 		recognized_textures->resize(scene->mNumMaterials);
+		data.MaterialsData->resize(scene->mNumMaterials);
 
 		for (size_t i = 0; i < scene->mNumMaterials; i++)
 		{

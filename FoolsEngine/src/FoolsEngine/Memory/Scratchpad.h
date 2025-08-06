@@ -6,6 +6,7 @@
 
 namespace fe
 {
+#pragma warning(disable : 6323)
 	class Scratchpad final : public std::pmr::memory_resource
 	{
 	public:
@@ -24,24 +25,25 @@ namespace fe
 		template<class U, class... CtorArgs>
 		U* NewObject(CtorArgs&&... ctor_args)
 		{
-			return std::pmr::polymorphic_allocator(this).new_object<U>(std::forward<CtorArgs>(ctor_args)...);
+			U* ptr = (U*)do_allocate(sizeof(U), alignof(U));
+			new (ptr) U(std::forward<CtorArgs>(ctor_args)...);
+			return ptr;
+			//return std::pmr::polymorphic_allocator(this).new_object<U>(std::forward<CtorArgs>(ctor_args)...);
 		}
 
 		template<class U>
 		void DeleteObject(U* p)
 		{
 			p->~U();
-			//std::pmr::polymorphic_allocator<U> alloc(this);
-			//alloc.deallocate(p, 1); // just calls this->do_deallocate() that is no-op
+			this->do_deallocate();
+			//std::pmr::polymorphic_allocator(this).delete_object<U>(p);
 		}
 
 		virtual ~Scratchpad() final override
 		{
 			s_Count--;
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
-#pragma warning(disable : 6323)
 			s_Free = (std::byte*)((uintptr_t)m_Begin * rollback_flag + (uintptr_t)s_Free * !rollback_flag);
-#pragma warning(default : 6323)
 		}
 	private:
 		constexpr const static size_t s_BufferSize = 524'288;
@@ -74,9 +76,8 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 			
-#pragma warning(disable : 6323)
 			m_Begin = (std::byte*)(((uintptr_t)s_Free * reset_begin) + ((uintptr_t)m_Begin * !reset_begin));
-#pragma warning(default : 6323)
+
 			s_RollbackFlags |= m_FlagMask;
 
 			std::byte* const aligned = (std::byte*)(((uintptr_t)s_Free + (alignment - 1)) & ~(alignment - 1));
@@ -90,6 +91,7 @@ namespace fe
 		virtual void do_deallocate(void* p, std::size_t bytes, std::size_t alignment) final override { };
 		virtual bool do_is_equal(const std::pmr::memory_resource& other)  const noexcept final override { return this == &other; };
 	};
+#pragma warning(default : 6323)
 
 #if 0
 	{
@@ -99,7 +101,7 @@ namespace fe
 		vec->push_back("test");
 		sp.DeleteObject(vec); // no need if no need for destructors, all gets released with death of sp
 	
-		std::pmr::vector<std::pmr::string> vec2(&sp);
+		std::pmr::vector<std::string> vec2(&sp);
 		vec2.push_back("aaaa");
 		// destructor called automatically when vec2 goes out of scope
 	}
