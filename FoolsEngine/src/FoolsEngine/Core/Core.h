@@ -7,8 +7,7 @@
 	#error FoolsEngine does not support this platform!
 #endif
 
-#define BIT_FLAG(x) (1 << x)
-#define WIDE_BIT_FLAG(x) ((uint64_t)1 << x)
+
 
 #define PMR_STRING_TEMPLATE_PARAMS char, std::char_traits<char>, std::pmr::polymorphic_allocator<char>
 

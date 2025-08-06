@@ -41,6 +41,7 @@ namespace fe
 		struct MaterialData
 		{
 			AlphaMode AlphaMode;
+			float AlphaCutoff;
 			std::pmr::vector<aiString>* DetectedTextures;
 			struct
 			{
@@ -62,13 +63,13 @@ namespace fe
 
 		struct Data
 		{
-			struct
-			{
-				bool GLTFTexturePacking;
-				uint32_t PreviewItemSelectedIndex;
-				std::pmr::vector<uint32_t>* SetTextures; // materials_count * 6
-				std::pmr::vector<std::pmr::vector<aiString>>* RecognizedTextures;
-			} Materials;
+			//struct
+			//{
+			//	std::pmr::vector<uint32_t>* SetTextures; // materials_count * 6
+			//	std::pmr::vector<std::pmr::vector<aiString>>* RecognizedTextures;
+			//} Materials;
+			uint32_t PreviewItemSelectedIndex;
+			bool GLTFTexturePacking;
 			std::pmr::vector<MaterialData>* MaterialsData;
 			ImportVariant ImportVariant;
 			const aiScene* Scene;

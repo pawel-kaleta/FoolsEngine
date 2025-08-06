@@ -251,9 +251,11 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
     <ClInclude Include="src\FoolsEngine\Scene\SimulationStage.h" />
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\BitOperations.h" />
     <ClInclude Include="src\FoolsEngine\Utils\Colors.h" />
     <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h" />
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\Xar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp">

@@ -387,6 +387,8 @@
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Utils\BitOperations.h" />
+    <ClInclude Include="src\FoolsEngine\Utils\Xar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

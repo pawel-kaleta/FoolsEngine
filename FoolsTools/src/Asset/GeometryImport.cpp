@@ -25,28 +25,51 @@ namespace fe::GeometryImport
 		auto texture_packing = IsGuaranteedStandardTexturePacking(importData->Filepath);
 		
 		auto& data = importData->GeometryData;
-		auto& set_textures = data.Materials.SetTextures;
-		auto& recognized_textures = data.Materials.RecognizedTextures;
 
 		std::pmr::polymorphic_allocator alloc(&importData->Arena);
-		       set_textures = alloc.new_object<std::pmr::vector<uint32_t>>();
-		recognized_textures = alloc.new_object<std::pmr::vector<std::pmr::vector<aiString>>>();
 		data.MaterialsData = alloc.new_object<std::pmr::vector<MaterialData>>();
 		
 		data.Scene = scene;
 		data.ImportVariant = ImportVariant::Mesh;
-		data.Materials.GLTFTexturePacking = texture_packing;
-		data.Materials.PreviewItemSelectedIndex = 0;
+		data.GLTFTexturePacking = texture_packing;
+		data.PreviewItemSelectedIndex = 0;
 
-		set_textures->resize(scene->mNumMaterials * 6, -1);
-		recognized_textures->resize(scene->mNumMaterials);
 		data.MaterialsData->resize(scene->mNumMaterials);
 
 		for (size_t i = 0; i < scene->mNumMaterials; i++)
 		{
 			auto& mat = scene->mMaterials[i];
-			auto& set_textures_in_material = *(Textures*)&((*set_textures)[i*6]);
-			auto& recognized_textures_in_material = (*recognized_textures)[i];
+			auto& material_data = data.MaterialsData->emplace_back();
+
+			aiColor3D base_color; if (AI_SUCCESS == mat->Get(AI_MATKEY_BASE_COLOR, base_color))
+			{
+
+			}
+			aiColor3D ambient;    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
+			{
+
+			}
+			aiColor3D emissive;   if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
+			{
+
+			}
+
+
+
+
+			material_data.DetectedTextures = alloc.new_object<std::pmr::vector<aiString>>();
+
+			aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
+			{
+				if (std::string_view(gltf_alphamode.C_Str()) == "OPAQUE") material_data.AlphaMode = AlphaMode::Opaque;
+				if (std::string_view(gltf_alphamode.C_Str()) == "MASK"  ) material_data.AlphaMode = AlphaMode::Mask;
+				if (std::string_view(gltf_alphamode.C_Str()) == "BLEND" ) material_data.AlphaMode = AlphaMode::Blend;
+			}
+
+			float gltf_alphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_alphacutoff))
+			{
+				material_data.AlphaCutoff = gltf_alphacutoff;
+			}
 
 			for (unsigned int j = 1; j <= AI_TEXTURE_TYPE_MAX; j++)
 			{
@@ -65,16 +88,21 @@ namespace fe::GeometryImport
 					{
 						if (aiTextureFlags::aiTextureFlags_UseAlpha & texture_flags)
 						{
-							int a = 0;
+							FE_CORE_ASSERT(material_data.AlphaMode)
+							material_data.AlphaMode = AlphaMode::Blend;
+						}
+						if (aiTextureFlags::aiTextureFlags_IgnoreAlpha & texture_flags)
+						{
+							material_data.AlphaMode = AlphaMode::Opaque;
 						}
 					}
 				}
 				
-				auto new_index = recognized_textures_in_material.size();
+				auto new_index = material_data.DetectedTextures->size();
 				bool found = false;
-				for (size_t n=0; n<recognized_textures_in_material.size(); n++)
+				for (size_t n=0; n<material_data.DetectedTextures->size(); n++)
 				{
-					if (recognized_textures_in_material[n] == new_texture)
+					if (material_data.DetectedTextures->operator[](n) == new_texture)
 					{
 						new_index = n;
 						found = true;
@@ -82,24 +110,27 @@ namespace fe::GeometryImport
 					}
 				}
 
+				if (!found)
+					material_data.DetectedTextures->push_back(std::move(new_texture));
+
 				switch (texture_type)
 				{
 				case aiTextureType_BASE_COLOR:
-					set_textures_in_material.BaseColor = new_index;
+					material_data.RecognizedTextures.BaseColor = new_index;
 					break;
 				case aiTextureType_NORMALS:
 				case aiTextureType_NORMAL_CAMERA:
-					set_textures_in_material.Normal = new_index;
+					material_data.RecognizedTextures.Normal = new_index;
 					break;
 				case aiTextureType_EMISSION_COLOR:
 				case aiTextureType_EMISSIVE:
-					set_textures_in_material.Emissive = new_index;
+					material_data.RecognizedTextures.Emissive = new_index;
 					break;
 				default:
 					if (texture_packing)
 					{
 						if (texture_type == aiTextureType_GLTF_METALLIC_ROUGHNESS)
-							set_textures_in_material.PackedOMR = new_index;
+							material_data.RecognizedTextures.PackedOMR = new_index;
 						break;
 					}
 					
@@ -108,19 +139,16 @@ namespace fe::GeometryImport
 					case aiTextureType_AMBIENT_OCCLUSION:
 					case aiTextureType_AMBIENT:
 					case aiTextureType_LIGHTMAP:
-						set_textures_in_material.NonPackedOMR.Occlusion = new_index;
+						material_data.RecognizedTextures.NonPackedOMR.Occlusion = new_index;
 						break;
 					case aiTextureType_METALNESS:
-						set_textures_in_material.NonPackedOMR.Metalness = new_index;
+						material_data.RecognizedTextures.NonPackedOMR.Metalness = new_index;
 						break;
 					case aiTextureType_DIFFUSE_ROUGHNESS:
-						set_textures_in_material.NonPackedOMR.Roughness = new_index;
+						material_data.RecognizedTextures.NonPackedOMR.Roughness = new_index;
 						break;
 					}
 				}
-
-				if (!found)
-					recognized_textures_in_material.push_back(std::move(new_texture));
 			}
 		}
 	}
@@ -369,7 +397,7 @@ namespace fe::GeometryImport
 		ImGui::PushID("Material Preview");
 
 		auto& data = importData->GeometryData;
-		auto& selected_idx = data.Materials.PreviewItemSelectedIndex;
+		auto& selected_idx = data.PreviewItemSelectedIndex;
 		auto& scene = data.Scene;
 		
 		const auto selected_material_name = scene->mMaterials[selected_idx]->GetName();
@@ -405,19 +433,6 @@ namespace fe::GeometryImport
 
 		ImGui::SeparatorText("Parameters");
 		ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoPicker;
-
-		//aiBlendMode blend_mode; if (AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC, blend_mode)) ImGui::InputInt("Blend Mode", (int*)&blend_mode);
-
-		aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
-		{
-			"OPAQUE", "MASK", "BLEND";
-				int a = 0;
-		}
-
-		float gltf_alphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_alphacutoff))
-		{
-			int a = 0;
-		}
 
 		aiColor3D base_color; if (AI_SUCCESS == mat->Get(AI_MATKEY_BASE_COLOR,     base_color)) ImGui::ColorEdit3("Base Color", (float*)&base_color, flags);
 		aiColor3D ambient;    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT,  ambient   )) ImGui::ColorEdit3("Ambient",    (float*)&ambient,    flags);
