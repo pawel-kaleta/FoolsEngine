@@ -48,6 +48,7 @@
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Memory\Scratchpad.h"
 #include "FoolsEngine\Utils\Colors.h"
+#include "FoolsEngine\Utils\BitOperations.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"

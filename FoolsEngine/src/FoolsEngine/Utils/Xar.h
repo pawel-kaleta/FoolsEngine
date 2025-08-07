@@ -22,35 +22,44 @@ namespace fe
 		{
 			FE_CORE_ASSERT(i < m_Size, "Out of bounds.");
 			
-			unsigned long chunk;
-			auto is_i_non_zero = MSB64(&chunk, i);
-			chunk = 0 + ((bool)is_i_non_zero) * chunk;
+			unsigned long chunk = MSB64(&chunk, i|1);
 			auto chunk_mask = (uint64_t)1 << chunk;
 			auto in_chunk_i = i - chunk_mask;
 			auto result_ptr = (T*)(m_Chunks[chunk]) + in_chunk_i;
 			return *result_ptr;
 		}
 
-		void push_back(T&& t)
+		void PushBack(T&& t)
 		{
-			unsigned long chunk;
-			auto is_i_non_zero = MSB64(&chunk, m_Size);
-			chunk = 0 + ((bool)is_i_non_zero) * chunk;
+			unsigned long chunk = MSB64(&chunk, m_Size|1);
 			if (chunk == m_Chunks.size())
 			{
 				m_Chunks.push_back(m_Chunks.get_allocator().allocate_object<T>(1<<chunk));
-
 			}
 			auto chunk_mask = (uint64_t)1 << chunk;
 			auto in_chunk_i = m_Size - chunk_mask;
 
-			auto result_ptr = (T*)(m_Chunks[chunk]) + in_chunk_i;
-			// *result_ptr;
+			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
+			*result_ptr = std::move(t);
 		}
 
+		void PopBack()
+		{
+			FE_CORE_ASSERT(0 < m_Size, "Poping from empty Xar");
+			size_t i = m_Size - 1;
+			unsigned long chunk = MSBS(&chunk, i | 1);
+			auto chunk_mask = (uint64_t)1 << chunk;
+			auto in_chunk_i = i - chunk_mask;
+
+			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
+
+			((T*)result_ptr)->~T();
+
+			m_Size--;
+		}
 
 	private:
 		std::pmr::vector<T*> m_Chunks;
-		uint32_t m_Size;
+		uint64_t m_Size;
 	};
 }

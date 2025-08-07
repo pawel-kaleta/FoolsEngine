@@ -39,25 +39,35 @@ namespace fe::GeometryImport
 		for (size_t i = 0; i < scene->mNumMaterials; i++)
 		{
 			auto& mat = scene->mMaterials[i];
-			auto& material_data = data.MaterialsData->emplace_back();
+			auto& material_data = data.MaterialsData->operator[](i);
+			auto& uniforms = material_data.Uniforms;
 
 			aiColor3D base_color; if (AI_SUCCESS == mat->Get(AI_MATKEY_BASE_COLOR, base_color))
+				uniforms.BaseColor = { base_color.r, base_color.g, base_color.b };
+			else
+				uniforms.BaseColor = { 1.f, 1.f, 1.f };
+
+			aiColor3D ambient; if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
+				uniforms.Ambient = { ambient.r, ambient.g, ambient.b };
+			else
+				uniforms.Ambient = { 1.f, 1.f, 1.f };
+
+			aiColor3D emissive; if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
+				uniforms.Emissive = { emissive.r, emissive.g, emissive.b };
+			else
+				uniforms.Emissive = { 1.f, 1.f, 1.f };
+
+			float transparency; if (AI_SUCCESS == mat->Get(AI_MATKEY_TRANSPARENCYFACTOR, transparency))
 			{
-
+				uniforms.Transparency = transparency;
+				if (transparency < 1.f)
+					material_data.AlphaMode = AlphaMode::Blend;
 			}
-			aiColor3D ambient;    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
+			else
 			{
-
+				uniforms.Transparency = 1.f;
+				material_data.AlphaMode = AlphaMode::Opaque;
 			}
-			aiColor3D emissive;   if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
-			{
-
-			}
-
-
-
-
-			material_data.DetectedTextures = alloc.new_object<std::pmr::vector<aiString>>();
 
 			aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
 			{
@@ -67,9 +77,11 @@ namespace fe::GeometryImport
 			}
 
 			float gltf_alphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_alphacutoff))
-			{
-				material_data.AlphaCutoff = gltf_alphacutoff;
-			}
+				uniforms.AlphaCutoff = gltf_alphacutoff;
+			else
+				uniforms.AlphaCutoff = 0;
+
+			material_data.DetectedTextures = alloc.new_object<std::pmr::vector<aiString>>();
 
 			for (unsigned int j = 1; j <= AI_TEXTURE_TYPE_MAX; j++)
 			{
@@ -443,9 +455,9 @@ namespace fe::GeometryImport
 
 		ImGui::SeparatorText("Textures");
 		
-		auto& recognized_textures = (*data.Materials.RecognizedTextures)[selected_idx];
+		auto& detected_textures = *(data.MaterialsData->operator[](selected_idx).DetectedTextures);
 
-		for (auto& texture : recognized_textures)
+		for (auto& texture : detected_textures)
 		{
 			ImGui::Text(texture.C_Str());
 		}
