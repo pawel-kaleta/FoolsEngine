@@ -14,15 +14,34 @@ namespace fe
 	public:
 		Xar(std::pmr::polymorphic_allocator<std::byte> alloc) :
 			m_Size(0), m_Chunks(alloc)
+		{ }
+
+		~Xar()
 		{
-			m_Chunks.push_back(alloc.allocate_object<T>(2));
+			auto alloc = m_Chunks.get_allocator();
+
+			size_t chunk_size = 1;
+			for (size_t i = 0; i < m_Chunks.size(); i++)
+			{
+				T* t = m_Chunks[i];
+				for (size_t j = 0; j < chunk_size; j++)
+				{
+					t->~T();
+					t++;
+				}
+				alloc.deallocate_object<T>(t, chunk_size);
+				chunk_size <<= 1;
+			}
 		}
 
 		T& operator[](size_t i)
 		{
 			FE_CORE_ASSERT(i < m_Size, "Out of bounds.");
 			
-			unsigned long chunk = MSB64(&chunk, i|1);
+			i++;
+
+			unsigned long chunk;
+			MSB64(&chunk, i);
 			auto chunk_mask = (uint64_t)1 << chunk;
 			auto in_chunk_i = i - chunk_mask;
 			auto result_ptr = (T*)(m_Chunks[chunk]) + in_chunk_i;
@@ -31,23 +50,28 @@ namespace fe
 
 		void PushBack(T&& t)
 		{
-			unsigned long chunk = MSB64(&chunk, m_Size|1);
+			size_t i = m_Size + 1;
+			unsigned long chunk;
+			MSB64(&chunk, i);
 			if (chunk == m_Chunks.size())
 			{
 				m_Chunks.push_back(m_Chunks.get_allocator().allocate_object<T>(1<<chunk));
 			}
 			auto chunk_mask = (uint64_t)1 << chunk;
-			auto in_chunk_i = m_Size - chunk_mask;
+			auto in_chunk_i = i - chunk_mask;
 
 			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
 			*result_ptr = std::move(t);
+
+			m_Size++;
 		}
 
 		void PopBack()
 		{
 			FE_CORE_ASSERT(0 < m_Size, "Poping from empty Xar");
-			size_t i = m_Size - 1;
-			unsigned long chunk = MSBS(&chunk, i | 1);
+			size_t i = m_Size;
+			unsigned long chunk;
+			MSB64(&chunk, i);
 			auto chunk_mask = (uint64_t)1 << chunk;
 			auto in_chunk_i = i - chunk_mask;
 
@@ -58,6 +82,7 @@ namespace fe
 			m_Size--;
 		}
 
+		size_t Size() { return m_Size; }
 	private:
 		std::pmr::vector<T*> m_Chunks;
 		uint64_t m_Size;

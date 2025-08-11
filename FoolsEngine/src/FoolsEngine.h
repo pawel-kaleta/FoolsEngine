@@ -49,6 +49,7 @@
 #include "FoolsEngine\Memory\Scratchpad.h"
 #include "FoolsEngine\Utils\Colors.h"
 #include "FoolsEngine\Utils\BitOperations.h"
+#include "FoolsEngine\Utils\Xar.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine\Debug\Profiler.h"

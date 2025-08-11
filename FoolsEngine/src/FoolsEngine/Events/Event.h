@@ -4,6 +4,7 @@
 
 #include "FoolsEngine/Core/Core.h"
 #include "FoolsEngine/Debug/Log.h"
+#include "FoolsEngine/Utils/BitOperations.h"
 
 namespace fe
 {

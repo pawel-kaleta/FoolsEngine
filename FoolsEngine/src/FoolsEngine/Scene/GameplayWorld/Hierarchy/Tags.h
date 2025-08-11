@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine/Utils/BitOperations.h"
+
 namespace fe
 {
 	struct Tags

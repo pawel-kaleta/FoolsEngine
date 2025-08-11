@@ -25,7 +25,8 @@ namespace fe
 			Emissive  = BIT_FLAG(2),
 			Metalness = BIT_FLAG(3),
 			Roughness = BIT_FLAG(4),
-			AlphaCutoff = BIT_FLAG(5)//,
+			AlphaCutoff = BIT_FLAG(5),
+			Opacity = BIT_FLAG(6)
 			//= BIT_FLAG(6),
 			//= BIT_FLAG(7),
 			//= BIT_FLAG(8),
@@ -40,7 +41,8 @@ namespace fe
 		{
 			AlphaMode AlphaMode;
 			
-			std::pmr::vector<aiString>* DetectedTextures;
+			//std::pmr::vector<aiString>* DetectedTextures;
+			Xar<aiString>* DetectedTextures;
 			struct
 			{
 				uint32_t BaseColor;
@@ -66,23 +68,19 @@ namespace fe
 				float Metalness;
 				float Roughness;
 				float AlphaCutoff;
-				float Transparency;
+				float Opacity;
 			} Uniforms;
+
+			uint32_t DetectedProperties;
 		};
 
 		struct Data
 		{
-			//struct
-			//{
-			//	std::pmr::vector<uint32_t>* SetTextures; // materials_count * 6
-			//	std::pmr::vector<std::pmr::vector<aiString>>* RecognizedTextures;
-			//} Materials;
 			uint32_t PreviewItemSelectedIndex;
 			bool GLTFTexturePacking;
 			std::pmr::vector<MaterialData>* MaterialsData;
 			ImportVariant ImportVariant;
 			const aiScene* Scene;
-			
 		};
 	};
 }
