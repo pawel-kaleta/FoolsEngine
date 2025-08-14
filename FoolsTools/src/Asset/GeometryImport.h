@@ -27,21 +27,12 @@ namespace fe
 			Roughness = BIT_FLAG(4),
 			AlphaCutoff = BIT_FLAG(5),
 			Opacity = BIT_FLAG(6)
-			//= BIT_FLAG(6),
-			//= BIT_FLAG(7),
-			//= BIT_FLAG(8),
-			//= BIT_FLAG(9),
-			//= BIT_FLAG(10),
-			//= BIT_FLAG(11),
-			//= BIT_FLAG(12),
-			//= BIT_FLAG(13)
 		};
 		
 		struct MaterialData
 		{
 			AlphaMode AlphaMode;
 			
-			//std::pmr::vector<aiString>* DetectedTextures;
 			Xar<aiString>* DetectedTextures;
 			struct
 			{

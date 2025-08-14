@@ -194,28 +194,71 @@ namespace fe::GeometryImport
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
-		
-		FE_CORE_ASSERT(false, "not implemented yet");
-		AssetID assetID = NullAssetID;// = AssetManager::CreateAsset();
+		auto& scene = importData->GeometryData.Scene;
+
+		auto assets_path = Project::GetInstance()->AssetsPath;
+		auto x = filepath.lexically_relative(std::filesystem::current_path());
+		auto w = x.lexically_relative(assets_path);
+
+		AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Model>(w);
+		AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(assets_path));
 		AssetHandle<Model> model_handle(assetID);
 		auto model_user = model_handle.Use();
 
-		//auto& spec = model_user.GetSpecification();
-		//spec.RenderMeshCount = scene->mNumMeshes;
+		auto& core = model_user.GetCoreComponent();
 
-		//std::vector<ImportRenderMesh> render_meshes;
-		//
-		//for (size_t i = 0; i < scene->mNumMeshes; i++)
-		//{
-		//	auto& render_mesh = render_meshes.emplace_back();
-		//
-		//	render_mesh.AssimpMeshIndex = (uint32_t)i;
-		//	render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
-		//	render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
-		//	render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
-		//}
+		Scratchpad sp;
+		std::pmr::vector<AssetID> mesh_IDs(&sp);
+		std::pmr::vector<AssetID> material_IDs(&sp);
 
-		//model_user.SetFilepath(importData->Filepath);
+		mesh_IDs.reserve(scene->mNumMeshes);
+		material_IDs.reserve(scene->mNumMaterials);
+
+		for (size_t i = 0; i < scene->mNumMeshes; i++)
+		{
+			AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
+			mesh_IDs.push_back(mesh_ID);
+		}
+
+		for (size_t i = 0; i < scene->mNumMaterials; i++)
+		{
+			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
+			material_IDs.push_back(material_ID);
+		}
+
+			AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
+			auto& render_mesh = core.RenderMeshes.emplace_back(render_mesh_ID, AssetLoadingPriority::None);
+		
+			auto render_mesh_user = render_mesh.Use();
+			auto& render_mesh_core = render_mesh_user.GetCoreComponent();
+
+			
+			render_mesh_core.MeshHandle = AssetHandle<Mesh>(mesh_ID);
+			auto mesh_user = AssetUser<Mesh>(mesh_ID);
+			auto& core = mesh_user.GetCoreComponent();
+			auto& specification = core.Specification;
+
+			scene->mMaterials[i]->
+			for (size_t i = 0; i < scene->mNumMeshes; i++)
+			{
+				specification.VertexCount += scene->mMeshes[i]->mNumVertices;
+				specification.IndexCount += scene->mMeshes[i]->mNumFaces;
+			}
+			specification.IndexCount *= 3;
+			
+
+			Mesh::SaveMetadata(assetID);
+
+			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
+			render_mesh_core.MaterialHandle = AssetHandle<Material>(material_ID);
+			render_mesh_core.MaterialHandle.Use().GetCoreComponent().
+
+			render_mesh.AssimpMeshIndex = (uint32_t)i;
+			render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
+			render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
+			render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
+		}
+
 
 		YAML::Emitter emitter;
 
@@ -254,7 +297,7 @@ namespace fe::GeometryImport
 
 	static void ImportAsMesh(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
-		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath);
+		auto& scene = importData->GeometryData.Scene;
 		
 		auto y = Project::GetInstance()->AssetsPath;
 		auto z = std::filesystem::current_path();
