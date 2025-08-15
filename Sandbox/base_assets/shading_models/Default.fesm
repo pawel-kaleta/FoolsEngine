@@ -23,7 +23,5 @@ Uniforms:
       - 0
 Shader Texture Slots:
   - u_BaseColorMap
-  - u_RoughnessMap
-  - u_MetalnessMap
-  - u_AOMap
+  - u_OMRMap
   - u_NormalMap

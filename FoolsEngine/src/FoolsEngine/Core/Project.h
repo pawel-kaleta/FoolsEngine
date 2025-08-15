@@ -23,6 +23,7 @@ namespace fe
 			struct {
 				UUID Default;
 				UUID FlatWhite;
+				UUID FlatBlack;
 			} Textures;
 
 			struct {

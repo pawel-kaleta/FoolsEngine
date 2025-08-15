@@ -192,6 +192,74 @@ namespace fe::GeometryImport
 		}
 	}
 
+	static void CreateOpaqueMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
+	{
+		AssetUser<Material> material_user(materialID);
+		auto& core = material_user.GetCoreComponent();
+
+		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Default.Observe());
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
+			material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::Roughness)
+			material_user.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::Metalness)
+			material_user.SetUniformValue(core, "u_Metalness", &materialData.Uniforms.Metalness);
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::Ambient)
+			material_user.SetUniformValue(core, "u_AO", &materialData.Uniforms.Ambient);
+
+		auto& all = *materialData.DetectedTextures;
+		auto& recognized = materialData.RecognizedTextures;
+
+		if (recognized.BaseColor != -1)
+		{
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			AssetHandle<Texture2D> textureHandle(textureID);
+			
+			auto& texture_path = all[recognized.BaseColor];
+			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
+			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
+			material_user.SetTexture(core, "u_BaseColorMap", textureID);
+		}
+		else
+		{
+			material_user.SetTexture(core, "u_BaseColorMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+		}
+
+		if (recognized.PackedOMR != -1)
+		{
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			AssetHandle<Texture2D> textureHandle(textureID);
+
+			auto& texture_path = all[recognized.PackedOMR];
+			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
+			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
+			material_user.SetTexture(core, "u_OMRMap", textureID);
+		}
+		else
+		{
+			material_user.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+		}
+
+		if (recognized.Normal != -1)
+		{
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			AssetHandle<Texture2D> textureHandle(textureID);
+
+			auto& texture_path = all[recognized.Normal];
+			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
+			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
+			material_user.SetTexture(core, "u_NormalMap", textureID);
+		}
+		else
+		{
+			material_user.SetTexture(core, "u_NormalMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+		}
+	}
+
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
 		auto& scene = importData->GeometryData.Scene;
@@ -214,18 +282,33 @@ namespace fe::GeometryImport
 		mesh_IDs.reserve(scene->mNumMeshes);
 		material_IDs.reserve(scene->mNumMaterials);
 
+		for (size_t i = 0; i < scene->mNumMaterials; i++)
+		{
+			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
+			material_IDs.push_back(material_ID);
+
+			auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
+			
+			if (material_data.AlphaMode == AlphaMode::Opaque)
+			{
+				CreateOpaqueMaterial(material_ID, material_data, scene);
+			}
+			else
+			{
+				FE_LOG_CORE_WARN("Unimplemented default alpha material in geometry import");
+				//material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Default.Observe()); // alpha in future
+			}
+
+			auto material = scene->mMaterials[i];
+		}
+
 		for (size_t i = 0; i < scene->mNumMeshes; i++)
 		{
 			AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
 			mesh_IDs.push_back(mesh_ID);
 		}
 
-		for (size_t i = 0; i < scene->mNumMaterials; i++)
 		{
-			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
-			material_IDs.push_back(material_ID);
-		}
-
 			AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
 			auto& render_mesh = core.RenderMeshes.emplace_back(render_mesh_ID, AssetLoadingPriority::None);
 		

@@ -63,6 +63,7 @@ namespace fe
 			struct {
 				AssetHandle<Texture2D> Default;
 				AssetHandle<Texture2D> FlatWhite;
+				AssetHandle<Texture2D> FlatBlack;
 			} Textures;
 
 			struct {
