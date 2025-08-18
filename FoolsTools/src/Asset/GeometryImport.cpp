@@ -192,72 +192,109 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void CreateOpaqueMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
+	static void CreateBaseMaterial(const AssetUser<Material>& materialUser, GeometryImport::MaterialData& materialData, const aiScene* scene)
 	{
-		AssetUser<Material> material_user(materialID);
-		auto& core = material_user.GetCoreComponent();
-
-		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Default.Observe());
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
-			material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
+		auto& core = materialUser.GetCoreComponent();
 
 		if (materialData.DetectedProperties & DetectedMaterialProperties::Roughness)
-			material_user.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
+			materialUser.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
 
 		if (materialData.DetectedProperties & DetectedMaterialProperties::Metalness)
-			material_user.SetUniformValue(core, "u_Metalness", &materialData.Uniforms.Metalness);
+			materialUser.SetUniformValue(core, "u_Metalness", &materialData.Uniforms.Metalness);
 
 		if (materialData.DetectedProperties & DetectedMaterialProperties::Ambient)
-			material_user.SetUniformValue(core, "u_AO", &materialData.Uniforms.Ambient);
+			materialUser.SetUniformValue(core, "u_AO", &materialData.Uniforms.Ambient);
 
 		auto& all = *materialData.DetectedTextures;
 		auto& recognized = materialData.RecognizedTextures;
 
 		if (recognized.BaseColor != -1)
 		{
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
 			AssetHandle<Texture2D> textureHandle(textureID);
-			
+
 			auto& texture_path = all[recognized.BaseColor];
 			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
 			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			material_user.SetTexture(core, "u_BaseColorMap", textureID);
+			materialUser.SetTexture(core, "u_BaseColorMap", textureID);
 		}
 		else
 		{
-			material_user.SetTexture(core, "u_BaseColorMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+			materialUser.SetTexture(core, "u_BaseColorMap", Renderer::BaseAssets.Textures.Default.GetID());
 		}
 
 		if (recognized.PackedOMR != -1)
 		{
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			bool packing = true;
+			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
+
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
 			AssetHandle<Texture2D> textureHandle(textureID);
 
 			auto& texture_path = all[recognized.PackedOMR];
 			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
 			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			material_user.SetTexture(core, "u_OMRMap", textureID);
+			materialUser.SetTexture(core, "u_OMRMap", textureID);
+
+			materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+			materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+			materialUser.SetTexture(core, "u_AOMap", Renderer::BaseAssets.Textures.Default.GetID());
 		}
 		else
 		{
-			material_user.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+			bool packing = false;
+			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
+			materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
 		}
 
 		if (recognized.Normal != -1)
 		{
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialID);
+			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
 			AssetHandle<Texture2D> textureHandle(textureID);
 
 			auto& texture_path = all[recognized.Normal];
 			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
 			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			material_user.SetTexture(core, "u_NormalMap", textureID);
+			materialUser.SetTexture(core, "u_NormalMap", textureID);
 		}
 		else
 		{
-			material_user.SetTexture(core, "u_NormalMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+			materialUser.SetTexture(core, "u_NormalMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
 		}
+	}
+
+	static void CreateOpaqueMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
+	{
+		AssetUser<Material> material_user(materialID);
+		auto& core = material_user.GetCoreComponent();
+
+		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
+
+		CreateBaseMaterial(material_user, materialData, scene);
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
+			material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
+	}
+
+	static void CreateBlendMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
+	{
+		AssetUser<Material> material_user(materialID);
+		auto& core = material_user.GetCoreComponent();
+
+		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
+
+		CreateBaseMaterial(material_user, materialData, scene);
+
+		glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
+			base_color = { materialData.Uniforms.BaseColor, 1.f };
+		if (materialData.DetectedProperties & DetectedMaterialProperties::Opacity)
+			base_color.a = materialData.Uniforms.Opacity;
+		material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
+
+		if (materialData.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
+			material_user.SetUniformValue(core, "u_AlphaCutOff", &materialData.Uniforms.AlphaCutoff);
 	}
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
@@ -289,8 +326,15 @@ namespace fe::GeometryImport
 
 			auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
 			
+			AssetUser<Material> material_user(material_ID);
+			auto& core = material_user.GetCoreComponent();
+
+
+			CreateBaseMaterial(material_user, materialData, scene);
+
 			if (material_data.AlphaMode == AlphaMode::Opaque)
 			{
+				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 				CreateOpaqueMaterial(material_ID, material_data, scene);
 			}
 			else

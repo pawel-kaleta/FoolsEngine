@@ -28,11 +28,13 @@ namespace fe
 
 			struct {
 				UUID Base2D;
-				UUID Base3D;
+				UUID Base3DOpaque;
+				UUID Base3DBlend;
 			} Shaders;
 
 			struct {
-				UUID Default;
+				UUID Base3DOpaque;
+				UUID Base3DBlend;
 			} ShadingModels;
 
 			struct {

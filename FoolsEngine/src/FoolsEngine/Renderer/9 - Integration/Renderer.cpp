@@ -62,22 +62,33 @@ namespace fe
 		MakeHandle("base_assets/textures/Default_Texture.png",	BaseAssets.Textures.Default,		base_assets.Textures.Default);
 		MakeHandle("base_assets/textures/FlatWhite.png",		BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
 		MakeHandle("base_assets/textures/FlatBlack.png",		BaseAssets.Textures.FlatBlack,		base_assets.Textures.FlatBlack);
+
 		MakeHandle("base_assets/shaders/Base2DShader.glsl",		BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
-		MakeHandle("base_assets/shaders/Base3DShader.glsl",		BaseAssets.Shaders.Base3D,			base_assets.Shaders.Base3D);
-		MakeHandle("base_assets/shading_models/Default.fesm",	BaseAssets.ShadingModels.Default,	base_assets.ShadingModels.Default);
+		MakeHandle("base_assets/shaders/Base3DOpaque.glsl",		BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
+		MakeHandle("base_assets/shaders/Base3DBlend.glsl",		BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
+
+		MakeHandle("base_assets/shading_models/Base3DOpaque.fesm",	BaseAssets.ShadingModels.Base3DOpaque,	base_assets.ShadingModels.Base3DOpaque);
+		MakeHandle("base_assets/shading_models/Base3DBlend.fesm",	BaseAssets.ShadingModels.Base3DBlend,	base_assets.ShadingModels.Base3DBlend);
+
 		MakeHandle("Default.femat",								BaseAssets.Materials.Default,		base_assets.Materials.Default);
-		// "_Default.femat" is a dummy path for name
+		// "Default.femat" is a dummy path for name
 
 		TextureLoader::LoadTexture("base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
 		TextureLoader::LoadTexture("base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
+		TextureLoader::LoadTexture("base_assets/textures/FlatBlack.png"      , BaseAssets.Textures.FlatBlack.Use());
+
 
 		ShaderLoader::LoadShader("base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::LoadShader("base_assets/shaders/Base3DShader.glsl", BaseAssets.Shaders.Base3D.Use());
+		ShaderLoader::LoadShader("base_assets/shaders/Base3DOpaque.glsl", BaseAssets.Shaders.Base3DOpaque.Use());
+		ShaderLoader::LoadShader("base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
 
-		bool succes = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Default.GetID(), "base_assets/shading_models/Default.fesm");
-		FE_CORE_ASSERT(succes, "Failed to load default shading model");
+		bool succes_1 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DOpaque.GetID(), "base_assets/shading_models/Base3DOpaque.fesm");
+		bool succes_2 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DBlend.GetID(), "base_assets/shading_models/Base3DBlend.fesm");
 
-		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Default.Observe());
+		FE_CORE_ASSERT(succes_1, "Failed to load Base3DOpaque shading model");
+		FE_CORE_ASSERT(succes_2, "Failed to load Base3DBlend shading model");
+
+		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DOpaque.Observe());
 
 		UploadBaseAssetsToGPU(GetActiveGDItype());
 

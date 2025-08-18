@@ -17,6 +17,7 @@ uniform vec3 u_BaseColor;
 uniform float u_Roughness;
 uniform float u_Metalness;
 uniform float u_AO;
+uniform bool u_OMRTexturePacking;
 
 // Editor mouse picking
 uniform uint u_EntityID;
@@ -28,6 +29,7 @@ layout (location = 3) out float v_Metalness;
 layout (location = 4) out float v_AO;
 layout (location = 5) out flat uint v_EntityID;
 layout (location = 6) out vec3 v_Normal;
+layout (location = 7) out flat bool v_OMRTexturePacking;
 
 void main()
 {
@@ -41,6 +43,7 @@ void main()
 	v_Metalness = u_Metalness;
 	v_AO = u_AO;
 	v_Normal = a_Normal;
+	v_OMRTexturePacking = u_OMRTexturePacking;
 }
 
 
@@ -57,12 +60,14 @@ layout (location = 3) in float v_Metalness;
 layout (location = 4) in float v_AO;
 layout (location = 5) in flat uint v_EntityID;
 layout (location = 6) in vec3 v_Normal;
+layout (location = 7) in flat bool v_OMRTexturePacking;
 
 uniform sampler2D u_BaseColorMap;
 uniform sampler2D u_RoughnessMap;
 uniform sampler2D u_MetalnessMap;
 uniform sampler2D u_AOMap;
 uniform sampler2D u_NormalMap;
+uniform sampler2D u_OMRMap;
 
 void main()
 {

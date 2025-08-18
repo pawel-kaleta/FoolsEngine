@@ -63,13 +63,16 @@ namespace fe
 			emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Default" << YAML::Value << inst.BaseAssets.Textures.Default;
 				emitter << YAML::Key << "FlatWhite" << YAML::Value << inst.BaseAssets.Textures.FlatWhite;
+				emitter << YAML::Key << "FlatBlack" << YAML::Value << inst.BaseAssets.Textures.FlatBlack;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Shaders" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Base2D" << YAML::Value << inst.BaseAssets.Shaders.Base2D;
-				emitter << YAML::Key << "Base3D" << YAML::Value << inst.BaseAssets.Shaders.Base3D;
+				emitter << YAML::Key << "Base3DOpaque" << YAML::Value << inst.BaseAssets.Shaders.Base3DOpaque;
+				emitter << YAML::Key << "Base3DBlend" << YAML::Value << inst.BaseAssets.Shaders.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "ShadingModels" << YAML::Value << YAML::BeginMap;
-				emitter << YAML::Key << "Default" << YAML::Value << inst.BaseAssets.ShadingModels.Default;
+				emitter << YAML::Key << "Base3DOpaque" << YAML::Value << inst.BaseAssets.ShadingModels.Base3DOpaque;
+				emitter << YAML::Key << "Base3DBlend" << YAML::Value << inst.BaseAssets.ShadingModels.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Materials" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Default" << YAML::Value << inst.BaseAssets.Materials.Default;
@@ -116,9 +119,15 @@ namespace fe
 
 		inst.BaseAssets.Textures.Default = textures_node["Default"].as<UUID>();
 		inst.BaseAssets.Textures.FlatWhite = textures_node["FlatWhite"].as<UUID>();
+		inst.BaseAssets.Textures.FlatBlack = textures_node["FlatBlack"].as<UUID>();
+
 		inst.BaseAssets.Shaders.Base2D = shaders_node["Base2D"].as<UUID>();
-		inst.BaseAssets.Shaders.Base3D = shaders_node["Base3D"].as<UUID>();
-		inst.BaseAssets.ShadingModels.Default = shading_models_node["Default"].as<UUID>();
+		inst.BaseAssets.Shaders.Base3DOpaque = shaders_node["Base3DOpaque"].as<UUID>();
+		inst.BaseAssets.Shaders.Base3DBlend = shaders_node["Base3DBlend"].as<UUID>();
+
+		inst.BaseAssets.ShadingModels.Base3DOpaque = shading_models_node["Base3DOpaque"].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base3DBlend = shading_models_node["Base3DBlend"].as<UUID>();
+
 		inst.BaseAssets.Materials.Default = materials_node["Default"].as<UUID>();
 
 		FE_LOG_CORE_INFO("Project deserialized");
