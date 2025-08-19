@@ -11,7 +11,7 @@ namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
 	{
-		AssetHandle<Shader> ShaderHandle;
+		AssetID ShaderID;
 		std::vector<Uniform> Uniforms;
 		std::vector<ShaderTextureSlot> TextureSlots;
 

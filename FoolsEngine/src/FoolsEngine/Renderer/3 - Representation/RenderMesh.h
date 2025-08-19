@@ -10,8 +10,8 @@ namespace fe
 {
 	struct ACRenderMeshCore final : public AssetComponent
 	{
-		AssetHandle<Mesh	> MeshHandle;
-		AssetHandle<Material> MaterialHandle;
+		AssetID MeshID;
+		AssetID MaterialID;
 
 		void Init() {}
 	};

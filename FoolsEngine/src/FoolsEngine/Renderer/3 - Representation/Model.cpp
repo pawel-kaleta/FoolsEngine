@@ -14,10 +14,12 @@ namespace fe
 
 		YAML::Emitter emitter;
 
+		FE_LOG_CORE_ERROR("Not implemented");
+
 		emitter << YAML::BeginSeq;
-		for (const auto& renderMeshHandle : core.RenderMeshes)
+		for (const auto& renderMeshID : core.RenderMeshIDs)
 		{
-			emitter << renderMeshHandle.GetUUID();
+			emitter << renderMeshID;
 		}
 		emitter << YAML::EndSeq;
 

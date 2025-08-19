@@ -10,7 +10,7 @@ namespace fe
 {
 	struct ACModelCore final : public AssetComponent
 	{
-		std::vector<AssetHandle<RenderMesh>> RenderMeshes;
+		std::vector<AssetID> RenderMeshIDs;
 
 		void Init()	{ }
 	};

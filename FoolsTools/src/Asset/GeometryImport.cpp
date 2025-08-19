@@ -263,40 +263,6 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void CreateOpaqueMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
-	{
-		AssetUser<Material> material_user(materialID);
-		auto& core = material_user.GetCoreComponent();
-
-		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
-
-		CreateBaseMaterial(material_user, materialData, scene);
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
-			material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
-	}
-
-	static void CreateBlendMaterial(AssetID materialID, GeometryImport::MaterialData& materialData, const aiScene* scene)
-	{
-		AssetUser<Material> material_user(materialID);
-		auto& core = material_user.GetCoreComponent();
-
-		material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
-
-		CreateBaseMaterial(material_user, materialData, scene);
-
-		glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::BaseColor)
-			base_color = { materialData.Uniforms.BaseColor, 1.f };
-		if (materialData.DetectedProperties & DetectedMaterialProperties::Opacity)
-			base_color.a = materialData.Uniforms.Opacity;
-		material_user.SetUniformValue(core, "u_BaseColor", &materialData.Uniforms.BaseColor);
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
-			material_user.SetUniformValue(core, "u_AlphaCutOff", &materialData.Uniforms.AlphaCutoff);
-	}
-
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
 	{
 		auto& scene = importData->GeometryData.Scene;
@@ -310,7 +276,7 @@ namespace fe::GeometryImport
 		AssetHandle<Model> model_handle(assetID);
 		auto model_user = model_handle.Use();
 
-		auto& core = model_user.GetCoreComponent();
+		auto& model_core = model_user.GetCoreComponent();
 
 		Scratchpad sp;
 		std::pmr::vector<AssetID> mesh_IDs(&sp);
@@ -327,94 +293,59 @@ namespace fe::GeometryImport
 			auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
 			
 			AssetUser<Material> material_user(material_ID);
-			auto& core = material_user.GetCoreComponent();
-
-
-			CreateBaseMaterial(material_user, materialData, scene);
+			auto& material_core = material_user.GetCoreComponent();
 
 			if (material_data.AlphaMode == AlphaMode::Opaque)
 			{
 				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
-				CreateOpaqueMaterial(material_ID, material_data, scene);
+				CreateBaseMaterial(material_user, material_data, scene);
+
+				if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+					material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
 			}
 			else
 			{
-				FE_LOG_CORE_WARN("Unimplemented default alpha material in geometry import");
-				//material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Default.Observe()); // alpha in future
-			}
+				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
+				CreateBaseMaterial(material_user, material_data, scene);
+				
+				glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
 
-			auto material = scene->mMaterials[i];
+				if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+					base_color = { material_data.Uniforms.BaseColor, 1.f };
+				if (material_data.DetectedProperties & DetectedMaterialProperties::Opacity)
+					base_color.a = material_data.Uniforms.Opacity;
+				material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+
+				if (material_data.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
+					material_user.SetUniformValue(material_core, "u_AlphaCutOff", &material_data.Uniforms.AlphaCutoff);
+			}
 		}
 
 		for (size_t i = 0; i < scene->mNumMeshes; i++)
 		{
 			AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
 			mesh_IDs.push_back(mesh_ID);
-		}
 
-		{
+			auto mesh_user = AssetUser<Mesh>(mesh_ID);
+			auto& mesh_core = mesh_user.GetCoreComponent();
+
+			mesh_core.Specification.VertexCount = scene->mMeshes[i]->mNumVertices;
+			mesh_core.Specification.IndexCount  = scene->mMeshes[i]->mNumFaces * 3;
+
 			AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
-			auto& render_mesh = core.RenderMeshes.emplace_back(render_mesh_ID, AssetLoadingPriority::None);
-		
-			auto render_mesh_user = render_mesh.Use();
+			auto& render_mesh = model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
+
+			auto render_mesh_user = AssetUser<RenderMesh>(render_mesh);
 			auto& render_mesh_core = render_mesh_user.GetCoreComponent();
 
-			
-			render_mesh_core.MeshHandle = AssetHandle<Mesh>(mesh_ID);
-			auto mesh_user = AssetUser<Mesh>(mesh_ID);
-			auto& core = mesh_user.GetCoreComponent();
-			auto& specification = core.Specification;
+			auto& material_index = scene->mMeshes[i]->mMaterialIndex;
+			auto& material_ID = material_IDs[material_index];
 
-			scene->mMaterials[i]->
-			for (size_t i = 0; i < scene->mNumMeshes; i++)
-			{
-				specification.VertexCount += scene->mMeshes[i]->mNumVertices;
-				specification.IndexCount += scene->mMeshes[i]->mNumFaces;
-			}
-			specification.IndexCount *= 3;
-			
-
-			Mesh::SaveMetadata(assetID);
-
-			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
-			render_mesh_core.MaterialHandle = AssetHandle<Material>(material_ID);
-			render_mesh_core.MaterialHandle.Use().GetCoreComponent().
-
-			render_mesh.AssimpMeshIndex = (uint32_t)i;
-			render_mesh.AssimpMaterialIndex = scene->mMeshes[i]->mMaterialIndex;
-			render_mesh.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
-			render_mesh.VertexCount = scene->mMeshes[i]->mNumVertices; 
+			render_mesh_core.MeshID = mesh_ID;
+			render_mesh_core.MaterialID = material_ID;
 		}
 
-
-		YAML::Emitter emitter;
-
-		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID"              << YAML::Value << model_handle.GetUUID();
-		emitter << YAML::Key << "Source File"       << YAML::Value << importData->Filepath.string();
-		//emitter << YAML::Key << "Render Mesh Count" << YAML::Value << render_meshes.size();
-		emitter << YAML::Key << "Meshes"            << YAML::Value << YAML::BeginSeq;
-		//for (auto& renderMesh : render_meshes)
-		//{
-		//	emitter << YAML::BeginMap;
-		//
-		//	emitter << YAML::Key << "AssimpMeshIndex" << YAML::Value << renderMesh.AssimpMeshIndex;
-		//
-		//	//if (importData->GeometryData.ImportMaterials)
-		//	//	emitter << YAML::Key << "Assimp Material Index" << YAML::Value << renderMesh.AssimpMaterialIndex;
-		//
-		//	emitter << YAML::Key << "Index Count"  << YAML::Value << renderMesh.IndexCount;
-		//	emitter << YAML::Key << "Vertex Count" << YAML::Value << renderMesh.VertexCount;
-		//
-		//	emitter << YAML::EndMap;
-		//}
-		emitter << YAML::EndSeq;
-
-		emitter << YAML::EndMap;
-
-		std::ofstream fout(filepath);
-		fout << emitter.c_str();
-		fout.close();
+		Model::SaveMetadata(assetID);
 	}
 
 	static void ImportAsRenderMesh(const std::filesystem::path& filepath, const ImportData* const importData)
