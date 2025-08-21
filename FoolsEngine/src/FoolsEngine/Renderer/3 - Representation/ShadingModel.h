@@ -15,8 +15,8 @@ namespace fe
 		std::vector<Uniform> Uniforms;
 		std::vector<ShaderTextureSlot> TextureSlots;
 
-		void* DefaultUniformsData = 0;
-		size_t UniformsDataSize = 0;
+		void* DefaultUniformsData;
+		size_t UniformsDataSize;
 
 		void Init();
 

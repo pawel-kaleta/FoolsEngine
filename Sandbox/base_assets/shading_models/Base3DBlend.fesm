@@ -28,9 +28,9 @@ Uniforms:
       - 0
   - Name: u_OMRTexturePacking
     Type: Bool
-	Count: 1
-	DefaultValue:
-	  - true
+    Count: 1
+    DefaultValue:
+      - true
 Shader Texture Slots:
   - u_BaseColorMap
   - u_OMRMap

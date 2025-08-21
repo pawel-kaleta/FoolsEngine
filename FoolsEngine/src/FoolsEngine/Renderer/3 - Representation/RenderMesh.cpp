@@ -13,12 +13,12 @@ namespace fe
 	{
 		auto& core = Get<ACRenderMeshCore>();
 
-		if (!core.MaterialHandle.IsValid() || !core.MeshHandle.IsValid())
+		if (!core.MaterialID || !core.MeshID)
 			return false;
 		
 		// material loading
 		{
-			auto material_user = core.MaterialHandle.Use();
+			AssetUser<Material> material_user(core.MaterialID);
 			if (!material_user.AllOf<ACLoadedFlag>())
 				if (!material_user.SendDataToGPU(GDI))
 					return false;
@@ -39,7 +39,7 @@ namespace fe
 
 		// mesh loading
 		{
-			auto mesh_user = core.MeshHandle.Use();
+			AssetUser<Material> mesh_user(core.MeshID);
 			if (!mesh_user.AllOf<ACLoadedFlag>())
 				if (!mesh_user.SendDataToGPU(GDI))
 					return false;
@@ -68,8 +68,8 @@ namespace fe
 
 		YAML::Emitter emitter;
 
-		emitter << YAML::Key << "MeshID"     << YAML::Value << core.MeshHandle.GetUUID();
-		emitter << YAML::Key << "MaterialID" << YAML::Value << core.MaterialHandle.GetUUID();
+		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetManager::GetUUID(core.MeshID);
+		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetManager::GetUUID(core.MaterialID);
 
 		std::ofstream fout(assetObserver.GetFilepath());
 		fout << emitter.c_str();
@@ -106,8 +106,8 @@ namespace fe
 		if (!materialID_node) return false;
 
 		auto& core = ECS_handle.get<ACRenderMeshCore>();
-		core.MeshHandle.SetID(AssetManager::GetOrCreateAssetWithUUID(meshID_node.as<UUID>()));
-		core.MaterialHandle.SetID(AssetManager::GetOrCreateAssetWithUUID(materialID_node.as<UUID>()));
+		core.MeshID = AssetManager::GetOrCreateAssetWithUUID(meshID_node.as<UUID>());
+		core.MaterialID = AssetManager::GetOrCreateAssetWithUUID(materialID_node.as<UUID>());
 
 		return true;
 	}

@@ -63,14 +63,14 @@ namespace fe
 		MakeHandle("base_assets/textures/FlatWhite.png",		BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
 		MakeHandle("base_assets/textures/FlatBlack.png",		BaseAssets.Textures.FlatBlack,		base_assets.Textures.FlatBlack);
 
-		MakeHandle("base_assets/shaders/Base2DShader.glsl",		BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
-		MakeHandle("base_assets/shaders/Base3DOpaque.glsl",		BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
-		MakeHandle("base_assets/shaders/Base3DBlend.glsl",		BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
+		MakeHandle("base_assets/shaders/Base2DShader.glsl",	BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
+		MakeHandle("base_assets/shaders/Base3DOpaque.glsl",	BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
+		MakeHandle("base_assets/shaders/Base3DBlend.glsl",	BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
 
 		MakeHandle("base_assets/shading_models/Base3DOpaque.fesm",	BaseAssets.ShadingModels.Base3DOpaque,	base_assets.ShadingModels.Base3DOpaque);
 		MakeHandle("base_assets/shading_models/Base3DBlend.fesm",	BaseAssets.ShadingModels.Base3DBlend,	base_assets.ShadingModels.Base3DBlend);
 
-		MakeHandle("Default.femat",								BaseAssets.Materials.Default,		base_assets.Materials.Default);
+		MakeHandle("Default.femat", BaseAssets.Materials.Default, base_assets.Materials.Default);
 		// "Default.femat" is a dummy path for name
 
 		TextureLoader::LoadTexture("base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
@@ -106,8 +106,8 @@ namespace fe
 		BaseAssets.Textures.FlatWhite.Use().CreateGDITexture2D(GDI);
 
 		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3D.Use());
-		
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3DOpaque.Use());
+		ShaderLoader::CompileShader(GDI, BaseAssets.Shaders.Base3DBlend.Use());
 	}
 
 	void Renderer::SetAPI(GDIType GDI)
@@ -149,8 +149,6 @@ namespace fe
 	{
 		RenderCommands::SetViewport(0, 0, width, height);
 	}
-
-
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
 	{
@@ -200,8 +198,8 @@ namespace fe
 			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix() * renderViewMesh_component.Offset.GetMatrix();
 			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
 
-			auto shading_model_observer = material_observer.GetCoreComponent().ShadingModelHandle.Observe();
-			auto shaderID = shading_model_observer.GetCoreComponent().ShaderHandle.GetID();
+			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
+			auto shaderID = shading_model_observer.GetCoreComponent().ShaderID;
 
 			{
 				auto shader_observer = AssetObserver<Shader>(shaderID);
@@ -263,9 +261,9 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& material_core = materialObserver.GetCoreComponent();
-		auto sm_observer = material_core.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> sm_observer(material_core.ShadingModelID);
 		auto& sm_core = sm_observer.GetCoreComponent();
-		auto shaderUser = sm_core.ShaderHandle.Use();
+		AssetUser<Shader> shaderUser(sm_core.ShaderID);
 
 		shaderUser.Bind(s_ActiveGDI);
 
@@ -290,13 +288,13 @@ namespace fe
 			uint32_t rendererTextureSlot = 0;
 			auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
 
-			for (const auto& textureHandle : material_core.Textures)
+			for (const auto& textureID : material_core.TextureIDs)
 			{
 				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
 
-				if (textureHandle.IsValid())
+				if (textureID)
 				{
-					textureHandle.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
+					AssetUser<Texture2D>(textureID).Bind(s_ActiveGDI, rendererTextureSlot++);
 				}
 				else
 				{

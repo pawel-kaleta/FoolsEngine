@@ -55,7 +55,7 @@ namespace fe
 		for (const auto& render_mesh_node : node)
 		{
 			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>());
-			core.RenderMeshes.emplace_back(render_mesh_ID, AssetLoadingPriority::None);
+			core.RenderMeshIDs.emplace_back(render_mesh_ID);
 		}
 
 		return true;

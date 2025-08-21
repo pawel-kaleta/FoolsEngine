@@ -61,8 +61,8 @@ namespace fe
 
 		bool modified = false;
 
-		auto& shading_model_current = materialUser.GetCoreComponent().ShadingModelHandle;
-		if (ImGui::BeginCombo("Shading Model", shading_model_current.Observe().GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
+		auto& shading_model_current = materialUser.GetCoreComponent().ShadingModelID;
+		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
 		{
 			bool is_selected;
 
@@ -73,12 +73,12 @@ namespace fe
 			for (auto id : shading_models)
 			{
 				auto shading_model_observer = AssetObserver<ShadingModel>(id);
-				is_selected = (shading_model_current.GetID() == id);
+				is_selected = (shading_model_current == id);
 
 				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp2).c_str(), is_selected))
 				{
 					materialUser.MakeMaterial(shading_model_observer);
-					shading_model_current.SetID(id);
+					shading_model_current = id;
 					modified = true;
 				}
 
@@ -89,7 +89,7 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		auto shading_model_observer = shading_model_current.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(shading_model_current);
 
 		auto& sm_core_component = shading_model_observer.GetCoreComponent();
 		auto& material_core_component = materialUser.GetCoreComponent();
@@ -100,23 +100,23 @@ namespace fe
 				modified = true;
 		}
 
-		for (size_t i=0; i<material_core_component.Textures.size(); i++)
+		for (size_t i=0; i<material_core_component.TextureIDs.size(); i++)
 		{
-			auto& textureHandle = material_core_component.Textures[i];
+			auto& textureID = material_core_component.TextureIDs[i];
 			
-			ImGui::PushID((const void*)&textureHandle);
-
+			ImGui::PushID((const void*)&textureID);
+			
 			ImGuiStyle& style = ImGui::GetStyle();
 			const float square_button_size = ImGui::GetFrameHeight();
 			const ImVec2 square_button_dimentions = { square_button_size, square_button_size };
 			const float button_width__handle = (ImGui::GetContentRegionAvail().x / 2) - (style.ItemInnerSpacing.x + square_button_size);
-			bool handle_valid = textureHandle.IsValid();
+			bool handle_valid = textureID != NullAssetID;
 			bool reset_handle = false;
 
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
 			std::pmr::string asset_name(&sp);
-			asset_name = handle_valid ? textureHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp) : "<empty>";
+			asset_name = handle_valid ? AssetObserver<Texture2D>(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp) : "<empty>";
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
 			ImGui::Button(asset_name.c_str(), { button_width__handle, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
@@ -140,7 +140,7 @@ namespace fe
 								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
 								if (assetID != NullAssetID)
 								{
-									textureHandle.SetID(assetID);
+									textureID = assetID;
 									modified = true;
 								}
 								else
@@ -156,7 +156,7 @@ namespace fe
 
 				if (reset_handle)
 				{
-					textureHandle.SetID(NullAssetID);
+					textureID = NullAssetID;
 					modified = true;
 				}
 			}
@@ -317,9 +317,7 @@ namespace fe
 		ImGui::EndChild();
 		ImGui::PopID();
 	}
-	template void DataComponent::DrawAssetHandle<Texture2D   >(AssetHandle<Texture2D   >&);
-	template void DataComponent::DrawAssetHandle<Material    >(AssetHandle<Material    >&);
-	template void DataComponent::DrawAssetHandle<Mesh        >(AssetHandle<Mesh        >&);
-	template void DataComponent::DrawAssetHandle<RenderMesh  >(AssetHandle<RenderMesh  >&);
-	template void DataComponent::DrawAssetHandle<Model       >(AssetHandle<Model       >&);
+
+#define _DRAW_ASSET_HANDLE_DEF(x) template void DataComponent::DrawAssetHandle<x>(AssetHandle<x>&);
+	FE_FOR_EACH(_DRAW_ASSET_HANDLE_DEF, FE_ASSET_TYPES_LIST);
 }

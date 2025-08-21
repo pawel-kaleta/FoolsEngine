@@ -15,13 +15,13 @@ namespace fe
 {
 	void ACMaterialCore::Init()
 	{
-		ShadingModelHandle.SetLoadingPriority(AssetLoadingPriority::None);
-		Textures.clear();
+		TextureIDs.clear();
 
 		if (UniformsData) operator delete(UniformsData);
 		UniformsData = nullptr;
 
 		UniformsDataSize = 0;
+		ShadingModelID = NullAssetID;
 	}
 
 	void MaterialUser::MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const
@@ -31,7 +31,7 @@ namespace fe
 		auto& core_component = GetCoreComponent();
 		auto& sm_core_component = shadingModelObserver.GetCoreComponent();
 
-		core_component.ShadingModelHandle.SetID(shadingModelObserver.GetID());
+		core_component.ShadingModelID = shadingModelObserver.GetID();
 
 		auto& data = core_component.UniformsData;
 		auto& size = core_component.UniformsDataSize;
@@ -44,12 +44,12 @@ namespace fe
 
 		std::memcpy(data, sm_core_component.DefaultUniformsData, size);
 
-		auto& textures = core_component.Textures;
+		auto& textures = core_component.TextureIDs;
 		textures.clear();
 		textures.resize(sm_core_component.TextureSlots.size());
 		for (auto& texture : textures)
 		{
-			texture.SetLoadingPriority(AssetLoadingPriority::None);
+			texture = NullAssetID;
 		}
 	}
 
@@ -59,7 +59,7 @@ namespace fe
 
 		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.UniformsData);
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
 			if (&targetUniform == &uniform)
@@ -79,7 +79,7 @@ namespace fe
 
 		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.UniformsData);
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
@@ -114,7 +114,7 @@ namespace fe
 
 		uint8_t* dest = (uint8_t*)(dataComponent.UniformsData);
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
@@ -134,15 +134,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		auto slotsIt = shading_model_observer.GetCoreComponent().TextureSlots.begin();
-		for (const auto& texture : dataComponent.Textures)
+		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
+		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (slotsIt._Ptr == &textureSlot)
-				return texture.GetID();
-
-			++slotsIt;
+			if (&(texture_slots[i]) == &textureSlot)
+				return dataComponent.TextureIDs[i];
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
@@ -153,15 +151,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		auto slotsIt = shading_model_observer.GetCoreComponent().TextureSlots.begin();
-		for (const auto& texture : dataComponent.Textures)
+		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
+		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (slotsIt->GetName() == textureSlotName)
-				return texture.GetID();
-
-			++slotsIt;
+			if (texture_slots[i].GetName() == textureSlotName)
+				return dataComponent.TextureIDs[i];
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
@@ -172,17 +168,16 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		auto slotsIt = shading_model_observer.GetCoreComponent().TextureSlots.begin();
-		for (auto& texture : dataComponent.Textures)
+		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
+		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (slotsIt._Ptr == &textureSlot)
+			if (&(texture_slots[i]) == &textureSlot)
 			{
-				texture.SetID(textureID);
+				dataComponent.TextureIDs[i] = textureID;
 				return;
 			}
-			++slotsIt;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
@@ -192,17 +187,17 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
 		auto slotsIt = shading_model_observer.GetCoreComponent().TextureSlots.begin();
-		for (auto& texture : dataComponent.Textures)
+		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
+		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (slotsIt->GetName() == textureSlotName)
+			if (texture_slots[i].GetName() == textureSlotName)
 			{
-				texture.SetID(textureID);
+				dataComponent.TextureIDs[i] = textureID;
 				return;
 			}
-			++slotsIt;
 		}
 
 		FE_CORE_ASSERT(false, "Texture not found in material!");
@@ -211,7 +206,7 @@ namespace fe
 	void MaterialUser::ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const
 	{
 		void* dest = GetUniformValuePtr_Internal(dataComponent, uniform);
-		auto shading_model_observer = dataComponent.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
 		auto offset = (std::byte*)dest - (std::byte*)dataComponent.UniformsData;
 		void* src = (std::byte*)shading_model_observer.GetCoreComponent().DefaultUniformsData + offset;
@@ -223,22 +218,21 @@ namespace fe
 	{
 		auto& core = Get<ACMaterialCore>();
 		
-		if (!core.ShadingModelHandle.IsValid())
+		if (core.ShadingModelID == NullAssetID)
 			return false;
 
-		for (const auto& texture_handle : core.Textures)
+		for (const auto& texture_ID : core.TextureIDs)
 		{
-			if (!texture_handle.IsValid())
+			if (texture_ID == NullAssetID)
 				return false;
 
-			auto texture_user = texture_handle.Use();
+			AssetUser<Texture2D> texture_user(texture_ID);
 			TextureLoader::LoadTexture(texture_user);
 			texture_user.CreateGDITexture2D(GDI);
 			texture_user.UnloadFromCPU();
 			texture_user.FlagLoadedAsDependency();
 			texture_user.FlagLoaded();
 		}
-
 		
 		FE_LOG_CORE_ERROR("Material to gpu upload not implemented... I think...");
 		return false;
@@ -248,12 +242,12 @@ namespace fe
 	{
 		auto& core = Get<ACMaterialCore>();
 
-		for (const auto& texture_handle : core.Textures)
+		for (const auto& texture_ID : core.TextureIDs)
 		{
-			if (!texture_handle.IsValid())
+			if (texture_ID == NullAssetID)
 				continue;
 
-			auto texture_user = texture_handle.Use();
+			AssetUser<Texture2D> texture_user(texture_ID);
 			texture_user.ReleaseDependencyLoad();
 		}
 	}
@@ -265,7 +259,7 @@ namespace fe
 
 		YAML::Emitter emitter;
 
-		const auto shading_model_observer = core.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(core.ShadingModelID);
 		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
@@ -299,9 +293,9 @@ namespace fe
 		{
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Shader Texture Slot" << YAML::Value << shading_model_core.TextureSlots[i].GetName();
-			if (core.Textures[i].IsValid())
+			if (core.TextureIDs[i] != NullAssetID)
 			{
-				const auto texture_observer = core.Textures[i].Observe();
+				const AssetObserver<Texture2D> texture_observer(core.TextureIDs[i]);
 				emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetFilepath().string();
 				emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
 			}
@@ -357,7 +351,7 @@ namespace fe
 		if (!textures_node.IsSequence()) return false;
 
 		auto shading_model_UUID = shading_model_node.as<UUID>();
-		core.ShadingModelHandle.SetID(AssetManager::GetOrCreateAssetWithUUID(shading_model_UUID));
+		core.ShadingModelID = AssetManager::GetOrCreateAssetWithUUID(shading_model_UUID);
 
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.UniformsData = operator new(core.UniformsDataSize);
@@ -406,9 +400,9 @@ namespace fe
 			//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 
 			if (texture_UUID_node.as<UUID>() == UUID(0))
-				core.Textures.emplace_back();			
+				core.TextureIDs.emplace_back();			
 			else
-				core.Textures.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
+				core.TextureIDs.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
 		}
 
 		return true;

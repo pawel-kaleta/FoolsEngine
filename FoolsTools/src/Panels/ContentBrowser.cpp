@@ -147,7 +147,8 @@ namespace fe
 				if (ImGui::MenuItem("Create Material"))
 				{
 					//CreateAsset::OpenWindow(m_CurrentPath, AssetType::Material);
-					CreateAsset::CreateMaterial(m_CurrentPath);
+					//CreateAsset::CreateMaterial(m_CurrentPath);
+					FE_LOG_ERROR("Unimplemented Material Import");
 				}
 
 				ImGui::EndPopup();

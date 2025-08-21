@@ -74,9 +74,9 @@ namespace fe
 		}
 
 		auto& material_core = materialObserver.GetCoreComponent();
-		auto shading_model_observer = material_core.ShadingModelHandle.Observe();
+		AssetObserver<ShadingModel> shading_model_observer(material_core.ShadingModelID);
 		auto& sm_core = shading_model_observer.GetCoreComponent();
-		auto shader_user = sm_core.ShaderHandle.Use();
+		AssetUser<Shader> shader_user(sm_core.ShaderID);
 
 		auto GDI = Renderer::GetActiveGDItype();
 

@@ -72,7 +72,11 @@ namespace fe
 				return 0;
 			}
 
-			return type.ToInt() % 4;
+			uint32_t result = type.ToInt() % 4;
+
+			if (result)
+				return result;
+			return 4;
 		}
 
 		constexpr Type TypeOfMatrix(uint32_t rows, uint32_t columns)

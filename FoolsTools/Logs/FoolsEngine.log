@@ -1,59 +1,51 @@
-15:07:12:889230 | FE  | info     | Logging innitialized!
-15:07:12:890131 | App | info     | Logging innitialized!
-15:07:12:890404 | FE  | info     | /////////////////////////////////////////////////////
-15:07:12:890705 | FE  | info     | ////////////////////// STARTUP //////////////////////
-15:07:12:890981 | FE  | info     | /////////////////////////////////////////////////////
-15:07:12:891264 | App | info     | Logging level set to 0 - all.
-15:07:12:891540 | FE  | info     | Logging level set to 0 - all.
-15:07:12:892834 | FE  | info     | Profiler session 'Startup' started.
-15:07:12:894313 | FE  | info     | Initializing GLFW
-15:07:13:018325 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-15:07:13:340304 | FE  | info     | Setting events callbacks for window:
-15:07:13:340683 | FE  | info     | 	WindowResizeEvent
-15:07:13:340992 | FE  | info     | 	WindowCloseEvent
-15:07:13:341227 | FE  | info     | 	WindowFocusChangeEvents
-15:07:13:341444 | FE  | info     | 	KeyEvents
-15:07:13:341709 | FE  | info     | 	KeyTypedEvent
-15:07:13:341928 | FE  | info     | 	MouseButtonEvents
-15:07:13:342170 | FE  | info     | 	MouseScrolledEvent
-15:07:13:342413 | FE  | info     | 	MouseMovedEvent
-15:07:13:342964 | FE  | info     | Creating rendering context
-15:07:13:349255 | FE  | info     | Rendering platform info:
-15:07:13:349692 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-15:07:13:349930 | FE  | info     | 	Renderer:	AMD Radeon RX 640
-15:07:13:350154 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
-15:07:13:350575 | FE  | info     | OpenGL Rendering Context created
-15:07:13:350927 | FE  | info     | VSync disabled.
-15:07:13:351556 | FE  | info     | OpenGLDeviceAPI creation!
-15:07:13:352390 | FE  | info     | OpenGLDeviceAPI Initialization.
-15:07:13:359183 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-15:07:13:361396 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-15:07:13:467308 | FE  | info     | Profiler session 'Startup' closed.
-15:07:13:467886 | FE  | info     | /////////////////////////////////////////////////////
-15:07:13:468182 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-15:07:13:468457 | FE  | info     | /////////////////////////////////////////////////////
-15:07:13:468708 | App | info     | Logging level set to 1 - debug or higher.
-15:07:13:468931 | FE  | info     | Logging level set to 1 - debug or higher.
-15:07:15:979880 | FE  | info     | Profiler session 'ProjectLoading' started.
-15:07:16:003536 | FE  | info     | Project deserialized
-15:07:16:088591 | FE  | warning  | Missing UUID in ShadingModel file
-15:07:16:363468 | FE  | info     | Base Assets acquired
-15:07:16:418958 | FE  | info     | Asset Registry deserialized
-15:07:16:741455 | FE  | info     | Assets' meta data loaded
-15:07:16:743470 | FE  | info     | Profiler session 'ProjectLoading' closed.
-15:07:16:744239 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-15:07:16:744642 | App | info     | EditorLayer::OnAttach()
-15:07:16:745707 | FE  | info     | Scene initialization
-15:07:16:747122 | FE  | info     | World Creation
-15:07:16:751493 | FE  | info     | Profiler session 'SceneLoading' started.
-15:07:22:316024 | FE  | info     | Profiler session 'SceneLoading' closed.
-15:07:22:321425 | FE  | info     | Profiler session 'Runtime' started.
-15:07:22:563491 | FE  | info     | Profiler session 'Runtime' closed.
-15:10:35:179974 | FE  | info     | Window Close Event
-15:10:35:188430 | FE  | info     | /////////////////////////////////////////////////////
-15:10:35:189102 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
-15:10:35:189563 | FE  | info     | /////////////////////////////////////////////////////
-15:10:35:190057 | App | info     | Logging level set to 0 - all.
-15:10:35:190629 | FE  | info     | Logging level set to 0 - all.
-15:10:35:192120 | FE  | info     | Profiler session 'Shutdown' started.
-15:10:35:198152 | FE  | info     | Profiler session 'Shutdown' closed.
+20:08:54:497532 | FE  | info     | Logging innitialized!
+20:08:54:497890 | App | info     | Logging innitialized!
+20:08:54:498125 | FE  | info     | /////////////////////////////////////////////////////
+20:08:54:498289 | FE  | info     | ////////////////////// STARTUP //////////////////////
+20:08:54:498463 | FE  | info     | /////////////////////////////////////////////////////
+20:08:54:498609 | App | info     | Logging level set to 0 - all.
+20:08:54:498751 | FE  | info     | Logging level set to 0 - all.
+20:08:54:499495 | FE  | info     | Profiler session 'Startup' started.
+20:08:54:500063 | FE  | info     | Initializing GLFW
+20:08:54:526464 | FE  | info     | Creating Window FoolsTools (1900, 1000)
+20:08:54:710293 | FE  | info     | Setting events callbacks for window:
+20:08:54:710659 | FE  | info     | 	WindowResizeEvent
+20:08:54:710978 | FE  | info     | 	WindowCloseEvent
+20:08:54:711229 | FE  | info     | 	WindowFocusChangeEvents
+20:08:54:711448 | FE  | info     | 	KeyEvents
+20:08:54:711660 | FE  | info     | 	KeyTypedEvent
+20:08:54:711908 | FE  | info     | 	MouseButtonEvents
+20:08:54:712150 | FE  | info     | 	MouseScrolledEvent
+20:08:54:712397 | FE  | info     | 	MouseMovedEvent
+20:08:54:712897 | FE  | info     | Creating rendering context
+20:08:54:715902 | FE  | info     | Rendering platform info:
+20:08:54:716121 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+20:08:54:716347 | FE  | info     | 	Renderer:	AMD Radeon RX 640
+20:08:54:716616 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 22.20.20.06.231106
+20:08:54:716968 | FE  | info     | OpenGL Rendering Context created
+20:08:54:717273 | FE  | info     | VSync disabled.
+20:08:54:717597 | FE  | info     | OpenGLDeviceAPI creation!
+20:08:54:717894 | FE  | info     | OpenGLDeviceAPI Initialization.
+20:08:54:721761 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+20:08:54:723383 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+20:08:54:733717 | FE  | info     | Profiler session 'Startup' closed.
+20:08:54:734046 | FE  | info     | /////////////////////////////////////////////////////
+20:08:54:734255 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+20:08:54:734463 | FE  | info     | /////////////////////////////////////////////////////
+20:08:54:734664 | App | info     | Logging level set to 1 - debug or higher.
+20:08:54:734859 | FE  | info     | Logging level set to 1 - debug or higher.
+20:08:56:615508 | FE  | info     | Profiler session 'ProjectLoading' started.
+20:08:56:624896 | FE  | info     | Project deserialized
+20:08:56:649290 | FE  | warning  | Missing UUID in ShadingModel file
+20:08:56:662820 | FE  | warning  | Missing UUID in ShadingModel file
+20:08:56:779178 | FE  | info     | Base Assets acquired
+20:08:56:797862 | FE  | info     | Asset Registry deserialized
+20:08:56:891111 | FE  | info     | Assets' meta data loaded
+20:08:56:891797 | FE  | info     | Profiler session 'ProjectLoading' closed.
+20:08:56:892172 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+20:08:56:892385 | App | info     | EditorLayer::OnAttach()
+20:08:56:892815 | FE  | info     | Scene initialization
+20:08:56:893175 | FE  | info     | World Creation
+20:08:56:895200 | FE  | info     | Profiler session 'SceneLoading' started.
+20:09:00:078908 | FE  | error    | CORE ASSERTION FAILED: in file TextureLoader.h in function void __cdecl fe::TextureLoader::LoadTexture(const class fe::AssetUser<class fe::Texture2D> &) at line 24.
+20:09:00:079878 | FE  | error    | Assertion Message: AAAAAAA

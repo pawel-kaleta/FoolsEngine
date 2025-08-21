@@ -17,8 +17,8 @@ namespace fe
 		AssetID ShadingModelID;
 		std::vector<AssetID> TextureIDs;
 
-		void* UniformsData = 0;
-		size_t UniformsDataSize = 0;
+		void* UniformsData;
+		size_t UniformsDataSize;
 
 		void Init();
 

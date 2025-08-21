@@ -12,6 +12,7 @@ namespace fe
 	{
 	public:
 		static AssetRegistry& GetRegistry() { return s_Instance->m_Registry; }
+		static UUID GetUUID(AssetID assetID) { return s_Instance->m_Registry.get<ACUUID>(assetID).UUID; }
 
 		struct AssetCreation
 		{

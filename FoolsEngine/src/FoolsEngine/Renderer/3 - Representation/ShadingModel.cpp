@@ -10,7 +10,6 @@ namespace fe
 {
 	void ACShadingModelCore::Init()
 	{
-		ShaderHandle.SetLoadingPriority(AssetLoadingPriority::None);
 		Uniforms.clear();
 		TextureSlots.clear();
 
@@ -18,6 +17,7 @@ namespace fe
 		DefaultUniformsData = nullptr;
 
 		UniformsDataSize = 0;
+		ShaderID = NullAssetID;
 	}
 
 	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const
@@ -107,7 +107,7 @@ namespace fe
 
 		YAML::Emitter emitter;
 
-		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderHandle.GetID()).Filepath.string();
+		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderID).Filepath.string();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
 		
@@ -193,7 +193,7 @@ namespace fe
 		std::filesystem::path shader_filepath = shader_node.as<std::string>();
 		auto shaderID = AssetManager::GetAssetFromFilepath(shader_filepath);
 		FE_CORE_ASSERT(shaderID != NullAssetID, "Failed to recognize shader asset during shading model deserialization");
-		core.ShaderHandle.SetID(shaderID);
+		core.ShaderID = shaderID;
 
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.DefaultUniformsData = operator new(core.UniformsDataSize);

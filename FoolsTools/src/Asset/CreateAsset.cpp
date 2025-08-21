@@ -23,7 +23,7 @@ namespace fe
 
 			auto assetID = AssetManager::AssetCreation::ProjectAsset<Material>(new_asset_relative_path);
 
-			AssetUser<Material>(assetID).MakeMaterial(Renderer::BaseAssets.ShadingModels.Default.Observe());
+			AssetUser<Material>(assetID).MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 			Material::SaveMetadata(assetID);
 		}
 	}
