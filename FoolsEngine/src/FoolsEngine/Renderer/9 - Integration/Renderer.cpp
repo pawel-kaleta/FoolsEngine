@@ -59,31 +59,31 @@ namespace fe
 
 		auto& base_assets = Project::GetInstance()->BaseAssets;
 
-		MakeHandle("base_assets/textures/Default_Texture.png",	BaseAssets.Textures.Default,		base_assets.Textures.Default);
-		MakeHandle("base_assets/textures/FlatWhite.png",		BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
-		MakeHandle("base_assets/textures/FlatBlack.png",		BaseAssets.Textures.FlatBlack,		base_assets.Textures.FlatBlack);
+		MakeHandle("../FoolsEngine/base_assets/textures/Default_Texture.png",	BaseAssets.Textures.Default,		base_assets.Textures.Default);
+		MakeHandle("../FoolsEngine/base_assets/textures/FlatWhite.png",			BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
+		MakeHandle("../FoolsEngine/base_assets/textures/FlatBlack.png",			BaseAssets.Textures.FlatBlack,		base_assets.Textures.FlatBlack);
 
-		MakeHandle("base_assets/shaders/Base2DShader.glsl",	BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
-		MakeHandle("base_assets/shaders/Base3DOpaque.glsl",	BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
-		MakeHandle("base_assets/shaders/Base3DBlend.glsl",	BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
+		MakeHandle("../FoolsEngine/base_assets/shaders/Base2DShader.glsl",	BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
+		MakeHandle("../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl",	BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
+		MakeHandle("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",	BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
 
-		MakeHandle("base_assets/shading_models/Base3DOpaque.fesm",	BaseAssets.ShadingModels.Base3DOpaque,	base_assets.ShadingModels.Base3DOpaque);
-		MakeHandle("base_assets/shading_models/Base3DBlend.fesm",	BaseAssets.ShadingModels.Base3DBlend,	base_assets.ShadingModels.Base3DBlend);
+		MakeHandle("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm",	BaseAssets.ShadingModels.Base3DOpaque,	base_assets.ShadingModels.Base3DOpaque);
+		MakeHandle("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm",	BaseAssets.ShadingModels.Base3DBlend,	base_assets.ShadingModels.Base3DBlend);
 
 		MakeHandle("Default.femat", BaseAssets.Materials.Default, base_assets.Materials.Default);
 		// "Default.femat" is a dummy path for name
 
-		TextureLoader::LoadTexture("base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
-		TextureLoader::LoadTexture("base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
-		TextureLoader::LoadTexture("base_assets/textures/FlatBlack.png"      , BaseAssets.Textures.FlatBlack.Use());
+		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
+		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
+		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/FlatBlack.png"      , BaseAssets.Textures.FlatBlack.Use());
 
 
-		ShaderLoader::LoadShader("base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::LoadShader("base_assets/shaders/Base3DOpaque.glsl", BaseAssets.Shaders.Base3DOpaque.Use());
-		ShaderLoader::LoadShader("base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
+		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
+		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl", BaseAssets.Shaders.Base3DOpaque.Use());
+		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
 
-		bool succes_1 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DOpaque.GetID(), "base_assets/shading_models/Base3DOpaque.fesm");
-		bool succes_2 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DBlend.GetID(), "base_assets/shading_models/Base3DBlend.fesm");
+		bool succes_1 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DOpaque.GetID(),	"../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
+		bool succes_2 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DBlend.GetID(),		"../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
 
 		FE_CORE_ASSERT(succes_1, "Failed to load Base3DOpaque shading model");
 		FE_CORE_ASSERT(succes_2, "Failed to load Base3DBlend shading model");

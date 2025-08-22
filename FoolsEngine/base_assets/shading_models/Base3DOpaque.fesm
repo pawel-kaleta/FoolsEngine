@@ -1,16 +1,11 @@
-Shader: base_assets/shaders/Base3DBlend.glsl
+Shader: ../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl
 Uniforms Data Size: 24
 Uniforms:
   - Name: u_BaseColor
-    Type: Float4
+    Type: Float3
     Count: 1
     DefaultValue:
-      - [1, 1, 1, 1]
-  - Name: u_AlphaCutOff
-    Type: Float
-    Count: 1
-    DefaultValue:
-      - 0.5
+      - [1, 1, 1]
   - Name: u_Roughness
     Type: Float
     Count: 1

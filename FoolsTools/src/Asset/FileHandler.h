@@ -19,7 +19,7 @@ namespace fe
 	{
 		void Init();
 		void OnImGuiRender();
-		void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr);
+		void OpenWindow(const std::filesystem::path& filepathToImport, const LoadersRegistry::Item* loaderItemPtr);
 
 		template <typename tnAsset>
 		std::filesystem::path GetDefaultFilepathAndFilterForImport(const std::filesystem::path& originalPath, std::pmr::string& outFilter)

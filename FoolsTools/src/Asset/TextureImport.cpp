@@ -9,7 +9,7 @@ namespace fe
 {
 	void TextureImport::InitImport(ImportData*  importData)
 	{      
-        importData->TextureData.Specification = TextureLoader::InspectTexture(importData->Filepath);
+        importData->TextureData.Specification = TextureLoader::InspectTexture(importData->FilepathToImport);
 	}
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
@@ -21,7 +21,7 @@ namespace fe
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
         AssetHandle<Texture2D> textureHandle(assetID);
         textureHandle.Use().GetCoreComponent().Specification = importData->TextureData.Specification;
-        AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(assets_path));
+        AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         Texture2D::SaveMetadata(assetID);
     }
@@ -30,7 +30,7 @@ namespace fe
     {
         auto& spec = importData->TextureData.Specification;
         Scratchpad sp;
-        ImGui::Text("File: %s", importData->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+        ImGui::Text("File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
         ImGui::Text("Components: %d", spec.Components);
         ImGui::Text("Format: %d", spec.Format);
         ImGui::Text("Width: %d", spec.Width);
@@ -50,7 +50,7 @@ namespace fe
             spec.Usage.FromInt(usage_current);
 
             std::pmr::string filter(&sp);
-            std::filesystem::path defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Texture2D>(importData->Filepath, filter);
+            std::filesystem::path defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Texture2D>(importData->FilepathToImport, filter);
 
             std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
 

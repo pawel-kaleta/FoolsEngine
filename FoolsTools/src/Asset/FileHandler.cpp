@@ -83,7 +83,7 @@ namespace fe
             }
         }
 
-        void OpenWindow(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr)
+        void OpenWindow(const std::filesystem::path& filepathToImport, const LoadersRegistry::Item* loaderItemPtr)
         {
             if (s_ImportData)
             {
@@ -101,7 +101,7 @@ namespace fe
 
             s_ImportData = new ImportData();
 
-            s_ImportData->Filepath = filepath;
+            s_ImportData->FilepathToImport = filepathToImport;
             s_ImportData->LoaderItemPtr = loaderItemPtr;
 
             (*init_import_funk)(s_ImportData);

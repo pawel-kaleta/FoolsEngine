@@ -227,6 +227,9 @@ namespace fe
 				return false;
 
 			AssetUser<Texture2D> texture_user(texture_ID);
+			
+			FE_CORE_ASSERT(texture_user.GetType() == AssetType::Texture2D, "Trying to load texture in material that is not a texture.");
+
 			TextureLoader::LoadTexture(texture_user);
 			texture_user.CreateGDITexture2D(GDI);
 			texture_user.UnloadFromCPU();
@@ -400,7 +403,7 @@ namespace fe
 			//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 
 			if (texture_UUID_node.as<UUID>() == UUID(0))
-				core.TextureIDs.emplace_back();			
+				core.TextureIDs.emplace_back(NullAssetID);
 			else
 				core.TextureIDs.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
 		}

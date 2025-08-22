@@ -21,8 +21,8 @@ namespace fe::GeometryImport
 
 	void InitImport(ImportData* const importData)
 	{
-		auto scene = GeometryLoader::InspectSourceFile(importData->Filepath);
-		auto texture_packing = IsGuaranteedStandardTexturePacking(importData->Filepath);
+		auto scene = GeometryLoader::InspectSourceFile(importData->FilepathToImport);
+		auto texture_packing = IsGuaranteedStandardTexturePacking(importData->FilepathToImport);
 		
 		auto& data = importData->GeometryData;
 
@@ -192,7 +192,19 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void CreateBaseMaterial(const AssetUser<Material>& materialUser, GeometryImport::MaterialData& materialData, const aiScene* scene)
+	static void CreateTextureForMaterial(const char* textureSlotName, ACMaterialCore& core, const aiString& filePath, const AssetUser<Material>& materialUser, const ImportData* const importData)
+	{
+		AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
+		AssetHandle<Texture2D> textureHandle(textureID);
+
+		auto full_texture_path = importData->FilepathToImport.parent_path() / std::filesystem::path(filePath.C_Str());
+
+		textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(full_texture_path);
+		AssetManager::SetSourcePath(textureID, filePath.C_Str());
+		materialUser.SetTexture(core, textureSlotName, textureID);
+	}
+
+	static void CreateBaseMaterial(const AssetUser<Material>& materialUser, GeometryImport::MaterialData& materialData, const ImportData* const importData)
 	{
 		auto& core = materialUser.GetCoreComponent();
 
@@ -210,13 +222,7 @@ namespace fe::GeometryImport
 
 		if (recognized.BaseColor != -1)
 		{
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
-			AssetHandle<Texture2D> textureHandle(textureID);
-
-			auto& texture_path = all[recognized.BaseColor];
-			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
-			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			materialUser.SetTexture(core, "u_BaseColorMap", textureID);
+			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData);
 		}
 		else
 		{
@@ -228,13 +234,7 @@ namespace fe::GeometryImport
 			bool packing = true;
 			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
 
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
-			AssetHandle<Texture2D> textureHandle(textureID);
-
-			auto& texture_path = all[recognized.PackedOMR];
-			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
-			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			materialUser.SetTexture(core, "u_OMRMap", textureID);
+			CreateTextureForMaterial("u_OMRMap", core, all[recognized.PackedOMR], materialUser, importData);
 
 			materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
 			materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
@@ -245,17 +245,15 @@ namespace fe::GeometryImport
 			bool packing = false;
 			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
 			materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
+
+			CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedOMR.Roughness], materialUser, importData);
+			CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedOMR.Metalness], materialUser, importData);
+			CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedOMR.Occlusion], materialUser, importData);
 		}
 
 		if (recognized.Normal != -1)
 		{
-			AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
-			AssetHandle<Texture2D> textureHandle(textureID);
-
-			auto& texture_path = all[recognized.Normal];
-			textureHandle.Use().GetCoreComponent().Specification = TextureLoader::InspectTexture(texture_path.C_Str());
-			AssetManager::SetSourcePath(textureID, texture_path.C_Str());
-			materialUser.SetTexture(core, "u_NormalMap", textureID);
+			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData);
 		}
 		else
 		{
@@ -272,7 +270,7 @@ namespace fe::GeometryImport
 		auto w = x.lexically_relative(assets_path);
 
 		AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Model>(w);
-		AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(assets_path));
+		AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 		AssetHandle<Model> model_handle(assetID);
 		auto model_user = model_handle.Use();
 
@@ -298,7 +296,7 @@ namespace fe::GeometryImport
 			if (material_data.AlphaMode == AlphaMode::Opaque)
 			{
 				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
-				CreateBaseMaterial(material_user, material_data, scene);
+				CreateBaseMaterial(material_user, material_data, importData);
 
 				if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
 					material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
@@ -306,7 +304,7 @@ namespace fe::GeometryImport
 			else
 			{
 				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
-				CreateBaseMaterial(material_user, material_data, scene);
+				CreateBaseMaterial(material_user, material_data, importData);
 				
 				glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
 
@@ -348,24 +346,24 @@ namespace fe::GeometryImport
 		Model::SaveMetadata(assetID);
 	}
 
-	static void ImportAsRenderMesh(const std::filesystem::path& filepath, const ImportData* const importData)
+	static void ImportAsRenderMesh(const std::filesystem::path& targetFilepath, const ImportData* const importData)
 	{
 	
 	}
 
-	static void ImportAsMesh(const std::filesystem::path& filepath, const ImportData* const importData)
+	static void ImportAsMesh(const std::filesystem::path& targetFilepath, const ImportData* const importData)
 	{
 		auto& scene = importData->GeometryData.Scene;
 		
 		auto y = Project::GetInstance()->AssetsPath;
 		auto z = std::filesystem::current_path();
-		auto x = filepath.lexically_relative(z);
+		auto x = targetFilepath.lexically_relative(z);
 		auto w = x.lexically_relative(y);
 		const AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Mesh>(w);
 		{
 			auto mesh_user = AssetUser<Mesh>(assetID);
 
-			AssetManager::SetSourcePath(assetID, importData->Filepath.lexically_relative(y));
+			AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(y));
 			auto& core = mesh_user.GetCoreComponent();
 			auto& specification = core.Specification;
 
@@ -773,7 +771,7 @@ namespace fe::GeometryImport
 		auto& scene = data.Scene;
 
 		ImGui::SeparatorText("Geometry Info");
-		ImGui::Text("File: %s", importData->Filepath.string().c_str());
+		ImGui::Text("File: %s", importData->FilepathToImport.string().c_str());
 
 		if (ImGui::CollapsingHeader("Nodes", 0))
 			RenderHierarchy(scene);
@@ -819,9 +817,9 @@ namespace fe::GeometryImport
 			
 				switch (variant)
 				{
-				case ImportVariant::Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->Filepath, filter);	break;
-				case ImportVariant::RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->Filepath, filter);	break;
-				case ImportVariant::Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->Filepath, filter);	break;
+				case ImportVariant::Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->FilepathToImport, filter);	break;
 				}
 
 				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());

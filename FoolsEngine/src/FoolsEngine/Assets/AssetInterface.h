@@ -18,6 +18,8 @@ namespace fe
 		const ACSourceFilepath* GetSourceFilepath() const { return GetIfExist<ACSourceFilepath>(); }
 		const std::filesystem::path& GetFilepath() const { return Get<ACFilepath>().Filepath; }
 
+		AssetType GetType() const { return Get<ACAssetType>().Type; }
+
 		template<typename... tnAssetComponents>
 		bool AllOf() const
 		{

@@ -11,7 +11,7 @@ namespace fe
     struct ImportData
     {
         //char AssetName[64] = "";
-        std::filesystem::path Filepath;
+        std::filesystem::path FilepathToImport;
         //const std::vector<AssetID>* ImportedAssets = nullptr;
         //AssetHandleBase* HandleToOverride = nullptr;
         //AssetType Type = AssetType::None;

@@ -38,3 +38,6 @@ Textures:
   - Shader Texture Slot: u_NormalMap
     Filepath: ""
     UUID: 0
+  - Shader Texture Slot: u_OMRMap
+    Filepath: ""
+    UUID: 0
