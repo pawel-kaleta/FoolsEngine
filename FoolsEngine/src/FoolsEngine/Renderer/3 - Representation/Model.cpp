@@ -5,25 +5,106 @@
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
+#include "FoolsEngine\Core\Project.h"
+
 namespace fe
 {
+	extern void EmitShaderDataType(YAML::Emitter& emitter, char* dataPtr, const ShaderData::Type& type);
+
 	void Model::SaveMetadata(AssetID assetID)
 	{
-		auto assetObserver = AssetObserver<Model>(assetID);
-		auto& core = assetObserver.GetCoreComponent();
+		AssetObserver<Model> assetObserver(assetID);
+		auto& model_core = assetObserver.GetCoreComponent();
 
 		YAML::Emitter emitter;
 
-		FE_LOG_CORE_ERROR("Not implemented");
+		emitter << YAML::BeginMap;
+		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "RenderMeshes" << YAML::Value << YAML::BeginSeq;
 
-		emitter << YAML::BeginSeq;
-		for (const auto& renderMeshID : core.RenderMeshIDs)
+		for (const auto& renderMeshID : model_core.RenderMeshIDs)
 		{
-			emitter << renderMeshID;
+			AssetObserver<RenderMesh> renderMesh_observer(renderMeshID);
+			auto& renderMesh_core = renderMesh_observer.GetCoreComponent();
+
+			emitter << YAML::BeginMap;
+			emitter << YAML::Key << "UUID" << YAML::Value << renderMesh_observer.GetUUID();
+			emitter << YAML::Key << "Mesh" << YAML::Value << YAML::BeginMap;
+			{
+				AssetObserver<Mesh> mesh_observer(renderMesh_core.MeshID);
+				auto& mesh_core = mesh_observer.GetCoreComponent();
+
+				emitter << YAML::Key << "UUID" << YAML::Value << mesh_observer.GetUUID();
+				emitter << YAML::Key << "Vartex Count" << YAML::Value << mesh_core.Specification.VertexCount;
+				emitter << YAML::Key << "Index Count" << YAML::Value << mesh_core.Specification.IndexCount;
+			}
+			emitter << YAML::EndMap;
+			emitter << YAML::Key << "Material" << YAML::Value << YAML::BeginMap;
+			{
+				AssetObserver<Material> material_observer(renderMesh_core.MaterialID);
+				auto& material_core = material_observer.GetCoreComponent();
+				emitter << YAML::Key << "UUID" << YAML::Value << material_observer.GetUUID();
+
+				AssetObserver<ShadingModel> shading_model_observer(material_core.ShadingModelID);
+				const auto& shading_model_core = shading_model_observer.GetCoreComponent();
+
+				emitter << YAML::BeginMap;
+				emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
+				emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << material_core.UniformsDataSize;
+				emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
+
+				char* uniform_data_ptr = (char*)material_core.UniformsData;
+				for (auto& uniform : shading_model_core.Uniforms)
+				{
+					emitter << YAML::BeginMap;
+					emitter << YAML::Key << "Name" << YAML::Value << uniform.GetName();
+					emitter << YAML::Key << "Type" << YAML::Value << uniform.GetType().ToConstCharPtr();
+					emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
+					emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
+
+					auto type = uniform.GetType();
+					for (size_t i = 0; i < uniform.GetCount(); i++)
+					{
+						float* test = (float*)uniform_data_ptr;
+						EmitShaderDataType(emitter, uniform_data_ptr, type);
+						uniform_data_ptr += uniform.GetSize();
+					}
+					emitter << YAML::EndSeq;
+					emitter << YAML::EndMap;
+				}
+				emitter << YAML::EndSeq;
+
+				emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq;
+				for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
+				{
+					emitter << YAML::BeginMap;
+					emitter << YAML::Key << "Shader Texture Slot" << YAML::Value << shading_model_core.TextureSlots[i].GetName();
+					if (material_core.TextureIDs[i] != NullAssetID)
+					{
+						const AssetObserver<Texture2D> texture_observer(material_core.TextureIDs[i]);
+						emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
+						static_assert(false, "do they have filepaths?");
+						emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetSourceFilepath()->Filepath.string(); 
+					}
+					else
+					{
+						emitter << YAML::Key << "UUID" << YAML::Value << 0;
+						emitter << YAML::Key << "Filepath" << YAML::Value << "";
+					}
+					emitter << YAML::EndMap;
+				}
+				emitter << YAML::EndSeq;
+				emitter << YAML::EndMap;
+			}
+			emitter << YAML::EndMap;
+			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
 
-		std::ofstream fout(assetObserver.GetFilepath());
+		emitter << YAML::EndMap;
+
+		auto& path = assetObserver.GetFilepath();
+		std::ofstream fout(Project::GetInstance()->AssetsPath / path);
 		fout << emitter.c_str();
 	}
 

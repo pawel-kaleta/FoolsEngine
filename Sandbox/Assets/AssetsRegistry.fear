@@ -1,6 +1,6 @@
 Masters:
   - Type: Model
-    UUID: 15547647560171893600
+    UUID: 11566640065895987926
     Filepath: Sponza\glTF\Sponza.femodel
   - Type: Texture2D
     UUID: 7533288542743074609

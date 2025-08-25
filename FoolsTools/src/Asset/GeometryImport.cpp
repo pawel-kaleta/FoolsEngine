@@ -221,20 +221,19 @@ namespace fe::GeometryImport
 		auto& recognized = materialData.RecognizedTextures;
 
 		if (recognized.BaseColor != -1)
-		{
 			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData);
-		}
 		else
-		{
 			materialUser.SetTexture(core, "u_BaseColorMap", Renderer::BaseAssets.Textures.Default.GetID());
-		}
+		
+		auto& texture_packing = importData->GeometryData.GLTFTexturePacking;
+		materialUser.SetUniformValue(core, "u_OMRTexturePacking", (void*) & texture_packing);
 
-		if (recognized.PackedOMR != -1)
+		if (texture_packing)
 		{
-			bool packing = true;
-			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
-
-			CreateTextureForMaterial("u_OMRMap", core, all[recognized.PackedOMR], materialUser, importData);
+			if (recognized.PackedOMR != -1)
+				CreateTextureForMaterial("u_OMRMap", core, all[recognized.PackedOMR], materialUser, importData);
+			else
+				materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
 
 			materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
 			materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
@@ -242,23 +241,28 @@ namespace fe::GeometryImport
 		}
 		else
 		{
-			bool packing = false;
-			materialUser.SetUniformValue(core, "u_OMRTexturePacking", &packing);
 			materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
 
-			CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedOMR.Roughness], materialUser, importData);
-			CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedOMR.Metalness], materialUser, importData);
-			CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedOMR.Occlusion], materialUser, importData);
+			if (recognized.NonPackedOMR.Roughness != -1)
+				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedOMR.Roughness], materialUser, importData);
+			else
+				materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+
+			if (recognized.NonPackedOMR.Metalness != -1)
+				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedOMR.Metalness], materialUser, importData);
+			else
+				materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+
+			if (recognized.NonPackedOMR.Occlusion != -1)
+				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedOMR.Occlusion], materialUser, importData);
+			else
+				materialUser.SetTexture(core, "u_AOMap", Renderer::BaseAssets.Textures.Default.GetID());
 		}
 
 		if (recognized.Normal != -1)
-		{
 			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData);
-		}
 		else
-		{
 			materialUser.SetTexture(core, "u_NormalMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
-		}
 	}
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
@@ -271,76 +275,74 @@ namespace fe::GeometryImport
 
 		AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Model>(w);
 		AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
-		AssetHandle<Model> model_handle(assetID);
-		auto model_user = model_handle.Use();
-
-		auto& model_core = model_user.GetCoreComponent();
-
-		Scratchpad sp;
-		std::pmr::vector<AssetID> mesh_IDs(&sp);
-		std::pmr::vector<AssetID> material_IDs(&sp);
-
-		mesh_IDs.reserve(scene->mNumMeshes);
-		material_IDs.reserve(scene->mNumMaterials);
-
-		for (size_t i = 0; i < scene->mNumMaterials; i++)
+		
 		{
-			AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
-			material_IDs.push_back(material_ID);
+			AssetUser<Model> model_user(assetID);
+			auto& model_core = model_user.GetCoreComponent();
 
-			auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
-			
-			AssetUser<Material> material_user(material_ID);
-			auto& material_core = material_user.GetCoreComponent();
+			Scratchpad sp;
+			std::pmr::vector<AssetID> material_IDs(&sp);
 
-			if (material_data.AlphaMode == AlphaMode::Opaque)
+			material_IDs.reserve(scene->mNumMaterials);
+
+			for (size_t i = 0; i < scene->mNumMaterials; i++)
 			{
-				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
-				CreateBaseMaterial(material_user, material_data, importData);
+				AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
+				material_IDs.push_back(material_ID);
 
-				if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+				auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
+
+				AssetUser<Material> material_user(material_ID);
+				auto& material_core = material_user.GetCoreComponent();
+
+				if (material_data.AlphaMode == AlphaMode::Opaque)
+				{
+					material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
+					CreateBaseMaterial(material_user, material_data, importData);
+
+					if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+						material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+				}
+				else
+				{
+					material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
+					CreateBaseMaterial(material_user, material_data, importData);
+
+					glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
+
+					if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+						base_color = { material_data.Uniforms.BaseColor, 1.f };
+					if (material_data.DetectedProperties & DetectedMaterialProperties::Opacity)
+						base_color.a = material_data.Uniforms.Opacity;
 					material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+
+					if (material_data.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
+						material_user.SetUniformValue(material_core, "u_AlphaCutOff", &material_data.Uniforms.AlphaCutoff);
+				}
 			}
-			else
+
+			for (size_t i = 0; i < scene->mNumMeshes; i++)
 			{
-				material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
-				CreateBaseMaterial(material_user, material_data, importData);
-				
-				glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
+				AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
 
-				if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
-					base_color = { material_data.Uniforms.BaseColor, 1.f };
-				if (material_data.DetectedProperties & DetectedMaterialProperties::Opacity)
-					base_color.a = material_data.Uniforms.Opacity;
-				material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+				auto mesh_user = AssetUser<Mesh>(mesh_ID);
+				auto& mesh_core = mesh_user.GetCoreComponent();
 
-				if (material_data.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
-					material_user.SetUniformValue(material_core, "u_AlphaCutOff", &material_data.Uniforms.AlphaCutoff);
+				mesh_core.Specification.VertexCount = scene->mMeshes[i]->mNumVertices;
+				mesh_core.Specification.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
+
+				AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
+				auto& render_mesh = model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
+
+				auto render_mesh_user = AssetUser<RenderMesh>(render_mesh);
+				auto& render_mesh_core = render_mesh_user.GetCoreComponent();
+
+				auto& material_index = scene->mMeshes[i]->mMaterialIndex;
+				auto& material_ID = material_IDs[material_index];
+
+				render_mesh_core.MeshID = mesh_ID;
+				render_mesh_core.MaterialID = material_ID;
 			}
-		}
-
-		for (size_t i = 0; i < scene->mNumMeshes; i++)
-		{
-			AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
-			mesh_IDs.push_back(mesh_ID);
-
-			auto mesh_user = AssetUser<Mesh>(mesh_ID);
-			auto& mesh_core = mesh_user.GetCoreComponent();
-
-			mesh_core.Specification.VertexCount = scene->mMeshes[i]->mNumVertices;
-			mesh_core.Specification.IndexCount  = scene->mMeshes[i]->mNumFaces * 3;
-
-			AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
-			auto& render_mesh = model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
-
-			auto render_mesh_user = AssetUser<RenderMesh>(render_mesh);
-			auto& render_mesh_core = render_mesh_user.GetCoreComponent();
-
-			auto& material_index = scene->mMeshes[i]->mMaterialIndex;
-			auto& material_ID = material_IDs[material_index];
-
-			render_mesh_core.MeshID = mesh_ID;
-			render_mesh_core.MaterialID = material_ID;
 		}
 
 		Model::SaveMetadata(assetID);
