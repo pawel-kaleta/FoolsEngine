@@ -13,6 +13,8 @@ namespace fe
 
 	void Model::SaveMetadata(AssetID assetID)
 	{
+		Scratchpad sp;
+
 		AssetObserver<Model> assetObserver(assetID);
 		auto& model_core = assetObserver.GetCoreComponent();
 
@@ -20,6 +22,7 @@ namespace fe
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 		emitter << YAML::Key << "RenderMeshes" << YAML::Value << YAML::BeginSeq;
 
 		for (const auto& renderMeshID : model_core.RenderMeshIDs)
@@ -48,7 +51,6 @@ namespace fe
 				AssetObserver<ShadingModel> shading_model_observer(material_core.ShadingModelID);
 				const auto& shading_model_core = shading_model_observer.GetCoreComponent();
 
-				emitter << YAML::BeginMap;
 				emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
 				emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << material_core.UniformsDataSize;
 				emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
@@ -83,8 +85,7 @@ namespace fe
 					{
 						const AssetObserver<Texture2D> texture_observer(material_core.TextureIDs[i]);
 						emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
-						static_assert(false, "do they have filepaths?");
-						emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetSourceFilepath()->Filepath.string(); 
+						emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 					}
 					else
 					{
@@ -94,10 +95,11 @@ namespace fe
 					emitter << YAML::EndMap;
 				}
 				emitter << YAML::EndSeq;
-				emitter << YAML::EndMap;
 			}
 			emitter << YAML::EndMap;
 			emitter << YAML::EndMap;
+
+			sp.Clear();
 		}
 		emitter << YAML::EndSeq;
 

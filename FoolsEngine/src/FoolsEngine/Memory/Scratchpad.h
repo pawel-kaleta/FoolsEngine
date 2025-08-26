@@ -45,6 +45,16 @@ namespace fe
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			s_Free = (std::byte*)((uintptr_t)m_Begin * rollback_flag + (uintptr_t)s_Free * !rollback_flag);
 		}
+
+		void Clear()
+		{
+			bool rollback_flag = s_RollbackFlags & m_FlagMask;
+			s_Free = (std::byte*)((uintptr_t)m_Begin * rollback_flag + (uintptr_t)s_Free * !rollback_flag);
+
+			s_RollbackFlags |= m_FlagMask;
+			m_Begin = s_Free;
+			m_End = s_Free;
+		}
 	private:
 		constexpr const static size_t s_BufferSize = 524'288;
 		static std::byte s_Buffer[s_BufferSize];

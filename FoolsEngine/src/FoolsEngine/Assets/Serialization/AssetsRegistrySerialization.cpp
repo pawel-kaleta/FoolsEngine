@@ -9,12 +9,15 @@
 
 #include "FoolsEngine\Core\Project.h"
 
+#include "FoolsEngine\Memory\Scratchpad.h"
+
 #include <string>
 
 namespace fe::AssetSerializer
 {
 	void SerializeRegistry()
 	{
+		Scratchpad sp;
 		YAML::Emitter emitter;
 		auto& reg = AssetManager::GetRegistry();
 
@@ -29,10 +32,12 @@ namespace fe::AssetSerializer
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
-			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string();
+			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
+
+		sp.Clear();
 
 		emitter << YAML::Key << "Internals" << YAML::Value << YAML::BeginSeq;
 		auto masters_view = reg.view<ACMasterAsset>();
@@ -45,6 +50,8 @@ namespace fe::AssetSerializer
 			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Master" << YAML::Value << reg.get<ACUUID>(acmaster.Master).UUID;
+			if (type == AssetType::Texture2D)
+				emitter << YAML::Key << "Source Filepath" << YAML::Value << reg.get<ACSourceFilepath>(id).Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
@@ -57,6 +64,8 @@ namespace fe::AssetSerializer
 	bool DeserializeRegistry()
 	{
 		FE_PROFILER_FUNC();
+
+		Scratchpad sp;
 
 		YAML::Node node;
 		
@@ -98,8 +107,15 @@ namespace fe::AssetSerializer
 				if (!asset["Master"])   return false;
 
 				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
-				reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
 				reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
+				AssetType asset_type;
+				asset_type.FromString(asset["Type"].as<std::string>());
+				reg.emplace<ACAssetType>(assetID).Type = asset_type;
+				switch (asset_type)
+				{
+				case AssetType::Texture2D:
+					reg.emplace<ACSourceFilepath>(assetID).Filepath = asset["Source Filepath"].as<std::string>();
+				}
 			}
 		}
 

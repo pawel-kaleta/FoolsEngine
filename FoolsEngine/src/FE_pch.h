@@ -31,3 +31,5 @@
 #include "FoolsEngine/Debug/Profiler.h"
 #include "FoolsEngine/Platform/InputCodes.h"
 #include "FoolsEngine/Core/Core.h"
+
+#include "FoolsEngine\Memory\Scratchpad.h"

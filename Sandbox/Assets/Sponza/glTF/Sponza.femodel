@@ -1,77 +1,1367 @@
-UUID: 13765857148588376912
+UUID: 349007352878849658
 RenderMeshes:
-  - UUID: 6933964705330306285
-    Mesh UUID: 9084354880221635761
-    Material UUID: 16844740007651310457
-  - UUID: 6077152954207502375
-    Mesh UUID: 10156392133434786201
-    Material UUID: 8836317041838692659
-  - UUID: 13633011941089027016
-    Mesh UUID: 9801447412335362110
-    Material UUID: 2359833656623348354
-  - UUID: 3538357550160087551
-    Mesh UUID: 10426652797945509016
-    Material UUID: 17714983624492294851
-  - UUID: 6769298600083331240
-    Mesh UUID: 14934967093859538230
-    Material UUID: 4873406559989128675
-  - UUID: 18022818079138699397
-    Mesh UUID: 7911006666220748403
-    Material UUID: 17619043193806269574
-  - UUID: 3452924512388735252
-    Mesh UUID: 18064072073113209585
-    Material UUID: 3455587843218496016
-  - UUID: 2408410898837465203
-    Mesh UUID: 17250921185555845723
-    Material UUID: 15208350857574167512
-  - UUID: 6414545781544059256
-    Mesh UUID: 796841789430704459
-    Material UUID: 10273697753794766824
-  - UUID: 11930073915209755061
-    Mesh UUID: 18133684445823723388
-    Material UUID: 14230420495426075497
-  - UUID: 17415821154645684976
-    Mesh UUID: 2318299791241524094
-    Material UUID: 10599737848474987689
-  - UUID: 11913965925260517353
-    Mesh UUID: 13779026289703507028
-    Material UUID: 2130137529660749168
-  - UUID: 3111475796796395282
-    Mesh UUID: 14603451303367374710
-    Material UUID: 16701555084636185817
-  - UUID: 7260119207544411033
-    Mesh UUID: 16150412574510768849
-    Material UUID: 15897850386730899237
-  - UUID: 6854034732658481668
-    Mesh UUID: 17023722894372650643
-    Material UUID: 6772920594195832491
-  - UUID: 6843677838683111593
-    Mesh UUID: 376287949030902177
-    Material UUID: 3960856420219984834
-  - UUID: 12294455623823929615
-    Mesh UUID: 8994271789155090806
-    Material UUID: 434070107962769357
-  - UUID: 8368730080194996803
-    Mesh UUID: 7984489448157555786
-    Material UUID: 13035658824474209067
-  - UUID: 775500135182538506
-    Mesh UUID: 16190833710597499913
-    Material UUID: 1725476744384203309
-  - UUID: 1115346099803908310
-    Mesh UUID: 2690678620424337069
-    Material UUID: 554444077858486638
-  - UUID: 1291391379328129958
-    Mesh UUID: 12163769758766406535
-    Material UUID: 16900772174794673167
-  - UUID: 16615337451657129238
-    Mesh UUID: 10649463052094573703
-    Material UUID: 10868830637538745675
-  - UUID: 9227133778925755594
-    Mesh UUID: 2597571504770132461
-    Material UUID: 6248912974446324190
-  - UUID: 3975733448047964341
-    Mesh UUID: 16178174438509440554
-    Material UUID: 12790695900573774994
-  - UUID: 9212566843680345263
-    Mesh UUID: 12040222049950878187
-    Material UUID: 840434253587331073
+  - UUID: 9135785788398477667
+    Mesh:
+      UUID: 14278405445510963475
+      Vartex Count: 24110
+      Index Count: 94308
+    Material:
+      UUID: 4710016588121195657
+      Shading Model: 3793305017238133067
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float4
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588, 1]
+        - Name: u_AlphaCutOff
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - -4.2201683e+37
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - -1.9983972e+18
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 2719984189861369267
+          Filepath: 5061699253647017043.png
+        - Shader Texture Slot: u_OMRMap
+          UUID: 8292896785184023922
+          Filepath: 11872827283454512094.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 8192918411774779530
+          Filepath: 8773302468495022225.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 2148861855824274089
+    Mesh:
+      UUID: 8372128982376442797
+      Vartex Count: 3932
+      Index Count: 10416
+    Material:
+      UUID: 6152210678265963572
+      Shading Model: 3793305017238133067
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float4
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588, 1]
+        - Name: u_AlphaCutOff
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - -4.2201683e+37
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - -1.9983972e+18
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 8630158930854980435
+          Filepath: 8006627369776289000.png
+        - Shader Texture Slot: u_OMRMap
+          UUID: 15101573704182256023
+          Filepath: 715093869573992647.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 8774194657646349551
+          Filepath: 12501374198249454378.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 10947503178333835214
+    Mesh:
+      UUID: 9317466842359899422
+      Vartex Count: 9840
+      Index Count: 53064
+    Material:
+      UUID: 1764864142381971900
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 1901206233404145387
+          Filepath: 7268504077753552595.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 14517560437967011350
+          Filepath: 8503262930880235456.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 14090158046298098080
+          Filepath: 4477655471536070370.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 12723633711026335205
+    Mesh:
+      UUID: 17883654258288369569
+      Vartex Count: 2241
+      Index Count: 12258
+    Material:
+      UUID: 12563947265888166403
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 10189674193997608524
+          Filepath: 8750083169368950601.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 15156226199001077411
+          Filepath: 16885566240357350108.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 8641910677995991240
+          Filepath: 13982482287905699490.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 17641200774033392336
+    Mesh:
+      UUID: 2274268511572173546
+      Vartex Count: 1053
+      Index Count: 2388
+    Material:
+      UUID: 4819274880967020126
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 16440760771520912821
+          Filepath: 5792855332885324923.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 8895003675101776748
+          Filepath: 11968150294050148237.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 2112713783845366944
+          Filepath: 16299174074766089871.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 12158946660784181118
+    Mesh:
+      UUID: 6280585630112634236
+      Vartex Count: 9679
+      Index Count: 30504
+    Material:
+      UUID: 13713973811987468078
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 7871941278482604960
+          Filepath: 14650633544276105767.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 12498629412843710665
+          Filepath: 4871783166746854860.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 9203319770895389290
+          Filepath: 2051777328469649772.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 17598029154519108494
+    Mesh:
+      UUID: 6346887725556124497
+      Vartex Count: 4998
+      Index Count: 17628
+    Material:
+      UUID: 11291902314589452183
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 9585614595987710883
+          Filepath: 15295713303328085182.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 4815480825418452939
+          Filepath: 9916269861720640319.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 2824710869805386104
+          Filepath: 10388182081421875623.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 4313250598809214973
+    Mesh:
+      UUID: 7271431541832456029
+      Vartex Count: 3124
+      Index Count: 8448
+    Material:
+      UUID: 6803149673019776418
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 16640030504560269067
+          Filepath: 6047387724914829168.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 14481668336690967431
+          Filepath: 8051790464816141987.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 18252853342116065007
+          Filepath: 15722799267630235092.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 12264367648711782238
+    Mesh:
+      UUID: 8698533662570430703
+      Vartex Count: 23
+      Index Count: 63
+    Material:
+      UUID: 7742817959895904540
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 12512301503954143017
+          Filepath: 5823059166183034438.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 12660749556559523721
+          Filepath: 13824894030729245199.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 16924449791699309536
+          Filepath: 14267839433702832875.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 2494835347503282457
+    Mesh:
+      UUID: 10740338031017037217
+      Vartex Count: 11820
+      Index Count: 21264
+    Material:
+      UUID: 1783093168327724567
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 3036326061272430717
+          Filepath: 7441062115984513793.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 7654081240513186174
+          Filepath: 8114461559286000061.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 7245248310189227941
+          Filepath: 6667038893015345571.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 4411014658238101919
+    Mesh:
+      UUID: 6781319157144572568
+      Vartex Count: 1098
+      Index Count: 2640
+    Material:
+      UUID: 4509252437944908536
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 17374113947332018873
+          Filepath: 11490520546946913238.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 1947445985260713777
+          Filepath: 3455394979645218238.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 9576378727114185596
+          Filepath: 3628158980083700836.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 6368490197687941750
+    Mesh:
+      UUID: 8017209568658542844
+      Vartex Count: 22820
+      Index Count: 69624
+    Material:
+      UUID: 1879895918845177009
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 7485414975563547517
+          Filepath: 6151467286084645207.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 9186125560825746376
+          Filepath: 8783994986360286082.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 6970386001629295890
+          Filepath: 7645212358685992005.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 11850209952051692665
+    Mesh:
+      UUID: 2588372069727280946
+      Vartex Count: 36
+      Index Count: 54
+    Material:
+      UUID: 14459567436757162950
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 4912512628935238916
+          Filepath: white.png
+        - Shader Texture Slot: u_OMRMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_NormalMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 15708084237054909962
+    Mesh:
+      UUID: 11989994315543338332
+      Vartex Count: 12162
+      Index Count: 49488
+    Material:
+      UUID: 15731768628639604107
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 2788625295535352025
+          Filepath: 4975155472559461469.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 2994176048027661105
+          Filepath: 3371964815757888145.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 12080990689691637805
+          Filepath: 2299742237651021498.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 617621310891037471
+    Mesh:
+      UUID: 10738689518046218330
+      Vartex Count: 9126
+      Index Count: 49536
+    Material:
+      UUID: 6290610079911530891
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 4543668348036915018
+          Filepath: 4675343432951571524.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 4820184463345072612
+          Filepath: 7815564343179553343.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 13296748186215171303
+          Filepath: 7056944414013900257.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 1566123808238454979
+    Mesh:
+      UUID: 2347180923710353664
+      Vartex Count: 9126
+      Index Count: 49536
+    Material:
+      UUID: 9424168375885643354
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 6519270851401750341
+          Filepath: 2775690330959970771.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 4980615927263858575
+          Filepath: 7815564343179553343.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 7991642191935373012
+          Filepath: 2374361008830720677.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 11862830682066889317
+    Mesh:
+      UUID: 1989126587866262855
+      Vartex Count: 6084
+      Index Count: 33024
+    Material:
+      UUID: 5122263658902943954
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 4233264514296726057
+          Filepath: 2185409758123873465.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 2837881240429305361
+          Filepath: 7815564343179553343.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 5086062335671643744
+          Filepath: 332936164838540657.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 9667918470685350663
+    Mesh:
+      UUID: 4095182200085759829
+      Vartex Count: 7398
+      Index Count: 43008
+    Material:
+      UUID: 18426803453322124891
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 8478359424923345092
+          Filepath: 17876391417123941155.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 835030114030613255
+          Filepath: 466164707995436622.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 15653733458624838872
+          Filepath: 6593109234861095314.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 2632741316061793622
+    Mesh:
+      UUID: 857507953960227461
+      Vartex Count: 9904
+      Index Count: 56832
+    Material:
+      UUID: 9554907944118305365
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 14808165956252068485
+          Filepath: 11474523244911310074.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 12232593573804526126
+          Filepath: 466164707995436622.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 5700181353052344700
+          Filepath: 4601176305987539675.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 9560021435716222567
+    Mesh:
+      UUID: 6475627498948098507
+      Vartex Count: 7398
+      Index Count: 43008
+    Material:
+      UUID: 6509729406420025134
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 5605280279706596860
+          Filepath: 9288698199695299068.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 7295513136089778031
+          Filepath: 466164707995436622.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 15590229301791289346
+          Filepath: 4910669866631290573.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 6953391226828407103
+    Mesh:
+      UUID: 17005107495314349686
+      Vartex Count: 64
+      Index Count: 96
+    Material:
+      UUID: 6690371327824187729
+      Shading Model: 3793305017238133067
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float4
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588, 1]
+        - Name: u_AlphaCutOff
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - -4.2201683e+37
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - -1.9983972e+18
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 4683366071963740174
+          Filepath: 16275776544635328252.png
+        - Shader Texture Slot: u_OMRMap
+          UUID: 10719267994404980614
+          Filepath: 1219024358953944284.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 13693207820715215124
+          Filepath: 14170708867020035030.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 10815511230928925244
+    Mesh:
+      UUID: 14637919606420204913
+      Vartex Count: 10412
+      Index Count: 59484
+    Material:
+      UUID: 4519409891696340353
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 9123200019751536567
+          Filepath: 755318871556304029.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 5536821680283444249
+          Filepath: 2411100444841994089.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 16082623629215078838
+          Filepath: 3827035219084910048.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 5040218683856386770
+    Mesh:
+      UUID: 4111901626634687052
+      Vartex Count: 5308
+      Index Count: 27552
+    Material:
+      UUID: 13097417283293709102
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 7332407579781626333
+          Filepath: 8481240838833932244.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 9844107796530247417
+          Filepath: 17556969131407844942.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 17211482039750026027
+          Filepath: 10381718147657362067.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 12767210838826256038
+    Mesh:
+      UUID: 14492877564925055828
+      Vartex Count: 1728
+      Index Count: 9126
+    Material:
+      UUID: 9318206529178086817
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 9539372733858066313
+          Filepath: 6772804448157695701.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 12576611450192134145
+          Filepath: 13196865903111448057.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 9867986085266847736
+          Filepath: 759203620573749278.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""
+  - UUID: 10975626581232797427
+    Mesh:
+      UUID: 5883312189255428939
+      Vartex Count: 10918
+      Index Count: 43452
+    Material:
+      UUID: 14196077090214141331
+      Shading Model: 3793305017238133063
+      Uniforms Data Size: 24
+      Uniforms:
+        - Name: u_BaseColor
+          Type: Float3
+          Count: 1
+          Value:
+            - [0.588, 0.588, 0.588]
+        - Name: u_Roughness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_Metalness
+          Type: Float
+          Count: 1
+          Value:
+            - 0.5
+        - Name: u_AO
+          Type: Float
+          Count: 1
+          Value:
+            - 0
+        - Name: u_OMRTexturePacking
+          Type: Bool
+          Count: 1
+          Value:
+            - true
+      Textures:
+        - Shader Texture Slot: u_BaseColorMap
+          UUID: 16060985069976975133
+          Filepath: 2969916736137545357.jpg
+        - Shader Texture Slot: u_OMRMap
+          UUID: 6146678123118126455
+          Filepath: 8747919177698443163.jpg
+        - Shader Texture Slot: u_NormalMap
+          UUID: 1825793357780544333
+          Filepath: 14118779221266351425.jpg
+        - Shader Texture Slot: u_RoughnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_MetalnessMap
+          UUID: 0
+          Filepath: ""
+        - Shader Texture Slot: u_AOMap
+          UUID: 0
+          Filepath: ""

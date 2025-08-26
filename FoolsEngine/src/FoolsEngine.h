@@ -43,6 +43,7 @@
 #include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
 #include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
 #include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"

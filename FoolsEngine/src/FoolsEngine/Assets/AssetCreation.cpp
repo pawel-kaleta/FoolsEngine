@@ -93,8 +93,6 @@ namespace fe
 		using core = tnAsset::Core;
 		reg.emplace<core>(assetID).Init();
 
-		AssetSerializer::SerializeRegistry(); // I don't think this should happen immediately
-
 		return assetID;
 	}
 

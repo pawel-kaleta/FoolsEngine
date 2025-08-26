@@ -223,7 +223,7 @@ namespace fe::GeometryImport
 		if (recognized.BaseColor != -1)
 			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData);
 		else
-			materialUser.SetTexture(core, "u_BaseColorMap", Renderer::BaseAssets.Textures.Default.GetID());
+			materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
 		
 		auto& texture_packing = importData->GeometryData.GLTFTexturePacking;
 		materialUser.SetUniformValue(core, "u_OMRTexturePacking", (void*) & texture_packing);
@@ -233,36 +233,36 @@ namespace fe::GeometryImport
 			if (recognized.PackedOMR != -1)
 				CreateTextureForMaterial("u_OMRMap", core, all[recognized.PackedOMR], materialUser, importData);
 			else
-				materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
+				materialUser.SetTexture(core, "u_OMRMap", NullAssetID);
 
-			materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
-			materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
-			materialUser.SetTexture(core, "u_AOMap", Renderer::BaseAssets.Textures.Default.GetID());
+			materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
+			materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
+			materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 		else
 		{
-			materialUser.SetTexture(core, "u_OMRMap", Renderer::BaseAssets.Textures.Default.GetID());
+			materialUser.SetTexture(core, "u_OMRMap", NullAssetID);
 
 			if (recognized.NonPackedOMR.Roughness != -1)
 				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedOMR.Roughness], materialUser, importData);
 			else
-				materialUser.SetTexture(core, "u_RoughnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+				materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 
 			if (recognized.NonPackedOMR.Metalness != -1)
 				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedOMR.Metalness], materialUser, importData);
 			else
-				materialUser.SetTexture(core, "u_MetalnessMap", Renderer::BaseAssets.Textures.Default.GetID());
+				materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
 
 			if (recognized.NonPackedOMR.Occlusion != -1)
 				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedOMR.Occlusion], materialUser, importData);
 			else
-				materialUser.SetTexture(core, "u_AOMap", Renderer::BaseAssets.Textures.Default.GetID());
+				materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 
 		if (recognized.Normal != -1)
 			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData);
 		else
-			materialUser.SetTexture(core, "u_NormalMap", Renderer::BaseAssets.Textures.FlatWhite.GetID());
+			materialUser.SetTexture(core, "u_NormalMap", NullAssetID);
 	}
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
@@ -346,6 +346,7 @@ namespace fe::GeometryImport
 		}
 
 		Model::SaveMetadata(assetID);
+		AssetSerializer::SerializeRegistry();
 	}
 
 	static void ImportAsRenderMesh(const std::filesystem::path& targetFilepath, const ImportData* const importData)
