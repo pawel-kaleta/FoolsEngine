@@ -36,25 +36,6 @@ namespace fe::AssetSerializer
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
-
-		sp.Clear();
-
-		emitter << YAML::Key << "Internals" << YAML::Value << YAML::BeginSeq;
-		auto masters_view = reg.view<ACMasterAsset>();
-		for (auto id : masters_view)
-		{
-			auto [acmaster] = masters_view.get(id);
-			auto& type = reg.get<ACAssetType>(id).Type;
-
-			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
-			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
-			emitter << YAML::Key << "Master" << YAML::Value << reg.get<ACUUID>(acmaster.Master).UUID;
-			if (type == AssetType::Texture2D)
-				emitter << YAML::Key << "Source Filepath" << YAML::Value << reg.get<ACSourceFilepath>(id).Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-			emitter << YAML::EndMap;
-		}
-		emitter << YAML::EndSeq;
 		emitter << YAML::EndMap;
 
 		std::ofstream fout(Project::GetInstance()->AssetsPath / "AssetsRegistry.fear");
@@ -75,7 +56,7 @@ namespace fe::AssetSerializer
 		}
 
 		if (!node["Masters"])   return false;
-		if (!node["Internals"]) return false;
+		//if (!node["Internals"]) return false;
 
 		auto& reg = AssetManager::GetRegistry();
 
@@ -93,29 +74,6 @@ namespace fe::AssetSerializer
 				auto& debug = reg.emplace<ACAssetType>(assetID);
 				debug.Type.FromString(asset["Type"].as<std::string>());
 				reg.emplace<ACRefsCounters>(assetID);
-			}
-		}
-
-
-		{
-			FE_PROFILER_SCOPE("Internals");
-			for (auto asset : node["Internals"])
-			{
-				FE_PROFILER_SCOPE("Asset");
-				if (!asset["Type"])     return false;
-				if (!asset["UUID"])     return false;
-				if (!asset["Master"])   return false;
-
-				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
-				reg.emplace<ACMasterAsset>(assetID).Master = AssetManager::GetOrCreateAssetWithUUID(asset["Master"].as<UUID>());
-				AssetType asset_type;
-				asset_type.FromString(asset["Type"].as<std::string>());
-				reg.emplace<ACAssetType>(assetID).Type = asset_type;
-				switch (asset_type)
-				{
-				case AssetType::Texture2D:
-					reg.emplace<ACSourceFilepath>(assetID).Filepath = asset["Source Filepath"].as<std::string>();
-				}
 			}
 		}
 

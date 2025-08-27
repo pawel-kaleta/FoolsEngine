@@ -1,5 +1,5 @@
 Shader: ../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl
-Uniforms Data Size: 24
+Uniforms Data Size: 28
 Uniforms:
   - Name: u_BaseColor
     Type: Float3

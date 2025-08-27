@@ -86,6 +86,14 @@ namespace fe
 						const AssetObserver<Texture2D> texture_observer(material_core.TextureIDs[i]);
 						emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
 						emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+						auto& spec = texture_observer.GetCoreComponent().Specification;
+						emitter << YAML::Key << "Specification" << YAML::Value << YAML::BeginMap;
+							emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
+							emitter << YAML::Key << "Components" << YAML::Value << spec.Components.ToConstCharPtr();
+							emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToConstCharPtr();
+							emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
+							emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
+						emitter << YAML::EndMap;
 					}
 					else
 					{
