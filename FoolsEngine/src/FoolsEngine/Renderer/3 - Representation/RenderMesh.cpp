@@ -61,18 +61,16 @@ namespace fe
 		return true;
 	}
 
-	void RenderMesh::SaveMetadata(AssetID assetID)
+	void RenderMesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto assetObserver = AssetObserver<RenderMesh>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
-		YAML::Emitter emitter;
-
 		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetManager::GetUUID(core.MeshID);
 		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetManager::GetUUID(core.MaterialID);
 
-		std::ofstream fout(assetObserver.GetFilepath());
-		fout << emitter.c_str();
+		//std::ofstream fout(assetObserver.GetFilepath());
+		//fout << emitter.c_str();
 	}
 
 	bool RenderMesh::LoadMetadata(AssetID assetID)

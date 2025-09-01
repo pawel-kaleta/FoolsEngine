@@ -98,14 +98,12 @@ namespace fe
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
 	}
 	
-	void ShadingModel::SaveMetadata(AssetID assetID)
+	void ShadingModel::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		FE_PROFILER_FUNC();
 
 		auto assetObserver = AssetObserver<ShadingModel>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
-
-		YAML::Emitter emitter;
 
 		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderID).Filepath.string();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
@@ -137,8 +135,8 @@ namespace fe
 		}
 		emitter << YAML::EndSeq;
 
-		std::ofstream fout(assetObserver.GetFilepath());
-		fout << emitter.c_str();
+		//std::ofstream fout(assetObserver.GetFilepath());
+		//fout << emitter.c_str();
 	}
 
 	bool ShadingModel::LoadMetadata(AssetID assetID)

@@ -347,7 +347,11 @@ namespace fe::GeometryImport
 			}
 		}
 
-		Model::SaveMetadata(assetID);
+		YAML::Emitter emitter;
+		Model::SaveMetadata(emitter, assetID);
+		std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Model>(assetID).GetFilepath());
+		fout << emitter.c_str();
+
 		AssetSerializer::SerializeRegistry();
 	}
 
@@ -380,7 +384,11 @@ namespace fe::GeometryImport
 			specification.IndexCount *= 3;
 		}
 		
-		Mesh::SaveMetadata(assetID);
+		YAML::Emitter emitter;
+		Mesh::SaveMetadata(emitter, assetID);
+		std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Mesh>(assetID).GetFilepath());
+		fout << emitter.c_str();
+
 		AssetSerializer::SerializeRegistry();
 	}
 

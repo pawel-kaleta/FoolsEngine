@@ -3,6 +3,8 @@
 #include "Asset.h"
 #include "Loaders\LoaderType.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	class AssetTypesRegistry
@@ -12,7 +14,7 @@ namespace fe
 		{
 			void (* EmplaceCore)(AssetID);
 			bool (* LoadMetadata)(AssetID);
-			void (* SaveMetadata)(AssetID);
+			void (* SaveMetadata)(YAML::Emitter&, AssetID);
 			const char* MetaFileExtension;
 			// load data too? (for AssetManager::EvaluateAndReload)
 			const char* TypeConstCharPtr;

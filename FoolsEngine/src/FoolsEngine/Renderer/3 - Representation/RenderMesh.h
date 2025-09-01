@@ -6,6 +6,8 @@
 #include "FoolsEngine\Assets\AssetAccessors.h"
 #include "Mesh.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	struct ACRenderMeshCore final : public AssetComponent
@@ -44,7 +46,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".ferm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using Observer = RenderMeshObserver;

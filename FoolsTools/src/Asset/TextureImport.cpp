@@ -23,7 +23,10 @@ namespace fe
         textureHandle.Use().GetCoreComponent().Specification = importData->TextureData.Specification;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
-        Texture2D::SaveMetadata(assetID);
+        YAML::Emitter emitter;
+        Texture2D::SaveMetadata(emitter, assetID);
+        std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Texture2D>(assetID).GetFilepath());
+        fout << emitter.c_str();
     }
 
     void TextureImport::RenderWindow(ImportData* const importData)

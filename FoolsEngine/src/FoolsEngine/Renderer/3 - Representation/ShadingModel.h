@@ -7,6 +7,8 @@
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
@@ -59,7 +61,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }
 		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShadingModelCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using User = ShadingModelUser;

@@ -255,12 +255,10 @@ namespace fe
 		}
 	}
 
-	void Material::SaveMetadata(AssetID assetID)
+	void Material::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto assetObserver = AssetObserver<Material>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
-
-		YAML::Emitter emitter;
 
 		AssetObserver<ShadingModel> shading_model_observer(core.ShadingModelID);
 		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
@@ -312,8 +310,8 @@ namespace fe
 		emitter << YAML::EndSeq;
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
-		fout << emitter.c_str();
+		//std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
+		//fout << emitter.c_str();
 	}
 
 	bool Material::LoadMetadata(AssetID assetID)

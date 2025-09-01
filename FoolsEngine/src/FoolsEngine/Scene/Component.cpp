@@ -306,7 +306,10 @@ namespace fe
 				ImGui::SeparatorText("Material parameters");
 				if (EditMaterial(assetHandle.Use()))
 				{
-					Material::SaveMetadata(assetHandle.GetID());
+					YAML::Emitter emitter;
+					Material::SaveMetadata(emitter, assetHandle.GetID());
+					std::ofstream fout(Project::GetInstance()->AssetsPath / assetHandle.Observe().GetFilepath());
+					fout << emitter.c_str();
 				}
 			}
 		}

@@ -6,6 +6,8 @@
 #include "Mesh.h"
 #include "RenderMesh.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	struct ACModelCore final : public AssetComponent
@@ -44,7 +46,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Model; }
 		static constexpr const char* GetMetaFileExtension() { return ".femodel"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACModelCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using Observer = ModelObserver;

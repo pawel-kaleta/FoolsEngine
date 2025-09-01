@@ -8,6 +8,8 @@
 
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	FE_DECLARE_ENUM(AlphaMode, Opaque, Mask, Blend);
@@ -74,7 +76,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Material; }
 		static constexpr const char* GetMetaFileExtension() { return ".femat"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMaterialCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using User = MaterialUser;

@@ -131,13 +131,11 @@ namespace fe
 		}
 	}
 
-	void Texture2D::SaveMetadata(AssetID assetID)
+	void Texture2D::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		FE_PROFILER_FUNC();
 
 		auto assetObserver = AssetObserver<Texture2D>(assetID);
-
-		YAML::Emitter emitter;
 		
 		Scratchpad sp;
 
@@ -152,8 +150,8 @@ namespace fe
 		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
-		fout << emitter.c_str();
+		//std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
+		//fout << emitter.c_str();
 	}
 
 	bool Texture2D::LoadMetadata(AssetID assetID)

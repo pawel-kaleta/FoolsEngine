@@ -13,6 +13,8 @@
 
 #include <glm\glm.hpp>
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	struct MeshSpecification
@@ -81,7 +83,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Mesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".femesh"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMeshCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using Observer = MeshObserver;

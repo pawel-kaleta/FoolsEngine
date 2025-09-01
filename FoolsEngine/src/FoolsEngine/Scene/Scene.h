@@ -8,6 +8,8 @@
 
 #include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	class Entity;
@@ -56,7 +58,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Scene; }
 		static constexpr const char* GetMetaFileExtension() { return ".fescene"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACSceneCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID) {};
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) { };
 		static bool LoadMetadata(AssetID assetID) { return true; };
 
 		using Observer = SceneObserver;

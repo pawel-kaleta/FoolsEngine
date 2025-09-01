@@ -117,12 +117,10 @@ namespace fe
 		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
 	}
 
-	void Mesh::SaveMetadata(AssetID assetID)
+	void Mesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto assetObserver = AssetObserver<Mesh>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
-
-		YAML::Emitter emitter;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
@@ -131,9 +129,9 @@ namespace fe
 		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
 		emitter << YAML::EndMap;
 
-		auto x = Project::GetInstance()->AssetsPath / assetObserver.GetFilepath();
-		std::ofstream fout(x);
-		fout << emitter.c_str();
+		//auto x = Project::GetInstance()->AssetsPath / assetObserver.GetFilepath();
+		//std::ofstream fout(x);
+		//fout << emitter.c_str();
 	}
 
 	bool Mesh::LoadMetadata(AssetID assetID)

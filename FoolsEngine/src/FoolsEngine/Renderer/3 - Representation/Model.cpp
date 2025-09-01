@@ -11,14 +11,12 @@ namespace fe
 {
 	extern void EmitShaderDataType(YAML::Emitter& emitter, char* dataPtr, const ShaderData::Type& type);
 
-	void Model::SaveMetadata(AssetID assetID)
+	void Model::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		Scratchpad sp;
 
 		AssetObserver<Model> assetObserver(assetID);
 		auto& model_core = assetObserver.GetCoreComponent();
-
-		YAML::Emitter emitter;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
@@ -113,9 +111,9 @@ namespace fe
 
 		emitter << YAML::EndMap;
 
-		auto& path = assetObserver.GetFilepath();
-		std::ofstream fout(Project::GetInstance()->AssetsPath / path);
-		fout << emitter.c_str();
+		//auto& path = assetObserver.GetFilepath();
+		//std::ofstream fout(Project::GetInstance()->AssetsPath / path);
+		//fout << emitter.c_str();
 	}
 
 	bool Model::LoadMetadata(AssetID assetID)

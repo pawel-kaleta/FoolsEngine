@@ -4,6 +4,8 @@
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
 
+namespace YAML { class Emitter; }
+
 namespace fe
 {
 	struct GDIType;
@@ -68,7 +70,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
 		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
-		static void SaveMetadata(AssetID assetID);
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 
 		using Observer = Texture2DObserver;
