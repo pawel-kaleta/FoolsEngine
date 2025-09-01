@@ -9,6 +9,8 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/fmt/ostr.h>
 
+#include <FoolsEngine\Utils\DeclareEnum.h>
+
 namespace fe {
 
 	class Log
@@ -16,14 +18,71 @@ namespace fe {
 	public:
 		static void Init();
 
+        //FE_DECLARE_ENUM expanden in place, due to circular dependency log-enum
+        struct LoggingLevel {
+            enum ValueType {
+                Trace, Debug, Info, Warn, Error, Fatal, None
+            } Value; constexpr operator const ValueType()& {
+                return Value;
+            } constexpr bool operator==(const LoggingLevel& other) const {
+                return this->Value == other.Value;
+            } constexpr bool operator!=(const LoggingLevel& other) const {
+                return this->Value != other.Value;
+            } constexpr bool operator==(const ValueType& other) const {
+                return this->Value == other;
+            } constexpr bool operator!=(const ValueType& other) const {
+                return this->Value != other;
+            } constexpr LoggingLevel& operator=(const LoggingLevel& other) {
+                this->Value = other.Value; return *this;
+            } constexpr LoggingLevel& operator=(const ValueType& other) {
+                this->Value = other; return *this;
+            } constexpr LoggingLevel& operator=(LoggingLevel&& other) noexcept {
+                this->Value = other.Value; return *this;
+            } constexpr LoggingLevel& operator=(ValueType&& other) {
+                this->Value = other; return *this;
+            } LoggingLevel() = default; constexpr LoggingLevel(const LoggingLevel& other) : Value(other.Value) {
+            } constexpr LoggingLevel(LoggingLevel&& other) noexcept : Value(other.Value) {
+            } constexpr LoggingLevel(const ValueType& other) : Value(other) {
+            } constexpr LoggingLevel(ValueType&& other) : Value(other) {
+            } void FromString(const std::string& string) {
+                if (string == "Trace") {
+                    Value = Trace; return;
+                }if (string == "Debug") {
+                    Value = Debug; return;
+                }if (string == "Info") {
+                    Value = Info; return;
+                }if (string == "Warn") {
+                    Value = Warn; return;
+                }if (string == "Error") {
+                    Value = Error; return;
+                }if (string == "Fatal") {
+                    Value = Fatal; return;
+                }if (string == "None") {
+                    Value = None; return;
+                } if (!(false)) {
+                    fe::Log::GetCoreLogger()->error("CORE ASSERTION FAILED: in file {0} in function {1} at line {2}.", std::filesystem::path("C:\\FE_DEV\\FoolsEngine\\FoolsEngine\\src\\FoolsEngine\\Debug\\Log.h").filename().string(), __builtin_FUNCSIG(), 21); fe::Log::GetCoreLogger()->error("Assertion Message: " "Unrecognised string representation of enum"); if (fe::Asserts::EnableCoreAssertionBreak) __debugbreak();;
+                };
+            } constexpr const char* ToConstCharPtr() const {
+                switch (Value) {
+                case Trace: return "Trace"; case Debug: return "Debug"; case Info: return "Info"; case Warn: return "Warn"; case Error: return "Error"; case Fatal: return "Fatal"; case None: return "None"; default: if (!(false)) {
+                    fe::Log::GetCoreLogger()->error("CORE ASSERTION FAILED: in file {0} in function {1} at line {2}.", std::filesystem::path("C:\\FE_DEV\\FoolsEngine\\FoolsEngine\\src\\FoolsEngine\\Debug\\Log.h").filename().string(), __builtin_FUNCSIG(), 21); fe::Log::GetCoreLogger()->error("Assertion Message: " "Unrecognised value of enum"); if (fe::Asserts::EnableCoreAssertionBreak) __debugbreak();;
+                }; return "";
+                }
+            } constexpr void FromInt(int x) {
+                Value = (ValueType)x;
+            } constexpr int ToInt() const {
+                return (int)Value;
+            }
+        };
+
 		static std::shared_ptr<spdlog::logger> GetCoreLogger()   { return s_CoreLogger; }
 		static std::shared_ptr<spdlog::logger> GetClientLogger() { return s_ClientLogger; }
 
-		static void SetCoreLoggingLevel(int lvl);
-		static void SetClientLoggingLevel(int lvl);
+		static void SetCoreLoggingLevel(LoggingLevel lvl);
+		static void SetClientLoggingLevel(LoggingLevel lvl);
 
-		static spdlog::level::level_enum GetCoreLoggingLevel() { return s_CoreLogger->level(); }
-		static spdlog::level::level_enum GetClientLoggingLevel() { return s_ClientLogger->level(); }
+		static LoggingLevel GetCoreLoggingLevel();
+		static LoggingLevel GetClientLoggingLevel();
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;

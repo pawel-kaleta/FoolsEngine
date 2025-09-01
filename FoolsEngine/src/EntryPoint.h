@@ -17,8 +17,8 @@ int main(int argc, char** argv)
 	FE_LOG_CORE_INFO("////////////////////// STARTUP //////////////////////");
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 
-	fe::Log::SetClientLoggingLevel(spdlog::level::trace);
-	fe::Log::SetCoreLoggingLevel(spdlog::level::trace);
+	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Trace);
+	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Trace);
 
 	FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
 	auto app = fe::CreateApplication({ argc, argv });
@@ -29,8 +29,8 @@ int main(int argc, char** argv)
 	FE_LOG_CORE_INFO("////////////////////// RUNTIME //////////////////////");
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 
-	fe::Log::SetClientLoggingLevel(spdlog::level::debug);
-	fe::Log::SetCoreLoggingLevel(spdlog::level::debug);
+	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Debug);
+	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Debug);
 
 	app->Run();
 
@@ -38,8 +38,8 @@ int main(int argc, char** argv)
 	FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
 
-	fe::Log::SetClientLoggingLevel(spdlog::level::trace);
-	fe::Log::SetCoreLoggingLevel(spdlog::level::trace);
+	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Trace);
+	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Trace);
 
 	FE_PROFILER_SESSION_START("Shutdown", "Logs/ProfileData_Shutdown.json");
 	app->ShutDown();

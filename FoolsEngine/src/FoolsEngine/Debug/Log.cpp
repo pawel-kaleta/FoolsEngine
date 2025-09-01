@@ -14,7 +14,7 @@ namespace fe
 
 #ifdef FE_DEBUG
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-		loggingTargets.back()->set_pattern("%^%T:%f | %-3n | %-8l | %v%$");
+		loggingTargets.back()->set_pattern("%^%M:%S:%f | %-3n | %-8l | %v%$");
 #endif // FE_DEBUG
 
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Logs/FoolsEngine.log", true));
@@ -48,85 +48,103 @@ namespace fe
 		FE_LOG_INFO("Logging innitialized!");
 	}
 
-	void Log::SetCoreLoggingLevel(int lvl)
+	void Log::SetCoreLoggingLevel(LoggingLevel lvl)
 	{
 		spdlog::level::level_enum currentLoggingLvl = s_CoreLogger->level();
-		s_CoreLogger->set_level(spdlog::level::info);
 		switch (lvl)
 		{
-			case 0:
-				FE_LOG_CORE_INFO("Logging level set to 0 - all.");
-				s_CoreLogger->set_level(spdlog::level::trace);
-				break;
-			case 1:
-				FE_LOG_CORE_INFO("Logging level set to 1 - debug or higher.");
-				s_CoreLogger->set_level(spdlog::level::debug);
-				break;
-			case 2:
-				FE_LOG_CORE_INFO("Logging level set to 2 - info or higher.");
-				s_CoreLogger->set_level(spdlog::level::info);
-				break;
-			case 3:
-				FE_LOG_CORE_INFO("Logging level set to 3 - warning or higher.");
-				s_CoreLogger->set_level(spdlog::level::warn);
-				break;
-			case 4:
-				FE_LOG_CORE_INFO("Logging level set to 4 - error or higher.");
-				s_CoreLogger->set_level(spdlog::level::err);
-				break;
-			case 5:
-				FE_LOG_CORE_INFO("Logging level set to 5 - fatal error or higher.");
-				s_CoreLogger->set_level(spdlog::level::critical);
-				break;
-			case 6:
-				FE_LOG_CORE_INFO("Logging level set to 6 - nothing.");
-				s_CoreLogger->set_level(spdlog::level::off);
-				break;
-			default:
-				FE_LOG_CORE_ERROR("Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl={0}", lvl);
-				s_CoreLogger->set_level(currentLoggingLvl);
-				break;
+		case LoggingLevel::Trace:
+			s_CoreLogger->set_level(spdlog::level::trace);
+			break;
+		case LoggingLevel::Debug:
+			s_CoreLogger->set_level(spdlog::level::debug);
+			break;
+		case LoggingLevel::Info:
+			s_CoreLogger->set_level(spdlog::level::info);
+			break;
+		case LoggingLevel::Warn:
+			s_CoreLogger->set_level(spdlog::level::warn);
+			break;
+		case LoggingLevel::Error:
+			s_CoreLogger->set_level(spdlog::level::err);
+			break;
+		case LoggingLevel::Fatal:
+			s_CoreLogger->set_level(spdlog::level::critical);
+			break;
+		case LoggingLevel::None:
+			s_CoreLogger->set_level(spdlog::level::off);
+			break;
+		default:
+			FE_LOG_CORE_ERROR("Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl={0}", lvl.ToInt());
+			s_CoreLogger->set_level(currentLoggingLvl);
+			break;
 		}
 	}
 
-	void Log::SetClientLoggingLevel(int lvl)
+	void Log::SetClientLoggingLevel(LoggingLevel lvl)
 	{
 		spdlog::level::level_enum currentLoggingLvl = s_ClientLogger->level();
-		s_ClientLogger->set_level(spdlog::level::trace);
 		switch (lvl)
 		{
-		case 0:
-			FE_LOG_INFO("Logging level set to 0 - all.");
+		case LoggingLevel::Trace:
 			s_ClientLogger->set_level(spdlog::level::trace);
 			break;
-		case 1:
-			FE_LOG_INFO("Logging level set to 1 - debug or higher.");
+		case LoggingLevel::Debug:
 			s_ClientLogger->set_level(spdlog::level::debug);
 			break;
-		case 2:
-			FE_LOG_INFO("Logging level set to 2 - info or higher.");
+		case LoggingLevel::Info:
 			s_ClientLogger->set_level(spdlog::level::info);
 			break;
-		case 3:
-			FE_LOG_INFO("Logging level set to 3 - warning or higher.");
+		case LoggingLevel::Warn:
 			s_ClientLogger->set_level(spdlog::level::warn);
 			break;
-		case 4:
-			FE_LOG_INFO("Logging level set to 4 - error or higher.");
+		case LoggingLevel::Error:
 			s_ClientLogger->set_level(spdlog::level::err);
 			break;
-		case 5:
-			FE_LOG_INFO("Logging level set to 5 - fatal error or higher.");
+		case LoggingLevel::Fatal:
 			s_ClientLogger->set_level(spdlog::level::critical);
 			break;
-		case 6:
-			FE_LOG_INFO("Logging level set to 6 - nothing.");
+		case LoggingLevel::None:
 			s_ClientLogger->set_level(spdlog::level::off);
 			break;
 		default:
-			FE_LOG_ERROR("Unrecognized lvl of logging! Possible values: 0-6. Received value: lvl={0}", lvl);
+			FE_LOG_ERROR("Unrecognized lvl of logging! Received value: lvl={0}", lvl.ToInt());
 			s_ClientLogger->set_level(currentLoggingLvl);
 			break;
+		}
+	}
+
+	Log::LoggingLevel Log::GetCoreLoggingLevel()
+	{
+		auto lvl = s_CoreLogger->level();
+		switch (lvl)
+		{
+		case spdlog::level::trace:		return LoggingLevel::Trace;
+		case spdlog::level::debug:		return LoggingLevel::Debug;
+		case spdlog::level::info:		return LoggingLevel::Info;
+		case spdlog::level::warn:		return LoggingLevel::Warn;
+		case spdlog::level::err:		return LoggingLevel::Error;
+		case spdlog::level::critical:	return LoggingLevel::Fatal;
+		case spdlog::level::off:		return LoggingLevel::None;
+		default:
+			FE_CORE_ASSERT(false, "What?");
+		}
+	}
+
+	Log::LoggingLevel Log::GetClientLoggingLevel()
+	{
+		auto lvl = s_ClientLogger->level();
+		switch (lvl)
+		{
+		case spdlog::level::trace:		return LoggingLevel::Trace;
+		case spdlog::level::debug:		return LoggingLevel::Debug;
+		case spdlog::level::info:		return LoggingLevel::Info;
+		case spdlog::level::warn:		return LoggingLevel::Warn;
+		case spdlog::level::err:		return LoggingLevel::Error;
+		case spdlog::level::critical:	return LoggingLevel::Fatal;
+		case spdlog::level::off:		return LoggingLevel::None;
+		default:
+			FE_CORE_ASSERT(false, "What?");
 		}
 	}
 

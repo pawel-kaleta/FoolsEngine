@@ -18,11 +18,16 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		auto logging_level = Log::GetCoreLoggingLevel();
+		Log::SetCoreLoggingLevel(Log::LoggingLevel::Info);
+
 		glCreateVertexArrays(1, &m_VertexArrayID);
 
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 		glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, GL_DYNAMIC_DRAW);
+
+		Log::SetCoreLoggingLevel(logging_level);
 	}
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
@@ -30,11 +35,16 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		auto logging_level = Log::GetCoreLoggingLevel();
+		Log::SetCoreLoggingLevel(Log::LoggingLevel::Info);
+
 		glCreateVertexArrays(1, &m_VertexArrayID);
 
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 		glBufferData(GL_ARRAY_BUFFER, m_Size, vertices, GL_STATIC_DRAW);
+
+		Log::SetCoreLoggingLevel(logging_level);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -64,8 +74,14 @@ namespace fe
 	void OpenGLVertexBuffer::SendDataToGPU(const void* data, uint32_t size)
 	{
 		FE_CORE_ASSERT(size <= m_Size, "Too much data for this VertexBuffer!");
+
+		auto logging_level = Log::GetCoreLoggingLevel();
+		Log::SetCoreLoggingLevel(Log::LoggingLevel::Info);
+
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+
+		Log::SetCoreLoggingLevel(logging_level);
 	}
 
 	uint32_t OpenGLVertexBuffer::GetSize() const

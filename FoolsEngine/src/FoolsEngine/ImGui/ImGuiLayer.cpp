@@ -114,7 +114,11 @@ namespace fe {
 		io.DisplaySize = ImVec2((float)window.GetWidth(), (float)window.GetHeight());
 
 		ImGui::Render();
+
+		auto logging_level = Log::GetCoreLoggingLevel();
+		Log::SetCoreLoggingLevel(Log::LoggingLevel::Warn);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		Log::SetCoreLoggingLevel(logging_level);
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{

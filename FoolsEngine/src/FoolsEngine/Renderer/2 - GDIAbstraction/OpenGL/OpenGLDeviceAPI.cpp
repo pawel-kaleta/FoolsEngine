@@ -21,12 +21,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		glUseProgram(0);
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
 	void OpenGLDeviceAPI::Clear()
 	{
 		FE_PROFILER_FUNC();
+
+		glUseProgram(0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
@@ -55,6 +58,8 @@ namespace fe
 
 	void OpenGLDeviceAPI::SetDepthTest(bool depthTets)
 	{
+		// note: will propably cause shader recompilation
+
 		if (depthTets)
 			glEnable(GL_DEPTH_TEST);
 		else

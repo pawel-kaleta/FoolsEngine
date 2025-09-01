@@ -1,7 +1,4 @@
 Masters:
-  - Type: Model
-    UUID: 3290530881504410974
-    Filepath: Sponza\glTF\Sponza.femodel
   - Type: Texture2D
     UUID: 7533288542743074609
     Filepath: Survival_BackPack_2\1001_albedo.fetex2d

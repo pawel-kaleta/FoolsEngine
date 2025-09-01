@@ -9,10 +9,15 @@ namespace fe
 		: IndexBuffer(count)
 	{
 		FE_PROFILER_FUNC();
+		auto logging_level = Log::GetCoreLoggingLevel();
+		Log::SetCoreLoggingLevel(Log::LoggingLevel::Info);
+
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+
+		Log::SetCoreLoggingLevel(logging_level);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()

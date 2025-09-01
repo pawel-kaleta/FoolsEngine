@@ -124,9 +124,10 @@ namespace fe
 
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
-		auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
-
+		auto filepath = Project::GetInstance()->AssetsPath;
+		filepath /= ECS_handle.get<ACFilepath>().Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
+
 		auto& core = ECS_handle.get<ACModelCore>();
 
 		auto uuid_node = node["UUID"];

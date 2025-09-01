@@ -40,7 +40,19 @@ namespace fe
 			{GL_DEBUG_TYPE_OTHER, "OTHER"}
 		};
 
-		std::string logMessage = "OpenGL Message: ";
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:         FE_LOG_CORE_FATAL("OpenGL:"); break;
+		case GL_DEBUG_SEVERITY_MEDIUM:       FE_LOG_CORE_ERROR("OpenGL:"); break;
+		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN( "OpenGL:"); break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG("OpenGL:"); break;
+		}
+
+		FE_LOG_CORE_DEBUG("	Source:		{0}", Sources.at(source));
+		FE_LOG_CORE_DEBUG("	Type:		{0}", Types.at(type));
+		FE_LOG_CORE_DEBUG("	ID:		{0}", id);
+
+		std::string logMessage = "	Message:	";
 		logMessage += message;
 		switch (severity)
 		{
@@ -49,9 +61,9 @@ namespace fe
 		case GL_DEBUG_SEVERITY_LOW:          FE_LOG_CORE_WARN(logMessage);  break;
 		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG(logMessage); break;
 		}
-		FE_LOG_CORE_DEBUG("Source: {0}, Type: {1}, ID: {2}", Sources.at(source), Types.at(type), id);
 
-		FE_ASSERTION_BREAK();
+		if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
+			FE_ASSERTION_BREAK();
 	}
 
 	OpenGLRenderingContext::OpenGLRenderingContext(void* window) :
