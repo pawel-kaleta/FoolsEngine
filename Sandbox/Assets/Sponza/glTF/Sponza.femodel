@@ -1,13 +1,12 @@
-UUID: 3290530881504410974
+UUID: 11976198241382410547
 Filepath: Sponza\glTF\Sponza.gltf
 RenderMeshes:
-  - UUID: 62299098718892881
+  - UUID: 14450573047982775954
     Mesh:
-      UUID: 17668634516339112417
+      UUID: 6404373949174253520
       Vartex Count: 24110
       Index Count: 94308
     Material:
-      UUID: 12232630336035647737
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -42,49 +41,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 9401151737483469571
-          Filepath: 5061699253647017043.png
-          Specification:
+        - u_BaseColorMap:
+            UUID: 11604277287419225451
+            Source Filepath: 5061699253647017043.png
             Usage: Map_BaseColor
             Components: RGBA
             Format: RGBA_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 2908423784333871399
-          Filepath: 11872827283454512094.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 10188028827370301128
+            Source Filepath: 11872827283454512094.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 17098326482091950103
-          Filepath: 8773302468495022225.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 4591876732714677846
+            Source Filepath: 8773302468495022225.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 5815259418434708572
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 14615148411237863468
     Mesh:
-      UUID: 16590472041621563247
+      UUID: 14872632807121070198
       Vartex Count: 3932
       Index Count: 10416
     Material:
-      UUID: 12151491232814967783
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -119,49 +111,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8167604351152023487
-          Filepath: 8006627369776289000.png
-          Specification:
+        - u_BaseColorMap:
+            UUID: 16703419593056056071
+            Source Filepath: 8006627369776289000.png
             Usage: Map_BaseColor
             Components: RGBA
             Format: RGBA_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 15849458383159411884
-          Filepath: 715093869573992647.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 5342415190506690594
+            Source Filepath: 715093869573992647.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 10746898138457195921
-          Filepath: 12501374198249454378.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 4551866755998126294
+            Source Filepath: 12501374198249454378.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 10861555001804901890
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 9075418783024351430
     Mesh:
-      UUID: 3854492712279038395
+      UUID: 3262360178102827884
       Vartex Count: 9840
       Index Count: 53064
     Material:
-      UUID: 11367685750604457699
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -191,49 +176,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 16087619479112476044
-          Filepath: 7268504077753552595.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 9517480150368104048
+            Source Filepath: 7268504077753552595.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 17190619813747252215
-          Filepath: 8503262930880235456.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 12202699073754622277
+            Source Filepath: 8503262930880235456.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 8809929826227839539
-          Filepath: 4477655471536070370.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 18318131127583652169
+            Source Filepath: 4477655471536070370.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 9194580688879816674
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 4718355496096185042
     Mesh:
-      UUID: 13460297109785699299
+      UUID: 3831140998850129615
       Vartex Count: 2241
       Index Count: 12258
     Material:
-      UUID: 13450652903607728056
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -263,49 +241,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 17573704534076373561
-          Filepath: 8750083169368950601.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 3507145859810221645
+            Source Filepath: 8750083169368950601.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 5982096180430676261
-          Filepath: 16885566240357350108.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 11731870085257399875
+            Source Filepath: 16885566240357350108.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 12921491186788785516
-          Filepath: 13982482287905699490.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 2551857349886120780
+            Source Filepath: 13982482287905699490.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 11467062260065994959
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 6625617285251866720
     Mesh:
-      UUID: 10210942402744345887
+      UUID: 11630828383345242786
       Vartex Count: 1053
       Index Count: 2388
     Material:
-      UUID: 9756951958841773353
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -335,49 +306,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 15346150340272730279
-          Filepath: 5792855332885324923.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 17828861343406962604
+            Source Filepath: 5792855332885324923.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 15019988715717807499
-          Filepath: 11968150294050148237.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 12587822609062608388
+            Source Filepath: 11968150294050148237.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 9734663428891410622
-          Filepath: 16299174074766089871.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 15858432485676857299
+            Source Filepath: 16299174074766089871.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 3911058348381804923
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 15905846644655692245
     Mesh:
-      UUID: 16276369664434941000
+      UUID: 14171716580897070284
       Vartex Count: 9679
       Index Count: 30504
     Material:
-      UUID: 12716945850245637190
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -407,49 +371,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 11838720699300313653
-          Filepath: 14650633544276105767.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 5310671131190023112
+            Source Filepath: 14650633544276105767.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 3619857881135324582
-          Filepath: 4871783166746854860.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 2016298316064657212
+            Source Filepath: 4871783166746854860.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 14802872372408928319
-          Filepath: 2051777328469649772.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 13858310688636700627
+            Source Filepath: 2051777328469649772.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 15860545581624673572
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 4201627497628168364
     Mesh:
-      UUID: 12906040141332318771
+      UUID: 12124938054153430912
       Vartex Count: 4998
       Index Count: 17628
     Material:
-      UUID: 14006238775293739234
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -479,49 +436,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 11123699747203175532
-          Filepath: 15295713303328085182.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 4857896028432032008
+            Source Filepath: 15295713303328085182.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 14894564513803166736
-          Filepath: 9916269861720640319.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 15043829295589256980
+            Source Filepath: 9916269861720640319.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 11206442136474368150
-          Filepath: 10388182081421875623.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 10149583272187328800
+            Source Filepath: 10388182081421875623.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 17171176898642488149
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 13923291926829220130
     Mesh:
-      UUID: 18073727076846239788
+      UUID: 570220795419587175
       Vartex Count: 3124
       Index Count: 8448
     Material:
-      UUID: 7876479336789394641
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -551,49 +501,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8211761914717329358
-          Filepath: 6047387724914829168.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 6116439151905628481
+            Source Filepath: 6047387724914829168.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 6864948897362108831
-          Filepath: 8051790464816141987.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 3576647884242740983
+            Source Filepath: 8051790464816141987.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 494609333978324986
-          Filepath: 15722799267630235092.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 11627051820057657499
+            Source Filepath: 15722799267630235092.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 4922397933950588099
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 11239876395768795602
     Mesh:
-      UUID: 1349287770790534022
+      UUID: 18323952495107165032
       Vartex Count: 23
       Index Count: 63
     Material:
-      UUID: 8842721551216147030
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -623,49 +566,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 4766428820619199437
-          Filepath: 5823059166183034438.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 17302021753665017205
+            Source Filepath: 5823059166183034438.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 4307064760639595451
-          Filepath: 13824894030729245199.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 4552842055462839470
+            Source Filepath: 13824894030729245199.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 13880201727584358054
-          Filepath: 14267839433702832875.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 13117832029668687605
+            Source Filepath: 14267839433702832875.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 4600392718740144896
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 13001222218641203898
     Mesh:
-      UUID: 11632008894532228220
+      UUID: 9288808628124780596
       Vartex Count: 11820
       Index Count: 21264
     Material:
-      UUID: 11807434143613060425
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -695,49 +631,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 5208722301539664750
-          Filepath: 7441062115984513793.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 3128153287700340247
+            Source Filepath: 7441062115984513793.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 13608748158606989356
-          Filepath: 8114461559286000061.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 2386849725484721638
+            Source Filepath: 8114461559286000061.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 16597800500639862853
-          Filepath: 6667038893015345571.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 18247370158523148380
+            Source Filepath: 6667038893015345571.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 15697633236446188023
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 6176534755222033768
     Mesh:
-      UUID: 3033155366529588981
+      UUID: 5118713496219905415
       Vartex Count: 1098
       Index Count: 2640
     Material:
-      UUID: 1171028432735468046
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -767,49 +696,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 2818783838559086893
-          Filepath: 11490520546946913238.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 7565521710694394053
+            Source Filepath: 11490520546946913238.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 2036377710585340708
-          Filepath: 3455394979645218238.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 10891467427256350609
+            Source Filepath: 3455394979645218238.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 16190582099933461948
-          Filepath: 3628158980083700836.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 16222623298780799168
+            Source Filepath: 3628158980083700836.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 12953469529518329478
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 3013025262210007883
     Mesh:
-      UUID: 14059682543736920084
+      UUID: 10142226205789288097
       Vartex Count: 22820
       Index Count: 69624
     Material:
-      UUID: 8196901303159231318
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -839,49 +761,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 16274999968468239529
-          Filepath: 6151467286084645207.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 17759972929329513763
+            Source Filepath: 6151467286084645207.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 3753242990093697890
-          Filepath: 8783994986360286082.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 9422784338691136248
+            Source Filepath: 8783994986360286082.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 7743828006386407741
-          Filepath: 7645212358685992005.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 17393167323375122277
+            Source Filepath: 7645212358685992005.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 9897438785932613960
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 11810565107473598437
     Mesh:
-      UUID: 1151305908438901090
+      UUID: 15198198887608099571
       Vartex Count: 36
       Index Count: 54
     Material:
-      UUID: 6006251491551777032
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -911,37 +826,30 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8444577834775824416
-          Filepath: white.png
-          Specification:
+        - u_BaseColorMap:
+            UUID: 7711798038837886175
+            Source Filepath: white.png
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 4
             Height: 4
-        - Shader Texture Slot: u_OMRMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_NormalMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 12213696861271298862
+        - u_OMRMap:
+            UUID: 0
+        - u_NormalMap:
+            UUID: 0
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 5342922674270224234
     Mesh:
-      UUID: 2865943176704854314
+      UUID: 2450478488660373758
       Vartex Count: 12162
       Index Count: 49488
     Material:
-      UUID: 9922039624774627000
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -971,49 +879,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 13227970107873436758
-          Filepath: 4975155472559461469.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 11010289638785944980
+            Source Filepath: 4975155472559461469.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 8008032202458881926
-          Filepath: 3371964815757888145.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 11428046552547277159
+            Source Filepath: 3371964815757888145.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 3674459629484637417
-          Filepath: 2299742237651021498.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 17327338442924072549
+            Source Filepath: 2299742237651021498.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 14941858550995980992
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 346247655515682545
     Mesh:
-      UUID: 7750680242261848578
+      UUID: 3104197002184727394
       Vartex Count: 9126
       Index Count: 49536
     Material:
-      UUID: 3481347742338325109
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1043,49 +944,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8186470902954092223
-          Filepath: 4675343432951571524.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 16677645715233248156
+            Source Filepath: 4675343432951571524.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 10159013715712329277
-          Filepath: 7815564343179553343.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 4187566680811019693
+            Source Filepath: 7815564343179553343.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 7207456590032941256
-          Filepath: 7056944414013900257.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 18422769679209814797
+            Source Filepath: 7056944414013900257.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 819196955109273320
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 131569302208774111
     Mesh:
-      UUID: 1463165232691932688
+      UUID: 349777395295287652
       Vartex Count: 9126
       Index Count: 49536
     Material:
-      UUID: 13437234618910309821
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1115,49 +1009,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 10164664809896756722
-          Filepath: 2775690330959970771.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 400627143881067799
+            Source Filepath: 2775690330959970771.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 16716580983255885211
-          Filepath: 7815564343179553343.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 4289920551739168090
+            Source Filepath: 7815564343179553343.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 5047191253984040455
-          Filepath: 2374361008830720677.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 8305281884464732717
+            Source Filepath: 2374361008830720677.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 8579110165020665725
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 9646526987931050236
     Mesh:
-      UUID: 10434927570074610486
+      UUID: 7472552171853074934
       Vartex Count: 6084
       Index Count: 33024
     Material:
-      UUID: 1270158419146513543
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1187,49 +1074,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 6846143043793433596
-          Filepath: 2185409758123873465.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 16241265790584162043
+            Source Filepath: 2185409758123873465.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 15115093544455189862
-          Filepath: 7815564343179553343.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 3168965831883646409
+            Source Filepath: 7815564343179553343.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 3902871392861589996
-          Filepath: 332936164838540657.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 587574576258884343
+            Source Filepath: 332936164838540657.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 6944018971256042765
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 14097795259240081160
     Mesh:
-      UUID: 13511349046784353397
+      UUID: 10596618159972452373
       Vartex Count: 7398
       Index Count: 43008
     Material:
-      UUID: 6205210484164207984
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1259,49 +1139,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 1628141606481358992
-          Filepath: 17876391417123941155.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 9487367279785764235
+            Source Filepath: 17876391417123941155.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 9605014519866392474
-          Filepath: 466164707995436622.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 8559377322763887845
+            Source Filepath: 466164707995436622.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 14703172221739385590
-          Filepath: 6593109234861095314.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 8389099771588449884
+            Source Filepath: 6593109234861095314.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 6393410840587411940
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 11967609230841415004
     Mesh:
-      UUID: 10571947853556415127
+      UUID: 10792260843917277373
       Vartex Count: 9904
       Index Count: 56832
     Material:
-      UUID: 12211635352716526358
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1331,49 +1204,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 6039423623969884317
-          Filepath: 11474523244911310074.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 4009828836690784502
+            Source Filepath: 11474523244911310074.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 14824926650035082673
-          Filepath: 466164707995436622.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 12650430250424996629
+            Source Filepath: 466164707995436622.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 12996673625102754275
-          Filepath: 4601176305987539675.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 9066235996362466570
+            Source Filepath: 4601176305987539675.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 14675612899260721363
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 1387148772127732482
     Mesh:
-      UUID: 16366382306071678179
+      UUID: 5780191321464464617
       Vartex Count: 7398
       Index Count: 43008
     Material:
-      UUID: 5766224426857158888
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1403,49 +1269,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 9320243260152280118
-          Filepath: 9288698199695299068.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 9770227553866609603
+            Source Filepath: 9288698199695299068.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 12852781992173003451
-          Filepath: 466164707995436622.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 13762095601981892642
+            Source Filepath: 466164707995436622.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 3484801754612269635
-          Filepath: 4910669866631290573.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 15201750635595978227
+            Source Filepath: 4910669866631290573.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 2536361562167770712
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 13479677459300221260
     Mesh:
-      UUID: 3095741188847690974
+      UUID: 5107460675626936200
       Vartex Count: 64
       Index Count: 96
     Material:
-      UUID: 163954814788596317
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -1480,49 +1339,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8725060597156125795
-          Filepath: 16275776544635328252.png
-          Specification:
+        - u_BaseColorMap:
+            UUID: 2078638358012835530
+            Source Filepath: 16275776544635328252.png
             Usage: Map_BaseColor
             Components: RGBA
             Format: RGBA_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 17460337859825633473
-          Filepath: 1219024358953944284.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 8284746328404066231
+            Source Filepath: 1219024358953944284.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 13879384362610990713
-          Filepath: 14170708867020035030.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 17395883308645190924
+            Source Filepath: 14170708867020035030.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 1419984243350092219
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 5874594025475647653
     Mesh:
-      UUID: 8346309920517348045
+      UUID: 1301182454775475160
       Vartex Count: 10412
       Index Count: 59484
     Material:
-      UUID: 1142424555516803418
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1552,49 +1404,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 6554336159344561227
-          Filepath: 755318871556304029.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 3667405269452824118
+            Source Filepath: 755318871556304029.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 9235000010858792890
-          Filepath: 2411100444841994089.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 929354276041178284
+            Source Filepath: 2411100444841994089.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 18104915612856086916
-          Filepath: 3827035219084910048.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 11612769935671747760
+            Source Filepath: 3827035219084910048.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 4062338574224255237
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 4562754868395051788
     Mesh:
-      UUID: 14894437645859918594
+      UUID: 2454942706160024511
       Vartex Count: 5308
       Index Count: 27552
     Material:
-      UUID: 15677012349585449065
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1624,49 +1469,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 855215314827299486
-          Filepath: 8481240838833932244.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 14439273810404070009
+            Source Filepath: 8481240838833932244.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 7852001231034054173
-          Filepath: 17556969131407844942.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 16057070613073897589
+            Source Filepath: 17556969131407844942.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 3134702439674806035
-          Filepath: 10381718147657362067.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 10443480293491337657
+            Source Filepath: 10381718147657362067.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 9757978441465351398
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 3816868472001961349
     Mesh:
-      UUID: 4184305519774926216
+      UUID: 17244527722452029122
       Vartex Count: 1728
       Index Count: 9126
     Material:
-      UUID: 1281421003212813291
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1696,49 +1534,42 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 13593651004191749875
-          Filepath: 6772804448157695701.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 4725638759281284784
+            Source Filepath: 6772804448157695701.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 4946647185269881824
-          Filepath: 13196865903111448057.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 6826177412351176996
+            Source Filepath: 13196865903111448057.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 13815159249439559208
-          Filepath: 759203620573749278.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 3614717864058868910
+            Source Filepath: 759203620573749278.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
-  - UUID: 6250241205494453313
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0
+  - UUID: 7452963680111492091
     Mesh:
-      UUID: 14178950756076750552
+      UUID: 11733318014391006439
       Vartex Count: 10918
       Index Count: 43452
     Material:
-      UUID: 9259637597083188193
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1768,39 +1599,33 @@ RenderMeshes:
           Value:
             - true
       Textures:
-        - Shader Texture Slot: u_BaseColorMap
-          UUID: 8271093470065901155
-          Filepath: 2969916736137545357.jpg
-          Specification:
+        - u_BaseColorMap:
+            UUID: 9902446771534059282
+            Source Filepath: 2969916736137545357.jpg
             Usage: Map_BaseColor
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_OMRMap
-          UUID: 6693850399021960354
-          Filepath: 8747919177698443163.jpg
-          Specification:
+        - u_OMRMap:
+            UUID: 5633015543285008024
+            Source Filepath: 8747919177698443163.jpg
             Usage: Map_OMR
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_NormalMap
-          UUID: 8752357865684191520
-          Filepath: 14118779221266351425.jpg
-          Specification:
+        - u_NormalMap:
+            UUID: 15386778160633759360
+            Source Filepath: 14118779221266351425.jpg
             Usage: Map_Normal
             Components: RGB
             Format: RGB_8
             Width: 1024
             Height: 1024
-        - Shader Texture Slot: u_RoughnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_MetalnessMap
-          UUID: 0
-          Filepath: ""
-        - Shader Texture Slot: u_AOMap
-          UUID: 0
-          Filepath: ""
+        - u_RoughnessMap:
+            UUID: 0
+        - u_MetalnessMap:
+            UUID: 0
+        - u_AOMap:
+            UUID: 0

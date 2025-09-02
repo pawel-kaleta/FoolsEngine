@@ -99,7 +99,7 @@ namespace fe
 					RenderUPFolder();
 
 				Scratchpad sp;
-				auto file_names = sp.NewObject<std::pmr::vector<std::pmr::string>>();
+				auto file_names = sp.NewObject<std::pmr::vector<std::pmr::string>>(&sp);
 
 				// RenderFolders iterates over directory rendering folders and creating list of filenames
 				// RenderFiles iterates over filenames in a list

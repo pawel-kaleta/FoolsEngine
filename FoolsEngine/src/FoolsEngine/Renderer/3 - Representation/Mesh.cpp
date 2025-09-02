@@ -124,14 +124,11 @@ namespace fe
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
+		if (!assetObserver.AllOf<ACMasterAsset>())
+			emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
 		emitter << YAML::Key << "Vartex Count" << YAML::Value << core.Specification.VertexCount;
 		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
 		emitter << YAML::EndMap;
-
-		//auto x = Project::GetInstance()->AssetsPath / assetObserver.GetFilepath();
-		//std::ofstream fout(x);
-		//fout << emitter.c_str();
 	}
 
 	bool Mesh::LoadMetadata(AssetID assetID)

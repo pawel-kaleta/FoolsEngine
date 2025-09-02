@@ -272,8 +272,8 @@ namespace fe
 		for (auto& uniform : shading_model_core.Uniforms)
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name" << YAML::Value << uniform.GetName();
-			emitter << YAML::Key << "Type" << YAML::Value << uniform.GetType().ToConstCharPtr();
+			emitter << YAML::Key << "Name"  << YAML::Value << uniform.GetName();
+			emitter << YAML::Key << "Type"  << YAML::Value << uniform.GetType().ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
 
@@ -293,25 +293,37 @@ namespace fe
 		for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Shader Texture Slot" << YAML::Value << shading_model_core.TextureSlots[i].GetName();
+			emitter << YAML::Key << shading_model_core.TextureSlots[i].GetName() << YAML::Value;
 			if (core.TextureIDs[i] != NullAssetID)
 			{
-				const AssetObserver<Texture2D> texture_observer(core.TextureIDs[i]);
-				emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetFilepath().string();
-				emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
+				bool is_internal;
+				{
+					const AssetObserver<Texture2D> texture_observer(core.TextureIDs[i]);
+					is_internal = AssetObserver<Texture2D>(core.TextureIDs[i]).AllOf<ACMasterAsset>();
+
+					if (!is_internal)
+					{
+						emitter << YAML::BeginMap;
+						emitter << YAML::Key << "Filepath" << YAML::Value << texture_observer.GetFilepath().string();
+						emitter << YAML::Key << "UUID" << YAML::Value << texture_observer.GetUUID();
+						emitter << YAML::EndMap;
+					}
+				}
+				if (is_internal)
+				{
+					Texture2D::SaveMetadata(emitter, core.TextureIDs[i]);
+				}
 			}
 			else
 			{
-				emitter << YAML::Key << "Filepath" << YAML::Value << "";
+				emitter << YAML::BeginMap;
 				emitter << YAML::Key << "UUID" << YAML::Value << 0;
+				emitter << YAML::EndMap;
 			}
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
 		emitter << YAML::EndMap;
-
-		//std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
-		//fout << emitter.c_str();
 	}
 
 	bool Material::LoadMetadata(AssetID assetID)

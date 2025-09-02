@@ -149,9 +149,6 @@ namespace fe
 		emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
 		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
 		emitter << YAML::EndMap;
-
-		//std::ofstream fout(Project::GetInstance()->AssetsPath / assetObserver.GetFilepath());
-		//fout << emitter.c_str();
 	}
 
 	bool Texture2D::LoadMetadata(AssetID assetID)

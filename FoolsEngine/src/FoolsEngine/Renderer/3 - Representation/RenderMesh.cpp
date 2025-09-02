@@ -66,16 +66,21 @@ namespace fe
 		auto assetObserver = AssetObserver<RenderMesh>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
-		emitter << YAML::Key << "MeshID"     << YAML::Value << AssetManager::GetUUID(core.MeshID);
-		emitter << YAML::Key << "MaterialID" << YAML::Value << AssetManager::GetUUID(core.MaterialID);
-
-		//std::ofstream fout(assetObserver.GetFilepath());
-		//fout << emitter.c_str();
+		emitter << YAML::BeginMap;
+		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "Mesh" << YAML::Value;
+		Mesh::SaveMetadata(emitter, core.MeshID);
+		emitter << YAML::Key << "Material" << YAML::Value;
+		Material::SaveMetadata(emitter, core.MaterialID);
+		emitter << YAML::EndMap;
 	}
 
 	bool RenderMesh::LoadMetadata(AssetID assetID)
 	{
 		FE_PROFILER_FUNC();
+
+		FE_LOG_CORE_WARN("Model metadata loading not implemented");
+		return true;
 
 		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
 
