@@ -91,23 +91,13 @@ namespace fe
 		delete &s_Data;
 	}
 
-	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& view)
+	void Renderer2D::BeginScene()
 	{
 		FE_PROFILER_FUNC();
 
 		RenderCommands::SetDepthTest(true);
 
 		auto GDI = Renderer::GetActiveGDItype();
-
-		switch (GDI.Value)
-		{
-		case GDIType::OpenGL:
-			s_Data.VPMatrix = projection * glm::inverse(view);
-			break;
-		default:
-			FE_CORE_ASSERT(false, "Unkown GDI!");
-			return;
-		}
 
 		ClearBatch();
 
@@ -121,7 +111,7 @@ namespace fe
 		baseShader.UploadUniform(
 			GDI,
 			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-			(void*)glm::value_ptr(s_Data.VPMatrix)
+			(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
 		);
 		baseShader.BindTextureSlot(
 			GDI,
@@ -138,11 +128,11 @@ namespace fe
 		s_Data.Batch.QuadVeriticesIt = s_Data.Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform)
+	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene)
 	{
 		FE_PROFILER_FUNC();
 
-		BeginScene(camera, cameraTransform);
+		BeginScene();
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
 
@@ -159,23 +149,15 @@ namespace fe
 
 		Flush();
 
-		if (camera.GetProjectionType() == Camera::ProjectionType::Orthographic && cameraTransform.Rotation.x == 0 && cameraTransform.Rotation.y == 0)
-			registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
-				auto& lz = registry.get<CTransformGlobal>(l).GetRef().Shift.z;
-				auto& rz = registry.get<CTransformGlobal>(r).GetRef().Shift.z;
+		registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
+			const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
+			const auto& rPosition = registry.get<CTransformGlobal>(r).GetRef().Shift;
 
-				return lz < rz;
-			});
-		else
-			registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
-				const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
-				const auto& rPosition = registry.get<CTransformGlobal>(r).GetRef().Shift;
+			auto lDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, lPosition);
+			auto rDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, rPosition);
 
-				auto lDistance = glm::distance(cameraTransform.Shift, lPosition);
-				auto rDistance = glm::distance(cameraTransform.Shift, rPosition);
-
-				return lDistance > rDistance;
-			});
+			return lDistance > rDistance;
+		});
 
 		auto viewSprites = registry.view<CSprite, CTransformGlobal>();
 

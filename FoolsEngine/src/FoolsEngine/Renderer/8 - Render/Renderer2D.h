@@ -40,7 +40,7 @@ namespace fe
 		static void Init();
 		static void Shutdown();
 
-		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
+		static void RenderScene(const AssetObserver<Scene>& scene);
 
 		static RenderStats GetStats() { return s_Stats; }
 
@@ -79,8 +79,6 @@ namespace fe
 
 		struct Renderer2DData
 		{
-			glm::mat4 VPMatrix;
-
 			Ref<VertexBuffer> QuadVertexBuffer;
 
 			BatchData Batch;
@@ -92,7 +90,7 @@ namespace fe
 
 		static Renderer2DData& s_Data;
 
-		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
+		static void BeginScene();
 		static void ClearBatch();
 		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
 		static void Flush();

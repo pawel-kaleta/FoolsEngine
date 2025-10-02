@@ -2,26 +2,30 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
 
 #include "FoolsEngine\Math\Transform.h"
-#include "FoolsEngine\Scene\Scene.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 
 namespace fe
 {
 	class VertexBuffer;
-	class Material;
+	class Framebuffer;
+	class Scene;
+	class Camera;
 
-	template <class Material>
+	template <class tAssetType>
 	class AssetHandle;
+
+	template <class tAssetType>
+	class AssetObserver;
 
 	class Renderer
 	{
@@ -36,7 +40,6 @@ namespace fe
 		static void CreateAPI(GDIType GDI);
 		static void InitAPI(GDIType GDI);
 
-
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
@@ -45,18 +48,18 @@ namespace fe
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();
 
-		static void Draw(
-			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetObserver<Material>& materialObserver,
-			const glm::mat4& transform
-		);
-
-		static void Draw(
-			const Ref<VertexBuffer>& vertexBuffer,
-			const AssetObserver<Material>& materialObserver,
-			const glm::mat4& transform,
-			const glm::mat4& VPMatrix
-		);
+		//static void Draw(
+		//	const Ref<VertexBuffer>& vertexBuffer,
+		//	const AssetObserver<Material>& materialObserver,
+		//	const glm::mat4& transform
+		//);
+		//
+		//static void Draw(
+		//	const Ref<VertexBuffer>& vertexBuffer,
+		//	const AssetObserver<Material>& materialObserver,
+		//	const glm::mat4& transform,
+		//	const glm::mat4& VPMatrix
+		//);
 
 		static struct BaseAssets // starting from C++20 msvc is unhappy about anonymus static properties :(
 		{
@@ -81,13 +84,16 @@ namespace fe
 				AssetHandle<Material> Default;
 			} Materials;
 		} BaseAssets;
-	private:
-		struct SceneData
+
+		static struct SceneData
 		{
 			glm::mat4 VPMatrix;
-		};
+			const Camera* MainCamera;
+			Transform CameraTransform;
+			AssetID Scene;
+		} SceneData;
 
-		static Scope<SceneData> s_SceneData;
+	private:
 		static GDIType s_ActiveGDI;
 		static std::unordered_map<GDIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};

@@ -137,13 +137,13 @@ namespace fe::GeometryImport
 					}
 				}
 				
-				auto new_index = material_data.DetectedTextures->Size();
+				uint32_t new_index = (uint32_t) material_data.DetectedTextures->Size();
 				bool found = false;
 				for (size_t n=0; n<material_data.DetectedTextures->Size(); n++)
 				{
 					if (material_data.DetectedTextures->operator[](n) == new_texture)
 					{
-						new_index = n;
+						new_index = (uint32_t)n;
 						found = true;
 						break;
 					}
@@ -483,7 +483,7 @@ namespace fe::GeometryImport
 			Scratchpad sp;
 			for (size_t i = 0; i < scene->mNumMeshes; i++)
 			{
-				ImGui::PushID(i);
+				ImGui::PushID((int)i);
 
 				auto& mesh = scene->mMeshes[i];
 				auto matIndex = mesh->mMaterialIndex;
@@ -525,7 +525,7 @@ namespace fe::GeometryImport
 
 			for (size_t i = 0; i < scene->mNumMaterials; i++)
 			{
-				ImGui::PushID(i);
+				ImGui::PushID((int)i);
 				const auto& mat = scene->mMaterials[i];
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -608,7 +608,7 @@ namespace fe::GeometryImport
 			for (size_t i = 0; i < data.Scene->mNumMaterials; i++)
 			{
 				ImGui::TableNextRow();
-				ImGui::PushID(i);
+				ImGui::PushID((int)i);
 
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", i);
@@ -681,7 +681,7 @@ namespace fe::GeometryImport
 		{
 			for (size_t n = 0; n < scene->mNumMaterials; n++)
 			{
-				ImGui::PushID(n);
+				ImGui::PushID((int)n);
 				const bool is_selected = (selected_material_index == n);
 				auto name = scene->mMaterials[n]->GetName();
 

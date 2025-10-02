@@ -65,6 +65,7 @@ namespace fe
 		Erase<ACGPUBuffers>();
 	}
 
+	// mesh should not draw itself
 	void MeshObserver::Draw(const AssetObserver<Material>& materialObserver) const
 	{
 		if (!AllOf<ACGPUBuffers>())

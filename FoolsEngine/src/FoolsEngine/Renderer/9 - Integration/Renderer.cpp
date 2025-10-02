@@ -3,13 +3,18 @@
 
 #include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
 #include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
+#include "FoolsEngine\Renderer\8 - Render\GeometryRenderer.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
@@ -30,7 +35,7 @@
 
 namespace fe
 {
-	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
+	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
 	GDIType Renderer::s_ActiveGDI = GDIType::None;
 	std::unordered_map<GDIType::ValueType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
@@ -38,13 +43,13 @@ namespace fe
 	void Renderer::Startup()
 	{
 		FE_PROFILER_FUNC();
-
 	}
 
 	void Renderer::Shutdown()
 	{
 		FE_PROFILER_FUNC();
 		Renderer2D::Shutdown();
+		GeometryRenderer::Shutdown();
 	}
 
 	template <typename tnAsset>
@@ -123,6 +128,7 @@ namespace fe
 		RenderCommands::SetAPI(deviceAPI.get());
 
 		Renderer2D::Init();
+		GeometryRenderer::Init();
 	}
 
 	void Renderer::CreateAPI(GDIType GDI)
@@ -166,52 +172,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		SceneData.Scene = scene.GetID();
+		SceneData.MainCamera = &camera;
+		SceneData.CameraTransform = cameraTransform;
 		BeginScene(camera, cameraTransform);
 
-		Renderer2D::RenderScene(scene, camera, cameraTransform);
-
-		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
-		void* VPmatrixPtr = (void*)glm::value_ptr(s_SceneData->VPMatrix);
-		auto GDI = GetActiveGDItype();
-
-		auto viewViewMeshes = registry.view<CRenderMeshView, CTransformGlobal>();
-		for (auto ID : viewViewMeshes) // intellisense is freaking out here, don't worry, be happy
-		{
-			auto [renderViewMesh_component, transform_component] = viewViewMeshes.get(ID);
-			if (!renderViewMesh_component.Material.IsValid())
-				continue;
-			if (!renderViewMesh_component.Mesh.IsValid())
-				continue;
-			if (renderViewMesh_component.Material.GetLoadingPriority() == AssetLoadingPriority::None)
-				continue;
-			if (renderViewMesh_component.Mesh.GetLoadingPriority() == AssetLoadingPriority::None)
-				continue;
-
-			auto material_observer = renderViewMesh_component.Material.Observe();
-			auto mesh_observer = renderViewMesh_component.Mesh.Observe();
-			
-			if (!material_observer.AllOf<ACLoadedFlag>())
-				continue;
-			if (!mesh_observer.AllOf<ACLoadedFlag>())
-				continue;
-			
-			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix() * renderViewMesh_component.Offset.GetMatrix();
-			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
-
-			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
-			auto shaderID = shading_model_observer.GetCoreComponent().ShaderID;
-
-			{
-				auto shader_observer = AssetObserver<Shader>(shaderID);
-
-				shader_observer.Bind(GDI);
-				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
-				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
-			}
-
-			mesh_observer.Draw(material_observer);
-		}
+		Renderer2D::RenderScene(scene);
+		GeometryRenderer::RenderScene(scene);	
 
 		EndScene();
 	}
@@ -226,7 +193,7 @@ namespace fe
 		switch (s_ActiveGDI.Value)
 		{
 		case GDIType::OpenGL:
-			s_SceneData->VPMatrix = projection * glm::inverse(view);
+			SceneData.VPMatrix = projection * glm::inverse(view);
 			break;
 		default:
 			FE_CORE_ASSERT(false, "Unkown GDI!");
@@ -247,66 +214,66 @@ namespace fe
 			FE_LOG_CORE_INFO("{0}", error);
 	}
 
-	void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, const AssetObserver<Material>& materialObserver, const glm::mat4& transform)
-	{
-		Draw(vertexBuffer, materialObserver, transform, s_SceneData->VPMatrix);
-	}
-
-	void Renderer::Draw(
-		const Ref<VertexBuffer>& vertexBuffer,
-		const AssetObserver<Material>& materialObserver,
-		const glm::mat4& transform,
-		const glm::mat4& VPMatrix)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& material_core = materialObserver.GetCoreComponent();
-		AssetObserver<ShadingModel> sm_observer(material_core.ShadingModelID);
-		auto& sm_core = sm_observer.GetCoreComponent();
-		AssetUser<Shader> shaderUser(sm_core.ShaderID);
-
-		shaderUser.Bind(s_ActiveGDI);
-
-		shaderUser.UploadUniform(
-			s_ActiveGDI,
-			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-			(void*)glm::value_ptr(VPMatrix)
-		);
-		shaderUser.UploadUniform(
-			s_ActiveGDI,
-			Uniform("u_Transform", ShaderData::Type::Mat4),
-			(void*)glm::value_ptr(transform)
-		);
-
-		for (const auto& uniform : sm_core.Uniforms)
-		{
-			auto dataPointer = materialObserver.GetUniformValuePtr(material_core, uniform);
-			shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
-		}
-
-		{
-			uint32_t rendererTextureSlot = 0;
-			auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
-
-			for (const auto& textureID : material_core.TextureIDs)
-			{
-				shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
-
-				if (textureID)
-				{
-					AssetUser<Texture2D>(textureID).Bind(s_ActiveGDI, rendererTextureSlot++);
-				}
-				else
-				{
-					FE_LOG_CORE_WARN("Uninitialized texture!");
-					BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
-					continue;
-				}
-			}
-		}
-
-		vertexBuffer->Bind();
-
-		RenderCommands::DrawIndexed(vertexBuffer.get());
-	}
+	//void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, const AssetObserver<Material>& materialObserver, const glm::mat4& transform)
+	//{
+	//	Draw(vertexBuffer, materialObserver, transform, SceneData.VPMatrix);
+	//}
+	//
+	//void Renderer::Draw(
+	//	const Ref<VertexBuffer>& vertexBuffer,
+	//	const AssetObserver<Material>& materialObserver,
+	//	const glm::mat4& transform,
+	//	const glm::mat4& VPMatrix)
+	//{
+	//	FE_PROFILER_FUNC();
+	//
+	//	auto& material_core = materialObserver.GetCoreComponent();
+	//	AssetObserver<ShadingModel> sm_observer(material_core.ShadingModelID);
+	//	auto& sm_core = sm_observer.GetCoreComponent();
+	//	AssetUser<Shader> shaderUser(sm_core.ShaderID);
+	//
+	//	shaderUser.Bind(s_ActiveGDI);
+	//
+	//	shaderUser.UploadUniform(
+	//		s_ActiveGDI,
+	//		Uniform("u_ViewProjection", ShaderData::Type::Mat4),
+	//		(void*)glm::value_ptr(VPMatrix)
+	//	);
+	//	shaderUser.UploadUniform(
+	//		s_ActiveGDI,
+	//		Uniform("u_Transform", ShaderData::Type::Mat4),
+	//		(void*)glm::value_ptr(transform)
+	//	);
+	//
+	//	for (const auto& uniform : sm_core.Uniforms)
+	//	{
+	//		auto dataPointer = materialObserver.GetUniformValuePtr(material_core, uniform);
+	//		shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
+	//	}
+	//
+	//	{
+	//		uint32_t rendererTextureSlot = 0;
+	//		auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
+	//
+	//		for (const auto& textureID : material_core.TextureIDs)
+	//		{
+	//			shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
+	//
+	//			if (textureID)
+	//			{
+	//				AssetUser<Texture2D>(textureID).Bind(s_ActiveGDI, rendererTextureSlot++);
+	//			}
+	//			else
+	//			{
+	//				FE_LOG_CORE_WARN("Uninitialized texture!");
+	//				BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
+	//				continue;
+	//			}
+	//		}
+	//	}
+	//
+	//	vertexBuffer->Bind();
+	//
+	//	RenderCommands::DrawIndexed(vertexBuffer.get());
+	//}
 } 

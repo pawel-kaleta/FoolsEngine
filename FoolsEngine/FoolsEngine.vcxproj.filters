@@ -389,6 +389,9 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Utils\BitOperations.h" />
     <ClInclude Include="src\FoolsEngine\Utils\Xar.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h">
+      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -604,6 +607,9 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.cpp">
+      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
