@@ -61,6 +61,43 @@ namespace fe
 		return true;
 	}
 
+	void RenderMeshUser::Release() const
+	{
+		auto& core = Get<ACRenderMeshCore>();
+
+		if (!core.MaterialID)
+		{
+			AssetUser<Material> material_user(core.MaterialID);
+
+			auto refs = material_user.GetRefCounters();
+			if (refs)
+			{
+				if (refs->LiveHandles[0].fetch_sub(1) == 1)
+					material_user.ReleaseDependencyLoad();
+			}
+			else
+			{
+				FE_CORE_ASSERT(false, "");
+			}
+		}
+
+		if (!core.MeshID)
+		{
+			AssetUser<Material> mesh_user(core.MeshID);
+
+			auto refs = mesh_user.GetRefCounters();
+			if (refs)
+			{
+				if (refs->LiveHandles[0].fetch_sub(1) == 1)
+					mesh_user.ReleaseDependencyLoad();
+			}
+			else
+			{
+				FE_CORE_ASSERT(false, "");
+			}
+		}
+	}
+
 	void RenderMesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto assetObserver = AssetObserver<RenderMesh>(assetID);

@@ -14,32 +14,41 @@ namespace fe
 {
 	void GeometryRenderer::RenderScene(const AssetObserver<Scene>& scene)
 	{
-		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
-		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
+		RenderCRenderMeshView(scene);
+		RenderCRenderMesh(scene);
+		RenderCModel(scene);
+		RenderCModelView(scene);
+	}
+
+	void GeometryRenderer::RenderCRenderMeshView(const AssetObserver<Scene>& scene)
+	{
 		auto GDI = Renderer::GetActiveGDItype();
+		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 
-		auto viewViewMeshes = registry.view<CRenderMeshView, CTransformGlobal>();
-		for (auto ID : viewViewMeshes) // intellisense is freaking out here, don't worry, be happy
+		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
+
+		auto view_of_CRenderMeshView_components = registry.view<CRenderMeshView, CTransformGlobal>();
+		for (auto ID : view_of_CRenderMeshView_components) // intellisense is freaking out here, don't worry, be happy
 		{
-			auto [renderViewMesh_component, transform_component] = viewViewMeshes.get(ID);
-			if (!renderViewMesh_component.Material.IsValid())
+			auto [comp_CRenderMeshView, component_CTransform] = view_of_CRenderMeshView_components.get(ID);
+			if (!comp_CRenderMeshView.Material.IsValid())
 				continue;
-			if (!renderViewMesh_component.Mesh.IsValid())
+			if (!comp_CRenderMeshView.Mesh.IsValid())
 				continue;
-			if (renderViewMesh_component.Material.GetLoadingPriority() == AssetLoadingPriority::None)
+			if (comp_CRenderMeshView.Material.GetLoadingPriority() == AssetLoadingPriority::None)
 				continue;
-			if (renderViewMesh_component.Mesh.GetLoadingPriority() == AssetLoadingPriority::None)
+			if (comp_CRenderMeshView.Mesh.GetLoadingPriority() == AssetLoadingPriority::None)
 				continue;
 
-			auto material_observer = renderViewMesh_component.Material.Observe();
-			auto mesh_observer = renderViewMesh_component.Mesh.Observe();
+			auto material_observer = comp_CRenderMeshView.Material.Observe();
+			auto mesh_observer = comp_CRenderMeshView.Mesh.Observe();
 
 			if (!material_observer.AllOf<ACLoadedFlag>())
 				continue;
 			if (!mesh_observer.AllOf<ACLoadedFlag>())
 				continue;
 
-			glm::mat4 modelTransform = transform_component.GetRef().GetMatrix() * renderViewMesh_component.Offset.GetMatrix();
+			glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CRenderMeshView.Offset.GetMatrix();
 			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
 
 			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
@@ -56,5 +65,64 @@ namespace fe
 
 			mesh_observer.Draw(material_observer);
 		}
+	}
+
+	void GeometryRenderer::RenderCRenderMesh(const AssetObserver<Scene>& scene)
+	{
+
+	}
+
+	void GeometryRenderer::RenderCModel(const AssetObserver<Scene>& scene)
+	{
+		auto GDI = Renderer::GetActiveGDItype();
+		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
+
+		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
+
+		auto view_of_CModelView_components = registry.view<CModel, CTransformGlobal>();
+		for (auto ID : view_of_CModelView_components)
+		{
+			auto [comp_CModel, component_CTransform] = view_of_CModelView_components.get(ID);
+
+			if (!comp_CModel.Model.IsValid())
+				continue;
+
+			auto model_observer = comp_CModel.Model.Observe();
+
+			if (!model_observer.AllOf<ACLoadedFlag>())
+				continue;
+
+			glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
+			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+
+			auto& model_core = model_observer.GetCoreComponent();
+			for (auto rendermeshID : model_core.RenderMeshIDs)
+			{
+				auto& asset_registry = AssetManager::GetRegistry();
+				auto& rendermesh_core = asset_registry.get<ACRenderMeshCore>(rendermeshID);
+
+				AssetObserver<Material> material_observer(rendermesh_core.MaterialID);
+				AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
+
+				AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
+				auto shaderID = shading_model_observer.GetCoreComponent().ShaderID;
+
+				{
+					auto shader_observer = AssetObserver<Shader>(shaderID);
+
+					shader_observer.Bind(GDI);
+					shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
+					shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+					shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+				}
+
+				mesh_observer.Draw(material_observer);
+			}
+		}
+	}
+
+	void GeometryRenderer::RenderCModelView(const AssetObserver<Scene>& scene)
+	{
+
 	}
 }

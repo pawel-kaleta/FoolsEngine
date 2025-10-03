@@ -9,7 +9,7 @@
 
 namespace fe
 {
-	extern void EmitShaderDataType(YAML::Emitter& emitter, char* dataPtr, const ShaderData::Type& type);
+	//extern void EmitShaderDataType(YAML::Emitter& emitter, char* dataPtr, const ShaderData::Type& type);
 
 	void Model::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
@@ -65,6 +65,32 @@ namespace fe
 		{
 			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>());
 			core.RenderMeshIDs.emplace_back(render_mesh_ID);
+		}
+
+		return true;
+	}
+
+	bool ModelUser::SendDataToGPU(GDIType GDI) const
+	{
+		auto& ACData = Get<ACModelCore>();
+
+		for (auto rendermeshID : ACData.RenderMeshIDs)
+		{
+			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
+			if (!rendermesh_user.AllOf<ACLoadedFlag>())
+				if (!rendermesh_user.SendDataToGPU(GDI))
+					return false;
+
+			auto refs = rendermesh_user.GetRefCounters();
+			if (refs)
+			{
+				if (refs->LiveHandles[0].fetch_add(1) == 0)
+					rendermesh_user.FlagLoadedAsDependency();
+			}
+			else
+			{
+				FE_CORE_ASSERT(false, "");
+			}
 		}
 
 		return true;

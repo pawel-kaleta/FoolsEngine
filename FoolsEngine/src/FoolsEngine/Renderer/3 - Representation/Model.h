@@ -3,6 +3,8 @@
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
+#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+
 #include "Mesh.h"
 #include "RenderMesh.h"
 
@@ -35,6 +37,8 @@ namespace fe
 		}
 
 		ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
+
+		bool SendDataToGPU(GDIType GDI) const;
 
 	protected:
 		ModelUser(ECS_AssetHandle ECS_handle) : ModelObserver(ECS_handle) {}

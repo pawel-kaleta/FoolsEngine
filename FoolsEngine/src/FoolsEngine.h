@@ -65,3 +65,8 @@
 //---------Entry Point---------
 //#include "FoolsEngine\Core\EntryPoint.h"
 //-----------------------------
+
+
+// TO DO:
+// - standarize asset loading/unloading to CPU/GPU ("sendtogpu(), Release(), unloadfromcpu(), releasedependencyload() etc.)
+// - cleanup of rendering architecture (acces to scene data)
