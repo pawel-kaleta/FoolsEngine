@@ -21,9 +21,9 @@ namespace fe
 		s_Instance = this;
 
 		m_LoadingGroups.Unload = m_Registry.group<>(
-			entt::get<ACLoadedFlag>,
+			entt::get<ACLoadedCPU>,
 			entt::exclude<
-				ACLoadedAsDependence,
+				ACLoadedAsDependenceCPU,
 				ACLoadFlag<AssetLoadingPriority::Minimal>,
 				ACLoadFlag<AssetLoadingPriority::VeryLow>,
 				ACLoadFlag<AssetLoadingPriority::Low>,
@@ -36,37 +36,37 @@ namespace fe
 
 		m_LoadingGroups.Minimal = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::Minimal>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.VeryLow = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::VeryLow>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.Low = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::Low>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.Standard = m_Registry.group<>(
 			entt::get< ACLoadFlag<AssetLoadingPriority::Standard>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.High = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::High>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.VeryHigh = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::VeryHigh>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 
 		m_LoadingGroups.Critical = m_Registry.group<>(
 			entt::get<ACLoadFlag<AssetLoadingPriority::Critical>>,
-			entt::exclude<ACLoadedFlag>
+			entt::exclude<ACLoadedCPU>
 		);
 	}
 
@@ -170,7 +170,7 @@ namespace fe
 		for (auto id : groups.Unload)
 		{
 			entities_to_unload.emplace_back(id);
-			reg.storage<ACLoadedFlag>().erase(id);
+			reg.storage<ACLoadedCPU>().erase(id);
 		}
 
 		for (auto id : entities_to_unload)

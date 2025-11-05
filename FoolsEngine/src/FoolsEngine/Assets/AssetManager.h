@@ -56,9 +56,9 @@ namespace fe
 		struct 
 		{
 			decltype(m_Registry.group<>(
-				entt::get<ACLoadedFlag>,
+				entt::get<ACLoadedCPU>,
 				entt::exclude<
-					ACLoadedAsDependence,
+					ACLoadedAsDependenceCPU,
 					ACLoadFlag<AssetLoadingPriority::Minimal>,
 					ACLoadFlag<AssetLoadingPriority::VeryLow>,
 					ACLoadFlag<AssetLoadingPriority::Low>,
@@ -71,37 +71,37 @@ namespace fe
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Minimal>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) Minimal;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::VeryLow>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) VeryLow;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Low>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) Low;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Standard>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) Standard;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::High>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) High;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::VeryHigh>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) VeryHigh;
 
 			decltype(m_Registry.group<>(
 				entt::get<ACLoadFlag<AssetLoadingPriority::Critical>>,
-				entt::exclude<ACLoadedFlag>
+				entt::exclude<ACLoadedCPU>
 			)) Critical;
 
 		} m_LoadingGroups;

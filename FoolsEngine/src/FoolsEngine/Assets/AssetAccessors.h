@@ -98,10 +98,10 @@ namespace fe
 			Init();
 		}
 		
-		void FlagLoaded()				{ this->Flag<ACLoadedFlag>(); }
-		void FlagLoadedAsDependency()	{ this->Flag<ACLoadedAsDependence>(); }
-		void FlagUnloaded()				{ this->UnFlag<ACLoadedFlag>(); }
-		void ReleaseDependencyLoad()	{ this->UnFlag<ACLoadedAsDependence>(); }
+		void FlagLoaded()				{ this->Flag<ACLoadedCPU>(); }
+		void FlagLoadedAsDependency()	{ this->Flag<ACLoadedAsDependenceCPU>(); }
+		void FlagUnloaded()				{ this->UnFlag<ACLoadedCPU>(); }
+		void ReleaseDependencyLoad()	{ this->UnFlag<ACLoadedAsDependenceCPU>(); }
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

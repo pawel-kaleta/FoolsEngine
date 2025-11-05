@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetLocationControl.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -259,6 +260,7 @@
     <ClInclude Include="src\FoolsEngine\Utils\Xar.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FoolsEngine\Assets\AssetLocationControl.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

@@ -87,9 +87,11 @@ namespace fe
 	template <AssetLoadingPriority::ValueType loadingPriority>
 	struct ACLoadFlag final : AssetFlagComponent {};
 
-	struct ACLoadedFlag final : AssetFlagComponent {};
+	struct ACLoadedCPU final : AssetFlagComponent {};
+	struct ACLoadedGPU final : AssetFlagComponent {};
 
-	struct ACLoadedAsDependence final : AssetFlagComponent {};
+	struct ACLoadedAsDependenceCPU final : AssetFlagComponent {};
+	struct ACLoadedAsDependenceGPU final : AssetFlagComponent {};
 
 	struct ACRefsCounters final : AssetComponent
 	{
@@ -102,4 +104,15 @@ namespace fe
 		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
 	};
 
+	FE_DECLARE_ENUM(AssetTargetLocation,
+		None,
+		CPU,
+		GPU,
+		CPU&GPU
+	);
+
+	struct ACAssetTargetLocation final : AssetComponent
+	{
+		AssetTargetLocation TargetLocation;
+	};
 }

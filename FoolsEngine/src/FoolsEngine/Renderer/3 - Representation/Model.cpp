@@ -77,7 +77,7 @@ namespace fe
 		for (auto rendermeshID : ACData.RenderMeshIDs)
 		{
 			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
-			if (!rendermesh_user.AllOf<ACLoadedFlag>())
+			if (!rendermesh_user.AllOf<ACLoadedCPU>())
 				if (!rendermesh_user.SendDataToGPU(GDI))
 					return false;
 

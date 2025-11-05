@@ -392,6 +392,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h">
       <Filter>FoolsEngine\Renderer\8 - Render</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Assets\AssetLocationControl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -611,5 +612,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.cpp">
       <Filter>FoolsEngine\Renderer\8 - Render</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Assets\AssetLocationControl.cpp" />
   </ItemGroup>
 </Project>
