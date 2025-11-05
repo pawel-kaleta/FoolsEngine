@@ -77,7 +77,7 @@ namespace fe
 		for (auto rendermeshID : ACData.RenderMeshIDs)
 		{
 			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
-			if (!rendermesh_user.AllOf<ACLoadedCPU>())
+			if (!rendermesh_user.AllOf<ACLoaded>())
 				if (!rendermesh_user.SendDataToGPU(GDI))
 					return false;
 
@@ -89,10 +89,25 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "");
+				rendermesh_user.FlagLoadedAsDependency();
 			}
+
+			rendermesh_user.FlagLoaded();
+
+			rendermesh_user.FlagLoadedAsDependency();
 		}
 
 		return true;
+	}
+
+	void ModelUser::Release() const
+	{
+		auto& ACData = Get<ACModelCore>();
+
+		for (auto rendermeshID : ACData.RenderMeshIDs)
+		{
+			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
+			rendermesh_user.ReleaseDependencyLoad();
+		}
 	}
 }

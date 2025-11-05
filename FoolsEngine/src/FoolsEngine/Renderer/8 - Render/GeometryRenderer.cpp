@@ -43,9 +43,9 @@ namespace fe
 			auto material_observer = comp_CRenderMeshView.Material.Observe();
 			auto mesh_observer = comp_CRenderMeshView.Mesh.Observe();
 
-			if (!material_observer.AllOf<ACLoadedCPU>())
+			if (!material_observer.AllOf<ACLoaded>())
 				continue;
-			if (!mesh_observer.AllOf<ACLoadedCPU>())
+			if (!mesh_observer.AllOf<ACLoaded>())
 				continue;
 
 			glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CRenderMeshView.Offset.GetMatrix();
@@ -89,7 +89,7 @@ namespace fe
 
 			auto model_observer = comp_CModel.Model.Observe();
 
-			if (!model_observer.AllOf<ACLoadedCPU>())
+			if (!model_observer.AllOf<ACLoaded>())
 				continue;
 
 			glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();

@@ -19,7 +19,7 @@ namespace fe
 		// material loading
 		{
 			AssetUser<Material> material_user(core.MaterialID);
-			if (!material_user.AllOf<ACLoadedCPU>())
+			if (!material_user.AllOf<ACLoaded>())
 				if (!material_user.SendDataToGPU(GDI))
 					return false;
 
@@ -40,7 +40,7 @@ namespace fe
 		// mesh loading
 		{
 			AssetUser<Material> mesh_user(core.MeshID);
-			if (!mesh_user.AllOf<ACLoadedCPU>())
+			if (!mesh_user.AllOf<ACLoaded>())
 				if (!mesh_user.SendDataToGPU(GDI))
 					return false;
 
@@ -52,7 +52,7 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "");
+				mesh_user.FlagLoadedAsDependency();
 			}
 
 			mesh_user.FlagLoaded();
@@ -77,7 +77,7 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "");
+				material_user.ReleaseDependencyLoad();
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace fe
 			}
 			else
 			{
-				FE_CORE_ASSERT(false, "");
+				mesh_user.ReleaseDependencyLoad();
 			}
 		}
 	}

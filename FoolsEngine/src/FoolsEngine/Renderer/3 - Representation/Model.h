@@ -39,6 +39,8 @@ namespace fe
 		ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
 
 		bool SendDataToGPU(GDIType GDI) const;
+		void Release() const;
+		void UnloadFromCPU() const { };
 
 	protected:
 		ModelUser(ECS_AssetHandle ECS_handle) : ModelObserver(ECS_handle) {}

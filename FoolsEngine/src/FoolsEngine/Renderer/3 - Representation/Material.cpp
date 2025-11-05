@@ -233,7 +233,18 @@ namespace fe
 			TextureLoader::LoadTexture(texture_user);
 			texture_user.CreateGDITexture2D(GDI);
 			texture_user.UnloadFromCPU();
-			texture_user.FlagLoadedAsDependency();
+
+			auto refs = texture_user.GetRefCounters();
+			if (refs)
+			{
+				if (refs->LiveHandles[0].fetch_add(1) == 0)
+					texture_user.FlagLoadedAsDependency();
+			}
+			else
+			{
+				texture_user.FlagLoadedAsDependency();
+			}
+
 			texture_user.FlagLoaded();
 		}
 		
@@ -251,7 +262,17 @@ namespace fe
 				continue;
 
 			AssetUser<Texture2D> texture_user(texture_ID);
-			texture_user.ReleaseDependencyLoad();
+
+			auto refs = texture_user.GetRefCounters();
+			if (refs)
+			{
+				if (refs->LiveHandles[0].fetch_sub(1) == 1)
+					texture_user.ReleaseDependencyLoad();
+			}
+			else
+			{
+				texture_user.ReleaseDependencyLoad();
+			}
 		}
 	}
 

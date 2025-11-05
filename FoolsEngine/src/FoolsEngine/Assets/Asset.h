@@ -86,33 +86,17 @@ namespace fe
 
 	template <AssetLoadingPriority::ValueType loadingPriority>
 	struct ACLoadFlag final : AssetFlagComponent {};
-
-	struct ACLoadedCPU final : AssetFlagComponent {};
-	struct ACLoadedGPU final : AssetFlagComponent {};
-
-	struct ACLoadedAsDependenceCPU final : AssetFlagComponent {};
-	struct ACLoadedAsDependenceGPU final : AssetFlagComponent {};
+	struct ACLoaded final : AssetFlagComponent {};
+	struct ACLoadedAsDependence final : AssetFlagComponent {};
 
 	struct ACRefsCounters final : AssetComponent
 	{
 		// LiveHandles[ AssetLoadingPriority::None ]
-		// is used to count how many assets keep this asset loaded as dependence
+		// is used to count how many assets keep this asset loaded as dependence (eg shading model loaded for multiple materials)
 		// so the first can load and last unload this asset
 		std::atomic<int> LiveHandles[AssetLoadingPriority::Count] = {};
 
 		std::atomic<int> ActiveObserversCount = 0;
 		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
-	};
-
-	FE_DECLARE_ENUM(AssetTargetLocation,
-		None,
-		CPU,
-		GPU,
-		CPU&GPU
-	);
-
-	struct ACAssetTargetLocation final : AssetComponent
-	{
-		AssetTargetLocation TargetLocation;
 	};
 }
