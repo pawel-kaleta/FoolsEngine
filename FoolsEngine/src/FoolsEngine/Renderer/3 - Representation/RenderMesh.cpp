@@ -19,43 +19,66 @@ namespace fe
 		// material loading
 		{
 			AssetUser<Material> material_user(core.MaterialID);
-			if (!material_user.AllOf<ACLoaded>())
-				if (!material_user.SendDataToGPU(GDI))
-					return false;
-
+			
 			auto refs = material_user.GetRefCounters();
-			if (refs)
+			if (refs) // Project asset
 			{
 				if (refs->LiveHandles[0].fetch_add(1) == 0)
+				{
+					if (!material_user.IsLoaded())
+					{
+						if (!material_user.SendDataToGPU(GDI))
+							return false;
+
+						material_user.FlagLoaded();
+					}
+
 					material_user.FlagLoadedAsDependency();
+				}
 			}
-			else
+			else // internal asset
 			{
-				FE_CORE_ASSERT(false, "");
+				FE_CORE_ASSERT(!material_user.IsLoadedAsDependency(), "Internal Material already marked LoadedAsDependency during loading");
+				FE_CORE_ASSERT(!material_user.IsLoaded(), "Internal Material already marked Loaded during loading");
+				
+				if (!material_user.SendDataToGPU(GDI))
+					return false;
+				material_user.FlagLoaded();
+				material_user.FlagLoadedAsDependency();
 			}
 
-			material_user.FlagLoaded();
 		}
 
 		// mesh loading
 		{
 			AssetUser<Material> mesh_user(core.MeshID);
-			if (!mesh_user.AllOf<ACLoaded>())
-				if (!mesh_user.SendDataToGPU(GDI))
-					return false;
 
 			auto refs = mesh_user.GetRefCounters();
-			if (refs)
+			if (refs) // project asset
 			{
 				if (refs->LiveHandles[0].fetch_add(1) == 0)
+				{
+					if (!mesh_user.IsLoaded())
+					{
+						if (!mesh_user.SendDataToGPU(GDI))
+							return false;
+
+						mesh_user.FlagLoaded();
+					}
+
 					mesh_user.FlagLoadedAsDependency();
+				}
 			}
-			else
+			else // internal asset
 			{
+				FE_CORE_ASSERT(!mesh_user.IsLoadedAsDependency(), "Internal Mesh already marked LoadedAsDependency during loading");
+				FE_CORE_ASSERT(!mesh_user.IsLoaded(), "Internal Mesh already marked Loaded during loading");
+
+				if (!mesh_user.SendDataToGPU(GDI))
+					return false;
+				mesh_user.FlagLoaded();
 				mesh_user.FlagLoadedAsDependency();
 			}
-
-			mesh_user.FlagLoaded();
 		}
 
 		return true;
@@ -70,12 +93,12 @@ namespace fe
 			AssetUser<Material> material_user(core.MaterialID);
 
 			auto refs = material_user.GetRefCounters();
-			if (refs)
+			if (refs) // project asset
 			{
 				if (refs->LiveHandles[0].fetch_sub(1) == 1)
 					material_user.ReleaseDependencyLoad();
 			}
-			else
+			else // internal asset
 			{
 				material_user.ReleaseDependencyLoad();
 			}
@@ -86,12 +109,12 @@ namespace fe
 			AssetUser<Material> mesh_user(core.MeshID);
 
 			auto refs = mesh_user.GetRefCounters();
-			if (refs)
+			if (refs) // project asset
 			{
 				if (refs->LiveHandles[0].fetch_sub(1) == 1)
 					mesh_user.ReleaseDependencyLoad();
 			}
-			else
+			else // internal asset
 			{
 				mesh_user.ReleaseDependencyLoad();
 			}

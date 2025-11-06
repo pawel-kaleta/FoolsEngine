@@ -1,4 +1,3 @@
-UUID: 12079571074305468052
 Shading Model: 3793305017238133063
 Uniforms Data Size: 24
 Uniforms:
@@ -22,22 +21,22 @@ Uniforms:
     Count: 1
     Value:
       - 0
+  - Name: u_OMRTexturePacking
+    Type: Bool
+    Count: 1
+    Value:
+      - true
 Textures:
-  - Shader Texture Slot: u_BaseColorMap
-    Filepath: Survival_BackPack_2\1001_albedo.fetex2d
-    UUID: 7533288542743074609
-  - Shader Texture Slot: u_RoughnessMap
-    Filepath: ""
-    UUID: 0
-  - Shader Texture Slot: u_MetalnessMap
-    Filepath: ""
-    UUID: 0
-  - Shader Texture Slot: u_AOMap
-    Filepath: ""
-    UUID: 0
-  - Shader Texture Slot: u_NormalMap
-    Filepath: ""
-    UUID: 0
-  - Shader Texture Slot: u_OMRMap
-    Filepath: ""
-    UUID: 0
+  - u_BaseColorMap:
+      Filepath: Survival_BackPack_2\1001_albedo.fetex2d
+      UUID: 7533288542743074609
+  - u_OMRMap:
+      UUID: 0
+  - u_NormalMap:
+      UUID: 0
+  - u_RoughnessMap:
+      UUID: 0
+  - u_MetalnessMap:
+      UUID: 0
+  - u_AOMap:
+      UUID: 0

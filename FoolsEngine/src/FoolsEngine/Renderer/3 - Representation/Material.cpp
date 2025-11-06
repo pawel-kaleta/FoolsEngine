@@ -230,25 +230,39 @@ namespace fe
 			
 			FE_CORE_ASSERT(texture_user.GetType() == AssetType::Texture2D, "Trying to load texture in material that is not a texture.");
 
-			TextureLoader::LoadTexture(texture_user);
-			texture_user.CreateGDITexture2D(GDI);
-			texture_user.UnloadFromCPU();
-
 			auto refs = texture_user.GetRefCounters();
-			if (refs)
+			if (refs) //project asset
 			{
 				if (refs->LiveHandles[0].fetch_add(1) == 0)
+				{
+					if (!texture_user.IsLoaded())
+					{
+						TextureLoader::LoadTexture(texture_user);
+						texture_user.CreateGDITexture2D(GDI);
+						texture_user.UnloadFromCPU();
+
+						texture_user.FlagLoaded();
+					}
+					
 					texture_user.FlagLoadedAsDependency();
+				}
 			}
-			else
+			else //internal asset
 			{
+				FE_CORE_ASSERT(!texture_user.IsLoadedAsDependency(), "Internal Texture already marked LoadedAsDependency during loading");
+				FE_CORE_ASSERT(!texture_user.IsLoaded(), "Internal Texture already marked Loaded during loading");
+				
+				TextureLoader::LoadTexture(texture_user);
+				texture_user.CreateGDITexture2D(GDI);
+				texture_user.UnloadFromCPU();
+
+				texture_user.FlagLoaded();
 				texture_user.FlagLoadedAsDependency();
 			}
-
-			texture_user.FlagLoaded();
+			
 		}
 		
-		FE_LOG_CORE_ERROR("Material to gpu upload not implemented... I think...");
+		FE_LOG_CORE_WARN("Material to gpu upload implementation not tested");
 		return false;
 	}
 
@@ -264,12 +278,12 @@ namespace fe
 			AssetUser<Texture2D> texture_user(texture_ID);
 
 			auto refs = texture_user.GetRefCounters();
-			if (refs)
+			if (refs) // project asset
 			{
 				if (refs->LiveHandles[0].fetch_sub(1) == 1)
 					texture_user.ReleaseDependencyLoad();
 			}
-			else
+			else // internal asset
 			{
 				texture_user.ReleaseDependencyLoad();
 			}

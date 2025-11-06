@@ -103,6 +103,9 @@ namespace fe
 		void FlagUnloaded()				{ this->UnFlag<ACLoaded>(); }
 		void ReleaseDependencyLoad()	{ this->UnFlag<ACLoadedAsDependence>(); }
 
+		bool IsLoaded()				{ return this->AllOf<ACLoaded>(); }
+		bool IsLoadedAsDependency()	{ return this->AllOf<ACLoadedAsDependence>(); }
+
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
 	private:

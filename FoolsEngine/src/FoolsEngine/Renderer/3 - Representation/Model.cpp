@@ -77,24 +77,33 @@ namespace fe
 		for (auto rendermeshID : ACData.RenderMeshIDs)
 		{
 			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
-			if (!rendermesh_user.AllOf<ACLoaded>())
-				if (!rendermesh_user.SendDataToGPU(GDI))
-					return false;
 
 			auto refs = rendermesh_user.GetRefCounters();
-			if (refs)
+			if (refs) // project asset
 			{
 				if (refs->LiveHandles[0].fetch_add(1) == 0)
+				{
+					if (!rendermesh_user.IsLoaded())
+					{
+						if (!rendermesh_user.SendDataToGPU(GDI))
+							return false;
+
+						rendermesh_user.FlagLoaded();
+					}
+
 					rendermesh_user.FlagLoadedAsDependency();
+				}
 			}
-			else
+			else // internal asset
 			{
+				FE_CORE_ASSERT(!rendermesh_user.IsLoadedAsDependency(), "Internal RenderMesh already marked LoadedAsDependency during loading");
+				FE_CORE_ASSERT(!rendermesh_user.IsLoaded(), "Internal RenderMesh already marked Loaded during loading");
+
+				if (!rendermesh_user.SendDataToGPU(GDI))
+					return false;
+				rendermesh_user.FlagLoaded();
 				rendermesh_user.FlagLoadedAsDependency();
 			}
-
-			rendermesh_user.FlagLoaded();
-
-			rendermesh_user.FlagLoadedAsDependency();
 		}
 
 		return true;
@@ -107,7 +116,17 @@ namespace fe
 		for (auto rendermeshID : ACData.RenderMeshIDs)
 		{
 			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
-			rendermesh_user.ReleaseDependencyLoad();
+
+			auto refs = rendermesh_user.GetRefCounters();
+			if (refs) // project asset
+			{
+				if (refs->LiveHandles[0].fetch_sub(1) == 1)
+					rendermesh_user.ReleaseDependencyLoad();
+			}
+			else // internal asset
+			{
+				rendermesh_user.ReleaseDependencyLoad();
+			}
 		}
 	}
 }

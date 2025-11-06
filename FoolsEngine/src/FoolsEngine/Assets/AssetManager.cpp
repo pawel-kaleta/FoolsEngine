@@ -237,12 +237,14 @@ namespace fe
 				auto material_user = AssetUser<Material>(id);
 				material_user.SendDataToGPU(GDI);
 				material_user.FlagLoaded();
+				break;
 			}
 			case AssetType::Model:
 			{
 				auto model_user = AssetUser<Model>(id);
 				model_user.SendDataToGPU(GDI);
 				model_user.FlagLoaded();
+				break;
 			}
 			default:
 				int what;
