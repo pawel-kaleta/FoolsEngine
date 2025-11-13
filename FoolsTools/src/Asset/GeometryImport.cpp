@@ -334,9 +334,9 @@ namespace fe::GeometryImport
 				mesh_core.Specification.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
 
 				AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
-				auto& render_mesh = model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
+				model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
 
-				auto render_mesh_user = AssetUser<RenderMesh>(render_mesh);
+				auto render_mesh_user = AssetUser<RenderMesh>(render_mesh_ID);
 				auto& render_mesh_core = render_mesh_user.GetCoreComponent();
 
 				auto& material_index = scene->mMeshes[i]->mMaterialIndex;

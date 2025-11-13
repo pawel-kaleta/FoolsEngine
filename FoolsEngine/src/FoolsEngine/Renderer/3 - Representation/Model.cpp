@@ -36,35 +36,57 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_WARN("Model metadata loading not implemented");
-		return true;
-
-		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
-
 		auto filepath = Project::GetInstance()->AssetsPath;
-		filepath /= ECS_handle.get<ACFilepath>().Filepath;
+		filepath /= AssetManager::GetRegistry().get<ACFilepath>(assetID).Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
+		bool success = Model::LoadMetadataInternal(assetID, node);
 
-		auto& core = ECS_handle.get<ACModelCore>();
+		if (!success) return false;
+
+		const auto& source_filepath_node = node["Source Filepath"];
+		if (!source_filepath_node) return false;
+
+		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
+	}
+
+	bool Model::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
+		auto& core = reg.get<ACModelCore>(assetID);
 
 		auto uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
 			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node!");
 				return false;
 			}
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Missing UUID in Model file");
+			FE_LOG_CORE_WARN("Missing UUID in Model serialized node");
 		}
 
-		for (const auto& render_mesh_node : node)
+		const auto& rendermeshes_node = node["RenderMeshes"];
+
+		for (const auto& render_mesh_node : rendermeshes_node)
 		{
-			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_node.as<UUID>());
+			const auto& render_mesh_uuid_node = render_mesh_node["UUID"];
+
+			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_uuid_node.as<UUID>());
 			core.RenderMeshIDs.emplace_back(render_mesh_ID);
+
+			reg.emplace<ACAssetType>(render_mesh_ID).Type = AssetType::RenderMesh;
+			reg.emplace<ACMasterAsset>(render_mesh_ID).Master = assetID;
+			reg.emplace<RenderMesh::Core>(render_mesh_ID).Init();
+
+			bool success = RenderMesh::LoadMetadataInternal(render_mesh_ID, render_mesh_node);
+			
+			if (!success)
+				return false;
 		}
 
 		return true;

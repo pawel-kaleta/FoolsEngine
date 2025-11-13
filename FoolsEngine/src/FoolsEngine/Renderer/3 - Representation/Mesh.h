@@ -13,7 +13,7 @@
 
 #include <glm\glm.hpp>
 
-namespace YAML { class Emitter; }
+namespace YAML { class Emitter; class Node; }
 
 namespace fe
 {
@@ -85,6 +85,7 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMeshCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
+		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
 
 		using Observer = MeshObserver;
 		using User = MeshUser;

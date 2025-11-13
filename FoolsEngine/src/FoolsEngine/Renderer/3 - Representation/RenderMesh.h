@@ -6,7 +6,7 @@
 #include "FoolsEngine\Assets\AssetAccessors.h"
 #include "Mesh.h"
 
-namespace YAML { class Emitter; }
+namespace YAML { class Emitter; class Node; }
 
 namespace fe
 {
@@ -48,6 +48,7 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACRenderMeshCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
+		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;

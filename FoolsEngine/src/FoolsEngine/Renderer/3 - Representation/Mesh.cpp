@@ -136,38 +136,53 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
+		auto& reg = AssetManager::GetRegistry();
 
-		const auto& filepath = ECS_handle.get<ACFilepath>().Filepath;
+		const auto& filepath = reg.get<ACFilepath>(assetID).Filepath;
 		YAML::Node node = YAML::LoadFile((Project::GetInstance()->AssetsPath / filepath).string());
+
+		bool success = Mesh::LoadMetadataInternal(assetID, node);
+
+		if (!success) return false;
+
+		const auto& source_filepath_node = node["Source Filepath"];
+		if (!source_filepath_node) return false;
+
+		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
+
+		return true;
+	}
+
+	bool Mesh::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
 
 		auto uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
 			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node");
 				return false;
 			}
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Missing UUID in Mesh file");
+			FE_LOG_CORE_WARN("Missing UUID in Mesh serialized node");
 		}
 
-		const auto& source_filepath_node = node["Source Filepath"];
 		const auto& vertex_count_node = node["Vartex Count"];
 		const auto& index_count_node = node["Index Count"];
 
-		if (!source_filepath_node) return false;
-		if (!vertex_count_node) return false;
-		if (!index_count_node) return false;
+		if (!vertex_count_node ||
+			!index_count_node)
+			return false;
 
-		auto& core = ECS_handle.get<ACMeshCore>();
+		auto& core = reg.get<ACMeshCore>(assetID);
 		core.Specification.VertexCount = vertex_count_node.as<uint32_t>();
-		core.Specification.IndexCount  =  index_count_node.as<uint32_t>();
-
-		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
+		core.Specification.IndexCount = index_count_node.as<uint32_t>();
 
 		return true;
 	}

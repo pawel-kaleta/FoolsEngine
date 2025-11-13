@@ -299,6 +299,7 @@ namespace fe
 		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
+		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
 		emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
@@ -324,11 +325,11 @@ namespace fe
 		}
 		emitter << YAML::EndSeq;
 
-		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq;
+		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
 		for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
 		{
-			emitter << YAML::BeginMap;
 			emitter << YAML::Key << shading_model_core.TextureSlots[i].GetName() << YAML::Value;
+
 			if (core.TextureIDs[i] != NullAssetID)
 			{
 				bool is_internal;
@@ -355,9 +356,9 @@ namespace fe
 				emitter << YAML::Key << "UUID" << YAML::Value << 0;
 				emitter << YAML::EndMap;
 			}
-			emitter << YAML::EndMap;
+
 		}
-		emitter << YAML::EndSeq;
+		emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
 	}
 
@@ -365,38 +366,49 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
-
-		auto& core = ECS_handle.get<ACMaterialCore>();
+		auto& reg = AssetManager::GetRegistry();
 
 		auto filepath = Project::GetInstance()->AssetsPath;
-		filepath /= ECS_handle.get<ACFilepath>().Filepath;
+		filepath /= reg.get<ACFilepath>(assetID).Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
+
+		bool success = LoadMetadataInternal(assetID, node);
+
+		return success;
+	}
+
+	bool Material::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
 
 		auto uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
 			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node!");
 				return false;
 			}
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Missing UUID in Material file");
+			FE_LOG_CORE_WARN("Missing UUID in Material serialized node");
 		}
 
 		const auto& shading_model_node = node["Shading Model"];
-		const auto& data_size_node     = node["Uniforms Data Size"];
-		const auto& uniforms_node      = node["Uniforms"];
-		const auto& textures_node      = node["Textures"];
+		const auto& data_size_node = node["Uniforms Data Size"];
+		const auto& uniforms_node = node["Uniforms"];
+		const auto& textures_node = node["Textures"];
 
-		if (!shading_model_node) return false;
-		if (!data_size_node) return false;
-		if (!uniforms_node) return false;
-		if (!textures_node) return false;
-		if (!textures_node.IsSequence()) return false;
+		if (!shading_model_node ||
+			!data_size_node ||
+			!uniforms_node ||
+			!textures_node)
+			return false;
+
+		auto& core = reg.get<ACMaterialCore>(assetID);
 
 		auto shading_model_UUID = shading_model_node.as<UUID>();
 		core.ShadingModelID = AssetManager::GetOrCreateAssetWithUUID(shading_model_UUID);
@@ -409,15 +421,16 @@ namespace fe
 		for (auto& uniform_node : uniforms_node)
 		{
 			FE_PROFILER_SCOPE("Uniform");
-			const auto& name_node  = uniform_node["Name"];
-			const auto& type_node  = uniform_node["Type"];
+			const auto& name_node = uniform_node["Name"];
+			const auto& type_node = uniform_node["Type"];
 			const auto& count_node = uniform_node["Count"];
 			const auto& value_node = uniform_node["Value"];
 
-			if (!name_node) return false;
-			if (!type_node) return false;
-			if (!count_node) return false;
-			if (!value_node) return false;
+			if (!name_node ||
+				!type_node ||
+				!count_node ||
+				!value_node)
+				return false;
 
 			const auto uniform_name = name_node.as<std::string>();
 			// to do: compare (assert) with uniform's name in shading model
@@ -437,20 +450,30 @@ namespace fe
 		for (auto& texture_node : textures_node)
 		{
 			FE_PROFILER_SCOPE("Texture");
-			const auto& texture_slot_node = texture_node["Shader Texture Slot"];
-			const auto& texture_filepath_node = texture_node["Filepath"];
 			const auto& texture_UUID_node = texture_node["UUID"];
 
-			if (!texture_slot_node) return false;
-			if (!texture_filepath_node) return false;
 			if (!texture_UUID_node) return false;
 			//To do: compare (assert) texture_slot_node with texture slot in shading model
-			//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 
 			if (texture_UUID_node.as<UUID>() == UUID(0))
+			{
 				core.TextureIDs.emplace_back(NullAssetID);
-			else
-				core.TextureIDs.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
+				continue;
+			}
+			
+			auto texture_id = core.TextureIDs.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
+
+			if (reg.all_of<ACRefsCounters>(texture_id)) //check if texture is master asset
+			{
+				//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
+				continue;
+			}
+			
+			reg.emplace<ACAssetType>(texture_id).Type = AssetType::Texture2D;
+			reg.emplace<ACMasterAsset>(texture_id).Master = assetID;
+			reg.emplace<Texture2D::Core>(texture_id).Init();
+
+			Texture2D::LoadMetadataInternal(texture_id, texture_node);
 		}
 
 		return true;

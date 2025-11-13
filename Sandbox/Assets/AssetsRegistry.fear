@@ -1,31 +1,28 @@
 Masters:
-  - Type: Model
-    UUID: 13584324288690206529
-    Filepath: Sponza\glTF\Sponza.femodel
+  - Type: Material
+    UUID: 12079571074305468052
+    Filepath: Survival_BackPack_2\Material.femat
+  - Type: Mesh
+    UUID: 12471327083499578500
+    Filepath: Survival_BackPack_2\Survival_BackPack_2.femesh
   - Type: Texture2D
-    UUID: 7533288542743074609
-    Filepath: Survival_BackPack_2\1001_albedo.fetex2d
-  - Type: Scene
-    UUID: 3793305017238133058
-    Filepath: example.fescene
-  - Type: Texture2D
-    UUID: 18112934642992629188
-    Filepath: textures\grass2.fetex2d
-  - Type: Texture2D
-    UUID: 2406470786547939043
-    Filepath: textures\grass1.fetex2d
-  - Type: Texture2D
-    UUID: 3147587995776764887
-    Filepath: textures\tree2.fetex2d
+    UUID: 16144042178780554263
+    Filepath: textures\grassland.fetex2d
   - Type: Texture2D
     UUID: 7011469824264952867
     Filepath: textures\tree1.fetex2d
   - Type: Texture2D
-    UUID: 16144042178780554263
-    Filepath: textures\grassland.fetex2d
-  - Type: Mesh
-    UUID: 12471327083499578500
-    Filepath: Survival_BackPack_2\Survival_BackPack_2.femesh
-  - Type: Material
-    UUID: 12079571074305468052
-    Filepath: Survival_BackPack_2\Material.femat
+    UUID: 3147587995776764887
+    Filepath: textures\tree2.fetex2d
+  - Type: Texture2D
+    UUID: 2406470786547939043
+    Filepath: textures\grass1.fetex2d
+  - Type: Texture2D
+    UUID: 18112934642992629188
+    Filepath: textures\grass2.fetex2d
+  - Type: Scene
+    UUID: 3793305017238133058
+    Filepath: example.fescene
+  - Type: Texture2D
+    UUID: 7533288542743074609
+    Filepath: Survival_BackPack_2\1001_albedo.fetex2d

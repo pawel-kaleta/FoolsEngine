@@ -21,11 +21,11 @@ namespace fe
 
 		return assetID;
 	}
-#endif
 
 #define _CREATE_EDITOR_ASSET_DEF(x) template AssetID AssetManager::AssetCreation::EditorAsset<x>();
 	FE_FOR_EACH(_CREATE_EDITOR_ASSET_DEF, FE_ASSET_TYPES_LIST);
 
+#endif
 
 	template <typename tnAsset>
 	static AssetID AssetManager::AssetCreation::BaseAsset(const std::filesystem::path& path, UUID uuid)

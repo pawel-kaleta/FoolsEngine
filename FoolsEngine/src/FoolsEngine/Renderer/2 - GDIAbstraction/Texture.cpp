@@ -156,37 +156,46 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& reg = AssetManager::GetRegistry();
-		ECS_AssetHandle ECS_handle(reg, assetID);
 
 		auto filepath = Project::GetInstance()->AssetsPath;
-		filepath /= ECS_handle.get<ACFilepath>().Filepath;
+		filepath /= reg.get<ACFilepath>(assetID).Filepath;
 		YAML::Node node = YAML::LoadFile(filepath.string());
-
-		auto uuid_node = node["UUID"];
-		if (uuid_node) // Base Assets don't have UUID in their file
-		{
-			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
-			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
-				return false;
-			}
-		}
-		else
-		{
-			FE_LOG_CORE_WARN("Missing UUID in Texture file");
-		}
 
 		auto source_node = node["Source Filepath"];
 		if (!source_node) return false;
 		AssetManager::SetSourcePath(assetID, source_node.as<std::string>());
 
-		if (!node["Usage"]) return false;
-		if (!node["Components"]) return false;
-		if (!node["Format"]) return false;
-		if (!node["Width"]) return false;
-		if (!node["Height"]) return false;
+		return true;
+	}
 
-		auto& spec = ECS_handle.get<ACTexture2DCore>().Specification;
+	bool Texture2D::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
+
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in Texture serialized node");
+		}
+
+		if (!node["Usage"].IsDefined() ||
+			!node["Components"].IsDefined() ||
+			!node["Format"].IsDefined() ||
+			!node["Width"].IsDefined() ||
+			!node["Height"].IsDefined())
+			return false;
+
+		auto& spec = reg.get<ACTexture2DCore>(assetID).Specification;
 		spec.Usage.FromString(node["Usage"].as<std::string>());
 		spec.Components.FromString(node["Components"].as<std::string>());
 		spec.Format.FromString(node["Format"].as<std::string>());

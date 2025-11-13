@@ -4,7 +4,7 @@
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
 
-namespace YAML { class Emitter; }
+namespace YAML { class Emitter; class Node; }
 
 namespace fe
 {
@@ -72,6 +72,7 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
+		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;

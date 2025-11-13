@@ -63,8 +63,8 @@ Worlds:
                 Rotation: [0, 0, 0]
                 Scale: [1, 1, 1]
               Model:
-                UUID: 13584324288690206529
-                Name: Sponza.femodel
+                UUID: 0
+                Name: empty handle
                 Loading Priority: Minimal
       - Actor: Enviro
         UUID: 14670524396616024285

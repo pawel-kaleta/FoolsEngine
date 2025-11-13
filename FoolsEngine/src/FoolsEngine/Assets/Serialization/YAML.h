@@ -175,9 +175,17 @@ namespace YAML
 
 			fe::AssetLoadingPriority loading_priority; loading_priority.FromString(node["Loading Priority"].as<std::string>());
 
-			fe::AssetID id = fe::AssetManager::GetOrCreateAssetWithUUID(uuid);
-
-			FE_CORE_ASSERT(id != fe::NullAssetID, "Failed to deserialize asset handle");
+			fe::AssetID id;
+			
+			if (uuid == fe::UUID(0))
+			{
+				id = fe::NullAssetID;
+			}
+			else
+			{
+				id = fe::AssetManager::GetOrCreateAssetWithUUID(uuid);
+				FE_CORE_ASSERT(id != fe::NullAssetID, "Failed to deserialize asset handle");
+			}
 
 			rhs = fe::AssetHandle<tnAsset>(id);
 			rhs.SetLoadingPriority(loading_priority);

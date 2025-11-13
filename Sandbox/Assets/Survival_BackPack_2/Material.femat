@@ -1,3 +1,4 @@
+UUID: 12079571074305468052
 Shading Model: 3793305017238133063
 Uniforms Data Size: 24
 Uniforms:
@@ -27,16 +28,16 @@ Uniforms:
     Value:
       - true
 Textures:
-  - u_BaseColorMap:
-      Filepath: Survival_BackPack_2\1001_albedo.fetex2d
-      UUID: 7533288542743074609
-  - u_OMRMap:
-      UUID: 0
-  - u_NormalMap:
-      UUID: 0
-  - u_RoughnessMap:
-      UUID: 0
-  - u_MetalnessMap:
-      UUID: 0
-  - u_AOMap:
-      UUID: 0
+  u_BaseColorMap:
+    Filepath: Survival_BackPack_2\1001_albedo.fetex2d
+    UUID: 7533288542743074609
+  u_OMRMap:
+    UUID: 0
+  u_NormalMap:
+    UUID: 0
+  u_RoughnessMap:
+    UUID: 0
+  u_MetalnessMap:
+    UUID: 0
+  u_AOMap:
+    UUID: 0
