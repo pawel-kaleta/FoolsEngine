@@ -20,7 +20,7 @@ namespace fe
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		emitter << YAML::Key << "Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 		emitter << YAML::Key << "RenderMeshes" << YAML::Value << YAML::BeginSeq;
 
 		for (const auto& renderMeshID : model_core.RenderMeshIDs)

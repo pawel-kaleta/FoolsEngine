@@ -302,13 +302,12 @@ namespace fe
 		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
 		emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
-		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
+		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginMap;
 
 		char* uniform_data_ptr = (char*)core.UniformsData;
 		for (auto& uniform : shading_model_core.Uniforms)
 		{
-			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name"  << YAML::Value << uniform.GetName();
+			emitter << YAML::Key << uniform.GetName() << YAML::Value << YAML::BeginMap;
 			emitter << YAML::Key << "Type"  << YAML::Value << uniform.GetType().ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
@@ -323,7 +322,7 @@ namespace fe
 			emitter << YAML::EndSeq;
 			emitter << YAML::EndMap;
 		}
-		emitter << YAML::EndSeq;
+		emitter << YAML::EndMap;
 
 		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
 		for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
@@ -381,6 +380,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		AssetUser<Material> material_user(assetID);
+
 		auto& reg = AssetManager::GetRegistry();
 
 		auto uuid_node = node["UUID"];
@@ -408,72 +409,110 @@ namespace fe
 			!textures_node)
 			return false;
 
-		auto& core = reg.get<ACMaterialCore>(assetID);
 
 		auto shading_model_UUID = shading_model_node.as<UUID>();
-		core.ShadingModelID = AssetManager::GetOrCreateAssetWithUUID(shading_model_UUID);
+		auto shadingModelID = AssetManager::GetOrCreateAssetWithUUID(shading_model_UUID);
+		
+		AssetObserver<ShadingModel> sm_observer(shadingModelID);
 
-		core.UniformsDataSize = data_size_node.as<size_t>();
-		core.UniformsData = operator new(core.UniformsDataSize);
+		material_user.MakeMaterial(sm_observer);
 
-		char* uniform_data_ptr = (char*)core.UniformsData;
+		auto& sm_core = sm_observer.GetCoreComponent();
 
-		for (auto& uniform_node : uniforms_node)
+		auto& core = material_user.GetCoreComponent();
+
+		for (auto& uniform : sm_core.Uniforms)
 		{
 			FE_PROFILER_SCOPE("Uniform");
-			const auto& name_node = uniform_node["Name"];
-			const auto& type_node = uniform_node["Type"];
-			const auto& count_node = uniform_node["Count"];
-			const auto& value_node = uniform_node["Value"];
 
-			if (!name_node ||
-				!type_node ||
-				!count_node ||
-				!value_node)
-				return false;
+			const auto& uniform_node = uniforms_node[uniform.GetName()];
 
-			const auto uniform_name = name_node.as<std::string>();
-			// to do: compare (assert) with uniform's name in shading model
-			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
-			const auto uniform_count = count_node.as<uint32_t>();
-
-			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
-			auto uniform_size = ShaderData::SizeOfType(uniform_type);
-			for (size_t i = 0; i < uniform_count; ++i)
+			if (!uniform_node.IsDefined())
 			{
-				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform_type);
-				if (!success) return false;
-				uniform_data_ptr += uniform_size;
+				//assert
+				continue;
+			}
+			else
+			{
+				const auto& type_node = uniform_node["Type"];
+				const auto& count_node = uniform_node["Count"];
+				const auto& value_node = uniform_node["Value"];
+		
+				if (!type_node ||
+					!count_node ||
+					!value_node)
+				{
+					//assert
+
+					continue;
+				}
+
+				if (uniform.GetType().ToConstCharPtr() != type_node.as<std::string>())
+				{
+					//assert
+
+					continue;
+				}
+
+				const auto uniform_count = count_node.as<uint32_t>();
+
+				if (!value_node.IsSequence() || value_node.size() != uniform_count)
+				{
+					//assert
+
+					continue;
+				}
+
+				char* uniform_data_ptr = (char*) material_user.GetUniformValuePtr(core, uniform);
+
+				for (size_t i = 0; i < uniform_count; ++i)
+				{
+					bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform.GetType());
+					if (!success) return false;
+					uniform_data_ptr += uniform.GetSize();
+				}
 			}
 		}
 
-		for (auto& texture_node : textures_node)
+		auto& texture_slots = sm_core.TextureSlots;
+
+		for (auto& texture_slot : texture_slots)
 		{
 			FE_PROFILER_SCOPE("Texture");
-			const auto& texture_UUID_node = texture_node["UUID"];
 
-			if (!texture_UUID_node) return false;
-			//To do: compare (assert) texture_slot_node with texture slot in shading model
+			const auto& texture_node = textures_node[texture_slot.GetName()];
+
+			if (!texture_node.IsDefined())
+			{
+				//assert
+				continue;
+			}
+
+			const auto& texture_UUID_node = texture_node["UUID"];
 
 			if (texture_UUID_node.as<UUID>() == UUID(0))
 			{
-				core.TextureIDs.emplace_back(NullAssetID);
+				//assert
 				continue;
 			}
-			
-			auto texture_id = core.TextureIDs.emplace_back(AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>()));
+
+			auto texture_id = AssetManager::GetOrCreateAssetWithUUID(texture_UUID_node.as<UUID>());
+			material_user.SetTexture(core, texture_slot, texture_id);
 
 			if (reg.all_of<ACRefsCounters>(texture_id)) //check if texture is master asset
 			{
 				//To do: compare (assert) texture_filepath_node with filepath of texture with this UUID
 				continue;
 			}
-			
+
 			reg.emplace<ACAssetType>(texture_id).Type = AssetType::Texture2D;
 			reg.emplace<ACMasterAsset>(texture_id).Master = assetID;
 			reg.emplace<Texture2D::Core>(texture_id).Init();
 
-			Texture2D::LoadMetadataInternal(texture_id, texture_node);
+			bool success = Texture2D::LoadMetadataInternal(texture_id, texture_node);
+
+			if (!success)
+				return false;
 		}
 
 		return true;

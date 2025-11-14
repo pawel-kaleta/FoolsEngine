@@ -1,4 +1,7 @@
 Masters:
+  - Type: Model
+    UUID: 14243844596517536663
+    Filepath: Sponza\glTF\Sponza.femodel
   - Type: Material
     UUID: 12079571074305468052
     Filepath: Survival_BackPack_2\Material.femat

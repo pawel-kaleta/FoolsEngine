@@ -2,27 +2,27 @@ UUID: 12079571074305468052
 Shading Model: 3793305017238133063
 Uniforms Data Size: 24
 Uniforms:
-  - Name: u_BaseColor
+  u_BaseColor:
     Type: Float3
     Count: 1
     Value:
       - [1, 1, 1]
-  - Name: u_Roughness
+  u_Roughness:
     Type: Float
     Count: 1
     Value:
       - 0.5
-  - Name: u_Metalness
+  u_Metalness:
     Type: Float
     Count: 1
     Value:
       - 0.5
-  - Name: u_AO
+  u_AO:
     Type: Float
     Count: 1
     Value:
       - 0
-  - Name: u_OMRTexturePacking
+  u_OMRTexturePacking:
     Type: Bool
     Count: 1
     Value:
