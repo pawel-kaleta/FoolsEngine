@@ -197,7 +197,7 @@ namespace fe
 		for (const auto& texture_ID : core.TextureIDs)
 		{
 			if (texture_ID == NullAssetID)
-				return false;
+				continue;
 
 			AssetUser<Texture2D> texture_user(texture_ID);
 			
@@ -232,11 +232,9 @@ namespace fe
 				texture_user.FlagLoaded();
 				texture_user.FlagLoadedAsDependency();
 			}
-			
 		}
 		
-		FE_LOG_CORE_WARN("Material to gpu upload implementation not tested");
-		return false;
+		return true;
 	}
 
 	void MaterialUser::Release() const
@@ -459,6 +457,8 @@ namespace fe
 			spec.Height = height_node.as<uint32_t>();
 
 			AssetManager::SetSourcePath(texture_id, parentPath / texture_source_filepath_node.as<std::string>());
+
+			textureIDs[i] = texture_id;
 		}
 	}
 
@@ -580,7 +580,7 @@ namespace fe
 		LoadUniforms(uniforms_node, core.UniformsData, sm_core.Uniforms);
 		LoadTextures(textures_node, core.TextureIDs, sm_core.TextureSlots, parentPath, master);
 
-		return true;
+		return asset_id;
 	}
 
 	void Material::MakeMaterial(AssetID assetID, const AssetObserver<ShadingModel>& shadingModelObserver)

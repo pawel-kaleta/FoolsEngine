@@ -21,12 +21,12 @@ namespace fe
 		}
 		static void UnloadMesh(void* data) { delete[] (float*)data; }
 
-		//static void LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser);
-		//static void LoadModel(AssetUser<Model>& modelUser)
-		//{
-		//	auto path = modelUser.GetFilepath();
-		//	LoadModel(path, modelUser);
-		//}
+		static void LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser);
+		static void LoadModel(AssetUser<Model>& modelUser)
+		{
+			auto path = modelUser.GetFilepath();
+			LoadModel(path, modelUser);
+		}
 		//static void UnloadModel(void* data);
 
 		static bool IsKnownExtension(const std::pmr::string& extension);

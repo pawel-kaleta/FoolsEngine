@@ -161,8 +161,18 @@ namespace fe
 		return;
 	}
 
-	//void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
-	//{
-	//	FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
-	//}
+	void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
+	{
+		FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
+
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile((Project::GetInstance()->AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
+
+		const auto& render_meshes = modelUser.GetCoreComponent().RenderMeshIDs;
+
+		for (size_t i = 0; i < render_meshes.size(); i++)
+		{
+
+		}
+	}
 }

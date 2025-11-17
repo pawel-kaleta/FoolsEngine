@@ -54,7 +54,7 @@ namespace fe
 
 		// mesh loading
 		{
-			AssetUser<Material> mesh_user(core.MeshID);
+			AssetUser<Mesh> mesh_user(core.MeshID);
 
 			auto refs = mesh_user.GetRefCounters();
 			if (refs) // project asset
@@ -209,6 +209,11 @@ namespace fe
 
 		auto asset_id = AssetManager::GetOrCreateAssetWithUUID(uuid);
 		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
+
+		if (asset_id == 24)
+		{
+			int test = 0;
+		}
 
 		reg.emplace<ACAssetType>(asset_id).Type = AssetType::RenderMesh;
 		reg.emplace<ACMasterAsset>(asset_id).Master = master;
