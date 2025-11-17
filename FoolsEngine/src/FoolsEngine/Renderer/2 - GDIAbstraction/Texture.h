@@ -72,7 +72,7 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACTexture2DCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
-		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
+		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;

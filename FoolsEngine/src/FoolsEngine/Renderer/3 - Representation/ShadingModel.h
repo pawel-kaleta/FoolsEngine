@@ -70,7 +70,7 @@ namespace fe
 
 	private:
 		friend class Renderer;
-		// used only by renderer to create base assets during startup
+
 		static bool DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath);
 	};
 }

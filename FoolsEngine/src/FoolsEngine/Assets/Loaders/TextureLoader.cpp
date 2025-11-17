@@ -24,13 +24,13 @@ namespace fe
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data;
-		{
-			Scratchpad sp;
-			std::pmr::string filename("stbi_load - " + sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(), &sp);
-			FE_PROFILER_SCOPE(filename.c_str());
-			std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>();
-			data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
-		}
+		
+		Scratchpad sp;
+		std::pmr::string filename("stbi_load - " + sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(), &sp);
+		FE_PROFILER_SCOPE(filename.c_str());
+		std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>();
+		data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+		
 
 		{
 			FE_PROFILER_SCOPE("Specification Init");

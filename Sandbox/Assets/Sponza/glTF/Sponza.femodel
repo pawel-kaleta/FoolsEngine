@@ -1,13 +1,13 @@
-UUID: 14243844596517536663
+UUID: 4673240981466641358
 Source Filepath: Sponza\glTF\Sponza.gltf
 RenderMeshes:
-  - UUID: 15439003031668181371
+  - UUID: 15023070408884052255
     Mesh:
-      UUID: 9605556792360827475
+      UUID: 636428347336398835
       Vartex Count: 24110
       Index Count: 94308
     Material:
-      UUID: 17804989184723292846
+      UUID: 13869870582220804952
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -43,7 +43,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 12017674616329843521
+          UUID: 954855944475879390
           Source Filepath: 5061699253647017043.png
           Usage: Map_BaseColor
           Components: RGBA
@@ -51,7 +51,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 16571727661944053501
+          UUID: 194615181231926800
           Source Filepath: 11872827283454512094.jpg
           Usage: Map_OMR
           Components: RGB
@@ -59,7 +59,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 2260735766460869493
+          UUID: 11245259622940118187
           Source Filepath: 8773302468495022225.jpg
           Usage: Map_Normal
           Components: RGB
@@ -72,13 +72,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 3938879801808194730
+  - UUID: 4543993353244229979
     Mesh:
-      UUID: 12477628011245165883
+      UUID: 613505170611746255
       Vartex Count: 3932
       Index Count: 10416
     Material:
-      UUID: 4297430327562178501
+      UUID: 12604406272237870354
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -114,7 +114,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 10674477092701090390
+          UUID: 13981145211994878826
           Source Filepath: 8006627369776289000.png
           Usage: Map_BaseColor
           Components: RGBA
@@ -122,7 +122,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 10707973563228091160
+          UUID: 12091871155402774692
           Source Filepath: 715093869573992647.jpg
           Usage: Map_OMR
           Components: RGB
@@ -130,7 +130,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 2424301727513391014
+          UUID: 10178804480099713547
           Source Filepath: 12501374198249454378.jpg
           Usage: Map_Normal
           Components: RGB
@@ -143,13 +143,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 6216577879921278205
+  - UUID: 7961871574748541636
     Mesh:
-      UUID: 2370313847259798668
+      UUID: 1229489582648784064
       Vartex Count: 9840
       Index Count: 53064
     Material:
-      UUID: 298273227376672112
+      UUID: 17435209728815526565
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -180,7 +180,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 8589499405580801162
+          UUID: 11639545454994072502
           Source Filepath: 7268504077753552595.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -188,7 +188,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 3096000320171379212
+          UUID: 15108843625912585078
           Source Filepath: 8503262930880235456.jpg
           Usage: Map_OMR
           Components: RGB
@@ -196,7 +196,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 4092293588496612896
+          UUID: 17465483449960981008
           Source Filepath: 4477655471536070370.jpg
           Usage: Map_Normal
           Components: RGB
@@ -209,13 +209,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 8683345835311544725
+  - UUID: 10841974135695118712
     Mesh:
-      UUID: 9789640280563036830
+      UUID: 18274036871025607228
       Vartex Count: 2241
       Index Count: 12258
     Material:
-      UUID: 17038421684362225273
+      UUID: 8446287323935011524
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -246,7 +246,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 6098907773251489731
+          UUID: 5000753269744083472
           Source Filepath: 8750083169368950601.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -254,7 +254,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 12810302304003172274
+          UUID: 15071931932204764578
           Source Filepath: 16885566240357350108.jpg
           Usage: Map_OMR
           Components: RGB
@@ -262,7 +262,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 5956505353352852661
+          UUID: 12712817465749623084
           Source Filepath: 13982482287905699490.jpg
           Usage: Map_Normal
           Components: RGB
@@ -275,13 +275,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 3383018850978983296
+  - UUID: 1927326214000081880
     Mesh:
-      UUID: 13251075194454706712
+      UUID: 2943121984401461968
       Vartex Count: 1053
       Index Count: 2388
     Material:
-      UUID: 5625260641666657791
+      UUID: 18267925145927168367
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -312,7 +312,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 4577346654350998558
+          UUID: 17162583645487442339
           Source Filepath: 5792855332885324923.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -320,7 +320,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 16275318039949282918
+          UUID: 6143234462381664921
           Source Filepath: 11968150294050148237.jpg
           Usage: Map_OMR
           Components: RGB
@@ -328,7 +328,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 12482358713081899318
+          UUID: 12115417854775791620
           Source Filepath: 16299174074766089871.jpg
           Usage: Map_Normal
           Components: RGB
@@ -341,13 +341,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 5253205960168209306
+  - UUID: 10442354994853752013
     Mesh:
-      UUID: 16650147922544476103
+      UUID: 17275475878226910939
       Vartex Count: 9679
       Index Count: 30504
     Material:
-      UUID: 13918312439148691324
+      UUID: 8799632396981736421
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -378,7 +378,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 13253847413824960695
+          UUID: 15230191144329524626
           Source Filepath: 14650633544276105767.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -386,7 +386,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 14314592103061462684
+          UUID: 12150711412422538491
           Source Filepath: 4871783166746854860.jpg
           Usage: Map_OMR
           Components: RGB
@@ -394,7 +394,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 16336609572189070480
+          UUID: 17032831352897098082
           Source Filepath: 2051777328469649772.jpg
           Usage: Map_Normal
           Components: RGB
@@ -407,13 +407,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 15964589585025793809
+  - UUID: 8790869489982987695
     Mesh:
-      UUID: 9973962657287859934
+      UUID: 6724159848584959628
       Vartex Count: 4998
       Index Count: 17628
     Material:
-      UUID: 130022492581767522
+      UUID: 8603227922727490883
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -444,7 +444,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 73775029943786235
+          UUID: 14469632722248789961
           Source Filepath: 15295713303328085182.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -452,7 +452,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 5545216361289203257
+          UUID: 2673692949076616313
           Source Filepath: 9916269861720640319.jpg
           Usage: Map_OMR
           Components: RGB
@@ -460,7 +460,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 4361869948711428002
+          UUID: 16040406509214097120
           Source Filepath: 10388182081421875623.jpg
           Usage: Map_Normal
           Components: RGB
@@ -473,13 +473,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 3496680174269077806
+  - UUID: 9335128842335589289
     Mesh:
-      UUID: 4447553139750586436
+      UUID: 1010722180173350721
       Vartex Count: 3124
       Index Count: 8448
     Material:
-      UUID: 6565593327602535350
+      UUID: 3725880037464390166
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -510,7 +510,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 7063661243906680893
+          UUID: 5739728785658758008
           Source Filepath: 6047387724914829168.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -518,7 +518,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 15968807990987300395
+          UUID: 6762280983552848924
           Source Filepath: 8051790464816141987.jpg
           Usage: Map_OMR
           Components: RGB
@@ -526,7 +526,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 3485158430784222833
+          UUID: 9088500543822096526
           Source Filepath: 15722799267630235092.jpg
           Usage: Map_Normal
           Components: RGB
@@ -539,13 +539,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 15368478580428004974
+  - UUID: 8628600552172537565
     Mesh:
-      UUID: 5178269076565940807
+      UUID: 11839742605665175452
       Vartex Count: 23
       Index Count: 63
     Material:
-      UUID: 17747465730873470756
+      UUID: 17857437680670892374
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -576,7 +576,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 16149467322782149550
+          UUID: 16521565108885559188
           Source Filepath: 5823059166183034438.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -584,7 +584,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 1933580683850996851
+          UUID: 16577583775436602153
           Source Filepath: 13824894030729245199.jpg
           Usage: Map_OMR
           Components: RGB
@@ -592,7 +592,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 10104352893140424930
+          UUID: 6049971986803461630
           Source Filepath: 14267839433702832875.jpg
           Usage: Map_Normal
           Components: RGB
@@ -605,13 +605,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 15435431188505405911
+  - UUID: 15268101558506372520
     Mesh:
-      UUID: 6451090525935968127
+      UUID: 7333194987521627164
       Vartex Count: 11820
       Index Count: 21264
     Material:
-      UUID: 10447635506383512321
+      UUID: 5451394576853569194
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -642,7 +642,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 14405925248703094936
+          UUID: 8436679158779999587
           Source Filepath: 7441062115984513793.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -650,7 +650,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 16580504596339728220
+          UUID: 16414465359009264475
           Source Filepath: 8114461559286000061.jpg
           Usage: Map_OMR
           Components: RGB
@@ -658,7 +658,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 17738088679492439016
+          UUID: 11245171115809232161
           Source Filepath: 6667038893015345571.jpg
           Usage: Map_Normal
           Components: RGB
@@ -671,13 +671,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 16961946459078145130
+  - UUID: 18432003018135920008
     Mesh:
-      UUID: 14729812432752563199
+      UUID: 8766545307437381638
       Vartex Count: 1098
       Index Count: 2640
     Material:
-      UUID: 15441553502696158697
+      UUID: 5907732385820890035
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -708,7 +708,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 11554913349369685899
+          UUID: 10441076982567048221
           Source Filepath: 11490520546946913238.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -716,7 +716,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 18430338988537368752
+          UUID: 415517871317518864
           Source Filepath: 3455394979645218238.jpg
           Usage: Map_OMR
           Components: RGB
@@ -724,7 +724,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 10828426534104699407
+          UUID: 14285357209347919836
           Source Filepath: 3628158980083700836.jpg
           Usage: Map_Normal
           Components: RGB
@@ -737,13 +737,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 2882235191570072295
+  - UUID: 4289397362477468955
     Mesh:
-      UUID: 2600852019088490913
+      UUID: 16864390502714710411
       Vartex Count: 22820
       Index Count: 69624
     Material:
-      UUID: 2635044221902964143
+      UUID: 7768221188671041615
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -774,7 +774,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 4010541473384727514
+          UUID: 7928944996727906928
           Source Filepath: 6151467286084645207.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -782,7 +782,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 12120388239183660012
+          UUID: 1194335491491114138
           Source Filepath: 8783994986360286082.jpg
           Usage: Map_OMR
           Components: RGB
@@ -790,7 +790,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 16835747790597159628
+          UUID: 18064056618115411999
           Source Filepath: 7645212358685992005.jpg
           Usage: Map_Normal
           Components: RGB
@@ -803,13 +803,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 3112591430870016652
+  - UUID: 11054736486922506045
     Mesh:
-      UUID: 4233408944094709093
+      UUID: 11380894439684545526
       Vartex Count: 36
       Index Count: 54
     Material:
-      UUID: 606517790141552588
+      UUID: 14384234017034204824
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -840,7 +840,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 1492185191385806951
+          UUID: 5625009901552013744
           Source Filepath: white.png
           Usage: Map_BaseColor
           Components: RGB
@@ -857,13 +857,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 7158609391981968879
+  - UUID: 16129402031312261337
     Mesh:
-      UUID: 1237675985204147751
+      UUID: 12977320137261537361
       Vartex Count: 12162
       Index Count: 49488
     Material:
-      UUID: 12260210052904227924
+      UUID: 13235844238329149645
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -894,7 +894,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 13474100300726318375
+          UUID: 3978206607651668854
           Source Filepath: 4975155472559461469.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -902,7 +902,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 10318920477776083009
+          UUID: 10815050756595984067
           Source Filepath: 3371964815757888145.jpg
           Usage: Map_OMR
           Components: RGB
@@ -910,7 +910,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 17510964058208218823
+          UUID: 589443102103534410
           Source Filepath: 2299742237651021498.jpg
           Usage: Map_Normal
           Components: RGB
@@ -923,13 +923,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 16598422009771790788
+  - UUID: 9621182880090648841
     Mesh:
-      UUID: 3742909703033677166
+      UUID: 1715892643698852842
       Vartex Count: 9126
       Index Count: 49536
     Material:
-      UUID: 7259783079960040012
+      UUID: 17442397284372793149
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -960,7 +960,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 12390282257703191185
+          UUID: 14503440013771151595
           Source Filepath: 4675343432951571524.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -968,7 +968,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 16077011874894679681
+          UUID: 583581874348896099
           Source Filepath: 7815564343179553343.jpg
           Usage: Map_OMR
           Components: RGB
@@ -976,7 +976,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 16498826294756524780
+          UUID: 14680704333838526688
           Source Filepath: 7056944414013900257.jpg
           Usage: Map_Normal
           Components: RGB
@@ -989,13 +989,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 17582423931707329720
+  - UUID: 16344391657556874915
     Mesh:
-      UUID: 7343333755824385144
+      UUID: 16853646685555248644
       Vartex Count: 9126
       Index Count: 49536
     Material:
-      UUID: 15737797902378508792
+      UUID: 16591548850771874747
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1026,7 +1026,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 1297616329017172205
+          UUID: 8273031444230227484
           Source Filepath: 2775690330959970771.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1034,7 +1034,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 2318754661376737930
+          UUID: 3930450752836729792
           Source Filepath: 7815564343179553343.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1042,7 +1042,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 6031078173944389919
+          UUID: 10671717485571507896
           Source Filepath: 2374361008830720677.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1055,13 +1055,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 14264030947269691757
+  - UUID: 7565175620699283023
     Mesh:
-      UUID: 2495277608541710451
+      UUID: 10023584927271066524
       Vartex Count: 6084
       Index Count: 33024
     Material:
-      UUID: 12550628392447262469
+      UUID: 14077169998271520081
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1092,7 +1092,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 12165063402891629332
+          UUID: 3574424557854191993
           Source Filepath: 2185409758123873465.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1100,7 +1100,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 10219342720051501961
+          UUID: 6366177434222134246
           Source Filepath: 7815564343179553343.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1108,7 +1108,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 17967554695675351210
+          UUID: 5604767764262229396
           Source Filepath: 332936164838540657.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1121,13 +1121,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 8972161745280700046
+  - UUID: 11164720203102531061
     Mesh:
-      UUID: 3190809907275887206
+      UUID: 5694039098866122244
       Vartex Count: 7398
       Index Count: 43008
     Material:
-      UUID: 9133209079583206135
+      UUID: 15121181600161535906
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1158,7 +1158,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 10886220398931057680
+          UUID: 13274746158172231732
           Source Filepath: 17876391417123941155.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1166,7 +1166,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 15096882536233782447
+          UUID: 1909012791775506619
           Source Filepath: 466164707995436622.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1174,7 +1174,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 4396860620233636603
+          UUID: 5100413086192661451
           Source Filepath: 6593109234861095314.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1187,13 +1187,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 16641253106887515497
+  - UUID: 10886809226004497771
     Mesh:
-      UUID: 5924791165939279073
+      UUID: 4509422864629786423
       Vartex Count: 9904
       Index Count: 56832
     Material:
-      UUID: 9679912915663062552
+      UUID: 8301716143612194464
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1224,7 +1224,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 14469749357866416819
+          UUID: 2688547322974846097
           Source Filepath: 11474523244911310074.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1232,7 +1232,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 14387829936722840905
+          UUID: 6647270777715106753
           Source Filepath: 466164707995436622.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1240,7 +1240,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 14732962957847839561
+          UUID: 83014137741341122
           Source Filepath: 4601176305987539675.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1253,13 +1253,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 485658957550505890
+  - UUID: 11167166405798653181
     Mesh:
-      UUID: 14045028370181368440
+      UUID: 5138402701618910124
       Vartex Count: 7398
       Index Count: 43008
     Material:
-      UUID: 16131363393464741664
+      UUID: 16168454164558754975
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1290,7 +1290,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 11536033446301504632
+          UUID: 1542730290406659099
           Source Filepath: 9288698199695299068.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1298,7 +1298,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 521255110208799529
+          UUID: 1091600542865654118
           Source Filepath: 466164707995436622.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1306,7 +1306,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 6027921808083474726
+          UUID: 16418771913179506508
           Source Filepath: 4910669866631290573.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1319,13 +1319,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 12904894138870561812
+  - UUID: 15578829005080558149
     Mesh:
-      UUID: 6608584027058033724
+      UUID: 13106541270672528623
       Vartex Count: 64
       Index Count: 96
     Material:
-      UUID: 4169070821564981490
+      UUID: 13688454943770951302
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
@@ -1361,7 +1361,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 856950498711531188
+          UUID: 12524231730088836545
           Source Filepath: 16275776544635328252.png
           Usage: Map_BaseColor
           Components: RGBA
@@ -1369,7 +1369,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 10574793476988852391
+          UUID: 18231446791265630769
           Source Filepath: 1219024358953944284.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1377,7 +1377,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 13976892919672367113
+          UUID: 15332962261099451866
           Source Filepath: 14170708867020035030.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1390,13 +1390,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 12006999438786409590
+  - UUID: 16180803215404378181
     Mesh:
-      UUID: 10374034614021372907
+      UUID: 6262838920729309756
       Vartex Count: 10412
       Index Count: 59484
     Material:
-      UUID: 16278622993722598699
+      UUID: 16135982314877748138
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1427,7 +1427,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 8155140790589924352
+          UUID: 6496714154219269014
           Source Filepath: 755318871556304029.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1435,7 +1435,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 2027633587591361049
+          UUID: 13908354888196841151
           Source Filepath: 2411100444841994089.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1443,7 +1443,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 1700755716872116952
+          UUID: 3191878750627529932
           Source Filepath: 3827035219084910048.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1456,13 +1456,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 11888805949224428793
+  - UUID: 2959804290422552198
     Mesh:
-      UUID: 398362657740146649
+      UUID: 11337375443987673359
       Vartex Count: 5308
       Index Count: 27552
     Material:
-      UUID: 7051948281347774426
+      UUID: 3938109680364203733
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1493,7 +1493,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 10940714941287866877
+          UUID: 15277861817184603478
           Source Filepath: 8481240838833932244.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1501,7 +1501,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 4809247406754677208
+          UUID: 1182757581994200766
           Source Filepath: 17556969131407844942.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1509,7 +1509,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 16121542044207673605
+          UUID: 10509294817077463094
           Source Filepath: 10381718147657362067.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1522,13 +1522,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 4819203468312642654
+  - UUID: 15217107126921173382
     Mesh:
-      UUID: 14728768754043393227
+      UUID: 4873673764755444173
       Vartex Count: 1728
       Index Count: 9126
     Material:
-      UUID: 1647452925377407701
+      UUID: 4979757460137933905
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1559,7 +1559,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 1996116364106545679
+          UUID: 4946371657836424444
           Source Filepath: 6772804448157695701.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1567,7 +1567,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 3002712600359591609
+          UUID: 8270666505495787185
           Source Filepath: 13196865903111448057.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1575,7 +1575,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 480880564309947689
+          UUID: 14008002012902276417
           Source Filepath: 759203620573749278.jpg
           Usage: Map_Normal
           Components: RGB
@@ -1588,13 +1588,13 @@ RenderMeshes:
           UUID: 0
         u_AOMap:
           UUID: 0
-  - UUID: 14003166898610511146
+  - UUID: 12683249734198567394
     Mesh:
-      UUID: 8525963068594428637
+      UUID: 4402565196571626604
       Vartex Count: 10918
       Index Count: 43452
     Material:
-      UUID: 5576122266085558707
+      UUID: 2566231891949393877
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
@@ -1625,7 +1625,7 @@ RenderMeshes:
             - true
       Textures:
         u_BaseColorMap:
-          UUID: 7455417381478489379
+          UUID: 7199646072401101889
           Source Filepath: 2969916736137545357.jpg
           Usage: Map_BaseColor
           Components: RGB
@@ -1633,7 +1633,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_OMRMap:
-          UUID: 2264539164200132672
+          UUID: 5652933931575936764
           Source Filepath: 8747919177698443163.jpg
           Usage: Map_OMR
           Components: RGB
@@ -1641,7 +1641,7 @@ RenderMeshes:
           Width: 1024
           Height: 1024
         u_NormalMap:
-          UUID: 12983426547019215662
+          UUID: 8081615896395585088
           Source Filepath: 14118779221266351425.jpg
           Usage: Map_Normal
           Components: RGB

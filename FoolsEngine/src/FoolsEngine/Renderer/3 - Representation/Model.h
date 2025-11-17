@@ -54,7 +54,6 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACModelCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
-		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
 
 		using Observer = ModelObserver;
 		using User = ModelUser;

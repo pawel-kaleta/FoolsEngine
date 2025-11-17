@@ -4,6 +4,7 @@
 #include "RenderMesh.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
 
 #include "FoolsEngine\Core\Project.h"
 
@@ -36,57 +37,46 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto filepath = Project::GetInstance()->AssetsPath;
-		filepath /= AssetManager::GetRegistry().get<ACFilepath>(assetID).Filepath;
-		YAML::Node node = YAML::LoadFile(filepath.string());
-		bool success = Model::LoadMetadataInternal(assetID, node);
-
-		if (!success) return false;
-
-		const auto& source_filepath_node = node["Source Filepath"];
-		if (!source_filepath_node) return false;
-
-		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
-	}
-
-	bool Model::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
-	{
-		FE_PROFILER_FUNC();
-
 		auto& reg = AssetManager::GetRegistry();
-		auto& core = reg.get<ACModelCore>(assetID);
 
-		auto uuid_node = node["UUID"];
+		const auto& filepath = reg.get<ACFilepath>(assetID).Filepath;
+		auto full_filepath = Project::GetInstance()->AssetsPath / filepath;
+
+		YAML::Node node;
+
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(full_filepath.string());
+		}
+
+		const auto& uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
 		{
 			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
 			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node!");
+				FE_LOG_CORE_ERROR("Not machting UUID in asset and its serialized node!");
 				return false;
 			}
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Missing UUID in Model serialized node");
+			FE_LOG_CORE_ERROR("Missing UUID in Model serialized node");
 		}
 
-		const auto& rendermeshes_node = node["RenderMeshes"];
+		const auto& source_filepath_node = node["Source Filepath"];
+		if (!source_filepath_node) return false;
+		std::filesystem::path source_filepath = source_filepath_node.as<std::string>();
+		AssetManager::SetSourcePath(assetID, source_filepath);
 
+		const auto parent_path = filepath.parent_path();
+		auto& core = reg.get<ACModelCore>(assetID);
+
+		const auto& rendermeshes_node = node["RenderMeshes"];
+		if (!rendermeshes_node) return false;
 		for (const auto& render_mesh_node : rendermeshes_node)
 		{
-			const auto& render_mesh_uuid_node = render_mesh_node["UUID"];
-
-			auto render_mesh_ID = AssetManager::GetOrCreateAssetWithUUID(render_mesh_uuid_node.as<UUID>());
+			auto render_mesh_ID = RenderMesh::LoadMetadataInternal(render_mesh_node, assetID, parent_path);
 			core.RenderMeshIDs.emplace_back(render_mesh_ID);
-
-			reg.emplace<ACAssetType>(render_mesh_ID).Type = AssetType::RenderMesh;
-			reg.emplace<ACMasterAsset>(render_mesh_ID).Master = assetID;
-			reg.emplace<RenderMesh::Core>(render_mesh_ID).Init();
-
-			bool success = RenderMesh::LoadMetadataInternal(render_mesh_ID, render_mesh_node);
-			
-			if (!success)
-				return false;
 		}
 
 		return true;

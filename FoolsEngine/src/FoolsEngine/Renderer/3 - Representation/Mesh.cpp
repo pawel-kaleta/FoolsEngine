@@ -139,25 +139,14 @@ namespace fe
 		auto& reg = AssetManager::GetRegistry();
 
 		const auto& filepath = reg.get<ACFilepath>(assetID).Filepath;
-		YAML::Node node = YAML::LoadFile((Project::GetInstance()->AssetsPath / filepath).string());
+		auto full_filepath = Project::GetInstance()->AssetsPath / filepath;
 
-		bool success = Mesh::LoadMetadataInternal(assetID, node);
+		YAML::Node node;
 
-		if (!success) return false;
-
-		const auto& source_filepath_node = node["Source Filepath"];
-		if (!source_filepath_node) return false;
-
-		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
-
-		return true;
-	}
-
-	bool Mesh::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& reg = AssetManager::GetRegistry();
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(full_filepath.string());
+		}
 
 		auto uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
@@ -173,6 +162,10 @@ namespace fe
 			FE_LOG_CORE_WARN("Missing UUID in Mesh serialized node");
 		}
 
+		const auto& source_filepath_node = node["Source Filepath"];
+		if (!source_filepath_node) return false;
+		AssetManager::SetSourcePath(assetID, source_filepath_node.as<std::string>());
+
 		const auto& vertex_count_node = node["Vartex Count"];
 		const auto& index_count_node = node["Index Count"];
 
@@ -185,5 +178,49 @@ namespace fe
 		core.Specification.IndexCount = index_count_node.as<uint32_t>();
 
 		return true;
+	}
+
+	AssetID Mesh::LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
+
+		const auto& uuid_node = node["UUID"];
+		if (!uuid_node)
+		{
+			FE_LOG_CORE_WARN("Missing UUID in Mesh serialized node!");
+			return NullAssetID;
+		}
+		
+		auto uuid = uuid_node.as<UUID>();
+		if (uuid == UUID(0))
+		{
+			FE_LOG_CORE_WARN("Missing Mesh definition!");
+			return NullAssetID;
+		}
+		
+		auto asset_id = AssetManager::GetOrCreateAssetWithUUID(uuid);
+		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
+
+		reg.emplace<ACAssetType>(asset_id).Type = AssetType::Mesh;
+		reg.emplace<ACMasterAsset>(asset_id).Master = master;
+		auto& mesh_core = reg.emplace<Mesh::Core>(asset_id);
+		mesh_core.Init();
+		
+		const auto& vertex_count_node = node["Vartex Count"];
+		const auto& index_count_node = node["Index Count"];
+		
+		if (!vertex_count_node ||
+			!index_count_node)
+		{
+			FE_LOG_CORE_WARN("Ill defined Mesh!");
+			return NullAssetID;
+		}
+		
+		mesh_core.Specification.VertexCount = vertex_count_node.as<uint32_t>();
+		mesh_core.Specification.IndexCount = index_count_node.as<uint32_t>();
+
+		return asset_id;
 	}
 }

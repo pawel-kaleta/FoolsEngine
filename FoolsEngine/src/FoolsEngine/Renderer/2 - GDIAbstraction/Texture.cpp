@@ -158,50 +158,107 @@ namespace fe
 		auto& reg = AssetManager::GetRegistry();
 
 		auto filepath = Project::GetInstance()->AssetsPath;
-		filepath /= reg.get<ACFilepath>(assetID).Filepath;
-		YAML::Node node = YAML::LoadFile(filepath.string());
+		const auto& relative_path = reg.get<ACFilepath>(assetID).Filepath;
+		filepath /= relative_path;
+		
+		YAML::Node node;
 
-		auto source_node = node["Source Filepath"];
-		if (!source_node) return false;
-		AssetManager::SetSourcePath(assetID, source_node.as<std::string>());
-
-		return true;
-	}
-
-	bool Texture2D::LoadMetadataInternal(AssetID assetID, const YAML::Node& node)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& reg = AssetManager::GetRegistry();
-
-		auto uuid_node = node["UUID"];
-		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			if (reg.get<ACUUID>(assetID).UUID != node["UUID"].as<UUID>())
-			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node!");
-				return false;
-			}
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(filepath.string());
 		}
-		else
+
+		const auto& UUID_node = node["UUID"];
+
+		if (!UUID_node.IsDefined())
 		{
-			FE_LOG_CORE_WARN("Missing UUID in Texture serialized node");
+			FE_LOG_CORE_ERROR("Misspecified Texture in serialized node");
+			return false;
+		}
+
+		auto uuid = UUID_node.as<UUID>();
+		if (uuid == UUID(0))
+		{
+			FE_LOG_CORE_ERROR("Missing Texture definition!");
+			return false;
 		}
 
 		if (!node["Usage"].IsDefined() ||
 			!node["Components"].IsDefined() ||
 			!node["Format"].IsDefined() ||
 			!node["Width"].IsDefined() ||
-			!node["Height"].IsDefined())
+			!node["Height"].IsDefined() ||
+			!node["Source Filepath"].IsDefined())
+		{
+			FE_LOG_CORE_ERROR("Ill defined Texture in serialized node");
 			return false;
+		}
 
-		auto& spec = reg.get<ACTexture2DCore>(assetID).Specification;
+		auto& spec = reg.get<Texture2D::Core>(assetID).Specification;
+		
 		spec.Usage.FromString(node["Usage"].as<std::string>());
 		spec.Components.FromString(node["Components"].as<std::string>());
 		spec.Format.FromString(node["Format"].as<std::string>());
 		spec.Width = node["Width"].as<uint32_t>();
 		spec.Height = node["Height"].as<uint32_t>();
 
+		std::filesystem::path source_path = node["Source Filepath"].as<std::string>();
+		AssetManager::SetSourcePath(assetID, source_path);
+
 		return true;
+	}
+
+	AssetID Texture2D::LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentpath)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& reg = AssetManager::GetRegistry();
+
+		const auto& UUID_node = node["UUID"];
+
+		if (!UUID_node.IsDefined())
+		{
+			FE_LOG_CORE_ERROR("Misspecified Texture in serialized node");
+			return NullAssetID;
+		}
+
+		auto uuid = UUID_node.as<UUID>();
+		if (uuid == UUID(0))
+		{
+			FE_LOG_CORE_ERROR("Missing Texture definition!");
+			return NullAssetID;
+		}
+
+		auto asset_id = AssetManager::GetOrCreateAssetWithUUID(uuid);
+		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
+
+		if (!node["Usage"].IsDefined() ||
+			!node["Components"].IsDefined() ||
+			!node["Format"].IsDefined() ||
+			!node["Width"].IsDefined() ||
+			!node["Height"].IsDefined() ||
+			!node["Source Filepath"].IsDefined())
+		{
+			FE_LOG_CORE_ERROR("Ill defined Texture in serialized node");
+			return NullAssetID;
+		}
+
+		reg.emplace<ACAssetType>(asset_id).Type = AssetType::Texture2D;
+		reg.emplace<ACMasterAsset>(asset_id).Master = master;
+		auto& core = reg.emplace<Texture2D::Core>(asset_id);
+		core.Init();
+
+		auto& spec = reg.get<ACTexture2DCore>(asset_id).Specification;
+		spec.Usage.FromString(node["Usage"].as<std::string>());
+		spec.Components.FromString(node["Components"].as<std::string>());
+		spec.Format.FromString(node["Format"].as<std::string>());
+		spec.Width = node["Width"].as<uint32_t>();
+		spec.Height = node["Height"].as<uint32_t>();
+
+		std::filesystem::path source_path = parentpath;
+		source_path /= node["Source Filepath"].as<std::string>();
+		AssetManager::SetSourcePath(asset_id, source_path);
+
+		return asset_id;
 	}
 }

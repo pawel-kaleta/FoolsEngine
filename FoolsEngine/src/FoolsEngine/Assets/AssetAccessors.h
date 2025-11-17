@@ -28,9 +28,8 @@ namespace fe
 			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return;
 
-			refs->ActiveObserversCount--;
+			//TODO: mutex
 		}
-		//TODO: mutexes
 
 		AssetObserver(AssetID assetID) :
 			tnAsset::Observer(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
@@ -38,11 +37,6 @@ namespace fe
 			FE_CORE_ASSERT(assetID != NullAssetID, "Cannot create AssetObserver from NullAssetID");
 			Init();
 		}
-		//AssetObserver(ECS_AssetHandle ECS_handle) :
-		//	tnAsset::Observer(ECS_handle)
-		//{
-		//	Init();
-		//};
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 
@@ -67,7 +61,7 @@ namespace fe
 			if (!refs) return; // internal assets are not reference counted
 
 			FE_CORE_ASSERT(!refs->ActiveUser, "Cannot read and write at the same time");
-			refs->ActiveObserversCount++; //TODO: mutexes
+			//TODO: mutex
 		}
 	};
 
@@ -89,7 +83,7 @@ namespace fe
 			if (!refs) return;
 			refs->ActiveUser = false;
 		}
-		//TODO: mutexes
+		//TODO: mutex
 
 		AssetUser(AssetID assetID) :
 			tnAsset::User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
@@ -128,9 +122,8 @@ namespace fe
 			auto refs = AssetInterface::GetRefCounters();
 			if (!refs) return;
 
-			FE_CORE_ASSERT(!refs->ActiveObserversCount, "Cannot read and write at the same time");
 			FE_CORE_ASSERT(!refs->ActiveUser, "Cannot write concurently");
-			refs->ActiveUser = true; //TODO: mutexes
+			refs->ActiveUser = true; //TODO: mutex
 		}
 	};
 }

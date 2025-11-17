@@ -66,6 +66,24 @@ namespace fe
 			m_Size++;
 		}
 
+		void PushBack(const T& t)
+		{
+			size_t i = m_Size + 1;
+			unsigned long chunk;
+			MSB64(&chunk, i);
+			if (chunk == m_Chunks.size())
+			{
+				m_Chunks.push_back(m_Chunks.get_allocator().allocate_object<T>(1 << chunk));
+			}
+			auto chunk_mask = (uint64_t)1 << chunk;
+			auto in_chunk_i = i - chunk_mask;
+
+			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
+			*result_ptr = t;
+
+			m_Size++;
+		}
+
 		void PopBack()
 		{
 			FE_CORE_ASSERT(0 < m_Size, "Poping from empty Xar");

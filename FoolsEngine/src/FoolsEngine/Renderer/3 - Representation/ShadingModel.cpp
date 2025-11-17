@@ -148,6 +148,46 @@ namespace fe
 		return DeserializeFromFile(assetID, filepath);
 	}
 
+	static bool LoadUniforms(const YAML::Node& node, void* uniformsData, std::vector<Uniform>& uniforms)
+	{
+		FE_PROFILER_FUNC();
+
+		char* uniform_data_ptr = (char*)uniformsData;
+
+		for (auto& uniform_node : node)
+		{
+			FE_PROFILER_SCOPE("Uniform");
+
+			const auto& name_node = uniform_node["Name"];
+			const auto& type_node = uniform_node["Type"];
+			const auto& count_node = uniform_node["Count"];
+			const auto& value_node = uniform_node["DefaultValue"];
+
+			if (!name_node) return false;
+			if (!type_node) return false;
+			if (!count_node) return false;
+			if (!value_node) return false;
+
+			const auto uniform_name = name_node.as<std::string>();
+			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
+			const auto uniform_count = count_node.as<uint32_t>();
+
+			uniforms.emplace_back(uniform_name, uniform_type, uniform_count);
+
+			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
+			auto uniform_size = ShaderData::SizeOfType(uniform_type);
+			for (size_t i = 0; i < uniform_count; ++i)
+			{
+				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform_type);
+				if (!success) return false;
+
+				uniform_data_ptr += uniform_size;
+			}
+		}
+
+		return true;
+	}
+
 	bool ShadingModel::DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath)
 	{
 		FE_PROFILER_FUNC();
@@ -182,11 +222,15 @@ namespace fe
 		const auto& uniforms_node      = node["Uniforms"];
 		const auto& texture_slots_node = node["Shader Texture Slots"];
 
-		if (!shader_node) return false;
-		if (!data_size_node) return false;
-		if (!uniforms_node) return false;
-		if (!texture_slots_node) return false;
-		if (!texture_slots_node.IsSequence()) return false;
+		if (!shader_node ||
+			!data_size_node ||
+			!uniforms_node ||
+			!texture_slots_node ||
+			!texture_slots_node.IsSequence())
+		{
+			FE_LOG_CORE_ERROR("Ill specified ShadingModel");
+			return false;
+		}
 
 		std::filesystem::path shader_filepath = shader_node.as<std::string>();
 		auto shaderID = AssetManager::GetAssetFromFilepath(shader_filepath);
@@ -196,37 +240,11 @@ namespace fe
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.DefaultUniformsData = operator new(core.UniformsDataSize);
 
-		char* uniform_data_ptr = (char*)core.DefaultUniformsData;
-
-		for (auto& uniform_node : uniforms_node)
+		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData, core.Uniforms);
+		if (!success)
 		{
-			FE_PROFILER_SCOPE("Uniform");
-
-			const auto& name_node  = uniform_node["Name"];
-			const auto& type_node  = uniform_node["Type"];
-			const auto& count_node = uniform_node["Count"];
-			const auto& value_node = uniform_node["DefaultValue"];
-
-			if (!name_node) return false;
-			if (!type_node) return false;
-			if (!count_node) return false;
-			if (!value_node) return false;
-
-			const auto uniform_name = name_node.as<std::string>();
-			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
-			const auto uniform_count = count_node.as<uint32_t>();
-
-			core.Uniforms.emplace_back(uniform_name, uniform_type, uniform_count);
-
-			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
-			auto uniform_size = ShaderData::SizeOfType(uniform_type);
-			for (size_t i = 0; i < uniform_count; ++i)
-			{
-				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform_type);
-				if (!success) return false;
-
-				uniform_data_ptr += uniform_size;
-			}
+			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
+			return false;
 		}
 
 		{

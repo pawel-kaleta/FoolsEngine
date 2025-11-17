@@ -4,12 +4,13 @@
 
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetManager.h"
-
+#include "FoolsEngine\Assets\AssetTypes.h"
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
 
 #include "FoolsEngine\Core\Project.h"
 
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine\Utils\Xar.h"
+
 
 #include <string>
 
@@ -56,7 +57,6 @@ namespace fe::AssetSerializer
 		}
 
 		if (!node["Masters"])   return false;
-		//if (!node["Internals"]) return false;
 
 		auto& reg = AssetManager::GetRegistry();
 
@@ -82,32 +82,56 @@ namespace fe::AssetSerializer
 		return true;
 	}
 
+	template <typename tnAssetType>
+	static void LoadMetaData()
+	{
+		FE_PROFILER_FUNC();
+
+		Scratchpad sp;
+
+		auto& reg = AssetManager::GetRegistry();
+		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
+		
+		for (const auto asset_id : paths_view)
+		{
+
+			auto type = reg.get<ACAssetType>(asset_id).Type;
+			if (tnAssetType::GetTypeStatic() == type)
+			{
+				FE_PROFILER_SCOPE("Asset");
+
+				tnAssetType::EmplaceCore(asset_id);
+				bool result = tnAssetType::LoadMetadata(asset_id);
+
+				FE_CORE_ASSERT(result, "Failed to load asset metadata");
+			}
+
+			//for (auto& item : AssetTypesRegistry::GetItems())
+			//{
+			//	if (item.Type != type)
+			//		continue;
+			//
+			//	(*item.EmplaceCore)(asset_id);
+			//	bool result = (*item.LoadMetadata)(asset_id);
+			//	FE_CORE_ASSERT(result, "Failed to load asset metadata");
+			//
+			//	break;
+			//}
+		}
+	}
+
 	void LoadMetaData()
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
-		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
-
-		for (auto assetID : paths_view)
-		{
-			FE_PROFILER_SCOPE("Asset");
-
-			//auto& cfilepath = paths_view.get<ACFilepath>(assetID);
-			auto type = reg.get<ACAssetType>(assetID).Type;
-
-			for (auto& item : AssetTypesRegistry::GetItems())
-			{
-				if (item.Type != type)
-					continue;
-
-				(*item.EmplaceCore)(assetID);
-				bool result = (*item.LoadMetadata)(assetID);
-				FE_CORE_ASSERT(result, "Failed to load asset metadata");
-
-				break;
-			}
-		}
+		LoadMetaData<Shader>();
+		LoadMetaData<ShadingModel>();
+		LoadMetaData<Texture2D>();
+		LoadMetaData<Material>();
+		LoadMetaData<Mesh>();
+		LoadMetaData<RenderMesh>();
+		LoadMetaData<Model>();
+		LoadMetaData<Scene>();
 
 		FE_LOG_CORE_INFO("Assets' meta data loaded");
 	}

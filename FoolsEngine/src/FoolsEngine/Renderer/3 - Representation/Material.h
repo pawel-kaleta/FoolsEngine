@@ -78,7 +78,9 @@ namespace fe
 		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMaterialCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
-		static bool LoadMetadataInternal(AssetID assetID, const YAML::Node& node);
+		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
+
+		static void MakeMaterial(AssetID assetID, const AssetObserver<ShadingModel>& shadingModelObserver);
 
 		using User = MaterialUser;
 		using Observer = MaterialObserver;

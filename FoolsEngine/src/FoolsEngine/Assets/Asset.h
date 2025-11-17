@@ -89,6 +89,7 @@ namespace fe
 	struct ACLoaded final : AssetFlagComponent {};
 	struct ACLoadedAsDependence final : AssetFlagComponent {};
 
+	//TODO: align to cache line
 	struct ACRefsCounters final : AssetComponent
 	{
 		// LiveHandles[ AssetLoadingPriority::None ]
@@ -96,7 +97,6 @@ namespace fe
 		// so the first can load and last unload this asset
 		std::atomic<int> LiveHandles[AssetLoadingPriority::Count] = {};
 
-		std::atomic<int> ActiveObserversCount = 0;
-		bool ActiveUser = false; //TODO: make this a mutex and add all other control block code
+		bool ActiveUser = false; //TODO: make this a shared_mutex
 	};
 }
