@@ -242,7 +242,7 @@ namespace fe
 			case AssetType::Model:
 			{
 				auto model_user = AssetUser<Model>(id);
-				// TO DO: GeometryLoader::LoadModel(model_user);
+				GeometryLoader::LoadModel(model_user);
 				model_user.SendDataToGPU(GDI);
 				model_user.FlagLoaded();
 				break;

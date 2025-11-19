@@ -24,7 +24,7 @@ namespace fe
 		static void LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser);
 		static void LoadModel(AssetUser<Model>& modelUser)
 		{
-			auto path = modelUser.GetFilepath();
+			auto path = modelUser.GetSourceFilepath()->Filepath;
 			LoadModel(path, modelUser);
 		}
 		//static void UnloadModel(void* data);

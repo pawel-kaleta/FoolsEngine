@@ -165,14 +165,83 @@ namespace fe
 	{
 		FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
 
+		auto& base_path = Project::GetInstance()->AssetsPath;
+		auto direct_path = base_path / sourceFilePath;
+
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile((Project::GetInstance()->AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
+		const aiScene* scene = importer.ReadFile(direct_path.string().c_str(), s_assimp_load_flags);
 
 		const auto& render_meshes = modelUser.GetCoreComponent().RenderMeshIDs;
 
 		for (size_t i = 0; i < render_meshes.size(); i++)
 		{
+			auto mesh_id = AssetObserver<RenderMesh>(render_meshes[i]).GetCoreComponent().MeshID;
+			AssetUser<Mesh> mesh_user(mesh_id);
 
+			auto& core = mesh_user.GetCoreComponent();
+
+			auto& dataLocation = core.Data;
+			if (dataLocation)
+			{
+				FE_LOG_CORE_WARN("Reloading mesh");
+				delete dataLocation;
+			}
+
+			auto& spec = core.Specification;
+
+			dataLocation = (void*) new float[core.DataSize() / sizeof(float)];
+
+			uint32_t* index_ptr = (uint32_t*)dataLocation;
+			VertexData::Vertex* vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
+
+			auto& assimpMesh = scene->mMeshes[i];
+			bool sndUV = assimpMesh->GetNumUVChannels() > 1;
+
+			for (size_t j = 0; j < assimpMesh->mNumVertices; j++)
+			{
+				auto& vertex = *vertex_ptr;
+
+				vertex.Position.x = assimpMesh->mVertices[j].x;
+				vertex.Position.y = assimpMesh->mVertices[j].y;
+				vertex.Position.z = assimpMesh->mVertices[j].z;
+
+				vertex.Normal.x = assimpMesh->mNormals[j].x;
+				vertex.Normal.y = assimpMesh->mNormals[j].y;
+				vertex.Normal.z = assimpMesh->mNormals[j].z;
+
+				vertex.Tangent.x = assimpMesh->mTangents[j].x;
+				vertex.Tangent.y = assimpMesh->mTangents[j].y;
+				vertex.Tangent.z = assimpMesh->mTangents[j].z;
+
+				vertex.UV0.x = assimpMesh->mTextureCoords[0][j].x;
+				vertex.UV0.y = assimpMesh->mTextureCoords[0][j].y;
+
+				if (sndUV)
+				{
+					vertex.UV1.x = assimpMesh->mTextureCoords[1][j].x;
+					vertex.UV1.y = assimpMesh->mTextureCoords[1][j].y;
+				}
+				else
+				{
+					vertex.UV1.x = assimpMesh->mTextureCoords[0][j].x;
+					vertex.UV1.y = assimpMesh->mTextureCoords[0][j].y;
+				}
+
+				vertex_ptr++;
+			}
+
+			for (size_t j = 0; j < assimpMesh->mNumFaces; j++)
+			{
+				aiFace& face = assimpMesh->mFaces[j];
+
+				*(index_ptr + 0) = (uint32_t)(face.mIndices[0]);
+				*(index_ptr + 1) = (uint32_t)(face.mIndices[1]);
+				*(index_ptr + 2) = (uint32_t)(face.mIndices[2]);
+
+				index_ptr += 3;
+			}
 		}
+
+		return;
 	}
 }
