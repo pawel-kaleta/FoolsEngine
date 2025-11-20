@@ -295,8 +295,8 @@ Worlds:
               ChildrenCount: 0
               FirstChild: 0
             Transform:
-              Shift: [0, 0, 0]
-              Rotation: [0, 0, 0]
+              Shift: [0.28, -0.52, -3]
+              Rotation: [0, 90, 0]
               Scale: [1, 1, 1]
             Model:
               Offset:

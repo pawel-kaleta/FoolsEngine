@@ -133,7 +133,12 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("RenderStats");
 
+			auto& main_light = Renderer::SceneData.MainLight;
+			ImGui::DragFloat3("Main Light", glm::value_ptr(main_light), );
+
+
 			auto stats = Renderer2D::GetStats();
+			ImGui::Text("Renderer2D Stats:");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.Quads);
 			ImGui::Text("Render Time: %F", stats.RenderTime.GetMilliseconds());
