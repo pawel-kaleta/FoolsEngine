@@ -26,7 +26,7 @@ Uniforms:
     Type: Bool
     Count: 1
     Value:
-      - true
+      - false
 Textures:
   u_BaseColorMap:
     Filepath: Survival_BackPack_2\1001_albedo.fetex2d
@@ -34,10 +34,14 @@ Textures:
   u_OMRMap:
     UUID: 0
   u_NormalMap:
-    UUID: 0
+    Filepath: Survival_BackPack_2\1001_normal.fetex2d
+    UUID: 11791384622300239495
   u_RoughnessMap:
-    UUID: 0
+    Filepath: Survival_BackPack_2\1001_roughness.fetex2d
+    UUID: 12610931852707946589
   u_MetalnessMap:
-    UUID: 0
+    Filepath: Survival_BackPack_2\1001_metallic.fetex2d
+    UUID: 12886867191802054394
   u_AOMap:
-    UUID: 0
+    Filepath: Survival_BackPack_2\1001_AO.fetex2d
+    UUID: 2260714804933753314

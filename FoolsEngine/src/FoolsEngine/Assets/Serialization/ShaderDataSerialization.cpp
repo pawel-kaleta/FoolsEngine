@@ -87,7 +87,14 @@ namespace fe
 		if (!node.IsSequence() || node.size() != vector_size) return false;
 		for (size_t i = 0; i < vector_size; ++i)
 		{
-			*(data_type*)dataPtr = node[i].as<data_type>();
+			if constexpr (std::is_same_v<data_type, bool>)
+			{
+				*(uint32_t*)dataPtr = (uint32_t)node[i].as<bool>();
+			}
+			else
+			{
+				*(data_type*)dataPtr = node[i].as<data_type>();
+			}
 			dataPtr += primitive_size;
 		}
 		return true;
@@ -108,7 +115,14 @@ namespace fe
 
 			for (size_t j = 0; j < columns; ++j)
 			{
-				*(data_type*)dataPtr = row_node[j].as<data_type>();
+				if constexpr (std::is_same_v<data_type, bool>)
+				{
+					*(uint32_t*)dataPtr = (uint32_t)row_node[j].as<bool>();
+				}
+				else
+				{
+					*(data_type*)dataPtr = row_node[j].as<data_type>();
+				}
 				dataPtr += primitive_size;
 			}
 		}
@@ -128,7 +142,7 @@ namespace fe
 		case ShaderData::Structure::Scalar:
 			switch (primitive)
 			{
-			case ShaderData::Primitive::Bool:   *(bool*    )dataPtr = node.as<bool    >(); success = true; break;
+			case ShaderData::Primitive::Bool:   *(uint32_t*)dataPtr = (uint32_t)node.as<bool>(); success = true; break;
 			case ShaderData::Primitive::Int:    *(int*     )dataPtr = node.as<int     >(); success = true; break;
 			case ShaderData::Primitive::UInt:   *(uint32_t*)dataPtr = node.as<uint32_t>(); success = true; break;
 			case ShaderData::Primitive::Float:  *(float*   )dataPtr = node.as<float   >(); success = true; break;

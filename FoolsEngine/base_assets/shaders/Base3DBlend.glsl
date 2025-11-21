@@ -10,28 +10,28 @@ layout (location = 4) in vec2 a_UV1;
 // Geometry
 uniform mat4 u_ViewProjection;
 uniform mat4 u_ModelTransform;
-uniform vec3 u_Position;
 
-layout (location = 0) out vec2 v_TexCoord;
-layout (location = 1) out vec3 v_Normal;
+out vec2 v_TexCoord;
+out vec3 v_FragPos;
+out mat3 v_TBN;
 
 void main()
 {
 	gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
 	
 	v_TexCoord = a_UV0;
-	v_Normal = a_Normal;
 }
 
 
 #type fragment
 #version 450 core
 
-layout (location = 0) out vec4 o_color;
-layout (location = 1) out uint o_entityID;
+out vec4 o_color;
+out uint o_entityID;
 
-layout (location = 0) in vec2 v_TexCoord;
-layout (location = 1) in vec3 v_Normal;
+in vec2 v_TexCoord;
+in vec3 v_FragPos;
+in mat3 v_TBN;
 
 // Textures
 uniform sampler2D u_BaseColorMap;
@@ -48,6 +48,12 @@ uniform float u_Roughness;
 uniform float u_Metalness;
 uniform float u_AO;
 uniform bool u_OMRTexturePacking;
+
+// Scene
+uniform vec3 u_MainLightDir;
+uniform vec3 u_MainLightColor;
+uniform vec3 u_AmbientLight;
+uniform vec3 u_CameraPosition;
 
 // Editor mouse picking
 uniform uint u_EntityID;

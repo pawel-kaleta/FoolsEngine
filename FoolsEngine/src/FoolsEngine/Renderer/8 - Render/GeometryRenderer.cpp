@@ -58,8 +58,21 @@ namespace fe
 				auto shader_observer = AssetObserver<Shader>(shaderID);
 
 				shader_observer.Bind(GDI);
+
 				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
 				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+
+				void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLightDir);
+				shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
+				void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLightColor);
+				shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
+				void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
+				shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
+
+				void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
+				shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
+
+
 				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 			}
 
@@ -111,8 +124,20 @@ namespace fe
 					auto shader_observer = AssetObserver<Shader>(shaderID);
 
 					shader_observer.Bind(GDI);
+
 					shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
 					shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+
+					void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLightDir);
+					shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
+					void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLightColor);
+					shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
+					void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
+					shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
+
+					void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
+					shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
+
 					shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 				}
 

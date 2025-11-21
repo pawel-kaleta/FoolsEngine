@@ -83,6 +83,12 @@ namespace fe
 
 		for (const auto& uniform : sm_core.Uniforms)
 		{
+			if (uniform.GetName() == "u_OMRTexturePacking")
+			{
+				bool* value = (bool*)materialObserver.GetUniformValuePtr(material_core, uniform);
+				uint32_t* value2 = (uint32_t*)materialObserver.GetUniformValuePtr(material_core, uniform);
+				int a =0;
+			}
 			shader_user.UploadUniform(
 				GDI,
 				uniform,

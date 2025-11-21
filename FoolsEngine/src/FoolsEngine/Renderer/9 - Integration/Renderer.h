@@ -88,7 +88,9 @@ namespace fe
 		static struct SceneData
 		{
 			glm::mat4 VPMatrix;
-			glm::vec3 MainLight = { -0.2f, -1.0f, -0.3f };
+			glm::vec3 MainLightDir;
+			glm::vec3 MainLightColor;
+			glm::vec3 AmbientLight;
 			const Camera* MainCamera;
 			Transform CameraTransform;
 			AssetID Scene;

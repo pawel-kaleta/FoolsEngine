@@ -11,33 +11,36 @@ layout (location = 4) in vec2 a_UV1;
 uniform mat4 u_ViewProjection;
 uniform mat4 u_ModelTransform;
 
-layout (location = 0) out vec2 v_TexCoord;
-layout (location = 1) out mat3 v_TBN;
-layout (location = 2) out vec2 v_FragPos;
+out vec2 v_TexCoord;
+out mat3 v_TBN;
+out vec3 v_FragPos;
 
 void main()
 {
-	vec3 B = cross(a_Normal, a_Tangent);
-	mat3 TBN = transpose(mat3(a_Tangent, B, a_Normal));
-
+	vec3 T = normalize(vec3(u_ModelTransform * vec4(a_Tangent, 0.0)));
+	vec3 N = normalize(vec3(u_ModelTransform * vec4(a_Normal , 0.0)));
+	T = normalize(T - dot(T, N) * N);
+	vec3 B = cross(N, T);
+	v_TBN = mat3(T, B, N);
 
 	gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
 
 	v_FragPos = vec3(u_ModelTransform * vec4(a_Position, 1.0));
 	
 	v_TexCoord = a_UV0;
-	v_Normal = a_Normal;
 }
+///////////////////////////////////////////////////////////////
 
 
 #type fragment
 #version 450 core
 
-layout (location = 0) out vec4 o_color;
-layout (location = 1) out uint o_entityID;
+out vec4 o_color;
+out uint o_entityID;
 
-layout (location = 0) in vec2 v_TexCoord;
-layout (location = 1) in mat3 v_TBN
+in vec2 v_TexCoord;
+in mat3 v_TBN;
+in vec3 v_FragPos;
 
 // Textures
 uniform sampler2D u_BaseColorMap;
@@ -55,23 +58,115 @@ uniform float u_AO;
 uniform bool u_OMRTexturePacking;
 
 // Scene
-uniform vec3 u_MainLight;
+uniform vec3 u_MainLightDir;
+uniform vec3 u_MainLightColor;
+uniform vec3 u_AmbientLight;
 uniform vec3 u_CameraPosition;
 
 // Editor mouse picking
 uniform uint u_EntityID;
 
+const float PI = 3.14159265359;
+
+float NDF(vec3 N, vec3 H, float a)
+{
+    float a2     = a*a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+	
+    float nom    = a2;
+    float denom  = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom        = PI * denom * denom;
+	
+    return nom / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float k)
+{
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+	
+    return nom / denom;
+}
+  
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float k)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx1 = GeometrySchlickGGX(NdotV, k);
+    float ggx2 = GeometrySchlickGGX(NdotL, k);
+	
+    return ggx1 * ggx2;
+}
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (vec3(1.0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
 void main()
 {
-	vec3 lightDir = normalize(-u_MainLight);
-	vec3 lightColor = vec3(23.47, 21.31, 20.79);
+	float o;
+	float m;
+	float a;
 
-	vec3 normal = texture(normalMap, v_TexCoord).rgb;
-	normal = normal * 2.0 - 1.0;
-	normal = normalize(v_TBN * normal);
+	if (!u_OMRTexturePacking)
+	{
+		o = texture(u_AOMap, v_TexCoord).r;
+		m = texture(u_MetalnessMap, v_TexCoord).r;
+		a = texture(u_RoughnessMap, v_TexCoord).r;
+	}
+	else
+	{
+		o = texture(u_OMRMap, v_TexCoord).r;
+		m = texture(u_OMRMap, v_TexCoord).g;
+		a = texture(u_OMRMap, v_TexCoord).b;
+		o = 1.0 - o;
+		m = 1.0 - m;
+		a = 1.0 - a;
+	}
 
+	vec3 c = texture(u_BaseColorMap, v_TexCoord).rgb;
 
+	vec3 L = normalize(-u_MainLightDir);
+	vec3 V = normalize(u_CameraPosition - v_FragPos);
+	vec3 H = normalize(V + L);
 
-	o_color = vec4(u_BaseColor, 1) * texture(u_BaseColorMap, v_TexCoord);
+	vec3 N = texture(u_NormalMap, v_TexCoord).rgb;
+	N = N * 2.0 - 1.0;
+	N = normalize(v_TBN * N);
+
+	float cosTheta = max(dot(L, N), 0.0);
+
+	vec3 F0 = vec3(0.04);
+	F0      = mix(F0, c, m);
+	vec3 F	= fresnelSchlick(cosTheta, F0);
+
+	float D = NDF(N, H, a);       
+
+	float k = ((a + 1.0)*(a + 1.0)) / 8.0;
+	float G = GeometrySmith(N, V, L, k);
+
+	vec3 BRDF_nom = D * F * G;
+	float BRDF_denom = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0)  + 0.0001;
+	vec3 specular = BRDF_nom / BRDF_denom;
+
+	vec3 kS = F;
+	vec3 kD = vec3(1.0) - kS;
+  
+	kD *= 1.0 - m;
+
+	float NdotL = max(dot(N, L), 0.0); 
+	vec3 Ld = (kD * c / PI) * u_MainLightColor * NdotL;
+    vec3 Ls = specular * u_MainLightColor * NdotL;
+	vec3 Lo = Ld + Ls;
+
+	vec3 ambient_light = o * u_AmbientLight * c;
+
+	//o_color = vec4(F, 1.0);
+	o_color = vec4(Lo + ambient_light, 1.0);
+	//o_color = vec4(texture(u_OMRMap, v_TexCoord).rgb, 1.0);
+	//o_color = vec4(u_MainLightDir, 1.0);
+	//o_color = vec4(a,a,a, 1.0);
 	o_entityID = u_EntityID;
 }

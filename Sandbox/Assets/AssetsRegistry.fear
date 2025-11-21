@@ -1,4 +1,7 @@
 Masters:
+  - Type: Mesh
+    UUID: 10608160000247017
+    Filepath: Survival_BackPack_2\Survival_BackPack_2.femesh
   - Type: Model
     UUID: 4673240981466641358
     Filepath: Sponza\glTF\Sponza.femodel
@@ -23,9 +26,18 @@ Masters:
   - Type: Texture2D
     UUID: 16144042178780554263
     Filepath: textures\grassland.fetex2d
-  - Type: Mesh
-    UUID: 12471327083499578500
-    Filepath: Survival_BackPack_2\Survival_BackPack_2.femesh
   - Type: Material
     UUID: 12079571074305468052
     Filepath: Survival_BackPack_2\Material.femat
+  - Type: Texture2D
+    UUID: 2260714804933753314
+    Filepath: Survival_BackPack_2\1001_AO.fetex2d
+  - Type: Texture2D
+    UUID: 12886867191802054394
+    Filepath: Survival_BackPack_2\1001_metallic.fetex2d
+  - Type: Texture2D
+    UUID: 11791384622300239495
+    Filepath: Survival_BackPack_2\1001_normal.fetex2d
+  - Type: Texture2D
+    UUID: 12610931852707946589
+    Filepath: Survival_BackPack_2\1001_roughness.fetex2d

@@ -27,6 +27,8 @@ namespace fe
         Texture2D::SaveMetadata(emitter, assetID);
         std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Texture2D>(assetID).GetFilepath());
         fout << emitter.c_str();
+
+        AssetSerializer::SerializeRegistry();
     }
 
     void TextureImport::RenderWindow(ImportData* const importData)
