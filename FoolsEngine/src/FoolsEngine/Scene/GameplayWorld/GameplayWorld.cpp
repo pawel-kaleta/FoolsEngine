@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
 #include "FoolsEngine\Scene\Components\RenderingComponents.h"
+#include "FoolsEngine\Scene\Components\LightComponents.h"
 
 #include <stack>
 
@@ -192,5 +193,47 @@ namespace fe
 	{
 		Entity entity(id, this);
 		SetPrimaryCameraEntity(entity);
+	}
+
+	Entity GameplayWorld::GetEntityWithPrimaryDirectionalLight() const
+	{
+		Entity entity(m_PrimaryDirectionalLightEntityID, this);
+		// are those ifs neccessary?
+		if (entity)
+			if (!entity.AllOf<CDirectionalLight>())
+				return Entity();
+		return entity;
+	}
+
+	void GameplayWorld::SetPrimaryDirectionalLightEntity(Entity entity)
+	{
+		FE_PROFILER_FUNC();
+		FE_LOG_CORE_INFO("Primary Directional Light Set.");
+
+		if (!(entity))
+		{
+			FE_CORE_ASSERT(false, "This is not a valid entity");
+			return;
+		}
+
+		if (!entity.AllOf<CDirectionalLight>())
+		{
+			FE_CORE_ASSERT(false, "This entity does not have a CDirectionalLight component");
+			return;
+		}
+
+		if (entity.m_World != (World*)this)
+		{
+			FE_CORE_ASSERT(false, "This entity does not belong to GameplayWorld of this Scene");
+			return;
+		}
+
+		m_PrimaryDirectionalLightEntityID = entity.ID();
+	}
+
+	void GameplayWorld::SetPrimaryDirectionalLightEntity(EntityID id)
+	{
+		Entity entity(id, this);
+		SetPrimaryDirectionalLightEntity(entity);
 	}
 }

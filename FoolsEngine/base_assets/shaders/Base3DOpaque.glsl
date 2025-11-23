@@ -60,6 +60,7 @@ uniform bool u_OMRTexturePacking;
 // Scene
 uniform vec3 u_MainLightDir;
 uniform vec3 u_MainLightColor;
+uniform float u_MainLightIntensity;
 uniform vec3 u_AmbientLight;
 uniform vec3 u_CameraPosition;
 
@@ -136,7 +137,7 @@ void main()
 	N = N * 2.0 - 1.0;
 	N = normalize(v_TBN * N);
 
-	float cosTheta = max(dot(L, N), 0.0);
+	float cosTheta = max(dot(L, H), 0.0);
 
 	vec3 F0 = vec3(0.04);
 	F0      = mix(F0, c, m);
@@ -149,24 +150,19 @@ void main()
 
 	vec3 BRDF_nom = D * F * G;
 	float BRDF_denom = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0)  + 0.0001;
-	vec3 specular = BRDF_nom / BRDF_denom;
+	vec3 BRDF = BRDF_nom / BRDF_denom;
 
 	vec3 kS = F;
-	vec3 kD = vec3(1.0) - kS;
-  
-	kD *= 1.0 - m;
+	vec3 kD = (vec3(1.0) - kS) * (1.0 - m);
 
 	float NdotL = max(dot(N, L), 0.0); 
-	vec3 Ld = (kD * c / PI) * u_MainLightColor * NdotL;
-    vec3 Ls = specular * u_MainLightColor * NdotL;
-	vec3 Lo = Ld + Ls;
+	vec3 Ld = kD * c / PI;
+    vec3 Ls = BRDF;
+	vec3 Lo = (Ld + Ls) * u_MainLightColor * u_MainLightIntensity * NdotL;
 
 	vec3 ambient_light = o * u_AmbientLight * c;
 
-	//o_color = vec4(F, 1.0);
 	o_color = vec4(Lo + ambient_light, 1.0);
-	//o_color = vec4(texture(u_OMRMap, v_TexCoord).rgb, 1.0);
-	//o_color = vec4(u_MainLightDir, 1.0);
-	//o_color = vec4(a,a,a, 1.0);
+	
 	o_entityID = u_EntityID;
 }

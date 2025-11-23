@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Lights.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.h" />
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
+    <ClInclude Include="src\FoolsEngine\Scene\Components\LightComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\ComponentTypesRegistry.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Components\MeshComponents.h" />
@@ -316,6 +318,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\9 - Integration\Renderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
+    <ClCompile Include="src\FoolsEngine\Scene\Components\LightComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\MeshComponents.cpp" />

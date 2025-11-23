@@ -96,6 +96,7 @@ namespace fe
 					emitter << YAML::EndMap;
 
 					emitter << YAML::Key << "Primary Camera" << YAML::Value << gameplay_world->GetEntityWithPrimaryCamera();
+					emitter << YAML::Key << "Main Light" << YAML::Value << gameplay_world->GetEntityWithPrimaryDirectionalLight();
 					emitter << YAML::EndMap;
 				}
 
@@ -361,6 +362,9 @@ namespace fe
 
 				auto cameraEntity = gameplay_world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
 				gameplay_world->m_PrimaryCameraEntityID = cameraEntity.ID();
+
+				auto main_light_entity = gameplay_world->CreateEntityWithUUID(props["Main Light"].as<UUID>());
+				gameplay_world->m_PrimaryDirectionalLightEntityID = main_light_entity.ID();
 			}
 
 			// Actors

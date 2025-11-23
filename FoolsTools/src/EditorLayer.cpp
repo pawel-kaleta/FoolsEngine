@@ -133,10 +133,12 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("RenderStats");
 
-			auto& main_light = Renderer::SceneData.MainLightColor;
-			ImGui::ColorEdit3("Main Light", glm::value_ptr(main_light));
-			auto& main_light_dir = Renderer::SceneData.MainLightDir;
-			ImGui::DragFloat3("Main Light Dir", glm::value_ptr(main_light_dir), 0.01, -1, 1);
+			//auto& main_light_color = Renderer::SceneData.MainLightColor;
+			//ImGui::ColorEdit3("Main Light Color", glm::value_ptr(main_light_color));
+			//auto& main_light_dir = Renderer::SceneData.MainLightDir;
+			//ImGui::DragFloat3("Main Light Dir", glm::value_ptr(main_light_dir), 0.01, -1, 1);
+			//auto& main_light_int = Renderer::SceneData.MainLightIntensity;
+			//ImGui::DragFloat("Main Light Intensity", &main_light_int, 0.01, 0.0, 4.0);
 
 			auto& ambient_light = Renderer::SceneData.AmbientLight;
 			ImGui::ColorEdit3("Ambient Light", glm::value_ptr(ambient_light));

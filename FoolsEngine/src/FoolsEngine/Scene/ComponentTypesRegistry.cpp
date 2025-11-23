@@ -5,6 +5,7 @@
 #include "Components/RenderingComponents.h"
 #include "Components/2DComponents.h"
 #include "Components/MeshComponents.h"
+#include "Components/LightComponents.h"
 
 namespace fe
 {
@@ -23,6 +24,8 @@ namespace fe
 		RegisterDataComponent<CRenderMeshView>();
 		RegisterDataComponent<CModel>();
 		RegisterDataComponent<CModelView>();
+
+		RegisterDataComponent<CDirectionalLight>();
 	}
 
 }

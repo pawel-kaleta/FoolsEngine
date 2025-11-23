@@ -8,6 +8,8 @@
 
 #include "FoolsEngine\Scene\SimulationStage.h"
 
+#include "FoolsEngine\Renderer\3 - Representation\Lights.h"
+
 namespace fe
 {
 	class GameplayWorld : public World
@@ -42,12 +44,17 @@ namespace fe
 		void	SetPrimaryCameraEntity(Entity entity);
 		void	SetPrimaryCameraEntity(EntityID id);
 
+		Entity	GetEntityWithPrimaryDirectionalLight() const;
+		void	SetPrimaryDirectionalLightEntity(Entity entity);
+		void	SetPrimaryDirectionalLightEntity(EntityID id);
 	private:
 		friend class Entity;
 		friend class System;
 		friend class SceneSerializerYAML;
 
 		EntityID					m_PrimaryCameraEntityID;
+		EntityID					m_PrimaryDirectionalLightEntityID;
+
 		Scope<HierarchyDirector>	m_Hierarchy;
 		Scope<SystemsDirector>      m_SystemsDirector;
 		ComponentDestructionManager m_DestructionManager;

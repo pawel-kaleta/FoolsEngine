@@ -9,6 +9,7 @@
 #include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\3 - Representation\Lights.h"
 
 #include "FoolsEngine\Math\Transform.h"
 
@@ -88,8 +89,7 @@ namespace fe
 		static struct SceneData
 		{
 			glm::mat4 VPMatrix;
-			glm::vec3 MainLightDir;
-			glm::vec3 MainLightColor;
+			DirectionalLight* MainLight;
 			glm::vec3 AmbientLight;
 			const Camera* MainCamera;
 			Transform CameraTransform;

@@ -392,6 +392,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h">
       <Filter>FoolsEngine\Renderer\8 - Render</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Scene\Components\LightComponents.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Lights.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -611,5 +613,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.cpp">
       <Filter>FoolsEngine\Renderer\8 - Render</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Scene\Components\LightComponents.cpp" />
   </ItemGroup>
 </Project>

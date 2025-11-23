@@ -26,6 +26,7 @@
 
 #include "FoolsEngine\Scene\Components\RenderingComponents.h"
 #include "FoolsEngine\Scene\Components\MeshComponents.h"
+#include "FoolsEngine\Scene\Components\LightComponents.h"
 
 #include "FoolsEngine\Core\Project.h"
 
@@ -175,6 +176,10 @@ namespace fe
 		SceneData.Scene = scene.GetID();
 		SceneData.MainCamera = &camera;
 		SceneData.CameraTransform = cameraTransform;
+		auto& gameplay_world = scene.GetCoreComponent().GameplayWorld;
+		auto main_light_enity = gameplay_world->GetEntityWithPrimaryDirectionalLight();
+		SceneData.MainLight = & main_light_enity.Get<CDirectionalLight>().DirectionalLight;
+
 		BeginScene(camera, cameraTransform);
 
 		Renderer2D::RenderScene(scene);

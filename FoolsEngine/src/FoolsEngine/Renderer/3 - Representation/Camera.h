@@ -6,7 +6,6 @@
 
 namespace fe
 {
-
 	class Camera
 	{
 	public:
