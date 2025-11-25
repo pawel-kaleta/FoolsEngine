@@ -68,10 +68,12 @@ namespace fe
 			emitter << YAML::Key << "Shaders" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Base2D" << YAML::Value << inst.BaseAssets.Shaders.Base2D;
 				emitter << YAML::Key << "Base3DOpaque" << YAML::Value << inst.BaseAssets.Shaders.Base3DOpaque;
+				emitter << YAML::Key << "Base3DCutout" << YAML::Value << inst.BaseAssets.Shaders.Base3DCutout;
 				emitter << YAML::Key << "Base3DBlend" << YAML::Value << inst.BaseAssets.Shaders.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "ShadingModels" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Base3DOpaque" << YAML::Value << inst.BaseAssets.ShadingModels.Base3DOpaque;
+				emitter << YAML::Key << "Base3DCutout" << YAML::Value << inst.BaseAssets.ShadingModels.Base3DCutout;
 				emitter << YAML::Key << "Base3DBlend" << YAML::Value << inst.BaseAssets.ShadingModels.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Materials" << YAML::Value << YAML::BeginMap;
@@ -123,9 +125,11 @@ namespace fe
 
 		inst.BaseAssets.Shaders.Base2D = shaders_node["Base2D"].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DOpaque = shaders_node["Base3DOpaque"].as<UUID>();
+		inst.BaseAssets.Shaders.Base3DCutout = shaders_node["Base3DCutout"].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DBlend = shaders_node["Base3DBlend"].as<UUID>();
 
 		inst.BaseAssets.ShadingModels.Base3DOpaque = shading_models_node["Base3DOpaque"].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base3DCutout = shading_models_node["Base3DCutout"].as<UUID>();
 		inst.BaseAssets.ShadingModels.Base3DBlend = shading_models_node["Base3DBlend"].as<UUID>();
 
 		inst.BaseAssets.Materials.Default = materials_node["Default"].as<UUID>();

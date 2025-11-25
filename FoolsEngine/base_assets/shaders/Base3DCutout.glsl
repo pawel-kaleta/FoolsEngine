@@ -29,7 +29,7 @@ void main()
 	
 	v_TexCoord = a_UV0;
 }
-///////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 
 #type fragment
@@ -51,7 +51,8 @@ uniform sampler2D u_NormalMap;
 uniform sampler2D u_OMRMap;
 
 // Material
-uniform vec3 u_BaseColor;
+uniform vec4 u_BaseColor;
+uniform float u_AlphaCutOff;
 uniform float u_Roughness;
 uniform float u_Metalness;
 uniform float u_AO;
@@ -107,6 +108,11 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 
 void main()
 {
+	vec4 c = texture(u_BaseColorMap, v_TexCoord);
+	
+	if (c.w < u_AlphaCutOff)
+		discard;
+
 	float o;
 	float m;
 	float a;
@@ -127,8 +133,6 @@ void main()
 		a = 1.0 - a;
 	}
 
-	vec3 c = texture(u_BaseColorMap, v_TexCoord).rgb;
-
 	vec3 L = normalize(-u_MainLightDir);
 	vec3 V = normalize(u_CameraPosition - v_FragPos);
 	vec3 H = normalize(V + L);
@@ -140,7 +144,7 @@ void main()
 	float cosTheta = max(dot(L, H), 0.0);
 
 	vec3 F0 = vec3(0.04);
-	F0      = mix(F0, c, m);
+	F0      = mix(F0, c.rgb, m);
 	vec3 F	= fresnelSchlick(cosTheta, F0);
 
 	float D = NDF(N, H, a);       
@@ -156,11 +160,11 @@ void main()
 	vec3 kD = (vec3(1.0) - kS) * (1.0 - m);
 
 	float NdotL = max(dot(N, L), 0.0); 
-	vec3 Ld = kD * c / PI;
+	vec3 Ld = kD * c.rgb / PI;
     vec3 Ls = BRDF;
 	vec3 Lo = (Ld + Ls) * u_MainLightColor * u_MainLightIntensity * NdotL;
 
-	vec3 ambient_light = o * u_AmbientLight * c;
+	vec3 ambient_light = o * u_AmbientLight * c.rgb;
 
 	o_color = vec4(Lo + ambient_light, 1.0);
 	

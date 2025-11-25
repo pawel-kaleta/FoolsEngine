@@ -73,11 +73,13 @@ namespace fe
 			struct {
 				AssetHandle<Shader> Base2D;
 				AssetHandle<Shader> Base3DOpaque;
+				AssetHandle<Shader> Base3DCutout;
 				AssetHandle<Shader> Base3DBlend;
 			} Shaders;
 
 			struct {
 				AssetHandle<ShadingModel> Base3DOpaque;
+				AssetHandle<ShadingModel> Base3DCutout;
 				AssetHandle<ShadingModel> Base3DBlend;
 			} ShadingModels;
 
