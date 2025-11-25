@@ -84,6 +84,8 @@ namespace fe
 	
 	void GeometryLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
 	{
+		FE_PROFILER_FUNC();
+
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile((Project::GetInstance()->AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
 
@@ -163,7 +165,7 @@ namespace fe
 
 	void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
 	{
-		FE_LOG_CORE_WARN("Not implemented yet - geometry loader model loading");
+		FE_PROFILER_FUNC();
 
 		auto& base_path = Project::GetInstance()->AssetsPath;
 		auto direct_path = base_path / sourceFilePath;

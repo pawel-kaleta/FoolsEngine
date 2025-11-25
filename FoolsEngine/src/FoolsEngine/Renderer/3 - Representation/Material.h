@@ -12,7 +12,7 @@ namespace YAML { class Emitter; class Node; }
 
 namespace fe
 {
-	FE_DECLARE_ENUM(AlphaMode, Opaque, Mask, Blend);
+	FE_DECLARE_ENUM(AlphaMode, Opaque, Cutout, Blend);
 
 	struct ACMaterialCore
 	{

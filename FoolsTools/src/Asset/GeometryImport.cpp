@@ -73,7 +73,7 @@ namespace fe::GeometryImport
 			{
 				material_data.DetectedProperties |= DetectedMaterialProperties::Opacity;
 				uniforms.Opacity = 1.f - transparency;
-				if (transparency < 1.f)
+				if (transparency > 0.f)
 					material_data.AlphaMode = AlphaMode::Blend;
 			}
 
@@ -89,7 +89,7 @@ namespace fe::GeometryImport
 			aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
 			{
 				if (std::string_view(gltf_alphamode.C_Str()) == "OPAQUE") material_data.AlphaMode = AlphaMode::Opaque;
-				if (std::string_view(gltf_alphamode.C_Str()) == "MASK"  ) material_data.AlphaMode = AlphaMode::Mask;
+				if (std::string_view(gltf_alphamode.C_Str()) == "MASK"  ) material_data.AlphaMode = AlphaMode::Cutout;
 				if (std::string_view(gltf_alphamode.C_Str()) == "BLEND" ) material_data.AlphaMode = AlphaMode::Blend;
 			}
 
@@ -97,6 +97,10 @@ namespace fe::GeometryImport
 			{
 				material_data.DetectedProperties |= DetectedMaterialProperties::AlphaCutoff;
 				uniforms.AlphaCutoff = gltf_alphacutoff;
+				if (gltf_alphacutoff < 1.f && material_data.AlphaMode == AlphaMode::Opaque)
+				{
+					material_data.AlphaMode = AlphaMode::Cutout;
+				}
 			}
 			else
 				uniforms.AlphaCutoff = 0;
@@ -127,11 +131,12 @@ namespace fe::GeometryImport
 					{
 						if (aiTextureFlags::aiTextureFlags_UseAlpha & texture_flags)
 						{
-							FE_CORE_ASSERT(material_data.AlphaMode)
+							FE_CORE_ASSERT(material_data.AlphaMode);
 							material_data.AlphaMode = AlphaMode::Blend;
 						}
 						if (aiTextureFlags::aiTextureFlags_IgnoreAlpha & texture_flags)
 						{
+							FE_CORE_ASSERT(!material_data.AlphaMode);
 							material_data.AlphaMode = AlphaMode::Opaque;
 						}
 					}
@@ -717,7 +722,7 @@ namespace fe::GeometryImport
 		if (props & DetectedMaterialProperties::AlphaCutoff ||
 			props & DetectedMaterialProperties::Opacity ||
 			material_data.AlphaMode & AlphaMode::Blend ||
-			material_data.AlphaMode & AlphaMode::Mask)
+			material_data.AlphaMode & AlphaMode::Cutout)
 		{
 			ImGui::InputFloat("Transparency##uniform", &uniforms.Opacity);
 			ImGui::InputFloat("AlphaCutoff##uniform", &uniforms.AlphaCutoff);
