@@ -87,7 +87,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile((Project::GetInstance()->AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
+		const aiScene* scene = importer.ReadFile((Project::Get()->m_AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
 
 		auto& mesh_core_component = meshUser.GetCoreComponent();
 
@@ -167,7 +167,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& base_path = Project::GetInstance()->AssetsPath;
+		auto& base_path = Project::Get()->m_AssetsPath;
 		auto direct_path = base_path / sourceFilePath;
 
 		Assimp::Importer importer;

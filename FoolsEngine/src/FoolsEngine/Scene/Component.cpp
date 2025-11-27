@@ -137,7 +137,7 @@ namespace fe
 
 							if (Texture2D::GetMetaFileExtension() == extension)
 							{
-								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
+								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::Get()->m_AssetsPath));
 								if (assetID != NullAssetID)
 								{
 									textureID = assetID;
@@ -219,7 +219,7 @@ namespace fe
 
 							if (tnAsset::GetMetaFileExtension() == extension)
 							{
-								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::GetInstance()->AssetsPath));
+								AssetID assetID = AssetManager::GetAssetFromFilepath(filepath.lexically_relative(Project::Get()->m_AssetsPath));
 								if (assetID != NullAssetID)
 								{
 									assetHandle.SetID(assetID);
@@ -308,7 +308,7 @@ namespace fe
 				{
 					YAML::Emitter emitter;
 					Material::SaveMetadata(emitter, assetHandle.GetID());
-					std::ofstream fout(Project::GetInstance()->AssetsPath / assetHandle.Observe().GetFilepath());
+					std::ofstream fout(Project::Get()->m_AssetsPath / assetHandle.Observe().GetFilepath());
 					fout << emitter.c_str();
 				}
 			}

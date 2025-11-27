@@ -142,7 +142,7 @@ namespace fe
 		auto& reg = AssetManager::GetRegistry();
 
 		const auto& filepath = reg.get<ACFilepath>(assetID).Filepath;
-		auto full_filepath = Project::GetInstance()->AssetsPath / filepath;
+		auto full_filepath = Project::Get()->m_AssetsPath / filepath;
 
 		YAML::Node node;
 

@@ -49,7 +49,7 @@ namespace fe
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static Scope<Window> Create(const WindowAttributes& attr = WindowAttributes());
+		static Window* Create(const WindowAttributes& attr = WindowAttributes());
 
 	protected:
 		GDIType m_GDI;

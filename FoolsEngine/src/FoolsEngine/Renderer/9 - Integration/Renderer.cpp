@@ -63,7 +63,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& base_assets = Project::GetInstance()->BaseAssets;
+		auto& base_assets = Project::Get()->BaseAssets;
 
 		MakeHandle("../FoolsEngine/base_assets/textures/Default_Texture.png",	BaseAssets.Textures.Default,		base_assets.Textures.Default);
 		MakeHandle("../FoolsEngine/base_assets/textures/FlatWhite.png",			BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);

@@ -9,7 +9,7 @@ namespace fe
 	class Project
 	{
 	public:
-		static Project* GetInstance() { return s_Instance; }
+		static Project* Get() { return s_Instance; }
 
 		static void Create(const std::filesystem::path& filepath);
 		static void Load(const std::filesystem::path& filepath);
@@ -44,9 +44,9 @@ namespace fe
 			} Materials;
 		} BaseAssets;
 
-		std::filesystem::path File;
-		std::filesystem::path Directory;
-		std::filesystem::path AssetsPath;
+		std::filesystem::path m_File;
+		std::filesystem::path m_Directory;
+		std::filesystem::path m_AssetsPath;
 		UUID StartScene;
 
 		// tags list? (scene component)

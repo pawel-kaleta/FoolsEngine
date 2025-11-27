@@ -14,7 +14,7 @@ namespace fe
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
     {
-        auto assets_path = Project::GetInstance()->AssetsPath;
+        auto assets_path = Project::Get()->m_AssetsPath;
         auto x = filepath.lexically_relative(std::filesystem::current_path());
         auto w = x.lexically_relative(assets_path);
 
@@ -25,7 +25,7 @@ namespace fe
 
         YAML::Emitter emitter;
         Texture2D::SaveMetadata(emitter, assetID);
-        std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Texture2D>(assetID).GetFilepath());
+        std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Texture2D>(assetID).GetFilepath());
         fout << emitter.c_str();
 
         AssetSerializer::SerializeRegistry();
@@ -35,7 +35,7 @@ namespace fe
     {
         auto& spec = importData->TextureData.Specification;
         Scratchpad sp;
-        ImGui::Text("File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+        ImGui::Text("m_File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
         ImGui::Text("Components: %d", spec.Components);
         ImGui::Text("Format: %d", spec.Format);
         ImGui::Text("Width: %d", spec.Width);

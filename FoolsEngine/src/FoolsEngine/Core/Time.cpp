@@ -18,38 +18,5 @@ namespace fe
 			//return TimePoint( Platform::GetTime() );
 		}
 
-		TimeStep TimePoint::operator-(const TimePoint& b) {	return TimeStep(this->m_Time - b.GetTime()); }
-
-		TimePoint  TimePoint::operator+ (const TimeStep& b) { return  TimePoint(this->m_Time + b.GetSeconds()); }
-		TimePoint  TimePoint::operator- (const TimeStep& b) { return  TimePoint(this->m_Time - b.GetSeconds()); }
-		TimePoint& TimePoint::operator+=(const TimeStep& b) { this->m_Time += b.GetSeconds(); return *this; }
-		TimePoint& TimePoint::operator-=(const TimeStep& b) { this->m_Time -= b.GetSeconds(); return *this; }
-
-		TimePoint TimePoint::operator==(const TimePoint& b) { return this->m_Time == b.m_Time; }
-		TimePoint TimePoint::operator!=(const TimePoint& b) { return this->m_Time != b.m_Time; }
-		TimePoint TimePoint::operator> (const TimePoint& b) { return this->m_Time > b.m_Time; }
-		TimePoint TimePoint::operator< (const TimePoint& b) { return this->m_Time < b.m_Time; }
-		TimePoint TimePoint::operator>=(const TimePoint& b) { return this->m_Time >= b.m_Time; }
-		TimePoint TimePoint::operator<=(const TimePoint& b) { return this->m_Time <= b.m_Time; }
-
-
-		TimeStep  TimeStep::operator+ (const TimeStep& b) { return  TimeStep(this->m_Time + b.m_Time); }
-		TimeStep  TimeStep::operator- (const TimeStep& b) { return  TimeStep(this->m_Time - b.m_Time); }
-		TimeStep& TimeStep::operator+=(const TimeStep& b) { *this = TimeStep(this->m_Time + b.m_Time); return *this; }
-		TimeStep& TimeStep::operator-=(const TimeStep& b) { *this = TimeStep(this->m_Time - b.m_Time); return *this; }
-
-		TimeStep  TimeStep::operator* (const float& b) { return TimeStep(this->m_Time * b); }
-		TimeStep  TimeStep::operator/ (const float& b) { return TimeStep(this->m_Time / b); }
-		TimeStep& TimeStep::operator*=(const float& b) { this->m_Time *= b; return *this; }
-		TimeStep& TimeStep::operator/=(const float& b) { this->m_Time /= b; return *this; }
-
-		TimeStep TimeStep::operator==(const TimeStep& b) { return this->m_Time == b.m_Time; }
-		TimeStep TimeStep::operator!=(const TimeStep& b) { return this->m_Time != b.m_Time; }
-		TimeStep TimeStep::operator> (const TimeStep& b) { return this->m_Time > b.m_Time; }
-		TimeStep TimeStep::operator< (const TimeStep& b) { return this->m_Time < b.m_Time; }
-		TimeStep TimeStep::operator>=(const TimeStep& b) { return this->m_Time >= b.m_Time; }
-		TimeStep TimeStep::operator<=(const TimeStep& b) { return this->m_Time <= b.m_Time; }
-
-		
 	}
 }

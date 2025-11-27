@@ -76,7 +76,7 @@ namespace fe {
 		{
 			FE_PROFILER_SCOPE("Platform/Renderer backends");
 			// Setup Platform/Renderer backends
-			GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetWindow().GetNativeWindow());
+			GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().m_Window->GetNativeWindow());
 			ImGui_ImplGlfw_InitForOpenGL(window, true);
 			ImGui_ImplOpenGL3_Init("#version 410");
 		}
@@ -110,7 +110,7 @@ namespace fe {
 		FE_PROFILER_FUNC();
 
 		ImGuiIO& io = ImGui::GetIO();
-		Window& window = Application::GetWindow();
+		Window& window = *Application::Get().m_Window;
 		io.DisplaySize = ImVec2((float)window.GetWidth(), (float)window.GetHeight());
 
 		ImGui::Render();

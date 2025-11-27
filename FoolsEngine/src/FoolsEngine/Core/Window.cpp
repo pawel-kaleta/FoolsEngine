@@ -7,12 +7,12 @@
 
 namespace fe
 {
-	Scope<Window> Window::Create(const WindowAttributes& attr)
+	Window* Window::Create(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
 
 	#ifdef FE_PLATFORM_WINDOWS
-		return CreateScope<Win32Window>(attr);
+		return new Win32Window(attr);
 	#else
 		FE_CORE_ASSERT(false, "Unknown platform!");
 		#error

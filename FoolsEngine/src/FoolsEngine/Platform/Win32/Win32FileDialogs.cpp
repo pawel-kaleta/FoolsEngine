@@ -21,7 +21,7 @@ namespace fe
 		CHAR currentDir[256] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::GetWindow().GetNativeWindow());
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().m_Window->GetNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		if (GetCurrentDirectoryA(256, currentDir))
@@ -47,7 +47,7 @@ namespace fe
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		strncpy_s(szFile, defaultpath, sizeof(szFile));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::GetWindow().GetNativeWindow());
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().m_Window->GetNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		CHAR currentDir[256] = { 0 };

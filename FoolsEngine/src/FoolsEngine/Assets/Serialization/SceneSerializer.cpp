@@ -26,7 +26,7 @@ namespace fe
 		Serialize(scene, emitter);
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(Project::GetInstance()->AssetsPath / scene.GetFilepath());
+		std::ofstream fout(Project::Get()->m_AssetsPath / scene.GetFilepath());
 		fout << emitter.c_str();
 	}
 
@@ -36,7 +36,7 @@ namespace fe
 		FE_PROFILER_SESSION_START("SceneLoading", "Logs/ProfileData_SceneLoading.json");
 #endif // FE_INTERNAL_BUILD
 
-		auto filepath = Project::GetInstance()->AssetsPath;
+		auto filepath = Project::Get()->m_AssetsPath;
 		filepath /= scene.GetFilepath();
 		YAML::Node node = YAML::LoadFile(filepath.string());
 		

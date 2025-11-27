@@ -65,11 +65,43 @@ namespace fe
 	
 		TimePoint Now();
 
-		//defined in Application.h to avoid "include loop"
 		inline float DeltaTime()
 		{
-			extern TimeStep s_LastFrameTimeStep;;
+			extern TimeStep s_LastFrameTimeStep;
 			return s_LastFrameTimeStep.GetSeconds();
 		}
+
+
+		inline TimeStep TimePoint::operator-(const TimePoint& b) { return TimeStep(this->m_Time - b.GetTime()); }
+
+		inline TimePoint  TimePoint::operator+ (const TimeStep& b) { return  TimePoint(this->m_Time + b.GetSeconds()); }
+		inline TimePoint  TimePoint::operator- (const TimeStep& b) { return  TimePoint(this->m_Time - b.GetSeconds()); }
+		inline TimePoint& TimePoint::operator+=(const TimeStep& b) { this->m_Time += b.GetSeconds(); return *this; }
+		inline TimePoint& TimePoint::operator-=(const TimeStep& b) { this->m_Time -= b.GetSeconds(); return *this; }
+
+		inline TimePoint TimePoint::operator==(const TimePoint& b) { return this->m_Time == b.m_Time; }
+		inline TimePoint TimePoint::operator!=(const TimePoint& b) { return this->m_Time != b.m_Time; }
+		inline TimePoint TimePoint::operator> (const TimePoint& b) { return this->m_Time > b.m_Time; }
+		inline TimePoint TimePoint::operator< (const TimePoint& b) { return this->m_Time < b.m_Time; }
+		inline TimePoint TimePoint::operator>=(const TimePoint& b) { return this->m_Time >= b.m_Time; }
+		inline TimePoint TimePoint::operator<=(const TimePoint& b) { return this->m_Time <= b.m_Time; }
+
+
+		inline TimeStep  TimeStep::operator+ (const TimeStep& b) { return  TimeStep(this->m_Time + b.m_Time); }
+		inline TimeStep  TimeStep::operator- (const TimeStep& b) { return  TimeStep(this->m_Time - b.m_Time); }
+		inline TimeStep& TimeStep::operator+=(const TimeStep& b) { *this = TimeStep(this->m_Time + b.m_Time); return *this; }
+		inline TimeStep& TimeStep::operator-=(const TimeStep& b) { *this = TimeStep(this->m_Time - b.m_Time); return *this; }
+
+		inline TimeStep  TimeStep::operator* (const float& b) { return TimeStep(this->m_Time * b); }
+		inline TimeStep  TimeStep::operator/ (const float& b) { return TimeStep(this->m_Time / b); }
+		inline TimeStep& TimeStep::operator*=(const float& b) { this->m_Time *= b; return *this; }
+		inline TimeStep& TimeStep::operator/=(const float& b) { this->m_Time /= b; return *this; }
+
+		inline TimeStep TimeStep::operator==(const TimeStep& b) { return this->m_Time == b.m_Time; }
+		inline TimeStep TimeStep::operator!=(const TimeStep& b) { return this->m_Time != b.m_Time; }
+		inline TimeStep TimeStep::operator> (const TimeStep& b) { return this->m_Time > b.m_Time; }
+		inline TimeStep TimeStep::operator< (const TimeStep& b) { return this->m_Time < b.m_Time; }
+		inline TimeStep TimeStep::operator>=(const TimeStep& b) { return this->m_Time >= b.m_Time; }
+		inline TimeStep TimeStep::operator<=(const TimeStep& b) { return this->m_Time <= b.m_Time; }
 	}
 }

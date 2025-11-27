@@ -14,7 +14,7 @@ namespace fe
 
 		tnComponent* Get()
 		{
-			uint32_t frameNum = Application::GetFrameCount();
+			uint32_t frameNum = Application::Get().m_FrameCount;
 			if (m_PointerLifeSpanFrameNumber == frameNum)
 			{
 				return GetCashed();
@@ -25,7 +25,7 @@ namespace fe
 		tnComponent* GetAndCash()
 		{
 			m_Component = m_Entity.GetIfExist<tnComponent>();
-			m_PointerLifeSpanFrameNumber = Application::GetFrameCount();
+			m_PointerLifeSpanFrameNumber = Application::Get().m_FrameCount;
 
 			return m_Component;
 		}

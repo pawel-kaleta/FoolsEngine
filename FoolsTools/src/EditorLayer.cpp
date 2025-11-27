@@ -22,7 +22,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("EditorLayer::OnAttach()");
 
-		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::GetInstance()->StartScene);
+		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::Get()->StartScene);
 		m_Scene = AssetHandle<Scene>(sceneID, AssetLoadingPriority::Critical);
 		{
 			auto scene_user = m_Scene.Use();
@@ -32,8 +32,8 @@ namespace fe
 		}
 		SetSceneContext(m_Scene);
 
-		m_Panels.ContentBrowser.m_AssetsPath = Project::GetInstance()->AssetsPath;
-		m_Panels.ContentBrowser.m_CurrentPath = Project::GetInstance()->AssetsPath;
+		m_Panels.ContentBrowser.m_AssetsPath = Project::Get()->m_AssetsPath;
+		m_Panels.ContentBrowser.m_CurrentPath = Project::Get()->m_AssetsPath;
 	}
 
 	void EditorLayer::OnUpdate()
@@ -173,7 +173,7 @@ namespace fe
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("File"))
+			if (ImGui::BeginMenu("m_File"))
 			{
 				if (ImGui::MenuItem("New Scene", "Ctrl+N")) NewScene();
 				if (ImGui::MenuItem("Open...",   "Ctrl+O")) OpenScene();
@@ -397,7 +397,7 @@ namespace fe
 		if (event->Handled || event->Owned)
 			return;
 
-		if (!Application::GetImguiLayer()->IsBlocking())
+		if (!Application::Get().m_ImGuiLayer->IsBlocking())
 			m_Viewports.EditViewport.OnEvent(event);
 	}
 

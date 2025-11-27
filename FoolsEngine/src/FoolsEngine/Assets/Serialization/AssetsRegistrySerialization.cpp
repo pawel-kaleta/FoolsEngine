@@ -39,7 +39,7 @@ namespace fe::AssetSerializer
 		emitter << YAML::EndSeq;
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(Project::GetInstance()->AssetsPath / "AssetsRegistry.fear");
+		std::ofstream fout(Project::Get()->m_AssetsPath / "AssetsRegistry.fear");
 		fout << emitter.c_str();
 	}
 
@@ -53,7 +53,7 @@ namespace fe::AssetSerializer
 		
 		{
 			FE_PROFILER_SCOPE("YAML::LoadFile");
-			node = YAML::LoadFile((Project::GetInstance()->AssetsPath / "AssetsRegistry.fear").string());
+			node = YAML::LoadFile((Project::Get()->m_AssetsPath / "AssetsRegistry.fear").string());
 		}
 
 		if (!node["Masters"])   return false;

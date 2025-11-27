@@ -17,7 +17,7 @@ namespace fe
 		static void LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser);
 		static void LoadTexture(const AssetUser<Texture2D>& textureUser)
 		{
-			auto filepath = Project::GetInstance()->AssetsPath;
+			auto filepath = Project::Get()->m_AssetsPath;
 			auto source =  textureUser.GetSourceFilepath();
 			if (!source)
 			{

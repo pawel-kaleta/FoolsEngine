@@ -18,9 +18,9 @@ namespace fe
 		}
 		s_Instance = this;
 
-		File = filepath.filename();
-		Directory = filepath.parent_path();
-		AssetsPath = s_Instance->Directory / "Assets";
+		m_File = filepath.filename();
+		m_Directory = filepath.parent_path();
+		m_AssetsPath = s_Instance->m_Directory / "Assets";
 	}
 
 	Project::~Project()
@@ -81,7 +81,7 @@ namespace fe
 			emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
 
-		std::ofstream fout(inst.Directory / inst.File);
+		std::ofstream fout(inst.m_Directory / inst.m_File);
 		fout << emitter.c_str();
 	}
 
@@ -90,7 +90,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& inst = *s_Instance;
-		auto path = (inst.Directory / inst.File).string();
+		auto path = (inst.m_Directory / inst.m_File).string();
 		YAML::Node main_node;
 		
 		{

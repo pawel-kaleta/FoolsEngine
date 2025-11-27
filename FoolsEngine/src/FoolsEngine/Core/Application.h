@@ -52,11 +52,28 @@ namespace fe
 				 Application(const ApplicationSpecification& appSpecification);
 		virtual ~Application();
 
-		static void			Close()			{ Get().m_Running = false; }
-		static Window&		GetWindow()		{ return *(Get().m_Window); }
-		static ImGuiLayer*	GetImguiLayer()	{ return Get().m_ImGuiLayer.get(); }
-		static uint32_t		GetFrameCount()	{ return Get().m_FrameCount; }
+		static Application& Get() { return *s_Instance; }
+		static void Close() { s_Instance->m_Running = false; }
 
+		std::string			m_Name;
+		MainEventDispacher	m_MainEventDispacher;
+		LayerStack*			m_LayerStack;
+
+		Window*					m_Window;
+		Ref<ApplicationLayer>	m_AppLayer;
+		Ref<ImGuiLayer>			m_ImGuiLayer;
+
+		ComponentTypesRegistry*	m_ComponentTypesRegistry;
+		BehaviorsRegistry*		m_BehaviorsRegistry;
+		SystemsRegistry*		m_SystemsRegistry;
+		AssetTypesRegistry*		m_AssetTypesRegistry;
+		LoadersRegistry*		m_LoadersRegistry;
+
+		AssetManager* m_AssetManager;
+
+		uint32_t	m_FrameCount	= 1;
+		bool		m_Running		= true;
+		bool		m_Minimized		= false;
 		
 	protected:
 		virtual void ClientAppStartup() {};
@@ -72,8 +89,6 @@ namespace fe
 		void ProjectLoad(const std::filesystem::path& filepath);
 		void ProjectSave();
 
-		static Application& Get() { return *s_Instance; }
-
 	private:
 		static Application* s_Instance;
 
@@ -87,32 +102,12 @@ namespace fe
 		void OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event);
 		void OnWindowResize(Ref<Events::WindowResizeEvent> event);
 
-		std::string			m_Name;
-		MainEventDispacher	m_MainEventDispacher;
-		LayerStack*			m_LayerStack = nullptr;
-
-		Scope<Window>			m_Window;
-		Ref<ApplicationLayer>	m_AppLayer;
-		Ref<ImGuiLayer>			m_ImGuiLayer;
-
-		ComponentTypesRegistry*	m_ComponentTypesRegistry	= nullptr;
-		BehaviorsRegistry*		m_BehaviorsRegistry			= nullptr;
-		SystemsRegistry*		m_SystemsRegistry			= nullptr;
-		AssetTypesRegistry*		m_AssetTypesRegistry		= nullptr;
-		LoadersRegistry*		m_LoadersRegistry			= nullptr;
-
-		AssetManager* m_AssetManager = nullptr;
-
-		uint32_t	m_FrameCount	= 1;
-		bool		m_Running		= true;
-		bool		m_Minimized		= false;
 
 #ifdef FE_INTERNAL_BUILD
 		uint16_t	m_ProfilerFramesCount	= 0;
 		bool		m_ActiveProfiler		= false;
 		bool		m_ActivateProfiler		= true;
 #endif // FE_INTERNAL_BUILD
-
 	};
 
 	// To be defined in FoolsEngine application (game)

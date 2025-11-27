@@ -157,7 +157,7 @@ namespace fe
 
 		auto& reg = AssetManager::GetRegistry();
 
-		auto filepath = Project::GetInstance()->AssetsPath;
+		auto filepath = Project::Get()->m_AssetsPath;
 		const auto& relative_path = reg.get<ACFilepath>(assetID).Filepath;
 		filepath /= relative_path;
 		

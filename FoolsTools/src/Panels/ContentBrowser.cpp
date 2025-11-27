@@ -385,7 +385,7 @@ namespace fe
 
 				// Render File Node
 				{
-					FE_PROFILER_SCOPE("Render File Node");
+					FE_PROFILER_SCOPE("Render m_File Node");
 
 					ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 					flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;// | ImGuiTreeNodeFlags_Bullet;

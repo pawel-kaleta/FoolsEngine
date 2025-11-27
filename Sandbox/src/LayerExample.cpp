@@ -6,7 +6,7 @@ LayerExample::LayerExample()
 
 void LayerExample::OnAttach()
 {
-	auto sceneID = fe::AssetManager::GetOrCreateAssetWithUUID(fe::Project::GetInstance()->StartScene);
+	auto sceneID = fe::AssetManager::GetOrCreateAssetWithUUID(fe::Project::Get()->StartScene);
 	m_Scene = fe::AssetHandle<fe::Scene>(sceneID, fe::AssetLoadingPriority::Critical);
 	{
 		auto scene_user = m_Scene.Use();
@@ -15,7 +15,7 @@ void LayerExample::OnAttach()
 		FE_ASSERT(success, "scene loading failed");
 	}
 
-	auto& window = fe::Application::GetWindow();
+	auto& window = *fe::Application::Get().m_Window;
 
 	fe::FramebufferData::SpecificationBuilder specBuilder;
 	specBuilder
@@ -51,7 +51,7 @@ void LayerExample::OnUpdate()
 		auto& cameraComponent = camera_entity.Get<fe::CCamera>();
 		auto& camera = cameraComponent.Camera;
 
-		auto& window = fe::Application::GetWindow();
+		auto& window = *fe::Application::Get().m_Window;
 		uint32_t new_x = window.GetWidth();
 		uint32_t new_y = window.GetHeight();
 

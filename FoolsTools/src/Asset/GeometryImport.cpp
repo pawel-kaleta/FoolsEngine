@@ -276,7 +276,7 @@ namespace fe::GeometryImport
 	{
 		auto& scene = importData->GeometryData.Scene;
 
-		auto assets_path = Project::GetInstance()->AssetsPath;
+		auto assets_path = Project::Get()->m_AssetsPath;
 		auto x = filepath.lexically_relative(std::filesystem::current_path());
 		auto w = x.lexically_relative(assets_path);
 
@@ -354,7 +354,7 @@ namespace fe::GeometryImport
 
 		YAML::Emitter emitter;
 		Model::SaveMetadata(emitter, assetID);
-		std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Model>(assetID).GetFilepath());
+		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Model>(assetID).GetFilepath());
 		fout << emitter.c_str();
 
 		AssetSerializer::SerializeRegistry();
@@ -369,7 +369,7 @@ namespace fe::GeometryImport
 	{
 		auto& scene = importData->GeometryData.Scene;
 
-		auto y = Project::GetInstance()->AssetsPath;
+		auto y = Project::Get()->m_AssetsPath;
 		auto z = std::filesystem::current_path();
 		auto x = targetFilepath.lexically_relative(z);
 		auto w = x.lexically_relative(y);
@@ -391,7 +391,7 @@ namespace fe::GeometryImport
 
 		YAML::Emitter emitter;
 		Mesh::SaveMetadata(emitter, assetID);
-		std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Mesh>(assetID).GetFilepath());
+		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Mesh>(assetID).GetFilepath());
 		fout << emitter.c_str();
 
 		AssetSerializer::SerializeRegistry();
@@ -790,7 +790,7 @@ namespace fe::GeometryImport
 		auto& scene = data.Scene;
 
 		ImGui::SeparatorText("Geometry Info");
-		ImGui::Text("File: %s", importData->FilepathToImport.string().c_str());
+		ImGui::Text("m_File: %s", importData->FilepathToImport.string().c_str());
 
 		if (ImGui::CollapsingHeader("Nodes", 0))
 			RenderHierarchy(scene);

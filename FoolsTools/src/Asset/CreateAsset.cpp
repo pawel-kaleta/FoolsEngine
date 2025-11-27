@@ -17,7 +17,7 @@ namespace fe
 
 			std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
 
-			auto assets_folder = std::filesystem::absolute(std::filesystem::current_path() / Project::GetInstance()->AssetsPath);
+			auto assets_folder = std::filesystem::absolute(std::filesystem::current_path() / Project::Get()->m_AssetsPath);
 
 			auto new_asset_relative_path = newAssetFilepath.lexically_relative(assets_folder);
 
@@ -26,7 +26,7 @@ namespace fe
 			AssetUser<Material>(assetID).MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 			YAML::Emitter emitter;
 			Material::SaveMetadata(emitter, assetID);
-			std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Material>(assetID).GetFilepath());
+			std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Material>(assetID).GetFilepath());
 			fout << emitter.c_str();
 		}
 	}

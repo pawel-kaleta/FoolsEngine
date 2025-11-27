@@ -42,7 +42,7 @@ namespace fe
 		void OnEvent(Ref<Events::Event> event) override { m_Callback(event); };
 
 		void Shutdown() { FE_PROFILER_FUNC(); }
-	private:
+
 		std::function<void(Ref<Events::Event>)> m_Callback;
 	};
 
@@ -299,7 +299,8 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
 			Renderer::Shutdown();
-			m_Window.release();
+			
+			delete m_Window; // abstraction, safer to destroy
 		}
 
 		// Allocators
