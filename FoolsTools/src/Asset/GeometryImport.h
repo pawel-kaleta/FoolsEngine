@@ -41,13 +41,13 @@ namespace fe
 				uint32_t Emissive;
 				union
 				{
-					uint32_t PackedOMR;
+					uint32_t PackedORM;
 					struct
 					{
 						uint32_t Occlusion;
-						uint32_t Metalness;
 						uint32_t Roughness;
-					} NonPackedOMR;
+						uint32_t Metalness;
+					} NonPackedORM;
 				};
 			} RecognizedTextures;
 
@@ -56,8 +56,8 @@ namespace fe
 				glm::vec3 BaseColor;
 				glm::vec3 Ambient;
 				glm::vec3 Emissive;
-				float Metalness;
 				float Roughness;
+				float Metalness;
 				float AlphaCutoff;
 				float Opacity;
 			} Uniforms;

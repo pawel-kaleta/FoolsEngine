@@ -47,7 +47,7 @@ namespace fe
 		ProjectionType m_ProjectionType = ProjectionType::Perspective;
 		float m_AspectRatio = 1280.0f / 720.0f;
 
-		float m_PerspectiveFOV = glm::radians(45.0f);
+		float m_PerspectiveFOV = glm::radians(60.0f);
 		float m_PerspectiveNearClip = 0.01f;
 		float m_PerspectiveFarClip = 1000.0f;
 

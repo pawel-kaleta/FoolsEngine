@@ -48,20 +48,17 @@ uniform sampler2D u_RoughnessMap;
 uniform sampler2D u_MetalnessMap;
 uniform sampler2D u_AOMap;
 uniform sampler2D u_NormalMap;
-uniform sampler2D u_OMRMap;
+uniform sampler2D u_ORMMap;
 
 // Material
-uniform vec3 u_BaseColor;
-uniform float u_Roughness;
-uniform float u_Metalness;
-uniform float u_AO;
-uniform bool u_OMRTexturePacking;
+uniform bool u_ORMTexturePacking;
 
 // Scene
 uniform vec3 u_MainLightDir;
 uniform vec3 u_MainLightColor;
 uniform float u_MainLightIntensity;
 uniform vec3 u_AmbientLight;
+uniform float u_AmbientLightIntensity;
 uniform vec3 u_CameraPosition;
 
 // Editor mouse picking
@@ -111,23 +108,25 @@ void main()
 	float m;
 	float a;
 
-	if (!u_OMRTexturePacking)
+	if (u_ORMTexturePacking)
 	{
-		o = texture(u_AOMap, v_TexCoord).r;
-		m = texture(u_MetalnessMap, v_TexCoord).r;
-		a = texture(u_RoughnessMap, v_TexCoord).r;
+		vec3 orm = texture(u_ORMMap, v_TexCoord).rgb;
+		o = orm.r;
+		a = orm.g;
+		m = orm.b;
+		
+		o = 1.0 - o;
 	}
 	else
 	{
-		o = texture(u_OMRMap, v_TexCoord).r;
-		m = texture(u_OMRMap, v_TexCoord).g;
-		a = texture(u_OMRMap, v_TexCoord).b;
-		o = 1.0 - o;
-		m = 1.0 - m;
-		a = 1.0 - a;
+		o = texture(u_AOMap, v_TexCoord).r;
+		a = texture(u_RoughnessMap, v_TexCoord).r;
+		m = texture(u_MetalnessMap, v_TexCoord).r;
 	}
 
 	vec3 c = texture(u_BaseColorMap, v_TexCoord).rgb;
+
+	//c *= u_BaseColor;
 
 	vec3 L = normalize(-u_MainLightDir);
 	vec3 V = normalize(u_CameraPosition - v_FragPos);
@@ -158,11 +157,14 @@ void main()
 	float NdotL = max(dot(N, L), 0.0); 
 	vec3 Ld = kD * c / PI;
     vec3 Ls = BRDF;
-	vec3 Lo = (Ld + Ls) * u_MainLightColor * u_MainLightIntensity * NdotL;
 
-	vec3 ambient_light = o * u_AmbientLight * c;
+	vec3 ambient_light = o * u_AmbientLight * u_AmbientLightIntensity * c;
 
-	o_color = vec4(Lo + ambient_light, 1.0);
+	vec3 Lo = (Ld + Ls) * (u_MainLightColor * u_MainLightIntensity * NdotL);
+
+	vec3 color = Lo + ambient_light;
+
+	o_color = vec4(color, 1.0);
 	
 	o_entityID = u_EntityID;
 }

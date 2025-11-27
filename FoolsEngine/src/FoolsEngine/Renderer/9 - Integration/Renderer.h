@@ -93,6 +93,7 @@ namespace fe
 			glm::mat4 VPMatrix;
 			DirectionalLight* MainLight;
 			glm::vec3 AmbientLight;
+			float AmbientLightIntensity;
 			const Camera* MainCamera;
 			Transform CameraTransform;
 			AssetID Scene;

@@ -81,26 +81,24 @@ namespace fe
 
 		auto GDI = Renderer::GetActiveGDItype();
 
+		char* uniform_data_ptr = (char*)material_core.UniformsData;
+
 		for (const auto& uniform : sm_core.Uniforms)
 		{
-			if (uniform.GetName() == "u_OMRTexturePacking")
-			{
-				bool* value = (bool*)materialObserver.GetUniformValuePtr(material_core, uniform);
-				uint32_t* value2 = (uint32_t*)materialObserver.GetUniformValuePtr(material_core, uniform);
-				int a =0;
-			}
 			shader_user.UploadUniform(
 				GDI,
 				uniform,
-				(void*)materialObserver.GetUniformValuePtr(material_core, uniform)
+				(void*)uniform_data_ptr
 			);
+
+			uniform_data_ptr += uniform.GetCount() * uniform.GetSize();
 		}
 
 		RenderTextureSlotID rendererTextureSlot = 0;
-		
-		for (auto& textureSlot : sm_core.TextureSlots)
+		for (size_t i = 0; i < sm_core.TextureSlots.size(); ++i)
 		{
-			auto textureID = materialObserver.GetTextureID(material_core, textureSlot);
+			auto textureID = material_core.TextureIDs[i];
+			auto& texture_slot = sm_core.TextureSlots[i];
 
 			if (textureID != NullAssetID)
 			{
@@ -109,11 +107,10 @@ namespace fe
 			}
 			else
 			{
-				//FE_CORE_ASSERT(false, "Not implemented default texture");		
 				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, rendererTextureSlot);
 			}
 
-			shader_user.BindTextureSlot(GDI, textureSlot, rendererTextureSlot);
+			shader_user.BindTextureSlot(GDI, texture_slot, rendererTextureSlot);
 
 			rendererTextureSlot++;
 		}
@@ -198,14 +195,14 @@ namespace fe
 			FE_LOG_CORE_WARN("Missing UUID in Mesh serialized node!");
 			return NullAssetID;
 		}
-		
+
 		auto uuid = uuid_node.as<UUID>();
 		if (uuid == UUID(0))
 		{
 			FE_LOG_CORE_WARN("Missing Mesh definition!");
 			return NullAssetID;
 		}
-		
+
 		auto asset_id = AssetManager::GetOrCreateAssetWithUUID(uuid);
 		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
 
@@ -213,17 +210,17 @@ namespace fe
 		reg.emplace<ACMasterAsset>(asset_id).Master = master;
 		auto& mesh_core = reg.emplace<Mesh::Core>(asset_id);
 		mesh_core.Init();
-		
+
 		const auto& vertex_count_node = node["Vartex Count"];
 		const auto& index_count_node = node["Index Count"];
-		
+
 		if (!vertex_count_node ||
 			!index_count_node)
 		{
 			FE_LOG_CORE_WARN("Ill defined Mesh!");
 			return NullAssetID;
 		}
-		
+
 		mesh_core.Specification.VertexCount = vertex_count_node.as<uint32_t>();
 		mesh_core.Specification.IndexCount = index_count_node.as<uint32_t>();
 

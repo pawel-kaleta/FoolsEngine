@@ -142,6 +142,8 @@ namespace fe
 
 			auto& ambient_light = Renderer::SceneData.AmbientLight;
 			ImGui::ColorEdit3("Ambient Light", glm::value_ptr(ambient_light));
+			auto& ambient_light_intensity = Renderer::SceneData.AmbientLightIntensity;
+			ImGui::DragFloat("Ambient Light Intensity", &ambient_light_intensity, 0.01, 0.0, 1.0);
 
 			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Renderer2D Stats:");

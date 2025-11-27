@@ -23,12 +23,12 @@ namespace fe::GeometryImport
 	{
 		auto scene = GeometryLoader::InspectSourceFile(importData->FilepathToImport);
 		auto texture_packing = IsGuaranteedStandardTexturePacking(importData->FilepathToImport);
-		
+
 		auto& data = importData->GeometryData;
 
 		std::pmr::polymorphic_allocator alloc(&importData->Arena);
 		data.MaterialsData = alloc.new_object<std::pmr::vector<MaterialData>>();
-		
+
 		data.Scene = scene;
 		data.ImportVariant = ImportVariant::Mesh;
 		data.GLTFTexturePacking = texture_packing;
@@ -89,8 +89,8 @@ namespace fe::GeometryImport
 			aiString gltf_alphamode; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHAMODE, gltf_alphamode))
 			{
 				if (std::string_view(gltf_alphamode.C_Str()) == "OPAQUE") material_data.AlphaMode = AlphaMode::Opaque;
-				if (std::string_view(gltf_alphamode.C_Str()) == "MASK"  ) material_data.AlphaMode = AlphaMode::Cutout;
-				if (std::string_view(gltf_alphamode.C_Str()) == "BLEND" ) material_data.AlphaMode = AlphaMode::Blend;
+				if (std::string_view(gltf_alphamode.C_Str()) == "MASK") material_data.AlphaMode = AlphaMode::Cutout;
+				if (std::string_view(gltf_alphamode.C_Str()) == "BLEND") material_data.AlphaMode = AlphaMode::Blend;
 			}
 
 			float gltf_alphacutoff; if (AI_SUCCESS == mat->Get(AI_MATKEY_GLTF_ALPHACUTOFF, gltf_alphacutoff))
@@ -110,9 +110,9 @@ namespace fe::GeometryImport
 			material_data.RecognizedTextures.BaseColor = -1;
 			material_data.RecognizedTextures.Emissive = -1;
 			material_data.RecognizedTextures.Normal = -1;
-			material_data.RecognizedTextures.NonPackedOMR.Metalness = -1;
-			material_data.RecognizedTextures.NonPackedOMR.Occlusion = -1;
-			material_data.RecognizedTextures.NonPackedOMR.Roughness = -1;
+			material_data.RecognizedTextures.NonPackedORM.Metalness = -1;
+			material_data.RecognizedTextures.NonPackedORM.Occlusion = -1;
+			material_data.RecognizedTextures.NonPackedORM.Roughness = -1;
 
 			for (unsigned int j = 1; j <= AI_TEXTURE_TYPE_MAX; j++)
 			{
@@ -141,10 +141,10 @@ namespace fe::GeometryImport
 						}
 					}
 				}
-				
-				uint32_t new_index = (uint32_t) material_data.DetectedTextures->Size();
+
+				uint32_t new_index = (uint32_t)material_data.DetectedTextures->Size();
 				bool found = false;
-				for (size_t n=0; n<material_data.DetectedTextures->Size(); n++)
+				for (size_t n = 0; n < material_data.DetectedTextures->Size(); n++)
 				{
 					if (material_data.DetectedTextures->operator[](n) == new_texture)
 					{
@@ -174,22 +174,22 @@ namespace fe::GeometryImport
 					if (texture_packing)
 					{
 						if (texture_type == aiTextureType_GLTF_METALLIC_ROUGHNESS)
-							material_data.RecognizedTextures.PackedOMR = new_index;
+							material_data.RecognizedTextures.PackedORM = new_index;
 						break;
 					}
-					
+
 					switch (texture_type)
 					{
 					case aiTextureType_AMBIENT_OCCLUSION:
 					case aiTextureType_AMBIENT:
 					case aiTextureType_LIGHTMAP:
-						material_data.RecognizedTextures.NonPackedOMR.Occlusion = new_index;
+						material_data.RecognizedTextures.NonPackedORM.Occlusion = new_index;
 						break;
 					case aiTextureType_METALNESS:
-						material_data.RecognizedTextures.NonPackedOMR.Metalness = new_index;
+						material_data.RecognizedTextures.NonPackedORM.Metalness = new_index;
 						break;
 					case aiTextureType_DIFFUSE_ROUGHNESS:
-						material_data.RecognizedTextures.NonPackedOMR.Roughness = new_index;
+						material_data.RecognizedTextures.NonPackedORM.Roughness = new_index;
 						break;
 					}
 				}
@@ -231,16 +231,16 @@ namespace fe::GeometryImport
 			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData, TextureData::Usage::Map_BaseColor);
 		else
 			materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
-		
+
 		auto& texture_packing = importData->GeometryData.GLTFTexturePacking;
-		materialUser.SetUniformValue(core, "u_OMRTexturePacking", (void*) & texture_packing);
+		materialUser.SetUniformValue(core, "u_ORMTexturePacking", (void*)&texture_packing);
 
 		if (texture_packing)
 		{
-			if (recognized.PackedOMR != -1)
-				CreateTextureForMaterial("u_OMRMap", core, all[recognized.PackedOMR], materialUser, importData, TextureData::Usage::Map_OMR);
+			if (recognized.PackedORM != -1)
+				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData, TextureData::Usage::Map_ORM);
 			else
-				materialUser.SetTexture(core, "u_OMRMap", NullAssetID);
+				materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
 			materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 			materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
@@ -248,20 +248,20 @@ namespace fe::GeometryImport
 		}
 		else
 		{
-			materialUser.SetTexture(core, "u_OMRMap", NullAssetID);
+			materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
-			if (recognized.NonPackedOMR.Roughness != -1)
-				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedOMR.Roughness], materialUser, importData, TextureData::Usage::Map_Roughness);
+			if (recognized.NonPackedORM.Roughness != -1)
+				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData, TextureData::Usage::Map_Roughness);
 			else
 				materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 
-			if (recognized.NonPackedOMR.Metalness != -1)
-				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedOMR.Metalness], materialUser, importData, TextureData::Usage::Map_Metalness);
+			if (recognized.NonPackedORM.Metalness != -1)
+				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData, TextureData::Usage::Map_Metalness);
 			else
 				materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
 
-			if (recognized.NonPackedOMR.Occlusion != -1)
-				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedOMR.Occlusion], materialUser, importData, TextureData::Usage::Map_AO);
+			if (recognized.NonPackedORM.Occlusion != -1)
+				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData, TextureData::Usage::Map_AO);
 			else
 				materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
@@ -282,7 +282,7 @@ namespace fe::GeometryImport
 
 		AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Model>(w);
 		AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
-		
+
 		{
 			AssetUser<Model> model_user(assetID);
 			auto& model_core = model_user.GetCoreComponent();
@@ -362,13 +362,13 @@ namespace fe::GeometryImport
 
 	static void ImportAsRenderMesh(const std::filesystem::path& targetFilepath, const ImportData* const importData)
 	{
-	
+
 	}
 
 	static void ImportAsMesh(const std::filesystem::path& targetFilepath, const ImportData* const importData)
 	{
 		auto& scene = importData->GeometryData.Scene;
-		
+
 		auto y = Project::GetInstance()->AssetsPath;
 		auto z = std::filesystem::current_path();
 		auto x = targetFilepath.lexically_relative(z);
@@ -388,7 +388,7 @@ namespace fe::GeometryImport
 			}
 			specification.IndexCount *= 3;
 		}
-		
+
 		YAML::Emitter emitter;
 		Mesh::SaveMetadata(emitter, assetID);
 		std::ofstream fout(Project::GetInstance()->AssetsPath / AssetObserver<Mesh>(assetID).GetFilepath());
@@ -598,7 +598,7 @@ namespace fe::GeometryImport
 			ImGui::TableSetupColumn("Normal", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableSetupColumn("Emissive", ImGuiTableColumnFlags_NoHide);
 			if (data.GLTFTexturePacking)
-				ImGui::TableSetupColumn("PackedOMR", ImGuiTableColumnFlags_NoHide);
+				ImGui::TableSetupColumn("PackedORM", ImGuiTableColumnFlags_NoHide);
 			else
 			{
 				ImGui::TableSetupColumn("Occlusion", ImGuiTableColumnFlags_NoHide);
@@ -627,7 +627,7 @@ namespace fe::GeometryImport
 				ImGui::TableNextColumn();
 				bool base_color = recognized_textures.BaseColor != -1;
 				ImGui::Checkbox("##1", &base_color);
-				
+
 				ImGui::TableNextColumn();
 				bool normal = recognized_textures.Normal != -1;
 				ImGui::Checkbox("##2", &normal);
@@ -639,21 +639,21 @@ namespace fe::GeometryImport
 				if (data.GLTFTexturePacking)
 				{
 					ImGui::TableNextColumn();
-					bool omr = recognized_textures.PackedOMR != -1;
-					ImGui::Checkbox("##4", &omr);
+					bool orm = recognized_textures.PackedORM != -1;
+					ImGui::Checkbox("##4", &orm);
 				}
 				else
 				{
 					ImGui::TableNextColumn();
-					bool occlusion = recognized_textures.NonPackedOMR.Occlusion != -1;
+					bool occlusion = recognized_textures.NonPackedORM.Occlusion != -1;
 					ImGui::Checkbox("##5", &occlusion);
 
 					ImGui::TableNextColumn();
-					bool metalness = recognized_textures.NonPackedOMR.Metalness != -1;
+					bool metalness = recognized_textures.NonPackedORM.Metalness != -1;
 					ImGui::Checkbox("##6", &metalness);
 
 					ImGui::TableNextColumn();
-					bool roughness = recognized_textures.NonPackedOMR.Roughness != -1;
+					bool roughness = recognized_textures.NonPackedORM.Roughness != -1;
 					ImGui::Checkbox("##7", &roughness);
 				}
 
@@ -716,8 +716,8 @@ namespace fe::GeometryImport
 		ImGui::ColorEdit3("Ambient##uniform", (float*)&uniforms.Ambient, flags);
 		ImGui::ColorEdit3("Emissive##uniform", (float*)&uniforms.Emissive, flags);
 
-		ImGui::InputFloat("Metalness##uniform", &uniforms.Metalness);
 		ImGui::InputFloat("Roughness##uniform", &uniforms.Roughness);
+		ImGui::InputFloat("Metalness##uniform", &uniforms.Metalness);
 
 		if (props & DetectedMaterialProperties::AlphaCutoff ||
 			props & DetectedMaterialProperties::Opacity ||
@@ -735,10 +735,10 @@ namespace fe::GeometryImport
 			"BaseColor",
 			"Normal",
 			"Emissive",
-			"PackedOMR",
+			"PackedORM",
 			"Occlusion",
-			"Metalness",
-			"Roughness"
+			"Roughness",
+			"Metalness"
 		};
 
 		auto& recognized_textures = material_data.RecognizedTextures;
@@ -833,7 +833,7 @@ namespace fe::GeometryImport
 				Scratchpad sp;
 				std::filesystem::path defaultFilepath;
 				std::pmr::string filter(&sp);
-			
+
 				switch (variant)
 				{
 				case ImportVariant::Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->FilepathToImport, filter);	break;
@@ -851,7 +851,7 @@ namespace fe::GeometryImport
 					case ImportVariant::RenderMesh:	ImportAsRenderMesh(newAssetFilepath, importData); break;
 					case ImportVariant::Mesh:		ImportAsMesh(newAssetFilepath, importData); break;
 					}
-				
+
 					importData->Finished = true;
 				}
 			}

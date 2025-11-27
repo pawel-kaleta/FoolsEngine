@@ -1,31 +1,11 @@
 Shader: ../FoolsEngine/base_assets/shaders/Base3DBlend.glsl
 Uniforms Data Size: 36
 Uniforms:
-  - Name: u_BaseColor
-    Type: Float4
-    Count: 1
-    DefaultValue:
-      - [1, 1, 1, 1]
   - Name: u_AlphaCutOff
     Type: Float
     Count: 1
     DefaultValue:
       - 0.5
-  - Name: u_Roughness
-    Type: Float
-    Count: 1
-    DefaultValue:
-      - 0.5
-  - Name: u_Metalness
-    Type: Float
-    Count: 1
-    DefaultValue:
-      - 0.5
-  - Name: u_AO
-    Type: Float
-    Count: 1
-    DefaultValue:
-      - 0
   - Name: u_OMRTexturePacking
     Type: Bool
     Count: 1
@@ -33,7 +13,7 @@ Uniforms:
       - true
 Shader Texture Slots:
   - u_BaseColorMap
-  - u_OMRMap
+  - u_ORMMap
   - u_NormalMap
   - u_RoughnessMap
   - u_MetalnessMap

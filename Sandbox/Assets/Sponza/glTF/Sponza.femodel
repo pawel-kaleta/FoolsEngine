@@ -11,32 +11,12 @@ RenderMeshes:
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
-        u_BaseColor:
-          Type: Float4
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588, 1]
         u_AlphaCutOff:
           Type: Float
           Count: 1
           Value:
             - 0.5
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -50,10 +30,10 @@ RenderMeshes:
           Format: RGBA_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 194615181231926800
           Source Filepath: 11872827283454512094.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -82,32 +62,12 @@ RenderMeshes:
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
-        u_BaseColor:
-          Type: Float4
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588, 1]
         u_AlphaCutOff:
           Type: Float
           Count: 1
           Value:
             - 0.5
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -121,10 +81,10 @@ RenderMeshes:
           Format: RGBA_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 12091871155402774692
           Source Filepath: 715093869573992647.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -153,27 +113,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -187,10 +127,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 15108843625912585078
           Source Filepath: 8503262930880235456.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -219,27 +159,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -253,10 +173,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 15071931932204764578
           Source Filepath: 16885566240357350108.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -285,27 +205,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -319,10 +219,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 6143234462381664921
           Source Filepath: 11968150294050148237.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -351,27 +251,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -385,10 +265,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 12150711412422538491
           Source Filepath: 4871783166746854860.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -417,27 +297,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -451,10 +311,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 2673692949076616313
           Source Filepath: 9916269861720640319.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -483,27 +343,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -517,10 +357,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 6762280983552848924
           Source Filepath: 8051790464816141987.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -549,27 +389,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -583,10 +403,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 16577583775436602153
           Source Filepath: 13824894030729245199.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -615,27 +435,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -649,10 +449,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 16414465359009264475
           Source Filepath: 8114461559286000061.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -681,27 +481,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -715,10 +495,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 415517871317518864
           Source Filepath: 3455394979645218238.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -747,27 +527,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -781,10 +541,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 1194335491491114138
           Source Filepath: 8783994986360286082.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -813,27 +573,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -847,7 +587,7 @@ RenderMeshes:
           Format: RGB_8
           Width: 4
           Height: 4
-        u_OMRMap:
+        u_ORMMap:
           UUID: 0
         u_NormalMap:
           UUID: 0
@@ -867,27 +607,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -901,10 +621,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 10815050756595984067
           Source Filepath: 3371964815757888145.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -933,27 +653,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -967,10 +667,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 583581874348896099
           Source Filepath: 7815564343179553343.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -999,27 +699,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1033,10 +713,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 3930450752836729792
           Source Filepath: 7815564343179553343.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1065,27 +745,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1099,10 +759,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 6366177434222134246
           Source Filepath: 7815564343179553343.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1131,27 +791,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1165,10 +805,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 1909012791775506619
           Source Filepath: 466164707995436622.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1197,27 +837,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1231,10 +851,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 6647270777715106753
           Source Filepath: 466164707995436622.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1263,27 +883,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1297,10 +897,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 1091600542865654118
           Source Filepath: 466164707995436622.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1329,32 +929,12 @@ RenderMeshes:
       Shading Model: 3793305017238133067
       Uniforms Data Size: 36
       Uniforms:
-        u_BaseColor:
-          Type: Float4
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588, 1]
         u_AlphaCutOff:
           Type: Float
           Count: 1
           Value:
             - 0.5
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1368,10 +948,10 @@ RenderMeshes:
           Format: RGBA_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 18231446791265630769
           Source Filepath: 1219024358953944284.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1400,27 +980,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1434,10 +994,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 13908354888196841151
           Source Filepath: 2411100444841994089.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1466,27 +1026,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1500,10 +1040,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 1182757581994200766
           Source Filepath: 17556969131407844942.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1532,27 +1072,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1566,10 +1086,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 8270666505495787185
           Source Filepath: 13196865903111448057.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
@@ -1598,27 +1118,7 @@ RenderMeshes:
       Shading Model: 3793305017238133063
       Uniforms Data Size: 28
       Uniforms:
-        u_BaseColor:
-          Type: Float3
-          Count: 1
-          Value:
-            - [0.588, 0.588, 0.588]
-        u_Roughness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_Metalness:
-          Type: Float
-          Count: 1
-          Value:
-            - 0.5
-        u_AO:
-          Type: Float
-          Count: 1
-          Value:
-            - 0
-        u_OMRTexturePacking:
+        u_ORMTexturePacking:
           Type: Bool
           Count: 1
           Value:
@@ -1632,10 +1132,10 @@ RenderMeshes:
           Format: RGB_8
           Width: 1024
           Height: 1024
-        u_OMRMap:
+        u_ORMMap:
           UUID: 5652933931575936764
           Source Filepath: 8747919177698443163.jpg
-          Usage: Map_OMR
+          Usage: Map_ORM
           Components: RGB
           Format: RGB_8
           Width: 1024
