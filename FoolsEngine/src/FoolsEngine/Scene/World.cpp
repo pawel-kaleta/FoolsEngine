@@ -53,9 +53,11 @@ namespace fe
 
 	EntityID World::TranslateID(UUID uuid)
 	{
-		if (m_PersistentToTransientIDsMap.find(uuid) == m_PersistentToTransientIDsMap.end())
+		auto result = m_PersistentToTransientIDsMap.find(uuid);
+		
+		if (result == m_PersistentToTransientIDsMap.end())
 			return NullEntityID;
 
-		return m_PersistentToTransientIDsMap.at(uuid);
+		return result->second;
 	}
 }

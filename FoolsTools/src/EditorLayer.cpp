@@ -133,17 +133,10 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("RenderStats");
 
-			//auto& main_light_color = Renderer::SceneData.MainLightColor;
-			//ImGui::ColorEdit3("Main Light Color", glm::value_ptr(main_light_color));
-			//auto& main_light_dir = Renderer::SceneData.MainLightDir;
-			//ImGui::DragFloat3("Main Light Dir", glm::value_ptr(main_light_dir), 0.01, -1, 1);
-			//auto& main_light_int = Renderer::SceneData.MainLightIntensity;
-			//ImGui::DragFloat("Main Light Intensity", &main_light_int, 0.01, 0.0, 4.0);
-
 			auto& ambient_light = Renderer::SceneData.AmbientLight;
 			ImGui::ColorEdit3("Ambient Light", glm::value_ptr(ambient_light));
 			auto& ambient_light_intensity = Renderer::SceneData.AmbientLightIntensity;
-			ImGui::DragFloat("Ambient Light Intensity", &ambient_light_intensity, 0.01, 0.0, 1.0);
+			ImGui::DragFloat("Ambient Light Intensity", &ambient_light_intensity, 0.01f, 0.0f, 1.0f);
 
 			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Renderer2D Stats:");
@@ -301,7 +294,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			if (!m_Scene.Use().GetCoreComponent().GameplayWorld->GetRegistry().valid(m_SelectedEntityID))
+			if (!m_Scene.Use().GetCoreComponent().GameplayWorld->m_Registry.valid(m_SelectedEntityID))
 				m_SelectedEntityID = NullEntityID;
 		}
 
@@ -397,7 +390,7 @@ namespace fe
 		if (event->Handled || event->Owned)
 			return;
 
-		if (!Application::Get().m_ImGuiLayer->IsBlocking())
+		if (!Application::Get().m_ImGuiLayer->BlockEvents)
 			m_Viewports.EditViewport.OnEvent(event);
 	}
 

@@ -21,32 +21,24 @@ namespace fe
 			AssetType Type;
 		};
 
-		static const std::vector<Item> GetItems() { return s_Instance->m_Items; }
+		static AssetTypesRegistry& Get() { return *s_Instance; }
+
 		static const Item* GetItem(AssetType assetType);
 		static const Item* GetItem(const std::pmr::string extension);
+		
+		std::vector<Item> m_Items;
 	private:
-		friend class Application;
-		AssetTypesRegistry() { s_Instance = this; };
-		void RegisterAssetTypes();
-		void Shutdown() {};
-
 		static AssetTypesRegistry* s_Instance;
 
-		std::vector<Item> m_Items;
-
+		friend class Application;
+		
+		AssetTypesRegistry() { s_Instance = this; };
+		
 		template <typename tnAsset>
-		static void RegisterAssetType()
-		{
-			s_Instance->m_Items.push_back(
-				Item{
-					&tnAsset::EmplaceCore,
-					&tnAsset::LoadMetadata,
-					&tnAsset::SaveMetadata,
-					tnAsset::GetMetaFileExtension(),
-					tnAsset::GetTypeStatic().ToConstCharPtr(),
-					tnAsset::GetTypeStatic()
-				}
-			);
-		}
+		void RegisterAssetType();
+		
+		void RegisterAssetTypes();
+		
+		void Shutdown() {};
 	};
 }

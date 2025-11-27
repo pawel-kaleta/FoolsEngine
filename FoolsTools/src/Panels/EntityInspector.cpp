@@ -95,7 +95,7 @@ namespace fe
 
         if (removeComponent)
         {
-            if (entity.GetWorld()->IsGameplayWorld())
+            if (entity.GetWorld()->m_IsGameplayWorld)
             {
                 auto destroy = item.DestructionScheduler;
                 Entity gamplayEntity(entity);
@@ -131,7 +131,7 @@ namespace fe
 
         DrawCTransformWidget(entity);
 
-        for (const auto& item : ComponentTypesRegistry::GetDataCompItems())
+        for (const auto& item : ComponentTypesRegistry::Get().m_DataItems)
         {
             DrawComponentWidget(item, entity);
         }
@@ -187,7 +187,7 @@ namespace fe
     {
         if (!ImGui::BeginPopup("AddComponent")) return;
 
-        for (const auto& item : ComponentTypesRegistry::GetDataCompItems())
+        for (const auto& item : ComponentTypesRegistry::Get().m_DataItems)
         {
             auto& getter = item.Getter;
             DataComponent* component = (entity.*getter)();
@@ -329,7 +329,7 @@ namespace fe
         auto tagsGlobal = tagsHandle.Global();
         auto tagsLocal = tagsHandle.Local();
         Tags tagsInherited;
-        EntityID parent = entity.GetWorld()->GetRegistry().get<CEntityNode>(entity.ID()).Parent;
+        EntityID parent = entity.GetWorld()->m_Registry.get<CEntityNode>(entity.ID()).Parent;
         if (parent != RootID)
         {
             Entity parentEntity = Entity(parent, entity.GetWorld());

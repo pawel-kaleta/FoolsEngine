@@ -70,7 +70,7 @@ namespace fe
 		return nullptr;
 	}
 
-	System* SystemsDirector::GetSystemFromName(const std::string& name)
+	System* SystemsDirector::GetSystemFromName(const std::string& name) const
 	{
 		for (auto& system : m_Systems)
 		{

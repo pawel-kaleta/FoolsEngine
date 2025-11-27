@@ -32,7 +32,7 @@ namespace fe
 		}
 
 		AssetObserver(AssetID assetID) :
-			tnAsset::Observer(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+			tnAsset::Observer(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
 		{
 			FE_CORE_ASSERT(assetID != NullAssetID, "Cannot create AssetObserver from NullAssetID");
 			Init();
@@ -86,7 +86,7 @@ namespace fe
 		//TODO: mutex
 
 		AssetUser(AssetID assetID) :
-			tnAsset::User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+			tnAsset::User(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
 		{
 			FE_CORE_ASSERT(assetID != NullAssetID, "Cannot create AssetUser from NullAssetID");
 			Init();

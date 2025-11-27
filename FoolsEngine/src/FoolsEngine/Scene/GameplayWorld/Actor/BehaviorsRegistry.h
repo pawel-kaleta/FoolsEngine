@@ -8,6 +8,8 @@ namespace fe
 	class BehaviorsRegistry
 	{
 	public:
+		static BehaviorsRegistry& Get() { return *s_Instance; }
+
 		struct Item
 		{
 			Behavior*   (Actor::* Create)();
@@ -25,18 +27,16 @@ namespace fe
 			);
 		}
 
-		static const Item* GetItemFromName(const std::string& name) { return s_Instance->GetItemFromNameInternal(name); }
-		static std::vector<Item>& GetAll() { return s_Instance->m_Items; }
+		static const Item* GetItemFromName(const std::string& name);
+		
+		std::vector<Item> m_Items;
+	
 	private:
-		friend class ActorInspector;
+		static BehaviorsRegistry* s_Instance;
+
 		friend class Application;
 		BehaviorsRegistry() { s_Instance = this;}
 		void RegisterBehaviors();
 		void Shutdown() {};
-
-		static BehaviorsRegistry* s_Instance;
-
-		std::vector<Item> m_Items;
-		const Item* GetItemFromNameInternal(const std::string& name) const;
 	};
 }

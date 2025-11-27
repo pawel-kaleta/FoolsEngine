@@ -14,6 +14,15 @@ namespace fe
 		SystemsDirector() = default;
 		SystemsDirector(const SystemsDirector& other) = delete;
 
+		struct SystemUpdateEnroll
+		{
+			System* System;
+			void (System::* OnUpdateFuncPtr)();
+			uint32_t Priority;
+		};
+		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, SimulationStage::Count>;
+		using Systems = std::vector<std::unique_ptr<System>>;
+
 		template<SimulationStage::ValueType stage>
 		void EnrollForUpdate(System* system, void (System::* onUpdateFuncPtr)(), uint32_t priority);
 
@@ -38,26 +47,15 @@ namespace fe
 			return system;
 		}
 
-		System* GetSystemFromName(const std::string& name);
-
+		System* GetSystemFromName(const std::string& name) const;
 		System* GetSystemFromUUID(UUID uuid) const;
+
+		Systems             m_Systems;
+		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
 	private:
 		friend class SystemsInspector;
 		friend class SystemsRegistry;
 		friend class SceneSerializerYAML;
-
-		using Systems = std::vector<std::unique_ptr<System>>;
-
-		struct SystemUpdateEnroll
-		{
-			System* System;
-			void (System::* OnUpdateFuncPtr)();
-			uint32_t Priority;
-		};
-		using SystemUpdateEnrolls = std::array<std::vector<SystemUpdateEnroll>, SimulationStage::Count>;
-
-		Systems             m_Systems;
-		SystemUpdateEnrolls	m_SystemUpdateEnrolls;
 
 		void SortSystemUpdateEnrolls(SimulationStage stage);
 		void RemoveSystem(System* system);

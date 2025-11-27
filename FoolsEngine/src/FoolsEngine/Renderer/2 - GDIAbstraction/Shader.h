@@ -59,7 +59,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
 		static constexpr const char* GetMetaFileExtension() { return ""; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACShaderCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShaderCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) { };
 		static bool LoadMetadata(AssetID assetID) { return true; };
 

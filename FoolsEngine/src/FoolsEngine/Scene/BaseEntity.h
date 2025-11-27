@@ -12,7 +12,7 @@ namespace fe
 	{
 	public:
 		BaseEntity(EntityID entityID, World* world)
-			: m_World(world), m_Handle(ECS_handle(world->GetRegistry(), entityID)) { }
+			: m_World(world), m_Handle(ECS_handle(world->m_Registry, entityID)) { }
 		BaseEntity(const BaseEntity& other) = default;
 		BaseEntity() = default;
 

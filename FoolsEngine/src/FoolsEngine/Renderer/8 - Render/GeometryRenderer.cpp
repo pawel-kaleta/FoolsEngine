@@ -25,7 +25,7 @@ namespace fe
 		auto GDI = Renderer::GetActiveGDItype();
 		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 
-		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
 
 		auto view_of_CRenderMeshView_components = registry.view<CRenderMeshView, CTransformGlobal>();
 		for (auto ID : view_of_CRenderMeshView_components) // intellisense is freaking out here, don't worry, be happy
@@ -99,9 +99,9 @@ namespace fe
 		void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
 		void* ambient_light_intensity = &Renderer::SceneData.AmbientLightIntensity;
 		void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
-		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
 		auto view_of_CModelView_components = registry.view<CModel, CTransformGlobal>();
-		auto& asset_registry = AssetManager::GetRegistry();
+		auto& asset_registry = AssetManager::Get().m_Registry;
 
 		{
 			FE_PROFILER_SCOPE("Cutout geometry");

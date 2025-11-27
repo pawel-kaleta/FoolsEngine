@@ -26,7 +26,7 @@ namespace fe
 
 		TransformHandle	GetTransformHandle() { return TransformHandle(ID(), m_Handle.registry()); }
 		TagsHandle		GetTagsHandle() { return TagsHandle(ID(), m_Handle.registry()); }
-		ChildrenList	GetChildrenList() { return ChildrenList(ID(), m_Handle.registry()); }
+		std::vector<EntityID> GetChildrenList() { return ChildrenList(ID(), *m_Handle.registry()); }
 
 		// destruction is scheduled 
 		void Destroy();
@@ -54,7 +54,7 @@ namespace fe
 			else
 			{
 				auto& headID = Get<CHeadEntity>().HeadEntity;
-				auto& headName = m_World->GetRegistry().get<CEntityName>(headID).EntityName;
+				auto& headName = m_World->m_Registry.get<CEntityName>(headID).EntityName;
 				ID_and_name += " [" + headName + "] " + Get<CEntityName>().EntityName;
 			}
 

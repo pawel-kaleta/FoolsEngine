@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Core\Window.h"
+#include "FoolsEngine\Platform\Window.h"
 #include "FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h"
 
 #include <GLFW/glfw3.h>

@@ -82,7 +82,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Mesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".femesh"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::GetRegistry().emplace<ACMeshCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMeshCore>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
 		static bool LoadMetadata(AssetID assetID);
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);

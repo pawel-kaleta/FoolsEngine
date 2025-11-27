@@ -134,7 +134,7 @@ namespace fe
 
 		BeginScene();
 
-		auto& registry = scene.GetCoreComponent().GameplayWorld->GetRegistry();
+		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
 
 		auto viewTiles = registry.view<CTile, CTransformGlobal>();
 

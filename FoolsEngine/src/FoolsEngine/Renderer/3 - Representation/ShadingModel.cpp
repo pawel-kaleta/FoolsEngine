@@ -105,7 +105,7 @@ namespace fe
 		auto assetObserver = AssetObserver<ShadingModel>(assetID);
 		auto& core = assetObserver.GetCoreComponent();
 
-		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::GetRegistry().get<ACFilepath>(core.ShaderID).Filepath.string();
+		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::Get().m_Registry.get<ACFilepath>(core.ShaderID).Filepath.string();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
 		
@@ -143,7 +143,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& filepath = ECS_AssetHandle(AssetManager::GetRegistry(), assetID).get<ACFilepath>().Filepath;
+		const auto& filepath = ECS_AssetHandle(AssetManager::Get().m_Registry, assetID).get<ACFilepath>().Filepath;
 
 		return DeserializeFromFile(assetID, filepath);
 	}
@@ -192,7 +192,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		ECS_AssetHandle ECS_handle(AssetManager::GetRegistry(), assetID);
+		ECS_AssetHandle ECS_handle(AssetManager::Get().m_Registry, assetID);
 
 		auto& core = ECS_handle.get<ACShadingModelCore>();
 

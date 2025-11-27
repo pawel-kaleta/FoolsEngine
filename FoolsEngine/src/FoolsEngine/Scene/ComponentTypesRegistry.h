@@ -9,9 +9,13 @@ namespace fe
 {
 	struct DataComponent;
 
+#define FE_COMPONENT_TYPES_LIST CCamera, CTile, CSprite, CRenderMesh, CRenderMeshView, CModel, CModelView, CModelView, CDirectionalLight
+
 	class ComponentTypesRegistry
 	{
 	public:
+		static ComponentTypesRegistry& Get() { return *s_Instance; }
+
 		struct DataComponentRegistryItem
 		{
 			DataComponent* (BaseEntity::* Getter)() const;
@@ -26,7 +30,7 @@ namespace fe
 			void (BaseEntity::* Flagger)();
 			void (BaseEntity::* Remover)();
 		};
-
+		
 		template <typename tnComponent>
 		static void RegisterDataComponent()
 		{
@@ -51,21 +55,16 @@ namespace fe
 				}
 			);
 		}
+		
+		std::vector<DataComponentRegistryItem> m_DataItems;
+		std::vector<FlagComponentRegistryItem> m_FlagItems;
 
-		static const std::vector<DataComponentRegistryItem>& GetDataCompItems() { return s_Instance->m_DataItems; };
-		static const std::vector<FlagComponentRegistryItem>& GetFlagCompItems() { return s_Instance->m_FlagItems; };
-		
-		
 	private:
+		static ComponentTypesRegistry* s_Instance;
+
 		friend class Application;
 		ComponentTypesRegistry() { s_Instance = this; };
 		void RegisterComponents();
 		void Shutdown() {};
-
-		static ComponentTypesRegistry* s_Instance;
-
-		std::vector<DataComponentRegistryItem> m_DataItems;
-		std::vector<FlagComponentRegistryItem> m_FlagItems;
-
 	};
 }

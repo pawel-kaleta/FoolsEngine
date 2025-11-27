@@ -96,7 +96,7 @@ namespace fe
 		AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
 
 	private:
-		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::GetRegistry(), m_ID); };
+		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::Get().m_Registry, m_ID); };
 
 		void Init()
 		{

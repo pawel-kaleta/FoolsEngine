@@ -155,7 +155,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		auto filepath = Project::Get()->m_AssetsPath;
 		const auto& relative_path = reg.get<ACFilepath>(assetID).Filepath;
@@ -212,7 +212,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		const auto& UUID_node = node["UUID"];
 

@@ -109,8 +109,8 @@ namespace fe
 							emitter << YAML::BeginMap;
 
 							emitter << YAML::Key << "System" << YAML::Value << system->GetName();
-							emitter << YAML::Key << "UUID" << YAML::Value << system->GetUUID();
-							emitter << YAML::Key << "Active" << YAML::Value << system->IsActive();
+							emitter << YAML::Key << "UUID" << YAML::Value << system->m_UUID;
+							emitter << YAML::Key << "Active" << YAML::Value << system->m_Active;
 
 							system->Serialize(emitter);
 
@@ -127,7 +127,7 @@ namespace fe
 							for (auto& updateEnroll : gameplay_world->GetSystems().m_SystemUpdateEnrolls[i])
 							{
 								emitter << YAML::BeginMap;
-								emitter << YAML::Key << "System" << YAML::Value << updateEnroll.System->GetUUID();
+								emitter << YAML::Key << "System" << YAML::Value << updateEnroll.System->m_UUID;
 								emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
 								emitter << YAML::EndMap;
 							}
@@ -139,7 +139,7 @@ namespace fe
 
 				// Actors
 				{
-					const auto& reg = gameplay_world->GetRegistry();
+					const auto& reg = gameplay_world->m_Registry;
 					const auto& UUIDstorage = reg.storage<CUUID>();
 					const auto& nameStorage = reg.storage<CEntityName>();
 					const auto& actorStorage = reg.storage<CActorData>();
@@ -160,8 +160,8 @@ namespace fe
 								{
 									emitter << YAML::BeginMap;
 									emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
-									emitter << YAML::Key << "UUID" << YAML::Value << behavior->GetUUID();
-									emitter << YAML::Key << "Active" << YAML::Value << behavior->IsActive();
+									emitter << YAML::Key << "UUID" << YAML::Value << behavior->m_UUID;
+									emitter << YAML::Key << "Active" << YAML::Value << behavior->m_Active;
 									behavior->Serialize(emitter);
 									emitter << YAML::EndMap;
 								}
@@ -177,7 +177,7 @@ namespace fe
 									for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
 									{
 										emitter << YAML::BeginMap;
-										emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->GetUUID();
+										emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->m_UUID;
 										emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
 										emitter << YAML::EndMap;
 									}
@@ -190,7 +190,7 @@ namespace fe
 						// Actor's Entities
 						{
 							std::stack<EntityID> toSerialize;
-							const auto& nodeStorage = gameplay_world->GetRegistry().storage<CEntityNode>();
+							const auto& nodeStorage = gameplay_world->m_Registry.storage<CEntityNode>();
 							
 							emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
@@ -272,7 +272,7 @@ namespace fe
 
 		// Data Components
 		{
-			auto& regItems = ComponentTypesRegistry::GetDataCompItems();
+			auto& regItems = ComponentTypesRegistry::Get().m_DataItems;
 
 			for (auto& item : regItems)
 			{
@@ -430,7 +430,7 @@ namespace fe
 								if (transform_node["Scale"   ]) transform.Scale    = transform_node["Scale"   ].as<glm::vec3>(); else return false;
 							}
 
-							for (auto& item : ComponentTypesRegistry::GetDataCompItems())
+							for (auto& item : ComponentTypesRegistry::Get().m_DataItems)
 							{
 								auto& nameFunkPtr = item.GetName;
 								auto compName = (*nameFunkPtr)();

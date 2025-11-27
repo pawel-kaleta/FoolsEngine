@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "FoolsEngine\Events\Event.h"
 #include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
 
 namespace fe

@@ -20,7 +20,7 @@ namespace fe::AssetSerializer
 	{
 		Scratchpad sp;
 		YAML::Emitter emitter;
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Masters" << YAML::Value << YAML::BeginSeq;
@@ -58,7 +58,7 @@ namespace fe::AssetSerializer
 
 		if (!node["Masters"])   return false;
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		{
 			FE_PROFILER_SCOPE("Masters");
@@ -89,7 +89,7 @@ namespace fe::AssetSerializer
 
 		Scratchpad sp;
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 		
 		for (const auto asset_id : paths_view)
@@ -105,18 +105,6 @@ namespace fe::AssetSerializer
 
 				FE_CORE_ASSERT(result, "Failed to load asset metadata");
 			}
-
-			//for (auto& item : AssetTypesRegistry::GetItems())
-			//{
-			//	if (item.Type != type)
-			//		continue;
-			//
-			//	(*item.EmplaceCore)(asset_id);
-			//	bool result = (*item.LoadMetadata)(asset_id);
-			//	FE_CORE_ASSERT(result, "Failed to load asset metadata");
-			//
-			//	break;
-			//}
 		}
 	}
 
@@ -124,6 +112,7 @@ namespace fe::AssetSerializer
 	{
 		FE_PROFILER_FUNC();
 
+		// order important becouse of cross dependencies between assets
 		LoadMetaData<Shader>();
 		LoadMetaData<ShadingModel>();
 		LoadMetaData<Texture2D>();

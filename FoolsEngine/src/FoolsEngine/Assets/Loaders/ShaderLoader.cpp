@@ -51,7 +51,7 @@ namespace fe
 
 	bool ShaderLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static std::pmr::string knownExtensions[] = {
+		static const char* knownExtensions[] = {
 			".glsl"
 		};
 

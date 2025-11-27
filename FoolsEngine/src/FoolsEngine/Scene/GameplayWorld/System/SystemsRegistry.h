@@ -9,6 +9,8 @@ namespace fe
 	class SystemsRegistry
 	{
 	public:
+		static SystemsRegistry& Get() { return *s_Instance; }
+
 		struct Item
 		{
 			System*     (SystemsDirector::* Create)();
@@ -26,19 +28,17 @@ namespace fe
 			);
 		}
 
-		static const Item* GetItem(const std::string& systemTypeName) { return s_Instance->GetItemInternal(systemTypeName); };
+		static const Item* GetItem(const std::string& name);
 
-		static std::vector<Item>& GetAll() { return s_Instance->m_Items; }
+		std::vector<Item> m_Items;
+
 	private:
+		static SystemsRegistry* s_Instance;
+
 		friend class SystemsDirector;
 		friend class Application;
 		SystemsRegistry() { s_Instance = this; }
 		void RegisterSystems();
 		void Shutdown() {};
-
-		static SystemsRegistry* s_Instance;
-
-		std::vector<Item> m_Items;
-		const Item* GetItemInternal(const std::string& systemTypeName) const;
 	};
 }

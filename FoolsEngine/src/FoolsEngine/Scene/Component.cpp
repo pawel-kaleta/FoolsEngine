@@ -66,7 +66,7 @@ namespace fe
 		{
 			bool is_selected;
 
-			auto shading_models = AssetManager::GetRegistry().view<ACShadingModelCore>();
+			auto shading_models = AssetManager::Get().m_Registry.view<ACShadingModelCore>();
 
 			Scratchpad sp2;
 

@@ -10,11 +10,11 @@ namespace fe
 		FE_PROFILER_FUNC();
 	}
 
-	const BehaviorsRegistry::Item* BehaviorsRegistry::GetItemFromNameInternal(const std::string& name) const
+	const BehaviorsRegistry::Item* BehaviorsRegistry::GetItemFromName(const std::string& name)
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& item : m_Items)
+		for (auto& item : s_Instance->m_Items)
 		{
 			auto& nameFunkPtr = item.GetName;
 

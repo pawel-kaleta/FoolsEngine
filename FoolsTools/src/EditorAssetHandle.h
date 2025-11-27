@@ -21,7 +21,7 @@ namespace fe
 			tnAsset::User(assetHandle)
 		{ };
 		EditorAssetHandle(AssetID assetID) :
-			tnAsset::User(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+			tnAsset::User(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
 		{ };
 
 		EditorAssetHandle(const EditorAssetHandle& other) :

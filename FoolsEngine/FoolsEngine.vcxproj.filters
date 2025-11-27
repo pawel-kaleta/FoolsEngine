@@ -156,7 +156,7 @@
     <ClInclude Include="src\FoolsEngine\Core\UUID.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Window.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Window.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Debug\Asserts.h">
@@ -445,7 +445,7 @@
     <ClCompile Include="src\FoolsEngine\Core\UUID.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Window.cpp">
+    <ClCompile Include="src\FoolsEngine\Platform\Window.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Debug\Asserts.cpp">
@@ -467,9 +467,6 @@
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Math\Math.cpp">
-      <Filter>FoolsEngine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp">
       <Filter>FoolsEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp">

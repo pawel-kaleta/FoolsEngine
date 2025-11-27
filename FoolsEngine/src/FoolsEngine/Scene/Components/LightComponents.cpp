@@ -13,13 +13,13 @@ namespace fe
 {
 	void CDirectionalLight::DrawInspectorWidget(BaseEntity entity)
 	{
-		ImGui::DragFloat3("Direction", glm::value_ptr(DirectionalLight.Direction), 0.01, -1, 1);
+		ImGui::DragFloat3("Direction", glm::value_ptr(DirectionalLight.Direction), 0.01f, -1.0f, 1.0f);
 		ImGui::ColorEdit3("Color", glm::value_ptr(DirectionalLight.Color));
-		ImGui::DragFloat("Intensity", &DirectionalLight.Intensity, 0.01, 0.0, 4.0);
+		ImGui::DragFloat("Intensity", &DirectionalLight.Intensity, 0.01f, 0.0f, 4.0f);
 
 		auto* world = entity.GetWorld();
 
-		if (world->IsGameplayWorld())
+		if (world->m_IsGameplayWorld)
 		{
 			if (entity.ID() == ((GameplayWorld*)world)->GetEntityWithPrimaryDirectionalLight().ID())
 			{

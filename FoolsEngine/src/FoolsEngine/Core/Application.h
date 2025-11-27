@@ -2,7 +2,7 @@
 
 #include "FoolsEngine\Core\Core.h"
 #include "FoolsEngine\Events\MainEventDispacher.h"
-#include "FoolsEngine\Core\Window.h"
+#include "FoolsEngine\Platform\Window.h"
 #include "FoolsEngine\Core\Layer.h"
 #include "FoolsEngine\Core\LayerStack.h"
 #include "FoolsEngine\ImGui\ImGuiLayer.h"

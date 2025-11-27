@@ -38,7 +38,7 @@ namespace fe
 	protected:
 		AssetInterface() = default;
 		AssetInterface(AssetType type, AssetID assetID) :
-			m_ECSHandle(ECS_AssetHandle(AssetManager::GetRegistry(), assetID))
+			m_ECSHandle(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
 		{ }
 		AssetInterface(ECS_AssetHandle ECS_handle) :
 			m_ECSHandle(std::move(ECS_handle))

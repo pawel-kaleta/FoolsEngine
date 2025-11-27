@@ -35,6 +35,20 @@ namespace fe
 		return nullptr;
 	}
 
+	template <typename tnLoader>
+	void LoadersRegistry::RegisterLoader()
+	{
+		m_Items.push_back(
+			Item{
+				&tnLoader::IsKnownExtension,
+				&tnLoader::IsKnownAssetType,
+				tnLoader::GetExtensionAlias(),
+				tnLoader::GetTypeStatic(),
+				tnLoader::GetAssetTypeStatic()
+			}
+		);
+	}
+
 	void LoadersRegistry::RegisterLoaders()
 	{
 		RegisterLoader<TextureLoader>();

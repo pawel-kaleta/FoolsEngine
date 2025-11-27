@@ -11,7 +11,8 @@ namespace fe
 	class AssetManager
 	{
 	public:
-		static AssetRegistry& GetRegistry() { return s_Instance->m_Registry; }
+		static AssetManager& Get() { return *s_Instance; }
+
 		static UUID GetUUID(AssetID assetID) { return s_Instance->m_Registry.get<ACUUID>(assetID).UUID; }
 
 		struct AssetCreation
@@ -38,20 +39,14 @@ namespace fe
 		static void SetFilepath(AssetID assetID, const std::filesystem::path& filepath);
 		static void SetSourcePath(AssetID assetID, const std::filesystem::path& sourcePath);
 
-		static auto GetAll() { return GetRegistry().view<AssetID>(); }
+		static auto GetAll() { return s_Instance->m_Registry.view<AssetID>(); }
 		static void EvaluateAndReload();
-
-	private:
-		friend class Application;
-		AssetManager();
-
-		static AssetManager* s_Instance;
 
 		AssetRegistry m_Registry;
 		std::unordered_map<UUID, AssetID> m_MapByUUID;
 		std::unordered_map<std::filesystem::path, AssetID> m_MapByFilepath;
 		std::unordered_map<std::filesystem::path, std::vector<AssetID>> m_SourceFileRegistry;
-
+		
 		struct 
 		{
 			decltype(m_Registry.group<>(
@@ -104,5 +99,11 @@ namespace fe
 			)) Critical;
 
 		} m_LoadingGroups;
+	
+	private:
+		friend class Application;
+		AssetManager();
+
+		static AssetManager* s_Instance;
 	};
 }

@@ -33,7 +33,7 @@ namespace fe {
 
 	void ImGuiLayer::OnEvent(Ref<Events::Event> event)
 	{
-		if (m_BlockEvents)
+		if (BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			event->Handled |= event->IsInCategory(Events::Mouse) & io.WantCaptureMouse;

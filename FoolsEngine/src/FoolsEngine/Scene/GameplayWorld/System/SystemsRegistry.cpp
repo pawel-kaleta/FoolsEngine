@@ -11,11 +11,11 @@ namespace fe
 		FE_PROFILER_FUNC();
 	}
 
-	const SystemsRegistry::Item* SystemsRegistry::GetItemInternal(const std::string& name) const
+	const SystemsRegistry::Item* SystemsRegistry::GetItem(const std::string& name)
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& item : m_Items)
+		for (auto& item : s_Instance->m_Items)
 		{
 			auto& nameFunkPtr = item.GetName;
 			if ((*nameFunkPtr)().compare(name) == 0)

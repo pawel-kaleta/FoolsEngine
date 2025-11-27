@@ -13,7 +13,7 @@ namespace fe
 	{
 		auto* world = entity.GetWorld();
 
-		if (world->IsGameplayWorld())
+		if (world->m_IsGameplayWorld)
 		{
 			if (entity.ID() == ((GameplayWorld*)world)->GetEntityWithPrimaryCamera().ID())
 			{

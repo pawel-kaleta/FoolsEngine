@@ -179,7 +179,7 @@
     <ClInclude Include="src\FoolsEngine\Core\Project.h" />
     <ClInclude Include="src\FoolsEngine\Core\Time.h" />
     <ClInclude Include="src\FoolsEngine\Core\UUID.h" />
-    <ClInclude Include="src\FoolsEngine\Core\Window.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Debug\Profiler.h" />
@@ -281,7 +281,7 @@
     <ClCompile Include="src\FoolsEngine\Core\Project.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\Time.cpp" />
     <ClCompile Include="src\FoolsEngine\Core\UUID.cpp" />
-    <ClCompile Include="src\FoolsEngine\Core\Window.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Asserts.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp" />
@@ -289,7 +289,6 @@
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\FoolsEngine\Math\Math.cpp" />
-    <ClCompile Include="src\FoolsEngine\Math\Transform.cpp" />
     <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />

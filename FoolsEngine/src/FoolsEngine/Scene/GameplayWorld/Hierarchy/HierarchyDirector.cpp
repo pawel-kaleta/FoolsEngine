@@ -10,7 +10,7 @@
 namespace fe
 {
 	HierarchyDirector::HierarchyDirector(GameplayWorld* world)
-		: m_World(world), m_Registry(&world->GetRegistry())
+		: m_World(world), m_Registry(&world->m_Registry)
 	{
 		FE_PROFILER_FUNC();
 

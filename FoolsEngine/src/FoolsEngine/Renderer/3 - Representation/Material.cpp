@@ -391,7 +391,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		for (size_t i = 0; i < textureSlots.size(); ++i)
 		{
@@ -466,7 +466,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		const auto& filepath = reg.get<ACFilepath>(assetID).Filepath;
 		auto full_filepath = Project::Get()->m_AssetsPath / filepath;
@@ -528,7 +528,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		const auto& uuid_node = node["UUID"];
 		if (!uuid_node)
@@ -587,7 +587,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::GetRegistry();
+		auto& reg = AssetManager::Get().m_Registry;
 
 		auto& core_component = reg.get<Material::Core>(assetID);
 		auto& sm_core_component = shadingModelObserver.GetCoreComponent();

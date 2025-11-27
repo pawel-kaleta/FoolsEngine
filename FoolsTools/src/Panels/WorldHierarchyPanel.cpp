@@ -129,10 +129,10 @@ namespace fe
 
 		if (opened && node.ChildrenCount)
 		{
-			auto children = ChildrenList(entityID, & gameplay_world->GetRegistry());
+			auto children = ChildrenList(entityID, gameplay_world->m_Registry);
 
-			auto child = children.Begin();
-			while (child != children.End())
+			auto child = children.begin();
+			while (child != children.end())
 				nodeClicked |= DrawEntity(sceneObserver, *child++);
 
 			ImGui::TreePop();

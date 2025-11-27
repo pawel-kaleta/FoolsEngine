@@ -15,17 +15,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		RegisterDataComponent<CCamera>();
+#define _REGISTER_DATA_COMPONENT_CALL(x) RegisterDataComponent<x>();
 
-		RegisterDataComponent<CTile>();
-		RegisterDataComponent<CSprite>();
-
-		RegisterDataComponent<CRenderMesh>();
-		RegisterDataComponent<CRenderMeshView>();
-		RegisterDataComponent<CModel>();
-		RegisterDataComponent<CModelView>();
-
-		RegisterDataComponent<CDirectionalLight>();
+		FE_FOR_EACH(_REGISTER_DATA_COMPONENT_CALL, FE_COMPONENT_TYPES_LIST);
 	}
-
 }

@@ -12,7 +12,7 @@ namespace fe
 	{
 		if (other)
 		{
-			FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld!");
+			FE_CORE_ASSERT(other.m_World->m_IsGameplayWorld, "This entity does not belong to GameplayWorld!");
 		}
 	}
 
@@ -20,7 +20,7 @@ namespace fe
 	{
 		if (other)
 		{
-			FE_CORE_ASSERT(other.m_World->IsGameplayWorld(), "This entity does not belong to GameplayWorld");
+			FE_CORE_ASSERT(other.m_World->m_IsGameplayWorld, "This entity does not belong to GameplayWorld");
 			m_Handle = other.m_Handle;
 			m_World = other.m_World;
 		}
@@ -35,7 +35,7 @@ namespace fe
 
 	Actor Entity::CreateAttachedActor(const std::string& name)
 	{
-		FE_CORE_ASSERT(m_World->IsGameplayWorld(), "Only Gamplay Worlds have actors!");
+		FE_CORE_ASSERT(m_World->m_IsGameplayWorld, "Only Gamplay Worlds have actors!");
 
 		return ((GameplayWorld*)m_World)->CreateActor(ID(), name);
 	}
@@ -47,7 +47,8 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		std::queue<EntityID> toMark;
-		m_World->GetRegistry().emplace<CDestroyFlag>(ID());
+		auto& reg = m_World->m_Registry;
+		reg.emplace<CDestroyFlag>(ID());
 		toMark.push(m_Handle.get<CEntityNode>().FirstChild);
 
 		EntityID current;
@@ -57,11 +58,11 @@ namespace fe
 			toMark.pop();
 			while (current != NullEntityID)
 			{
-				auto& node = m_World->GetRegistry().get<CEntityNode>(current);
-				if (!m_World->GetRegistry().all_of<CDestroyFlag>(current))
+				auto& node = reg.get<CEntityNode>(current);
+				if (!reg.all_of<CDestroyFlag>(current))
 				{
 					toMark.push(node.FirstChild);
-					m_World->GetRegistry().emplace<CDestroyFlag>(current);
+					reg.emplace<CDestroyFlag>(current);
 				}
 				current = node.NextSibling;
 			}

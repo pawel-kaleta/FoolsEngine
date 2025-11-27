@@ -19,7 +19,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		if (Application::Get().m_ImGuiLayer->IsBlocking())
+		if (Application::Get().m_ImGuiLayer->BlockEvents)
 			return;
 
 		int inputAxisDA = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);

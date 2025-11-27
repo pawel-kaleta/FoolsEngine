@@ -26,8 +26,8 @@ namespace fe
 
 		virtual void OnImGuiRender() override {};
 
-		void BlockEvents(bool block) { m_BlockEvents = block; }
-		bool IsBlocking() const { return m_BlockEvents; }
+		bool BlockEvents = false;
+		bool m_Attached = false;
 
 		struct UniformRenderSettings
 		{
@@ -41,10 +41,7 @@ namespace fe
 		static bool RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
 	private:
 		friend class Application;
-		//float m_Time = 0.0f;
-		bool m_BlockEvents = false;
-		bool m_Attached = false;
-
+		
 		void Startup();
 		void Shutdown();
 

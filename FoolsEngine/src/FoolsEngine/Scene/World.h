@@ -14,10 +14,6 @@ namespace fe
 		World(bool isGameplayWorld = false);
 		virtual void Initialize() = 0;
 
-		const Registry&	GetRegistry() const { return m_Registry; }
-		Registry& GetRegistry() { return m_Registry; }
-		bool IsGameplayWorld() const { return m_IsGameplayWorld; }
-
 		EntityID TranslateID(UUID uuid);
 
 		template <typename tnComponent>
@@ -28,16 +24,16 @@ namespace fe
 
 		// Use only when deserializing
 		BaseEntity CreateOrGetEntityWithUUID(UUID uuid);
+		
+		Registry m_Registry;
+		bool m_IsGameplayWorld = false;
+		
+		std::unordered_map<UUID, EntityID>	m_PersistentToTransientIDsMap;
 	protected:
 		friend class Entity;
 		friend class Actor;
 		friend class EditorLayer;
 		friend class WorldHierarchyPanel;
-
-		Registry	m_Registry;
-		bool		m_IsGameplayWorld	= false;
-
-		std::unordered_map<UUID, EntityID>	m_PersistentToTransientIDsMap;
 
 		BaseEntity CreateEntity();
 		BaseEntity CreateEntityWithUUID(UUID uuid);

@@ -22,7 +22,7 @@ namespace fe
         }
 
         auto scene_observer = m_Scene.Observe();
-        m_OpenedActorID = scene_observer.GetCoreComponent().GameplayWorld->GetRegistry().get<CHeadEntity>(entityID).HeadEntity;
+        m_OpenedActorID = scene_observer.GetCoreComponent().GameplayWorld->m_Registry.get<CHeadEntity>(entityID).HeadEntity;
     }
     
     void ActorInspector::DrawBehaviorWidget(Behavior* behavior, const Actor& actor)
@@ -184,7 +184,7 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
-            for (const auto& item : BehaviorsRegistry::GetAll())
+            for (const auto& item : BehaviorsRegistry::Get().m_Items)
             {
                 auto& getName = item.GetName;
                 std::string name = (*getName)();

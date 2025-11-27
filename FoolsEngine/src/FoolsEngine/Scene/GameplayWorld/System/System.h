@@ -29,13 +29,26 @@ namespace fe
 		virtual void DrawInspectorWidget() {};
 
 		virtual std::string GetName() const { return "BaseSystem"; }
-		UUID GetUUID() const { return m_UUID; }
-		bool IsActive() const { return m_Active; }
+
 		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName()); }
 		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetName()); }
 		static std::string GetNameStatic() { return "BaseSystem"; }
 
+
+		template<SimulationStage::ValueType stage>
+		void RegisterForUpdate(uint32_t priority);
+
+		template<SimulationStage::ValueType stage>
+		void UnregisterFromUpdate();
+
+
+		UUID m_UUID;
+		SystemsDirector* m_SystemsDirector;
+		bool m_Active = false;
+
 	protected:
+		friend class SystemsDirector;
+
 		virtual void OnInitialize() {};
 		virtual void OnActivate() {};
 
@@ -44,20 +57,6 @@ namespace fe
 
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
-		
-		template<SimulationStage::ValueType stage>
-		void RegisterForUpdate(uint32_t priority);
-
-		template<SimulationStage::ValueType stage>
-		void UnregisterFromUpdate();
-
-	private:
-		UUID m_UUID;
-		SystemsDirector* m_SystemsDirector;
-		bool m_Active = false;
-
-		friend class SystemsDirector;
-		friend class SceneSerializerYAML;
 	};
 
 #define FE_SYSTEM_SETUP(type, name) \
