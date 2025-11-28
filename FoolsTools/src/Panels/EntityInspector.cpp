@@ -324,15 +324,15 @@ namespace fe
             "63"
         };
 
-        auto tagsHandle = entity.GetTagsHandle();
-        auto tagsGlobal = tagsHandle.Global();
-        auto tagsLocal = tagsHandle.Local();
-        Tags tagsInherited;
+        auto tags_handle = entity.GetTagsHandle();
+        auto tags_global = tags_handle.Global();
+        auto tags_local = tags_handle.Local();
+        Tags tags_inherited;
         EntityID parent = entity.GetWorld()->m_Registry.get<CEntityNode>(entity.ID()).Parent;
         if (parent != RootID)
         {
-            Entity parentEntity = Entity(parent, entity.GetWorld());
-            tagsInherited = parentEntity.GetTagsHandle().Global();
+            Entity parent_entity = Entity(parent, entity.GetWorld());
+            tags_inherited = parent_entity.GetTagsHandle().Global();
         }
 
         constexpr ImGuiTableFlags flags =
@@ -368,15 +368,15 @@ namespace fe
 
                 ImGui::TableNextColumn();
                 ImGui::BeginDisabled();
-                ImGui::CheckboxFlags("##1", &tagsInherited.TagBitFlags, WIDE_BIT_FLAG(i));
+                ImGui::CheckboxFlags("##1", &tags_inherited.TagBitFlags, WIDE_BIT_FLAG(i));
                 ImGui::EndDisabled();
 
                 ImGui::TableNextColumn();
-                ImGui::CheckboxFlags("##2", &tagsLocal.TagBitFlags, WIDE_BIT_FLAG(i));
+                ImGui::CheckboxFlags("##2", &tags_local.TagBitFlags, WIDE_BIT_FLAG(i));
 
                 ImGui::TableNextColumn();
                 ImGui::BeginDisabled();
-                ImGui::CheckboxFlags("##3", &tagsGlobal.TagBitFlags, WIDE_BIT_FLAG(i));
+                ImGui::CheckboxFlags("##3", &tags_global.TagBitFlags, WIDE_BIT_FLAG(i));
                 ImGui::EndDisabled();
 
                 ImGui::TableNextColumn();
@@ -388,7 +388,7 @@ namespace fe
         }
         ImGui::PopID();
 
-        tagsHandle.SetLocal(tagsLocal);
+        tags_handle.SetLocal(tags_local);
     }
 
     void EntityInspector::DrawDebugTab(Entity entity)

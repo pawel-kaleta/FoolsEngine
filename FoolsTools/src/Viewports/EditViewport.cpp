@@ -6,8 +6,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FramebufferData::SpecificationBuilder specBuilder;
-		specBuilder
+		FramebufferData::SpecificationBuilder spec_builder;
+		spec_builder
 			.SetWidth(1280)
 			.SetHight(720)
 			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
@@ -15,7 +15,7 @@ namespace fe
 				{ "Final frame", TextureData::Components::RGBA, TextureData::Format::RGBA_8 },
 				{ "EntityID"   , TextureData::Components::R   , TextureData::Format::R_UINT_32    }
 			});
-		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
+		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 	}
@@ -79,31 +79,31 @@ namespace fe
 
 		Application::Get().m_ImGuiLayer->BlockEvents = m_IsVisible && !(m_VieportFocus || m_VieportHover);
 
-		auto vidgetSize = ImGui::GetContentRegionAvail();
-		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different librarys
+		auto vidget_size = ImGui::GetContentRegionAvail();
+		glm::vec2 new_viewport_size = { vidget_size.x, vidget_size.y }; // most likely simple cast possible, but still different data types from different librarys
 
-		if (m_ViewportSize != newViewPortSize)
+		if (m_ViewportSize != new_viewport_size)
 		{
 			// there is a bug in ImGui that is causing GetContentRegionAvail() to report wrong values in first frame
 			// this is a workaround that prevents creation of framebuffer with 0 hight or with
-			if (newViewPortSize.x == 0 || newViewPortSize.y == 0)
-				newViewPortSize = { 1, 1 };
+			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
+				new_viewport_size = { 1, 1 };
 
-			m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
-			m_ViewportSize = newViewPortSize;
-			m_CameraController->Resize(newViewPortSize.x, newViewPortSize.y);
+			m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
+			m_ViewportSize = new_viewport_size;
+			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
 		}
 
-		auto fbID = m_Framebuffer->GetColorAttachmentID();
-		ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		auto framebuffer_ID = m_Framebuffer->GetColorAttachmentID();
+		ImGui::Image((void*)(uint64_t)framebuffer_ID, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		RenderGuizmos();
 
-		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
-		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-		auto viewportOffset = ImGui::GetWindowPos();
-		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+		auto viewport_region_min = ImGui::GetWindowContentRegionMin();
+		auto viewport_region_max = ImGui::GetWindowContentRegionMax();
+		auto viewport_offset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewport_region_min.x + viewport_offset.x, viewport_region_min.y + viewport_offset.y };
+		m_ViewportBounds[1] = { viewport_region_max.x + viewport_offset.x, viewport_region_max.y + viewport_offset.y };
 
 		ImGui::End();
 	}
@@ -155,9 +155,9 @@ namespace fe
 		auto scene_observer = m_Scene.Observe();
 		auto gameplay_world = scene_observer.GetCoreComponent().GameplayWorld.get();
 
-		Entity selectedEntity(m_SelectedEntityID, gameplay_world);
+		Entity selected_entity(m_SelectedEntityID, gameplay_world);
 
-		if (!selectedEntity)
+		if (!selected_entity)
 			return;
 
 		ImGuizmo::SetOrthographic(false);
@@ -166,41 +166,39 @@ namespace fe
 		ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 		// Camera
-		auto cameraEntity = gameplay_world->GetEntityWithPrimaryCamera();
+		auto camera_entity = gameplay_world->GetEntityWithPrimaryCamera();
 		const auto& camera = m_CameraController->GetCamera();
-		const glm::mat4& cameraProjection = camera.GetProjectionMatrix();
-		glm::mat4 cameraView = glm::inverse(m_CameraController->GetTransform().GetMatrix());
+		const glm::mat4& camera_projection_matrix = camera.GetProjectionMatrix();
+		glm::mat4 camera_view_matrix = glm::inverse(m_CameraController->GetTransform().GetMatrix());
 
 		// Entity transform
-		auto& tc = selectedEntity.GetTransformHandle().GetGlobal();
-		glm::mat4 transformMatrix = tc.GetMatrix();
+		glm::mat4 selected_entity_transform_matrix = selected_entity.GetTransformHandle().GetGlobal().GetMatrix();
 
 		// Snapping
 		bool snap = InputPolling::IsKeyPressed(InputCodes::LeftControl);
-		float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+		float snap_value = 0.5f; // Snap to 0.5m for translation/scale
 		// Snap to 45 degrees for rotation
 		if (m_GuizmoType == ImGuizmo::OPERATION::ROTATE)
-			snapValue = 45.0f;
+			snap_value = 45.0f;
 
-		float snapValues[3] = { snapValue, snapValue, snapValue };
+		float snap_values[3] = { snap_value, snap_value, snap_value };
 
 		ImGuizmo::Manipulate(
-			glm::value_ptr(cameraView),
-			glm::value_ptr(cameraProjection),
+			glm::value_ptr(camera_view_matrix),
+			glm::value_ptr(camera_projection_matrix),
 			(ImGuizmo::OPERATION)m_GuizmoType,
 			ImGuizmo::LOCAL,
-			glm::value_ptr(transformMatrix),
+			glm::value_ptr(selected_entity_transform_matrix),
 			nullptr,
-			snap ? snapValues : nullptr
+			snap ? snap_values : nullptr
 		);
 
 		if (ImGuizmo::IsUsing())
 		{
-			auto mosePos = ImGui::GetMousePos();
 			Transform transform;
-			Math::DecomposeTransform(transformMatrix, transform);
+			Math::DecomposeTransform(selected_entity_transform_matrix, transform);
 			transform.Rotation = glm::degrees(transform.Rotation);
-			selectedEntity.GetTransformHandle().SetGlobal(transform);
+			selected_entity.GetTransformHandle().SetGlobal(transform);
 		}
 	}
 
@@ -211,18 +209,18 @@ namespace fe
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
 		my -= m_ViewportBounds[0].y;
-		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-		my = viewportSize.y - my;
+		glm::vec2 viewport_size = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewport_size.y - my;
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
 
 		EntityID entityID = NullEntityID;
 
-		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
-			int attachmentIndex = m_Framebuffer->GetColorAttachmentIndex("EntityID");
+			int attachment_index = m_Framebuffer->GetColorAttachmentIndex("EntityID");
 			m_Framebuffer->Bind();
-			m_Framebuffer->ReadPixel(attachmentIndex, mouseX, mouseY, &entityID);
+			m_Framebuffer->ReadPixel(attachment_index, mouseX, mouseY, &entityID);
 			m_Framebuffer->Unbind();
 		}
 

@@ -276,6 +276,7 @@ namespace fe::GeometryImport
 	{
 		auto& scene = importData->GeometryData.Scene;
 
+		// TO DO: clean this filepath operations
 		auto assets_path = Project::Get()->m_AssetsPath;
 		auto x = filepath.lexically_relative(std::filesystem::current_path());
 		auto w = x.lexically_relative(assets_path);
@@ -369,6 +370,7 @@ namespace fe::GeometryImport
 	{
 		auto& scene = importData->GeometryData.Scene;
 
+		// TO DO: clean this filepath operations
 		auto y = Project::Get()->m_AssetsPath;
 		auto z = std::filesystem::current_path();
 		auto x = targetFilepath.lexically_relative(z);

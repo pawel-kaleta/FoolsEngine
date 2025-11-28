@@ -29,11 +29,11 @@ namespace fe
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		static bool load_not_create = true;
-		static char load_path_buffer[128] = "..\\Sandbox\\SandboxProject.feproj";
-		static char create_path_buffer[128] = "";
+		static bool s_load_not_create = true;
+		static char s_load_path_buffer[128] = "..\\Sandbox\\SandboxProject.feproj";
+		static char s_create_path_buffer[128] = "";
 
-		if (load_not_create)
+		if (s_load_not_create)
 		{
 			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -46,7 +46,7 @@ namespace fe
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.DisabledAlpha);
 				if (ImGui::Button("New Project"))
-					load_not_create = false;
+					s_load_not_create = false;
 				ImGui::PopStyleVar();
 
 				ImGui::SameLine();
@@ -58,7 +58,7 @@ namespace fe
 				ImGui::Text("Path");
 				ImGui::SameLine();
 
-				ImGui::InputText("##filepath", load_path_buffer, 128);
+				ImGui::InputText("##filepath", s_load_path_buffer, 128);
 				ImGui::SameLine();
 
 				std::filesystem::path filepath;
@@ -66,12 +66,12 @@ namespace fe
 				{
 					filepath = FileDialogs::OpenFile("FoolsEngine Project (*.feproj)\0*.feproj\0");
 					if (!filepath.empty())
-						strncpy_s(load_path_buffer, filepath.string().c_str(), sizeof(load_path_buffer));
+						strncpy_s(s_load_path_buffer, filepath.string().c_str(), sizeof(s_load_path_buffer));
 				}
 
 				if (ImGui::Button("Load"))
 				{
-					filepath = load_path_buffer;
+					filepath = s_load_path_buffer;
 					Application::ProjectLoad(filepath);
 					PushOuterLayer(m_EditorLayer);
 					ImGui::End();
@@ -104,13 +104,13 @@ namespace fe
 
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.DisabledAlpha);
 				if (ImGui::Button("Open Project"))
-					load_not_create = true;
+					s_load_not_create = true;
 				ImGui::PopStyleVar();
 
 				ImGui::Text("Path");
 				ImGui::SameLine();
 
-				ImGui::InputText("##filepath", create_path_buffer, 128);
+				ImGui::InputText("##filepath", s_create_path_buffer, 128);
 				ImGui::SameLine();
 
 				std::filesystem::path filepath;
@@ -118,12 +118,12 @@ namespace fe
 				{
 					filepath = FileDialogs::SaveFile("", "FoolsEngine Project (*.feproj)\0*.feproj\0");
 					if (!filepath.empty())
-						strncpy_s(create_path_buffer, filepath.string().c_str(), sizeof(create_path_buffer));
+						strncpy_s(s_create_path_buffer, filepath.string().c_str(), sizeof(s_create_path_buffer));
 				}
 
 				if (ImGui::Button("Create"))
 				{
-					filepath = create_path_buffer;
+					filepath = s_create_path_buffer;
 					Application::ProjectNew(filepath);
 					PushOuterLayer(m_EditorLayer);
 					ImGui::End();

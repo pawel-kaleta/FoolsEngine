@@ -94,9 +94,9 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Handle Toolbar Input");
 
-			ToolbarButton clickedButton = m_Toolbar.GetClickedButton();
+			ToolbarButton clicked_button = m_Toolbar.GetClickedButton();
 
-			switch (clickedButton)
+			switch (clicked_button)
 			{
 			case ToolbarButton::None:
 				break;
@@ -223,11 +223,11 @@ namespace fe
 		if (current_scene_filepath == filepath)
 			return;
 		
-		AssetHandle<Scene> newScene = AssetHandle<Scene>(AssetManager::GetAssetFromFilepath(filepath));
+		AssetHandle<Scene> new_scene_handle = AssetHandle<Scene>(AssetManager::GetAssetFromFilepath(filepath));
 		bool new_scene_opened = false;
-		if (newScene.IsValid())
+		if (new_scene_handle.IsValid())
 		{
-			auto newScene_user = newScene.Use();
+			auto newScene_user = new_scene_handle.Use();
 			newScene_user.Initialize();
 
 			new_scene_opened = SceneSerializerYAML::DeserializeFromFile(newScene_user);
@@ -241,7 +241,7 @@ namespace fe
 		{
 			m_EditorState  = EditorState::Edit;
 
-			m_Scene = newScene;
+			m_Scene = new_scene_handle;
 			SetSceneContext(m_Scene);
 		}
 		else
@@ -309,32 +309,32 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		EntityID newSelection = NullEntityID;
-		bool isNewSelection = false;
+		EntityID new_selection_entity = NullEntityID;
+		bool is_selection_new = false;
 
-		EntityID newSelectionRequest_1 = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
-		if (newSelectionRequest_1 != m_SelectedEntityID)
+		EntityID new_selection_request_1 = m_Panels.WorldHierarchyPanel.GetSelectionRequest();
+		if (new_selection_request_1 != m_SelectedEntityID)
 		{
-			newSelection = newSelectionRequest_1;
-			isNewSelection = true;
+			new_selection_entity = new_selection_request_1;
+			is_selection_new = true;
 		}
 
-		EntityID newSelectionRequest_2 = m_Viewports.EditViewport.GetSelectionRequest();
-		if (newSelectionRequest_2 != NullEntityID)
+		EntityID new_selection_request_2 = m_Viewports.EditViewport.GetSelectionRequest();
+		if (new_selection_request_2 != NullEntityID)
 		{
-			newSelection = newSelectionRequest_2;
-			isNewSelection = true;
+			new_selection_entity = new_selection_request_2;
+			is_selection_new = true;
 		}
 
-		EntityID newSelectionRequest_3 = m_Panels.ActorInspector.GetSelectionRequest();
-		if (newSelectionRequest_3 != NullEntityID)
+		EntityID new_selection_request_3 = m_Panels.ActorInspector.GetSelectionRequest();
+		if (new_selection_request_3 != NullEntityID)
 		{
-			newSelection = newSelectionRequest_3;
-			isNewSelection = true;
+			new_selection_entity = new_selection_request_3;
+			is_selection_new = true;
 		}
 
-		if (isNewSelection)
-			m_SelectedEntityID = newSelection;
+		if (is_selection_new)
+			m_SelectedEntityID = new_selection_entity;
 	}
 
 	void EditorLayer::OnScenePlayStart()

@@ -61,9 +61,9 @@ namespace fe
 
         if (widget_open)
         {
-            EntityID newSelection = behavior->DrawInspectorWidget();
-            if (newSelection != NullEntityID)
-                m_EntityIDSelectionRequest = newSelection;
+            EntityID new_selection_entity = behavior->DrawInspectorWidget();
+            if (new_selection_entity != NullEntityID)
+                m_EntityIDSelectionRequest = new_selection_entity;
         }
 
         if (widget_of_popup)

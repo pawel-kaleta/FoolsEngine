@@ -22,22 +22,22 @@ namespace fe
 		if (Application::Get().m_ImGuiLayer->BlockEvents)
 			return;
 
-		int inputAxisDA = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
-		int inputAxisWS = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
-		int inputAxisEQ = InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q);
+		int input_axis_DA = InputPolling::IsKeyPressed(InputCodes::D) - InputPolling::IsKeyPressed(InputCodes::A);
+		int input_axis_WS = InputPolling::IsKeyPressed(InputCodes::W) - InputPolling::IsKeyPressed(InputCodes::S);
+		int input_axis_EQ = InputPolling::IsKeyPressed(InputCodes::E) - InputPolling::IsKeyPressed(InputCodes::Q);
 		bool ctrl = InputPolling::IsKeyPressed(InputCodes::LeftControl);
 
-		if (!(inputAxisDA || inputAxisWS || inputAxisEQ))
+		if (!(input_axis_DA || input_axis_WS || input_axis_EQ))
 			return;
 
 		if (ctrl)
-			Rotate(inputAxisDA, inputAxisWS, inputAxisEQ);
+			Rotate(input_axis_DA, input_axis_WS, input_axis_EQ);
 		else
 		{
 			if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
-				Move(inputAxisDA, inputAxisEQ, inputAxisWS);
+				Move(input_axis_DA, input_axis_EQ, input_axis_WS);
 			else
-				Move(inputAxisDA, inputAxisWS, inputAxisEQ);
+				Move(input_axis_DA, input_axis_WS, input_axis_EQ);
 		}
 	}
 
@@ -67,19 +67,19 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto angleDelta = Time::DeltaTime() * m_RotationSpeed;
+		auto angle_delta = Time::DeltaTime() * m_RotationSpeed;
 
-		float headingDelta = -headingDir * angleDelta;
-		float pitchDelta = pitchDir * angleDelta;
-		float bankDelta = bankDir * angleDelta;
+		float heading_delta = -headingDir * angle_delta;
+		float pitch_delta = pitchDir * angle_delta;
+		float bank_delta = bankDir * angle_delta;
 
-		auto orientationHeadingDelta = glm::angleAxis(glm::radians(headingDelta), GetDirectionUp());
-		auto orientationPitchDelta = glm::angleAxis(glm::radians(pitchDelta), GetDirectionRight());
-		auto orientationBankDelta = glm::angleAxis(glm::radians(bankDelta), GetDirectionForward());
+		auto orientation_heading_delta = glm::angleAxis(glm::radians(heading_delta), GetDirectionUp());
+		auto orientation_pitch_delta = glm::angleAxis(glm::radians(pitch_delta), GetDirectionRight());
+		auto orientation_bank_delta = glm::angleAxis(glm::radians(bank_delta), GetDirectionForward());
 
-		auto newOrientation = orientationBankDelta * orientationPitchDelta * orientationHeadingDelta * GetOrientation();
+		auto new_orientation = orientation_bank_delta * orientation_pitch_delta * orientation_heading_delta * GetOrientation();
 
-		m_Transform.Rotation = glm::degrees(glm::eulerAngles(newOrientation));
+		m_Transform.Rotation = glm::degrees(glm::eulerAngles(new_orientation));
 	}
 
 	void EditorCameraController::Move(int horizontalDir, int verticalDir, int viewDir)
@@ -88,13 +88,13 @@ namespace fe
 
 		auto step = Time::DeltaTime() * m_MoveSpeed;
 
-		float horizontalStep = horizontalDir * step;
-		float verticalStep = verticalDir * step;
-		float viewStep = viewDir * step;
+		float horizontal_step = horizontalDir * step;
+		float vertical_step = verticalDir * step;
+		float view_step = viewDir * step;
 
-		m_Transform.Shift += verticalStep * GetDirectionUp();
-		m_Transform.Shift += horizontalStep * GetDirectionRight();
-		m_Transform.Shift += viewStep * GetDirectionForward();
+		m_Transform.Shift += vertical_step * GetDirectionUp();
+		m_Transform.Shift += horizontal_step * GetDirectionRight();
+		m_Transform.Shift += view_step * GetDirectionForward();
 	}
 
 	void EditorCameraController::Zoom(float delta)
@@ -149,23 +149,23 @@ namespace fe
 		ImGui::DragFloat3("Rotation", glm::value_ptr(transform.Rotation), 0.10f);
 		ImGui::DragFloat3("Scale"   , glm::value_ptr(transform.Scale   ), 0.01f);
 
-		constexpr const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[m_Camera.m_ProjectionType.ToInt()];
+		constexpr const char* projection_type_strings[] = { "Orthographic", "Perspective" };
+		const char* current_projection_type_string = projection_type_strings[m_Camera.m_ProjectionType.ToInt()];
 
-		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+		if (ImGui::BeginCombo("Projection", current_projection_type_string))
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
-				if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+				bool is_selected = current_projection_type_string == projection_type_strings[i];
+				if (ImGui::Selectable(projection_type_strings[i], is_selected))
 				{
-					currentProjectionTypeString = projectionTypeStrings[i];
+					current_projection_type_string = projection_type_strings[i];
 					Camera::ProjectionType projection;
 					projection.FromInt(i);
 					m_Camera.SetProjectionType(projection);
 				}
 
-				if (isSelected)
+				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
 

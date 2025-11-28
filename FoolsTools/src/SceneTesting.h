@@ -15,16 +15,16 @@ namespace fe
 				auto& position = transform.Shift;
 				auto& rotation = transform.Rotation;
 
-				float moveDistance = Time::DeltaTime() * MoveSpeed;
-				float rotAngle = Time::DeltaTime() * RotationSpeed;
+				float move_distance = Time::DeltaTime() * MoveSpeed;
+				float rotation_angle = Time::DeltaTime() * RotationSpeed;
 
-				     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.y += rotAngle;
-				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.y -= rotAngle;
+				     if (InputPolling::IsKeyPressed(InputCodes::KP4))	rotation.y += rotation_angle;
+				else if (InputPolling::IsKeyPressed(InputCodes::KP6))	rotation.y -= rotation_angle;
 
-				     if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += moveDistance;
-				else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= moveDistance;
-				     if (InputPolling::IsKeyPressed(InputCodes::Up))	position.z -= moveDistance;
-				else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.z += moveDistance;
+				     if (InputPolling::IsKeyPressed(InputCodes::Right))	position.x += move_distance;
+				else if (InputPolling::IsKeyPressed(InputCodes::Left))	position.x -= move_distance;
+				     if (InputPolling::IsKeyPressed(InputCodes::Up))	position.z -= move_distance;
+				else if (InputPolling::IsKeyPressed(InputCodes::Down))	position.z += move_distance;
 
 				return transform;
 			}
@@ -58,21 +58,21 @@ namespace fe
 
 		virtual void OnUpdate_PrePhysics() override
 		{
-			static bool firstError = false;
+			static bool first_error = false;
 			if (!(m_Player && m_Movement.GetEntity()))
 			{
-				if (!firstError)
+				if (!first_error)
 				{
 					FE_LOG_ERROR("Missing references on PlayerMovementBehavior");
-					firstError = true;
+					first_error = true;
 				}
 				return;
 			}
-			firstError = false;
+			first_error = false;
 
 			auto transform = m_Player.GetTransformHandle();
-			auto newTransform = m_Movement.Get()->Movement.CalculateNewTransform(transform.Global());
-			transform = newTransform;
+			auto new_transform = m_Movement.Get()->Movement.CalculateNewTransform(transform.Global());
+			transform = new_transform;
 		}
 
 		virtual void OnActivate() override
@@ -102,8 +102,8 @@ namespace fe
 		{
 			m_Player = world->CreateOrGetEntityWithUUID(data["Player Root entity"].as<UUID>());
 			
-			auto movementEntity = world->CreateOrGetEntityWithUUID(data["MovementComponent"].as<UUID>());
-			m_Movement.Set(movementEntity);
+			auto movement_entity = world->CreateOrGetEntityWithUUID(data["MovementComponent"].as<UUID>());
+			m_Movement.Set(movement_entity);
 		}
 
 		FE_BEHAVIOR_SETUP(PlayerMovementBehavior, "PlayerMovement");
@@ -202,11 +202,11 @@ namespace fe
 		FE_LOG_INFO("Test Scene Setup");
 
 		auto gameplay_world = sceneObserver.GetCoreComponent().GameplayWorld.get();
-		Actor enviroActor = gameplay_world->CreateActor("Enviro");
+		Actor enviro_actor = gameplay_world->CreateActor("Enviro");
 
-		Entity tintedTextureTile = enviroActor.CreateChildEntity("TestEntity");
+		Entity tinted_texture_tile = enviro_actor.CreateChildEntity("TestEntity");
 		{
-			auto& tile = tintedTextureTile.Emplace<CTile>().Tile;
+			auto& tile = tinted_texture_tile.Emplace<CTile>().Tile;
 			tile.Color = glm::vec4(0.2f, 0.7f, 0.3f, 1.0f);
 			tile.TextureTilingFactor = 3;
 
@@ -214,27 +214,27 @@ namespace fe
 			transform.Scale = glm::vec3(0.6f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -30.0f);
 			transform.Shift = glm::vec3(0.0f, 0.2f, -0.1f);
-			tintedTextureTile.GetTransformHandle() = transform;
+			tinted_texture_tile.GetTransformHandle() = transform;
 
-			tintedTextureTile.Emplace<CCamera>();
-			gameplay_world->SetPrimaryCameraEntity(tintedTextureTile);
+			tinted_texture_tile.Emplace<CCamera>();
+			gameplay_world->SetPrimaryCameraEntity(tinted_texture_tile);
 		}
 
-		Entity flatTile = enviroActor.CreateChildEntity();
+		Entity flat_tile = enviro_actor.CreateChildEntity();
 		{
-			auto& tile = flatTile.Emplace<CTile>().Tile;
+			auto& tile = flat_tile.Emplace<CTile>().Tile;
 			tile.Color = glm::vec4(0.1f, 0.1f, 1.0f, 1.0f);
 			tile.TextureTilingFactor = 3;
 
 			Transform transform;
 			transform.Scale = glm::vec3(0.4f, 0.3f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
-			flatTile.GetTransformHandle() = transform;
+			flat_tile.GetTransformHandle() = transform;
 		}
 
-		Actor childActor = enviroActor.CreateAttachedActor("TestChildActor");
+		Actor child_actor = enviro_actor.CreateAttachedActor("TestChildActor");
 		{
-			auto& tile = childActor.Emplace<CTile>().Tile;
+			auto& tile = child_actor.Emplace<CTile>().Tile;
 			tile.Color = glm::vec4(0.8f, 0.8f, 0.1f, 1.0f);
 			tile.TextureTilingFactor = 2;
 
@@ -242,58 +242,58 @@ namespace fe
 			transform.Shift = glm::vec3(0.3f, -0.2f, 0.19f);
 			transform.Scale = glm::vec3(0.2f, 0.4f, 1.0f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, -40.0f);
-			childActor.GetTransformHandle() = transform;
+			child_actor.GetTransformHandle() = transform;
 		}
 
-		Entity childOfChildActor = childActor.CreateChildEntity();
+		Entity child_of_child_actor = child_actor.CreateChildEntity();
 
-		Entity colorSprite = enviroActor.CreateChildEntity();
+		Entity color_sprite = enviro_actor.CreateChildEntity();
 		{
-			auto& sprite = colorSprite.Emplace<CSprite>().Sprite;
+			auto& sprite = color_sprite.Emplace<CSprite>().Sprite;
 			sprite.Color = glm::vec4(0.9f, 0.2f, 0.9f, 0.8f);
 
 			Transform transform;
 			transform.Shift = glm::vec3(-0.1f, -0.1f, 0.1f);
 			transform.Scale = glm::vec3(0.3f, 0.2f, 1.0f);
-			colorSprite.GetTransformHandle() = transform;
+			color_sprite.GetTransformHandle() = transform;
 		}
 
-		Actor playerActor = gameplay_world->CreateActor("Player");
+		Actor player_actor = gameplay_world->CreateActor("Player");
 		{
-			auto& sprite = playerActor.Emplace<CSprite>().Sprite;
+			auto& sprite = player_actor.Emplace<CSprite>().Sprite;
 
 			Transform transform;
 			transform.Shift = glm::vec3(0.0f, 0.0f, 0.2f);
 			transform.Scale = glm::vec3(0.3f, 0.3f, 1.0f);
-			playerActor.GetTransformHandle() = transform;
+			player_actor.GetTransformHandle() = transform;
 
-			auto tags = playerActor.GetTagsHandle();
+			auto tags = player_actor.GetTagsHandle();
 			tags.Add(Tags::Player);
-			playerActor.GetTagsHandle().SetLocal(tags);
+			player_actor.GetTagsHandle().SetLocal(tags);
 
-			playerActor.CreateBehavior<TestBehavior>()->Activate();
-			playerActor.CreateBehavior<TestBehavior2>()->Activate();
+			player_actor.CreateBehavior<TestBehavior>()->Activate();
+			player_actor.CreateBehavior<TestBehavior2>()->Activate();
 		}
 
-		Entity testChild_1 = playerActor.CreateChildEntity("ChildEntity_1");
+		Entity test_child_1 = player_actor.CreateChildEntity("ChildEntity_1");
 		{
-			auto& sprite = testChild_1.Emplace<CSprite>().Sprite;
+			auto& sprite = test_child_1.Emplace<CSprite>().Sprite;
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 			Transform transform;
 			transform.Shift = glm::vec3(0.8f, 0.8f, 0.3f);
 			transform.Rotation = glm::vec3(0.0f, 0.0f, 20.0f);
 			transform.Scale = glm::vec3(0.5f, 0.5f, 1.0f);
-			testChild_1.GetTransformHandle().SetLocal(transform);
+			test_child_1.GetTransformHandle().SetLocal(transform);
 			
-			testChild_1.Emplace<CMovement>();
-			PlayerMovementBehavior* movement = playerActor.CreateBehavior<PlayerMovementBehavior>();
-			movement->m_Player = Entity(testChild_1);
-			movement->m_Movement.Set(Entity(testChild_1));
+			test_child_1.Emplace<CMovement>();
+			PlayerMovementBehavior* movement = player_actor.CreateBehavior<PlayerMovementBehavior>();
+			movement->m_Player = Entity(test_child_1);
+			movement->m_Movement.Set(Entity(test_child_1));
 			movement->Activate();
 		}
 
-		Entity testCild_2 = playerActor.CreateChildEntity("ChildEntity_2");
+		Entity testCild_2 = player_actor.CreateChildEntity("ChildEntity_2");
 		{
 			auto& sprite = testCild_2.Emplace<CSprite>().Sprite;
 			sprite.Color = { 1.0f, 1.0f, 1.0f, 0.5f };

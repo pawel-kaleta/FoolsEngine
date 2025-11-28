@@ -24,7 +24,7 @@ namespace fe
 			return;
 		}
 
-		bool nodeClicked = false;
+		bool node_clicked = false;
 
 		auto scene_observer = m_Scene.Observe();
 		auto& gameplay_world = scene_observer.GetCoreComponent().GameplayWorld;
@@ -38,10 +38,10 @@ namespace fe
 			if (node.HierarchyLvl > 1) // other levels drawn recursively
 				continue;
 
-			nodeClicked |= DrawEntity(scene_observer, *current);
+			node_clicked |= DrawEntity(scene_observer, *current);
 		}
 
-		if (ImGui::IsWindowHovered() && !nodeClicked)
+		if (ImGui::IsWindowHovered() && !node_clicked)
 		{
 			if (ImGui::IsMouseClicked(0))
 				m_EntityIDSelectionRequest = NullEntityID;
@@ -66,8 +66,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& gameplay_world = sceneObserver.GetCoreComponent().GameplayWorld;
-		auto allGroup = gameplay_world->GetHierarchy().Group();
-		auto& node = allGroup.get<CEntityNode>(entityID);
+		auto& node = gameplay_world->m_Registry.get<CEntityNode>(entityID);
 
 		Entity entity(entityID, gameplay_world.get());
 
@@ -82,7 +81,7 @@ namespace fe
 		flags |= selected ? ImGuiTreeNodeFlags_Selected : 0;
 
 		std::string name = entity.GetNameSignature();
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, name.c_str());
+		bool node_opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, name.c_str());
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
@@ -96,16 +95,16 @@ namespace fe
 			ImGui::EndDragDropSource();
 		}
 
-		bool nodeClicked = false;
+		bool node_clicked = false;
 		if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked())
 		{
 			m_EntityIDSelectionRequest = entityID;
-			nodeClicked = true;
+			node_clicked = true;
 		}
 
 		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1))
 		{
-			nodeClicked = true;	
+			node_clicked = true;	
 
 			ImGui::OpenPopup(name.c_str());
 		}
@@ -127,13 +126,13 @@ namespace fe
 			ImGui::EndPopup();
 		}
 
-		if (opened && node.ChildrenCount)
+		if (node_opened && node.ChildrenCount)
 		{
 			auto children = ChildrenList(entityID, gameplay_world->m_Registry);
 
 			auto child = children.begin();
 			while (child != children.end())
-				nodeClicked |= DrawEntity(sceneObserver, *child++);
+				node_clicked |= DrawEntity(sceneObserver, *child++);
 
 			ImGui::TreePop();
 		}
@@ -143,6 +142,6 @@ namespace fe
 		if (create_child_actor)
 			entity.CreateAttachedActor();
 
-		return nodeClicked;
+		return node_clicked;
 	}
 }

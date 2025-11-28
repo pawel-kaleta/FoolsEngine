@@ -22,6 +22,4 @@ namespace fe
 		Ref<EditorLayer> m_EditorLayer;
 		bool m_LayerAttached = false;
 	};
-
-	
 }

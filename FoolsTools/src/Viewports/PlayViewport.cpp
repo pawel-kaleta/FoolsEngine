@@ -8,8 +8,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FramebufferData::SpecificationBuilder specBuilder;
-		specBuilder
+		FramebufferData::SpecificationBuilder spec_builder;
+		spec_builder
 			.SetWidth(1)
 			.SetHight(1)
 			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
@@ -17,7 +17,7 @@ namespace fe
 				{ "Final Frame", TextureData::Components::RGBA, TextureData::Format::RGBA_8		},
 				{ "EntityID"   , TextureData::Components::R   , TextureData::Format::R_UINT_32	}
 			});
-		m_Framebuffer = Framebuffer::Create(specBuilder.Create());
+		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 		m_ViewportSize = { 1,1 };
 	}
 
@@ -29,15 +29,15 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		Entity cameraEntity = scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
-		if (cameraEntity)
+		Entity camera_entity = scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		if (camera_entity)
 		{
-			auto& cameraComponent = cameraEntity.Get<CCamera>();
-			auto& camera = cameraComponent.Camera;
-			auto cameraTransform = cameraEntity.GetTransformHandle().GetGlobal();
-			cameraTransform.Scale = { 1.f,1.f,1.f };
-			cameraTransform = cameraTransform + cameraComponent.Offset;
-			Renderer::RenderScene(scene_observer, camera, cameraTransform, *m_Framebuffer.get());
+			auto& camera_component = camera_entity.Get<CCamera>();
+			auto& camera = camera_component.Camera;
+			auto camera_transform = camera_entity.GetTransformHandle().GetGlobal();
+			camera_transform.Scale = { 1.f,1.f,1.f };
+			camera_transform = camera_transform + camera_component.Offset;
+			Renderer::RenderScene(scene_observer, camera, camera_transform, *m_Framebuffer.get());
 		}
 		else
 		{
@@ -61,28 +61,28 @@ namespace fe
 
 		Application::Get().m_ImGuiLayer->BlockEvents = !(m_VieportFocus || m_VieportHover) && m_IsVisible;
 
-		auto vidgetSize = ImGui::GetContentRegionAvail();
-		glm::vec2 newViewPortSize = { vidgetSize.x, vidgetSize.y }; // most likely simple cast possible, but still different data types from different libraries
+		auto vidget_size = ImGui::GetContentRegionAvail();
+		glm::vec2 new_viewport_size = { vidget_size.x, vidget_size.y }; // most likely simple cast possible, but still different data types from different libraries
 
-		if (m_ViewportSize != newViewPortSize)
+		if (m_ViewportSize != new_viewport_size)
 		{
 			// there is a bug in ImGui that is causing GetContentRegionAvail() to report wrong values in first frame
 			// this is a workaround that prevents creation of framebuffer with 0 hight or with
-			if (newViewPortSize.x == 0 || newViewPortSize.y == 0)
-				newViewPortSize = { 1, 1 };
+			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
+				new_viewport_size = { 1, 1 };
 
 			auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
 			if (camera_entity)
 			{
-				auto& cameraComponent = camera_entity.Get<CCamera>();
-				cameraComponent.Camera.SetViewportSize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
+				auto& camera_component = camera_entity.Get<CCamera>();
+				camera_component.Camera.SetViewportSize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			}
-			m_Framebuffer->Resize((uint32_t)newViewPortSize.x, (uint32_t)newViewPortSize.y);
-			m_ViewportSize = newViewPortSize;
+			m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
+			m_ViewportSize = new_viewport_size;
 		}
 
-		auto fbID = m_Framebuffer->GetColorAttachmentID();
-		ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		auto framebuffer_ID = m_Framebuffer->GetColorAttachmentID();
+		ImGui::Image((void*)(uint64_t)framebuffer_ID, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();
 	}
@@ -94,8 +94,8 @@ namespace fe
 		auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
 		if (camera_entity)
 		{
-			auto& cameraComponent = camera_entity.Get<CCamera>();
-			cameraComponent.Camera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			auto& camera_component = camera_entity.Get<CCamera>();
+			camera_component.Camera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 	}
 }
