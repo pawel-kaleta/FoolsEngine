@@ -25,12 +25,12 @@ namespace fe
 		}
 
 		auto& shader_core = shaderUser.GetCoreComponent();
-		auto& shaderSource = shader_core.ShaderSource;
+		auto& shader_source = shader_core.ShaderSource;
 		
 		in.seekg(0, std::ios::end);
-		shaderSource.resize(in.tellg());
+		shader_source.resize(in.tellg());
 		in.seekg(0, std::ios::beg);
-		in.read(&shaderSource[0], shaderSource.size());
+		in.read(&shader_source[0], shader_source.size());
 		in.close();
 
 		return;
@@ -51,13 +51,13 @@ namespace fe
 
 	bool ShaderLoader::IsKnownExtension(const std::pmr::string& extension)
 	{
-		static const char* knownExtensions[] = {
+		static const char* s_known_extensions[] = {
 			".glsl"
 		};
 
-		for (auto& knownExtension : knownExtensions)
+		for (auto& known_extension : s_known_extensions)
 		{
-			if (extension == knownExtension)
+			if (extension == known_extension)
 			{
 				return true;
 			}
@@ -68,13 +68,13 @@ namespace fe
 
 	bool ShaderLoader::IsKnownAssetType(AssetType assetType)
 	{
-		static const AssetType knownTypes[] = {
+		static const AssetType s_known_types[] = {
 			AssetType::Shader
 		};
 
-		for (const auto& knownType : knownTypes)
+		for (const auto& known_type : s_known_types)
 		{
-			if (knownType == assetType)
+			if (known_type == assetType)
 			{
 				return true;
 			}
@@ -92,118 +92,120 @@ namespace fe
 		if (!shader_core.ShaderSource.empty())
 			PreProcess(shaderUser);
 
-		std::unordered_map<GLenum, const std::string*> shaderSources;
-		shaderSources[GL_VERTEX_SHADER] = &(shader_core.VertexSource);
-		shaderSources[GL_FRAGMENT_SHADER] = &(shader_core.FragmentSource);
+		std::unordered_map<GLenum, const std::string*> shader_sources;
+		shader_sources[GL_VERTEX_SHADER] = &(shader_core.VertexSource);
+		shader_sources[GL_FRAGMENT_SHADER] = &(shader_core.FragmentSource);
 
 		std::array<GLuint, 2> shaders;
-		int shadersCount = 0;
+		int shaders_count = 0;
 
-		for (auto& keyValue : shaderSources)
+		for (auto& key_value : shader_sources)
 		{
 			FE_PROFILER_SCOPE("Shader compilation");
-			const GLenum type = keyValue.first;
-			const std::string* source = keyValue.second;
+			const GLenum type = key_value.first;
+			const std::string* source = key_value.second;
 
 			GLuint shader = glCreateShader(type);
-			shaders[shadersCount++] = shader;
+			shaders[shaders_count++] = shader;
 
-			const GLchar* sourceCStr = (const GLchar*)source->c_str();
-			glShaderSource(shader, 1, &sourceCStr, 0);
+			const GLchar* source_c_str = (const GLchar*)source->c_str();
+			glShaderSource(shader, 1, &source_c_str, 0);
 
-			GLint isCompiled = 0;
+			GLint compilation_success;
 			{
 				FE_PROFILER_SCOPE("OpenGL shader compilation");
 				glCompileShader(shader);
-				glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+				glGetShaderiv(shader, GL_COMPILE_STATUS, &compilation_success);
 			}
 
-			if (isCompiled == GL_FALSE)
+			if (compilation_success == GL_FALSE)
 			{
-				GLint maxLength = 0;
-				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+				GLint log_length = 0;
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &log_length);
 
-				std::vector<GLchar> infoLog(maxLength);
-				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+				std::vector<GLchar> info_log(log_length);
+				glGetShaderInfoLog(shader, log_length, &log_length, info_log.data());
 
-				for (int i = 0; i < shadersCount; i++)
+				for (int i = 0; i < shaders_count; i++)
 					glDeleteShader(shaders[i]);
 
-				FE_LOG_CORE_ERROR("{0}", infoLog.data());
+				FE_LOG_CORE_ERROR("{0}", info_log.data());
 				FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
 
 				return;
 			}
 		}
 
-		GLuint programID = glCreateProgram();
+		GLuint program_ID = glCreateProgram();
 
-		for (int i = 0; i < shadersCount; i++)
-			glAttachShader(programID, shaders[i]);
+		for (int i = 0; i < shaders_count; i++)
+			glAttachShader(program_ID, shaders[i]);
 
-		GLint isLinked = 0;
+		GLint linking_success = 0;
 		{
 			FE_PROFILER_SCOPE("OpenGL Shader linking");
-			glLinkProgram(programID);
-			glGetProgramiv(programID, GL_LINK_STATUS, (int*)&isLinked);
+			glLinkProgram(program_ID);
+			glGetProgramiv(program_ID, GL_LINK_STATUS, (int*)&linking_success);
 		}
 
-		if (isLinked == GL_FALSE)
+		if (linking_success == GL_FALSE)
 		{
-			GLint maxLength = 0;
-			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
+			GLint log_length = 0;
+			glGetProgramiv(program_ID, GL_INFO_LOG_LENGTH, &log_length);
 
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
+			std::vector<GLchar> info_log(log_length);
+			glGetProgramInfoLog(program_ID, log_length, &log_length, info_log.data());
 
-			glDeleteProgram(programID);
+			glDeleteProgram(program_ID);
 
-			for (int i = 0; i < shadersCount; i++)
+			for (int i = 0; i < shaders_count; i++)
 				glDeleteShader(shaders[i]);
 
-			FE_LOG_CORE_ERROR("{0}", infoLog.data());
+			FE_LOG_CORE_ERROR("{0}", info_log.data());
 			FE_CORE_ASSERT(false, "OpenGL shader program linking failed!");
 			return;
 		}
 
-		for (int i = 0; i < shadersCount; i++)
+		for (int i = 0; i < shaders_count; i++)
 		{
-			glDetachShader(programID, shaders[i]);
+			glDetachShader(program_ID, shaders[i]);
 			glDeleteShader(shaders[i]);
 		}
 
-		shaderUser.CreateGDIShader<OpenGLShader>(programID);
+		shaderUser.CreateGDIShader<OpenGLShader>(program_ID);
 	}
 
 	void ShaderLoader::PreProcess(const AssetUser<Shader>& shaderUser)
 	{
-		auto& shader_core = shaderUser.GetCoreComponent();
-		auto& shaderSource = shader_core.ShaderSource;
+		//TO DO: stop this nonsens with multiple shaders in one file
 
-		const char* typeToken = "#type";
-		size_t typeTokenLength = strlen(typeToken);
-		size_t pos = shaderSource.find(typeToken, 0);
+		auto& shader_core = shaderUser.GetCoreComponent();
+		auto& shader_source = shader_core.ShaderSource;
+
+		const char* type_token = "#type";
+		size_t type_token_length = strlen(type_token);
+		size_t pos = shader_source.find(type_token, 0);
 		while (pos != std::string::npos)
 		{
-			size_t eol = shaderSource.find_first_of("\r\n", pos);
+			size_t eol = shader_source.find_first_of("\r\n", pos);
 			FE_CORE_ASSERT(eol != std::string::npos, "Syntax error");
-			size_t begin = pos + typeTokenLength + 1;
-			std::string type = shaderSource.substr(begin, eol - begin);
+			size_t begin = pos + type_token_length + 1;
+			std::string type = shader_source.substr(begin, eol - begin);
 
-			std::string* dataLocation = nullptr;
+			std::string* data_location = nullptr;
 
 			if (type == "vertex")
-				dataLocation = &(shader_core.VertexSource);
+				data_location = &(shader_core.VertexSource);
 			if (type == "fragment" || type == "pixel")
-				dataLocation = &(shader_core.FragmentSource);
+				data_location = &(shader_core.FragmentSource);
 
-			size_t nextLinePos = shaderSource.find_first_not_of("\r\n", eol);
-			FE_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
-			pos = shaderSource.find(typeToken, nextLinePos);
+			size_t next_line_pos = shader_source.find_first_not_of("\r\n", eol);
+			FE_CORE_ASSERT(next_line_pos != std::string::npos, "Syntax error");
+			pos = shader_source.find(type_token, next_line_pos);
 
-			*dataLocation = (pos == std::string::npos) ? shaderSource.substr(nextLinePos) : shaderSource.substr(nextLinePos, pos - nextLinePos);
+			*data_location = (pos == std::string::npos) ? shader_source.substr(next_line_pos) : shader_source.substr(next_line_pos, pos - next_line_pos);
 		}
 
-		shaderSource.clear();
+		shader_source.clear();
 	}
 }

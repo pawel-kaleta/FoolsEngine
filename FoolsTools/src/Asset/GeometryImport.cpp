@@ -11,12 +11,12 @@ namespace fe::GeometryImport
 {
 	static bool IsGuaranteedStandardTexturePacking(const std::filesystem::path& path)
 	{
-		const static std::filesystem::path extensionsGuaranteeing[] = {
+		const static std::filesystem::path s_extensions_guaranteeing[] = {
 			".glb",
 			".gltf"
 		};
 		const std::filesystem::path extension = path.extension();
-		return extension == extensionsGuaranteeing[0] || extension == extensionsGuaranteeing[1];
+		return extension == s_extensions_guaranteeing[0] || extension == s_extensions_guaranteeing[1];
 	}
 
 	void InitImport(ImportData* const importData)
@@ -200,11 +200,11 @@ namespace fe::GeometryImport
 	static void CreateTextureForMaterial(const char* textureSlotName, ACMaterialCore& core, const aiString& filePath, const AssetUser<Material>& materialUser, const ImportData* const importData, TextureData::Usage usage)
 	{
 		AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
-		AssetHandle<Texture2D> textureHandle(textureID);
+		AssetHandle<Texture2D> texture_handle(textureID);
 
 		auto full_texture_path = importData->FilepathToImport.parent_path() / std::filesystem::path(filePath.C_Str());
 
-		auto& spec = textureHandle.Use().GetCoreComponent().Specification;
+		auto& spec = texture_handle.Use().GetCoreComponent().Specification;
 		spec = TextureLoader::InspectTexture(full_texture_path);
 		spec.Usage = usage;
 		AssetManager::SetSourcePath(textureID, filePath.C_Str());
@@ -491,8 +491,8 @@ namespace fe::GeometryImport
 				ImGui::PushID((int)i);
 
 				auto& mesh = scene->mMeshes[i];
-				auto matIndex = mesh->mMaterialIndex;
-				meshCountPerMaterial[matIndex]++;
+				auto material_index = mesh->mMaterialIndex;
+				meshCountPerMaterial[material_index]++;
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -500,8 +500,8 @@ namespace fe::GeometryImport
 				ImGui::TableNextColumn();
 				ImGui::TextWrapped(mesh->mName.C_Str());
 				ImGui::TableNextColumn();
-				const auto name = scene->mMaterials[matIndex]->GetName();
-				std::pmr::string nameLabel(std::to_string(matIndex), &sp);
+				const auto name = scene->mMaterials[material_index]->GetName();
+				std::pmr::string nameLabel(std::to_string(material_index), &sp);
 				nameLabel += ". ";
 				nameLabel += name.C_Str();
 				ImGui::Text(nameLabel.c_str());
@@ -730,7 +730,7 @@ namespace fe::GeometryImport
 
 		ImGui::EndDisabled();
 
-		static const char* texture_types_names[] =
+		static const char* s_texture_types_names[] =
 		{
 			"BaseColor",
 			"Normal",
@@ -753,7 +753,7 @@ namespace fe::GeometryImport
 
 			const char* combo_preview_value = *recognized_texture_ptr != -1 ? detected_textures[*recognized_texture_ptr].C_Str() : "<none>";
 
-			if (ImGui::BeginCombo(texture_types_names[i], combo_preview_value))
+			if (ImGui::BeginCombo(s_texture_types_names[i], combo_preview_value))
 			{
 				bool is_none_selected = *recognized_texture_ptr == -1;
 				if (ImGui::Selectable("<none>", is_none_selected))
@@ -797,21 +797,21 @@ namespace fe::GeometryImport
 
 		{
 			Scratchpad sp;
-			std::pmr::vector<uint32_t> meshCountPerMaterial(scene->mNumMaterials, 0, &sp);
+			std::pmr::vector<uint32_t> meshes_counts_per_material(scene->mNumMaterials, 0, &sp);
 
 			if (ImGui::CollapsingHeader("Meshes", 0))
-				RenderMeshList(meshCountPerMaterial, scene);
+				RenderMeshList(meshes_counts_per_material, scene);
 			else
 			{
 				for (size_t i = 0; i < scene->mNumMeshes; i++)
 				{
-					auto matIndex = scene->mMeshes[i]->mMaterialIndex;
-					meshCountPerMaterial[matIndex]++;
+					auto material_index = scene->mMeshes[i]->mMaterialIndex;
+					meshes_counts_per_material[material_index]++;
 				}
 			}
 
 			if (ImGui::CollapsingHeader("Materials"))
-				RenderMaterialList(meshCountPerMaterial, scene);
+				RenderMaterialList(meshes_counts_per_material, scene);
 		}
 
 		ImGui::SetNextItemOpen(true);
@@ -831,17 +831,17 @@ namespace fe::GeometryImport
 			if (ImGui::Button("Import As..."))
 			{
 				Scratchpad sp;
-				std::filesystem::path defaultFilepath;
+				std::filesystem::path default_filepath;
 				std::pmr::string filter(&sp);
 
 				switch (variant)
 				{
-				case ImportVariant::Model:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->FilepathToImport, filter);	break;
-				case ImportVariant::RenderMesh:	defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->FilepathToImport, filter);	break;
-				case ImportVariant::Mesh:		defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::Model:		default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::RenderMesh:	default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::Mesh:		default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->FilepathToImport, filter);	break;
 				}
 
-				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
 
 				if (!newAssetFilepath.empty())
 				{

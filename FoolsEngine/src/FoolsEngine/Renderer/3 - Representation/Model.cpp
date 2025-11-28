@@ -16,12 +16,12 @@ namespace fe
 	{
 		Scratchpad sp;
 
-		AssetObserver<Model> assetObserver(assetID);
-		auto& model_core = assetObserver.GetCoreComponent();
+		AssetObserver<Model> asset_observer(assetID);
+		auto& model_core = asset_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << asset_observer.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 		emitter << YAML::Key << "RenderMeshes" << YAML::Value << YAML::BeginSeq;
 
 		for (const auto& renderMeshID : model_core.RenderMeshIDs)
@@ -123,9 +123,9 @@ namespace fe
 
 	void ModelUser::Release() const
 	{
-		auto& ACData = Get<ACModelCore>();
+		auto& core = Get<ACModelCore>();
 
-		for (auto rendermeshID : ACData.RenderMeshIDs)
+		for (auto rendermeshID : core.RenderMeshIDs)
 		{
 			AssetUser<RenderMesh> rendermesh_user(rendermeshID);
 

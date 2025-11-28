@@ -27,13 +27,13 @@ namespace fe::AssetSerializer
 		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 		for (auto id : paths_view)
 		{
-			auto& acpath = paths_view.get<ACFilepath>(id);
+			auto& ac_path = paths_view.get<ACFilepath>(id).Filepath;
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
-			emitter << YAML::Key << "Filepath" << YAML::Value << acpath.Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+			emitter << YAML::Key << "Filepath" << YAML::Value << ac_path.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
@@ -71,8 +71,7 @@ namespace fe::AssetSerializer
 
 				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
 				AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
-				auto& debug = reg.emplace<ACAssetType>(assetID);
-				debug.Type.FromString(asset["Type"].as<std::string>());
+				reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
 				reg.emplace<ACRefsCounters>(assetID);
 			}
 		}
@@ -95,7 +94,7 @@ namespace fe::AssetSerializer
 		for (const auto asset_id : paths_view)
 		{
 
-			auto type = reg.get<ACAssetType>(asset_id).Type;
+			auto& type = reg.get<ACAssetType>(asset_id).Type;
 			if (tnAssetType::GetTypeStatic() == type)
 			{
 				FE_PROFILER_SCOPE("Asset");

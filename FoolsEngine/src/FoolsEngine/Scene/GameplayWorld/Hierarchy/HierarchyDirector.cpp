@@ -35,48 +35,48 @@ namespace fe
 		//entity.m_Handle.emplace<CHeadEntity>().HeadEntity = group.get<CHeadEntity>(parentID).HeadEntity;
 
 		auto& node = entity.m_Handle.emplace<CEntityNode>();
-		auto& parentNode = group.get<CEntityNode>(parentID);
+		auto& parent_node = group.get<CEntityNode>(parentID);
 
 		node.Parent = parentID;
-		node.HierarchyLvl = parentNode.HierarchyLvl + 1;
-		parentNode.ChildrenCount++;
+		node.HierarchyLvl = parent_node.HierarchyLvl + 1;
+		parent_node.ChildrenCount++;
 
-		if (parentNode.FirstChild == NullEntityID)
+		if (parent_node.FirstChild == NullEntityID)
 		{
-			parentNode.FirstChild = entity.ID();
+			parent_node.FirstChild = entity.ID();
 			return;
 		}
 
-		EntityID currentChild = parentNode.FirstChild;
-		CEntityNode* currentChildNode = & group.get<CEntityNode>(currentChild);
+		EntityID current_child = parent_node.FirstChild;
+		CEntityNode* current_child_node = & group.get<CEntityNode>(current_child);
 
-		if (currentChild > entity.ID())
+		if (current_child > entity.ID())
 		{
-			parentNode.FirstChild = entity.ID();
-			node.NextSibling = currentChild;
-			currentChildNode->PreviousSibling = entity.ID();
+			parent_node.FirstChild = entity.ID();
+			node.NextSibling = current_child;
+			current_child_node->PreviousSibling = entity.ID();
 			return;
 		}
 
-		EntityID nextChild = currentChildNode->NextSibling;
+		EntityID nextChild = current_child_node->NextSibling;
 		while (nextChild != NullEntityID && nextChild < entity.ID())
 		{
-			currentChild = nextChild;
-			currentChildNode = &m_Registry->get<CEntityNode>(currentChild);
-			nextChild = currentChildNode->NextSibling;
+			current_child = nextChild;
+			current_child_node = &m_Registry->get<CEntityNode>(current_child);
+			nextChild = current_child_node->NextSibling;
 		} 
 
 		if (nextChild != NullEntityID)
 		{
-			currentChildNode->NextSibling = entity.ID();
-			node.PreviousSibling = currentChild;
+			current_child_node->NextSibling = entity.ID();
+			node.PreviousSibling = current_child;
 			node.NextSibling = nextChild;
 			m_Registry->get<CEntityNode>(nextChild).PreviousSibling = entity.ID();
 		}
 		else
 		{
-			currentChildNode->NextSibling = entity.ID();
-			node.PreviousSibling = currentChild;
+			current_child_node->NextSibling = entity.ID();
+			node.PreviousSibling = current_child;
 			node.NextSibling = nextChild;
 		}
 	}
@@ -97,8 +97,8 @@ namespace fe
 		{
 			auto [local, global, node] = group.get<CTransformLocal, CTransformGlobal, CEntityNode>(entityID);
 
-			auto& parentGlobal = group.get<CTransformGlobal>(node.Parent);
-			global.Transform = parentGlobal.Transform + local.Transform;
+			auto& parent_global = group.get<CTransformGlobal>(node.Parent);
+			global.Transform = parent_global.Transform + local.Transform;
 		}
 
 		m_Registry->storage<CDirtyFlag<CTransformGlobal>>().clear();
@@ -118,37 +118,37 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& flagStorage = m_Registry->storage<CDestroyFlag>();
+		auto& flag_storage = m_Registry->storage<CDestroyFlag>();
 		
-		if (flagStorage.size() == 0)
+		if (flag_storage.size() == 0)
 			return;
 		
-		flagStorage.sort(m_Compare);
+		flag_storage.sort(m_Compare);
 
-		auto& nodeStorage = m_Registry->storage<CEntityNode>();
+		auto& node_storage = m_Registry->storage<CEntityNode>();
 
-		for (auto entityID : flagStorage)
+		for (auto entityID : flag_storage)
 		{
-			auto& node = nodeStorage.get(entityID);
-			if (!flagStorage.contains(node.Parent) && m_Registry->valid(node.Parent))
+			auto& node = node_storage.get(entityID);
+			if (!flag_storage.contains(node.Parent) && m_Registry->valid(node.Parent))
 			{
 				if (node.PreviousSibling != NullEntityID)
 				{
-					auto& prev = nodeStorage.get(node.PreviousSibling);
+					auto& prev = node_storage.get(node.PreviousSibling);
 					prev.NextSibling = node.NextSibling;
 				}
 				if (node.NextSibling != NullEntityID)
 				{
-					auto& next = nodeStorage.get(node.NextSibling);
+					auto& next = node_storage.get(node.NextSibling);
 					next.PreviousSibling = node.PreviousSibling;
 				}
 
-				auto& parentNode = nodeStorage.get(node.Parent);
+				auto& parent_node = node_storage.get(node.Parent);
 
-				if (parentNode.FirstChild == entityID)
-					parentNode.FirstChild = node.NextSibling;
+				if (parent_node.FirstChild == entityID)
+					parent_node.FirstChild = node.NextSibling;
 
-				--parentNode.ChildrenCount;
+				--parent_node.ChildrenCount;
 			}
 			m_Registry->destroy(entityID);
 		}

@@ -23,33 +23,40 @@ namespace fe
 	void GeometryRenderer::RenderCRenderMeshView(const AssetObserver<Scene>& scene)
 	{
 		auto GDI = Renderer::GetActiveGDItype();
-		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
+		void* VP_matrix_ptr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
+		
+		void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
+		void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);
+		void* main_light_intensity = &Renderer::SceneData.MainLight->Intensity;
+		void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
+		void* ambient_light_intensity = &Renderer::SceneData.AmbientLightIntensity;
+		void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
 
 		auto view_of_CRenderMeshView_components = registry.view<CRenderMeshView, CTransformGlobal>();
 		for (auto ID : view_of_CRenderMeshView_components) // intellisense is freaking out here, don't worry, be happy
 		{
-			auto [comp_CRenderMeshView, component_CTransform] = view_of_CRenderMeshView_components.get(ID);
-			if (!comp_CRenderMeshView.Material.IsValid())
+			auto [component_CRenderMeshView, component_CTransform] = view_of_CRenderMeshView_components.get(ID);
+			if (!component_CRenderMeshView.Material.IsValid())
 				continue;
-			if (!comp_CRenderMeshView.Mesh.IsValid())
+			if (!component_CRenderMeshView.Mesh.IsValid())
 				continue;
-			if (comp_CRenderMeshView.Material.GetLoadingPriority() == AssetLoadingPriority::None)
+			if (component_CRenderMeshView.Material.GetLoadingPriority() == AssetLoadingPriority::None)
 				continue;
-			if (comp_CRenderMeshView.Mesh.GetLoadingPriority() == AssetLoadingPriority::None)
+			if (component_CRenderMeshView.Mesh.GetLoadingPriority() == AssetLoadingPriority::None)
 				continue;
 
-			auto material_observer = comp_CRenderMeshView.Material.Observe();
-			auto mesh_observer = comp_CRenderMeshView.Mesh.Observe();
+			auto material_observer = component_CRenderMeshView.Material.Observe();
+			auto mesh_observer = component_CRenderMeshView.Mesh.Observe();
 
 			if (!material_observer.AllOf<ACLoaded>())
 				continue;
 			if (!mesh_observer.AllOf<ACLoaded>())
 				continue;
 
-			glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CRenderMeshView.Offset.GetMatrix();
-			void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+			glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * component_CRenderMeshView.Offset.GetMatrix();
+			void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
 			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
 			auto shaderID = shading_model_observer.GetCoreComponent().ShaderID;
@@ -59,20 +66,15 @@ namespace fe
 
 				shader_observer.Bind(GDI);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VP_matrix_ptr);
+				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
 
-				void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
 				shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
-				void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);
 				shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
-				void* main_light_intensity = &Renderer::SceneData.MainLight->Intensity;
 				shader_observer.UploadUniform(GDI, Uniform("u_MainLightIntensity", ShaderData::Type::Float), main_light_intensity);
 
-				void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
 				shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
 
-				void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
 				shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
 
 				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
@@ -134,13 +136,14 @@ namespace fe
 				if (!model_observer.AllOf<ACLoaded>())
 					continue;
 
-				glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
-				void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+				glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
+				void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
 				auto& model_core = model_observer.GetCoreComponent();
 				for (auto rendermeshID : model_core.RenderMeshIDs)
 				{
-					auto& rendermesh_core = asset_registry.get<ACRenderMeshCore>(rendermeshID);
+					AssetObserver<RenderMesh> rendermesh_observer(rendermeshID);
+					auto& rendermesh_core = rendermesh_observer.GetCoreComponent();
 					AssetObserver<Material> material_observer(rendermesh_core.MaterialID);
 
 					if (material_observer.GetCoreComponent().ShadingModelID == cutout_sm_observer.GetID())
@@ -148,7 +151,7 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						cutout_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+						cutout_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
 						cutout_shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 
 						mesh_observer.Draw(material_observer);
@@ -187,13 +190,14 @@ namespace fe
 				if (!model_observer.AllOf<ACLoaded>())
 					continue;
 
-				glm::mat4 modelTransform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
-				void* modelTransformPtr = (void*)glm::value_ptr(modelTransform);
+				glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
+				void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
 				auto& model_core = model_observer.GetCoreComponent();
 				for (auto rendermeshID : model_core.RenderMeshIDs)
 				{
-					auto& rendermesh_core = asset_registry.get<ACRenderMeshCore>(rendermeshID);
+					AssetObserver<RenderMesh> rendermesh_observer(rendermeshID);
+					auto& rendermesh_core = rendermesh_observer.GetCoreComponent();
 					AssetObserver<Material> material_observer(rendermesh_core.MaterialID);
 
 					if (material_observer.GetCoreComponent().ShadingModelID == opaque_sm_observer.GetID())
@@ -201,7 +205,7 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						opaque_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), modelTransformPtr);
+						opaque_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
 						opaque_shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
 
 						mesh_observer.Draw(material_observer);

@@ -26,14 +26,14 @@ namespace fe
 
 		FE_LOG_CORE_DEBUG("System Update Register");
 
-		void (System:: * onUpdateFuncPtr)() = nullptr;
+		void (System:: * on_update_func_ptr)() = nullptr;
 
-#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) onUpdateFuncPtr = &System::OnUpdate_##x;
+#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) on_update_func_ptr = &System::OnUpdate_##x;
 		FE_FOR_EACH(_GET_ON_UPDATE_FUNK_PTR, FE_SIMULATION_STAGES);
 
-		FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
+		FE_CORE_ASSERT(on_update_func_ptr, "Did not recognise Simulation Stage!");
 
-		m_SystemsDirector->EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
+		m_SystemsDirector->EnrollForUpdate<stage>(this, on_update_func_ptr, priority);
 	}
 
 #define _SYSTEM_REGISTER_FOR_UPDATE_DEF(x) template void System::RegisterForUpdate<SimulationStage::x>(uint32_t);

@@ -14,13 +14,13 @@ namespace fe
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
     {
+        //TO DO: clean up this path operations
         auto assets_path = Project::Get()->m_AssetsPath;
         auto x = filepath.lexically_relative(std::filesystem::current_path());
         auto w = x.lexically_relative(assets_path);
 
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
-        AssetHandle<Texture2D> textureHandle(assetID);
-        textureHandle.Use().GetCoreComponent().Specification = importData->TextureData.Specification;
+        AssetUser<Texture2D>(assetID).GetCoreComponent().Specification = importData->TextureData.Specification;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         YAML::Emitter emitter;
@@ -44,9 +44,9 @@ namespace fe
         ImGui::SeparatorText("Settings");
 
 #define _COMBO_ITEM_DEF(x) #x,
-        static const char* usage_names[] = { FE_FOR_EACH(_COMBO_ITEM_DEF, None, FE_TEXTURE_DATA_USAGE) };
+        static const char* s_usage_names[] = { FE_FOR_EACH(_COMBO_ITEM_DEF, None, FE_TEXTURE_DATA_USAGE) };
         static int usage_current = 0;
-        ImGui::Combo("Usage", &usage_current, usage_names, IM_ARRAYSIZE(usage_names));
+        ImGui::Combo("Usage", &usage_current, s_usage_names, IM_ARRAYSIZE(s_usage_names));
 
         ImGui::Separator();
 
@@ -55,13 +55,13 @@ namespace fe
             spec.Usage.FromInt(usage_current);
 
             std::pmr::string filter(&sp);
-            std::filesystem::path defaultFilepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Texture2D>(importData->FilepathToImport, filter);
+            std::filesystem::path default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Texture2D>(importData->FilepathToImport, filter);
 
-            std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(defaultFilepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+            std::filesystem::path new_asset_filepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
 
-            if (!newAssetFilepath.empty())
+            if (!new_asset_filepath.empty())
             {
-                Import(newAssetFilepath, importData);
+                Import(new_asset_filepath, importData);
 
                 importData->Finished = true;
             }

@@ -29,21 +29,21 @@ namespace fe
         auto name = component->GetName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
+        bool is_widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
 
-        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
+        float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
-        ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
+        ImGui::SameLine(ImGui::GetContentRegionAvail().x - line_height + 12.0f); // 12 may be windowPadding + framePadding ?
 
-        static bool popup_open;
+        static bool s_popup_open;
         // popup_open is common for all widgets, so wee need to check if it is applicable to this particular widget
         // simply component* is not good, because it is not stable across frames
         static DataComponent* (BaseEntity::* getter_of_component_of_popup)() const = nullptr;
         bool widget_of_popup = getter_of_component_of_popup == getter;
 
-        ImGuiDir button_arrow_dir = widget_of_popup && popup_open ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
+        ImGuiDir button_arrow_dir = widget_of_popup && s_popup_open ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
         bool open_new_popup = false;
-        if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
+        if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(line_height, line_height)))
         {
             open_new_popup = true;
             getter_of_component_of_popup = getter;
@@ -53,11 +53,11 @@ namespace fe
         {
             if (widget_of_popup)
             {
-                popup_open = false;
+                s_popup_open = false;
             }
         }
 
-        if (widget_open)
+        if (is_widget_open)
         {
             if (component->IsSpatial())
             {
@@ -79,27 +79,27 @@ namespace fe
 
         if (widget_of_popup)
         {
-            if (popup_open || open_new_popup)
+            if (s_popup_open || open_new_popup)
                 ImGui::OpenPopup("ComponentSettings");
         }
 
-        bool removeComponent = false;
+        bool should_remove_component = false;
         if (ImGui::BeginPopup("ComponentSettings"))
         {
-            popup_open = true;
+            s_popup_open = true;
             if (ImGui::MenuItem("Remove component"))
-                removeComponent = true;
+                should_remove_component = true;
 
             ImGui::EndPopup();
         }
 
-        if (removeComponent)
+        if (should_remove_component)
         {
             if (entity.GetWorld()->m_IsGameplayWorld)
             {
-                auto destroy = item.DestructionScheduler;
-                Entity gamplayEntity(entity);
-                (gamplayEntity.*destroy)();
+                auto destroy_funk_ptr = item.DestructionScheduler;
+                Entity gameplay_entity(entity);
+                (gameplay_entity.*destroy_funk_ptr)();
             }
             else
             {
@@ -121,10 +121,10 @@ namespace fe
 
         DrawCNameWidget(entity);
         
-        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
-        ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
+        float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
+        ImGui::SameLine(ImGui::GetContentRegionAvail().x - (line_height * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
 
-        if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))
+        if (ImGui::Button("Add +", ImVec2(line_height * 2.5f, line_height)))
             ImGui::OpenPopup("AddComponent");
 
         AddComponentPopupMenu(entity);
@@ -158,8 +158,8 @@ namespace fe
             return;
         }
 
-        auto scene_Observer = m_Scene.Observe();
-        Entity entity(m_OpenedEntityID, scene_Observer.GetCoreComponent().GameplayWorld.get());
+        auto scene_observer = m_Scene.Observe();
+        Entity entity(m_OpenedEntityID, scene_observer.GetCoreComponent().GameplayWorld.get());
 
         DrawComponentsTab(entity);
         
@@ -189,17 +189,17 @@ namespace fe
 
         for (const auto& item : ComponentTypesRegistry::Get().m_DataItems)
         {
-            auto& getter = item.Getter;
-            DataComponent* component = (entity.*getter)();
+            auto& getter_funk_ptr = item.Getter;
+            DataComponent* component = (entity.*getter_funk_ptr)();
 
             if (!component)
             {
-                auto& getName = item.GetName;
-                std::string name = (*getName)();
+                auto& get_name_funk_ptr = item.GetName;
+                std::string name = (*get_name_funk_ptr)();
                 if (ImGui::MenuItem(name.c_str()))
                 {
-                    auto& emplacer = item.Emplacer;
-                    (entity.*emplacer)();
+                    auto& emplace_funk_ptr = item.Emplacer;
+                    (entity.*emplace_funk_ptr)();
                 }
             }
         }
@@ -212,16 +212,15 @@ namespace fe
         FE_PROFILER_FUNC();
 
         auto& name = entity.Get<CEntityName>();
-        static char buffer[256];
-        memset(buffer, 0, sizeof(buffer));
-        strncpy_s(buffer, name.EntityName.c_str(), sizeof(buffer));
-        if (ImGui::InputText("Name", buffer, sizeof(buffer)))
+        static char s_buffer[256];
+        memset(s_buffer, 0, sizeof(s_buffer));
+        strncpy_s(s_buffer, name.EntityName.c_str(), sizeof(s_buffer));
+        if (ImGui::InputText("Name", s_buffer, sizeof(s_buffer)))
         {
-            name.EntityName = std::string(buffer);
+            name.EntityName = std::string(s_buffer);
         }
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
         {
-
             // Set payload to carry the index of our item (could be anything)
             ImGui::SetDragDropPayload("Entity", &entity, sizeof(entity));
 
@@ -258,7 +257,7 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        constexpr const char* tagLabels[64] = {
+        static const char* s_tag_labels[64] = {
             "Error",
             "Player",
             "Very very very very long Tag name test",
@@ -381,7 +380,7 @@ namespace fe
                 ImGui::EndDisabled();
 
                 ImGui::TableNextColumn();
-                ImGui::Text(tagLabels[i]);
+                ImGui::Text(s_tag_labels[i]);
 
                 ImGui::PopID();
             }

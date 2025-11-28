@@ -16,10 +16,10 @@ namespace fe
 
 		for (auto& item : s_Instance->m_Items)
 		{
-			auto& nameFunkPtr = item.GetName;
+			auto& name_funk_ptr = item.GetName;
 
-			auto string1 = (*nameFunkPtr)();
-			if (string1.compare(name) == 0)
+			auto current_behavior_name = (*name_funk_ptr)();
+			if (current_behavior_name == name)
 			{
 				return &item;
 			}

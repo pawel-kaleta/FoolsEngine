@@ -185,30 +185,30 @@ namespace fe
 			}
 		}
 
-		std::pmr::vector<AssetID> entities_to_load(&sp);
+		std::pmr::vector<AssetID> assets_to_load(&sp);
 
-		for (auto id : groups.Critical	) entities_to_load.emplace_back(id);
-		for (auto id : groups.VeryHigh	) entities_to_load.emplace_back(id);
-		for (auto id : groups.High		) entities_to_load.emplace_back(id);
-		for (auto id : groups.Standard	) entities_to_load.emplace_back(id);
-		for (auto id : groups.Low		) entities_to_load.emplace_back(id);
-		for (auto id : groups.VeryLow	) entities_to_load.emplace_back(id);
-		for (auto id : groups.Minimal	) entities_to_load.emplace_back(id);
+		for (auto id : groups.Critical	) assets_to_load.emplace_back(id);
+		for (auto id : groups.VeryHigh	) assets_to_load.emplace_back(id);
+		for (auto id : groups.High		) assets_to_load.emplace_back(id);
+		for (auto id : groups.Standard	) assets_to_load.emplace_back(id);
+		for (auto id : groups.Low		) assets_to_load.emplace_back(id);
+		for (auto id : groups.VeryLow	) assets_to_load.emplace_back(id);
+		for (auto id : groups.Minimal	) assets_to_load.emplace_back(id);
 
-		for (auto id : entities_to_load)
+		for (auto id : assets_to_load)
 		{
 			auto& type = reg.get<ACAssetType>(id).Type;
 			switch (type)
 			{
 			case AssetType::Texture2D:
 			{
-				auto textureUser = AssetUser<Texture2D>(id);
-				if (!textureUser.GetRendererID(GDI))
+				auto texture_user = AssetUser<Texture2D>(id);
+				if (!texture_user.GetRendererID(GDI))
 				{
-					TextureLoader::LoadTexture(textureUser);
-					textureUser.CreateGDITexture2D(GDI);
-					textureUser.UnloadFromCPU();
-					textureUser.FlagLoaded();
+					TextureLoader::LoadTexture(texture_user);
+					texture_user.CreateGDITexture2D(GDI);
+					texture_user.UnloadFromCPU();
+					texture_user.FlagLoaded();
 				}
 				else
 				{
@@ -218,13 +218,13 @@ namespace fe
 			}
 			case AssetType::Mesh:
 			{
-				auto meshUser = AssetUser<Mesh>(id);
-				if (!meshUser.GetBuffers())
+				auto mesh_user = AssetUser<Mesh>(id);
+				if (!mesh_user.GetBuffers())
 				{
-					GeometryLoader::LoadMesh(meshUser);
-					meshUser.SendDataToGPU(GDI);
-					meshUser.UnloadFromCPU();
-					meshUser.FlagLoaded();
+					GeometryLoader::LoadMesh(mesh_user);
+					mesh_user.SendDataToGPU(GDI);
+					mesh_user.UnloadFromCPU();
+					mesh_user.FlagLoaded();
 				}
 				else
 				{

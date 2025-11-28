@@ -54,8 +54,8 @@ namespace fe
 		else
 		{
 			Inherit(m_Node.Parent);
-			auto& parentGlobal = m_Registry->get<CTransformGlobal>(m_Node.Parent);
-			m_Local.Transform = m_Global.Transform - parentGlobal.Transform;
+			auto& parent_global = m_Registry->get<CTransformGlobal>(m_Node.Parent);
+			m_Local.Transform = m_Global.Transform - parent_global.Transform;
 		}
 	}
 
@@ -63,20 +63,20 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		std::queue<EntityID> toMark;
-		toMark.push(m_Node.FirstChild);
+		std::queue<EntityID> entities_to_mark;
+		entities_to_mark.push(m_Node.FirstChild);
 
 		EntityID current;
-		while (!toMark.empty())
+		while (!entities_to_mark.empty())
 		{
-			current = toMark.front();
-			toMark.pop();
+			current = entities_to_mark.front();
+			entities_to_mark.pop();
 			while (current != NullEntityID)
 			{
 				auto& node = m_Registry->get<CEntityNode>(current);
 				if (!IsDirty(current))
 				{
-					toMark.push(node.FirstChild);
+					entities_to_mark.push(node.FirstChild);
 					SetDirty(current);
 				}
 				current = node.NextSibling;
@@ -96,8 +96,8 @@ namespace fe
 
 		auto& cLocal = m_Registry->get<CTransformLocal >(entityID).Transform;
 		auto& cGlobal = m_Registry->get<CTransformGlobal>(entityID).Transform;
-		auto& parentGlobal = m_Registry->get<CTransformGlobal>(node.Parent).Transform;
-		cGlobal = parentGlobal + cLocal;
+		auto& parent_global = m_Registry->get<CTransformGlobal>(node.Parent).Transform;
+		cGlobal = parent_global + cLocal;
 
 		SetClean(entityID);
 	}

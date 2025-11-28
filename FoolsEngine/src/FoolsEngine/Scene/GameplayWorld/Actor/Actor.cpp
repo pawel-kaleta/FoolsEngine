@@ -41,10 +41,10 @@ namespace fe
 
 		m_Data.GetAndCash();
 		
-		for (auto& updateEnroll : m_Data.GetCashed()->m_UpdateEnrolls[stage.ToInt()])
+		for (auto& update_enroll : m_Data.GetCashed()->m_UpdateEnrolls[stage.ToInt()])
 		{
-			auto& beahavior = updateEnroll.Behavior;
-			auto& funkPtr   = updateEnroll.OnUpdateFuncPtr;
+			auto& beahavior = update_enroll.Behavior;
+			auto& funkPtr   = update_enroll.OnUpdateFuncPtr;
 			(beahavior->*funkPtr)();
 		}
 	}
@@ -64,12 +64,12 @@ namespace fe
 	template<SimulationStage::ValueType stage>
 	void Actor::EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 	{
-		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage];
-		if (updateEnrolls.size() == 0)
+		auto& update_enrolls = m_Data.Get()->m_UpdateEnrolls[stage];
+		if (update_enrolls.size() == 0)
 		{
 			Flag<CUpdateEnrollFlag<stage>>();
 		}
-		updateEnrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
+		update_enrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
 		SortUpdateEnrolls(stage);
 	}
 
@@ -82,22 +82,22 @@ namespace fe
 		auto& enrolls = m_Data.Get()->m_UpdateEnrolls[stage];
 
 		int found = false;
-		int enrollPos;
+		int enroll_position;
 		for (int j = 0; j < enrolls.size(); ++j)
 		{
 			if (enrolls[j].Behavior == behavior)
 			{
 				found = true;
-				enrollPos = j;
+				enroll_position = j;
 				break;
 			}
 		}
 
 		if (found)
 		{
-			for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+			for (size_t last = enrolls.size() - 1; enroll_position < last; ++enroll_position)
 			{
-				std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+				std::swap(enrolls[enroll_position], enrolls[enroll_position + 1]);
 			}
 
 			enrolls.pop_back();
@@ -116,10 +116,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& updateEnrolls = m_Data.Get()->m_UpdateEnrolls[stage.ToInt()];
+		auto& update_enrolls = m_Data.Get()->m_UpdateEnrolls[stage.ToInt()];
 		std::sort(
-			updateEnrolls.begin(),
-			updateEnrolls.end(),
+			update_enrolls.begin(),
+			update_enrolls.end(),
 			[](CActorData::UpdateEnroll& a, CActorData::UpdateEnroll& b) { return a.Priority < b.Priority; }
 		);
 	}

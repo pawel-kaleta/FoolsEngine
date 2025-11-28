@@ -62,11 +62,11 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& dataPtr = Get<ACTexture2DCore>().Data;
-		if (dataPtr)
+		auto& data_ptr = Get<ACTexture2DCore>().Data;
+		if (data_ptr)
 		{
-			TextureLoader::UnloadTexture(dataPtr);
-			dataPtr = nullptr;
+			TextureLoader::UnloadTexture(data_ptr);
+			data_ptr = nullptr;
 		}
 	}
 
@@ -135,14 +135,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto assetObserver = AssetObserver<Texture2D>(assetID);
+		auto asset_observer = AssetObserver<Texture2D>(assetID);
 		
 		Scratchpad sp;
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
-		auto& spec = assetObserver.GetCoreComponent().Specification;
+		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << asset_observer.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
+		auto& spec = asset_observer.GetCoreComponent().Specification;
 		emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
 		emitter << YAML::Key << "Components" << YAML::Value << spec.Components.ToConstCharPtr();
 		emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToConstCharPtr();

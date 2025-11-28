@@ -132,9 +132,9 @@ namespace fe
 		
 		s_ActiveGDI = GDI;
 
-		auto& deviceAPI = s_DeviceAPIs.at(GDI);
+		auto& device_API = s_DeviceAPIs.at(GDI);
 
-		RenderCommands::SetAPI(deviceAPI.get());
+		RenderCommands::SetAPI(device_API.get());
 
 		Renderer2D::Init();
 		GeometryRenderer::Init();
@@ -169,8 +169,8 @@ namespace fe
 	{
 		framebuffer.Bind();
 
-		int attachmentIndex = framebuffer.GetColorAttachmentIndex("EntityID");
-		framebuffer.ClearAttachment(attachmentIndex, (uint32_t)NullEntityID);
+		int attachment_index = framebuffer.GetColorAttachmentIndex("EntityID");
+		framebuffer.ClearAttachment(attachment_index, (uint32_t)NullEntityID);
 
 		RenderScene(scene, camera, cameraTransform);
 

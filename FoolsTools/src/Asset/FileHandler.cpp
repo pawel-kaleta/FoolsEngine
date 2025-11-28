@@ -44,9 +44,10 @@ namespace fe
 
         void Init()
         {
-            for (auto& importerData : s_ImporterData) importerData = { nullptr, nullptr };
+            for (auto& importer_data : s_ImporterData)
+                importer_data = { nullptr, nullptr };
 
-            s_ImporterData[LoaderType::Texture  ] = { &  TextureImport::InitImport,  &  TextureImport::RenderWindow };
+            s_ImporterData[LoaderType::Texture  ] = { &  TextureImport::InitImport, &  TextureImport::RenderWindow };
             s_ImporterData[LoaderType::Geometry ] = { & GeometryImport::InitImport, & GeometryImport::RenderWindow };
         }
 

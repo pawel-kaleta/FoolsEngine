@@ -17,8 +17,8 @@ namespace fe
 
 		for (auto& item : s_Instance->m_Items)
 		{
-			auto& nameFunkPtr = item.GetName;
-			if ((*nameFunkPtr)().compare(name) == 0)
+			auto& get_name_funk_ptr = item.GetName;
+			if ((*get_name_funk_ptr)() == name)
 			{
 				return &item;
 			}

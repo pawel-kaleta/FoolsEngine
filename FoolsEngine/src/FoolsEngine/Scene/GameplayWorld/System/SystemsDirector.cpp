@@ -10,9 +10,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& updateEnroll : m_SystemUpdateEnrolls[stage.ToInt()])
+		for (auto& update_enroll : m_SystemUpdateEnrolls[stage.ToInt()])
 		{
-			(updateEnroll.System->*(updateEnroll.OnUpdateFuncPtr))();
+			(update_enroll.System->*(update_enroll.OnUpdateFuncPtr))();
 		}
 	}
 
@@ -34,22 +34,22 @@ namespace fe
 		auto& enrolls = m_SystemUpdateEnrolls[stage];
 
 		int found = false;
-		int enrollPos;
+		int enroll_position;
 		for (int j = 0; j < enrolls.size(); ++j)
 		{
 			if (enrolls[j].System == system)
 			{
 				found = true;
-				enrollPos = j;
+				enroll_position = j;
 				break;
 			}
 		}
 
 		if (found)
 		{
-			for (size_t last = enrolls.size() - 1; enrollPos < last; ++enrollPos)
+			for (size_t last = enrolls.size() - 1; enroll_position < last; ++enroll_position)
 			{
-				std::swap(enrolls[enrollPos], enrolls[enrollPos + 1]);
+				std::swap(enrolls[enroll_position], enrolls[enroll_position + 1]);
 			}
 
 			enrolls.pop_back();
@@ -64,8 +64,8 @@ namespace fe
 		auto* item = SystemsRegistry::GetItem(systemTypeName);
 		if (item)
 		{
-			auto& createPtr = item->Create;
-			return (this->*createPtr)();
+			auto& create_funk_ptr = item->Create;
+			return (this->*create_funk_ptr)();
 		}
 		return nullptr;
 	}

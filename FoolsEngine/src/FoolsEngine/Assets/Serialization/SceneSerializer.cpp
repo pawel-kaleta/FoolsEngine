@@ -124,11 +124,11 @@ namespace fe
 						{
 							SimulationStage stage; stage.FromInt(i);
 							emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
-							for (auto& updateEnroll : gameplay_world->GetSystems().m_SystemUpdateEnrolls[i])
+							for (auto& update_enroll : gameplay_world->GetSystems().m_SystemUpdateEnrolls[i])
 							{
 								emitter << YAML::BeginMap;
-								emitter << YAML::Key << "System" << YAML::Value << updateEnroll.System->m_UUID;
-								emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
+								emitter << YAML::Key << "System" << YAML::Value << update_enroll.System->m_UUID;
+								emitter << YAML::Key << "Priority" << YAML::Value << update_enroll.Priority;
 								emitter << YAML::EndMap;
 							}
 							emitter << YAML::EndSeq;
@@ -140,17 +140,18 @@ namespace fe
 				// Actors
 				{
 					const auto& reg = gameplay_world->m_Registry;
-					const auto& UUIDstorage = reg.storage<CUUID>();
-					const auto& nameStorage = reg.storage<CEntityName>();
-					const auto& actorStorage = reg.storage<CActorData>();
+					const auto& UUID_storage = reg.storage<CUUID>();
+					const auto& name_storage = reg.storage<CEntityName>();
+					const auto& actor_storage = reg.storage<CActorData>();
+					const auto& node_storage = gameplay_world->m_Registry.storage<CEntityNode>();
 
 					emitter << YAML::Key << "Actors" << YAML::Value << YAML::BeginSeq;
 
-					for (const auto&& [actorID, actorData] : actorStorage->each())
+					for (const auto&& [actorID, actorData] : actor_storage->each())
 					{
 						emitter << YAML::BeginMap;
-						emitter << YAML::Key << "Actor" << YAML::Value << nameStorage->get(actorID).EntityName.c_str();
-						emitter << YAML::Key << "UUID" << YAML::Value << UUIDstorage->get(actorID).UUID;
+						emitter << YAML::Key << "Actor" << YAML::Value << name_storage->get(actorID).EntityName.c_str();
+						emitter << YAML::Key << "UUID" << YAML::Value << UUID_storage->get(actorID).UUID;
 
 						// Behaviors
 						{
@@ -174,11 +175,11 @@ namespace fe
 								{
 									SimulationStage stage; stage.FromInt(i);
 									emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
-									for (auto& updateEnroll : actorData.m_UpdateEnrolls[i])
+									for (auto& update_enroll : actorData.m_UpdateEnrolls[i])
 									{
 										emitter << YAML::BeginMap;
-										emitter << YAML::Key << "Behavior" << YAML::Value << updateEnroll.Behavior->m_UUID;
-										emitter << YAML::Key << "Priority" << YAML::Value << updateEnroll.Priority;
+										emitter << YAML::Key << "Behavior" << YAML::Value << update_enroll.Behavior->m_UUID;
+										emitter << YAML::Key << "Priority" << YAML::Value << update_enroll.Priority;
 										emitter << YAML::EndMap;
 									}
 									emitter << YAML::EndSeq;
@@ -189,46 +190,33 @@ namespace fe
 
 						// Actor's Entities
 						{
-							std::stack<EntityID> toSerialize;
-							const auto& nodeStorage = gameplay_world->m_Registry.storage<CEntityNode>();
+							std::stack<EntityID> entities_to_serialize;
+							entities_to_serialize.push(actorID);
 							
 							emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
-							//head entity
+							EntityID entity_to_serialize;
+							while (entities_to_serialize.size())
 							{
-								SerializeEntity(Entity(actorID, gameplay_world), emitter);
+								entity_to_serialize = entities_to_serialize.top();
+								entities_to_serialize.pop();
 
-								EntityID firstSibling = nodeStorage.get(actorID).FirstChild;
-								EntityID current = firstSibling;
-
-								if (current != NullEntityID)
-									do
-									{
-										toSerialize.push(current);
-										current = nodeStorage.get(current).NextSibling;
-									} while (current != firstSibling && current != NullEntityID);
-							}
-
-							EntityID entityToSerialize;
-							while (toSerialize.size())
-							{
-								entityToSerialize = toSerialize.top();
-								toSerialize.pop();
-
-								if (actorStorage->contains(entityToSerialize))
+								if (actor_storage->contains(entity_to_serialize))
 									continue;
 
-								SerializeEntity(Entity(entityToSerialize, gameplay_world), emitter);
+								SerializeEntity(Entity(entity_to_serialize, gameplay_world), emitter);
 
-								EntityID firstSibling = nodeStorage.get(entityToSerialize).FirstChild;
-								EntityID current = firstSibling;
+								EntityID first_sibling = node_storage.get(entity_to_serialize).FirstChild;
+								EntityID current = first_sibling;
 
 								if (current != NullEntityID)
 									do
 									{
-										toSerialize.push(current);
-										current = nodeStorage.get(current).NextSibling;
-									} while (current != firstSibling && current != NullEntityID);
+										if (! actor_storage->contains(current))
+											entities_to_serialize.push(current);
+
+										current = node_storage.get(current).NextSibling;
+									} while (current != first_sibling && current != NullEntityID);
 							}
 
 							emitter << YAML::EndSeq; //Actor's Entities
@@ -272,12 +260,12 @@ namespace fe
 
 		// Data Components
 		{
-			auto& regItems = ComponentTypesRegistry::Get().m_DataItems;
+			auto& reg_items = ComponentTypesRegistry::Get().m_DataItems;
 
-			for (auto& item : regItems)
+			for (auto& item : reg_items)
 			{
-				auto& getPtr = item.Getter;
-				auto* component = (entity.*getPtr)();
+				auto& get_ptr = item.Getter;
+				auto* component = (entity.*get_ptr)();
 				if (component)
 				{
 					emitter << YAML::Key << component->GetName() << YAML::BeginMap;
@@ -309,15 +297,15 @@ namespace fe
 
 		// Scene Properties
 		{
-			auto sceneProps = node["Scene Properties"];
-			if (!sceneProps)
+			auto scene_properties = node["Scene Properties"];
+			if (!scene_properties)
 			{
 				FE_CORE_ASSERT(false, "Deserialization failed");
 				FE_LOG_CORE_ERROR("Deserialization failed");
 				return false;
 			}
 
-			auto uuid_node = sceneProps["UUID"];
+			auto uuid_node = scene_properties["UUID"];
 
 			if (uuid_node)
 			{
@@ -339,31 +327,31 @@ namespace fe
 			auto gameplay_world_node = worlds["GameplayWorld"];
 			if (!gameplay_world_node) return false;
 			auto gameplay_world = scene.GetCoreComponent().GameplayWorld.get();
-			CEntityNode* root_node;
+			CEntityNode* root_entity_node_component;
 
 			// GameplayWorld Properties
 			{
-				auto props = gameplay_world_node["Properties"];
-				if (!props) return false;
+				auto properties_node = gameplay_world_node["Properties"];
+				if (!properties_node) return false;
 
-				UUID rootUUID = props["RootID"].as<UUID>();
-				auto rootEntity = gameplay_world->CreateOrGetEntityWithUUID(rootUUID);
+				UUID root_UUID = properties_node["RootID"].as<UUID>();
+				auto root_entity = gameplay_world->CreateOrGetEntityWithUUID(root_UUID);
 
-				rootEntity.Emplace<CEntityName>("WorldRoot");
-				rootEntity.Emplace<CTransformLocal>();
-				rootEntity.Emplace<CTransformGlobal>();
-				rootEntity.Emplace<CTags>();
-				rootEntity.Emplace<CHeadEntity>().HeadEntity = NullEntityID;
+				root_entity.Emplace<CEntityName>("WorldRoot");
+				root_entity.Emplace<CTransformLocal>();
+				root_entity.Emplace<CTransformGlobal>();
+				root_entity.Emplace<CTags>();
+				root_entity.Emplace<CHeadEntity>().HeadEntity = NullEntityID;
 
-				root_node = &rootEntity.Emplace<CEntityNode>();
-				auto rootData = props["RootNode"];
-				if (!DeserializeEntityNode(rootData, *root_node, gameplay_world))
+				root_entity_node_component = &root_entity.Emplace<CEntityNode>();
+				auto root_node = properties_node["RootNode"];
+				if (!DeserializeEntityNode(root_node, *root_entity_node_component, gameplay_world))
 					return false;
 
-				auto cameraEntity = gameplay_world->CreateEntityWithUUID(props["Primary Camera"].as<UUID>());
-				gameplay_world->m_PrimaryCameraEntityID = cameraEntity.ID();
+				auto camera_entity = gameplay_world->CreateEntityWithUUID(properties_node["Primary Camera"].as<UUID>());
+				gameplay_world->m_PrimaryCameraEntityID = camera_entity.ID();
 
-				auto main_light_entity = gameplay_world->CreateEntityWithUUID(props["Main Light"].as<UUID>());
+				auto main_light_entity = gameplay_world->CreateEntityWithUUID(properties_node["Main Light"].as<UUID>());
 				gameplay_world->m_PrimaryDirectionalLightEntityID = main_light_entity.ID();
 			}
 
@@ -388,41 +376,41 @@ namespace fe
 
 					if (!actor_node["UUID"]) return false;
 
-					Actor newActor = gameplay_world->CreateActorWithUUID(actor_node["UUID"].as<UUID>());
+					Actor new_actor = gameplay_world->CreateActorWithUUID(actor_node["UUID"].as<UUID>());
 
 					// Actor's Entities
 					{
-						auto entities = actor_node["Entities"];
-						if (!entities) return false;
+						auto entities_node = actor_node["Entities"];
+						if (!entities_node) return false;
 
-						for (auto entity : entities)
+						for (auto entity : entities_node)
 						{
 							if (!entity["UUID"] || !entity["Entity"] || !entity["Head"] || !entity["Tags"] || !entity["Node"] || !entity["Transform"])
 								return false;
 
 							UUID uuid = entity["UUID"].as<UUID>();
 							std::string name = entity["Entity"].as<std::string>();
-							UUID headUUID = entity["Head"].as<UUID>();
+							UUID head_UUID = entity["Head"].as<UUID>();
 
 							// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
-							BaseEntity newEntity = gameplay_world->CreateOrGetEntityWithUUID(uuid);
-							newEntity.Emplace<CEntityName>(name);
+							BaseEntity new_entity = gameplay_world->CreateOrGetEntityWithUUID(uuid);
+							new_entity.Emplace<CEntityName>(name);
 
-							auto head = gameplay_world->CreateOrGetEntityWithUUID(headUUID);
-							newEntity.Emplace<CHeadEntity>().HeadEntity = head.ID();
+							auto head = gameplay_world->CreateOrGetEntityWithUUID(head_UUID);
+							new_entity.Emplace<CHeadEntity>().HeadEntity = head.ID();
 
-							newEntity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
+							new_entity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
 
-							auto& entity_node = newEntity.Emplace<CEntityNode>();
+							auto& entity_node = new_entity.Emplace<CEntityNode>();
 							if (!DeserializeEntityNode(entity["Node"], entity_node, gameplay_world))
 								return false;
 
 							// Transform
 							{
-								newEntity.Emplace<CTransformGlobal>();
-								newEntity.Flag<CDirtyFlag<CTransformGlobal>>();
+								new_entity.Emplace<CTransformGlobal>();
+								new_entity.Flag<CDirtyFlag<CTransformGlobal>>();
 
-								auto& transform = newEntity.Emplace<CTransformLocal>().Transform;
+								auto& transform = new_entity.Emplace<CTransformLocal>().Transform;
 								auto transform_node = entity["Transform"];
 
 								if (transform_node["Shift"   ]) transform.Shift    = transform_node["Shift"   ].as<glm::vec3>(); else return false;
@@ -432,17 +420,18 @@ namespace fe
 
 							for (auto& item : ComponentTypesRegistry::Get().m_DataItems)
 							{
-								auto& nameFunkPtr = item.GetName;
-								auto compName = (*nameFunkPtr)();
+								auto& name_funk_ptr = item.GetName;
+								auto component_name = (*name_funk_ptr)();
 
-								auto compData = entity[compName];
-								if (compData)
+								auto component_data = entity[component_name];
+								if (component_data)
 								{
-									auto& createFunkPtr = item.Emplacer;
-									(newEntity.*createFunkPtr)();
-									auto& getFunkPtr = item.Getter;
-									DataComponent* component = (newEntity.*getFunkPtr)();
-									component->DeserializeBase(compData);
+									auto& create_funk_ptr = item.Emplacer;
+									(new_entity.*create_funk_ptr)();
+
+									auto& get_funk_ptr = item.Getter;
+									DataComponent* component = (new_entity.*get_funk_ptr)();
+									component->DeserializeBase(component_data);
 								}
 							}
 						}
@@ -450,34 +439,35 @@ namespace fe
 
 					// Behaviors
 					{
-						auto behaviors = actor_node["Behaviors"];
-						if (!behaviors)	return false;
+						auto behaviors_node = actor_node["Behaviors"];
+						if (!behaviors_node)	return false;
 
-						for (auto behavior_node : behaviors)
+						for (auto behavior_node : behaviors_node)
 						{
 							if (!behavior_node["Behavior"] || !behavior_node["UUID"])
 								return false;
 
-							auto behaviorType = behavior_node["Behavior"].as<std::string>();
-							auto* item = BehaviorsRegistry::GetItemFromName(behaviorType);
+							auto behavior_type_name = behavior_node["Behavior"].as<std::string>();
+							auto* item = BehaviorsRegistry::GetItemFromName(behavior_type_name);
 							if (!item)
 							{
-								FE_LOG_CORE_ERROR("Deserialization of {0} failed", behaviorType);
+								FE_LOG_CORE_ERROR("Deserialization of {0} failed", behavior_type_name);
 								continue;
 							}
-							auto& createFunkPtr = item->Create;
-							Behavior* newBehavior = (newActor.*createFunkPtr)();
-							newBehavior->m_UUID = behavior_node["UUID"].as<UUID>();
-							newBehavior->m_Active = behavior_node["Active"].as<bool>();
-							newBehavior->Deserialize(behavior_node, newActor.GetWorld());
-							newBehavior->Initialize();
+							auto& create_funk_ptr = item->Create;
+							Behavior* new_behavior = (new_actor.*create_funk_ptr)();
+
+							new_behavior->m_UUID = behavior_node["UUID"].as<UUID>();
+							new_behavior->m_Active = behavior_node["Active"].as<bool>();
+							new_behavior->Deserialize(behavior_node, gameplay_world);
+							new_behavior->Initialize();
 						}
 
-						auto behaviorUpdates = actor_node["Updates"];
-						if (!behaviorUpdates) return false;
+						auto behavior_updates_node = actor_node["Updates"];
+						if (!behavior_updates_node) return false;
 						bool success = true;
 
-#define _DeserializeBehaviorUpdates_CALL(x) success &= DeserializeBehaviorUpdates<SimulationStage::x>(behaviorUpdates[#x], newActor);
+#define _DeserializeBehaviorUpdates_CALL(x) success &= DeserializeBehaviorUpdates<SimulationStage::x>(behavior_updates_node[#x], new_actor);
 						FE_FOR_EACH(_DeserializeBehaviorUpdates_CALL, FE_SIMULATION_STAGES);
 
 						if (!success) return false;
@@ -490,32 +480,32 @@ namespace fe
 			{
 				FE_PROFILER_SCOPE("Systems");
 
-				auto systems = gameplay_world_node["Systems"];
-				if (!systems) return false;
+				auto systems_node = gameplay_world_node["Systems"];
+				if (!systems_node) return false;
 
 				auto director = gameplay_world->m_SystemsDirector.get();
-				for (auto system_node : systems)
+				for (auto system_node : systems_node)
 				{
-					auto systemType = system_node["System"].as<std::string>();
+					auto system_type_name = system_node["System"].as<std::string>();
 
-					System* newSystem = director->CreateSystemFromName(systemType);
+					System* new_system = director->CreateSystemFromName(system_type_name);
 
-					if (!newSystem)
+					if (!new_system)
 					{
-						FE_LOG_CORE_ERROR("Deserialization of {0} failed", systemType);
+						FE_LOG_CORE_ERROR("Deserialization of {0} failed", system_type_name);
 						continue;
 					}
-					newSystem->m_UUID = system_node["UUID"].as<uint64_t>();
-					newSystem->m_Active = system_node["Active"].as<bool>();
-					newSystem->Deserialize(system_node, gameplay_world);
-					newSystem->Initialize();
+					new_system->m_UUID = system_node["UUID"].as<uint64_t>();
+					new_system->m_Active = system_node["Active"].as<bool>();
+					new_system->Deserialize(system_node, gameplay_world);
+					new_system->Initialize();
 				}
 
-				auto systemUpdates = gameplay_world_node["System Updates"];
-				if (!systemUpdates) return false;
+				auto system_updates_node = gameplay_world_node["System Updates"];
+				if (!system_updates_node) return false;
 				bool success = true;
 
-#define _DeserializeSystemUpdates_CALL(x) success &= DeserializeSystemUpdates<SimulationStage::x>(systemUpdates[#x], director);
+#define _DeserializeSystemUpdates_CALL(x) success &= DeserializeSystemUpdates<SimulationStage::x>(system_updates_node[#x], director);
 				FE_FOR_EACH(_DeserializeSystemUpdates_CALL, FE_SIMULATION_STAGES);
 
 				if (!success) return false;
@@ -525,7 +515,7 @@ namespace fe
 			gameplay_world->GetHierarchy().m_SafeOrder = false;
 			gameplay_world->GetHierarchy().EnforceSafeOrder();
 			gameplay_world->GetHierarchy().MakeGlobalTransformsCurrent();
-			EntityID current = root_node->FirstChild;
+			EntityID current = root_entity_node_component->FirstChild;
 			//while (current != NullEntityID)
 			//{
 			//	TagsHandle(current, &gameplay_world->GetRegistry()).UpdateTags();

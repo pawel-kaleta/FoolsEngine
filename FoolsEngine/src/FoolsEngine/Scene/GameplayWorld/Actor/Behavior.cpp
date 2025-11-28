@@ -40,14 +40,14 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
-        void (Behavior:: * onUpdateFuncPtr)() = nullptr;
+        void (Behavior:: * on_update_func_ptr)() = nullptr;
 
-#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) onUpdateFuncPtr = &Behavior::OnUpdate_##x;
+#define _GET_ON_UPDATE_FUNK_PTR(x) if constexpr (stage == SimulationStage::x) on_update_func_ptr = &Behavior::OnUpdate_##x;
         FE_FOR_EACH(_GET_ON_UPDATE_FUNK_PTR, FE_SIMULATION_STAGES);
 
-        FE_CORE_ASSERT(onUpdateFuncPtr, "Did not recognise Simulation Stage!");
+        FE_CORE_ASSERT(on_update_func_ptr, "Did not recognise Simulation Stage!");
 
-        Actor(m_HeadEntity).EnrollForUpdate<stage>(this, onUpdateFuncPtr, priority);
+        Actor(m_HeadEntity).EnrollForUpdate<stage>(this, on_update_func_ptr, priority);
     }
 
 #define _BEHAVIOR_REGISTER_FOR_UPDATE_DEF(x) template void Behavior::RegisterForUpdate<SimulationStage::x>(uint32_t priority);
@@ -56,14 +56,14 @@ namespace fe
     bool Behavior::DrawEntity(Entity& entity, const std::string& name)
     {
         std::string entity_ID_and_name;
-        bool nullEntity = false;
+        bool was_entity_null = false;
         if (entity)
         {
             entity_ID_and_name = std::to_string(entity.ID()) + " " + entity.Get<CEntityName>().EntityName;
         }
         else
         {
-            nullEntity = true;
+            was_entity_null = true;
             ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.25f,0.25f,0.25f,1.0f });
         }
         ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
@@ -86,7 +86,7 @@ namespace fe
         ImGui::Text(name.c_str());
         ImGui::PopStyleVar();
         ImGui::PopStyleVar();
-        if (nullEntity)
+        if (was_entity_null)
             ImGui::PopStyleColor();
 
         return selected;

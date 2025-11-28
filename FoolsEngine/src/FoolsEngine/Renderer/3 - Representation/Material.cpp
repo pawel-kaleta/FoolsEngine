@@ -28,16 +28,16 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.UniformsData);
+		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.UniformsData);
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
 			if (&targetUniform == &uniform)
 			{
-				return (void*)uniformDataPointer;
+				return (void*)uniform_data_pointer;
 			}
-			uniformDataPointer += uniform.GetSize();
+			uniform_data_pointer += uniform.GetSize();
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
@@ -48,7 +48,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.UniformsData);
+		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.UniformsData);
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
@@ -56,9 +56,9 @@ namespace fe
 		{
 			if (name == uniform.m_Name)
 			{
-				return (void*)uniformDataPointer;
+				return (void*)uniform_data_pointer;
 			}
-			uniformDataPointer += uniform.GetSize();
+			uniform_data_pointer += uniform.GetSize();
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
@@ -263,14 +263,14 @@ namespace fe
 
 	void Material::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
-		auto assetObserver = AssetObserver<Material>(assetID);
-		auto& core = assetObserver.GetCoreComponent();
+		auto asset_observer = AssetObserver<Material>(assetID);
+		auto& core = asset_observer.GetCoreComponent();
 
 		AssetObserver<ShadingModel> shading_model_observer(core.ShadingModelID);
 		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
 		emitter << YAML::Key << "Shading Model" << YAML::Value << shading_model_observer.GetUUID();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginMap;

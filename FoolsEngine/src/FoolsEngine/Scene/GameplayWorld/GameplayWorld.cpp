@@ -67,7 +67,7 @@ namespace fe
 		entity.Emplace<CEntityName>(name);
 		m_Hierarchy->CreateNode(entity, attachmentEntityID);
 		entity.Emplace<CHeadEntity>().HeadEntity = entity.ID();
-		auto& actorData = m_Registry.emplace<CActorData>(entity.ID(), entity.ID());
+		m_Registry.emplace<CActorData>(entity.ID(), entity.ID());
 		return Actor(entity);
 	}
 
@@ -82,8 +82,8 @@ namespace fe
 
 		Entity ent = CreateOrGetEntityWithUUID(uuid);
 
-		auto& actorData = m_Registry.emplace<CActorData>(ent.ID(), ent.ID());
-		return Actor(actorData, this);
+		auto& actor_data = m_Registry.emplace<CActorData>(ent.ID(), ent.ID());
+		return Actor(actor_data, this);
 	}
 
 	template <SimulationStage::ValueType stage>
@@ -102,53 +102,52 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& actorStorage = m_Registry.storage<CActorData>();
-		auto& nodeStorage = m_Registry.storage<CEntityNode>();
+		auto& node_storage = m_Registry.storage<CEntityNode>();
 		// should use CActorNode, but CActorNode is not yet mantained
 		// because of updateEnrollCheck it is safe to use all entities for traversal
 
-		std::stack<EntityID> toUpdate;
+		std::stack<EntityID> actors_to_update;
 		// some data about entites in underlying hierarchy of just updated actor
 		// is going to be already cashed as a result of Actor update (Transform and Tags propagation)
 		// so we use stack for tempral locality
 
 		// initializing vector with actors attached to root
 		{
-			EntityID firstActor = nodeStorage.get(RootID).FirstChild;
-			EntityID currentActor = firstActor;
+			EntityID first_actor = node_storage.get(RootID).FirstChild;
+			EntityID current_actor = first_actor;
 
-			if (currentActor != NullEntityID)
+			if (current_actor != NullEntityID)
 				do
 				{
-					toUpdate.push(currentActor);
-					currentActor = nodeStorage.get(currentActor).NextSibling;
-				} while (currentActor != firstActor && currentActor != NullEntityID);
+					actors_to_update.push(current_actor);
+					current_actor = node_storage.get(current_actor).NextSibling;
+				} while (current_actor != first_actor && current_actor != NullEntityID);
 		}
 
-		EntityID updateActorID;
+		EntityID current_actorID;
 
 		// this can be parallelised
-		while (toUpdate.size())
+		while (actors_to_update.size())
 		{
-			updateActorID = toUpdate.top();
-			toUpdate.pop();
+			current_actorID = actors_to_update.top();
+			actors_to_update.pop();
 
 			// UpdateBehaviors() would access ActorData polluting cashe, even if there are no behaviors to run
 			// CUpdateEnrollFlag<> has empty component optimisation
-			if ((this->*updateEnrollCheck)(updateActorID))
-				Actor(updateActorID, this).UpdateBehaviors(stage);
+			if ((this->*updateEnrollCheck)(current_actorID))
+				Actor(current_actorID, this).UpdateBehaviors(stage);
 
 			// scheduling of children
 			{
-				EntityID firstSibling = nodeStorage.get(updateActorID).FirstChild;
-				EntityID current = firstSibling;
+				EntityID first_sibling = node_storage.get(current_actorID).FirstChild;
+				EntityID current = first_sibling;
 
 				if (current != NullEntityID)
 					do
 					{
-						toUpdate.push(current);
-						current = nodeStorage.get(current).NextSibling;
-					} while (current != firstSibling && current != NullEntityID);
+						actors_to_update.push(current);
+						current = node_storage.get(current).NextSibling;
+					} while (current != first_sibling && current != NullEntityID);
 			}
 		}
 	}

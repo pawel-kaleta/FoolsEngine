@@ -36,6 +36,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Scratchpad sp;
+
 		s_Instance->m_QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
 		s_Instance->m_QuadVertexBuffer->SetLayout({
 			{ ShaderData::Type::Float3, "a_Position" },
@@ -47,33 +49,27 @@ namespace fe
 		});
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
-		QuadsIndexBufferData* quadIndices;
-		{
-			FE_PROFILER_SCOPE("QuadsIndexBufferData allocation");
-			quadIndices = new QuadsIndexBufferData();
-		}
+		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
+
 		{
 			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");
 						
-			size_t quad_count = quadIndices->size() / 6;
+			size_t quad_count = quad_indices->size() / 6;
 			for (size_t i = 0; i < quad_count; i++)
 			{
-				(*quadIndices)[i * 6 + 0] = (uint32_t)(i * 4 + 0);
-				(*quadIndices)[i * 6 + 1] = (uint32_t)(i * 4 + 1);
-				(*quadIndices)[i * 6 + 2] = (uint32_t)(i * 4 + 2);
+				(*quad_indices)[i * 6 + 0] = (uint32_t)(i * 4 + 0);
+				(*quad_indices)[i * 6 + 1] = (uint32_t)(i * 4 + 1);
+				(*quad_indices)[i * 6 + 2] = (uint32_t)(i * 4 + 2);
 			
-				(*quadIndices)[i * 6 + 3] = (uint32_t)(i * 4 + 2);
-				(*quadIndices)[i * 6 + 4] = (uint32_t)(i * 4 + 3);
-				(*quadIndices)[i * 6 + 5] = (uint32_t)(i * 4 + 0);
+				(*quad_indices)[i * 6 + 3] = (uint32_t)(i * 4 + 2);
+				(*quad_indices)[i * 6 + 4] = (uint32_t)(i * 4 + 3);
+				(*quad_indices)[i * 6 + 5] = (uint32_t)(i * 4 + 0);
 			}
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices->data(), ConstLimits::MaxIndices);
-		s_Instance->m_QuadVertexBuffer->SetIndexBuffer(quadIB);
-		{
-			FE_PROFILER_SCOPE("QuadsIndexBufferData deallocation");
-			delete quadIndices;
-		}
+		Ref<IndexBuffer> quad_index_buffer = IndexBuffer::Create(quad_indices->data(), ConstLimits::MaxIndices);
+		s_Instance->m_QuadVertexBuffer->SetIndexBuffer(quad_index_buffer);
+
 
 		//s_Instance.m_BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
@@ -108,15 +104,15 @@ namespace fe
 		m_Stats.DrawCalls = 0;
 		m_RenderStartTimePoint = Time::Now();
 
-		auto baseShader = m_BaseShader.Use();
+		auto base_shader = m_BaseShader.Use();
 
-		baseShader.Bind(GDI);
-		baseShader.UploadUniform(
+		base_shader.Bind(GDI);
+		base_shader.UploadUniform(
 			GDI,
 			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
 			(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
 		);
-		baseShader.BindTextureSlot(
+		base_shader.BindTextureSlot(
 			GDI,
 			m_BaseShaderTextureSlot,
 			m_BaseShaderSamplers,
@@ -139,15 +135,15 @@ namespace fe
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
 
-		auto viewTiles = registry.view<CTile, CTransformGlobal>();
+		auto view_tiles = registry.view<CTile, CTransformGlobal>();
 
-		for (auto ID : viewTiles)
+		for (auto ID : view_tiles)
 		{
-			auto [tile, entityTransform] = viewTiles.get(ID);
-			if (!tile.Tile.Texture.IsValid()) continue;
-			if (tile.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
-			Transform transform = entityTransform.GetRef() + tile.Offset;
-			s_Instance->BatchQuadDrawCall(tile.Tile, transform, ID);
+			auto [tile_comp, entity_transform_comp] = view_tiles.get(ID);
+			if (!tile_comp.Tile.Texture.IsValid()) continue;
+			if (tile_comp.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
+			Transform transform = entity_transform_comp.GetRef() + tile_comp.Offset;
+			s_Instance->BatchQuadDrawCall(tile_comp.Tile, transform, ID);
 		}
 
 		s_Instance->Flush();
@@ -162,15 +158,15 @@ namespace fe
 			return lDistance > rDistance;
 		});
 
-		auto viewSprites = registry.view<CSprite, CTransformGlobal>();
+		auto view_sprites = registry.view<CSprite, CTransformGlobal>();
 
-		for (auto ID : viewSprites)
+		for (auto ID : view_sprites)
 		{
-			auto [sprite, entityTransform] = viewSprites.get(ID);
-			if (!sprite.Sprite.Texture.IsValid()) continue;
-			if (sprite.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
-			Transform transform = entityTransform.GetRef() + sprite.Offset;
-			s_Instance->BatchQuadDrawCall(sprite.Sprite, transform, ID);
+			auto [sprite_comp, entity_transform_comp] = view_sprites.get(ID);
+			if (!sprite_comp.Sprite.Texture.IsValid()) continue;
+			if (sprite_comp.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
+			Transform transform = entity_transform_comp.GetRef() + sprite_comp.Offset;
+			s_Instance->BatchQuadDrawCall(sprite_comp.Sprite, transform, ID);
 			s_Instance->Flush();
 		}
 
@@ -193,7 +189,7 @@ namespace fe
 			Flush();
 		}
 
-		uint32_t textureSampler = 0;
+		uint32_t texture_sampler_index = 0;
 
 		if (m_Batch.Textures[0] != quad.Texture.GetID())
 		{
@@ -201,12 +197,12 @@ namespace fe
 			{
 				if (m_Batch.Textures[i] == quad.Texture.GetID())
 				{
-					textureSampler = i;
+					texture_sampler_index = i;
 					break;
 				}
 			}
 
-			if (textureSampler == 0)
+			if (texture_sampler_index == 0)
 			{
 				if (m_Batch.TexturesCount >= ConstLimits::RendererTextureSlotsCount)
 				{
@@ -215,44 +211,44 @@ namespace fe
 				else
 				{
 					m_Batch.Textures[m_Batch.TexturesCount] = quad.Texture.GetID();
-					textureSampler = m_Batch.TexturesCount;
+					texture_sampler_index = m_Batch.TexturesCount;
 					m_Batch.TexturesCount++;
 				}
 			}
 		}
 
-		float aspectRatio;
+		float aspect_ratio;
 		{
 			auto texture_observer = quad.Texture.Observe();
 			auto& spec = texture_observer.GetCoreComponent().Specification;
-			aspectRatio = (float)spec.Height / (float)spec.Width;
+			aspect_ratio = (float)spec.Height / (float)spec.Width;
 		}
 
-		constexpr glm::vec4 QuadVertexPositions[] = {
+		constexpr glm::vec4 quad_vertex_positions[] = {
 			{ -0.5f, -0.5f, 0.0f, 1.0f },
 			{  0.5f, -0.5f, 0.0f, 1.0f },
 			{  0.5f,  0.5f, 0.0f, 1.0f },
 			{ -0.5f,  0.5f, 0.0f, 1.0f }
 		};
 
-		constexpr glm::vec2 TextureCoord[] = {
+		constexpr glm::vec2 texture_coords[] = {
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
 			{ 1.0f, 1.0f },
 			{ 0.0f, 1.0f }
 		};
 
-		glm::mat4 transformMatrix = transform.GetMatrix();
+		glm::mat4 transform_matrix = transform.GetMatrix();
 
 		for (int i = 0; i < 4; i++)
 		{
-			glm::vec4 vertexPosition = QuadVertexPositions[i];
-			vertexPosition.y *= aspectRatio;
-			VIt->Shift = transformMatrix * vertexPosition;
+			glm::vec4 vertex_position = quad_vertex_positions[i];
+			vertex_position.y *= aspect_ratio;
+			VIt->Shift = transform_matrix * vertex_position;
 			VIt->Color = quad.Color;
-			VIt->TexCoord = TextureCoord[i];
+			VIt->TexCoord = texture_coords[i];
 			VIt->TilingFactor = quad.TextureTilingFactor;
-			VIt->TextureSampler = textureSampler;
+			VIt->TextureSampler = texture_sampler_index;
 			VIt->EntityID = ID;
 			VIt++;
 		}
@@ -268,10 +264,10 @@ namespace fe
 			return;
 
 		// propably C-style array would look cleaner here then std::array
-		uint32_t dataSize = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
+		uint32_t data_size = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
 
 		m_QuadVertexBuffer->Bind();
-		m_QuadVertexBuffer->SendDataToGPU(m_Batch.QuadVertices->data(), dataSize);
+		m_QuadVertexBuffer->SendDataToGPU(m_Batch.QuadVertices->data(), data_size);
 
 		auto GDI = Renderer::GetActiveGDItype();
 

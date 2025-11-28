@@ -126,11 +126,11 @@ namespace fe
 
 	void RenderMesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
-		auto assetObserver = AssetObserver<RenderMesh>(assetID);
-		auto& core = assetObserver.GetCoreComponent();
+		auto asset_observer = AssetObserver<RenderMesh>(assetID);
+		auto& core = asset_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
+		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
 		emitter << YAML::Key << "Mesh" << YAML::Value;
 		Mesh::SaveMetadata(emitter, core.MeshID);
 		emitter << YAML::Key << "Material" << YAML::Value;

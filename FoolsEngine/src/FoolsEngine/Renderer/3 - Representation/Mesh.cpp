@@ -31,17 +31,17 @@ namespace fe
 			return false;
 		}
 
-		auto& ACData = Get<ACMeshCore>();
-		auto& spec = ACData.Specification;
+		auto& core = Get<ACMeshCore>();
+		auto& spec = core.Specification;
 		auto& buffersComp = Emplace<ACGPUBuffers>();
 
-		if (!ACData.Data)
+		if (!core.Data)
 			return false;
 
-		buffersComp.VertexBuffer = VertexBuffer::Create(ACData.GetVertexArrayPtr(), (spec.VertexCount * sizeof(VertexData::Vertex)));
+		buffersComp.VertexBuffer = VertexBuffer::Create(core.GetVertexArrayPtr(), (spec.VertexCount * sizeof(VertexData::Vertex)));
 		buffersComp.VertexBuffer->SetLayout(VertexData::Vertex::GetLayout());
 
-		buffersComp.IndexBuffer = IndexBuffer::Create(ACData.GetIndexArrayPtr(), spec.IndexCount);
+		buffersComp.IndexBuffer = IndexBuffer::Create(core.GetIndexArrayPtr(), spec.IndexCount);
 
 		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
 
@@ -94,7 +94,7 @@ namespace fe
 			uniform_data_ptr += uniform.m_Count * uniform.GetSize();
 		}
 
-		RenderTextureSlotID rendererTextureSlot = 0;
+		RenderTextureSlotID renderer_texture_slot = 0;
 		for (size_t i = 0; i < sm_core.TextureSlots.size(); ++i)
 		{
 			auto textureID = material_core.TextureIDs[i];
@@ -103,16 +103,16 @@ namespace fe
 			if (textureID != NullAssetID)
 			{
 				AssetUser<Texture2D> texture(textureID);
-				texture.Bind(GDI, rendererTextureSlot);
+				texture.Bind(GDI, renderer_texture_slot);
 			}
 			else
 			{
-				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, rendererTextureSlot);
+				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, renderer_texture_slot);
 			}
 
-			shader_user.BindTextureSlot(GDI, texture_slot, rendererTextureSlot);
+			shader_user.BindTextureSlot(GDI, texture_slot, renderer_texture_slot);
 
-			rendererTextureSlot++;
+			renderer_texture_slot++;
 		}
 
 		auto gpuBuffers = Get<ACGPUBuffers>();
@@ -123,13 +123,13 @@ namespace fe
 
 	void Mesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
-		auto assetObserver = AssetObserver<Mesh>(assetID);
-		auto& core = assetObserver.GetCoreComponent();
+		auto asset_observer = AssetObserver<Mesh>(assetID);
+		auto& core = asset_observer.GetCoreComponent();
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << assetObserver.GetUUID();
-		if (!assetObserver.AllOf<ACMasterAsset>())
-			emitter << YAML::Key << "Source Filepath" << YAML::Value << assetObserver.GetSourceFilepath()->Filepath.string();
+		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
+		if (!asset_observer.AllOf<ACMasterAsset>())
+			emitter << YAML::Key << "Source Filepath" << YAML::Value << asset_observer.GetSourceFilepath()->Filepath.string();
 		emitter << YAML::Key << "Vartex Count" << YAML::Value << core.Specification.VertexCount;
 		emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
 		emitter << YAML::EndMap;

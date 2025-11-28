@@ -9,8 +9,8 @@ namespace fe
 {
 	GLenum SDPrimitiveToGLBaseType(ShaderData::Primitive primitive)
 	{
-		const static GLenum LookupTable[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
-		return LookupTable[primitive.ToInt() - 1];
+		const static GLenum s_lookup_table[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
+		return s_lookup_table[primitive.ToInt() - 1];
 	};
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
@@ -101,7 +101,7 @@ namespace fe
 		glBindVertexArray(m_VertexArrayID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 
-		uint32_t bufferElementIndex = 0;
+		uint32_t buffer_element_index = 0;
 		for (const auto& element : layout)
 		{
 			ShaderData::Primitive primitive = element.Primitive();
@@ -111,27 +111,27 @@ namespace fe
 			case ShaderData::Primitive::Bool:
 			case ShaderData::Primitive::Int:
 			case ShaderData::Primitive::UInt:
-				glEnableVertexAttribArray(bufferElementIndex);
+				glEnableVertexAttribArray(buffer_element_index);
 				glVertexAttribIPointer(
-					bufferElementIndex,
+					buffer_element_index,
 					element.ComponentCount,
 					SDPrimitiveToGLBaseType(primitive),
 					layout.m_Stride,
 					(const void*)element.Offset
 				);
-				bufferElementIndex++;
+				buffer_element_index++;
 				break;
 
 			case ShaderData::Primitive::Double:
-				glEnableVertexAttribArray(bufferElementIndex);
+				glEnableVertexAttribArray(buffer_element_index);
 				glVertexAttribLPointer(
-					bufferElementIndex,
+					buffer_element_index,
 					element.ComponentCount,
 					SDPrimitiveToGLBaseType(primitive),
 					layout.m_Stride,
 					(const void*)element.Offset
 				);
-				bufferElementIndex++;
+				buffer_element_index++;
 				break;
 
 			case ShaderData::Primitive::Float:
@@ -139,16 +139,16 @@ namespace fe
 				{
 				case ShaderData::Structure::Scalar:
 				case ShaderData::Structure::Vector:
-					glEnableVertexAttribArray(bufferElementIndex);
+					glEnableVertexAttribArray(buffer_element_index);
 					glVertexAttribPointer(
-						bufferElementIndex,
+						buffer_element_index,
 						element.ComponentCount,
 						SDPrimitiveToGLBaseType(primitive),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.m_Stride,
 						(const void*)element.Offset
 					);
-					bufferElementIndex++;
+					buffer_element_index++;
 					break;
 
 				case ShaderData::Structure::Matrix:
@@ -158,17 +158,17 @@ namespace fe
 					FE_LOG_CORE_DEBUG("rows: {0}, columns: {1}", rows, columns);
 					for (uint8_t i = 0; i < rows; i++)
 					{
-						glEnableVertexAttribArray(bufferElementIndex);
+						glEnableVertexAttribArray(buffer_element_index);
 						glVertexAttribPointer(
-							bufferElementIndex,
+							buffer_element_index,
 							columns,
 							SDPrimitiveToGLBaseType(primitive),
 							element.Normalized ? GL_TRUE : GL_FALSE,
 							layout.m_Stride,
 							(const void*)element.Offset
 						);
-						glVertexAttribDivisor(bufferElementIndex, 1);
-						bufferElementIndex++;
+						glVertexAttribDivisor(buffer_element_index, 1);
+						buffer_element_index++;
 					}
 					break;
 

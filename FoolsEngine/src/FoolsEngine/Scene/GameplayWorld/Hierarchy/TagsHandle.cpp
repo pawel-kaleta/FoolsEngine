@@ -29,36 +29,36 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& nodeStorage = m_Registry->storage<CEntityNode>();
-		auto& tagsStorage = m_Registry->storage<CTags>();
+		auto& node_storage = m_Registry->storage<CEntityNode>();
+		auto& tags_storage = m_Registry->storage<CTags>();
 
-		std::queue<EntityID> toUpdate;
-		toUpdate.push(m_EntityID);
+		std::queue<EntityID> entities_to_update;
+		entities_to_update.push(m_EntityID);
 
 		EntityID current;
-		EntityID firstSibling;
+		EntityID first_sibling;
 		do
 		{
-			firstSibling = toUpdate.front();
-			toUpdate.pop();
+			first_sibling = entities_to_update.front();
+			entities_to_update.pop();
 
-			auto& firstSiblingNode = nodeStorage.get(firstSibling);
-			auto& parentCTags = tagsStorage.get(firstSiblingNode.Parent);
+			auto& first_sibling_node = node_storage.get(first_sibling);
+			auto& parent_tags = tags_storage.get(first_sibling_node.Parent);
 
-			current = firstSibling;
+			current = first_sibling;
 			do
 			{
-				auto& cTags = tagsStorage.get(current);
-				cTags.Global = parentCTags.Global + cTags.Local;
+				auto& tags = tags_storage.get(current);
+				tags.Global = parent_tags.Global + tags.Local;
 
-				auto& currentNode = nodeStorage.get(current);
+				auto& current_node = node_storage.get(current);
 
-				if (currentNode.ChildrenCount)
-					toUpdate.push(currentNode.FirstChild);
+				if (current_node.ChildrenCount)
+					entities_to_update.push(current_node.FirstChild);
 
-				current = currentNode.NextSibling;
-			} while (current != firstSibling && current != NullEntityID);
+				current = current_node.NextSibling;
+			} while (current != first_sibling && current != NullEntityID);
 
-		} while (!toUpdate.empty());
+		} while (!entities_to_update.empty());
 	}
 }

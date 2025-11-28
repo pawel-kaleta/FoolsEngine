@@ -12,7 +12,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		AssetRegistry& reg = s_Instance->m_Registry;
+		auto& reg = s_Instance->m_Registry;
 		AssetID assetID = reg.create();
 
 		reg.emplace<ACAssetType>(assetID).Type = tnAsset::GetTypeStatic();

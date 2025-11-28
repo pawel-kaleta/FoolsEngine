@@ -34,18 +34,18 @@ namespace fe
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
         bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
 
-        float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
+        float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
-        ImGui::SameLine(ImGui::GetContentRegionAvail().x - lineHeight + 12.0f); // 12 may be windowPadding + framePadding ?
+        ImGui::SameLine(ImGui::GetContentRegionAvail().x - line_height + 12.0f); // 12 may be windowPadding + framePadding ?
 
-        static bool popup_open;
+        static bool is_popup_open;
         // popup_open is common for all widgets, so wee need to check if it is applicable to this particular widget
         static Behavior* behavior_of_popup = nullptr;
         bool widget_of_popup = behavior_of_popup == behavior;
 
-        ImGuiDir button_arrow_dir = popup_open && widget_of_popup ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
+        ImGuiDir button_arrow_dir = is_popup_open && widget_of_popup ? ImGuiDir::ImGuiDir_Down : ImGuiDir::ImGuiDir_Right;
         bool open_new_popup = false;
-        if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(lineHeight, lineHeight)))
+        if (ImGui::ArrowButtonEx("settings", button_arrow_dir, ImVec2(line_height, line_height)))
         {
             behavior_of_popup = behavior;
             widget_of_popup = true;
@@ -55,7 +55,7 @@ namespace fe
         {
             if (widget_of_popup)
             {
-                popup_open = false;
+                is_popup_open = false;
             }
         }
 
@@ -68,21 +68,21 @@ namespace fe
 
         if (widget_of_popup)
         {
-            if (popup_open || open_new_popup)
+            if (is_popup_open || open_new_popup)
                 ImGui::OpenPopup("BehaviorSettings");
         }
 
-        bool removeBehavior = false;
+        bool should_remove_behavior = false;
         if (ImGui::BeginPopup("BehaviorSettings"))
         {
-            popup_open = true;
+            is_popup_open = true;
             if (ImGui::MenuItem("Remove behavior"))
-                removeBehavior = true;
+                should_remove_behavior = true;
 
             ImGui::EndPopup();
         }
 
-        if (removeBehavior)
+        if (should_remove_behavior)
         {
             //FE_LOG_CORE_ERROR("Behavior removal not yet implemented");
             m_BehaviorToRemove = behavior;
@@ -115,19 +115,19 @@ namespace fe
 
                 DrawCNameWidget(actor);
 
-                float lineHeight = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
-                ImGui::SameLine(ImGui::GetContentRegionAvail().x - (lineHeight * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
+                float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - (line_height * 2.5f) + 12.0f); // 12 may be windowPadding + framePadding ?
 
-                if (ImGui::Button("Add +", ImVec2(lineHeight * 2.5f, lineHeight)))
+                if (ImGui::Button("Add +", ImVec2(line_height * 2.5f, line_height)))
                     ImGui::OpenPopup("AddBehavior");
 
                 AddBehaviorPopupMenu(actor);
 
                 auto& behaviors = actor.m_Data.Get()->m_Behaviors;
-                int uniqueIdWrap = 0;
+                int unique_ImGui_ID_wrap = 0;
                 for (const auto& behavior : behaviors)
                 {
-                    ImGui::PushID(++uniqueIdWrap);
+                    ImGui::PushID(++unique_ImGui_ID_wrap);
                     DrawBehaviorWidget(behavior.get(), actor);
                     ImGui::PopID();
                 }
@@ -141,8 +141,8 @@ namespace fe
                     SimulationStage stage; stage.FromInt(i);
                     if (ImGui::CollapsingHeader(stage.ToConstCharPtr(), ImGuiTreeNodeFlags_None))
                     {
-                        auto& updateEnrolls = actor.m_Data.Get()->m_UpdateEnrolls[i];
-                        if (updateEnrolls.size() == 0)
+                        auto& update_enrolls = actor.m_Data.Get()->m_UpdateEnrolls[i];
+                        if (update_enrolls.size() == 0)
                         {
                             ImGui::Text("None");
                             continue;
@@ -150,13 +150,13 @@ namespace fe
 
                         ImGui::PushItemWidth(75.0f);
 
-                        int uniqueIdWrap = 0;
-                        for (auto& updateEnroll : updateEnrolls)
+                        int unique_ImGui_ID_wrap = 0;
+                        for (auto& update_enroll : update_enrolls)
                         {
-                            ImGui::PushID(++uniqueIdWrap);
-                            auto& beh = updateEnroll.Behavior;
+                            ImGui::PushID(++unique_ImGui_ID_wrap);
+                            auto& beh = update_enroll.Behavior;
 
-                            if (ImGui::InputInt(beh->GetBehaviorName().c_str(), (int*)&updateEnroll.Priority))
+                            if (ImGui::InputInt(beh->GetBehaviorName().c_str(), (int*)&update_enroll.Priority))
                             {
                                 actor.SortUpdateEnrolls(stage);
                             }
@@ -186,8 +186,8 @@ namespace fe
         {
             for (const auto& item : BehaviorsRegistry::Get().m_Items)
             {
-                auto& getName = item.GetName;
-                std::string name = (*getName)();
+                auto& get_name_funk_ptr = item.GetName;
+                std::string name = (*get_name_funk_ptr)();
                 if (ImGui::MenuItem(name.c_str()))
                 {
                     auto& create = item.Create;

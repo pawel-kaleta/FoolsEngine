@@ -46,22 +46,22 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		std::queue<EntityID> toMark;
+		std::queue<EntityID> entities_to_flag;
 		auto& reg = m_World->m_Registry;
 		reg.emplace<CDestroyFlag>(ID());
-		toMark.push(m_Handle.get<CEntityNode>().FirstChild);
+		entities_to_flag.push(m_Handle.get<CEntityNode>().FirstChild);
 
 		EntityID current;
-		while (!toMark.empty())
+		while (!entities_to_flag.empty())
 		{
-			current = toMark.front();
-			toMark.pop();
+			current = entities_to_flag.front();
+			entities_to_flag.pop();
 			while (current != NullEntityID)
 			{
 				auto& node = reg.get<CEntityNode>(current);
 				if (!reg.all_of<CDestroyFlag>(current))
 				{
-					toMark.push(node.FirstChild);
+					entities_to_flag.push(node.FirstChild);
 					reg.emplace<CDestroyFlag>(current);
 				}
 				current = node.NextSibling;

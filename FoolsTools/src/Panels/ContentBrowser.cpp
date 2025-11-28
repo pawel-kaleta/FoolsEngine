@@ -90,7 +90,7 @@ namespace fe
 			ImGui::SetNextItemWidth(272);
 			ImGui::SliderInt("Thumbnail Size", (int*)&(m_Settings.ThumbnailSize), 16, 256);
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, ImVec4(0.16f, 0.29f, 0.48f, 0.3f));
 
 			if (m_Settings.DisplayDirectories)
@@ -165,7 +165,7 @@ namespace fe
 
 		Scratchpad sp;
 		auto& tnSize = m_Settings.ThumbnailSize;
-		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
+		ImVec2 thumbnail_size_ImGui((float)tnSize, (float)tnSize);
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -184,7 +184,7 @@ namespace fe
 
 			// thumbnail in the future
 
-			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnail_size_ImGui, { 0,1 }, { 1,0 });
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
@@ -246,7 +246,7 @@ namespace fe
 		{
 			ImGui::BeginTable(file_name.c_str(), 1, 0, { (float)(tnSize + 9), 0 });
 			ImGui::TableNextColumn();
-			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+			ImGui::ImageButton(file_name.c_str(), m_Icons.FileID, thumbnail_size_ImGui, { 0,1 }, { 1,0 });
 			ImGui::TableNextColumn();
 			ImGui::TextWrapped(file_name.c_str());
 			ImGui::EndTable();
@@ -263,14 +263,14 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& tnSize = m_Settings.ThumbnailSize;
-		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
+		ImVec2 thumbnail_size_ImGui((float)tnSize, (float)tnSize);
 		ImGuiStyle& style = ImGui::GetStyle();
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
 		ImGui::BeginTable("UP", 1, 0, { (float)(tnSize + 9), 0 });
 		ImGui::TableNextColumn();
-		ImGui::ImageButton("UP2", m_Icons.FolderID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+		ImGui::ImageButton("UP2", m_Icons.FolderID, thumbnail_size_ImGui, { 0,1 }, { 1,0 });
 		ImGui::PopStyleVar();
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_::ImGuiMouseButton_Left)
@@ -295,7 +295,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& tnSize = m_Settings.ThumbnailSize;
-		ImVec2 thumbnailSizeIm((float)tnSize, (float)tnSize);
+		ImVec2 thumbnail_size_ImGui((float)tnSize, (float)tnSize);
 		ImGuiStyle& style = ImGui::GetStyle();
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
@@ -310,7 +310,7 @@ namespace fe
 				ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_CellPadding, { 0.f,0.f });
 				ImGui::BeginTable(entry_name.c_str(), 1, 0, { (float)(tnSize + 9), 0 });
 				ImGui::TableNextColumn();
-				ImGui::ImageButton(entry_name.c_str(), m_Icons.FolderID, thumbnailSizeIm, { 0,1 }, { 1,0 });
+				ImGui::ImageButton(entry_name.c_str(), m_Icons.FolderID, thumbnail_size_ImGui, { 0,1 }, { 1,0 });
 				ImGui::PopStyleVar();
 
 				if (ImGui::IsItemClicked(ImGuiMouseButton_::ImGuiMouseButton_Left)

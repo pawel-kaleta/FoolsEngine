@@ -25,17 +25,17 @@ namespace fe
 					((GameplayWorld*)world)->SetPrimaryCameraEntity(Entity(entity));
 		}
 
-		constexpr const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[Camera.m_ProjectionType.ToInt()];
+		constexpr const char* projection_type_strings[] = { "Orthographic", "Perspective" };
+		const char* current_projection_type_string = projection_type_strings[Camera.m_ProjectionType.ToInt()];
 
-		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+		if (ImGui::BeginCombo("Projection", current_projection_type_string))
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
-				if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+				bool isSelected = current_projection_type_string == projection_type_strings[i];
+				if (ImGui::Selectable(projection_type_strings[i], isSelected))
 				{
-					currentProjectionTypeString = projectionTypeStrings[i];
+					current_projection_type_string = projection_type_strings[i];
 					Camera::ProjectionType type;
 					type.FromInt(i);
 					Camera.SetProjectionType(type);

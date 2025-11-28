@@ -33,10 +33,10 @@ namespace fe
 
 			outFilter = alias + " (" + extension + ")" + std::pmr::string(1, '\0', &sp) + "*" + extension + std::pmr::string(1, '\0', &sp);
 
-			std::filesystem::path defaultFilepath = originalPath;
-			defaultFilepath = std::filesystem::absolute(defaultFilepath.replace_extension(std::filesystem::path(extension)));
+			std::filesystem::path default_filepath = originalPath;
+			default_filepath = std::filesystem::absolute(default_filepath.replace_extension(std::filesystem::path(extension)));
 
-			return defaultFilepath;
+			return default_filepath;
 		}
 	};
 }

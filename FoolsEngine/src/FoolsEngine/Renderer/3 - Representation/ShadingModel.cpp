@@ -24,15 +24,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.DefaultUniformsData);
+		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.DefaultUniformsData);
 
 		for (const auto& uniform : dataComponent.Uniforms)
 		{
 			if (&targetUniform == &uniform)
 			{
-				return (void*)uniformDataPointer;
+				return (void*)uniform_data_pointer;
 			}
-			uniformDataPointer += uniform.GetSize();
+			uniform_data_pointer += uniform.GetSize();
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
@@ -43,15 +43,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniformDataPointer = (uint8_t*)(dataComponent.DefaultUniformsData);
+		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.DefaultUniformsData);
 
 		for (const auto& uniform : dataComponent.Uniforms)
 		{
 			if (name == uniform.m_Name)
 			{
-				return (void*)uniformDataPointer;
+				return (void*)uniform_data_pointer;
 			}
-			uniformDataPointer += uniform.GetSize();
+			uniform_data_pointer += uniform.GetSize();
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
@@ -102,8 +102,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto assetObserver = AssetObserver<ShadingModel>(assetID);
-		auto& core = assetObserver.GetCoreComponent();
+		auto asset_observer = AssetObserver<ShadingModel>(assetID);
+		auto& core = asset_observer.GetCoreComponent();
 
 		emitter << YAML::Key << "Shader" << YAML::Value << AssetManager::Get().m_Registry.get<ACFilepath>(core.ShaderID).Filepath.string();
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
@@ -134,7 +134,7 @@ namespace fe
 		}
 		emitter << YAML::EndSeq;
 
-		//std::ofstream fout(assetObserver.GetFilepath());
+		//std::ofstream fout(asset_observer.GetFilepath());
 		//fout << emitter.c_str();
 	}
 
