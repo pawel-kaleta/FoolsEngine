@@ -161,7 +161,7 @@ namespace fe
 				}
 			}
 
-			ImGui::Text(sm_core_component.TextureSlots[i].GetName().c_str());
+			ImGui::Text(sm_core_component.TextureSlots[i].m_Name.c_str());
 
 			ImGui::PopID();
 		}

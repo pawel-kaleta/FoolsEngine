@@ -50,7 +50,7 @@ namespace fe
 				spec.SwapChainTarget = m_SwapChainTarget;
 
 				spec.DepthStencilAttachment = m_DepthStencilAttachment;
-				spec.ColorAttachments       = m_ColorAttachments;
+				spec.ColorAttachments       = std::move(m_ColorAttachments);
 
 				return spec;
 			}

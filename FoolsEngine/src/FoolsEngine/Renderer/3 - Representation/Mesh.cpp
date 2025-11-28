@@ -91,7 +91,7 @@ namespace fe
 				(void*)uniform_data_ptr
 			);
 
-			uniform_data_ptr += uniform.GetCount() * uniform.GetSize();
+			uniform_data_ptr += uniform.m_Count * uniform.GetSize();
 		}
 
 		RenderTextureSlotID rendererTextureSlot = 0;

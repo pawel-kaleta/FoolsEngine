@@ -25,16 +25,19 @@
 
 namespace fe
 {
-	Renderer2D::Renderer2DData& Renderer2D::s_Data = *(new Renderer2DData());
-	Renderer2D::RenderStats Renderer2D::s_Stats;
-	Time::TimePoint Renderer2D::m_RenderStartTimePoint;
+	Renderer2D* Renderer2D::s_Instance;
+
+	void Renderer2D::Startup()
+	{
+		s_Instance = new Renderer2D;
+	}
 
 	void Renderer2D::Init()
 	{
 		FE_PROFILER_FUNC();
 
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
-		s_Data.QuadVertexBuffer->SetLayout({
+		s_Instance->m_QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
+		s_Instance->m_QuadVertexBuffer->SetLayout({
 			{ ShaderData::Type::Float3, "a_Position" },
 			{ ShaderData::Type::Float4, "a_Color" },
 			{ ShaderData::Type::Float2, "a_TexCoord" },
@@ -66,21 +69,21 @@ namespace fe
 		}
 
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices->data(), ConstLimits::MaxIndices);
-		s_Data.QuadVertexBuffer->SetIndexBuffer(quadIB);
+		s_Instance->m_QuadVertexBuffer->SetIndexBuffer(quadIB);
 		{
 			FE_PROFILER_SCOPE("QuadsIndexBufferData deallocation");
 			delete quadIndices;
 		}
 
-		//s_Data.BaseShader = Renderer::BaseAssets.Shaders.Base2D;
+		//s_Instance.m_BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
 		// to do: fix this bad architecture
 
-		s_Data.BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
+		s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
-			s_Data.BaseShaderSamplers[i] = i;
+			s_Instance->m_BaseShaderSamplers[i] = i;
 
-		//s_Data.Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
+		//s_Instance.m_Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
 		// moved to Renderer::AcquireBaseAssets()
 		// to do: fix this bad architecture
 	}
@@ -88,7 +91,7 @@ namespace fe
 	void Renderer2D::Shutdown()
 	{
 		FE_PROFILER_FUNC();
-		delete &s_Data;
+		delete s_Instance;
 	}
 
 	void Renderer2D::BeginScene()
@@ -101,11 +104,11 @@ namespace fe
 
 		ClearBatch();
 
-		s_Stats.Quads = 0;
-		s_Stats.DrawCalls = 0;
+		m_Stats.Quads = 0;
+		m_Stats.DrawCalls = 0;
 		m_RenderStartTimePoint = Time::Now();
 
-		auto baseShader = s_Data.BaseShader.Use();
+		auto baseShader = m_BaseShader.Use();
 
 		baseShader.Bind(GDI);
 		baseShader.UploadUniform(
@@ -115,24 +118,24 @@ namespace fe
 		);
 		baseShader.BindTextureSlot(
 			GDI,
-			s_Data.BaseShaderTextureSlot,
-			s_Data.BaseShaderSamplers,
+			m_BaseShaderTextureSlot,
+			m_BaseShaderSamplers,
 			ConstLimits::RendererTextureSlotsCount
 		);
 	}
 
 	void Renderer2D::ClearBatch()
 	{
-		s_Data.Batch.TexturesCount = 1;
-		s_Data.Batch.QuadIndexCount = 0;
-		s_Data.Batch.QuadVeriticesIt = s_Data.Batch.QuadVertices->begin();
+		m_Batch.TexturesCount = 1;
+		m_Batch.QuadIndexCount = 0;
+		m_Batch.QuadVeriticesIt = m_Batch.QuadVertices->begin();
 	}
 
 	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene)
 	{
 		FE_PROFILER_FUNC();
 
-		BeginScene();
+		s_Instance->BeginScene();
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
 
@@ -144,10 +147,10 @@ namespace fe
 			if (!tile.Tile.Texture.IsValid()) continue;
 			if (tile.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entityTransform.GetRef() + tile.Offset;
-			BatchQuadDrawCall(tile.Tile, transform, ID);
+			s_Instance->BatchQuadDrawCall(tile.Tile, transform, ID);
 		}
 
-		Flush();
+		s_Instance->Flush();
 
 		registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
 			const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
@@ -167,38 +170,36 @@ namespace fe
 			if (!sprite.Sprite.Texture.IsValid()) continue;
 			if (sprite.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entityTransform.GetRef() + sprite.Offset;
-			BatchQuadDrawCall(sprite.Sprite, transform, ID);
-			Flush();
+			s_Instance->BatchQuadDrawCall(sprite.Sprite, transform, ID);
+			s_Instance->Flush();
 		}
 
-		EndScene();
+		s_Instance->EndScene();
 	}
 
 	void Renderer2D::EndScene()
 	{
 		FE_PROFILER_FUNC();
 
-		s_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
+		m_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 
 	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID)
 	{
-		auto& batch = s_Data.Batch;
+		auto& VIt = m_Batch.QuadVeriticesIt;
 
-		auto& VIt = batch.QuadVeriticesIt;
-
-		if (&*VIt > &batch.QuadVertices->back())
+		if (&*VIt > &m_Batch.QuadVertices->back())
 		{
 			Flush();
 		}
 
 		uint32_t textureSampler = 0;
 
-		if (batch.Textures[0] != quad.Texture.GetID())
+		if (m_Batch.Textures[0] != quad.Texture.GetID())
 		{
-			for (unsigned int i = 1; i < batch.TexturesCount; i++)
+			for (unsigned int i = 1; i < m_Batch.TexturesCount; i++)
 			{
-				if (batch.Textures[i] == quad.Texture.GetID())
+				if (m_Batch.Textures[i] == quad.Texture.GetID())
 				{
 					textureSampler = i;
 					break;
@@ -207,15 +208,15 @@ namespace fe
 
 			if (textureSampler == 0)
 			{
-				if (batch.TexturesCount >= ConstLimits::RendererTextureSlotsCount)
+				if (m_Batch.TexturesCount >= ConstLimits::RendererTextureSlotsCount)
 				{
 					FE_CORE_ASSERT(false, "Renderer2D textures slots count exceeded!");
 				}
 				else
 				{
-					batch.Textures[batch.TexturesCount] = quad.Texture.GetID();
-					textureSampler = batch.TexturesCount;
-					batch.TexturesCount++;
+					m_Batch.Textures[m_Batch.TexturesCount] = quad.Texture.GetID();
+					textureSampler = m_Batch.TexturesCount;
+					m_Batch.TexturesCount++;
 				}
 			}
 		}
@@ -256,36 +257,34 @@ namespace fe
 			VIt++;
 		}
 
-		batch.QuadIndexCount += 6;
+		m_Batch.QuadIndexCount += 6;
 	}
 
 	void Renderer2D::Flush()
 	{
 		FE_PROFILER_FUNC();
 
-		auto& batch = s_Data.Batch;
-
-		if (batch.QuadIndexCount == 0)
+		if (m_Batch.QuadIndexCount == 0)
 			return;
 
 		// propably C-style array would look cleaner here then std::array
-		uint32_t dataSize = (uint32_t)((uint8_t*)batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)batch.QuadVertices.get());
+		uint32_t dataSize = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
 
-		s_Data.QuadVertexBuffer->Bind();
-		s_Data.QuadVertexBuffer->SendDataToGPU(batch.QuadVertices->data(), dataSize);
+		m_QuadVertexBuffer->Bind();
+		m_QuadVertexBuffer->SendDataToGPU(m_Batch.QuadVertices->data(), dataSize);
 
 		auto GDI = Renderer::GetActiveGDItype();
 
-		for (unsigned int i = 0; i < batch.TexturesCount; i++)
+		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{
-			AssetUser<Texture2D>(batch.Textures[i]).Bind(GDI, i);
+			AssetUser<Texture2D>(m_Batch.Textures[i]).Bind(GDI, i);
 		}
 
-		s_Data.QuadVertexBuffer->Bind();
-		RenderCommands::DrawIndexed(s_Data.QuadVertexBuffer.get(), batch.QuadIndexCount);
+		m_QuadVertexBuffer->Bind();
+		RenderCommands::DrawIndexed(m_QuadVertexBuffer.get(), m_Batch.QuadIndexCount);
 
-		s_Stats.Quads += batch.QuadIndexCount / 3 / 2;
-		s_Stats.DrawCalls++;
+		m_Stats.Quads += m_Batch.QuadIndexCount / 3 / 2;
+		m_Stats.DrawCalls++;
 
 		ClearBatch();
 	}

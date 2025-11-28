@@ -14,7 +14,7 @@ namespace fe
 		void OnUpdate();
 		void OnEvent(Ref<Events::Event> event);
 
-		float GetZoomLevel() const { return m_Camera.GetOrthographicZoom(); }
+		float GetZoomLevel() const { return m_Camera.m_OrthographicData.m_Zoom; }
 		float SetZoomLevel(float lvl) { m_Camera.SetOrthographicZoom(lvl); }
 		void Resize(float width, float hight);
 		

@@ -116,7 +116,7 @@ namespace fe
 					bufferElementIndex,
 					element.ComponentCount,
 					SDPrimitiveToGLBaseType(primitive),
-					layout.GetStride(),
+					layout.m_Stride,
 					(const void*)element.Offset
 				);
 				bufferElementIndex++;
@@ -128,7 +128,7 @@ namespace fe
 					bufferElementIndex,
 					element.ComponentCount,
 					SDPrimitiveToGLBaseType(primitive),
-					layout.GetStride(),
+					layout.m_Stride,
 					(const void*)element.Offset
 				);
 				bufferElementIndex++;
@@ -145,7 +145,7 @@ namespace fe
 						element.ComponentCount,
 						SDPrimitiveToGLBaseType(primitive),
 						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
+						layout.m_Stride,
 						(const void*)element.Offset
 					);
 					bufferElementIndex++;
@@ -164,7 +164,7 @@ namespace fe
 							columns,
 							SDPrimitiveToGLBaseType(primitive),
 							element.Normalized ? GL_TRUE : GL_FALSE,
-							layout.GetStride(),
+							layout.m_Stride,
 							(const void*)element.Offset
 						);
 						glVertexAttribDivisor(bufferElementIndex, 1);

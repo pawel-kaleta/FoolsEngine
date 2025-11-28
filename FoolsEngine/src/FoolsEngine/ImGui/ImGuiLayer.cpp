@@ -139,7 +139,7 @@ namespace fe {
 
 		bool changed = false;
 
-		auto name = uniform.GetName().c_str();
+		auto name = uniform.m_Name.c_str();
 		ImGuiDataType ImGuiType = -1;
 
 		switch (uniform.GetPrimitive().Value)
@@ -151,7 +151,7 @@ namespace fe {
 		case ShaderData::Primitive::Bool:
 		{
 			bool* dataPtr = (bool*)uniformDataPtr;
-			for (unsigned int i = 1; i < uniform.GetCount(); i++)
+			for (unsigned int i = 1; i < uniform.m_Count; i++)
 			{
 				if (ImGui::Checkbox("", dataPtr++))
 					changed = true;
@@ -181,7 +181,7 @@ namespace fe {
 			return false;
 		}
 
-		int count = (int)ShaderData::SizeOfType(uniform.GetType()) / (int)ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		int count = (int)ShaderData::SizeOfType(uniform.m_Type) / (int)ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
 		if (ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
 			changed = true;
 

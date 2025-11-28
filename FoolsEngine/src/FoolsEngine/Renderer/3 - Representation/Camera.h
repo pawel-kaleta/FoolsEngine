@@ -11,7 +11,7 @@ namespace fe
 	public:
 		FE_DECLARE_ENUM(ProjectionType, Orthographic, Perspective);
 
-		Camera() { CalculateProjection(); }
+		Camera() { CalculateProjectionPerspective(); }
 		~Camera() = default;
 
 		glm::mat4 GetProjectionMatrix() const { return m_Projection; };
@@ -24,37 +24,40 @@ namespace fe
 		void SetViewportSize(uint32_t width, uint32_t hight) { m_AspectRatio = (float)width / (float)hight; CalculateProjection(); }
 
 		//radians
-		float GetPerspectiveFOV() const { return m_PerspectiveFOV; }
-		//radians
-		void SetPerspectiveFOV(float FOV) { m_PerspectiveFOV = FOV; CalculateProjection(); }
-		float GetPerspectiveNearClip() const { return m_PerspectiveNearClip; }
-		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNearClip = nearClip; CalculateProjection(); }
-		float GetPerspectiveFarClip() const { return m_PerspectiveFarClip; }
-		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFarClip = farClip; CalculateProjection(); }
+		void SetPerspectiveFOV(float FOV) { m_PerspectiveData.m_FOV = FOV; CalculateProjectionPerspective(); }
+		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveData.m_NearClip = nearClip; CalculateProjectionPerspective(); }
+		void SetPerspectiveFarClip(float farClip) { m_PerspectiveData.m_FarClip = farClip; CalculateProjectionPerspective(); }
 
-		float GetOrthographicZoom() const { return m_OrthographicZoom; }
-		void SetOrthographicZoom(float zoom) { m_OrthographicZoom = zoom; CalculateProjection(); }
-		float GetOrthographicNearClip() const { return m_OrthographicNearClip; }
-		void SetOrthographicNearClip(float nearClip) { m_OrthographicNearClip = nearClip; CalculateProjection(); }
-		float GetOrthographicFarClip() const { return m_OrthographicFarClip; }
-		void SetOrthographicFarClip(float farClip) { m_OrthographicFarClip = farClip; CalculateProjection(); }
+		void SetOrthographicZoom(float zoom) { m_OrthographicData.m_Zoom = zoom; CalculateProjectionOrthographic(); }
+		void SetOrthographicNearClip(float nearClip) { m_OrthographicData.m_NearClip = nearClip; CalculateProjectionOrthographic(); }
+		void SetOrthographicFarClip(float farClip) { m_OrthographicData.m_FarClip = farClip; CalculateProjectionOrthographic(); }
 
-		ProjectionType GetProjectionType() const { return m_ProjectionType; }
 		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; CalculateProjection(); }
 
-	private:
-		glm::mat4 m_Projection = glm::mat4(1.0f);
 		ProjectionType m_ProjectionType = ProjectionType::Perspective;
+
+		glm::mat4 m_Projection = glm::mat4(1.0f);
 		float m_AspectRatio = 1280.0f / 720.0f;
 
-		float m_PerspectiveFOV = glm::radians(60.0f);
-		float m_PerspectiveNearClip = 0.01f;
-		float m_PerspectiveFarClip = 1000.0f;
+		struct
+		{
+			//radians
+			float m_FOV = glm::radians(60.0f);
+			float m_NearClip = 0.01f;
+			float m_FarClip = 1000.0f;
+		} m_PerspectiveData;
 
-		float m_OrthographicZoom = 1.0f;
-		float m_OrthographicNearClip = -1.0f;
-		float m_OrthographicFarClip = 1.0f;
+		struct
+		{
+			float m_Zoom = 1.0f;
+			float m_NearClip = -1.0f;
+			float m_FarClip = 1.0f;
+		} m_OrthographicData;
+		
 
+	private:
 		void CalculateProjection();
+		void CalculateProjectionPerspective();
+		void CalculateProjectionOrthographic();
 	};
 }

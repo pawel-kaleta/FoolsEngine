@@ -47,7 +47,7 @@ namespace fe
 
 		for (const auto& uniform : dataComponent.Uniforms)
 		{
-			if (name == uniform.GetName())
+			if (name == uniform.m_Name)
 			{
 				return (void*)uniformDataPointer;
 			}
@@ -87,7 +87,7 @@ namespace fe
 		for (const auto& uniform : dataComponent.Uniforms)
 		{
 			auto size = uniform.GetSize();
-			if (name == uniform.GetName())
+			if (name == uniform.m_Name)
 			{
 				std::memcpy((void*)dest, dataPointer, size);
 				return;
@@ -113,15 +113,14 @@ namespace fe
 		for (auto& uniform : core.Uniforms)
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name" << YAML::Value << uniform.GetName();
-			emitter << YAML::Key << "Type" << YAML::Value << uniform.GetType().ToConstCharPtr();
-			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
+			emitter << YAML::Key << "Name" << YAML::Value << uniform.m_Name;
+			emitter << YAML::Key << "Type" << YAML::Value << uniform.m_Type.ToConstCharPtr();
+			emitter << YAML::Key << "Count" << YAML::Value << uniform.m_Count;
 			emitter << YAML::Key << "Default Value" << YAML::Value << YAML::BeginSeq;
 
-			auto type = uniform.GetType();
-			for (size_t i = 0; i < uniform.GetCount(); i++)
+			for (size_t i = 0; i < uniform.m_Count; i++)
 			{
-				EmitShaderDataType(emitter, uniform_data_ptr, type);
+				EmitShaderDataType(emitter, uniform_data_ptr, uniform.m_Type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
@@ -131,7 +130,7 @@ namespace fe
 		emitter << YAML::Key << "Shader Texture Slots" << YAML::Value << YAML::BeginSeq;
 		for (size_t i = 0; i < core.TextureSlots.size(); ++i)
 		{
-			emitter << core.TextureSlots[i].GetName();
+			emitter << core.TextureSlots[i].m_Name;
 		}
 		emitter << YAML::EndSeq;
 

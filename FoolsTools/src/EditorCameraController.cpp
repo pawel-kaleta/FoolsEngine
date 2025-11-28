@@ -34,7 +34,7 @@ namespace fe
 			Rotate(inputAxisDA, inputAxisWS, inputAxisEQ);
 		else
 		{
-			if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
+			if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
 				Move(inputAxisDA, inputAxisEQ, inputAxisWS);
 			else
 				Move(inputAxisDA, inputAxisWS, inputAxisEQ);
@@ -101,16 +101,16 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
+		if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
 		{
-			auto FOV = m_Camera.GetPerspectiveFOV();
+			auto FOV = m_Camera.m_PerspectiveData.m_FOV;
 			FOV -= delta * 0.05f;
 			FOV = std::clamp(FOV, glm::radians(10.0f), glm::radians(160.0f));
 			m_Camera.SetPerspectiveFOV(FOV);
 		}
 		else
 		{
-			auto zoom = m_Camera.GetOrthographicZoom();
+			auto zoom = m_Camera.m_OrthographicData.m_Zoom;
 			zoom -= delta * 0.25f;
 			zoom = std::max(zoom, 0.25f);
 			m_Camera.SetOrthographicZoom(zoom);
@@ -150,7 +150,7 @@ namespace fe
 		ImGui::DragFloat3("Scale"   , glm::value_ptr(transform.Scale   ), 0.01f);
 
 		constexpr const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[m_Camera.GetProjectionType().ToInt()];
+		const char* currentProjectionTypeString = projectionTypeStrings[m_Camera.m_ProjectionType.ToInt()];
 
 		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 		{
@@ -172,33 +172,36 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		if (m_Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
+		if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
 		{
-			float verticalFov = glm::degrees(m_Camera.GetPerspectiveFOV());
-			if (ImGui::DragFloat("Field of View", &verticalFov))
-				m_Camera.SetPerspectiveFOV(glm::radians(verticalFov));
+			const auto& data = m_Camera.m_PerspectiveData;
+			float fov = glm::degrees(data.m_FOV);
+			if (ImGui::DragFloat("Field of View", &fov))
+				m_Camera.SetPerspectiveFOV(glm::radians(fov));
 
-			float orthoNear = m_Camera.GetPerspectiveNearClip();
-			if (ImGui::DragFloat("Near Clip", &orthoNear))
-				m_Camera.SetPerspectiveNearClip(orthoNear);
+			float near_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Near Clip", &near_clip))
+				m_Camera.SetPerspectiveNearClip(near_clip);
 
-			float orthoFar = m_Camera.GetPerspectiveFarClip();
-			if (ImGui::DragFloat("Far Clip", &orthoFar))
-				m_Camera.SetPerspectiveFarClip(orthoFar);
+			float far_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Far Clip", &far_clip))
+				m_Camera.SetPerspectiveFarClip(far_clip);
 		}
 		else
 		{
-			float zoom = m_Camera.GetOrthographicZoom();
+			const auto& data = m_Camera.m_OrthographicData;
+
+			float zoom = data.m_Zoom;
 			if (ImGui::DragFloat("Zoom", &zoom))
 				m_Camera.SetOrthographicZoom(zoom);
 
-			float orthoNear = m_Camera.GetOrthographicNearClip();
-			if (ImGui::DragFloat("Near Clip", &orthoNear))
-				m_Camera.SetOrthographicNearClip(orthoNear);
+			float near_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Near Clip", &near_clip))
+				m_Camera.SetOrthographicNearClip(near_clip);
 
-			float orthoFar = m_Camera.GetOrthographicFarClip();
-			if (ImGui::DragFloat("Far Clip", &orthoFar))
-				m_Camera.SetOrthographicFarClip(orthoFar);
+			float far_clip = data.m_FarClip;
+			if (ImGui::DragFloat("Far Clip", &far_clip))
+				m_Camera.SetOrthographicFarClip(far_clip);
 		}
 	}
 }

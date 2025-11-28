@@ -48,11 +48,10 @@ namespace fe
 
         virtual const FramebufferData::Specification& GetSpecification() const override { return m_Specification; };
 
-        //static GLenum ComponentsToGLformat(TextureData::Components components);
         static GLenum FormatToGLinternalFormat(TextureData::Format format);
         static GLenum FormatToGLtype(TextureData::Format format);
         static GLenum FormatToGLformat(TextureData::Format format);
-    private:
+
         uint32_t m_ID = 0;
         std::string m_Name;
         FramebufferData::Specification m_Specification;
@@ -60,6 +59,7 @@ namespace fe
         uint32_t m_DepthStencilAttachment = 0;
         std::vector<uint32_t> m_ColorAttachments;
 
+    private:
         void Create();
         void Delete();
     };

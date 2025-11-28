@@ -23,12 +23,15 @@ namespace fe
 	class Renderer2D
 	{
 	public:
+		static Renderer2D& Get() { return *s_Instance; }
+
 		struct RenderStats
 		{
 			uint32_t Quads;
 			uint32_t DrawCalls;
 			Time::TimeStep RenderTime;
 		};
+		RenderStats m_Stats;
 
 		struct Quad
 		{
@@ -37,15 +40,13 @@ namespace fe
 			AssetHandle<Texture2D> Texture; // FlatWhite
 		};
 
-		static void Init();
-		static void Shutdown();
-
 		static void RenderScene(const AssetObserver<Scene>& scene);
-
-		static RenderStats GetStats() { return s_Stats; }
 
 	private:
 		friend class Renderer;
+		static void Startup();
+		static void Init();
+		static void Shutdown();
 
 		struct ConstLimits {
 			constexpr static uint32_t QuadsInBatch = 10000;
@@ -77,26 +78,23 @@ namespace fe
 			uint32_t TexturesCount = 1;
 		};
 
-		struct Renderer2DData
-		{
-			Ref<VertexBuffer> QuadVertexBuffer;
+		
+		Ref<VertexBuffer> m_QuadVertexBuffer;
 
-			BatchData Batch;
+		BatchData m_Batch;
 
-			AssetHandle<Shader> BaseShader;
-			ShaderTextureSlot BaseShaderTextureSlot;
-			RenderTextureSlotID BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
-		};
+		AssetHandle<Shader> m_BaseShader;
+		ShaderTextureSlot m_BaseShaderTextureSlot;
+		RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 
-		static Renderer2DData& s_Data;
+		static Renderer2D* s_Instance;
 
-		static void BeginScene();
-		static void ClearBatch();
-		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
-		static void Flush();
-		static void EndScene();
+		void BeginScene();
+		void ClearBatch();
+		void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
+		void Flush();
+		void EndScene();
 
-		static RenderStats s_Stats;
-		static Time::TimePoint m_RenderStartTimePoint;
+		Time::TimePoint m_RenderStartTimePoint;
 	};
 }

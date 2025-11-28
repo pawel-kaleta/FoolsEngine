@@ -5,7 +5,7 @@
 namespace fe
 {
 	using RenderingContextID = uint32_t;
-	constexpr uint32_t NullRenderingContextID = -1;
+	constexpr RenderingContextID NullRenderingContextID = -1;
 
 	class RenderingContext
 	{
@@ -19,13 +19,14 @@ namespace fe
 		RenderingContextID GetID() { return m_ID; }
 
 		static Scope<RenderingContext> Create(GDIType GDI, void* nativeWindow);
-	protected:
+
 		GDIType m_Type = GDIType::None;
 		RenderingContextID m_ID = -1;
 		void* m_Window = nullptr;
 		
 		static uint32_t ContextsCount;
 		
+	protected:
 		
 		RenderingContext() = default;
 		RenderingContext(GDIType GDI, void* nativeWindow) :

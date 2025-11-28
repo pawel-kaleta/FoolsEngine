@@ -49,19 +49,6 @@ namespace fe
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();
 
-		//static void Draw(
-		//	const Ref<VertexBuffer>& vertexBuffer,
-		//	const AssetObserver<Material>& materialObserver,
-		//	const glm::mat4& transform
-		//);
-		//
-		//static void Draw(
-		//	const Ref<VertexBuffer>& vertexBuffer,
-		//	const AssetObserver<Material>& materialObserver,
-		//	const glm::mat4& transform,
-		//	const glm::mat4& VPMatrix
-		//);
-
 		static struct BaseAssets // starting from C++20 msvc is unhappy about anonymous static properties :(
 		{
 			struct {

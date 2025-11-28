@@ -38,7 +38,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		uint32_t indexCount = ((OpenGLVertexBuffer*)vertexBuffer)->GetIndexBuffer()->GetCount(); 
+		uint32_t indexCount = ((OpenGLVertexBuffer*)vertexBuffer)->GetIndexBuffer()->m_Count; 
 		DrawIndexed(vertexBuffer, indexCount);
 	}
 

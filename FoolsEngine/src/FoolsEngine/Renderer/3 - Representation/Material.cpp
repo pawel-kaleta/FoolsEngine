@@ -54,7 +54,7 @@ namespace fe
 
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
-			if (name == uniform.GetName())
+			if (name == uniform.m_Name)
 			{
 				return (void*)uniformDataPointer;
 			}
@@ -92,7 +92,7 @@ namespace fe
 		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
 		{
 			auto size = uniform.GetSize();
-			if (name == uniform.GetName())
+			if (name == uniform.m_Name)
 			{
 				std::memcpy((void*)dest, dataPointer, size);
 				return;
@@ -129,7 +129,7 @@ namespace fe
 		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
 		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (texture_slots[i].GetName() == textureSlotName)
+			if (texture_slots[i].m_Name == textureSlotName)
 				return dataComponent.TextureIDs[i];
 		}
 
@@ -166,7 +166,7 @@ namespace fe
 		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
 		for (size_t i = 0; i < texture_slots.size(); i++)
 		{
-			if (texture_slots[i].GetName() == textureSlotName)
+			if (texture_slots[i].m_Name == textureSlotName)
 			{
 				dataComponent.TextureIDs[i] = textureID;
 				return;
@@ -278,16 +278,15 @@ namespace fe
 		char* uniform_data_ptr = (char*)core.UniformsData;
 		for (auto& uniform : shading_model_core.Uniforms)
 		{
-			emitter << YAML::Key << uniform.GetName() << YAML::Value << YAML::BeginMap;
-			emitter << YAML::Key << "Type"  << YAML::Value << uniform.GetType().ToConstCharPtr();
-			emitter << YAML::Key << "Count" << YAML::Value << uniform.GetCount();
+			emitter << YAML::Key << uniform.m_Name << YAML::Value << YAML::BeginMap;
+			emitter << YAML::Key << "Type"  << YAML::Value << uniform.m_Type.ToConstCharPtr();
+			emitter << YAML::Key << "Count" << YAML::Value << uniform.m_Count;
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
 
-			auto type = uniform.GetType();
-			for (size_t i = 0; i < uniform.GetCount(); i++)
+			for (size_t i = 0; i < uniform.m_Count; i++)
 			{
 				float* test = (float*)uniform_data_ptr;
-				EmitShaderDataType(emitter, uniform_data_ptr, type);
+				EmitShaderDataType(emitter, uniform_data_ptr, uniform.m_Type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
@@ -298,7 +297,7 @@ namespace fe
 		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
 		for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
 		{
-			emitter << YAML::Key << shading_model_core.TextureSlots[i].GetName() << YAML::Value;
+			emitter << YAML::Key << shading_model_core.TextureSlots[i].m_Name << YAML::Value;
 
 			if (core.TextureIDs[i] != NullAssetID)
 			{
@@ -340,49 +339,52 @@ namespace fe
 
 		for (const auto& uniform : uniforms)
 		{
-			const auto& uniform_node = node[uniform.GetName()];
+			const auto size = uniform.GetSize();
+			const auto& count = uniform.m_Count;
+			const auto& type = uniform.m_Type;
+			const auto& name = uniform.m_Name;
+
+			const auto& uniform_node = node[name];
 
 			if (!uniform_node.IsDefined())
 			{
 				FE_LOG_CORE_WARN("Missing uniform in material definition");
-				uniform_data_ptr += uniform.GetSize() * uniform.GetCount();
+				uniform_data_ptr += size * count;
 				continue;
 			}
-			else
+			
+			const auto& type_node = uniform_node["Type"];
+			const auto& count_node = uniform_node["Count"];
+			const auto& value_node = uniform_node["Value"];
+
+			if (!type_node ||
+				!count_node ||
+				!value_node)
 			{
-				const auto& type_node = uniform_node["Type"];
-				const auto& count_node = uniform_node["Count"];
-				const auto& value_node = uniform_node["Value"];
+				FE_LOG_CORE_WARN("Ill defined uniform in material definition");
+				uniform_data_ptr += size * count;
 
-				if (!type_node ||
-					!count_node ||
-					!value_node)
-				{
-					FE_LOG_CORE_WARN("Ill defined uniform in material definition");
-					uniform_data_ptr += uniform.GetSize() * uniform.GetCount();
+				continue;
+			}
 
-					continue;
-				}
+			const auto uniform_count = count_node.as<uint32_t>();
 
-				const auto uniform_count = count_node.as<uint32_t>();
+			if (type.ToConstCharPtr() != type_node.as<std::string>() ||
+				!value_node.IsSequence() ||
+				value_node.size() != uniform_count ||
+				count != uniform_count)
+			{
+				FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name);
+				uniform_data_ptr += size * count;
 
-				if (uniform.GetType().ToConstCharPtr() != type_node.as<std::string>() ||
-					!value_node.IsSequence() ||
-					value_node.size() != uniform_count ||
-					uniform.GetCount() != uniform_count)
-				{
-					FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", uniform.GetName());
-					uniform_data_ptr += uniform.GetSize() * uniform.GetCount();
+				continue;
+			}
 
-					continue;
-				}
-
-				for (size_t i = 0; i < uniform.GetCount(); ++i)
-				{
-					bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform.GetType());
-					if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", uniform.GetName());
-					uniform_data_ptr += uniform.GetSize();
-				}
+			for (size_t i = 0; i < count; ++i)
+			{
+				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, type);
+				if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name);
+				uniform_data_ptr += size;
 			}
 		}
 	}
@@ -396,7 +398,7 @@ namespace fe
 		for (size_t i = 0; i < textureSlots.size(); ++i)
 		{
 			const auto& texture_slot = textureSlots[i];
-			const auto& texture_node = node[texture_slot.GetName()];
+			const auto& texture_node = node[texture_slot.m_Name];
 
 			if (!texture_node.IsDefined())
 			{

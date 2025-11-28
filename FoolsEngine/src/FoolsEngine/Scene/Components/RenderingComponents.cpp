@@ -26,7 +26,7 @@ namespace fe
 		}
 
 		constexpr const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
-		const char* currentProjectionTypeString = projectionTypeStrings[Camera.GetProjectionType().ToInt()];
+		const char* currentProjectionTypeString = projectionTypeStrings[Camera.m_ProjectionType.ToInt()];
 
 		if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 		{
@@ -48,33 +48,36 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		if (Camera.GetProjectionType() == Camera::ProjectionType::Perspective)
+		if (Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
 		{
-			float verticalFov = glm::degrees(Camera.GetPerspectiveFOV());
-			if (ImGui::DragFloat("Field of View", &verticalFov))
-				Camera.SetPerspectiveFOV(glm::radians(verticalFov));
+			const auto& data = Camera.m_PerspectiveData;
+			float fov = glm::degrees(data.m_FOV);
+			if (ImGui::DragFloat("Field of View", &fov))
+				Camera.SetPerspectiveFOV(glm::radians(fov));
 
-			float orthoNear = Camera.GetPerspectiveNearClip();
-			if (ImGui::DragFloat("Near Clip", &orthoNear))
-				Camera.SetPerspectiveNearClip(orthoNear);
+			float near_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Near Clip", &near_clip))
+				Camera.SetPerspectiveNearClip(near_clip);
 
-			float orthoFar = Camera.GetPerspectiveFarClip();
-			if (ImGui::DragFloat("Far Clip", &orthoFar))
-				Camera.SetPerspectiveFarClip(orthoFar);
+			float far_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Far Clip", &far_clip))
+				Camera.SetPerspectiveFarClip(far_clip);
 		}
 		else
 		{
-			float zoom = Camera.GetOrthographicZoom();
+			const auto& data = Camera.m_OrthographicData;
+
+			float zoom = data.m_Zoom;
 			if (ImGui::DragFloat("Zoom", &zoom))
 				Camera.SetOrthographicZoom(zoom);
 
-			float orthoNear = Camera.GetOrthographicNearClip();
-			if (ImGui::DragFloat("Near Clip", &orthoNear))
-				Camera.SetOrthographicNearClip(orthoNear);
+			float near_clip = data.m_NearClip;
+			if (ImGui::DragFloat("Near Clip", &near_clip))
+				Camera.SetOrthographicNearClip(near_clip);
 
-			float orthoFar = Camera.GetOrthographicFarClip();
-			if (ImGui::DragFloat("Far Clip", &orthoFar))
-				Camera.SetOrthographicFarClip(orthoFar);
+			float far_clip = data.m_FarClip;
+			if (ImGui::DragFloat("Far Clip", &far_clip))
+				Camera.SetOrthographicFarClip(far_clip);
 		}
 	}
 
@@ -82,31 +85,36 @@ namespace fe
 	{
 		emitter << YAML::Key << "IsPrimary" << YAML::Value << IsPrimary;
 
-		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.GetProjectionType().ToConstCharPtr();
+		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.m_ProjectionType.ToConstCharPtr();
 
-		emitter << YAML::Key << "PerspectiveNear" << YAML::Value << Camera.GetPerspectiveNearClip();
-		emitter << YAML::Key << "PerspectiveFar" << YAML::Value << Camera.GetPerspectiveFarClip();
-		emitter << YAML::Key << "PerspectiveFOV" << YAML::Value << Camera.GetPerspectiveFOV();
+		const auto& data_pers = Camera.m_PerspectiveData;
+		emitter << YAML::Key << "PerspectiveNear" << YAML::Value << data_pers.m_NearClip;
+		emitter << YAML::Key << "PerspectiveFar" << YAML::Value << data_pers.m_FarClip;
+		emitter << YAML::Key << "PerspectiveFOV" << YAML::Value << data_pers.m_FOV;
 
-		emitter << YAML::Key << "OrthographicNear" << YAML::Value << Camera.GetOrthographicNearClip();
-		emitter << YAML::Key << "OrthographicFar" << YAML::Value << Camera.GetOrthographicFarClip();
-		emitter << YAML::Key << "OrthographicZoom" << YAML::Value << Camera.GetOrthographicZoom();
+		const auto& data_orto = Camera.m_OrthographicData;
+		emitter << YAML::Key << "OrthographicNear" << YAML::Value << data_orto.m_NearClip;
+		emitter << YAML::Key << "OrthographicFar" << YAML::Value << data_orto.m_FarClip;
+		emitter << YAML::Key << "OrthographicZoom" << YAML::Value << data_orto.m_Zoom;
 	}
 
 	void CCamera::Deserialize(YAML::Node& data)
 	{
 		IsPrimary = data["IsPrimary"].as<bool>();
 
+		auto& data_pers = Camera.m_PerspectiveData;
+		auto& data_orto = Camera.m_OrthographicData;
+
+		data_pers.m_NearClip = data["PerspectiveNear"].as<float>();
+		data_pers.m_FarClip = data["PerspectiveFar"].as<float>();
+		data_pers.m_FOV = data["PerspectiveFOV"].as<float>();
+
+		data_orto.m_NearClip = data["OrthographicNear"].as<float>();
+		data_orto.m_FarClip = data["OrthographicFar"].as<float>();
+		data_orto.m_Zoom = data["OrthographicZoom"].as<float>();
+
 		Camera::ProjectionType projection;
 		projection.FromString(data["ProjectionType"].as<std::string>());
 		Camera.SetProjectionType(projection);
-
-		Camera.SetPerspectiveNearClip(data["PerspectiveNear"].as<float>());
-		Camera.SetPerspectiveFarClip(data["PerspectiveFar"].as<float>());
-		Camera.SetPerspectiveFOV(data["PerspectiveFOV"].as<float>());
-
-		Camera.SetOrthographicNearClip(data["OrthographicNear"].as<float>());
-		Camera.SetOrthographicFarClip(data["OrthographicFar"].as<float>());
-		Camera.SetOrthographicZoom(data["OrthographicZoom"].as<float>());
 	}
 }

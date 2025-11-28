@@ -128,6 +128,7 @@ namespace fe
 		case spdlog::level::off:		return LoggingLevel::None;
 		default:
 			FE_CORE_ASSERT(false, "What?");
+			return LoggingLevel::None;
 		}
 	}
 
@@ -145,6 +146,7 @@ namespace fe
 		case spdlog::level::off:		return LoggingLevel::None;
 		default:
 			FE_CORE_ASSERT(false, "What?");
+			return LoggingLevel::None;
 		}
 	}
 

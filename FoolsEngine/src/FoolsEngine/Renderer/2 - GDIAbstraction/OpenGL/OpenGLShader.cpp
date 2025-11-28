@@ -42,19 +42,19 @@ namespace fe
 			return;
 		}
 
-		auto& name = uniform.GetName();
+		auto& name = uniform.m_Name;
 		GLint location;
 
 		auto x = m_UniformLocations.find(name);
 		if (x == m_UniformLocations.end())
 		{
-			location = glGetUniformLocation(m_ProgramID, uniform.GetName().c_str());
+			location = glGetUniformLocation(m_ProgramID, name.c_str());
 			m_UniformLocations[name] = location;
 		}
 		else
 			location = x->second;
 
-		switch (uniform.GetType().Value)
+		switch (uniform.m_Type.Value)
 		{
 		case ShaderData::Type::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Type of uniform!");
@@ -143,7 +143,7 @@ namespace fe
 	{
 		FE_CORE_ASSERT(rendererTextureSlot && count, "RenderTextureSlotID pointer is null or count is 0 - ptr_val: {0}; count: {1}", (size_t)rendererTextureSlot, count);
 
-		auto& name = textureSlot.GetName();
+		auto& name = textureSlot.m_Name;
 		GLint location;
 
 		auto x = m_UniformLocations.find(name);
@@ -160,7 +160,7 @@ namespace fe
 
 	void OpenGLShader::BindTextureSlot(const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot)
 	{
-		auto& name = textureSlot.GetName();
+		auto& name = textureSlot.m_Name;
 		GLint location;
 
 		auto x = m_UniformLocations.find(name);

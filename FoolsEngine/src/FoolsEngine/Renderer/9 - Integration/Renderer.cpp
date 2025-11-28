@@ -44,6 +44,8 @@ namespace fe
 	void Renderer::Startup()
 	{
 		FE_PROFILER_FUNC();
+
+		Renderer2D::Startup();
 	}
 
 	void Renderer::Shutdown()
@@ -103,8 +105,8 @@ namespace fe
 
 		UploadBaseAssetsToGPU(GetActiveGDItype());
 
-		Renderer2D::s_Data.BaseShader = BaseAssets.Shaders.Base2D;
-		Renderer2D::s_Data.Batch.Textures[0] = BaseAssets.Textures.FlatWhite.GetID();
+		Renderer2D::Get().m_BaseShader = BaseAssets.Shaders.Base2D;
+		Renderer2D::Get().m_Batch.Textures[0] = BaseAssets.Textures.FlatWhite.GetID();
 
 		FE_LOG_CORE_INFO("Base Assets acquired");
 	}
@@ -199,7 +201,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		
 		RenderCommands::Clear();
-		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
+		RenderCommands::SetClearColor({ 0.8, 0.1, 0.1, 1 });
 
 		switch (s_ActiveGDI.Value)
 		{
@@ -224,67 +226,4 @@ namespace fe
 		if (error)
 			FE_LOG_CORE_INFO("{0}", error);
 	}
-
-	//void Renderer::Draw(const Ref<VertexBuffer>& vertexBuffer, const AssetObserver<Material>& materialObserver, const glm::mat4& transform)
-	//{
-	//	Draw(vertexBuffer, materialObserver, transform, SceneData.VPMatrix);
-	//}
-	//
-	//void Renderer::Draw(
-	//	const Ref<VertexBuffer>& vertexBuffer,
-	//	const AssetObserver<Material>& materialObserver,
-	//	const glm::mat4& transform,
-	//	const glm::mat4& VPMatrix)
-	//{
-	//	FE_PROFILER_FUNC();
-	//
-	//	auto& material_core = materialObserver.GetCoreComponent();
-	//	AssetObserver<ShadingModel> sm_observer(material_core.ShadingModelID);
-	//	auto& sm_core = sm_observer.GetCoreComponent();
-	//	AssetUser<Shader> shaderUser(sm_core.ShaderID);
-	//
-	//	shaderUser.Bind(s_ActiveGDI);
-	//
-	//	shaderUser.UploadUniform(
-	//		s_ActiveGDI,
-	//		Uniform("u_ViewProjection", ShaderData::Type::Mat4),
-	//		(void*)glm::value_ptr(VPMatrix)
-	//	);
-	//	shaderUser.UploadUniform(
-	//		s_ActiveGDI,
-	//		Uniform("u_Transform", ShaderData::Type::Mat4),
-	//		(void*)glm::value_ptr(transform)
-	//	);
-	//
-	//	for (const auto& uniform : sm_core.Uniforms)
-	//	{
-	//		auto dataPointer = materialObserver.GetUniformValuePtr(material_core, uniform);
-	//		shaderUser.UploadUniform(s_ActiveGDI, uniform, dataPointer);
-	//	}
-	//
-	//	{
-	//		uint32_t rendererTextureSlot = 0;
-	//		auto shaderTextureSlotsIt = sm_core.TextureSlots.begin();
-	//
-	//		for (const auto& textureID : material_core.TextureIDs)
-	//		{
-	//			shaderUser.BindTextureSlot(s_ActiveGDI, *shaderTextureSlotsIt++, rendererTextureSlot);
-	//
-	//			if (textureID)
-	//			{
-	//				AssetUser<Texture2D>(textureID).Bind(s_ActiveGDI, rendererTextureSlot++);
-	//			}
-	//			else
-	//			{
-	//				FE_LOG_CORE_WARN("Uninitialized texture!");
-	//				BaseAssets.Textures.Default.Use().Bind(s_ActiveGDI, rendererTextureSlot++);
-	//				continue;
-	//			}
-	//		}
-	//	}
-	//
-	//	vertexBuffer->Bind();
-	//
-	//	RenderCommands::DrawIndexed(vertexBuffer.get());
-	//}
 } 
