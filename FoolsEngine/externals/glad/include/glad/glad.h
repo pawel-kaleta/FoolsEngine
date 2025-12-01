@@ -4710,9 +4710,9 @@ GLAPI PFNGLVERTEXATTRIBLFORMATPROC glad_glVertexAttribLFormat;
 typedef void (APIENTRYP PFNGLVERTEXATTRIBBINDINGPROC)(GLuint attribindex, GLuint bindingindex);
 GLAPI PFNGLVERTEXATTRIBBINDINGPROC glad_glVertexAttribBinding;
 #define glVertexAttribBinding glad_glVertexAttribBinding
-typedef void (APIENTRYP PFNGLVERTEXBINDINGAPIVISORPROC)(GLuint bindingindex, GLuint divisor);
-GLAPI PFNGLVERTEXBINDINGAPIVISORPROC glad_glVertexBindinGAPIvisor;
-#define glVertexBindinGAPIvisor glad_glVertexBindinGAPIvisor
+typedef void (APIENTRYP PFNGLVERTEXBINDINGDIVISORPROC)(GLuint bindingindex, GLuint divisor);
+GLAPI PFNGLVERTEXBINDINGDIVISORPROC glad_glVertexBindingDivisor;
+#define glVertexBindingDivisor glad_glVertexBindingDivisor
 typedef void (APIENTRYP PFNGLDEBUGMESSAGECONTROLPROC)(GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled);
 GLAPI PFNGLDEBUGMESSAGECONTROLPROC glad_glDebugMessageControl;
 #define glDebugMessageControl glad_glDebugMessageControl
@@ -5039,9 +5039,9 @@ GLAPI PFNGLVERTEXARRAYATTRIBIFORMATPROC glad_glVertexArrayAttribIFormat;
 typedef void (APIENTRYP PFNGLVERTEXARRAYATTRIBLFORMATPROC)(GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset);
 GLAPI PFNGLVERTEXARRAYATTRIBLFORMATPROC glad_glVertexArrayAttribLFormat;
 #define glVertexArrayAttribLFormat glad_glVertexArrayAttribLFormat
-typedef void (APIENTRYP PFNGLVERTEXARRAYBINDINGAPIVISORPROC)(GLuint vaobj, GLuint bindingindex, GLuint divisor);
-GLAPI PFNGLVERTEXARRAYBINDINGAPIVISORPROC glad_glVertexArrayBindinGAPIvisor;
-#define glVertexArrayBindinGAPIvisor glad_glVertexArrayBindinGAPIvisor
+typedef void (APIENTRYP PFNGLVERTEXARRAYBINDINGDIVISORPROC)(GLuint vaobj, GLuint bindingindex, GLuint divisor);
+GLAPI PFNGLVERTEXARRAYBINDINGDIVISORPROC glad_glVertexArrayBindingDivisor;
+#define glVertexArrayBindingDivisor glad_glVertexArrayBindingDivisor
 typedef void (APIENTRYP PFNGLGETVERTEXARRAYIVPROC)(GLuint vaobj, GLenum pname, GLint *param);
 GLAPI PFNGLGETVERTEXARRAYIVPROC glad_glGetVertexArrayiv;
 #define glGetVertexArrayiv glad_glGetVertexArrayiv
