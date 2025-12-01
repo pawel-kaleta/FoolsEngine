@@ -15,10 +15,11 @@ namespace fe
 		{
 			std::string Name;
 			Data::Type Type;
-			bool Normalized;
+			uint32_t Count;
+			bool Normalized; // TO DO: do we need this?
 
-			Element(Data::Type type, const std::string& name, bool normalized = false)
-				: Name(name), Normalized(normalized), Type(type) { }
+			Element(Data::Type type, const std::string& name, uint32_t count = 1, bool normalized = false)
+				: Name(name), Normalized(normalized), Type(type), Count(count) { }
 
 			size_t ComponentCount() const
 			{
@@ -30,18 +31,25 @@ namespace fe
 			size_t Size() const { return Data::SizeOfType(Type); }
 		};
 
-		FE_DECLARE_ENUM(LayoutType, None, Basic);
+		FE_DECLARE_ENUM(LayoutType, None, Vertex, MainUniforms, STD140, Internal);
+		// Vertex - vertex buffer
+		// MainUniforms - individually bound and uploaded uniforms
+		// STD140 - uniform buffers
+		// Internal - vertex output / fragment input / fragment output
 
 		struct Layout
 		{
 		public:
 			Layout()
 				: Type(LayoutType::None) { };
+			Layout(LayoutType type)
+				: Type(type) { };
 			Layout(const std::initializer_list<Element>& elements)
-				: Type(LayoutType::Basic), Elements(elements) { CalculateOffsetsAndStride(); }
+				: Type(LayoutType::Vertex), Elements(elements) { CalculateOffsetsAndStride(); };
 
 			std::vector<Element> Elements;
 			std::vector<uint32_t> Offsets;
+				
 			LayoutType Type;
 			uint32_t Stride;
 
@@ -49,7 +57,7 @@ namespace fe
 			{
 				FE_PROFILER_FUNC();
 
-				FE_CORE_ASSERT(Type == LayoutType::Basic, "Unsupported LayoutType");
+				FE_CORE_ASSERT(Type == LayoutType::Vertex, "Unsupported LayoutType");
 
 				uint32_t offset = 0;
 				Stride = 0;
@@ -63,13 +71,7 @@ namespace fe
 					offset += size;
 					Stride += size;
 				}
-			}
-
-			//std::vector<Element>::iterator begin() { return Elements.begin(); }
-			//std::vector<Element>::iterator end() { return Elements.end(); }
-			//
-			//std::vector<Element>::const_iterator begin() const { return Elements.begin(); }
-			//std::vector<Element>::const_iterator end()   const { return Elements.end(); }
+			};
 		};
 
 		struct Vertex {

@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Lights.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\EntryPoint.h" />
