@@ -4,7 +4,7 @@
 #include "BaseEntity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 #include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"

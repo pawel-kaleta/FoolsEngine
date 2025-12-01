@@ -1,9 +1,9 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
+#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
@@ -23,7 +23,7 @@ namespace fe
 
 	ACMeshCore::~ACMeshCore() { if (Data) GeometryLoader::UnloadMesh(Data); }
 
-	bool MeshUser::SendDataToGPU(GDIType GDI) const
+	bool MeshUser::SendDataToGPU(GAPIType GAPI) const
 	{
 		if (AllOf<ACGPUBuffers>())
 		{
@@ -38,8 +38,8 @@ namespace fe
 		if (!core.Data)
 			return false;
 
-		buffersComp.VertexBuffer = VertexBuffer::Create(core.GetVertexArrayPtr(), (spec.VertexCount * sizeof(VertexData::Vertex)));
-		buffersComp.VertexBuffer->SetLayout(VertexData::Vertex::GetLayout());
+		buffersComp.VertexBuffer = VertexBuffer::Create(core.GetVertexArrayPtr(), (spec.VertexCount * sizeof(Description::Buffer::Vertex)));
+		buffersComp.VertexBuffer->SetLayout(Description::Buffer::Vertex::GetLayout());
 
 		buffersComp.IndexBuffer = IndexBuffer::Create(core.GetIndexArrayPtr(), spec.IndexCount);
 
@@ -79,14 +79,14 @@ namespace fe
 		auto& sm_core = shading_model_observer.GetCoreComponent();
 		AssetUser<Shader> shader_user(sm_core.ShaderID);
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 
 		char* uniform_data_ptr = (char*)material_core.UniformsData;
 
 		for (const auto& uniform : sm_core.Uniforms)
 		{
 			shader_user.UploadUniform(
-				GDI,
+				GAPI,
 				uniform,
 				(void*)uniform_data_ptr
 			);
@@ -103,14 +103,14 @@ namespace fe
 			if (textureID != NullAssetID)
 			{
 				AssetUser<Texture2D> texture(textureID);
-				texture.Bind(GDI, renderer_texture_slot);
+				texture.Bind(GAPI, renderer_texture_slot);
 			}
 			else
 			{
-				Renderer::BaseAssets.Textures.Default.Use().Bind(GDI, renderer_texture_slot);
+				Renderer::BaseAssets.Textures.Default.Use().Bind(GAPI, renderer_texture_slot);
 			}
 
-			shader_user.BindTextureSlot(GDI, texture_slot, renderer_texture_slot);
+			shader_user.BindTextureSlot(GAPI, texture_slot, renderer_texture_slot);
 
 			renderer_texture_slot++;
 		}

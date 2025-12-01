@@ -43,7 +43,7 @@ namespace fe
 		void OnMouseScrolled(Ref<Events::MouseScrolledEvent> event);
 
 		void Move(int horizontalDir, int verticalDir, int viewDir);
-		void Rotate(int headingDir, int pitchDir, int bankDir);
+		void Rotate(int headinGAPIr, int pitchDir, int bankDir);
 		void Zoom(float delta);
 	};
 }

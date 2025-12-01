@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\DeviceAPI.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\DeviceAPI.h"
 
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
 #include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
 #include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
@@ -31,15 +31,15 @@ namespace fe
 	class Renderer
 	{
 	public:
-		const static GDIType GetActiveGDItype() { return s_ActiveGDI; }
+		const static GAPIType GetActiveGAPIType() { return s_ActiveGAPI; }
 
 		static void Startup();
 		static void AcquireBaseAssets();
-		static void UploadBaseAssetsToGPU(GDIType GDI);
+		static void UploadBaseAssetsToGPU(GAPIType GAPI);
 		static void Shutdown();
-		static void SetAPI(GDIType GDI);
-		static void CreateAPI(GDIType GDI);
-		static void InitAPI(GDIType GDI);
+		static void SetAPI(GAPIType GAPI);
+		static void CreateAPI(GAPIType GAPI);
+		static void InitAPI(GAPIType GAPI);
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
@@ -87,7 +87,7 @@ namespace fe
 		} SceneData;
 
 	private:
-		static GDIType s_ActiveGDI;
-		static std::unordered_map<GDIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
+		static GAPIType s_ActiveGAPI;
+		static std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};
 }

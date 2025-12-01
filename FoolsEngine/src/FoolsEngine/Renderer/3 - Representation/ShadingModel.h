@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
 
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"

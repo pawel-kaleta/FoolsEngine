@@ -197,16 +197,17 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void CreateTextureForMaterial(const char* textureSlotName, ACMaterialCore& core, const aiString& filePath, const AssetUser<Material>& materialUser, const ImportData* const importData, TextureData::Usage usage)
+	static void CreateTextureForMaterial(const char* textureSlotName, ACMaterialCore& core, const aiString& filePath, const AssetUser<Material>& materialUser, const ImportData* const importData, Description::Texture::Usage usage)
 	{
 		AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
 		AssetHandle<Texture2D> texture_handle(textureID);
 
 		auto full_texture_path = importData->FilepathToImport.parent_path() / std::filesystem::path(filePath.C_Str());
 
-		auto& spec = texture_handle.Use().GetCoreComponent().Specification;
+		auto& texture_core = texture_handle.Use().GetCoreComponent();
+		auto& spec = texture_core.Specification;
 		spec = TextureLoader::InspectTexture(full_texture_path);
-		spec.Usage = usage;
+		texture_core.Usage = usage;
 		AssetManager::SetSourcePath(textureID, filePath.C_Str());
 		materialUser.SetTexture(core, textureSlotName, textureID);
 	}
@@ -228,7 +229,7 @@ namespace fe::GeometryImport
 		auto& recognized = materialData.RecognizedTextures;
 
 		if (recognized.BaseColor != -1)
-			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData, TextureData::Usage::Map_BaseColor);
+			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData, Description::Texture::Usage::Map_BaseColor);
 		else
 			materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
 
@@ -238,7 +239,7 @@ namespace fe::GeometryImport
 		if (texture_packing)
 		{
 			if (recognized.PackedORM != -1)
-				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData, TextureData::Usage::Map_ORM);
+				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData, Description::Texture::Usage::Map_ORM);
 			else
 				materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
@@ -251,23 +252,23 @@ namespace fe::GeometryImport
 			materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Roughness != -1)
-				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData, TextureData::Usage::Map_Roughness);
+				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData, Description::Texture::Usage::Map_Roughness);
 			else
 				materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Metalness != -1)
-				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData, TextureData::Usage::Map_Metalness);
+				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData, Description::Texture::Usage::Map_Metalness);
 			else
 				materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Occlusion != -1)
-				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData, TextureData::Usage::Map_AO);
+				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData, Description::Texture::Usage::Map_AO);
 			else
 				materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 
 		if (recognized.Normal != -1)
-			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData, TextureData::Usage::Map_Normal);
+			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData, Description::Texture::Usage::Map_Normal);
 		else
 			materialUser.SetTexture(core, "u_NormalMap", NullAssetID);
 	}

@@ -1,0 +1,70 @@
+#pragma once
+
+#include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine\Assets\AssetInterface.h"
+
+namespace YAML { class Emitter; }
+
+namespace fe
+{
+	struct GAPIType;
+	class Uniform;
+	class ShaderTextureSlot;
+	using RenderTextureSlotID = uint32_t;
+
+	struct ACShaderCore final : public AssetComponent
+	{
+		std::string VertexSource;
+		std::string FragmentSource;
+		std::string ShaderSource;
+
+		void Init();
+	};
+
+	class ShaderObserver : public AssetInterface
+	{
+	public:
+		const ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
+
+		uint32_t GetRendererID(GAPIType GAPI) const;
+
+		void Bind(GAPIType GAPI) const;
+		void Unbind(GAPIType GAPI) const;
+
+		void UploadUniform(GAPIType GAPI, const Uniform& uniform, const void* dataPointer, uint32_t count = 1, bool transpose = false) const;
+		void BindTextureSlot(GAPIType GAPI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID* rendererTextureSlot, uint32_t count) const;
+		void BindTextureSlot(GAPIType GAPI, const ShaderTextureSlot& textureSlot, RenderTextureSlotID rendererTextureSlot) const;
+	protected:
+		ShaderObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
+	};
+
+	class ShaderUser : public ShaderObserver
+	{
+	public:
+		ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
+
+		template <typename tnGAPIShader, typename... Args>
+		tnGAPIShader& CreateGAPIShader(Args&&... args) const { return Emplace<tnGAPIShader>(std::forward<Args>(args)...); }
+
+		void Release() const;
+
+		void SendDataToGPU(GAPIType GAPI, void* data);;
+		void UnloadFromCPU() const;
+	protected:
+		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
+	};
+
+	class Shader : public Asset
+	{
+	public:
+		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
+		static constexpr const char* GetMetaFileExtension() { return ""; }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShaderCore>(assetID).Init(); }
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) { };
+		static bool LoadMetadata(AssetID assetID) { return true; };
+
+		using Observer = ShaderObserver;
+		using User = ShaderUser;
+		using Core = ACShaderCore;
+	};
+}

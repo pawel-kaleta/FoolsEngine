@@ -26,7 +26,7 @@ fe::Application* fe::CreateApplication(const ApplicationCommandLineArgs& args)
 
 	app_spec.CommandLineArgs = args;
 	app_spec.Name = "Sandbox - FoolsEngine Application";
-	app_spec.WindowAttributes = { "Sandbox - FoolsEngine Application", 1920, 1080, GDIType::OpenGL };
+	app_spec.WindowAttributes = { "Sandbox - FoolsEngine Application", 1920, 1080, GAPIType::OpenGL };
 
 	return new SandboxApp(app_spec);
 }

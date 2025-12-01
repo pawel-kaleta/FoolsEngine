@@ -22,7 +22,7 @@ namespace fe
 
 	void GeometryRenderer::RenderCRenderMeshView(const AssetObserver<Scene>& scene)
 	{
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 		void* VP_matrix_ptr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 
 		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
@@ -64,20 +64,20 @@ namespace fe
 			{
 				auto shader_observer = AssetObserver<Shader>(shaderID);
 
-				shader_observer.Bind(GDI);
+				shader_observer.Bind(GAPI);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VP_matrix_ptr);
-				shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
+				shader_observer.UploadUniform(GAPI, Uniform("u_ViewProjection", Description::Data::Type::Mat4), VP_matrix_ptr);
+				shader_observer.UploadUniform(GAPI, Uniform("u_ModelTransform", Description::Data::Type::Mat4), model_transform_ptr);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
-				shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
-				shader_observer.UploadUniform(GDI, Uniform("u_MainLightIntensity", ShaderData::Type::Float), main_light_intensity);
+				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightDir", Description::Data::Type::Float3), main_light_dir);
+				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightColor", Description::Data::Type::Float3), main_light_color);
+				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightIntensity", Description::Data::Type::Float), main_light_intensity);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
+				shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLight", Description::Data::Type::Float3), ambient_light);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
+				shader_observer.UploadUniform(GAPI, Uniform("u_CameraPosition", Description::Data::Type::Float3), camera_position);
 
-				shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+				shader_observer.UploadUniform(GAPI, Uniform("u_EntityID", Description::Data::Type::UInt), &ID);
 			}
 
 			mesh_observer.Draw(material_observer);
@@ -93,7 +93,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 		void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
 		void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);
@@ -112,16 +112,16 @@ namespace fe
 			auto cutout_shaderID = cutout_sm_observer.GetCoreComponent().ShaderID;
 			auto cutout_shader_observer = AssetObserver<Shader>(cutout_shaderID);
 
-			cutout_shader_observer.Bind(GDI);
+			cutout_shader_observer.Bind(GAPI);
 
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_MainLightIntensity", ShaderData::Type::Float), main_light_intensity);
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_AmbientLightIntensity", ShaderData::Type::Float), ambient_light_intensity);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_ViewProjection", Description::Data::Type::Mat4), VPmatrixPtr);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightDir", Description::Data::Type::Float3), main_light_dir);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightColor", Description::Data::Type::Float3), main_light_color);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightIntensity", Description::Data::Type::Float), main_light_intensity);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLight", Description::Data::Type::Float3), ambient_light);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLightIntensity", Description::Data::Type::Float), ambient_light_intensity);
 
-			cutout_shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
+			cutout_shader_observer.UploadUniform(GAPI, Uniform("u_CameraPosition", Description::Data::Type::Float3), camera_position);
 
 
 			for (auto ID : view_of_CModelView_components)
@@ -151,8 +151,8 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						cutout_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
-						cutout_shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+						cutout_shader_observer.UploadUniform(GAPI, Uniform("u_ModelTransform", Description::Data::Type::Mat4), model_transform_ptr);
+						cutout_shader_observer.UploadUniform(GAPI, Uniform("u_EntityID", Description::Data::Type::UInt), &ID);
 
 						mesh_observer.Draw(material_observer);
 					}
@@ -167,15 +167,15 @@ namespace fe
 			auto opaque_shaderID = opaque_sm_observer.GetCoreComponent().ShaderID;
 			auto opaque_shader_observer = AssetObserver<Shader>(opaque_shaderID);
 
-			opaque_shader_observer.Bind(GDI);
+			opaque_shader_observer.Bind(GAPI);
 
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_ViewProjection", ShaderData::Type::Mat4), VPmatrixPtr);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_MainLightDir", ShaderData::Type::Float3), main_light_dir);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_MainLightColor", ShaderData::Type::Float3), main_light_color);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_MainLightIntensity", ShaderData::Type::Float), main_light_intensity);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_AmbientLight", ShaderData::Type::Float3), ambient_light);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_AmbientLightIntensity", ShaderData::Type::Float), ambient_light_intensity);
-			opaque_shader_observer.UploadUniform(GDI, Uniform("u_CameraPosition", ShaderData::Type::Float3), camera_position);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_ViewProjection", Description::Data::Type::Mat4), VPmatrixPtr);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightDir", Description::Data::Type::Float3), main_light_dir);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightColor", Description::Data::Type::Float3), main_light_color);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_MainLightIntensity", Description::Data::Type::Float), main_light_intensity);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLight", Description::Data::Type::Float3), ambient_light);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLightIntensity", Description::Data::Type::Float), ambient_light_intensity);
+			opaque_shader_observer.UploadUniform(GAPI, Uniform("u_CameraPosition", Description::Data::Type::Float3), camera_position);
 
 
 			for (auto ID : view_of_CModelView_components)
@@ -205,8 +205,8 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						opaque_shader_observer.UploadUniform(GDI, Uniform("u_ModelTransform", ShaderData::Type::Mat4), model_transform_ptr);
-						opaque_shader_observer.UploadUniform(GDI, Uniform("u_EntityID", ShaderData::Type::UInt), &ID);
+						opaque_shader_observer.UploadUniform(GAPI, Uniform("u_ModelTransform", Description::Data::Type::Mat4), model_transform_ptr);
+						opaque_shader_observer.UploadUniform(GAPI, Uniform("u_EntityID", Description::Data::Type::UInt), &ID);
 
 						mesh_observer.Draw(material_observer);
 					}

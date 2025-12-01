@@ -16,10 +16,10 @@ namespace fe
 		TextureLoader::LoadTexture("resources/StopButton.png" , m_IconStop);
 		TextureLoader::LoadTexture("resources/PauseButton.png", m_IconPause);
 
-		auto GDI = Renderer::GetActiveGDItype();
-		m_IconPlay.CreateGDITexture2D(GDI);
-		m_IconStop.CreateGDITexture2D(GDI);
-		m_IconPause.CreateGDITexture2D(GDI);
+		auto GAPI = Renderer::GetActiveGAPIType();
+		m_IconPlay.CreateGAPITexture2D(GAPI);
+		m_IconStop.CreateGAPITexture2D(GAPI);
+		m_IconPause.CreateGAPITexture2D(GAPI);
 	}
 
 	void Toolbar::OnImGuiRender()
@@ -41,29 +41,29 @@ namespace fe
 
 		float size = ImGui::GetContentRegionAvail().y - 6.0f; // padding bottom and top
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 
 		switch (m_EditorState)
 		{
 		case EditorState::Edit:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GAPI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Play;
 			break;
 		case EditorState::Play:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPause", (ImTextureID)m_IconPause.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPause", (ImTextureID)m_IconPause.GetRendererID(GAPI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Pause;
 			ImGui::SameLine();
-			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GAPI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Stop;
 			break;
 		case EditorState::Pause:
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconPlay", (ImTextureID)m_IconPlay.GetRendererID(GAPI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Play;
 			ImGui::SameLine();
-			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GDI), ImVec2(size, size)))
+			if (ImGui::ImageButton("m_IconStop", (ImTextureID)m_IconStop.GetRendererID(GAPI), ImVec2(size, size)))
 				m_ClickedButton = ToolbarButton::Stop;
 		}
 		ImGui::PopStyleVar(2);

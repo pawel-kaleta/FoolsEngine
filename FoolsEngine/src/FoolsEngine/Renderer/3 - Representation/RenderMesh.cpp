@@ -2,17 +2,17 @@
 #include "RenderMesh.h"
 
 #include "Mesh.h"
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
-#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
+#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
 #include "FoolsEngine\Core\Project.h"
 
 namespace fe
 {
-	bool RenderMeshUser::SendDataToGPU(GDIType GDI) const
+	bool RenderMeshUser::SendDataToGPU(GAPIType GAPI) const
 	{
 		auto& core = Get<ACRenderMeshCore>();
 
@@ -30,7 +30,7 @@ namespace fe
 				{
 					if (!material_user.IsLoaded())
 					{
-						if (!material_user.SendDataToGPU(GDI))
+						if (!material_user.SendDataToGPU(GAPI))
 							return false;
 
 						material_user.FlagLoaded();
@@ -44,7 +44,7 @@ namespace fe
 				FE_CORE_ASSERT(!material_user.IsLoadedAsDependency(), "Internal Material already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!material_user.IsLoaded(), "Internal Material already marked Loaded during loading");
 				
-				if (!material_user.SendDataToGPU(GDI))
+				if (!material_user.SendDataToGPU(GAPI))
 					return false;
 				material_user.FlagLoaded();
 				material_user.FlagLoadedAsDependency();
@@ -63,7 +63,7 @@ namespace fe
 				{
 					if (!mesh_user.IsLoaded())
 					{
-						if (!mesh_user.SendDataToGPU(GDI))
+						if (!mesh_user.SendDataToGPU(GAPI))
 							return false;
 
 						mesh_user.FlagLoaded();
@@ -77,7 +77,7 @@ namespace fe
 				FE_CORE_ASSERT(!mesh_user.IsLoadedAsDependency(), "Internal Mesh already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!mesh_user.IsLoaded(), "Internal Mesh already marked Loaded during loading");
 
-				if (!mesh_user.SendDataToGPU(GDI))
+				if (!mesh_user.SendDataToGPU(GAPI))
 					return false;
 				mesh_user.FlagLoaded();
 				mesh_user.FlagLoadedAsDependency();

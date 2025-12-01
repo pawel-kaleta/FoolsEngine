@@ -34,7 +34,7 @@ namespace fe
 
 		void Release() const;
 
-		bool SendDataToGPU(GDIType GDI) const;
+		bool SendDataToGPU(GAPIType GAPI) const;
 		void UnloadFromCPU() const;
 	protected:
 		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }

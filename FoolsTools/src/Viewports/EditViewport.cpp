@@ -6,14 +6,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FramebufferData::SpecificationBuilder spec_builder;
+		Description::Framebuffer::SpecificationBuilder spec_builder;
 		spec_builder
 			.SetWidth(1280)
 			.SetHight(720)
-			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
+			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
 			.SetColorAttachmentSpecifications({
-				{ "Final frame", TextureData::Components::RGBA, TextureData::Format::RGBA_8 },
-				{ "EntityID"   , TextureData::Components::R   , TextureData::Format::R_UINT_32    }
+				{ "Final frame", Description::Texture::Format::RGBA_8 },
+				{ "EntityID"   , Description::Texture::Format::R_UINT_32 }
 			});
 		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 

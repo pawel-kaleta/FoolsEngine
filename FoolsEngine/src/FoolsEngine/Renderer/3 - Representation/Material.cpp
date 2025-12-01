@@ -1,14 +1,14 @@
 #include "FE_pch.h"
 #include "Material.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
 
 #include "FoolsEngine\Core\Project.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
+#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
 
 namespace fe
@@ -187,7 +187,7 @@ namespace fe
 		std::memcpy(dest, src, uniform.GetSize());
 	}
 
-	bool MaterialUser::SendDataToGPU(GDIType GDI) const
+	bool MaterialUser::SendDataToGPU(GAPIType GAPI) const
 	{
 		auto& core = Get<ACMaterialCore>();
 		
@@ -211,7 +211,7 @@ namespace fe
 					if (!texture_user.IsLoaded())
 					{
 						TextureLoader::LoadTexture(texture_user);
-						texture_user.CreateGDITexture2D(GDI);
+						texture_user.CreateGAPITexture2D(GAPI);
 						texture_user.UnloadFromCPU();
 
 						texture_user.FlagLoaded();
@@ -226,7 +226,7 @@ namespace fe
 				FE_CORE_ASSERT(!texture_user.IsLoaded(), "Internal Texture already marked Loaded during loading");
 				
 				TextureLoader::LoadTexture(texture_user);
-				texture_user.CreateGDITexture2D(GDI);
+				texture_user.CreateGAPITexture2D(GAPI);
 				texture_user.UnloadFromCPU();
 
 				texture_user.FlagLoaded();
@@ -286,7 +286,7 @@ namespace fe
 			for (size_t i = 0; i < uniform.m_Count; i++)
 			{
 				float* test = (float*)uniform_data_ptr;
-				EmitShaderDataType(emitter, uniform_data_ptr, uniform.m_Type);
+				EmitGPUDataType(emitter, uniform_data_ptr, uniform.m_Type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
@@ -382,7 +382,7 @@ namespace fe
 
 			for (size_t i = 0; i < count; ++i)
 			{
-				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, type);
+				bool success = LoadGPUDataType(value_node[i], uniform_data_ptr, type);
 				if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name);
 				uniform_data_ptr += size;
 			}
@@ -452,11 +452,11 @@ namespace fe
 			texture_core.Init();
 
 			auto& spec = texture_core.Specification;
-			spec.Usage.FromString(usage_node.as<std::string>());
-			spec.Components.FromString(components_node.as<std::string>());
+			texture_core.Usage.FromString(usage_node.as<std::string>());
+			//spec.Components.FromString(components_node.as<std::string>());
 			spec.Format.FromString(format_node.as<std::string>());
-			spec.Width = width_node.as<uint32_t>();
-			spec.Height = height_node.as<uint32_t>();
+			texture_core.Width = width_node.as<uint32_t>();
+			texture_core.Height = height_node.as<uint32_t>();
 
 			AssetManager::SetSourcePath(texture_id, parentPath / texture_source_filepath_node.as<std::string>());
 

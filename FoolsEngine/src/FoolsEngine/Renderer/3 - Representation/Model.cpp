@@ -4,13 +4,13 @@
 #include "RenderMesh.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
+#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 
 #include "FoolsEngine\Core\Project.h"
 
 namespace fe
 {
-	//extern void EmitShaderDataType(YAML::Emitter& emitter, char* dataPtr, const ShaderData::Type& type);
+	//extern void EmitGPUDataType(YAML::Emitter& emitter, char* dataPtr, const Description::Data::Type& type);
 
 	void Model::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
@@ -82,7 +82,7 @@ namespace fe
 		return true;
 	}
 
-	bool ModelUser::SendDataToGPU(GDIType GDI) const
+	bool ModelUser::SendDataToGPU(GAPIType GAPI) const
 	{
 		auto& ACData = Get<ACModelCore>();
 
@@ -97,7 +97,7 @@ namespace fe
 				{
 					if (!rendermesh_user.IsLoaded())
 					{
-						if (!rendermesh_user.SendDataToGPU(GDI))
+						if (!rendermesh_user.SendDataToGPU(GAPI))
 							return false;
 
 						rendermesh_user.FlagLoaded();
@@ -111,7 +111,7 @@ namespace fe
 				FE_CORE_ASSERT(!rendermesh_user.IsLoadedAsDependency(), "Internal RenderMesh already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!rendermesh_user.IsLoaded(), "Internal RenderMesh already marked Loaded during loading");
 
-				if (!rendermesh_user.SendDataToGPU(GDI))
+				if (!rendermesh_user.SendDataToGPU(GAPI))
 					return false;
 				rendermesh_user.FlagLoaded();
 				rendermesh_user.FlagLoadedAsDependency();

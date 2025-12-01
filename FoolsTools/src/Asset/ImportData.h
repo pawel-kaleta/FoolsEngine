@@ -21,7 +21,7 @@ namespace fe
 
         union
         {
-            TextureImport::Data TextureData;
+            TextureImport::Data Description;
             GeometryImport::Data GeometryData;
         };
     };

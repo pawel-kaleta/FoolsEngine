@@ -166,7 +166,7 @@ namespace fe
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("m_File"))
+			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New Scene", "Ctrl+N")) NewScene();
 				if (ImGui::MenuItem("Open...",   "Ctrl+O")) OpenScene();

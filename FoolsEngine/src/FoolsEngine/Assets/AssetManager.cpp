@@ -157,7 +157,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 		auto& reg = s_Instance->m_Registry;
 
 		auto& groups = s_Instance->m_LoadingGroups;
@@ -203,10 +203,10 @@ namespace fe
 			case AssetType::Texture2D:
 			{
 				auto texture_user = AssetUser<Texture2D>(id);
-				if (!texture_user.GetRendererID(GDI))
+				if (!texture_user.GetRendererID(GAPI))
 				{
 					TextureLoader::LoadTexture(texture_user);
-					texture_user.CreateGDITexture2D(GDI);
+					texture_user.CreateGAPITexture2D(GAPI);
 					texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}
@@ -222,7 +222,7 @@ namespace fe
 				if (!mesh_user.GetBuffers())
 				{
 					GeometryLoader::LoadMesh(mesh_user);
-					mesh_user.SendDataToGPU(GDI);
+					mesh_user.SendDataToGPU(GAPI);
 					mesh_user.UnloadFromCPU();
 					mesh_user.FlagLoaded();
 				}
@@ -235,7 +235,7 @@ namespace fe
 			case AssetType::Material:
 			{
 				auto material_user = AssetUser<Material>(id);
-				material_user.SendDataToGPU(GDI);
+				material_user.SendDataToGPU(GAPI);
 				material_user.FlagLoaded();
 				break;
 			}
@@ -243,7 +243,7 @@ namespace fe
 			{
 				auto model_user = AssetUser<Model>(id);
 				GeometryLoader::LoadModel(model_user);
-				model_user.SendDataToGPU(GDI);
+				model_user.SendDataToGPU(GAPI);
 				model_user.FlagLoaded();
 				break;
 			}

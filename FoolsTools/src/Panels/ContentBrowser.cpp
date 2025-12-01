@@ -40,12 +40,12 @@ namespace fe
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
-		auto GDI = Renderer::GetActiveGDItype();
-		m_Icons.File.CreateGDITexture2D(GDI);
-		m_Icons.Folder.CreateGDITexture2D(GDI);
+		auto GAPI = Renderer::GetActiveGAPIType();
+		m_Icons.File.CreateGAPITexture2D(GAPI);
+		m_Icons.Folder.CreateGAPITexture2D(GAPI);
 
-		m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetRendererID(GDI);
-		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetRendererID(GDI);
+		m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetRendererID(GAPI);
+		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetRendererID(GAPI);
 
 		InitColors();
 	}

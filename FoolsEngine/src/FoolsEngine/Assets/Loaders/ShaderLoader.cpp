@@ -1,8 +1,8 @@
 #include "FE_pch.h"
 
 #include "ShaderLoader.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\OpenGL\OpenGLShader.h"
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL\OpenGLShader.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 
 #include "FoolsEngine\Memory\Scratchpad.h"
 
@@ -36,15 +36,15 @@ namespace fe
 		return;
 	}
 
-	void ShaderLoader::CompileShader(GDIType GDI, const AssetUser<Shader>& shaderUser)
+	void ShaderLoader::CompileShader(GAPIType GAPI, const AssetUser<Shader>& shaderUser)
 	{
-		switch (GDI.Value)
+		switch (GAPI.Value)
 		{
-		case GDIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GDIType");
+		case GAPIType::None:
+			FE_CORE_ASSERT(false, "Unspecified GAPIType");
 			return;
 
-		case GDIType::OpenGL:
+		case GAPIType::OpenGL:
 			return GLCompileShader(shaderUser);
 		}
 	}
@@ -172,7 +172,7 @@ namespace fe
 			glDeleteShader(shaders[i]);
 		}
 
-		shaderUser.CreateGDIShader<OpenGLShader>(program_ID);
+		shaderUser.CreateGAPIShader<OpenGLShader>(program_ID);
 	}
 
 	void ShaderLoader::PreProcess(const AssetUser<Shader>& shaderUser)

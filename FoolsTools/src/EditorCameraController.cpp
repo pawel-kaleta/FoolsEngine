@@ -63,13 +63,13 @@ namespace fe
 		event->Handle();
 	}
 
-	void EditorCameraController::Rotate(int headingDir, int pitchDir, int bankDir)
+	void EditorCameraController::Rotate(int headinGAPIr, int pitchDir, int bankDir)
 	{
 		FE_PROFILER_FUNC();
 
 		auto angle_delta = Time::DeltaTime() * m_RotationSpeed;
 
-		float heading_delta = -headingDir * angle_delta;
+		float heading_delta = -headinGAPIr * angle_delta;
 		float pitch_delta = pitchDir * angle_delta;
 		float bank_delta = bankDir * angle_delta;
 

@@ -6,7 +6,7 @@
 
 #include "ShadingModel.h"
 
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -63,7 +63,7 @@ namespace fe
 
 		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const;
 
-		bool SendDataToGPU(GDIType GDI) const;
+		bool SendDataToGPU(GAPIType GAPI) const;
 		void Release() const;
 		void UnloadFromCPU() const { };
 	protected:

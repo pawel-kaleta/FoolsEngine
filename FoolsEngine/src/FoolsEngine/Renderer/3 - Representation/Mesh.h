@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\IndexBuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
 
 #include "FoolsEngine\Assets\Asset.h"
@@ -21,7 +21,7 @@ namespace fe
 	{
 		uint32_t VertexCount;
 		uint32_t IndexCount;
-		VertexData::Layout VertexLayout() { return VertexData::Vertex::GetLayout(); };
+		Description::Buffer::Layout VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
 
 		void Init()
 		{
@@ -40,7 +40,7 @@ namespace fe
 
 		uint32_t* GetIndexArrayPtr() { return (uint32_t*)Data; }
 		float* GetVertexArrayPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
-		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(VertexData::Vertex)); }
+		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Description::Buffer::Vertex)); }
 	};
 
 	struct ACGPUBuffers final : public AssetComponent
@@ -70,7 +70,7 @@ namespace fe
 		
 		void Release() const;
 
-		bool SendDataToGPU(GDIType GDI) const;
+		bool SendDataToGPU(GAPIType GAPI) const;
 		void UnloadFromCPU() const;
 
 	protected:

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include "FoolsEngine\Assets\Loaders\LoaderType.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
 
 namespace fe
 {
@@ -18,7 +18,7 @@ namespace fe
 			auto& path = shaderUser.GetFilepath();
 			LoadShader(path, shaderUser);
 		}
-		static void CompileShader(GDIType GDI, const AssetUser<Shader>& shaderUser);
+		static void CompileShader(GAPIType GAPI, const AssetUser<Shader>& shaderUser);
 
 		static bool IsKnownExtension(const std::pmr::string& extension);
 		static bool IsKnownAssetType(AssetType assetType);

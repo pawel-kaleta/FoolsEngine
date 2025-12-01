@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Core\Layer.h"
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
 
 #include "ImGuiBackend.h"
 

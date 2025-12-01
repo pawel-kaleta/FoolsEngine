@@ -144,11 +144,11 @@ namespace fe {
 
 		switch (uniform.GetPrimitive().Value)
 		{
-		case ShaderData::Primitive::None:
+		case Description::Data::Primitive::None:
 			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
 			return false;
 		
-		case ShaderData::Primitive::Bool:
+		case Description::Data::Primitive::Bool:
 		{
 			bool* dataPtr = (bool*)uniformDataPtr;
 			for (unsigned int i = 1; i < uniform.m_Count; i++)
@@ -163,16 +163,16 @@ namespace fe {
 			return changed;
 		}
 
-		case ShaderData::Primitive::Int:
+		case Description::Data::Primitive::Int:
 			ImGuiType = ImGuiDataType_::ImGuiDataType_S32;
 			break;
-		case ShaderData::Primitive::UInt:
+		case Description::Data::Primitive::UInt:
 			ImGuiType = ImGuiDataType_::ImGuiDataType_U32;
 			break;
-		case ShaderData::Primitive::Float:
+		case Description::Data::Primitive::Float:
 			ImGuiType = ImGuiDataType_::ImGuiDataType_Float;
 			break;
-		case ShaderData::Primitive::Double:
+		case Description::Data::Primitive::Double:
 			ImGuiType = ImGuiDataType_::ImGuiDataType_Double;
 			break;
 
@@ -181,7 +181,7 @@ namespace fe {
 			return false;
 		}
 
-		int count = (int)ShaderData::SizeOfType(uniform.m_Type) / (int)ShaderData::SizeOfPrimitive(uniform.GetPrimitive());
+		int count = (int)Description::Data::SizeOfType(uniform.m_Type) / (int)Description::Data::SizeOfPrimitive(uniform.GetPrimitive());
 		if (ImGui::DragScalarN(name, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
 			changed = true;
 

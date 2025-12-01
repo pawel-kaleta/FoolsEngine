@@ -92,11 +92,11 @@ namespace fe
 			m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
 			m_Window->CreateRenderingContext();
 
-			GDIType gdi = m_Window->GetGDIType();
+			GAPIType GAPI = m_Window->GetGAPIType();
 			Renderer::Startup();
-			Renderer::CreateAPI(gdi);
-			Renderer::InitAPI(gdi);
-			Renderer::SetAPI(gdi);
+			Renderer::CreateAPI(GAPI);
+			Renderer::InitAPI(GAPI);
+			Renderer::SetAPI(GAPI);
 		}
 		
 		// Types Registries

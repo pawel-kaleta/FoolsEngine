@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 #include "GeometryLoader.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 #include "FoolsEngine\Core\Project.h"
 
 #include <assimp/Importer.hpp>
@@ -104,8 +104,8 @@ namespace fe
 		auto last = (float*)data_location + (mesh_core_component.DataSize() / sizeof(float));
 		uint32_t* first_index = (uint32_t*)data_location;
 		uint32_t* index_ptr = (uint32_t*)data_location;
-		VertexData::Vertex* first_vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
-		VertexData::Vertex* vertex_ptr = first_vertex_ptr;
+		Description::Buffer::Vertex* first_vertex_ptr = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
+		Description::Buffer::Vertex* vertex_ptr = first_vertex_ptr;
 
 		uint32_t index_offset = 0;
 
@@ -194,7 +194,7 @@ namespace fe
 			data_location = (void*) new float[core.DataSize() / sizeof(float)];
 
 			uint32_t* index_ptr = (uint32_t*)data_location;
-			VertexData::Vertex* vertex_ptr = (VertexData::Vertex*)(index_ptr + spec.IndexCount);
+			Description::Buffer::Vertex* vertex_ptr = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
 
 			auto& assimp_mesh = scene->mMeshes[i];
 			bool sndUV = assimp_mesh->GetNumUVChannels() > 1;

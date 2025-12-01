@@ -1,6 +1,6 @@
 #include "PlayViewport.h"
 
-#include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
+#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
 
 namespace fe
 {
@@ -8,14 +8,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FramebufferData::SpecificationBuilder spec_builder;
+		Description::Framebuffer::SpecificationBuilder spec_builder;
 		spec_builder
 			.SetWidth(1)
 			.SetHight(1)
-			.SetDepthStencilAttachmentDataFormat(TextureData::Format::DEPTH24STENCIL8)
+			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
 			.SetColorAttachmentSpecifications({
-				{ "Final Frame", TextureData::Components::RGBA, TextureData::Format::RGBA_8		},
-				{ "EntityID"   , TextureData::Components::R   , TextureData::Format::R_UINT_32	}
+				{ "Final Frame", Description::Texture::Format::RGBA_8 },
+				{ "EntityID"   , Description::Texture::Format::R_UINT_32 }
 			});
 		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 		m_ViewportSize = { 1,1 };

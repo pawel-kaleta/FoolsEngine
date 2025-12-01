@@ -21,10 +21,10 @@ void LayerExample::OnAttach()
 	specBuilder
 		.SetWidth(window.GetWidth())
 		.SetHight(window.GetHeight())
-		.SetDepthStencilAttachmentDataFormat(fe::TextureData::Format::DEPTH24STENCIL8)
+		.SetDepthStencilAttachmentFormat(fe::Description::TextureFormat::DEPTH24STENCIL8)
 		.SetColorAttachmentSpecifications({
-			{ "Final Frame", fe::TextureData::Components::RGBA, fe::TextureData::Format::RGBA_8		},
-			{ "EntityID"   , fe::TextureData::Components::R   , fe::TextureData::Format::R_UINT_32	}
+			{ "Final Frame", fe::Description::TextureComponents::RGBA, fe::Description::TextureFormat::RGBA_8		},
+			{ "EntityID"   , fe::Description::TextureComponents::R   , fe::Description::TextureFormat::R_UINT_32	}
 			});
 	m_Framebuffer = fe::Framebuffer::Create(specBuilder.Create());
 	m_FramebufferSize = { window.GetWidth(), window.GetHeight() };

@@ -1,14 +1,14 @@
 #include "FE_pch.h"
 #include "Renderer2D.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\VertexData.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Framebuffer.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\IndexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Framebuffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\IndexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
 #include "FoolsEngine\Renderer\3 - Representation\Camera.h"
 #include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
+#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\ECS.h"
@@ -39,14 +39,14 @@ namespace fe
 		Scratchpad sp;
 
 		s_Instance->m_QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
-		s_Instance->m_QuadVertexBuffer->SetLayout({
-			{ ShaderData::Type::Float3, "a_Position" },
-			{ ShaderData::Type::Float4, "a_Color" },
-			{ ShaderData::Type::Float2, "a_TexCoord" },
-			{ ShaderData::Type::Float,  "a_TilingFactor" },
-			{ ShaderData::Type::UInt,   "a_TextureSampler" },
-			{ ShaderData::Type::UInt,   "a_EntityID" }
-		});
+		s_Instance->m_QuadVertexBuffer->SetLayout(Description::Buffer::Layout({
+			{ Description::Data::Type::Float3, "a_Position" },
+			{ Description::Data::Type::Float4, "a_Color" },
+			{ Description::Data::Type::Float2, "a_TexCoord" },
+			{ Description::Data::Type::Float,  "a_TilingFactor" },
+			{ Description::Data::Type::UInt,   "a_TextureSampler" },
+			{ Description::Data::Type::UInt,   "a_EntityID" }
+		}));
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
@@ -75,7 +75,7 @@ namespace fe
 		// moved to Renderer::AcquireBaseAssets()
 		// to do: fix this bad architecture
 
-		s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", TextureData::Type::Texture2D, 32);
+		s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", Description::Texture::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Instance->m_BaseShaderSamplers[i] = i;
 
@@ -96,7 +96,7 @@ namespace fe
 
 		RenderCommands::SetDepthTest(true);
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 
 		ClearBatch();
 
@@ -106,14 +106,14 @@ namespace fe
 
 		auto base_shader = m_BaseShader.Use();
 
-		base_shader.Bind(GDI);
+		base_shader.Bind(GAPI);
 		base_shader.UploadUniform(
-			GDI,
-			Uniform("u_ViewProjection", ShaderData::Type::Mat4),
+			GAPI,
+			Uniform("u_ViewProjection", Description::Data::Type::Mat4),
 			(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
 		);
 		base_shader.BindTextureSlot(
-			GDI,
+			GAPI,
 			m_BaseShaderTextureSlot,
 			m_BaseShaderSamplers,
 			ConstLimits::RendererTextureSlotsCount
@@ -220,8 +220,8 @@ namespace fe
 		float aspect_ratio;
 		{
 			auto texture_observer = quad.Texture.Observe();
-			auto& spec = texture_observer.GetCoreComponent().Specification;
-			aspect_ratio = (float)spec.Height / (float)spec.Width;
+			auto& core = texture_observer.GetCoreComponent();
+			aspect_ratio = (float)core.Height / (float)core.Width;
 		}
 
 		constexpr glm::vec4 quad_vertex_positions[] = {
@@ -269,11 +269,11 @@ namespace fe
 		m_QuadVertexBuffer->Bind();
 		m_QuadVertexBuffer->SendDataToGPU(m_Batch.QuadVertices->data(), data_size);
 
-		auto GDI = Renderer::GetActiveGDItype();
+		auto GAPI = Renderer::GetActiveGAPIType();
 
 		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{
-			AssetUser<Texture2D>(m_Batch.Textures[i]).Bind(GDI, i);
+			AssetUser<Texture2D>(m_Batch.Textures[i]).Bind(GAPI, i);
 		}
 
 		m_QuadVertexBuffer->Bind();

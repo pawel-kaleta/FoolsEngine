@@ -2,7 +2,7 @@
 #include "Win32Window.h"
 
 #include "FoolsEngine\Events\Event.h"
-#include "FoolsEngine\Renderer\4 - GDIIsolation\RenderCommands.h"
+#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
 
 #include <glad/glad.h>
 
@@ -17,7 +17,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		m_GDI = attr.GDI;
+		m_GAPI = attr.GAPI;
 		Init(attr);
 	}
 
@@ -28,25 +28,25 @@ namespace fe
 		ShutDown();
 	}
 
-	void Win32Window::CreateRenderingContext(GDIType GDI)
+	void Win32Window::CreateRenderingContext(GAPIType GAPI)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_INFO("Creating rendering context");
 
-		if (m_RenderingContexts.count(GDI))
+		if (m_RenderingContexts.count(GAPI))
 		{
-			FE_CORE_ASSERT(false, "Rendering context of this GDI was already created for this window!");
+			FE_CORE_ASSERT(false, "Rendering context of this GAPI was already created for this window!");
 			return;
 		};
 
-		m_RenderingContexts[GDI] = RenderingContext::Create(GDI, m_Window);
-		m_CurrentRenderingContext = m_RenderingContexts.at(GDI).get();
+		m_RenderingContexts[GAPI] = RenderingContext::Create(GAPI, m_Window);
+		m_CurrentRenderingContext = m_RenderingContexts.at(GAPI).get();
 		m_CurrentRenderingContext->Init();
 
 		SetVSync(false);
 	}
 
-	void Win32Window::MakeRenderingContextCurrent(GDIType GDI)
+	void Win32Window::MakeRenderingContextCurrent(GAPIType GAPI)
 	{
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(false, "Multiple rendering contexts not yet supported. Context is being made current upon creation.");

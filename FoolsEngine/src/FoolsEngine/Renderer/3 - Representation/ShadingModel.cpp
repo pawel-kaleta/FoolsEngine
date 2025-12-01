@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 #include "ShadingModel.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\ShaderDataSerialization.h"
+#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 
 namespace fe
 {
@@ -120,7 +120,7 @@ namespace fe
 
 			for (size_t i = 0; i < uniform.m_Count; i++)
 			{
-				EmitShaderDataType(emitter, uniform_data_ptr, uniform.m_Type);
+				EmitGPUDataType(emitter, uniform_data_ptr, uniform.m_Type);
 				uniform_data_ptr += uniform.GetSize();
 			}
 			emitter << YAML::EndSeq;
@@ -168,16 +168,16 @@ namespace fe
 			if (!value_node) return false;
 
 			const auto uniform_name = name_node.as<std::string>();
-			ShaderData::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
+			Description::Data::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
 			const auto uniform_count = count_node.as<uint32_t>();
 
 			uniforms.emplace_back(uniform_name, uniform_type, uniform_count);
 
 			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
-			auto uniform_size = ShaderData::SizeOfType(uniform_type);
+			auto uniform_size = Description::Data::SizeOfType(uniform_type);
 			for (size_t i = 0; i < uniform_count; ++i)
 			{
-				bool success = LoadShaderDataType(value_node[i], uniform_data_ptr, uniform_type);
+				bool success = LoadGPUDataType(value_node[i], uniform_data_ptr, uniform_type);
 				if (!success) return false;
 
 				uniform_data_ptr += uniform_size;
@@ -250,7 +250,7 @@ namespace fe
 			FE_PROFILER_SCOPE("Texture Slots");
 			for (const auto& texture_slot_node : texture_slots_node)
 			{
-				core.TextureSlots.emplace_back(texture_slot_node.as<std::string>(), TextureData::Type::Texture2D);
+				core.TextureSlots.emplace_back(texture_slot_node.as<std::string>(), Description::Texture::Type::Texture2D);
 			}
 		}
 

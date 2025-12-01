@@ -1,10 +1,10 @@
 #pragma once
 
 #include "FoolsEngine\Math\Transform.h"
-#include "FoolsEngine\Renderer\1 - Primitives\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
 
 
 #include "FoolsEngine\Core\Time.h"

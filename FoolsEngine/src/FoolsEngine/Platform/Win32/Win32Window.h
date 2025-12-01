@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Platform\Window.h"
-#include "FoolsEngine\Renderer\2 - GDIAbstraction\RenderingContext.h"
+#include "FoolsEngine\Renderer\2 - GAPIAbstraction\RenderingContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -13,8 +13,8 @@ namespace fe
 		Win32Window(const WindowAttributes& attr);
 		~Win32Window() override;
 
-		virtual void CreateRenderingContext(GDIType GDI) override;
-		virtual void MakeRenderingContextCurrent(GDIType GDI) override;
+		virtual void CreateRenderingContext(GAPIType GAPI) override;
+		virtual void MakeRenderingContextCurrent(GAPIType GAPI) override;
 
 		virtual void OnUpdate() override;
 
@@ -31,7 +31,7 @@ namespace fe
 	private:
 		GLFWwindow* m_Window;
 		RenderingContext* m_CurrentRenderingContext;
-		std::unordered_map<GDIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
+		std::unordered_map<GAPIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
 
 		struct WinData
 		{

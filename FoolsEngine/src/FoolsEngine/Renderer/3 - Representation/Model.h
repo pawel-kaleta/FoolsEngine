@@ -3,7 +3,7 @@
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
-#include "FoolsEngine\Renderer\1 - Primitives\GDIType.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 
 #include "Mesh.h"
 #include "RenderMesh.h"
@@ -38,7 +38,7 @@ namespace fe
 
 		ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
 
-		bool SendDataToGPU(GDIType GDI) const;
+		bool SendDataToGPU(GAPIType GAPI) const;
 		void Release() const;
 		void UnloadFromCPU() const { };
 
