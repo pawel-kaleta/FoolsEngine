@@ -45,7 +45,7 @@ namespace fe
 			uint32_t FragmentOutputLayoutID;
 			uint32_t MainUniformsLayoutID;
 
-			std::pmr::vector<uint32_t> TextureSamplerIDs;
+			std::pmr::vector<TextureSampler> TextureSamplers;
 			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
 			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
 

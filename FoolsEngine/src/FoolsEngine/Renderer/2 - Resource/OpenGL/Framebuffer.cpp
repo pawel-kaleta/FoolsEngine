@@ -1,5 +1,7 @@
 #include "FE_pch.h"
 
+#include "Utils.h"
+
 #include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 
@@ -9,29 +11,10 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	GLenum FormatToGLinternalFormat(Format format)
-	{
-		// TO DO: there is a copy of this in Resource > OpenGL > Texture.cpp
-
-		switch (format.Value)
-		{
-		case Format::None:
-			FE_CORE_ASSERT(false, "Not specified data format of attachment");
-			return GL_NONE;
-		case Format::R_8:				return GL_R8;
-		case Format::RG_8:				return GL_RG8;
-		case Format::RGB_8:				return GL_RGB8;
-		case Format::RGBA_8:			return GL_RGBA8;
-		case Format::R_UINT_32:			return GL_R32UI;
-		case Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
-		default:
-			FE_CORE_ASSERT(false, "Uknown data format of attachment");
-			return GL_NONE;
-		}
-	}
-
 	void Framebuffer_OpenGL::Create()
 	{
+		FE_PROFILER_FUNC();
+
 		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
 
 		glCreateFramebuffers(1, &m_OpenGLID);
@@ -49,7 +32,7 @@ namespace fe::Resource
 
 				for (int i = 0; i < m_ColorAttachments.size(); ++i)
 				{
-					GLenum internalFormat = FormatToGLinternalFormat(spec.ColorAttachments[i].Format);
+					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i]);
 					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, m_Width, m_Height, GL_FALSE);
 					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i], 0);
@@ -59,7 +42,7 @@ namespace fe::Resource
 			{
 				for (int i = 0; i < m_ColorAttachments.size(); ++i)
 				{
-					GLenum internalFormat = FormatToGLinternalFormat(spec.ColorAttachments[i].Format);
+					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D, m_ColorAttachments[i]);
 					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, m_Width, m_Height);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -74,7 +57,7 @@ namespace fe::Resource
 
 		if (spec.DepthStencilFormat != Description::Texture::Format::None)
 		{
-			GLenum dataFormat = FormatToGLinternalFormat(spec.DepthStencilFormat);
+			GLenum dataFormat = Utils::FormatToGLInternalFormat(spec.DepthStencilFormat);
 
 			if (multisampled)
 			{
@@ -126,12 +109,12 @@ namespace fe::Resource
 			FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_UNSUPPORTED");
 
 		FE_CORE_ASSERT(status == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete.");
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void Framebuffer_OpenGL::Resize(uint32_t width, uint32_t height)
 	{
+		FE_PROFILER_FUNC();
+
 		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
 
 		m_Width = width;
@@ -147,7 +130,7 @@ namespace fe::Resource
 			{
 				for (int i = 0; i < m_ColorAttachments.size(); ++i)
 				{
-					GLenum internalFormat = FormatToGLinternalFormat(spec.ColorAttachments[i].Format);
+					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i]);
 					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, m_Width, m_Height, GL_FALSE);
 				}
@@ -156,7 +139,7 @@ namespace fe::Resource
 			{
 				for (int i = 0; i < m_ColorAttachments.size(); ++i)
 				{
-					GLenum internalFormat = FormatToGLinternalFormat(spec.ColorAttachments[i].Format);
+					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D, m_ColorAttachments[i]);
 					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, m_Width, m_Height);
 				}
@@ -165,7 +148,7 @@ namespace fe::Resource
 
 		if (spec.DepthStencilFormat != Description::Texture::Format::None)
 		{
-			GLenum dataFormat = FormatToGLinternalFormat(spec.DepthStencilFormat);
+			GLenum dataFormat = Utils::FormatToGLInternalFormat(spec.DepthStencilFormat);
 
 			if (multisampled)
 			{
@@ -178,5 +161,57 @@ namespace fe::Resource
 				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, m_Width, m_Height);
 			}
 		}
+	}
+
+	void Framebuffer_OpenGL::ClearAttachment(uint32_t attachmentIndex, uint32_t value)
+	{
+		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+
+		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+
+		auto& format = spec.ColorAttachments[attachmentIndex].Format;
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_UNSIGNED_INT, &value);
+	}
+
+	void Framebuffer_OpenGL::ClearAttachment(uint32_t attachmentIndex, float value)
+	{
+		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+
+		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+
+		auto& format = spec.ColorAttachments[attachmentIndex].Format;
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_FLOAT, &value);
+	}
+
+	void Framebuffer_OpenGL::ReadPixel(uint32_t attachmentIndex, int x, int y, void* destination) const
+	{
+		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+
+		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		auto& format = spec.ColorAttachments[attachmentIndex].Format;
+		GLenum glFormat = Utils::FormatToGLFormat(format);
+		GLenum glType = Utils::FormatToGLType(format);
+		glReadPixels(x, y, 1, 1, glFormat, glType, destination);
+	}
+
+	void Framebuffer_OpenGL::Destroy()
+	{
+		FE_PROFILER_FUNC();
+
+		glDeleteFramebuffers(1, &m_OpenGLID);
+		if (m_ColorAttachments.size())
+			glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
+		if (m_DepthStencilAttachment)
+			glDeleteTextures(1, &m_DepthStencilAttachment);
+
+		m_ColorAttachments.clear();
 	}
 }

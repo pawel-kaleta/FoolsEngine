@@ -13,14 +13,14 @@ namespace fe::Resource
 		uint32_t m_LayoutID;
 
 		virtual void Create() = 0;
+		virtual void Delete() = 0;
 	};
 
 	struct VertexBinding_OpenGL final : VertexBindingBase
 	{
 		GLuint m_VertexArrayID;
 
-		GLenum DataPrimitiveToGLBaseType(Data::Primitive primitive);
-
 		virtual void Create() override;
+		virtual void Delete() override;
 	};
 }

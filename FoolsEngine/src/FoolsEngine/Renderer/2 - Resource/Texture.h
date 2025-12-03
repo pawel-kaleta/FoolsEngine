@@ -18,15 +18,14 @@ namespace fe::Resource
 		glm::vec3 m_Border;
 
 		virtual void Create(const void* data) = 0;
+		virtual void Destroy() = 0;
 	};
 
 	struct Texture_OpenGL final : TextureBase
 	{
 		GLuint m_OpenGLID;
 
-		static GLenum FormatToGlFormat(Format format);
-		static GLenum FormatToGLinternalFormat(Format format);
-
 		virtual void Create(const void* data) override;
+		virtual void Destroy() override;
 	};
 }

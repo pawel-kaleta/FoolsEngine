@@ -160,6 +160,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexBinding.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexBuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceStateControl.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation\Lights.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\EntryPoint.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h" />
     <ClInclude Include="src\FoolsEngine\Utils\ForEach.h" />
     <ClInclude Include="src\FoolsEngine\Utils\Xar.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp" />
@@ -278,6 +280,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexBinding.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexBuffer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceStareControl.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\8 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -352,6 +356,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\_projects_of_externals\glfw\glfw.vcxproj">

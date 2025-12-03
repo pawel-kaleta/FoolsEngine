@@ -13,14 +13,14 @@ namespace fe::Resource
 		uint32_t m_SpecificationID;
 
 		virtual void Create(const char* source) = 0;
+		virtual void Destroy() = 0;
 	};
 
 	struct Shader_OpenGL final : ShaderBase
 	{
 		GLuint m_OpenGLID;
 
-		static GLenum ShaderTypeToGLenum(ShaderType type);
-
 		virtual void Create(const char* source) override;
+		virtual void Destroy() override;
 	};
 }

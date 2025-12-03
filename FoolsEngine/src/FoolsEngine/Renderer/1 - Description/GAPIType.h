@@ -4,5 +4,5 @@
 
 namespace fe
 {
-	FE_DECLARE_ENUM(GAPIType, None, OpenGL);
+	FE_DECLARE_ENUM(GAPIType, None, OpenGL, Vulkan);
 }

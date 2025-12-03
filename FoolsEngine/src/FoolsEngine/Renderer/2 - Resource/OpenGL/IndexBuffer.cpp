@@ -8,6 +8,8 @@ namespace fe::Resource
 
 	void IndexBuffer_OpenGL::Create(uint32_t count, const uint32_t* indices)
 	{
+		FE_PROFILER_FUNC();
+
 		glCreateBuffers(1, &m_IndexBufferID);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBufferID);
@@ -24,5 +26,10 @@ namespace fe::Resource
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_DYNAMIC_DRAW);
 		}
 
+	}
+	void IndexBuffer_OpenGL::Destroy()
+	{
+		FE_PROFILER_FUNC();
+		glDeleteBuffers(1, &m_IndexBufferID);
 	}
 }

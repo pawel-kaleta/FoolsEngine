@@ -15,6 +15,7 @@ namespace fe::Resource
 		uint32_t m_Size;
 
 		virtual void Create(const float* vertices) = 0;
+		virtual void Delete() = 0;
 	};
 
 	struct VertexBuffer_OpenGL final : VertexBufferBase
@@ -22,5 +23,6 @@ namespace fe::Resource
 		GLuint m_VertexBufferID;
 
 		virtual void Create(const float* vertices) override;
+		virtual void Delete() override;
 	};
 }

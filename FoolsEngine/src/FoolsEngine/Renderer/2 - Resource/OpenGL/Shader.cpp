@@ -1,5 +1,7 @@
 #include "FE_pch.h"
 
+#include "Utils.h"
+
 #include "FoolsEngine\Renderer\2 - Resource\Shader.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 
@@ -7,24 +9,13 @@
 
 namespace fe::Resource
 {
-	GLenum Shader_OpenGL::ShaderTypeToGLenum(ShaderType type)
-	{
-		switch (type)
-		{
-		case ShaderType::None:		return GL_NONE;
-		case ShaderType::Vertex:	return GL_VERTEX_SHADER;
-		case ShaderType::Fragment:	return GL_FRAGMENT_SHADER;
-		default:
-			FE_LOG_CORE_ERROR("Unrecognized shader type");
-			return GL_NONE;
-		}
-	};
-
 	void Shader_OpenGL::Create(const char* source)
 	{
+		FE_PROFILER_FUNC();
+
 		const auto& spec = Description::Library::Get().ShaderSpecs[m_SpecificationID];
 
-		m_OpenGLID = glCreateShader(ShaderTypeToGLenum(spec.Type));
+		m_OpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(spec.Type));
 		glShaderSource(m_OpenGLID, 1, &source, 0);
 
 		GLint compilation_success;
@@ -53,5 +44,12 @@ namespace fe::Resource
 
 			return;
 		}
+	}
+
+	void Shader_OpenGL::Destroy()
+	{
+		FE_PROFILER_FUNC();
+
+		glDeleteShader(m_OpenGLID);
 	}
 }

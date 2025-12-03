@@ -1,5 +1,7 @@
 #include "FE_pch.h"
 
+#include "Utils.h"
+
 #include "FoolsEngine\Renderer\2 - Resource\VertexBinding.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 
@@ -8,12 +10,6 @@
 namespace fe::Resource
 {
 	using namespace Description;
-
-	GLenum VertexBinding_OpenGL::DataPrimitiveToGLBaseType(Data::Primitive primitive)
-	{
-		const static GLenum s_lookup_table[] = { GL_BOOL, GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE };
-		return s_lookup_table[primitive.ToInt() - 1];
-	};
 
 	void VertexBinding_OpenGL::Create()
 	{
@@ -47,7 +43,7 @@ namespace fe::Resource
 				glVertexAttribIPointer(
 					buffer_element_index,
 					element.ComponentCount(),
-					DataPrimitiveToGLBaseType(primitive),
+					Utils::DataPrimitiveToGLBaseType(primitive),
 					layout.Stride,
 					(const void*)offset
 				);
@@ -59,7 +55,7 @@ namespace fe::Resource
 				glVertexAttribLPointer(
 					buffer_element_index,
 					element.ComponentCount(),
-					DataPrimitiveToGLBaseType(primitive),
+					Utils::DataPrimitiveToGLBaseType(primitive),
 					layout.Stride,
 					(const void*)offset
 				);
@@ -75,7 +71,7 @@ namespace fe::Resource
 					glVertexAttribPointer(
 						buffer_element_index,
 						element.ComponentCount(),
-						DataPrimitiveToGLBaseType(primitive),
+						Utils::DataPrimitiveToGLBaseType(primitive),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.Stride,
 						(const void*)offset
@@ -95,7 +91,7 @@ namespace fe::Resource
 						glVertexAttribPointer(
 							buffer_element_index,
 							columns,
-							DataPrimitiveToGLBaseType(primitive),
+							Utils::DataPrimitiveToGLBaseType(primitive),
 							element.Normalized ? GL_TRUE : GL_FALSE,
 							layout.Stride,
 							(const void*)offset
@@ -116,5 +112,12 @@ namespace fe::Resource
 #pragma warning(default : 4312)
 #pragma warning(default : 4267)
 		}
+	}
+
+	void VertexBinding_OpenGL::Delete()
+	{
+		FE_PROFILER_FUNC();
+
+		glDeleteVertexArrays(1, &m_VertexArrayID);
 	}
 }

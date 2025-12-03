@@ -8,6 +8,8 @@ namespace fe::Resource
 
 	void VertexBuffer_OpenGL::Create(const float* vertices)
 	{
+		FE_PROFILER_FUNC();
+
 		glCreateBuffers(1, &m_VertexBufferID);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferID);
@@ -23,5 +25,12 @@ namespace fe::Resource
 			FE_LOG_CORE_ERROR("Unrecognized VertexBuffer UploadType, defaulting to GL_DYNAMIC_DRAW");
 			glBufferData(GL_ARRAY_BUFFER, m_Size, vertices, GL_DYNAMIC_DRAW);
 		}
+	}
+
+	void VertexBuffer_OpenGL::Delete()
+	{
+		FE_PROFILER_FUNC();
+
+		glDeleteBuffers(1, &m_VertexBufferID);
 	}
 }

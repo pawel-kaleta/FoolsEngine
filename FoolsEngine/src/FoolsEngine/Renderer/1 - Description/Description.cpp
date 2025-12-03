@@ -81,7 +81,7 @@ namespace fe::Description
 		VertexOutputLayoutID(-1),
 		FragmentOutputLayoutID(-1),
 		MainUniformsLayoutID(-1),
-		TextureSamplerIDs(& Library::Get().m_Allocator),
+		TextureSamplers(& Library::Get().m_Allocator),
 		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
 		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
 		VertexOutputCapture(false)

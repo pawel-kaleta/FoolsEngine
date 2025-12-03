@@ -401,6 +401,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\IndexBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\FrameBuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceStateControl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -623,5 +625,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\IndexBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Framebuffer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceStareControl.cpp" />
   </ItemGroup>
 </Project>

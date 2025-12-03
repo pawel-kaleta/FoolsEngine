@@ -1,5 +1,7 @@
 #include "FE_pch.h"
 
+#include "Utils.h"
+
 #include "FoolsEngine\Renderer\2 - Resource\Texture.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 
@@ -9,56 +11,11 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	GLenum Texture_OpenGL::FormatToGlFormat(Format format)
-	{
-		// TO DO: make this a static lookup table?
-
-		switch (format.Value)
-		{
-		case Format::None:
-			FE_CORE_ASSERT(false, "Not specified data format of attachment");
-			return GL_NONE;
-		case Format::R_8:				return GL_RED;
-		case Format::RG_8:				return GL_RG;
-		case Format::RGB_8:				return GL_RGB;
-		case Format::RGBA_8:			return GL_RGBA;
-		case Format::R_UINT_32:			return GL_RED_INTEGER;
-		case Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
-		default:
-			FE_CORE_ASSERT(false, "Uknown data format of attachment");
-			return GL_NONE;
-		}
-	}
-
-	GLenum Texture_OpenGL::FormatToGLinternalFormat(Format format)
-	{
-		// TO DO: make this a static lookup table?
-
-		switch (format.Value)
-		{
-		case Format::None:
-			FE_CORE_ASSERT(false, "Not specified data format of attachment");
-			return GL_NONE;
-		case Format::R_8:				return GL_R8;
-		case Format::RG_8:				return GL_RG8;
-		case Format::RGB_8:				return GL_RGB8;
-		case Format::RGBA_8:			return GL_RGBA8;
-		case Format::R_UINT_32:			return GL_R32UI;
-		case Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
-		default:
-			FE_CORE_ASSERT(false, "Uknown data format of attachment");
-			return GL_NONE;
-		}
-	}
-
 	void Texture_OpenGL::Create(const void* data)
 	{
 		FE_PROFILER_FUNC();
 
 		auto& spec = Description::Library::Get().TextureSpecs[m_SpecificationID];
-
-		auto format = FormatToGlFormat(spec.Format);
-		auto internal_format = FormatToGLinternalFormat(spec.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_OpenGLID);
 
@@ -110,10 +67,21 @@ namespace fe::Resource
 				FE_LOG_CORE_ERROR("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
 			}
 		}
+
+		auto format = Utils::FormatToGLFormat(spec.Format);
+		auto internal_format = Utils::FormatToGLInternalFormat(spec.Format);
+
 		glBindTexture(GL_TEXTURE_2D, m_OpenGLID);
 		glTexImage2D(GL_TEXTURE_2D, 0, internal_format, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, data);
 
 		if (spec.Mipmapping == Mipmapping::Nearest || spec.Mipmapping == Mipmapping::Liniear)
 			glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	void Texture_OpenGL::Destroy()
+	{
+		FE_PROFILER_FUNC();
+
+		glDeleteTextures(1, &m_OpenGLID);
 	}
 }

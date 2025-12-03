@@ -16,6 +16,7 @@ namespace fe::Resource
 		uint32_t m_Count;
 
 		virtual void Create(uint32_t count, const uint32_t* indices) = 0;
+		virtual void Destroy() = 0;
 	};
 
 	struct IndexBuffer_OpenGL final : IndexBufferBase
@@ -23,7 +24,6 @@ namespace fe::Resource
 		GLuint m_IndexBufferID;
 
 		virtual void Create(uint32_t count, const uint32_t* indices) override;
-
-		
+		virtual void Destroy() override;
 	};
 }
