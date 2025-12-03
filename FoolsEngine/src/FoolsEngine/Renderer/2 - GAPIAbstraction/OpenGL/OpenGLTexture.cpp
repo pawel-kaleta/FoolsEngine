@@ -9,7 +9,7 @@ namespace fe
 {
 	static GLenum FormatToGlFormat(Description::Texture::Format format)
 	{
-		// TO DO: make this a static lookup table
+		// TO DO: make this a static lookup table?
 
 		switch (format.Value)
 		{
@@ -30,7 +30,7 @@ namespace fe
 
 	static GLenum FormatToGLinternalFormat(Description::Texture::Format format)
 	{
-		// TO DO: make this a static lookup table
+		// TO DO: make this a static lookup table?
 
 		switch (format.Value)
 		{
@@ -47,7 +47,6 @@ namespace fe
 			FE_CORE_ASSERT(false, "Uknown data format of attachment");
 			return GL_NONE;
 		}
-		
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const Description::Texture::Specification& specification, uint32_t width, uint32_t height)

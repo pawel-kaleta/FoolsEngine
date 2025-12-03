@@ -4,6 +4,7 @@
 
 #include "FoolsEngine\Platform\FileDialogs.h"
 
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
@@ -68,6 +69,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Allocators");
 			Scratchpad::Init();
+			Description::Library::Init();
 		}
 
 		// Rendering, Window and Platform Layer

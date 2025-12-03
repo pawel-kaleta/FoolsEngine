@@ -36,7 +36,7 @@ namespace fe
         {
             for (int i = 0; i < m_Specification.ColorAttachments.size(); ++i)
             {
-                if (m_Specification.ColorAttachments[i].Name == name)
+                if (m_Specification.ColorAttachments[i].Name.compare(name))
                     return i;
             }
 

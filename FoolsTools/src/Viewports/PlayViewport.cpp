@@ -13,10 +13,8 @@ namespace fe
 			.SetWidth(1)
 			.SetHight(1)
 			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
-			.SetColorAttachmentSpecifications({
-				{ "Final Frame", Description::Texture::Format::RGBA_8 },
-				{ "EntityID"   , Description::Texture::Format::R_UINT_32 }
-			});
+			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
+			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
 		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 		m_ViewportSize = { 1,1 };
 	}

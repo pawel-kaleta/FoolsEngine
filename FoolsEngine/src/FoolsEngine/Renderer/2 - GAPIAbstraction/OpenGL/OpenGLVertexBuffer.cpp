@@ -95,9 +95,9 @@ namespace fe
 
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(layout.Type == Buffer::LayoutType::Basic, "Vertex buffer can only have basic layout");
+		FE_CORE_ASSERT(layout.Type == Buffer::LayoutType::Vertex, "Vertex buffer can only have vertex layout");
 
-		m_Layout = layout;
+		m_Layout = &layout;
 		m_LayoutSet = true;
 
 		glBindVertexArray(m_VertexArrayID);
@@ -199,7 +199,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		FE_CORE_ASSERT(m_LayoutSet, "Vertex Buffer has no layout!");
 
-		return m_Layout;
+		return *m_Layout;
 	}
 
 	void OpenGLVertexBuffer::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)

@@ -21,7 +21,7 @@ namespace fe
 	{
 		uint32_t VertexCount;
 		uint32_t IndexCount;
-		Description::Buffer::Layout VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
+		const Description::Buffer::Layout& VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
 
 		void Init()
 		{

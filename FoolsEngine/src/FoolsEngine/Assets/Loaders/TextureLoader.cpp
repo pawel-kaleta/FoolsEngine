@@ -78,7 +78,6 @@ namespace fe
 		}
 		
 		Description::Texture::Specification spec;
-		spec.Init();
 
 		if (!result)
 		{

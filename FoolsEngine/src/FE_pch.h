@@ -33,3 +33,6 @@
 #include "FoolsEngine/Core/Core.h"
 
 #include "FoolsEngine\Memory\Scratchpad.h"
+
+#include "FoolsEngine\Utils\DeclareEnum.h"
+#include "FoolsEngine\Utils\ForEach.h"

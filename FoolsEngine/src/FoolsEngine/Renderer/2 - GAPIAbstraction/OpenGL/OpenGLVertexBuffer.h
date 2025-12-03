@@ -30,7 +30,7 @@ namespace fe
 		uint32_t m_Size;
 		Ref<IndexBuffer> m_IndexBuffer;
 		uint32_t m_VertexArrayID;
-		Description::Buffer::Layout m_Layout;
+		const Description::Buffer::Layout* m_Layout;
 		bool m_LayoutSet = false;
 	};
 }

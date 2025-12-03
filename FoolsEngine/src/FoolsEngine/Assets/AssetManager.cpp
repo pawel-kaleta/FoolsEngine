@@ -247,8 +247,6 @@ namespace fe
 				model_user.FlagLoaded();
 				break;
 			}
-			default:
-				int what;
 			}
 		}
 	}

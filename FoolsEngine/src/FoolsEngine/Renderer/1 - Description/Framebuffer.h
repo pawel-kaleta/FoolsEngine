@@ -8,25 +8,27 @@ namespace fe
 	{
 		struct Attachment
 		{
-			std::string     Name;
+			std::pmr::string Name;
 			Texture::Format Format;
+
+			Attachment();
+			Attachment(const std::pmr::string& name, Texture::Format format);
 		};
 
 		struct Specification
 		{
-			Texture::Type Type = Texture::Type::Texture2D;
+			Texture::Type Type;
+			uint32_t Width;
+			uint32_t Height;
+			uint32_t Samples;
+			bool SwapChainTarget;
+			Texture::Format DepthStencilFormat;
+			std::pmr::vector<Attachment> ColorAttachments;
 
-			uint32_t Width = 0, Height = 0;
-
-			uint32_t Samples = 1;
-
-			bool SwapChainTarget = false;
-
-
-			Texture::Format DepthStencilFormat = Texture::Format::None;
-			std::vector<Attachment> ColorAttachments;
+			Specification();
 		};
 
+		//TO DO: get rid of this
 		class SpecificationBuilder
 		{
 		public:
@@ -51,7 +53,7 @@ namespace fe
 				spec.SwapChainTarget = m_SwapChainTarget;
 
 				spec.DepthStencilFormat	= DepthStencilFormat;
-				spec.ColorAttachments	= std::move(m_ColorAttachments);
+				spec.ColorAttachments	= m_ColorAttachments;
 
 				return spec;
 			}
@@ -62,7 +64,7 @@ namespace fe
 			bool     m_SwapChainTarget = false;
 
 			Texture::Format DepthStencilFormat = Texture::Format::None;
-			std::vector<Attachment> m_ColorAttachments;
+			std::pmr::vector<Attachment> m_ColorAttachments;
 		};
 	}
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Data.h"
 #include "Texture.h"
 #include "Buffer.h"
@@ -14,14 +12,10 @@ namespace fe
 
 		struct TextureSampler
 		{
-			TextureSampler()
-				: Spec() { Spec.Init(); }
-
-			TextureSampler(const std::string& name, Texture::Specification spec, uint32_t count = 1)
-				: Name(name), Spec(spec) { }
+			TextureSampler();
 
 			Texture::Specification Spec;
-			std::string	Name;
+			std::pmr::string Name;
 		};
 
 		struct UniformBufferSampler { };
@@ -29,28 +23,31 @@ namespace fe
 
 		struct Specification
 		{
+			Specification();
+
 			ShaderType Type;
 
-			Buffer::Layout InputLayout;
-			Buffer::Layout OutputLayout;
-			Buffer::Layout Uniforms;
+			uint32_t InputLayoutID;
+			uint32_t OutputLayoutID;
+			uint32_t MainUniformsLayoutID;
 
-			std::vector<TextureSampler>			TextureSamplers;
-			std::vector<UniformBufferSampler>	UniformBufferSamplers;
-			std::vector<DynamicBufferSampler>	DynamicBufferSamplers;
-
+			std::pmr::vector<uint32_t> TextureSamplerIDs;
+			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
+			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
 		};
 
 		struct ProgramSpecification
 		{
-			Buffer::Layout VertexInputLayout;
-			Buffer::Layout VertexOutputLayout; // needed only for VertexOutputCapture into buffer
-			Buffer::Layout FragmentOutputLayout;
-			Buffer::Layout Uniforms;
+			ProgramSpecification();
 
-			std::vector<TextureSampler>			TextureSamplers;
-			std::vector<UniformBufferSampler>	UniformBufferSamplers;
-			std::vector<DynamicBufferSampler>	DynamicBufferSamplers;
+			uint32_t VertexInputLayoutID;
+			uint32_t VertexOutputLayoutID; // needed only for VertexOutputCapture into buffer
+			uint32_t FragmentOutputLayoutID;
+			uint32_t MainUniformsLayoutID;
+
+			std::pmr::vector<uint32_t> TextureSamplerIDs;
+			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
+			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
 
 			bool VertexOutputCapture; //TO DO: this is most likely not enough
 		};

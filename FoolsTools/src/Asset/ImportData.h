@@ -10,6 +10,8 @@ namespace fe
 {
     struct ImportData
     {
+        ImportData() {};
+
         //char AssetName[64] = "";
         std::filesystem::path FilepathToImport;
         //const std::vector<AssetID>* ImportedAssets = nullptr;

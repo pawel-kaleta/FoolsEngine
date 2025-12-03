@@ -24,7 +24,6 @@ namespace fe
 			Height = 0;
 			Usage = Description::Texture::Usage::None;
 			Data = nullptr;
-			Specification.Init();
 		}
 	};
 

@@ -61,7 +61,7 @@ namespace fe
 			auto in_chunk_i = i - chunk_mask;
 
 			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
-			*result_ptr = std::move(t);
+			*result_ptr = t;
 
 			m_Size++;
 		}
@@ -84,7 +84,7 @@ namespace fe
 			m_Size++;
 		}
 
-		void PopBack()
+		T&& PopBack()
 		{
 			FE_CORE_ASSERT(0 < m_Size, "Poping from empty Xar");
 			size_t i = m_Size;
@@ -95,9 +95,31 @@ namespace fe
 
 			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
 
-			((T*)result_ptr)->~T();
-
 			m_Size--;
+
+			return std::move(*result_ptr); // is this correct?
+			//((T*)result_ptr)->~T();
+		}
+
+		template <typename... Args>
+		T& EmplaceBack(Args&&... args)
+		{
+			size_t i = m_Size + 1;
+			unsigned long chunk;
+			MSB64(&chunk, i);
+			if (chunk == m_Chunks.size())
+			{
+				m_Chunks.push_back(m_Chunks.get_allocator().allocate_object<T>(1 << chunk));
+			}
+			auto chunk_mask = (uint64_t)1 << chunk;
+			auto in_chunk_i = i - chunk_mask;
+
+			auto result_ptr = m_Chunks[chunk] + in_chunk_i;
+			new (result_ptr) T(std::forward<Args>(args)...);
+
+			m_Size++;
+
+			return *result_ptr;
 		}
 
 		size_t Size() { return m_Size; }

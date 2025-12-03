@@ -1,48 +1,56 @@
-06:40:30:585643 | FE  | info     | Logging innitialized!
-06:40:30:586446 | App | info     | Logging innitialized!
-06:40:30:586535 | FE  | info     | /////////////////////////////////////////////////////
-06:40:30:586604 | FE  | info     | ////////////////////// STARTUP //////////////////////
-06:40:30:586673 | FE  | info     | /////////////////////////////////////////////////////
-06:40:30:586950 | FE  | info     | Profiler session 'Startup' started.
-06:40:30:587302 | FE  | info     | Initializing GLFW
-06:40:30:629404 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-06:40:30:811127 | FE  | info     | Setting events callbacks for window:
-06:40:30:811260 | FE  | info     | 	WindowResizeEvent
-06:40:30:811367 | FE  | info     | 	WindowCloseEvent
-06:40:30:811471 | FE  | info     | 	WindowFocusChangeEvents
-06:40:30:811569 | FE  | info     | 	KeyEvents
-06:40:30:811665 | FE  | info     | 	KeyTypedEvent
-06:40:30:811757 | FE  | info     | 	MouseButtonEvents
-06:40:30:811852 | FE  | info     | 	MouseScrolledEvent
-06:40:30:811945 | FE  | info     | 	MouseMovedEvent
-06:40:30:812163 | FE  | info     | Creating rendering context
-06:40:30:815282 | FE  | info     | Rendering platform info:
-06:40:30:815392 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-06:40:30:815547 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-06:40:30:815678 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-06:40:30:815887 | FE  | info     | OpenGL Rendering Context created
-06:40:30:816054 | FE  | info     | VSync disabled.
-06:40:30:816554 | FE  | info     | OpenGLDeviceAPI creation!
-06:40:30:816692 | FE  | info     | OpenGLDeviceAPI Initialization.
-06:40:30:818444 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-06:40:30:819005 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-06:40:30:822878 | FE  | info     | Profiler session 'Startup' closed.
-06:40:30:824551 | FE  | info     | /////////////////////////////////////////////////////
-06:40:30:824685 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-06:40:30:825418 | FE  | info     | /////////////////////////////////////////////////////
-06:40:32:036925 | FE  | info     | Profiler session 'ProjectLoading' started.
-06:40:32:040697 | FE  | info     | Project deserialized
-06:40:32:044549 | FE  | warning  | Missing UUID in ShadingModel file
-06:40:32:046852 | FE  | warning  | Missing UUID in ShadingModel file
-06:40:32:049145 | FE  | warning  | Missing UUID in ShadingModel file
-06:40:32:117347 | FE  | info     | Base Assets acquired
-06:40:32:124536 | FE  | info     | Asset Registry deserialized
-06:40:32:284774 | FE  | info     | Assets' meta data loaded
-06:40:32:285099 | FE  | info     | Profiler session 'ProjectLoading' closed.
-06:40:32:285418 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-06:40:32:285718 | App | info     | EditorLayer::OnAttach()
-06:40:32:286213 | FE  | info     | Scene initialization
-06:40:32:286363 | FE  | info     | World Creation
-06:40:32:286878 | FE  | info     | Profiler session 'SceneLoading' started.
-06:40:40:504225 | FE  | info     | Profiler session 'SceneLoading' closed.
-06:40:40:512719 | FE  | info     | Profiler session 'Runtime' started.
+08:14:44:538505 | FE  | info     | Logging innitialized!
+08:14:44:539276 | App | info     | Logging innitialized!
+08:14:44:539375 | FE  | info     | /////////////////////////////////////////////////////
+08:14:44:539453 | FE  | info     | ////////////////////// STARTUP //////////////////////
+08:14:44:539526 | FE  | info     | /////////////////////////////////////////////////////
+08:14:44:539833 | FE  | info     | Profiler session 'Startup' started.
+08:14:44:540440 | FE  | info     | Initializing GLFW
+08:14:44:581290 | FE  | info     | Creating Window FoolsTools (1900, 1000)
+08:14:44:805751 | FE  | info     | Setting events callbacks for window:
+08:14:44:806245 | FE  | info     | 	WindowResizeEvent
+08:14:44:806417 | FE  | info     | 	WindowCloseEvent
+08:14:44:806546 | FE  | info     | 	WindowFocusChangeEvents
+08:14:44:806669 | FE  | info     | 	KeyEvents
+08:14:44:806783 | FE  | info     | 	KeyTypedEvent
+08:14:44:806893 | FE  | info     | 	MouseButtonEvents
+08:14:44:807027 | FE  | info     | 	MouseScrolledEvent
+08:14:44:807131 | FE  | info     | 	MouseMovedEvent
+08:14:44:807427 | FE  | info     | Creating rendering context
+08:14:44:811267 | FE  | info     | Rendering platform info:
+08:14:44:811387 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+08:14:44:811512 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+08:14:44:811606 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+08:14:44:811792 | FE  | info     | OpenGL Rendering Context created
+08:14:44:811923 | FE  | info     | VSync disabled.
+08:14:44:812516 | FE  | info     | OpenGLDeviceAPI creation!
+08:14:44:812678 | FE  | info     | OpenGLDeviceAPI Initialization.
+08:14:44:815596 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+08:14:44:816565 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+08:14:44:823068 | FE  | info     | Profiler session 'Startup' closed.
+08:14:44:823235 | FE  | info     | /////////////////////////////////////////////////////
+08:14:44:823478 | FE  | info     | ////////////////////// RUNTIME //////////////////////
+08:14:44:824539 | FE  | info     | /////////////////////////////////////////////////////
+08:14:46:203842 | FE  | info     | Profiler session 'ProjectLoading' started.
+08:14:46:208243 | FE  | info     | Project deserialized
+08:14:46:212674 | FE  | warning  | Missing UUID in ShadingModel file
+08:14:46:214982 | FE  | warning  | Missing UUID in ShadingModel file
+08:14:46:217603 | FE  | warning  | Missing UUID in ShadingModel file
+08:14:46:292699 | FE  | info     | Base Assets acquired
+08:14:46:300888 | FE  | info     | Asset Registry deserialized
+08:14:46:477608 | FE  | info     | Assets' meta data loaded
+08:14:46:477968 | FE  | info     | Profiler session 'ProjectLoading' closed.
+08:14:46:478254 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
+08:14:46:478567 | App | info     | EditorLayer::OnAttach()
+08:14:46:479079 | FE  | info     | Scene initialization
+08:14:46:479260 | FE  | info     | World Creation
+08:14:46:479844 | FE  | info     | Profiler session 'SceneLoading' started.
+08:14:55:680016 | FE  | info     | Profiler session 'SceneLoading' closed.
+08:14:55:689551 | FE  | info     | Profiler session 'Runtime' started.
+08:14:56:096872 | FE  | info     | Profiler session 'Runtime' closed.
+08:15:16:800424 | FE  | info     | Window Close Event
+08:15:16:809323 | FE  | info     | /////////////////////////////////////////////////////
+08:15:16:809433 | FE  | info     | ///////////////////// SHUTDOWN //////////////////////
+08:15:16:809782 | FE  | info     | /////////////////////////////////////////////////////
+08:15:16:810284 | FE  | info     | Profiler session 'Shutdown' started.
+08:15:16:811896 | FE  | info     | Closing Window.
+08:15:16:860793 | FE  | info     | Profiler session 'Shutdown' closed.

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FoolsEngine\Utils\DeclareEnum.h"
-
 namespace fe
 {
 	using RenderTextureSlotID = uint32_t;
@@ -17,16 +15,32 @@ namespace fe
 
 		FE_DECLARE_ENUM(Format, None, R_8, RG_8, RGB_8, RGBA_8, R_UINT_32, DEPTH24STENCIL8);
 
+		FE_DECLARE_ENUM(Wrapping, None, Repeat, MirrorRepeat, Clamp, Border);
+
+		FE_DECLARE_ENUM(Filtering, None, Nearest, Bilinear);
+
+		FE_DECLARE_ENUM(Mipmapping, None, Nearest, Liniear);
+
+		FE_DECLARE_ENUM(AnisotropicFiltering, None, x2, x4, x8, x16);
+
+
 		struct Specification
 		{
-			Type	Type;
-			Format	Format;
+			Specification() :
+				Type(Type::None),
+				Format(Format::None),
+				Wrapping(Wrapping::None),
+				Filtering(Filtering::None),
+				Mipmapping(Mipmapping::None),
+				AnisotropicFiltering(AnisotropicFiltering::None)
+			{ }
 
-			void Init()
-			{
-				Type	= Type::None;
-				Format	= Format::None;
-			}
+			Type Type;
+			Format Format;
+			Wrapping Wrapping;
+			Filtering Filtering;
+			Mipmapping Mipmapping;
+			AnisotropicFiltering AnisotropicFiltering;
 		};
 
 		constexpr Components ComponentsInFormat(Format format)

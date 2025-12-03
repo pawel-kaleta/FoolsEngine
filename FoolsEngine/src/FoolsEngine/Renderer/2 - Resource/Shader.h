@@ -2,25 +2,25 @@
 
 #include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
 
-using GLuint = uint32_t;
+#include <glad\glad.h>
 
 namespace fe::Resource
 {
+	using namespace Description::ShaderInterface;
+
 	struct ShaderBase
 	{
-		Description::ShaderInterface::Specification Specification; // Just an ID?
+		uint32_t m_SpecificationID;
+
+		virtual void Create(const char* source) = 0;
 	};
 
-	struct Shader_OpenGL : ShaderBase
+	struct Shader_OpenGL final : ShaderBase
 	{
-		GLuint OpenGLID;
+		GLuint m_OpenGLID;
+
+		static GLenum ShaderTypeToGLenum(ShaderType type);
+
+		virtual void Create(const char* source) override;
 	};
-
-	struct Shader_Vulkan : ShaderBase { };
-
-	namespace Shader
-	{
-		using OpenGL = Shader_OpenGL;
-		using Vulkan = Shader_Vulkan;
-	}
 }

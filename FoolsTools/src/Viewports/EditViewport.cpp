@@ -11,10 +11,8 @@ namespace fe
 			.SetWidth(1280)
 			.SetHight(720)
 			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
-			.SetColorAttachmentSpecifications({
-				{ "Final frame", Description::Texture::Format::RGBA_8 },
-				{ "EntityID"   , Description::Texture::Format::R_UINT_32 }
-			});
+			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
+			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID", Description::Texture::Format::R_UINT_32));
 		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);

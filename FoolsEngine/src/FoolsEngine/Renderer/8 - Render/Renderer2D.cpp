@@ -2,6 +2,7 @@
 #include "Renderer2D.h"
 
 #include "FoolsEngine\Renderer\1 - Description\Buffer.h"
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
 #include "FoolsEngine\Renderer\2 - GAPIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Renderer\2 - GAPIAbstraction\IndexBuffer.h"
@@ -39,14 +40,21 @@ namespace fe
 		Scratchpad sp;
 
 		s_Instance->m_QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
-		s_Instance->m_QuadVertexBuffer->SetLayout(Description::Buffer::Layout({
-			{ Description::Data::Type::Float3, "a_Position" },
-			{ Description::Data::Type::Float4, "a_Color" },
-			{ Description::Data::Type::Float2, "a_TexCoord" },
-			{ Description::Data::Type::Float,  "a_TilingFactor" },
-			{ Description::Data::Type::UInt,   "a_TextureSampler" },
-			{ Description::Data::Type::UInt,   "a_EntityID" }
-		}));
+
+		uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.size();
+		auto& layout = Description::Library::Get().BufferLayouts.emplace_back();
+
+		layout.Type = Description::Buffer::LayoutType::Vertex;
+		layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");
+		layout.Elements.emplace_back(Description::Data::Type::Float4, "a_Color");
+		layout.Elements.emplace_back(Description::Data::Type::Float2, "a_TexCoord");
+		layout.Elements.emplace_back(Description::Data::Type::Float,  "a_TilingFactor");
+		layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_TextureSampler");
+		layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_EntityID");
+
+		layout.CalculateOffsetsAndStride();
+
+		s_Instance->m_QuadVertexBuffer->SetLayout(layout);
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
