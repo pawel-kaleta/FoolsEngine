@@ -6,7 +6,7 @@ namespace fe
 	{
 	public:
 		IndexBuffer() = default;
-		IndexBuffer(uint32_t count) : m_Count(count) { }
+		IndexBuffer(uint32_t count) : Count(count) { }
 
 		virtual ~IndexBuffer() = default;
 
@@ -15,6 +15,6 @@ namespace fe
 
 		static Scope<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 
-		uint32_t m_Count = 0;
+		uint32_t Count = 0;
 	};
 }

@@ -2,10 +2,13 @@
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 #include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\2 - Resource\Texture.h"
 #include "FoolsEngine\Renderer\2 - Resource\VertexBuffer.h"
 #include "FoolsEngine\Renderer\2 - Resource\VertexBinding.h"
 #include "FoolsEngine\Renderer\2 - Resource\IndexBuffer.h"
+#include "FoolsEngine\Renderer\2 - Resource\Program.h"
 
 namespace fe::Command
 {
@@ -22,6 +25,7 @@ namespace fe::Command
 			void BindVertexBuffer(const Resource::VertexBuffer_OpenGL& vertexBuffer);
 			void BindVertexBinding(const Resource::VertexBinding_OpenGL& vertexBinding);
 			void BindIndexBuffer(const Resource::IndexBuffer_OpenGL& indexBuffer);
+			void UploadOrReserveVertexBuffer(Resource::VertexBuffer_OpenGL& vertexBuffer, size_t size, const void* data);
 		}
 
 		template<GAPIType::ValueType GAPI>
@@ -48,5 +52,12 @@ namespace fe::Command
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindIndexBuffer( * (const Resource::IndexBuffer_OpenGL *) & indexBuffer);
 		}
+
+		template<GAPIType::ValueType GAPI>
+		void UploadOrReserveVertexBuffer(Resource::VertexBufferBase& vertexBuffer, size_t size, const void* data)
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadOrReserveVertexBuffer(*(Resource::VertexBuffer_OpenGL*)&vertexBuffer, size, data);
+		}
+
 	}
 }

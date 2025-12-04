@@ -10,7 +10,7 @@ namespace fe::Resource
 
 	struct ShaderBase
 	{
-		uint32_t m_SpecificationID;
+		uint32_t SpecificationID;
 
 		virtual void Create(const char* source) = 0;
 		virtual void Destroy() = 0;
@@ -18,7 +18,7 @@ namespace fe::Resource
 
 	struct Shader_OpenGL final : ShaderBase
 	{
-		GLuint m_OpenGLID;
+		GLuint ShaderOpenGLID;
 
 		virtual void Create(const char* source) override;
 		virtual void Destroy() override;

@@ -13,16 +13,16 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& spec = Description::Library::Get().ShaderSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().ShaderSpecs[SpecificationID];
 
-		m_OpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(spec.Type));
-		glShaderSource(m_OpenGLID, 1, &source, 0);
+		ShaderOpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(spec.Type));
+		glShaderSource(ShaderOpenGLID, 1, &source, 0);
 
 		GLint compilation_success;
 		{
 			FE_PROFILER_SCOPE("OpenGL shader compilation");
-			glCompileShader(m_OpenGLID);
-			glGetShaderiv(m_OpenGLID, GL_COMPILE_STATUS, &compilation_success);
+			glCompileShader(ShaderOpenGLID);
+			glGetShaderiv(ShaderOpenGLID, GL_COMPILE_STATUS, &compilation_success);
 		}
 
 		if (compilation_success == GL_FALSE)
@@ -30,14 +30,14 @@ namespace fe::Resource
 			Scratchpad sp;
 
 			GLint log_length = 0;
-			glGetShaderiv(m_OpenGLID, GL_INFO_LOG_LENGTH, &log_length);
+			glGetShaderiv(ShaderOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
 			std::pmr::vector<GLchar> info_log(log_length, &sp);
-			glGetShaderInfoLog(m_OpenGLID, log_length, &log_length, info_log.data());
+			glGetShaderInfoLog(ShaderOpenGLID, log_length, &log_length, info_log.data());
 
-			glDeleteShader(m_OpenGLID);
+			glDeleteShader(ShaderOpenGLID);
 
-			m_OpenGLID = 0;
+			ShaderOpenGLID = 0;
 
 			FE_LOG_CORE_ERROR("{0}", info_log.data());
 			FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
@@ -50,6 +50,6 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		glDeleteShader(m_OpenGLID);
+		glDeleteShader(ShaderOpenGLID);
 	}
 }

@@ -8,7 +8,7 @@ namespace fe::Resource
 {
 	uint32_t FramebufferBase::GetColorAttachmentIndex(const std::string& name) const
 	{
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
 		for (int i = 0; i < spec.ColorAttachments.size(); ++i)
 		{

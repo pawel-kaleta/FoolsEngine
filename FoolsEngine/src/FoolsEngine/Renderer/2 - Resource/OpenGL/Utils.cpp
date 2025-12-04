@@ -21,10 +21,10 @@ namespace fe::Resource
 				FE_CORE_ASSERT(false, "Not specified data format of attachment");
 				return GL_NONE;
 			case Description::Texture::Format::R_8:				return GL_RED;
-			case Description::Texture::Format::RG_8:				return GL_RG;
-			case Description::Texture::Format::RGB_8:				return GL_RGB;
+			case Description::Texture::Format::RG_8:			return GL_RG;
+			case Description::Texture::Format::RGB_8:			return GL_RGB;
 			case Description::Texture::Format::RGBA_8:			return GL_RGBA;
-			case Description::Texture::Format::R_UINT_32:			return GL_RED_INTEGER;
+			case Description::Texture::Format::R_UINT_32:		return GL_RED_INTEGER;
 			case Description::Texture::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 			default:
 				FE_CORE_ASSERT(false, "Uknown data format of attachment");
@@ -42,10 +42,10 @@ namespace fe::Resource
 				FE_CORE_ASSERT(false, "Not specified data format of attachment");
 				return GL_NONE;
 			case Description::Texture::Format::R_8:				return GL_R8;
-			case Description::Texture::Format::RG_8:				return GL_RG8;
-			case Description::Texture::Format::RGB_8:				return GL_RGB8;
+			case Description::Texture::Format::RG_8:			return GL_RG8;
+			case Description::Texture::Format::RGB_8:			return GL_RGB8;
 			case Description::Texture::Format::RGBA_8:			return GL_RGBA8;
-			case Description::Texture::Format::R_UINT_32:			return GL_R32UI;
+			case Description::Texture::Format::R_UINT_32:		return GL_R32UI;
 			case Description::Texture::Format::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
 			default:
 				FE_CORE_ASSERT(false, "Uknown data format of attachment");

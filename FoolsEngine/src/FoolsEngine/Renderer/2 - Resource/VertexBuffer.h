@@ -10,19 +10,19 @@ namespace fe::Resource
 
 	struct VertexBufferBase
 	{
-		Buffer::UploadType m_UploadType;
-		Buffer::Usage m_Usage;
-		uint32_t m_Size;
+		Buffer::UploadType UploadType;
+		Buffer::Usage Usage;
+		uint32_t Size;
 
-		virtual void Create(const float* vertices) = 0;
+		virtual void Create() = 0;
 		virtual void Delete() = 0;
 	};
 
 	struct VertexBuffer_OpenGL final : VertexBufferBase
 	{
-		GLuint m_VertexBufferID;
+		GLuint VertexBufferID;
 
-		virtual void Create(const float* vertices) override;
+		virtual void Create() override;
 		virtual void Delete() override;
 	};
 }

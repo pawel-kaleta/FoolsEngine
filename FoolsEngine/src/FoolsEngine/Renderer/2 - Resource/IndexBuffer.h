@@ -11,19 +11,19 @@ namespace fe::Resource
 
 	struct IndexBufferBase
 	{
-		Buffer::UploadType m_UploadType;
-		Buffer::Usage m_Usage;
-		uint32_t m_Count;
+		Buffer::UploadType UploadType;
+		Buffer::Usage Usage;
+		uint32_t Count;
 
-		virtual void Create(uint32_t count, const uint32_t* indices) = 0;
+		virtual void Create() = 0;
 		virtual void Destroy() = 0;
 	};
 
 	struct IndexBuffer_OpenGL final : IndexBufferBase
 	{
-		GLuint m_IndexBufferID;
+		GLuint IndexBufferOpenGLID;
 
-		virtual void Create(uint32_t count, const uint32_t* indices) override;
+		virtual void Create() override;
 		virtual void Destroy() override;
 	};
 }

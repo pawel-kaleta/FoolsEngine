@@ -10,7 +10,7 @@ namespace fe::Resource
 
 	struct VertexBindingBase
 	{
-		uint32_t m_LayoutID;
+		uint32_t LayoutID;
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
@@ -18,7 +18,7 @@ namespace fe::Resource
 
 	struct VertexBinding_OpenGL final : VertexBindingBase
 	{
-		GLuint m_VertexArrayID;
+		GLuint VertexArrayID;
 
 		virtual void Create() override;
 		virtual void Delete() override;

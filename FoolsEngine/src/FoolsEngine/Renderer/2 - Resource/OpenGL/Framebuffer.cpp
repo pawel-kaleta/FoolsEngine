@@ -15,42 +15,42 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
-		glCreateFramebuffers(1, &m_OpenGLID);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_OpenGLID);
+		glCreateFramebuffers(1, &FramebufferOpenGLID);
+		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferOpenGLID);
 
 		bool multisampled = spec.Samples > 1;
 
 		if (spec.ColorAttachments.size())
 		{
-			m_ColorAttachments.resize(spec.ColorAttachments.size());
+			ColorAttachmentOpenGLIDs.resize(spec.ColorAttachments.size());
 
 			if (multisampled)
 			{
-				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, (GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
+				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, (GLsizei)ColorAttachmentOpenGLIDs.size(), ColorAttachmentOpenGLIDs.data());
 
-				for (int i = 0; i < m_ColorAttachments.size(); ++i)
+				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i]);
-					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, m_Width, m_Height, GL_FALSE);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i], 0);
+					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i]);
+					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, Width, Height, GL_FALSE);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i], 0);
 				}
 			}
 			else
 			{
-				for (int i = 0; i < m_ColorAttachments.size(); ++i)
+				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D, m_ColorAttachments[i]);
-					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, m_Width, m_Height);
+					glBindTexture(GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i]);
+					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, Width, Height);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, m_ColorAttachments[i], 0);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i], 0);
 				}
 			}
 		}
@@ -61,37 +61,37 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
-				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, 1, &m_DepthStencilAttachment);
-				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_DepthStencilAttachment);
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, m_Width, m_Height, GL_FALSE);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D_MULTISAMPLE, m_DepthStencilAttachment, 0);
+				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, 1, &DepthStencilAttachmentOpenGLID);
+				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID, 0);
 			}
 			else
 			{
-				glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthStencilAttachment);
-				glBindTexture(GL_TEXTURE_2D, m_DepthStencilAttachment);
-				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, m_Width, m_Height);
+				glCreateTextures(GL_TEXTURE_2D, 1, &DepthStencilAttachmentOpenGLID);
+				glBindTexture(GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID);
+				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, Width, Height);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthStencilAttachment, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID, 0);
 			}
 		}
 
-		if (m_ColorAttachments.size() > 1)
+		if (ColorAttachmentOpenGLIDs.size() > 1)
 		{
 			Scratchpad sp;
 
-			std::pmr::vector<GLenum> buffers(m_ColorAttachments.size(), &sp);
-			for (int i = 0; i < m_ColorAttachments.size(); ++i)
+			std::pmr::vector<GLenum> buffers(ColorAttachmentOpenGLIDs.size(), &sp);
+			for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 			{
 				buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 			}
-			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers.data());
+			glDrawBuffers((GLsizei)ColorAttachmentOpenGLIDs.size(), buffers.data());
 		}
-		else if (m_ColorAttachments.empty())
+		else if (ColorAttachmentOpenGLIDs.empty())
 		{
 			glDrawBuffer(GL_NONE);
 		}
@@ -115,33 +115,33 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
-		m_Width = width;
-		m_Height = height;
+		Width = width;
+		Height = height;
 
 		bool multisampled = spec.Samples > 1;
 
 		if (spec.ColorAttachments.size())
 		{
-			m_ColorAttachments.resize(spec.ColorAttachments.size());
+			ColorAttachmentOpenGLIDs.resize(spec.ColorAttachments.size());
 
 			if (multisampled)
 			{
-				for (int i = 0; i < m_ColorAttachments.size(); ++i)
+				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_ColorAttachments[i]);
-					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, m_Width, m_Height, GL_FALSE);
+					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i]);
+					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, Width, Height, GL_FALSE);
 				}
 			}
 			else
 			{
-				for (int i = 0; i < m_ColorAttachments.size(); ++i)
+				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D, m_ColorAttachments[i]);
-					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, m_Width, m_Height);
+					glBindTexture(GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i]);
+					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, Width, Height);
 				}
 			}
 		}
@@ -152,13 +152,13 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
-				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_DepthStencilAttachment);
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, m_Width, m_Height, GL_FALSE);
+				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
 			}
 			else
 			{
-				glBindTexture(GL_TEXTURE_2D, m_DepthStencilAttachment);
-				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, m_Width, m_Height);
+				glBindTexture(GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID);
+				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, Width, Height);
 			}
 		}
 	}
@@ -167,35 +167,35 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
 		auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_UNSIGNED_INT, &value);
+		glClearTexImage(ColorAttachmentOpenGLIDs[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_UNSIGNED_INT, &value);
 	}
 
 	void Framebuffer_OpenGL::ClearAttachment(uint32_t attachmentIndex, float value)
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
 		auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_FLOAT, &value);
+		glClearTexImage(ColorAttachmentOpenGLIDs[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_FLOAT, &value);
 	}
 
 	void Framebuffer_OpenGL::ReadPixel(uint32_t attachmentIndex, int x, int y, void* destination) const
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Framebuffer attachment index out of bounds");
+		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[m_SpecificationID];
+		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 		auto& format = spec.ColorAttachments[attachmentIndex].Format;
 		GLenum glFormat = Utils::FormatToGLFormat(format);
 		GLenum glType = Utils::FormatToGLType(format);
@@ -206,12 +206,12 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		glDeleteFramebuffers(1, &m_OpenGLID);
-		if (m_ColorAttachments.size())
-			glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
-		if (m_DepthStencilAttachment)
-			glDeleteTextures(1, &m_DepthStencilAttachment);
+		glDeleteFramebuffers(1, &FramebufferOpenGLID);
+		if (ColorAttachmentOpenGLIDs.size())
+			glDeleteTextures((GLsizei)ColorAttachmentOpenGLIDs.size(), ColorAttachmentOpenGLIDs.data());
+		if (DepthStencilAttachmentOpenGLID)
+			glDeleteTextures(1, &DepthStencilAttachmentOpenGLID);
 
-		m_ColorAttachments.clear();
+		ColorAttachmentOpenGLIDs.clear();
 	}
 }

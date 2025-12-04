@@ -11,11 +11,11 @@ namespace fe::Resource
 
 	struct TextureBase
 	{
-		uint32_t m_SpecificationID;
-		uint32_t m_Width;
-		uint32_t m_Height;
-		Usage m_Usage;
-		glm::vec3 m_Border;
+		uint32_t SpecificationID;
+		uint32_t Width;
+		uint32_t Height;
+		Usage Usage;
+		glm::vec3 BorderColor;
 
 		virtual void Create(const void* data) = 0;
 		virtual void Destroy() = 0;
@@ -23,7 +23,7 @@ namespace fe::Resource
 
 	struct Texture_OpenGL final : TextureBase
 	{
-		GLuint m_OpenGLID;
+		GLuint TextureOpenGLID;
 
 		virtual void Create(const void* data) override;
 		virtual void Destroy() override;
