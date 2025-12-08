@@ -16,5 +16,6 @@ namespace fe::Resource
 		GLenum FormatToGLInternalFormat(Description::Texture::Format format);
 		GLenum FormatToGLType(Description::Texture::Format format);
 		GLenum ShaderTypeToGLEnum(Description::ShaderInterface::ShaderType type);
+		GLenum BufferUsageToGLEnum(Description::Buffer::Usage usage);
 	}
 }

@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <memory_resource>
+#include <memory>
 
 namespace fe
 {
@@ -13,8 +14,10 @@ namespace fe
 	{
 	public:
 		Xar(std::pmr::polymorphic_allocator<std::byte> alloc) :
-			m_Size(0), m_Chunks(alloc)
-		{ }
+			m_Size(0), m_Chunks(alloc) { }
+
+		Xar()
+			: m_Size(0) { }
 
 		~Xar()
 		{

@@ -11,7 +11,7 @@ namespace fe::Resource
 	struct ProgramBase
 	{
 		uint32_t SpecificationID;
-		std::vector<ShaderBase*> Shaders; // make this an id in resource manager
+		std::vector<ShaderBase*> Shaders; // make this an id in resource manager for shader reuse in multiple programs
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
@@ -32,7 +32,11 @@ namespace fe::Resource
 
 		virtual void Create() override;
 		virtual void Destroy() override;
-		virtual void UploadUniform(const std::pmr::string& uniformName, const void* data) const override;
-		virtual void UploadUniform(size_t uniformIndex, const void* data) const override;
+	};
+
+	struct Program_Vulkan final : ProgramBase
+	{
+		virtual void Create() override {};
+		virtual void Destroy() override {};
 	};
 }

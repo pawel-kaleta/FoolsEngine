@@ -1,14 +1,8 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\2 - Resource\Texture.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexBuffer.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexBinding.h"
-#include "FoolsEngine\Renderer\2 - Resource\IndexBuffer.h"
 #include "FoolsEngine\Renderer\2 - Resource\Program.h"
+#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
 
 namespace fe::Command
 {
@@ -16,48 +10,75 @@ namespace fe::Command
 	{
 		namespace Vulkan
 		{
-			void BindToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::TextureBase& texture) {}
+			void BindTextureSamplerToRendererTextureSlot(Resource::Program_Vulkan& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot) {}
 		}
 
 		namespace OpenGL
 		{
-			void BindToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::Texture_OpenGL& texture);
-			void BindVertexBuffer(const Resource::VertexBuffer_OpenGL& vertexBuffer);
-			void BindVertexBinding(const Resource::VertexBinding_OpenGL& vertexBinding);
-			void BindIndexBuffer(const Resource::IndexBuffer_OpenGL& indexBuffer);
-			void UploadOrReserveVertexBuffer(Resource::VertexBuffer_OpenGL& vertexBuffer, size_t size, const void* data);
+			// shader interface setup
+
+			void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot);
+
+			void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot);
+
+			void UploadUniform(Resource::Program_OpenGL& program, size_t uniformIndex, const void* data);
+
+			void UploadUniform(Resource::Program_OpenGL& program, const std::pmr::string& uniformName, const void* data);
+
+			// framebuffer
+
+			void ClearAttachment(Resource::Framebuffer_OpenGL& framebuffer, uint32_t attachmentIndex, uint32_t value);
+
+			void ClearAttachment(Resource::Framebuffer_OpenGL& framebuffer, uint32_t attachmentIndex, float value);
+
+			void ReadPixel(const Resource::Framebuffer_OpenGL& framebuffer, uint32_t attachmentIndex, int x, int y, void* destination);
+		}
+
+		// shader interface setup
+
+		template<GAPIType::ValueType GAPI>
+		void BindTextureSamplerToRendererTextureSlot(Resource::ProgramBase& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot)
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_OpenGL*) & program, samplerIndex, rendererTextureSlot);
+			if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_Vulkan*) & program, samplerIndex, rendererTextureSlot);
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void BindToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::TextureBase& texture)
+		void BindTextureSamplerToRendererTextureSlot(Resource::ProgramBase& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindToRendererTextureSlot(rendererTextureSlot, * (const Resource::Texture_OpenGL *) & texture);
-			if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindToRendererTextureSlot(rendererTextureSlot, texture);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_OpenGL*) & program, samplerName, rendererTextureSlot);
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void BindVertexBuffer(const Resource::VertexBufferBase& vertexBuffer)
+		void UploadUniform(Resource::ProgramBase& program, size_t uniformIndex, const void* data)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindVertexBuffer( * (const Resource::VertexBuffer_OpenGL *) & vertexBuffer);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::ProgramBase*) & program, uniformIndex, data);
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void BindVertexBinding(const Resource::VertexBindingBase& vertexBinding)
+		void UploadUniform(Resource::ProgramBase& program, const std::pmr::string& uniformName, const void* data)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindVertexBinding( * (const Resource::VertexBinding_OpenGL *) & vertexBinding);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Program_OpenGL*) & program, uniformName, data);
+		}
+
+		// framebuffer
+
+		template<GAPIType::ValueType GAPI>
+		void ClearAttachment(Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, uint32_t value)
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(* (Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, value);
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void BindIndexBuffer(const Resource::IndexBufferBase& indexBuffer)
+		void ClearAttachment(Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, float value)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindIndexBuffer( * (const Resource::IndexBuffer_OpenGL *) & indexBuffer);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Framebuffer_OpenGL*)&framebuffer, attachmentIndex, value);
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void UploadOrReserveVertexBuffer(Resource::VertexBufferBase& vertexBuffer, size_t size, const void* data)
+		void ReadPixel(const Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, int x, int y, void* destination)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadOrReserveVertexBuffer(*(Resource::VertexBuffer_OpenGL*)&vertexBuffer, size, data);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, x, y, destination);
 		}
-
 	}
 }

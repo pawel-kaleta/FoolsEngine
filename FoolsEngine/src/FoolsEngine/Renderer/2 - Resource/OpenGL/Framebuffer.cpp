@@ -18,7 +18,7 @@ namespace fe::Resource
 		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
 		glCreateFramebuffers(1, &FramebufferOpenGLID);
-		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferOpenGLID);
+		//glBindFramebuffer(GL_FRAMEBUFFER, FramebufferOpenGLID);
 
 		bool multisampled = spec.Samples > 1;
 
@@ -28,6 +28,8 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
+				FE_CORE_ASSERTION_BREAK(false, "Multisampled framebuffer not supported yet because multisample textures dont support DSA OpenGL");
+
 				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, (GLsizei)ColorAttachmentOpenGLIDs.size(), ColorAttachmentOpenGLIDs.data());
 
 				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
@@ -35,22 +37,24 @@ namespace fe::Resource
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i]);
 					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, Width, Height, GL_FALSE);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i], 0);
+					glNamedFramebufferTexture(FramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + i, ColorAttachmentOpenGLIDs[i], 0);
 				}
 			}
 			else
 			{
+				glCreateTextures(GL_TEXTURE_2D, (GLsizei)ColorAttachmentOpenGLIDs.size(), ColorAttachmentOpenGLIDs.data());
+
 				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i]);
-					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, Width, Height);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i], 0);
+					GLuint textureID = ColorAttachmentOpenGLIDs[i];
+					glTextureStorage2D(textureID, 1, internalFormat, Width, Height);
+					glTextureParameteri(textureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					glTextureParameteri(textureID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+					glTextureParameteri(textureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					glTextureParameteri(textureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					glNamedFramebufferTexture(FramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + i, ColorAttachmentOpenGLIDs[i], 0);
 				}
 			}
 		}
@@ -61,22 +65,23 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
+				FE_CORE_ASSERTION_BREAK(false, "Multisampled framebuffer not supported yet because multisample textures dont support DSA OpenGL");
+
 				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, 1, &DepthStencilAttachmentOpenGLID);
 				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
 				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID, 0);
+				glNamedFramebufferTexture(FramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, DepthStencilAttachmentOpenGLID, 0);
 			}
 			else
 			{
 				glCreateTextures(GL_TEXTURE_2D, 1, &DepthStencilAttachmentOpenGLID);
-				glBindTexture(GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID);
-				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, Width, Height);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID, 0);
+				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, Width, Height);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glNamedFramebufferTexture(FramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, DepthStencilAttachmentOpenGLID, 0);
 			}
 		}
 
@@ -89,7 +94,7 @@ namespace fe::Resource
 			{
 				buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 			}
-			glDrawBuffers((GLsizei)ColorAttachmentOpenGLIDs.size(), buffers.data());
+			glNamedFramebufferDrawBuffers(FramebufferOpenGLID, (GLsizei)ColorAttachmentOpenGLIDs.size(), buffers.data());
 		}
 		else if (ColorAttachmentOpenGLIDs.empty())
 		{
@@ -128,6 +133,8 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
+				FE_CORE_ASSERTION_BREAK(false, "Multisampled framebuffer not supported yet because multisample textures dont support DSA OpenGL");
+
 				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
@@ -140,8 +147,7 @@ namespace fe::Resource
 				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glBindTexture(GL_TEXTURE_2D, ColorAttachmentOpenGLIDs[i]);
-					glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, Width, Height);
+					glTextureStorage2D(ColorAttachmentOpenGLIDs[i], 1, internalFormat, Width, Height);
 				}
 			}
 		}
@@ -152,54 +158,16 @@ namespace fe::Resource
 
 			if (multisampled)
 			{
+				FE_CORE_ASSERTION_BREAK(false, "Multisampled framebuffer not supported yet because multisample textures dont support DSA OpenGL");
+
 				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
 				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
 			}
 			else
 			{
-				glBindTexture(GL_TEXTURE_2D, DepthStencilAttachmentOpenGLID);
-				glTexStorage2D(GL_TEXTURE_2D, 1, dataFormat, Width, Height);
+				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, Width, Height);
 			}
 		}
-	}
-
-	void Framebuffer_OpenGL::ClearAttachment(uint32_t attachmentIndex, uint32_t value)
-	{
-		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
-
-		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
-
-		auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		glClearTexImage(ColorAttachmentOpenGLIDs[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_UNSIGNED_INT, &value);
-	}
-
-	void Framebuffer_OpenGL::ClearAttachment(uint32_t attachmentIndex, float value)
-	{
-		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
-
-		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
-
-		auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		glClearTexImage(ColorAttachmentOpenGLIDs[attachmentIndex], 0, Utils::FormatToGLFormat(format), GL_FLOAT, &value);
-	}
-
-	void Framebuffer_OpenGL::ReadPixel(uint32_t attachmentIndex, int x, int y, void* destination) const
-	{
-		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(attachmentIndex < ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
-
-		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-
-		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
-		auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		GLenum glFormat = Utils::FormatToGLFormat(format);
-		GLenum glType = Utils::FormatToGLType(format);
-		glReadPixels(x, y, 1, 1, glFormat, glType, destination);
 	}
 
 	void Framebuffer_OpenGL::Destroy()

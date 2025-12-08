@@ -76,7 +76,9 @@ namespace fe::Resource
 		{
 			switch (type)
 			{
-			case Description::ShaderInterface::ShaderType::None:		return GL_NONE;
+			case Description::ShaderInterface::ShaderType::None:
+				FE_CORE_ASSERT(false, "Not specified Shader Type");
+				return GL_NONE;
 			case Description::ShaderInterface::ShaderType::Vertex:		return GL_VERTEX_SHADER;
 			case Description::ShaderInterface::ShaderType::Fragment:	return GL_FRAGMENT_SHADER;
 			default:
@@ -85,6 +87,21 @@ namespace fe::Resource
 			}
 		}
 
-
+		GLenum BufferUsageToGLEnum(Description::Buffer::Usage usage)
+		{
+			switch (usage)
+			{
+			case Description::Buffer::Usage::None:
+				FE_CORE_ASSERT(false, "Not specified buffer usage");
+				return GL_NONE;
+			case Description::Buffer::Usage::Vertex:		return GL_ARRAY_BUFFER;
+			case Description::Buffer::Usage::Index:			return GL_ELEMENT_ARRAY_BUFFER;
+			case Description::Buffer::Usage::Uniform:		return GL_UNIFORM_BUFFER;
+			case Description::Buffer::Usage::ShaderStorage:	return GL_SHADER_STORAGE_BUFFER;
+			default:
+				FE_LOG_CORE_ERROR("Unrecognized buffer usage");
+				return GL_NONE;
+			}
+		}
 	}
 }

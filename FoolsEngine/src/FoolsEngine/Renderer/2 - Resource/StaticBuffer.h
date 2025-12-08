@@ -8,21 +8,24 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	struct VertexBufferBase
+	struct StaticBufferBase
 	{
-		Buffer::UploadType UploadType;
 		Buffer::Usage Usage;
 		uint32_t Size;
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
+
+		virtual void Upload(size_t size, const void* data) = 0;
 	};
 
-	struct VertexBuffer_OpenGL final : VertexBufferBase
+	struct StaticBuffer_OpenGL final : StaticBufferBase
 	{
-		GLuint VertexBufferID;
+		GLuint OpenGLID;
 
 		virtual void Create() override;
 		virtual void Delete() override;
+
+		virtual void Upload(size_t size, const void* data) override;
 	};
 }

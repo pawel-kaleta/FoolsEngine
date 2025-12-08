@@ -8,8 +8,7 @@ namespace fe
 {
 	namespace Description::Buffer
 	{
-		FE_DECLARE_ENUM(UploadType, None, Static, Dynamic, Stream);
-		FE_DECLARE_ENUM(Usage, None, Draw, Readback, Copy);
+		FE_DECLARE_ENUM(Usage, None, Vertex, Index, Batch, Uniform, ShaderStorage);
 
 		struct Element
 		{
@@ -31,10 +30,10 @@ namespace fe
 			}
 		};
 
-		FE_DECLARE_ENUM(LayoutType, None, Vertex, MainUniforms, STD140, Internal);
+		FE_DECLARE_ENUM(LayoutType, None, Vertex, Index, MainUniforms, STD140, Internal);
 		// Vertex - vertex buffer
 		// MainUniforms - individually bound and uploaded uniforms
-		// STD140 - uniform buffers
+		// STD140 - uniform buffers / shader storage buffers
 		// Internal - vertex output / fragment input / fragment output
 
 		struct Layout
