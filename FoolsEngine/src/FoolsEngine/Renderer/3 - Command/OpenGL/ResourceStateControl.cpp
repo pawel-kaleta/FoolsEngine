@@ -200,5 +200,12 @@ namespace fe::Command
 			GLenum glType = Resource::Utils::FormatToGLType(format);
 			glReadPixels(x, y, 1, 1, glFormat, glType, destination);
 		}
+
+		void Clear()
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
+
 	}
 }

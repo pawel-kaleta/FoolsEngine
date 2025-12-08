@@ -200,6 +200,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\GAPIType.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Library.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h" />
@@ -335,6 +336,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexArray.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\DeviceStateControl.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\RenderCommans.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceStateControl.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation\Material.cpp" />

@@ -32,6 +32,8 @@ namespace fe::Command
 			void ClearAttachment(Resource::Framebuffer_OpenGL& framebuffer, uint32_t attachmentIndex, float value);
 
 			void ReadPixel(const Resource::Framebuffer_OpenGL& framebuffer, uint32_t attachmentIndex, int x, int y, void* destination);
+
+			void Clear();
 		}
 
 		// shader interface setup
@@ -79,6 +81,12 @@ namespace fe::Command
 		void ReadPixel(const Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, int x, int y, void* destination)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, x, y, destination);
+		}
+
+		template<GAPIType::ValueType GAPI>
+		void Clear()
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::Clear();
 		}
 	}
 }

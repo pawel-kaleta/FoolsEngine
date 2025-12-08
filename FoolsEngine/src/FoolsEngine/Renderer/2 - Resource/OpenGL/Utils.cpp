@@ -103,5 +103,43 @@ namespace fe::Resource
 				return GL_NONE;
 			}
 		}
+
+		GLenum DepthTestTypeToGLEnum(Description::Pipeline::DepthTestType type)
+		{
+			switch (type)
+			{
+			case Description::Pipeline::DepthTestType::None:
+				FE_CORE_ASSERT(false, "Not specified DepthTestType");
+				return GL_NONE;
+			case Description::Pipeline::DepthTestType::Never:			return GL_NEVER;
+			case Description::Pipeline::DepthTestType::Always:			return GL_ALWAYS;
+			case Description::Pipeline::DepthTestType::NotEqual:		return GL_NOTEQUAL;
+			case Description::Pipeline::DepthTestType::Less:			return GL_LESS;
+			case Description::Pipeline::DepthTestType::LessEqual:		return GL_LEQUAL;
+			case Description::Pipeline::DepthTestType::Equal:			return GL_EQUAL;
+			case Description::Pipeline::DepthTestType::GreaterEqual:	return GL_GEQUAL;
+			case Description::Pipeline::DepthTestType::Greater:			return GL_GREATER;
+
+			default:
+				FE_LOG_CORE_ERROR("Unrecognized DepthTestType");
+				return GL_NONE;
+			}
+		}
+
+		GLenum BlendFunctionToGLEnum(Description::Pipeline::BlendFunction func)
+		{
+			switch (func)
+			{
+			case Description::Pipeline::BlendFunction::None:
+				FE_CORE_ASSERT(false, "Not specified BlendFunction");
+				return GL_NONE;
+			case Description::Pipeline::BlendFunction::SourceAlpha:			return GL_SRC_ALPHA;
+			case Description::Pipeline::BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
+
+			default:
+				FE_LOG_CORE_ERROR("Unrecognized BlendFunction");
+				return GL_NONE;
+			}
+		}
 	}
 }
