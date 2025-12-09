@@ -452,6 +452,8 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\RenderCommands.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation_New\ShaderAsset.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Representation_New\ShadingModelAsset.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -705,5 +707,7 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\RenderCommans.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation_New\ShaderAsset.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Representation_New\ShadingModelAsset.cpp" />
   </ItemGroup>
 </Project>

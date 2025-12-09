@@ -23,6 +23,7 @@ namespace fe
 		Texture2D,
 	
 		Shader,
+		ShaderAsset,
 		ShadingModel,
 		Material,
 	

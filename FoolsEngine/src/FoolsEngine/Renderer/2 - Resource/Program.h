@@ -15,9 +15,6 @@ namespace fe::Resource
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
-
-		virtual void UploadUniform(const std::pmr::string& uniformName, const void* data) const = 0;
-		virtual void UploadUniform(size_t uniformIndex, const void* data) const = 0;
 	};
 
 	struct Program_OpenGL final : ProgramBase
