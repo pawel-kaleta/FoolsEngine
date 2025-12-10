@@ -15,8 +15,13 @@ namespace fe::Description
 	Buffer::Element::Element(Data::Type type, const std::string& name, uint32_t count, bool normalized)
 		: Name(name, & Library::Get().m_Allocator), Type(type), Count(count), Normalized(normalized) { }
 
-	Buffer::Layout::Layout()
-		: Type(LayoutType::None), Stride(0), Elements(& Library::Get().m_Allocator), Offsets(& Library::Get().m_Allocator) { }
+	Buffer::Layout::Layout() :
+		Type(LayoutType::None),
+		Stride(0),
+		Elements(& Library::Get().m_Allocator),
+		Offsets(& Library::Get().m_Allocator),
+		UUID()
+	{ }
 
 	void Buffer::Layout::CalculateOffsetsAndStride()
 	{
@@ -64,7 +69,7 @@ namespace fe::Description
 	}
 
 	ShaderInterface::TextureSampler::TextureSampler()
-		: Spec(), Name(& Library::Get().m_Allocator) { }
+		: Spec(), Name(& Library::Get().m_Allocator), UUID() { }
 
 	ShaderInterface::Specification::Specification() :
 		Type(ShaderType::None),
@@ -73,7 +78,8 @@ namespace fe::Description
 		MainUniformsLayoutID(-1),
 		TextureSamplerIDs(& Library::Get().m_Allocator),
 		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
-		DynamicBufferSamplerIDs(& Library::Get().m_Allocator)
+		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
+		UUID()
 	{ }
 
 	ShaderInterface::ProgramSpecification::ProgramSpecification() :
@@ -84,7 +90,8 @@ namespace fe::Description
 		TextureSamplers(& Library::Get().m_Allocator),
 		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
 		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
-		VertexOutputCapture(false)
+		VertexOutputCapture(false),
+		UUID()
 	{ }
 
 	Framebuffer::Attachment::Attachment()
@@ -99,6 +106,70 @@ namespace fe::Description
 		Samples(1),
 		SwapChainTarget(false),
 		DepthStencilFormat(Texture::Format::None),
+		UUID(),
 		ColorAttachments(& Library::Get().m_Allocator)
 	{ }
+
+	Texture::Specification& Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return TextureSpecs.emplace_back();
+		
+		return TextureSpecs[search_result->second];
+	}
+
+	Buffer::Layout& Library::CreateOrGetDescriptorWithUUID_Layout(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return BufferLayouts.emplace_back();
+
+		return BufferLayouts[search_result->second];
+	}
+
+	Framebuffer::Specification& Library::CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return FramebufferSpecs.emplace_back();
+
+		return FramebufferSpecs[search_result->second];
+	}
+
+	ShaderInterface::TextureSampler& Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return TextureSamplers.emplace_back();
+
+		return TextureSamplers[search_result->second];
+	}
+
+	ShaderInterface::UniformBufferSampler& Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return UniformBufferSamplers.emplace_back();
+
+		return UniformBufferSamplers[search_result->second];
+	}
+
+	ShaderInterface::Specification& Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return ShaderSpecs.emplace_back();
+
+		return ShaderSpecs[search_result->second];
+	}
+
+	ShaderInterface::ProgramSpecification& Library::CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid)
+	{
+		auto search_result = UUIDToIDMap.find(uuid);
+		if (search_result != UUIDToIDMap.end())
+			return ProgramSpecs.emplace_back();
+
+		return ProgramSpecs[search_result->second];
+	}
 }

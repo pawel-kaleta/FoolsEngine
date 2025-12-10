@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.h"
+#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
@@ -17,6 +18,7 @@ namespace fe
 
 		struct Specification
 		{
+			UUID UUID;
 			Texture::Type Type;
 			uint32_t Width;
 			uint32_t Height;

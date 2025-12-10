@@ -21,22 +21,55 @@ namespace fe
         const auto& library = Description::Library::Get();
         const auto& spec = library.ShaderSpecs[core.SpecificationID];
 
-        /*ShaderType Type;
-
-			uint32_t InputLayoutID;
-			uint32_t OutputLayoutID;
-			uint32_t MainUniformsLayoutID;
-
-			std::pmr::vector<uint32_t> TextureSamplerIDs;
-			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
-			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;*/
         emitter << YAML::BeginMap;
         emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();
         if (!AllOf<ACMasterAsset>())
             emitter << YAML::Key << "Source Filepath" << YAML::Value << GetSourceFilepath()->Filepath.string();
         emitter << YAML::Key << "Type" << YAML::Value << spec.Type.ToConstCharPtr();
-        emitter << YAML::Key << "Index Count" << YAML::Value << core.Specification.IndexCount;
+        emitter << YAML::Key << "Specification" << YAML::Value << spec.UUID;
         emitter << YAML::EndMap;
+    }
+
+    bool ShaderAssetUser::LoadMetadata()
+    {
+        const auto& filepath = GetFilepath();
+        auto& reg = AssetManager::Get().m_Registry;
+
+        YAML::Node node;
+
+        {
+            FE_PROFILER_SCOPE("YAML::LoadFile");
+            node = YAML::LoadFile(filepath.string());
+        }
+
+        auto uuid_node = node["UUID"];
+        if (uuid_node) // Base Assets don't have UUID in their file
+        {
+            if (reg.get<ACUUID>(GetID()).UUID != node["UUID"].as<UUID>())
+            {
+                FE_CORE_ASSERT(false, "Not machting UUID in asset and its serialized node");
+                return false;
+            }
+        }
+        else
+        {
+            FE_LOG_CORE_WARN("Missing UUID in Shader serialized node");
+        }
+
+        const auto& source_filepath_node = node["Source Filepath"];
+        if (!source_filepath_node) return false;
+        AssetManager::SetSourcePath(GetID(), source_filepath_node.as<std::string>());
+
+        const auto& type = node["Type"];
+        const auto& specID = node["Specification"];
+
+        if (!type || !specID)
+            return false;
+
+        auto& core = GetCoreComponent();
+        core.SpecificationID = specID.as<uint32_t>();
+
+        return true;
     }
 
     void ShaderAssetUser::Release() const

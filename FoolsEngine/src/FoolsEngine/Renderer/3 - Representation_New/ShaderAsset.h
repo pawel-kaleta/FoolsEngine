@@ -12,7 +12,6 @@ namespace fe
 {
 	struct ACShaderAssetCore final : public AssetComponent
 	{
-		//std::string ShaderSource;
 		uint32_t SpecificationID;
 
 		void Init();
@@ -35,7 +34,6 @@ namespace fe
 		}
 
 		void SaveMetadata(YAML::Emitter& emitter);
-		bool LoadMetadata();
 
 	protected:
 		ShaderAssetObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {};
@@ -48,6 +46,8 @@ namespace fe
 
 		template <typename tnGAPIShader, typename... Args>
 		tnGAPIShader& CreateResourceComponent(Args&&... args) const { return Emplace<tnGAPIShader>(std::forward<Args>(args)...); }
+
+		bool LoadMetadata();
 
 		void Release() const;
 

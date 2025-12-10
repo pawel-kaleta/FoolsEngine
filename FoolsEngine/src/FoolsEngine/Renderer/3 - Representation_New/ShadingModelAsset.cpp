@@ -17,6 +17,7 @@ namespace fe
 		UniformsDataSize = 0;
 		VertexShaderID = NullAssetID;
 		FragmentShaderID = NullAssetID;
+		ProgramSpecificationID = -1;
 	}
 
 	void* ShadingModelAssetObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelAssetCore& dataComponent, const Description::Buffer::Element& targetUniform) const

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Data.h"
+#include "FoolsEngine\Core\UUID.h"
 
 #include <glm/glm.hpp>
 
@@ -41,7 +42,8 @@ namespace fe
 		public:
 			std::pmr::vector<Element> Elements;
 			std::pmr::vector<uint32_t> Offsets;
-				
+			
+			UUID UUID;
 			LayoutType Type;
 			uint32_t Stride;
 

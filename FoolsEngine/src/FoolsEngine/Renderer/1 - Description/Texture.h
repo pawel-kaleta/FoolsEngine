@@ -35,6 +35,7 @@ namespace fe
 				AnisotropicFiltering(AnisotropicFiltering::None)
 			{ }
 
+			UUID UUID;
 			Type Type;
 			Format Format;
 			Wrapping Wrapping;

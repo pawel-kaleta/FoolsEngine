@@ -3,6 +3,7 @@
 #include "Data.h"
 #include "Texture.h"
 #include "Buffer.h"
+#include "FoolsEngine\Core\UUID.h"
 
 namespace fe
 {
@@ -14,6 +15,7 @@ namespace fe
 		{
 			TextureSampler();
 
+			UUID UUID;
 			Texture::Specification Spec;
 			std::pmr::string Name;
 		};
@@ -25,6 +27,7 @@ namespace fe
 		{
 			Specification();
 
+			UUID UUID;
 			ShaderType Type;
 
 			uint32_t InputLayoutID;
@@ -40,6 +43,7 @@ namespace fe
 		{
 			ProgramSpecification();
 
+			UUID UUID;
 			uint32_t VertexInputLayoutID;
 			uint32_t VertexOutputLayoutID; // needed only for VertexOutputCapture into buffer
 			uint32_t FragmentOutputLayoutID;
