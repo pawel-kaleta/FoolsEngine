@@ -110,66 +110,80 @@ namespace fe::Description
 		ColorAttachments(& Library::Get().m_Allocator)
 	{ }
 
-	Texture::Specification& Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return TextureSpecs.emplace_back();
+			return search_result->second;
 		
-		return TextureSpecs[search_result->second];
+		uint32_t size = TextureSpecs.size();
+		TextureSpecs.emplace_back();
+		return size;
 	}
 
-	Buffer::Layout& Library::CreateOrGetDescriptorWithUUID_Layout(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_Layout(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return BufferLayouts.emplace_back();
-
-		return BufferLayouts[search_result->second];
+			return search_result->second;
+		
+		uint32_t size = BufferLayouts.size();
+		BufferLayouts.emplace_back();
+		return size;
 	}
 
-	Framebuffer::Specification& Library::CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return FramebufferSpecs.emplace_back();
-
-		return FramebufferSpecs[search_result->second];
+			return search_result->second;
+		
+		uint32_t size = FramebufferSpecs.size();
+		FramebufferSpecs.emplace_back();
+		return size;
 	}
 
-	ShaderInterface::TextureSampler& Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return TextureSamplers.emplace_back();
+			return search_result->second;
 
-		return TextureSamplers[search_result->second];
+		uint32_t size = TextureSamplers.size();
+		TextureSamplers.emplace_back();
+		return size;
 	}
 
-	ShaderInterface::UniformBufferSampler& Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return UniformBufferSamplers.emplace_back();
+			return search_result->second;
 
-		return UniformBufferSamplers[search_result->second];
+		uint32_t size = UniformBufferSamplers.size();
+		UniformBufferSamplers.emplace_back();
+		return size;
 	}
 
-	ShaderInterface::Specification& Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return ShaderSpecs.emplace_back();
-
-		return ShaderSpecs[search_result->second];
+			return search_result->second;
+		
+		uint32_t size = ShaderSpecs.size();
+		ShaderSpecs.emplace_back();
+		return size;
 	}
 
-	ShaderInterface::ProgramSpecification& Library::CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid)
+	uint32_t Library::CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
-			return ProgramSpecs.emplace_back();
+			return search_result->second;
 
-		return ProgramSpecs[search_result->second];
+		uint32_t size = ProgramSpecs.size();
+		ProgramSpecs.emplace_back();
+		return size;
 	}
 }

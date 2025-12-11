@@ -1,8 +1,9 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
+#include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
+#include "FoolsEngine\Renderer\2 - Resource\Program.h"
 
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
@@ -13,9 +14,9 @@ namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
 	{
-		AssetID ShaderID;
-		std::vector<Uniform> Uniforms;
-		std::vector<ShaderTextureSlot> TextureSlots;
+		AssetID VertexShaderID;
+		AssetID FragmentShaderID;
+		uint32_t ProgramSpecificationID;
 
 		void* DefaultUniformsData;
 		size_t UniformsDataSize;
@@ -25,18 +26,31 @@ namespace fe
 		~ACShadingModelCore() { if (DefaultUniformsData) operator delete(DefaultUniformsData); }
 	};
 
+	struct ACShaderModelResource_OpenGL final : public AssetComponent
+	{
+		Resource::Program_OpenGL Program;
+	};
+
 	class ShadingModelObserver : public AssetInterface
 	{
 	public:
 		const ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
-		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
+		template <GAPIType::ValueType GAPI>
+		const auto& GetResourceComponent()
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
+		}
+
+		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
+
+		void SaveMetadata(YAML::Emitter& emitter);
 
 	protected:
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
-		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const;
+		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const;
 		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const;
 	};
 
@@ -45,24 +59,24 @@ namespace fe
 	public:
 		ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
-		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Uniform& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
+		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
-		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Uniform& uniform, void* dataPointer) const;
+		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
 
+		bool LoadMetadata();
+		bool DeserializeFromFile(const std::filesystem::path& filepath);
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
 	};
 
-	class ShadingModel : public Asset
+	class ShadingModelAsset : public Asset
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }
 		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModelCore>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
-		static bool LoadMetadata(AssetID assetID);
 
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;
@@ -71,6 +85,5 @@ namespace fe
 	private:
 		friend class Renderer;
 
-		static bool DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath);
 	};
 }

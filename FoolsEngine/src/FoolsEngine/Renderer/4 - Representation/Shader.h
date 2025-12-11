@@ -10,7 +10,7 @@ namespace YAML { class Emitter; }
 
 namespace fe
 {
-	struct ACShaderAssetCore final : public AssetComponent
+	struct ACShaderCore final : public AssetComponent
 	{
 		uint32_t SpecificationID;
 
@@ -22,10 +22,10 @@ namespace fe
 		Resource::Shader_OpenGL Shader;
 	};
 
-	class ShaderAssetObserver : public AssetInterface
+	class ShaderObserver : public AssetInterface
 	{
 	public:
-		const ACShaderAssetCore& GetCoreComponent() const { return Get<ACShaderAssetCore>(); }
+		const ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
 		
 		template <GAPIType::ValueType GAPI>
 		const auto& GetResourceComponent()
@@ -36,13 +36,13 @@ namespace fe
 		void SaveMetadata(YAML::Emitter& emitter);
 
 	protected:
-		ShaderAssetObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {};
+		ShaderObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {};
 	};
 
-	class ShaderAssetUser : public ShaderAssetObserver
+	class ShaderUser : public ShaderObserver
 	{
 	public:
-		ACShaderAssetCore& GetCoreComponent() const { return Get<ACShaderAssetCore>(); }
+		ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
 
 		template <typename tnGAPIShader, typename... Args>
 		tnGAPIShader& CreateResourceComponent(Args&&... args) const { return Emplace<tnGAPIShader>(std::forward<Args>(args)...); }
@@ -54,18 +54,18 @@ namespace fe
 		void SendDataToGPU(GAPIType GAPI, void* data);
 		void UnloadFromCPU() const;
 	protected:
-		ShaderAssetUser(ECS_AssetHandle ECS_handle) : ShaderAssetObserver(ECS_handle) {}
+		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
 	};
 
-	class ShaderAsset : public Asset
+	class Shader : public Asset
 	{
 	public:
-		static constexpr AssetType GetTypeStatic() { return AssetType::ShaderAsset; }
+		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
 		static constexpr const char* GetMetaFileExtension() { return ""; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShaderAssetCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShaderCore>(assetID).Init(); }
 
-		using Observer = ShaderAssetObserver;
-		using User = ShaderAssetUser;
-		using Core = ACShaderAssetCore;
+		using Observer = ShaderObserver;
+		using User = ShaderUser;
+		using Core = ACShaderCore;
 	};
 }

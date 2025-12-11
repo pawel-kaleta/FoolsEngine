@@ -1,15 +1,15 @@
 #include "FE_pch.h"
-#include "ShadingModelAsset.h"
-
+#include "ShadingModel.h"
 
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "ShaderAsset.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 
 namespace fe
 {
-	void ACShadingModelAssetCore::Init()
+	void ACShadingModelCore::Init()
 	{
 		if (DefaultUniformsData) operator delete(DefaultUniformsData);
 		DefaultUniformsData = nullptr;
@@ -20,7 +20,7 @@ namespace fe
 		ProgramSpecificationID = -1;
 	}
 
-	void* ShadingModelAssetObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelAssetCore& dataComponent, const Description::Buffer::Element& targetUniform) const
+	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -43,7 +43,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void* ShadingModelAssetObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelAssetCore& dataComponent, const std::string& name) const
+	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -66,7 +66,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void ShadingModelAssetUser::SetUniformDefaultValue(const ACShadingModelAssetCore& dataComponent, const Description::Buffer::Element& targetUniform, void* dataPointer) const
+	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -80,7 +80,7 @@ namespace fe
 		std::memcpy((void*)dest, dataPointer, targetUniform.Size() *  targetUniform.Count);
 	}
 
-	void ShadingModelAssetUser::SetUniformDefaultValue(const ACShadingModelAssetCore& dataComponent, const std::string& name, void* dataPointer) const
+	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -109,7 +109,7 @@ namespace fe
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
 	}
 	
-	void ShadingModelAssetObserver::SaveMetadata(YAML::Emitter& emitter)
+	void ShadingModelObserver::SaveMetadata(YAML::Emitter& emitter)
 	{
 		FE_PROFILER_FUNC();
 
@@ -117,7 +117,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[core.ProgramSpecificationID];
 
-		emitter << YAML::Key << "Shader" << YAML::Value << GetFilepath().string();
+		emitter << YAML::Key << "Program Specification" << YAML::Value << program_spec.UUID;
 		emitter << YAML::Key << "Uniforms Data Size" << YAML::Value << core.UniformsDataSize;
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginSeq;
 		
@@ -140,35 +140,39 @@ namespace fe
 		}
 		emitter << YAML::EndSeq;
 
-		emitter << YAML::Key << "Shader Texture Slots" << YAML::Value << YAML::BeginSeq;
-		for (size_t i = 0; i < program_spec.TextureSamplers.size(); ++i)
+		emitter << YAML::Key << "Vertex Shader" << YAML::Value;
 		{
-			const auto& spec = program_spec.TextureSamplers[i].Spec;
+			AssetObserver<ShaderAsset> vertex_observer(core.VertexShaderID);
+			bool is_internal = vertex_observer.AllOf<ACMasterAsset>();
 
-			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name"					<< program_spec.TextureSamplers[i].Name;
-			emitter << YAML::Key << "Type"					<< spec.Type.ToConstCharPtr();
-			emitter << YAML::Key << "Format"				<< spec.Format.ToConstCharPtr();
-			emitter << YAML::Key << "Wrapping"				<< spec.Wrapping.ToConstCharPtr();
-			emitter << YAML::Key << "Filtering"				<< spec.Filtering.ToConstCharPtr();
-			emitter << YAML::Key << "Mipmapping"			<< spec.Mipmapping.ToConstCharPtr();
-			emitter << YAML::Key << "AnisotropicFiltering"	<< spec.AnisotropicFiltering.ToConstCharPtr();
-			emitter << YAML::EndMap;
-
+			if (!is_internal)
+				vertex_observer.SaveMetadata(emitter);
+			else
+				emitter << vertex_observer.GetUUID();
 		}
-		emitter << YAML::EndSeq;
+		emitter << YAML::Key << "Fragment Shader" << YAML::Value;
+		{
+			AssetObserver<ShaderAsset> fragment_observer(core.FragmentShaderID);
+			bool is_internal = fragment_observer.AllOf<ACMasterAsset>();
+
+			if (!is_internal)
+				fragment_observer.SaveMetadata(emitter);
+			else
+				emitter << fragment_observer.GetUUID();
+		}
 	}
 
-	bool ShadingModelAssetObserver::LoadMetadata()
+	bool ShadingModelUser::LoadMetadata()
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& filepath = ECS_AssetHandle(AssetManager::Get().m_Registry, assetID).get<ACFilepath>().Filepath;
+		
+		const auto& filepath = GetFilepath();
 
-		return DeserializeFromFile(assetID, filepath);
+		return DeserializeFromFile(filepath);
 	}
 
-	static bool LoadUniforms(const YAML::Node& node, void* uniformsData, std::vector<Uniform>& uniforms)
+	static bool LoadUniforms(const YAML::Node& node, void* uniformsData)
 	{
 		FE_PROFILER_FUNC();
 
@@ -192,8 +196,6 @@ namespace fe
 			Description::Data::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
 			const auto uniform_count = count_node.as<uint32_t>();
 
-			uniforms.emplace_back(uniform_name, uniform_type, uniform_count);
-
 			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
 			auto uniform_size = Description::Data::SizeOfType(uniform_type);
 			for (size_t i = 0; i < uniform_count; ++i)
@@ -208,13 +210,11 @@ namespace fe
 		return true;
 	}
 
-	bool ShadingModel::DeserializeFromFile(AssetID assetID, const std::filesystem::path& filepath)
+	bool ShadingModelUser::DeserializeFromFile(const std::filesystem::path& filepath)
 	{
 		FE_PROFILER_FUNC();
 
-		ECS_AssetHandle ECS_handle(AssetManager::Get().m_Registry, assetID);
-
-		auto& core = ECS_handle.get<ACShadingModelCore>();
+		auto& core = GetCoreComponent();
 
 		YAML::Node node;
 		
@@ -226,7 +226,7 @@ namespace fe
 		auto uuid_node = node["UUID"];
 		if (uuid_node) // Base Assets don't have UUID in their file
 		{
-			if (ECS_handle.get<ACUUID>().UUID != node["UUID"].as<UUID>())
+			if (GetUUID() != node["UUID"].as<UUID>())
 			{
 				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
 				return false;
@@ -237,42 +237,35 @@ namespace fe
 			FE_LOG_CORE_WARN("Missing UUID in ShadingModel file");
 		}
 
-		const auto& shader_node        = node["Shader"];
-		const auto& data_size_node     = node["Uniforms Data Size"];
-		const auto& uniforms_node      = node["Uniforms"];
-		const auto& texture_slots_node = node["Shader Texture Slots"];
+		const auto& program_spec_node	= node["Program Specification"];
+		const auto& data_size_node		= node["Uniforms Data Size"];
+		const auto& uniforms_node		= node["Uniforms"];
+		const auto& vertex_node			= node["Vertex Shader"];
+		const auto& fragmnent_node		= node["Fragment Shader"];
 
-		if (!shader_node ||
+		if (!program_spec_node ||
 			!data_size_node ||
 			!uniforms_node ||
-			!texture_slots_node ||
-			!texture_slots_node.IsSequence())
+			!vertex_node ||
+			!fragmnent_node)
 		{
 			FE_LOG_CORE_ERROR("Ill specified ShadingModel");
 			return false;
 		}
 
-		std::filesystem::path shader_filepath = shader_node.as<std::string>();
-		auto shaderID = AssetManager::GetAssetFromFilepath(shader_filepath);
-		FE_CORE_ASSERT(shaderID != NullAssetID, "Failed to recognize shader asset during shading model deserialization");
-		core.ShaderID = shaderID;
+		auto& library = Description::Library::Get();
+		UUID program_uuid = program_spec_node.as<UUID>();
+		uint32_t program_spec_id = library.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::ProgramSpecification>(program_uuid);
+		core.ProgramSpecificationID = program_spec_id;
 
 		core.UniformsDataSize = data_size_node.as<size_t>();
 		core.DefaultUniformsData = operator new(core.UniformsDataSize);
 
-		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData, core.Uniforms);
+		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData);
 		if (!success)
 		{
 			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
 			return false;
-		}
-
-		{
-			FE_PROFILER_SCOPE("Texture Slots");
-			for (const auto& texture_slot_node : texture_slots_node)
-			{
-				core.TextureSlots.emplace_back(texture_slot_node.as<std::string>(), Description::Texture::Type::Texture2D);
-			}
 		}
 
 		return true;

@@ -1,21 +1,21 @@
 #include "FE_pch.h"
-#include "ShaderAsset.h"
+#include "Shader.h"
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
 namespace fe
 {
-    void ACShaderAssetCore::Init()
+    void ACShaderCore::Init()
     {
         SpecificationID = -1;
     }
 
-    void ShaderAssetObserver::SaveMetadata(YAML::Emitter& emitter)
+    void ShaderObserver::SaveMetadata(YAML::Emitter& emitter)
     {
         const auto& core = GetCoreComponent();
         const auto& library = Description::Library::Get();
@@ -30,7 +30,7 @@ namespace fe
         emitter << YAML::EndMap;
     }
 
-    bool ShaderAssetUser::LoadMetadata()
+    bool ShaderUser::LoadMetadata()
     {
         const auto& filepath = GetFilepath();
         auto& reg = AssetManager::Get().m_Registry;
@@ -67,12 +67,14 @@ namespace fe
             return false;
 
         auto& core = GetCoreComponent();
-        core.SpecificationID = specID.as<uint32_t>();
+        auto& lib = Description::Library::Get();
+        auto spec_uuid = specID.as<UUID>();
+        core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
 
         return true;
     }
 
-    void ShaderAssetUser::Release() const
+    void ShaderUser::Release() const
     {
         auto GAPI = Renderer::GetActiveGAPIType();
         switch (GAPI.Value)
@@ -91,7 +93,7 @@ namespace fe
         }
     }
 
-    void ShaderAssetUser::SendDataToGPU(GAPIType GAPI, void* data)
+    void ShaderUser::SendDataToGPU(GAPIType GAPI, void* data)
     {
         FE_CORE_ASSERT(false, "Shader loading not implemented yet");
 
@@ -131,7 +133,7 @@ namespace fe
         }
     }
 
-    void ShaderAssetUser::UnloadFromCPU() const
+    void ShaderUser::UnloadFromCPU() const
     {
         //auto& sourceCode = Get<ACShaderAssetCore>();
         //sourceCode.ShaderSource.clear();

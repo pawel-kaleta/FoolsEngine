@@ -26,7 +26,7 @@ namespace fe::Description
 		static Library& Get() { return *s_Library; }
 
 		template <typename tnDescriptor>
-		tnDescriptor& CreateOrGetDescriptorWithUUID(UUID uuid)
+		uint32_t CreateOrGetDescriptorWithUUID(UUID uuid)
 		{
 			if constexpr (std::same_as<tnDescriptor, Texture::Specification					>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
 			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
@@ -57,13 +57,13 @@ namespace fe::Description
 			s_Library = new Library();
 		}
 
-		Texture::Specification&					CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
-		Buffer::Layout&							CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
-		Framebuffer::Specification&				CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
-		ShaderInterface::TextureSampler&		CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid);
-		ShaderInterface::UniformBufferSampler&	CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid);
-		ShaderInterface::Specification&			CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid);
-		ShaderInterface::ProgramSpecification&	CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid);
+		uint32_t CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);
 
 		static Library* s_Library;
 	};
