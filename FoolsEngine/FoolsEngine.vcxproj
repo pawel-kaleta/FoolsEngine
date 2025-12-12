@@ -202,9 +202,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Library.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Uniform.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h" />

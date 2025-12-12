@@ -2,7 +2,7 @@
 #include "ShadingModel.h"
 
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "ShaderAsset.h"
+#include "Shader.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 #include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
@@ -142,7 +142,7 @@ namespace fe
 
 		emitter << YAML::Key << "Vertex Shader" << YAML::Value;
 		{
-			AssetObserver<ShaderAsset> vertex_observer(core.VertexShaderID);
+			AssetObserver<Shader> vertex_observer(core.VertexShaderID);
 			bool is_internal = vertex_observer.AllOf<ACMasterAsset>();
 
 			if (!is_internal)
@@ -152,7 +152,7 @@ namespace fe
 		}
 		emitter << YAML::Key << "Fragment Shader" << YAML::Value;
 		{
-			AssetObserver<ShaderAsset> fragment_observer(core.FragmentShaderID);
+			AssetObserver<Shader> fragment_observer(core.FragmentShaderID);
 			bool is_internal = fragment_observer.AllOf<ACMasterAsset>();
 
 			if (!is_internal)
@@ -166,10 +166,62 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		
 		const auto& filepath = GetFilepath();
+		auto& core = GetCoreComponent();
 
-		return DeserializeFromFile(filepath);
+		YAML::Node node;
+
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(filepath.string());
+		}
+
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (GetUUID() != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in ShadingModel file");
+		}
+
+		const auto& program_spec_node = node["Program Specification"];
+		const auto& data_size_node = node["Uniforms Data Size"];
+		const auto& uniforms_node = node["Uniforms"];
+		const auto& vertex_node = node["Vertex Shader"];
+		const auto& fragmnent_node = node["Fragment Shader"];
+
+		if (!program_spec_node ||
+			!data_size_node ||
+			!uniforms_node ||
+			!vertex_node ||
+			!fragmnent_node)
+		{
+			FE_LOG_CORE_ERROR("Ill specified ShadingModel");
+			return false;
+		}
+
+		auto& library = Description::Library::Get();
+		UUID program_uuid = program_spec_node.as<UUID>();
+		uint32_t program_spec_id = library.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::ProgramSpecification>(program_uuid);
+		core.ProgramSpecificationID = program_spec_id;
+
+		core.UniformsDataSize = data_size_node.as<size_t>();
+		core.DefaultUniformsData = operator new(core.UniformsDataSize);
+
+		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData);
+		if (!success)
+		{
+			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
+			return false;
+		}
+
+		return true;
 	}
 
 	static bool LoadUniforms(const YAML::Node& node, void* uniformsData)
@@ -205,67 +257,6 @@ namespace fe
 
 				uniform_data_ptr += uniform_size;
 			}
-		}
-
-		return true;
-	}
-
-	bool ShadingModelUser::DeserializeFromFile(const std::filesystem::path& filepath)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& core = GetCoreComponent();
-
-		YAML::Node node;
-		
-		{
-			FE_PROFILER_SCOPE("YAML::LoadFile");
-			node = YAML::LoadFile(filepath.string());
-		}
-
-		auto uuid_node = node["UUID"];
-		if (uuid_node) // Base Assets don't have UUID in their file
-		{
-			if (GetUUID() != node["UUID"].as<UUID>())
-			{
-				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
-				return false;
-			}
-		}
-		else
-		{
-			FE_LOG_CORE_WARN("Missing UUID in ShadingModel file");
-		}
-
-		const auto& program_spec_node	= node["Program Specification"];
-		const auto& data_size_node		= node["Uniforms Data Size"];
-		const auto& uniforms_node		= node["Uniforms"];
-		const auto& vertex_node			= node["Vertex Shader"];
-		const auto& fragmnent_node		= node["Fragment Shader"];
-
-		if (!program_spec_node ||
-			!data_size_node ||
-			!uniforms_node ||
-			!vertex_node ||
-			!fragmnent_node)
-		{
-			FE_LOG_CORE_ERROR("Ill specified ShadingModel");
-			return false;
-		}
-
-		auto& library = Description::Library::Get();
-		UUID program_uuid = program_spec_node.as<UUID>();
-		uint32_t program_spec_id = library.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::ProgramSpecification>(program_uuid);
-		core.ProgramSpecificationID = program_spec_id;
-
-		core.UniformsDataSize = data_size_node.as<size_t>();
-		core.DefaultUniformsData = operator new(core.UniformsDataSize);
-
-		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData);
-		if (!success)
-		{
-			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
-			return false;
 		}
 
 		return true;

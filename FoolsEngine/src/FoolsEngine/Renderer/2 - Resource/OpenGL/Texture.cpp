@@ -17,24 +17,24 @@ namespace fe::Resource
 
 		auto& spec = Description::Library::Get().TextureSpecs[SpecificationID];
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &TextureOpenGLID);
+		glCreateTextures(GL_TEXTURE_2D, 1, &OpenGLID);
 
 		if (spec.Wrapping != Wrapping::Repeat) // default opengl
 		{
 			switch (spec.Wrapping)
 			{
 			case Wrapping::MirrorRepeat:
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 				break;
 			case Wrapping::Clamp:
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				break;
 			case Wrapping::Border:
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTextureParameteri(TextureOpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTextureParameterfv(TextureOpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(BorderColor));
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTextureParameterfv(OpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(BorderColor));
 				break;
 			default:
 				FE_LOG_CORE_ERROR("Unrecognized texture wrapping mode, defaulted to repeat");
@@ -48,18 +48,18 @@ namespace fe::Resource
 			case Filtering::Nearest:
 				switch (spec.Mipmapping)
 				{
-				case Mipmapping::None:		glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); break;
-				case Mipmapping::Nearest:	glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); break;
-				case Mipmapping::Liniear:	glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); break;
+				case Mipmapping::None:		glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); break;
+				case Mipmapping::Nearest:	glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); break;
+				case Mipmapping::Liniear:	glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); break;
 				default: FE_LOG_CORE_ERROR("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
 				}
 				break;
 			case Filtering::Bilinear:
 				switch (spec.Mipmapping)
 				{
-				case Mipmapping::None:		glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); break;
-				case Mipmapping::Nearest:	glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); break;
-				case Mipmapping::Liniear:	glTextureParameteri(TextureOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); break;
+				case Mipmapping::None:		glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); break;
+				case Mipmapping::Nearest:	glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); break;
+				case Mipmapping::Liniear:	glTextureParameteri(OpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); break;
 				default: FE_LOG_CORE_ERROR("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
 				}
 				break;
@@ -67,12 +67,22 @@ namespace fe::Resource
 				FE_LOG_CORE_ERROR("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
 			}
 		}
+
+		auto levels = glm::log2(glm::max(Width, Height));
+		auto internal_format = Utils::FormatToGLInternalFormat(spec.Format);
+
+		glTextureStorage2D(OpenGLID, levels, internal_format, Width, Height);
+
+		auto format = Utils::FormatToGLFormat(spec.Format);
+		glTextureSubImage2D(OpenGLID, 0, 0, 0, Width, Height, format, GL_UNSIGNED_BYTE, data);
+
+		glGenerateTextureMipmap(OpenGLID);
 	}
 
 	void Texture_OpenGL::Destroy()
 	{
 		FE_PROFILER_FUNC();
 
-		glDeleteTextures(1, &TextureOpenGLID);
+		glDeleteTextures(1, &OpenGLID);
 	}
 }

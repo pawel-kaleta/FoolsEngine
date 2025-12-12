@@ -240,13 +240,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Uniform.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h">

@@ -59,6 +59,18 @@ namespace fe
 	public:
 		ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
+		template <GAPIType::ValueType GAPI>
+		auto& GetResourceComponent()
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
+		}
+
+		template <GAPIType::ValueType GAPI>
+		auto& CreateResourceComponent()
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
+		}
+
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
@@ -66,7 +78,7 @@ namespace fe
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
 
 		bool LoadMetadata();
-		bool DeserializeFromFile(const std::filesystem::path& filepath);
+
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
 	};
@@ -81,9 +93,5 @@ namespace fe
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;
 		using Core = ACShadingModelCore;
-
-	private:
-		friend class Renderer;
-
 	};
 }

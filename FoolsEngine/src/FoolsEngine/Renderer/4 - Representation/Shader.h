@@ -44,15 +44,24 @@ namespace fe
 	public:
 		ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
 
-		template <typename tnGAPIShader, typename... Args>
-		tnGAPIShader& CreateResourceComponent(Args&&... args) const { return Emplace<tnGAPIShader>(std::forward<Args>(args)...); }
+		template <GAPIType::ValueType GAPI>
+		auto& GetResourceComponent()
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderResource_OpenGL>();
+		}
+
+		template <GAPIType::ValueType GAPI>
+		auto& CreateResourceComponent()
+		{ 
+			if constexpr (GAPI == GAPIType::OpenGL) return Emplace<ACShaderResource_OpenGL>();
+		}
 
 		bool LoadMetadata();
 
-		void Release() const;
-
 		void SendDataToGPU(GAPIType GAPI, void* data);
 		void UnloadFromCPU() const;
+		void Release() const;
+
 	protected:
 		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
 	};

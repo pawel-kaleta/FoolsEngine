@@ -1,8 +1,7 @@
 #pragma once
 
-
 // To be included by FoolsEngine application (game)
-// To do: create a nice include folder with with include batches based on areas/namespaces
+// To do: create a nice include folder with include batches based on areas/namespaces
 
 #include "FoolsEngine\Debug\Log.h"
 #include "FoolsEngine\Debug\Asserts.h"
@@ -14,8 +13,6 @@
 #include "FoolsEngine\Platform\InputCodes.h"
 #include "FoolsEngine\Platform\InputPolling.h"
 #include "FoolsEngine\Renderer\1 - Description\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"
 #include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\Scene.h"
@@ -46,7 +43,6 @@
 #include "FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h"
 #include "FoolsEngine\Assets\AssetManager.h"
 #include "FoolsEngine\Assets\AssetTypesRegistry.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Framebuffer.h"
 #include "FoolsEngine\Memory\Scratchpad.h"
 #include "FoolsEngine\Utils\Colors.h"
 #include "FoolsEngine\Utils\BitOperations.h"

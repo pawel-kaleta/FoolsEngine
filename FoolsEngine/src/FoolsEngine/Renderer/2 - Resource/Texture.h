@@ -23,7 +23,7 @@ namespace fe::Resource
 
 	struct Texture_OpenGL final : TextureBase
 	{
-		GLuint TextureOpenGLID;
+		GLuint OpenGLID;
 
 		virtual void Create(const void* data) override;
 		virtual void Destroy() override;

@@ -1,6 +1,8 @@
 #pragma once
 #include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 
+#include "FoolsEngine\Utils\Xar.h"
+
 #include <glad\glad.h>
 
 #include <queue>
@@ -24,6 +26,9 @@ namespace fe::Resource
 		virtual void BeginRegion() = 0;
 		virtual void PushData(void* data, size_t size) = 0;
 		virtual StreamRegion* EndRegion() = 0;
+
+		virtual StreamRegion* ReserveUncommitedRegion(size_t size) = 0;
+		virtual void CommitRegion(StreamRegion* region) = 0;
 
 		virtual void RetireRegion(StreamRegion* region) = 0;
 
@@ -51,11 +56,14 @@ namespace fe::Resource
 		// on top of that, you can't even clear std::deque, you have to recreate it
 		//Note: beware of pointer stability in regards to RegionFences
 		//maybe merge Fence and Region?
-		std::queue<Fence> BackFences;
-		std::queue<Fence> FrontFences;
+		std::vector<Fence> FrontFences;
+		std::vector<Fence> BackFences;
+		size_t NextFenceIndex;
+		
 		std::vector<StreamRegion_OpenGL> Regions;
 		std::vector<Fence*> RegionFences;
-		size_t CurrentRegionOffset;
+
+		//size_t CurrentRegionOffset;
 		size_t CurrentOffset;
 		void* CPUMemoryBegin;
 		size_t Capacity;
@@ -74,12 +82,15 @@ namespace fe::Resource
 		virtual void PushData(void* data, size_t size) override;
 		virtual StreamRegion* EndRegion() override;
 
+		virtual StreamRegion* ReserveUncommitedRegion(size_t size) override;
+		virtual void CommitRegion(StreamRegion* region) override;
+
 		virtual void RetireRegion(StreamRegion* region) override;
 
 		virtual void EndFrame() override;
 
 	private:
-		void CheckFences(size_t pushSize);
+		bool CheckFences(size_t pushSize);
 		void MakeNewBuffer(size_t pushSize);
 	};
 }

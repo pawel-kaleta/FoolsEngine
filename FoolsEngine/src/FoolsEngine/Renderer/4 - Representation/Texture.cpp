@@ -1,10 +1,9 @@
 #include "FE_pch.h"
 #include "Texture.h"
 
-#include "OpenGL\OpenGLTexture.h"
-
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\AssetAccessors.h"
@@ -33,29 +32,16 @@ namespace fe
 			break;
 
 		case GAPIType::OpenGL:
-			auto& spec = Get<ACTexture2DCore>();
-			Get<OpenGLTexture2D>().SendDataToGPU(core.Data, spec.Specification, core.Width, core.Height);
+			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Texture;
+			resource.Height = core.Height;
+			resource.Width = core.Width;
+			resource.SpecificationID = core.SpecificationID;
+			resource.Usage = core.Usage;
+			resource.Create(core.Data);
 			break;
 		}
 
 		return true;
-	}
-
-	void Texture2DUser::Bind(GAPIType GAPI, RenderTextureSlotID slotID) const
-	{
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			break;
-
-		case GAPIType::OpenGL:
-			auto ptr = GetIfExist<OpenGLTexture2D>();
-			FE_CORE_ASSERT(ptr, "Trying to bind texture not loaded to GPU");
-			if (ptr)
-				ptr->Bind(slotID);
-			break;
-		}
 	}
 
 	void Texture2DUser::UnloadFromCPU() const
@@ -67,46 +53,6 @@ namespace fe
 		{
 			TextureLoader::UnloadTexture(data_ptr);
 			data_ptr = nullptr;
-		}
-	}
-
-	uint32_t Texture2DObserver::GetRendererID(GAPIType GAPI) const
-	{
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			return 0;
-
-		case GAPIType::OpenGL:
-			auto ptr = GetIfExist<OpenGLTexture2D>();
-			if (ptr)
-				return ptr->GetOpenGLID();
-			return 0;
-		}
-		return 0;
-	}
-
-	void Texture2DUser::CreateGAPITexture2D(GAPIType GAPI) const
-	{
-		FE_PROFILER_FUNC();
-		auto& data = Get<ACTexture2DCore>();
-		CreateGAPITexture2D(GAPI, data, data.Data);
-	}
-
-	void Texture2DUser::CreateGAPITexture2D(GAPIType GAPI, const ACTexture2DCore& core, const void* data) const
-	{
-		FE_PROFILER_FUNC();
-
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			break;
-
-		case GAPIType::OpenGL:
-			Emplace<OpenGLTexture2D>(core.Specification, data, core.Width, core.Height);
-			break;
 		}
 	}
 
@@ -122,44 +68,42 @@ namespace fe
 			break;
 
 		case GAPIType::OpenGL:
-			if (AllOf<OpenGLTexture2D>())
+			if (AllOf<ACTexture2DResource_OpenGL>())
 			{
-				FE_LOG_CORE_DEBUG("Unloading Texture from GPU, AssetID: {0}, RendererID: {1}", GetID(), GetRendererID(GAPI));
-				Erase<OpenGLTexture2D>();
+				Scratchpad sp;
+				FE_LOG_CORE_DEBUG("Unloading Texture from GPU, AssetID: {0}, Name: {1}", GetID(), GetFilepath().string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
+				Get<ACTexture2DResource_OpenGL>().Texture.Destroy();
+				Erase<ACTexture2DResource_OpenGL>();
 			}
 			break;
 		}
 	}
 
-	void Texture2D::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
+	void Texture2DObserver::SaveMetadata(YAML::Emitter& emitter)
 	{
 		FE_PROFILER_FUNC();
-
-		auto asset_observer = AssetObserver<Texture2D>(assetID);
 		
 		Scratchpad sp;
-		auto& core = asset_observer.GetCoreComponent();
-		auto& spec = core.Specification;
+		auto& core = GetCoreComponent();
+		const auto& library = Description::Library::Get();
+		const auto& spec = library.ProgramSpecs[core.SpecificationID];
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << asset_observer.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
+		emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
 		emitter << YAML::Key << "Usage" << YAML::Value << core.Usage.ToConstCharPtr();
-		//emitter << YAML::Key << "Components" << YAML::Value << Description::Texture::ComponentsInFormat(spec.Format).ToConstCharPtr();
-		emitter << YAML::Key << "Format" << YAML::Value << spec.Format.ToConstCharPtr();
+		emitter << YAML::Key << "Specification" << YAML::Value << spec.UUID;
 		emitter << YAML::Key << "Width" << YAML::Value << core.Width;
 		emitter << YAML::Key << "Height" << YAML::Value << core.Height;
 		emitter << YAML::EndMap;
 	}
 
-	bool Texture2D::LoadMetadata(AssetID assetID)
+	bool Texture2DUser::LoadMetadata()
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::Get().m_Registry;
-
 		auto filepath = Project::Get()->m_AssetsPath;
-		const auto& relative_path = reg.get<ACFilepath>(assetID).Filepath;
+		const auto& relative_path = Get<ACFilepath>().Filepath;
 		filepath /= relative_path;
 		
 		YAML::Node node;
@@ -185,8 +129,7 @@ namespace fe
 		}
 
 		if (!node["Usage"].IsDefined() ||
-			//!node["Components"].IsDefined() ||
-			!node["Format"].IsDefined() ||
+			!node["Specification"].IsDefined() ||
 			!node["Width"].IsDefined() ||
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
@@ -195,16 +138,19 @@ namespace fe
 			return false;
 		}
 
-		auto& core = reg.get<Texture2D::Core>(assetID);
-		auto& spec = core.Specification;
+		auto& core = GetCoreComponent();
 		
 		core.Usage.FromString(node["Usage"].as<std::string>());
-		spec.Format.FromString(node["Format"].as<std::string>());
+
+		auto& lib = Description::Library::Get();
+		auto spec_uuid = node["Specification"].as<UUID>();
+		core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+
 		core.Width = node["Width"].as<uint32_t>();
 		core.Height = node["Height"].as<uint32_t>();
 
 		std::filesystem::path source_path = node["Source Filepath"].as<std::string>();
-		AssetManager::SetSourcePath(assetID, source_path);
+		AssetManager::SetSourcePath(GetID(), source_path);
 
 		return true;
 	}
@@ -234,8 +180,7 @@ namespace fe
 		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
 
 		if (!node["Usage"].IsDefined() ||
-			//!node["Components"].IsDefined() ||
-			!node["Format"].IsDefined() ||
+			!node["Specification"].IsDefined() ||
 			!node["Width"].IsDefined() ||
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
@@ -249,11 +194,13 @@ namespace fe
 		auto& core = reg.emplace<Texture2D::Core>(asset_id);
 		core.Init();
 
-		auto& spec = core.Specification;
 
 		core.Usage.FromString(node["Usage"].as<std::string>());
-		//spec.Components.FromString(node["Components"].as<std::string>());
-		spec.Format.FromString(node["Format"].as<std::string>());
+
+		auto& lib = Description::Library::Get();
+		auto spec_uuid = node["Specification"].as<UUID>();
+		core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+		
 		core.Width = node["Width"].as<uint32_t>();
 		core.Height = node["Height"].as<uint32_t>();
 
