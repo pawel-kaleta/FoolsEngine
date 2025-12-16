@@ -12,6 +12,7 @@ namespace fe::Resource
 	struct VertexArrayBase
 	{
 		uint32_t LayoutID;
+		uint32_t VertexOffset;
 		uint32_t IndexOffset;
 		uint32_t IndexCount;
 

@@ -1,5 +1,10 @@
 #pragma once
 
+// consider a library, options:
+// https://github.com/wolfpld/tracy
+// https://github.com/bombomby/optick
+// https://github.com/jonasmr/microprofile
+
 namespace fe
 {
 	struct ProfileResult

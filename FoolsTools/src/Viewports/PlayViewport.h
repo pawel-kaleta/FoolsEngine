@@ -23,6 +23,6 @@ namespace fe
 		bool      m_VieportFocus = false;
 		bool      m_VieportHover = false;
 
-		Scope<Framebuffer> m_Framebuffer;
+		Scope<Resource::FramebufferBase> m_Framebuffer;
 	};
 }

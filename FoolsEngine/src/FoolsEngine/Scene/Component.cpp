@@ -4,11 +4,12 @@
 #include "BaseEntity.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Model.h"
 
 #include "FoolsEngine\Assets\Serialization\YAML.h"
 
@@ -94,7 +95,11 @@ namespace fe
 		auto& sm_core_component = shading_model_observer.GetCoreComponent();
 		auto& material_core_component = materialUser.GetCoreComponent();
 
-		for (auto& uniform : sm_core_component.Uniforms)
+		const auto& lib = Description::Library::Get();
+		const auto& program_spec = lib.ProgramSpecs[sm_core_component.ProgramSpecificationID];
+		const auto& uniforms_layout = lib.BufferLayouts[program_spec.MainUniformsLayoutID];
+
+		for (auto& uniform : uniforms_layout.Elements)
 		{
 			if (ImGuiLayer::RenderUniform(uniform, materialUser.GetUniformValuePtr(material_core_component, uniform)))
 				modified = true;

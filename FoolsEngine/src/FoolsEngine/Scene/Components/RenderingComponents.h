@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine/Scene/Component.h"
+#include "FoolsEngine\Scene\Component.h"
 
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
 
 namespace fe
 {

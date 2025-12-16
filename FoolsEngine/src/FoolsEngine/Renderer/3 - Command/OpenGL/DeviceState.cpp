@@ -1,11 +1,11 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\3 - Command\DeviceStateControl.h"
+#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
 #include "FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h"
 
 namespace fe::Command
 {
-	namespace DeviceStateControl::OpenGL
+	namespace DeviceState::OpenGL
 	{
 		void BindVertexArray(const Resource::VertexArray_OpenGL& vertexBinding)
 		{
@@ -14,7 +14,7 @@ namespace fe::Command
 
 		void BindTextureToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::Texture_OpenGL& texture)
 		{
-			glBindTextureUnit(rendererTextureSlot, texture.TextureOpenGLID);
+			glBindTextureUnit(rendererTextureSlot, texture.OpenGLID);
 		}
 
 		void SetDepthTest(bool enable)
@@ -48,7 +48,14 @@ namespace fe::Command
 
 		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 		{
-			glViewport(x, y, width, height);
+			glViewport(x, y, width, height); // ??-> BindFramebuffer()
+		}
+
+		void BindFramebuffer(const Resource::Framebuffer_OpenGL& framebuffer)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.OpenGLID);
+			const auto& spec = Description::Library::Get().FramebufferSpecs[framebuffer.SpecificationID];
+			glViewport(0, 0, spec.Width, spec.Height); // ??-> SetViewport()
 		}
 	}
 }

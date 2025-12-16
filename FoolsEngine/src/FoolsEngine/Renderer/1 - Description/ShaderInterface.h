@@ -16,7 +16,7 @@ namespace fe
 			TextureSampler();
 
 			UUID UUID;
-			Texture::Specification Spec;
+			Texture::Archetype Spec;
 			std::pmr::string Name;
 		};
 

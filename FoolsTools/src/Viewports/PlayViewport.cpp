@@ -1,21 +1,34 @@
 #include "PlayViewport.h"
 
-#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
-
 namespace fe
 {
 	PlayViewport::PlayViewport()
 	{
 		FE_PROFILER_FUNC();
 
-		Description::Framebuffer::SpecificationBuilder spec_builder;
-		spec_builder
-			.SetWidth(1)
-			.SetHight(1)
-			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
-			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
-			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
-		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
+		//Description::Framebuffer::SpecificationBuilder spec_builder;
+		//spec_builder
+		//	.SetWidth(1)
+		//	.SetHight(1)
+		//	.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
+		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
+		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
+		//m_Framebuffer = Framebuffer::Create(spec_builder.Create());
+
+		m_Framebuffer.reset(new Resource::Framebuffer_OpenGL());
+
+		auto& lib = Description::Library::Get();
+		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.size();
+		auto& framebuffer_spec = lib.FramebufferSpecs.emplace_back();
+		framebuffer_spec.Width = 1;
+		framebuffer_spec.Height = 1;
+		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
+		framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
+		framebuffer_spec.Type = Description::Texture::Type::Texture2D;
+
+		m_Framebuffer->Create();
+
+
 		m_ViewportSize = { 1,1 };
 	}
 
@@ -39,9 +52,8 @@ namespace fe
 		}
 		else
 		{
-			m_Framebuffer->Bind();
-			RenderCommands::Clear();
-			m_Framebuffer->Unbind();
+			Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
+			Command::ResourceState::Clear<GAPIType::OpenGL>();
 		}
 		
 	}
@@ -79,8 +91,9 @@ namespace fe
 			m_ViewportSize = new_viewport_size;
 		}
 
-		auto framebuffer_ID = m_Framebuffer->GetColorAttachmentID();
-		ImGui::Image((void*)(uint64_t)framebuffer_ID, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex("Final Frame");
+		GLuint attachment_id = static_cast<Resource::Framebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
+		ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();
 	}

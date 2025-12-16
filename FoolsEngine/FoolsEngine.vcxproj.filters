@@ -255,7 +255,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\DownStream.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\FrameBuffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Framebuffer.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h">
@@ -276,10 +276,10 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexArray.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\DeviceStateControl.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\DeviceState.h">
       <Filter>FoolsEngine\Renderer\3 - Command</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceStateControl.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceState.h">
       <Filter>FoolsEngine\Renderer\3 - Command</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Camera.h">
@@ -405,7 +405,7 @@
     <ClInclude Include="src\FoolsEngine\Utils\Xar.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\RenderCommands.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
@@ -535,10 +535,10 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\DeviceStateControl.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\DeviceState.cpp">
       <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceStateControl.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceState.cpp">
       <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Camera.cpp">
@@ -625,7 +625,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\RenderCommans.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />
   </ItemGroup>

@@ -43,6 +43,6 @@ namespace fe
 		ImGuizmo::OPERATION m_GuizmoType = ImGuizmo::OPERATION::UNIVERSAL;
 		Scope<EditorCameraController> m_CameraController;
 
-		Scope<Framebuffer> m_Framebuffer;
+		Scope<Resource::FramebufferBase> m_Framebuffer;
 	};
 }

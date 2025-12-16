@@ -83,7 +83,7 @@ namespace fe
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
 	};
 
-	class ShadingModelAsset : public Asset
+	class ShadingModel : public Asset
 	{
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }

@@ -4,9 +4,10 @@
 #include "FoolsEngine\Assets\AssetInterface.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
 
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 #include "ShadingModel.h"
+#include "Texture.h"
 
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -32,7 +33,7 @@ namespace fe
 	public:
 		const ACMaterialCore& GetCoreComponent() const { return Get<ACMaterialCore>(); }
 
-		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
 		AssetID GetTextureID(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const;
@@ -41,7 +42,7 @@ namespace fe
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
-		void* GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const;
+		void* GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const;
 		void* GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const std::string& name) const;
 	};
 	
@@ -52,16 +53,16 @@ namespace fe
 
 		void MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const;
 
-		void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
+		void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
 		void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		void SetUniformValue(const ACMaterialCore& dataComponent, const Uniform& uniform, void* dataPointer) const;
+		void SetUniformValue(const ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
 		void SetUniformValue(const ACMaterialCore& dataComponent, const std::string& name, void* dataPointer) const;
 
 		void SetTexture(ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const;
 		void SetTexture(ACMaterialCore& dataComponent, const std::string& textureSlotName, AssetID textureID) const;
 
-		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const;
+		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform) const;
 
 		bool SendDataToGPU(GAPIType GAPI) const;
 		void Release() const;

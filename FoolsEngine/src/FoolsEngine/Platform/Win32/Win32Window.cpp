@@ -2,7 +2,6 @@
 #include "Win32Window.h"
 
 #include "FoolsEngine\Events\Event.h"
-#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
 
 #include <glad/glad.h>
 
@@ -65,8 +64,6 @@ namespace fe
 		}
 		
 		m_CurrentRenderingContext->SwapBuffers();
-		RenderCommands::Clear();
-		RenderCommands::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 	}
 
 	void Win32Window::GLFWErrorCallback(int error, const char* msg)

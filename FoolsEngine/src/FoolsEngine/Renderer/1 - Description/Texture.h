@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace fe
 {
 	using RenderTextureSlotID = uint32_t;
@@ -24,9 +26,9 @@ namespace fe
 		FE_DECLARE_ENUM(AnisotropicFiltering, None, x2, x4, x8, x16);
 
 
-		struct Specification
+		struct Archetype
 		{
-			Specification() :
+			Archetype() :
 				Type(Type::None),
 				Format(Format::None),
 				Wrapping(Wrapping::None),
@@ -60,5 +62,14 @@ namespace fe
 				return Components::None;
 			}
 		}
+
+		struct Specification
+		{
+			uint32_t ArchetypeID;
+			Usage Usage;
+			uint32_t Width;
+			uint32_t Height;
+			glm::vec3 BorderColor;
+		};
 	}
 }

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include "FoolsEngine\Assets\Loaders\LoaderType.h"
 #include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
 
 namespace fe
 {

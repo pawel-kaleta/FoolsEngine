@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine\Core\Layer.h"
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
+#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 
 #include "ImGuiBackend.h"
 
@@ -38,7 +38,7 @@ namespace fe
 			ImGuiSliderFlags Flags = ImGuiSelectableFlags_::ImGuiSelectableFlags_None;
 		};
 
-		static bool RenderUniform(const Uniform& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
+		static bool RenderUniform(const Description::Buffer::Element& uniform, void* uniformDataPtr, const UniformRenderSettings& options = UniformRenderSettings());
 	private:
 		friend class Application;
 		

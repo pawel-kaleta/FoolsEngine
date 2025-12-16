@@ -1,10 +1,10 @@
 #pragma once
 
 #include "FoolsEngine\Math\Transform.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
+#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
+#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
 
 
 #include "FoolsEngine\Core\Time.h"
@@ -15,7 +15,7 @@ namespace fe
 {
 	class Scene;
 	class Entity;
-	class Framebuffer;
+	namespace Resource { struct FramebufferBase; }
 	class Camera;
 
 	using AssetID = uint32_t;
@@ -78,13 +78,15 @@ namespace fe
 			uint32_t TexturesCount = 1;
 		};
 
-		
-		Ref<VertexBuffer> m_QuadVertexBuffer;
+		Ref<Resource::StaticBufferBase> m_QuadVertexBuffer;
+		Ref<Resource::StaticBufferBase> m_QuadIndexBuffer;
+		Ref<Resource::VertexArrayBase> m_VertexArray;
+		//Ref<VertexBuffer> m_QuadVertexBuffer;
 
 		BatchData m_Batch;
 
 		AssetHandle<Shader> m_BaseShader;
-		ShaderTextureSlot m_BaseShaderTextureSlot;
+		//ShaderTextureSlot m_BaseShaderTextureSlot;
 		RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 
 		static Renderer2D* s_Instance;

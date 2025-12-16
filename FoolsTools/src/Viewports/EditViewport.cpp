@@ -6,14 +6,26 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Description::Framebuffer::SpecificationBuilder spec_builder;
-		spec_builder
-			.SetWidth(1280)
-			.SetHight(720)
-			.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
-			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
-			.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID", Description::Texture::Format::R_UINT_32));
-		m_Framebuffer = Framebuffer::Create(spec_builder.Create());
+		//Description::Framebuffer::SpecificationBuilder spec_builder;
+		//spec_builder
+		//	.SetWidth(1280)
+		//	.SetHight(720)
+		//	.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
+		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
+		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID", Description::Texture::Format::R_UINT_32));
+		m_Framebuffer.reset(new Resource::Framebuffer_OpenGL());
+
+		auto& lib = Description::Library::Get();
+		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.size();
+		auto& framebuffer_spec = lib.FramebufferSpecs.emplace_back();
+		framebuffer_spec.Width = 1280;
+		framebuffer_spec.Height = 720;
+		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
+		framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
+		framebuffer_spec.ColorAttachments.emplace_back("EntityID", Description::Texture::Format::R_UINT_32);
+		framebuffer_spec.Type = Description::Texture::Type::Texture2D;
+
+		m_Framebuffer->Create();
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 	}
@@ -92,8 +104,9 @@ namespace fe
 			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
 		}
 
-		auto framebuffer_ID = m_Framebuffer->GetColorAttachmentID();
-		ImGui::Image((void*)(uint64_t)framebuffer_ID, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex("Final Frame");
+		GLuint attachment_id = static_cast<Resource::Framebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
+		ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		RenderGuizmos();
 
@@ -217,9 +230,8 @@ namespace fe
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
 			int attachment_index = m_Framebuffer->GetColorAttachmentIndex("EntityID");
-			m_Framebuffer->Bind();
-			m_Framebuffer->ReadPixel(attachment_index, mouseX, mouseY, &entityID);
-			m_Framebuffer->Unbind();
+			Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
+			Command::ResourceState::ReadPixel<GAPIType::OpenGL>(*m_Framebuffer, attachment_index, mouseX, mouseY, &entityID);
 		}
 
 		return entityID;

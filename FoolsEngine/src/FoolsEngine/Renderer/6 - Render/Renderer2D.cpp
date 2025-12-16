@@ -3,14 +3,14 @@
 
 #include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Framebuffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\IndexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
+#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\Render.h"
+#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\ECS.h"
 #include "FoolsEngine\Scene\GameplayWorld\Entity.h"
@@ -39,7 +39,10 @@ namespace fe
 
 		Scratchpad sp;
 
-		s_Instance->m_QuadVertexBuffer = VertexBuffer::Create(ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex));
+		s_Instance->m_QuadVertexBuffer.reset(new Resource::StaticBuffer_OpenGL());
+		s_Instance->m_QuadVertexBuffer->Usage = Description::Buffer::Usage::Vertex;
+		s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
+		s_Instance->m_QuadVertexBuffer->Create();
 
 		uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.size();
 		auto& layout = Description::Library::Get().BufferLayouts.emplace_back();
@@ -53,8 +56,6 @@ namespace fe
 		layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_EntityID");
 
 		layout.CalculateOffsetsAndStride();
-
-		s_Instance->m_QuadVertexBuffer->SetLayout(layout);
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
@@ -75,15 +76,23 @@ namespace fe
 			}
 		}
 
-		Ref<IndexBuffer> quad_index_buffer = IndexBuffer::Create(quad_indices->data(), ConstLimits::MaxIndices);
-		s_Instance->m_QuadVertexBuffer->SetIndexBuffer(quad_index_buffer);
+		s_Instance->m_QuadIndexBuffer.reset(new Resource::StaticBuffer_OpenGL());
+		s_Instance->m_QuadIndexBuffer->Usage = Description::Buffer::Usage::Index;
+		s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
+		s_Instance->m_QuadIndexBuffer->Create();
+		s_Instance->m_QuadIndexBuffer->Upload(ConstLimits::MaxIndices, quad_indices->data());
 
+		s_Instance->m_VertexArray.reset(new Resource::VertexArray_OpenGL());
+		s_Instance->m_VertexArray->LayoutID = layoutID;
+		s_Instance->m_VertexArray->Create();
+		s_Instance->m_VertexArray->BindIndexBuffer(*s_Instance->m_QuadIndexBuffer, 0, 0);
+		s_Instance->m_VertexArray->BindVertexBuffer(*s_Instance->m_QuadVertexBuffer, 0);
 
 		//s_Instance.m_BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
 		// to do: fix this bad architecture
 
-		s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", Description::Texture::Type::Texture2D, 32);
+		//s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", Description::Texture::Type::Texture2D, 32);
 		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
 			s_Instance->m_BaseShaderSamplers[i] = i;
 
@@ -102,7 +111,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		RenderCommands::SetDepthTest(true);
+		Command::DeviceState::SetDepthTest<GAPIType::OpenGL>(true);
 
 		auto GAPI = Renderer::GetActiveGAPIType();
 
@@ -114,6 +123,7 @@ namespace fe
 
 		auto base_shader = m_BaseShader.Use();
 
+		// this needs to use a shading model, not a shader
 		base_shader.Bind(GAPI);
 		base_shader.UploadUniform(
 			GAPI,
@@ -228,8 +238,8 @@ namespace fe
 		float aspect_ratio;
 		{
 			auto texture_observer = quad.Texture.Observe();
-			auto& core = texture_observer.GetCoreComponent();
-			aspect_ratio = (float)core.Height / (float)core.Width;
+			auto& spec = texture_observer.GetCoreComponent().Specification;
+			aspect_ratio = (float)spec.Height / (float)spec.Width;
 		}
 
 		constexpr glm::vec4 quad_vertex_positions[] = {
@@ -274,8 +284,7 @@ namespace fe
 		// propably C-style array would look cleaner here then std::array
 		uint32_t data_size = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
 
-		m_QuadVertexBuffer->Bind();
-		m_QuadVertexBuffer->SendDataToGPU(m_Batch.QuadVertices->data(), data_size);
+		m_QuadVertexBuffer->Upload(data_size, m_Batch.QuadVertices->data());
 
 		auto GAPI = Renderer::GetActiveGAPIType();
 
@@ -284,8 +293,10 @@ namespace fe
 			AssetUser<Texture2D>(m_Batch.Textures[i]).Bind(GAPI, i);
 		}
 
-		m_QuadVertexBuffer->Bind();
-		RenderCommands::DrawIndexed(m_QuadVertexBuffer.get(), m_Batch.QuadIndexCount);
+		m_VertexArray->IndexCount = m_Batch.QuadIndexCount;
+		Command::DeviceState::BindVertexArray<GAPIType::OpenGL>(*m_VertexArray);
+
+		Command::Render::DrawIndexed<GAPIType::OpenGL>(*m_VertexArray);
 
 		m_Stats.Quads += m_Batch.QuadIndexCount / 3 / 2;
 		m_Stats.DrawCalls++;

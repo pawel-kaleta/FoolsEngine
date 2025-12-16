@@ -33,11 +33,7 @@ namespace fe
 
 		case GAPIType::OpenGL:
 			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Texture;
-			resource.Height = core.Height;
-			resource.Width = core.Width;
-			resource.SpecificationID = core.SpecificationID;
-			resource.Usage = core.Usage;
-			resource.Create(core.Data);
+			resource.Create(core.Specification, core.Data);
 			break;
 		}
 
@@ -84,17 +80,17 @@ namespace fe
 		FE_PROFILER_FUNC();
 		
 		Scratchpad sp;
-		auto& core = GetCoreComponent();
+		auto& spec = GetCoreComponent().Specification;
 		const auto& library = Description::Library::Get();
-		const auto& spec = library.ProgramSpecs[core.SpecificationID];
+		const auto& archetype = library.TextureArchetypes[spec.ArchetypeID];
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();
 		emitter << YAML::Key << "Source Filepath" << YAML::Value << GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
-		emitter << YAML::Key << "Usage" << YAML::Value << core.Usage.ToConstCharPtr();
-		emitter << YAML::Key << "Specification" << YAML::Value << spec.UUID;
-		emitter << YAML::Key << "Width" << YAML::Value << core.Width;
-		emitter << YAML::Key << "Height" << YAML::Value << core.Height;
+		emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
+		emitter << YAML::Key << "Archetype" << YAML::Value << archetype.UUID;
+		emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
+		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
 		emitter << YAML::EndMap;
 	}
 
@@ -129,7 +125,7 @@ namespace fe
 		}
 
 		if (!node["Usage"].IsDefined() ||
-			!node["Specification"].IsDefined() ||
+			!node["Archetype"].IsDefined() ||
 			!node["Width"].IsDefined() ||
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
@@ -138,16 +134,16 @@ namespace fe
 			return false;
 		}
 
-		auto& core = GetCoreComponent();
+		auto& spec = GetCoreComponent().Specification;
 		
-		core.Usage.FromString(node["Usage"].as<std::string>());
+		spec.Usage.FromString(node["Usage"].as<std::string>());
 
 		auto& lib = Description::Library::Get();
-		auto spec_uuid = node["Specification"].as<UUID>();
-		core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+		auto spec_uuid = node["Archetype"].as<UUID>();
+		spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
 
-		core.Width = node["Width"].as<uint32_t>();
-		core.Height = node["Height"].as<uint32_t>();
+		spec.Width = node["Width"].as<uint32_t>();
+		spec.Height = node["Height"].as<uint32_t>();
 
 		std::filesystem::path source_path = node["Source Filepath"].as<std::string>();
 		AssetManager::SetSourcePath(GetID(), source_path);
@@ -180,7 +176,7 @@ namespace fe
 		if (reg.all_of<ACRefsCounters>(asset_id)) return asset_id; // is ProjectAsset ?
 
 		if (!node["Usage"].IsDefined() ||
-			!node["Specification"].IsDefined() ||
+			!node["Archetype"].IsDefined() ||
 			!node["Width"].IsDefined() ||
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
@@ -194,15 +190,16 @@ namespace fe
 		auto& core = reg.emplace<Texture2D::Core>(asset_id);
 		core.Init();
 
+		auto& spec = core.Specification;
 
-		core.Usage.FromString(node["Usage"].as<std::string>());
+		spec.Usage.FromString(node["Usage"].as<std::string>());
 
 		auto& lib = Description::Library::Get();
-		auto spec_uuid = node["Specification"].as<UUID>();
-		core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+		auto spec_uuid = node["Archetype"].as<UUID>();
+		spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
 		
-		core.Width = node["Width"].as<uint32_t>();
-		core.Height = node["Height"].as<uint32_t>();
+		spec.Width = node["Width"].as<uint32_t>();
+		spec.Height = node["Height"].as<uint32_t>();
 
 		std::filesystem::path source_path = parentpath;
 		source_path /= node["Source Filepath"].as<std::string>();

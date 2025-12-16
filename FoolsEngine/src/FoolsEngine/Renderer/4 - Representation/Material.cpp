@@ -2,8 +2,6 @@
 #include "Material.h"
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
 
 #include "FoolsEngine\Core\Project.h"
 
@@ -24,7 +22,7 @@ namespace fe
 		ShadingModelID = NullAssetID;
 	}
 
-	void* MaterialObserver::GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Uniform& targetUniform) const
+	void* MaterialObserver::GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 

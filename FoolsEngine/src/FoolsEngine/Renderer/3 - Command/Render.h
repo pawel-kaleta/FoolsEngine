@@ -6,7 +6,7 @@
 
 namespace fe::Command
 {
-	namespace RenderCommands
+	namespace Render
 	{
 		namespace Vulkan
 		{

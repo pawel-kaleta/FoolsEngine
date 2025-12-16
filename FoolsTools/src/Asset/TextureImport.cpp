@@ -9,7 +9,7 @@ namespace fe
 {
 	void TextureImport::InitImport(ImportData*  importData)
 	{      
-        importData->Description.Specification = TextureLoader::InspectTexture(importData->FilepathToImport);
+        importData->Description.Archetype = TextureLoader::InspectTexture(importData->FilepathToImport);
 	}
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
@@ -20,7 +20,7 @@ namespace fe
         auto w = x.lexically_relative(assets_path);
 
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
-        AssetUser<Texture2D>(assetID).GetCoreComponent().Specification = importData->Description.Specification;
+        AssetUser<Texture2D>(assetID).GetCoreComponent().Archetype = importData->Description.Archetype;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         YAML::Emitter emitter;
@@ -33,7 +33,7 @@ namespace fe
 
     void TextureImport::RenderWindow(ImportData* const importData)
     {
-        auto& spec = importData->Description.Specification;
+        auto& spec = importData->Description.Archetype;
         Scratchpad sp;
         ImGui::Text("m_File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
         //ImGui::Text("Components: %d", spec.Components);

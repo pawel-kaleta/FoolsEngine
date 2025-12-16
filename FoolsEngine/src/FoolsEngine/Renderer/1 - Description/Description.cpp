@@ -116,8 +116,8 @@ namespace fe::Description
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 		
-		uint32_t size = TextureSpecs.size();
-		TextureSpecs.emplace_back();
+		uint32_t size = TextureArchetypes.size();
+		TextureArchetypes.emplace_back();
 		return size;
 	}
 

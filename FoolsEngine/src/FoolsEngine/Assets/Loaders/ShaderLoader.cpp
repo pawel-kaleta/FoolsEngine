@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 
 #include "ShaderLoader.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL\OpenGLShader.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 
 #include "FoolsEngine\Memory\Scratchpad.h"

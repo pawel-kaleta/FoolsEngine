@@ -1,15 +1,14 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\DeviceAPI.h"
 
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Lights.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
+#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\ShadingModel.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Lights.h"
 
 #include "FoolsEngine\Math\Transform.h"
 
@@ -17,8 +16,7 @@
 
 namespace fe
 {
-	class VertexBuffer;
-	class Framebuffer;
+	namespace Resource { struct FramebufferBase; }
 	class Scene;
 	class Camera;
 
@@ -44,7 +42,7 @@ namespace fe
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
-		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer);
+		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer);
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();
@@ -88,6 +86,6 @@ namespace fe
 
 	private:
 		static GAPIType s_ActiveGAPI;
-		static std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
+		//static std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};
 }

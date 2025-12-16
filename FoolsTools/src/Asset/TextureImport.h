@@ -8,7 +8,7 @@ namespace fe
 {
 	struct ImportData;
 
-	namespace Description::Texture { struct Specification; }
+	namespace Description::Texture { struct Archetype; }
 
 	namespace TextureImport
 	{
@@ -18,7 +18,7 @@ namespace fe
 
 		struct Data
 		{
-			Description::Texture::Specification Specification;
+			Description::Texture::Archetype Archetype;
 		};
 	};
 }

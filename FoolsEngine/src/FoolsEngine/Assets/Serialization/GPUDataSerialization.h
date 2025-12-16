@@ -3,7 +3,6 @@
 #include "YAML.h"
 
 #include "FoolsEngine\Renderer\1 - Description\Data.h"
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
 
 namespace fe
 {

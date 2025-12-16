@@ -14,7 +14,7 @@ namespace fe::Description
 	{
 		std::pmr::monotonic_buffer_resource m_Allocator;
 
-		std::pmr::vector<Texture::Specification>				TextureSpecs;
+		std::pmr::vector<Texture::Archetype>					TextureArchetypes;
 		std::pmr::vector<Buffer::Layout>						BufferLayouts;
 		std::pmr::vector<Framebuffer::Specification>			FramebufferSpecs;
 		std::pmr::vector<ShaderInterface::TextureSampler>		TextureSamplers;
@@ -28,7 +28,7 @@ namespace fe::Description
 		template <typename tnDescriptor>
 		uint32_t CreateOrGetDescriptorWithUUID(UUID uuid)
 		{
-			if constexpr (std::same_as<tnDescriptor, Texture::Specification					>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
+			if constexpr (std::same_as<tnDescriptor, Texture::Archetype						>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
 			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
 			if constexpr (std::same_as<tnDescriptor, Framebuffer::Specification				>) return CreateOrGetDescriptorWithUUID_Framebuffer(uuid);
 			if constexpr (std::same_as<tnDescriptor, ShaderInterface::TextureSampler		>) return CreateOrGetDescriptorWithUUID_TextureSampler(uuid);
@@ -40,7 +40,7 @@ namespace fe::Description
 	private:
 		Library() :
 			m_Allocator(),
-			TextureSpecs(&m_Allocator),
+			TextureArchetypes(&m_Allocator),
 			BufferLayouts(&m_Allocator),
 			FramebufferSpecs(&m_Allocator),
 			TextureSamplers(&m_Allocator),

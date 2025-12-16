@@ -29,6 +29,8 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
+		VertexOffset = offset;
+
 		const auto& layout = Description::Library::Get().BufferLayouts[LayoutID];
 
 		FE_CORE_ASSERT(layout.Type == Description::Buffer::LayoutType::Vertex, "Vertex Array can only have vertex layout");

@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\3 - Command\RenderCommands.h"
+#include "FoolsEngine\Renderer\3 - Command\Render.h"
 
 namespace fe::Command
 {
-	namespace RenderCommands::OpenGL
+	namespace Render::OpenGL
 	{
 		void DrawIndexed(const Resource::VertexArray_OpenGL& vertexArray)
 		{

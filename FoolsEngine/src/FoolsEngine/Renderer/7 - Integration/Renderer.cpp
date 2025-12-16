@@ -1,20 +1,17 @@
 #include "FE_pch.h"
 #include "Renderer.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Framebuffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL\OpenGLShader.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
-#include "FoolsEngine\Renderer\8 - Render\Renderer2D.h"
-#include "FoolsEngine\Renderer\8 - Render\GeometryRenderer.h"
+#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
+#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
+#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
+#include "FoolsEngine\Renderer\6 - Render\Renderer2D.h"
+#include "FoolsEngine\Renderer\6 - Render\GeometryRenderer.h"
 
 #include "FoolsEngine\Assets\AssetHandle.h"
 #include "FoolsEngine\Assets\Loaders\TextureLoader.h"
@@ -39,7 +36,7 @@ namespace fe
 	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
 	GAPIType Renderer::s_ActiveGAPI = GAPIType::None;
-	std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
+	//std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
 
 	void Renderer::Startup()
 	{
@@ -115,8 +112,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		BaseAssets.Textures.Default.Use().CreateGAPITexture2D(GAPI);
-		BaseAssets.Textures.FlatWhite.Use().CreateGAPITexture2D(GAPI);
+		BaseAssets.Textures.Default.Use().CreateResourceComponent<GAPIType::OpenGL>();
+		BaseAssets.Textures.FlatWhite.Use().CreateResourceComponent<GAPIType::OpenGL>();
 
 		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base2D.Use());
 		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DOpaque.Use());
@@ -128,13 +125,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
+		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
 		
 		s_ActiveGAPI = GAPI;
 
-		auto& device_API = s_DeviceAPIs.at(GAPI);
+		//auto& device_API = s_DeviceAPIs.at(GAPI);
 
-		RenderCommands::SetAPI(device_API.get());
+		//RenderCommands::SetAPI(device_API.get());
 
 		Renderer2D::Init();
 		GeometryRenderer::Init();
@@ -144,37 +141,35 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) == s_DeviceAPIs.end(), "API already created!");
+		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) == s_DeviceAPIs.end(), "API already created!");
 
-		s_DeviceAPIs[GAPI] = RenderCommands::CreateAPI(GAPI);
+		//s_DeviceAPIs[GAPI] = RenderCommands::CreateAPI(GAPI);
 	}
 
 	void Renderer::InitAPI(GAPIType GAPI)
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
+		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
 
-		auto& deviceAPI = s_DeviceAPIs.at(GAPI);
+		//auto& deviceAPI = s_DeviceAPIs.at(GAPI);
 
-		deviceAPI->Init();
+		//deviceAPI->Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		RenderCommands::SetViewport(0, 0, width, height);
+		Command::DeviceState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
 	}
 
-	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Framebuffer& framebuffer)
+	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer)
 	{
-		framebuffer.Bind();
+		Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(framebuffer);
 
 		int attachment_index = framebuffer.GetColorAttachmentIndex("EntityID");
-		framebuffer.ClearAttachment(attachment_index, (uint32_t)NullEntityID);
+		Command::ResourceState::ClearAttachment<GAPIType::OpenGL>(framebuffer, attachment_index, (uint32_t)NullEntityID);
 
 		RenderScene(scene, camera, cameraTransform);
-
-		framebuffer.Unbind();
 	}
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform)
@@ -200,8 +195,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		RenderCommands::Clear();
-		RenderCommands::SetClearColor({ 0.8, 0.1, 0.1, 1 });
+		Command::ResourceState::Clear<GAPIType::OpenGL>();
 
 		switch (s_ActiveGAPI.Value)
 		{

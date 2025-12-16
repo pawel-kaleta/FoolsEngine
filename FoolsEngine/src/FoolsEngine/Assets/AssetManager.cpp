@@ -3,7 +3,8 @@
 
 #include "AssetHandle.h"
 
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 #include "Loaders\TextureLoader.h"
 #include "Loaders\ShaderLoader.h"
 #include "Loaders\GeometryLoader.h"
@@ -203,10 +204,10 @@ namespace fe
 			case AssetType::Texture2D:
 			{
 				auto texture_user = AssetUser<Texture2D>(id);
-				if (!texture_user.GetRendererID(GAPI))
+				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);
-					texture_user.CreateGAPITexture2D(GAPI);
+					texture_user.CreateResourceComponent<GAPIType::OpenGL>();
 					texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}

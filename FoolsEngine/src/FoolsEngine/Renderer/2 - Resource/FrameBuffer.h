@@ -11,8 +11,6 @@ namespace fe::Resource
 	struct FramebufferBase
 	{
 		uint32_t SpecificationID;
-		uint32_t Width;
-		uint32_t Height;
 
 		virtual void Create() = 0;
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
@@ -23,7 +21,7 @@ namespace fe::Resource
 
 	struct Framebuffer_OpenGL final : FramebufferBase
 	{
-		GLuint FramebufferOpenGLID;
+		GLuint OpenGLID;
 
 		GLuint DepthStencilAttachmentOpenGLID;
 		std::vector<GLuint> ColorAttachmentOpenGLIDs;

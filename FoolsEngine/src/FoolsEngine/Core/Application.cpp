@@ -5,7 +5,7 @@
 #include "FoolsEngine\Platform\FileDialogs.h"
 
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\ComponentTypesRegistry.h"
 #include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"

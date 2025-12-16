@@ -13,6 +13,9 @@ namespace fe
 	struct ACShaderCore final : public AssetComponent
 	{
 		uint32_t SpecificationID;
+		std::string ShaderSource;
+		std::string VertexSource;
+		std::string FragmentSource;
 
 		void Init();
 	};

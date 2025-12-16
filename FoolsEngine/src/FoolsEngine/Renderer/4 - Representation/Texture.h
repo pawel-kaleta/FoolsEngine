@@ -15,17 +15,15 @@ namespace fe
 	struct ACTexture2DCore final : public AssetComponent
 	{
 		void* Data;
-		Description::Texture::Usage Usage;
-		uint32_t SpecificationID;
-		uint32_t Width;
-		uint32_t Height;
+		Description::Texture::Specification Specification;
 
 		void Init()
 		{
-			Width = 0;
-			Height = 0;
-			Usage = Description::Texture::Usage::None;
-			SpecificationID = -1;
+			Specification.Width = 0;
+			Specification.Height = 0;
+			Specification.Usage = Description::Texture::Usage::None;
+			Specification.ArchetypeID = -1;
+			Specification.BorderColor = { 0, 0, 0 };
 			Data = nullptr;
 		}
 	};
@@ -69,7 +67,7 @@ namespace fe
 			if constexpr (GAPI == GAPIType::OpenGL) return Emplace<ACTexture2DResource_OpenGL>();
 		}
 
-		 bool LoadMetadata();
+		bool LoadMetadata();
 
 		bool SendDataToGPU(GAPIType GAPI) const;
 		void UnloadFromCPU() const;

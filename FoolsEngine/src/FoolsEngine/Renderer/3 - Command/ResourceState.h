@@ -6,7 +6,7 @@
 
 namespace fe::Command
 {
-	namespace ResourceStateControl
+	namespace ResourceState
 	{
 		namespace Vulkan
 		{

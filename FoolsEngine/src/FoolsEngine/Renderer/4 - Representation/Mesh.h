@@ -1,9 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\VertexBuffer.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\IndexBuffer.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
+#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
+#include "Material.h"
 
 #include "FoolsEngine\Assets\Asset.h"
 #include "FoolsEngine\Assets\AssetInterface.h"
@@ -45,8 +44,9 @@ namespace fe
 
 	struct ACGPUBuffers final : public AssetComponent
 	{
-		Ref<VertexBuffer> VertexBuffer;
-		Ref<IndexBuffer>  IndexBuffer;
+		// vertex array!
+		Resource::StaticBuffer_OpenGL VertexBuffer;
+		Resource::StaticBuffer_OpenGL IndexBuffer;
 	};
 
 	class MeshObserver : public AssetInterface

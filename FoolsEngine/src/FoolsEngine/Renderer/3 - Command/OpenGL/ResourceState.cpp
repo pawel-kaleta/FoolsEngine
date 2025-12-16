@@ -2,11 +2,11 @@
 
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h"
-#include "FoolsEngine\Renderer\3 - Command\ResourceStateControl.h"
+#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
 
 namespace fe::Command
 {
-	namespace ResourceStateControl::OpenGL
+	namespace ResourceState::OpenGL
 	{
 		// shader interface setup
 

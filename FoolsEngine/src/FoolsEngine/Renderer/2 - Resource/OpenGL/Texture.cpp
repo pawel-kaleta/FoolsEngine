@@ -11,11 +11,11 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	void Texture_OpenGL::Create(const void* data)
+	void Texture_OpenGL::Create(const Specification& instance, const void* data)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& spec = Description::Library::Get().TextureSpecs[SpecificationID];
+		auto& spec = Description::Library::Get().TextureArchetypes[instance.ArchetypeID];
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &OpenGLID);
 
@@ -34,7 +34,7 @@ namespace fe::Resource
 			case Wrapping::Border:
 				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 				glTextureParameteri(OpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTextureParameterfv(OpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(BorderColor));
+				glTextureParameterfv(OpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(instance.BorderColor));
 				break;
 			default:
 				FE_LOG_CORE_ERROR("Unrecognized texture wrapping mode, defaulted to repeat");
@@ -68,13 +68,13 @@ namespace fe::Resource
 			}
 		}
 
-		auto levels = glm::log2(glm::max(Width, Height));
+		auto levels = glm::log2(glm::max(instance.Width, instance.Height));
 		auto internal_format = Utils::FormatToGLInternalFormat(spec.Format);
 
-		glTextureStorage2D(OpenGLID, levels, internal_format, Width, Height);
+		glTextureStorage2D(OpenGLID, levels, internal_format, instance.Width, instance.Height);
 
 		auto format = Utils::FormatToGLFormat(spec.Format);
-		glTextureSubImage2D(OpenGLID, 0, 0, 0, Width, Height, format, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(OpenGLID, 0, 0, 0, instance.Width, instance.Height, format, GL_UNSIGNED_BYTE, data);
 
 		glGenerateTextureMipmap(OpenGLID);
 	}

@@ -3,7 +3,7 @@
 
 #include "Mesh.h"
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
 
 #include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
 #include "FoolsEngine\Assets\Serialization\YAML.h"

@@ -4,7 +4,7 @@
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Assets\AssetAccessors.h"
 
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\Components\MeshComponents.h"
 

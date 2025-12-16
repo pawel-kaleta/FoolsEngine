@@ -1,12 +1,12 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Texture.h"
-#include "FoolsEngine\Renderer\2 - GAPIAbstraction\Shader.h"
-#include "FoolsEngine\Renderer\3 - Representation\ShadingModel.h"
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
+#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
+#include "FoolsEngine\Renderer\4 - Representation\ShadingModel.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Model.h"
 #include "FoolsEngine\Scene\Scene.h"
 
 namespace fe

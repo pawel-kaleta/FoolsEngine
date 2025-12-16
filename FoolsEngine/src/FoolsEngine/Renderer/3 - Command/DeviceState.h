@@ -4,10 +4,11 @@
 #include "FoolsEngine\Renderer\1 - Description\Pipeline.h"
 #include "FoolsEngine\Renderer\2 - Resource\Texture.h"
 #include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
+#include "FoolsEngine\Renderer\2 - Resource\FrameBuffer.h"
 
 namespace fe::Command
 {
-	namespace DeviceStateControl
+	namespace DeviceState
 	{
 		namespace Vulkan
 		{
@@ -29,6 +30,8 @@ namespace fe::Command
 			void SetBlending(bool enable);
 
 			void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+
+			void BindFramebuffer(const Resource::Framebuffer_OpenGL& framebuffer);
 		}
 
 		template<GAPIType::ValueType GAPI>
@@ -72,6 +75,12 @@ namespace fe::Command
 		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetViewport(x, y, width, height);
+		}
+
+		template<GAPIType::ValueType GAPI>
+		void BindFramebuffer(const Resource::FramebufferBase& framebuffer)
+		{
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindFramebuffer((const Resource::Framebuffer_OpenGL &)  framebuffer);
 		}
 	}
 }

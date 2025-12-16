@@ -2,10 +2,10 @@
 
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine\Renderer\3 - Representation\Material.h"
-#include "FoolsEngine\Renderer\3 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\3 - Representation\Model.h"
+#include "FoolsEngine\Renderer\4 - Representation\Material.h"
+#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
+#include "FoolsEngine\Renderer\4 - Representation\Model.h"
 
 namespace fe
 {
