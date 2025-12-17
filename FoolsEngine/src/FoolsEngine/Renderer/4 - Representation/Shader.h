@@ -14,8 +14,8 @@ namespace fe
 	{
 		uint32_t SpecificationID;
 		std::string ShaderSource;
-		std::string VertexSource;
-		std::string FragmentSource;
+		//std::string VertexSource;
+		//std::string FragmentSource;
 
 		void Init();
 	};

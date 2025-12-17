@@ -3,6 +3,7 @@
 #include "Shader.h"
 
 #include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
+#include "FoolsEngine\Assets\Asset.h"
 
 #include <glad\glad.h>
 
@@ -11,7 +12,7 @@ namespace fe::Resource
 	struct ProgramBase
 	{
 		uint32_t SpecificationID;
-		std::vector<ShaderBase*> Shaders; // make this an id in resource manager for shader reuse in multiple programs
+		std::vector<AssetID> Shaders;
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;

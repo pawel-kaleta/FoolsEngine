@@ -16,8 +16,8 @@ namespace fe
 			TextureSampler();
 
 			UUID UUID;
-			Texture::Archetype Spec;
 			std::pmr::string Name;
+			uint32_t TextureArchetypeID;
 		};
 
 		struct UniformBufferSampler { };
@@ -49,7 +49,7 @@ namespace fe
 			uint32_t FragmentOutputLayoutID;
 			uint32_t MainUniformsLayoutID;
 
-			std::pmr::vector<TextureSampler> TextureSamplers;
+			std::pmr::vector<uint32_t> TextureSamplerIDs;
 			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
 			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
 

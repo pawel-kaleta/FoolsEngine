@@ -261,4 +261,28 @@ namespace fe
 
 		return true;
 	}
+
+	bool ShadingModelUser::SendDataToGPU(GAPIType GAPI) const
+	{
+		FE_PROFILER_FUNC();
+
+		auto& core = GetCoreComponent();
+
+
+		switch (GAPI.Value)
+		{
+		case GAPIType::None:
+			FE_CORE_ASSERT(false, "Unspecified GAPIType");
+			break;
+
+		case GAPIType::OpenGL:
+			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Program;
+			resource.SpecificationID = core.ProgramSpecificationID;
+			resource.Shaders = { core.VertexShaderID, core.FragmentShaderID };
+			resource.Create();
+			break;
+		}
+
+		return true;
+	}
 }

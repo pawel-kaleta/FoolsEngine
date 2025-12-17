@@ -60,13 +60,13 @@ namespace fe
 		ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
 
 		template <GAPIType::ValueType GAPI>
-		auto& GetResourceComponent()
+		auto& GetResourceComponent() const
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
 		}
 
 		template <GAPIType::ValueType GAPI>
-		auto& CreateResourceComponent()
+		auto& CreateResourceComponent() const
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
 		}
@@ -78,6 +78,10 @@ namespace fe
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
 
 		bool LoadMetadata();
+
+		bool SendDataToGPU(GAPIType GAPI) const;
+		void UnloadFromCPU() const {};
+		void Release() const;
 
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}

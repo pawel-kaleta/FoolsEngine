@@ -97,24 +97,6 @@ namespace fe
     {
         FE_CORE_ASSERT(false, "Shader loading not implemented yet");
 
-        Scratchpad sp;
-
-        std::ifstream in(Get<ACSourceFilepath>().Filepath, std::ios::in, std::ios::binary);
-
-        if (!in.good())
-        {
-            FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", Get<ACSourceFilepath>().Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
-            return;
-        }
-
-        std::pmr::string shader_source(&sp);
-
-        in.seekg(0, std::ios::end);
-        shader_source.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(&shader_source[0], shader_source.size());
-        in.close();
-
         switch (GAPI.Value)
         {
         case GAPIType::None:
@@ -122,12 +104,13 @@ namespace fe
             return;
 
         case GAPIType::OpenGL:
-            if (AllOf<ACShaderResource_OpenGL>())
+            if (!AllOf<ACShaderResource_OpenGL>())
             {
                 auto& shader = Emplace<ACShaderResource_OpenGL>().Shader;
+                const auto& core = GetCoreComponent();
 
-                shader.SpecificationID = GetCoreComponent().SpecificationID;
-                shader.Create(shader_source.c_str());
+                shader.SpecificationID = core.SpecificationID;
+                shader.Create(core.ShaderSource.c_str());
             }
             return;
         }
@@ -135,9 +118,8 @@ namespace fe
 
     void ShaderUser::UnloadFromCPU() const
     {
-        //auto& sourceCode = Get<ACShaderAssetCore>();
-        //sourceCode.ShaderSource.clear();
+        auto& core = Get<ACShaderCore>();
+        core.ShaderSource.clear();
+        core.ShaderSource.shrink_to_fit();
     }
-
-
 }

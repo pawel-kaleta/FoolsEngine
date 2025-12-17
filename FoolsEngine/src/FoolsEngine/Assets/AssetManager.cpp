@@ -207,7 +207,8 @@ namespace fe
 				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);
-					texture_user.CreateResourceComponent<GAPIType::OpenGL>();
+					auto& texture = texture_user.CreateResourceComponent<GAPIType::OpenGL>().Texture;
+					texture_user.SendDataToGPU(GAPI);
 					texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}

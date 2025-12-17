@@ -1,7 +1,9 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Program.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine\Renderer\2 - Resource\Program.h"
+#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
+#include "FoolsEngine\Assets\AssetAccessors.h"
 
 #include "FoolsEngine\Memory\Scratchpad.h"
 
@@ -11,12 +13,20 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
+		Scratchpad sp;
+
 		GLuint ProgramOpenGLID = glCreateProgram();
 
-		std::vector<Shader_OpenGL*>& shaders = *(std::vector<Shader_OpenGL*>*) & Shaders;
+		std::pmr::vector<GLuint> shaders_OpenGL(&sp);
 
-		for (int i = 0; i < shaders.size(); i++)
-			glAttachShader(ProgramOpenGLID, shaders[i]->ShaderOpenGLID);
+		for (const auto& shader_asset_id : Shaders)
+		{
+			AssetObserver<Shader> shader_observer(shader_asset_id);
+			shaders_OpenGL.push_back(shader_observer.GetResourceComponent<GAPIType::OpenGL>().Shader.ShaderOpenGLID);
+		}
+
+		for (int i = 0; i < shaders_OpenGL.size(); i++)
+			glAttachShader(ProgramOpenGLID, shaders_OpenGL[i]);
 
 		GLint linking_success = 0;
 		{
@@ -30,7 +40,6 @@ namespace fe::Resource
 			GLint log_length = 0;
 			glGetProgramiv(ProgramOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
-			Scratchpad sp;
 			std::pmr::vector<GLchar> info_log(log_length, &sp);
 			glGetProgramInfoLog(ProgramOpenGLID, log_length, &log_length, info_log.data());
 
@@ -42,9 +51,9 @@ namespace fe::Resource
 			return;
 		}
 
-		for (int i = 0; i < shaders.size(); i++)
+		for (int i = 0; i < shaders_OpenGL.size(); i++)
 		{
-			glDetachShader(ProgramOpenGLID, shaders[i]->ShaderOpenGLID); // do we need this?
+			glDetachShader(ProgramOpenGLID, shaders_OpenGL[i]); // do we need this?
 		}
 
 		const auto& spec = Description::Library::Get().ProgramSpecs[SpecificationID];
