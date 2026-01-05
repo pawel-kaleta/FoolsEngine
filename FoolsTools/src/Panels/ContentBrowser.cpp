@@ -41,11 +41,12 @@ namespace fe
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
 		auto GAPI = Renderer::GetActiveGAPIType();
-		m_Icons.File.CreateGAPITexture2D(GAPI);
-		m_Icons.Folder.CreateGAPITexture2D(GAPI);
+		m_Icons.File.SendDataToGPU(GAPI);
+		m_Icons.Folder.SendDataToGPU(GAPI);
 
-		m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetRendererID(GAPI);
-		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetRendererID(GAPI);
+
+		m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetGAPIResourceID(GAPI);
+		m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetGAPIResourceID(GAPI);
 
 		InitColors();
 	}

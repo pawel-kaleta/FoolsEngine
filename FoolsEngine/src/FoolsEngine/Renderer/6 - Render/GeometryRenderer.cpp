@@ -4,6 +4,8 @@
 #include "FoolsEngine\Scene\Scene.h"
 #include "FoolsEngine\Assets\AssetAccessors.h"
 
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
 #include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Scene\Components\MeshComponents.h"
@@ -59,25 +61,28 @@ namespace fe
 			void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
 			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
-			auto shaderID = shading_model_observer.GetCoreComponent().ShaderID;
+			auto programID = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
 
+			const auto& lib = Description::Library::Get();
 			{
-				auto shader_observer = AssetObserver<Shader>(shaderID);
+				const auto& program_spec = lib.ProgramSpecs[programID];
+				auto& program = shading_model_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
 
-				shader_observer.Bind(GAPI);
+				//shader_observer.Bind(GAPI);
+				FE_CORE_ASSERT(false, "Bind program and textures!");
 
-				shader_observer.UploadUniform(GAPI, Uniform("u_ViewProjection", Description::Data::Type::Mat4), VP_matrix_ptr);
-				shader_observer.UploadUniform(GAPI, Uniform("u_ModelTransform", Description::Data::Type::Mat4), model_transform_ptr);
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection", VP_matrix_ptr);
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform", model_transform_ptr);
+				
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir",  main_light_dir);
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor", main_light_color);
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity",  main_light_intensity);
+				
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight", ambient_light);
 
-				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightDir", Description::Data::Type::Float3), main_light_dir);
-				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightColor", Description::Data::Type::Float3), main_light_color);
-				shader_observer.UploadUniform(GAPI, Uniform("u_MainLightIntensity", Description::Data::Type::Float), main_light_intensity);
-
-				shader_observer.UploadUniform(GAPI, Uniform("u_AmbientLight", Description::Data::Type::Float3), ambient_light);
-
-				shader_observer.UploadUniform(GAPI, Uniform("u_CameraPosition", Description::Data::Type::Float3), camera_position);
-
-				shader_observer.UploadUniform(GAPI, Uniform("u_EntityID", Description::Data::Type::UInt), &ID);
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition", camera_position);
+				
+				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID", &ID);
 			}
 
 			mesh_observer.Draw(material_observer);

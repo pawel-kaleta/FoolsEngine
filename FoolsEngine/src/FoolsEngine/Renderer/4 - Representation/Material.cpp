@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 #include "Material.h"
 
+#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 
 #include "FoolsEngine\Core\Project.h"
@@ -29,13 +30,15 @@ namespace fe
 		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.UniformsData);
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
-		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
+		auto& uniforms = shading_model_observer.GetUniforms();
+
+		for (const auto& uniform : uniforms.Elements)
 		{
 			if (&targetUniform == &uniform)
 			{
 				return (void*)uniform_data_pointer;
 			}
-			uniform_data_pointer += uniform.GetSize();
+			uniform_data_pointer += uniform.Size() * uniform.Count;
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
@@ -49,14 +52,15 @@ namespace fe
 		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.UniformsData);
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
+		auto& uniforms = shading_model_observer.GetUniforms();
 
-		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
+		for (const auto& uniform : uniforms.Elements)
 		{
-			if (name == uniform.m_Name)
+			if (name.compare(uniform.Name))
 			{
 				return (void*)uniform_data_pointer;
 			}
-			uniform_data_pointer += uniform.GetSize();
+			uniform_data_pointer += uniform.Size() * uniform.Count;
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
@@ -65,7 +69,7 @@ namespace fe
 
 	void MaterialUser::MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const { Material::MakeMaterial(this->GetID(), shadingModelObserver); }
 
-	void MaterialUser::SetUniformValue(const ACMaterialCore& dataComponent, const Uniform& targetUniform, void* dataPointer) const
+	void MaterialUser::SetUniformValue(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -76,7 +80,7 @@ namespace fe
 		}
 
 		void* dest = GetUniformValuePtr_Internal(dataComponent, targetUniform);
-		std::memcpy((void*)dest, dataPointer, targetUniform.GetSize());
+		std::memcpy((void*)dest, dataPointer, targetUniform.Size() * targetUniform.Count);
 	}
 
 	void MaterialUser::SetUniformValue(const ACMaterialCore& dataComponent, const std::string& name, void* dataPointer) const
@@ -87,30 +91,34 @@ namespace fe
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		for (const auto& uniform : shading_model_observer.GetCoreComponent().Uniforms)
+		for (const auto& uniform : shading_model_observer.GetUniforms().Elements)
 		{
-			auto size = uniform.GetSize();
-			if (name == uniform.m_Name)
+			auto size = uniform.Size();
+			auto count = uniform.Count;
+			if (name.compare(uniform.Name))
 			{
-				std::memcpy((void*)dest, dataPointer, size);
+				std::memcpy((void*)dest, dataPointer, size * count);
 				return;
 			}
-			dest += size;
+			dest += size * count;
 		}
 		
 		FE_CORE_ASSERT(false, "Uniform not found in material!");
 	}
 
-	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const
+	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler) const
 	{
 		FE_PROFILER_FUNC();
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
-		for (size_t i = 0; i < texture_slots.size(); i++)
+		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[program_spec_id];
+		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
+		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
 		{
-			if (&(texture_slots[i]) == &textureSlot)
+			if (&(library.TextureSamplers[texture_sampler_ids[i]]) == &textureSampler)
 				return dataComponent.TextureIDs[i];
 		}
 
@@ -118,16 +126,19 @@ namespace fe
 		return NullAssetID;
 	}
 
-	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const
+	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSamplerName) const
 	{
 		FE_PROFILER_FUNC();
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
-		for (size_t i = 0; i < texture_slots.size(); i++)
+		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[program_spec_id];
+		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
+		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
 		{
-			if (texture_slots[i].m_Name == textureSlotName)
+			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
 				return dataComponent.TextureIDs[i];
 		}
 
@@ -135,16 +146,19 @@ namespace fe
 		return NullAssetID;
 	}
 
-	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const
+	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler, AssetID textureID) const
 	{
 		FE_PROFILER_FUNC();
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
-		for (size_t i = 0; i < texture_slots.size(); i++)
+		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[program_spec_id];
+		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
+		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
 		{
-			if (&(texture_slots[i]) == &textureSlot)
+			if (&(library.TextureSamplers[texture_sampler_ids[i]]) == &textureSampler)
 			{
 				dataComponent.TextureIDs[i] = textureID;
 				return;
@@ -154,17 +168,19 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const std::string& textureSlotName, AssetID textureID) const
+	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const std::string& textureSamplerName, AssetID textureID) const
 	{
 		FE_PROFILER_FUNC();
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		auto slotsIt = shading_model_observer.GetCoreComponent().TextureSlots.begin();
-		const auto& texture_slots = shading_model_observer.GetCoreComponent().TextureSlots;
-		for (size_t i = 0; i < texture_slots.size(); i++)
+		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[program_spec_id];
+		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
+		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
 		{
-			if (texture_slots[i].m_Name == textureSlotName)
+			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
 			{
 				dataComponent.TextureIDs[i] = textureID;
 				return;
@@ -174,7 +190,7 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	void MaterialUser::ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Uniform& uniform) const
+	void MaterialUser::ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform) const
 	{
 		void* dest = GetUniformValuePtr_Internal(dataComponent, uniform);
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
@@ -182,7 +198,7 @@ namespace fe
 		auto offset = (std::byte*)dest - (std::byte*)dataComponent.UniformsData;
 		void* src = (std::byte*)shading_model_observer.GetCoreComponent().DefaultUniformsData + offset;
 
-		std::memcpy(dest, src, uniform.GetSize());
+		std::memcpy(dest, src, uniform.Size() * uniform.Count);
 	}
 
 	bool MaterialUser::SendDataToGPU(GAPIType GAPI) const
@@ -209,7 +225,7 @@ namespace fe
 					if (!texture_user.IsLoaded())
 					{
 						TextureLoader::LoadTexture(texture_user);
-						texture_user.CreateGAPITexture2D(GAPI);
+						texture_user.SendDataToGPU(GAPI);
 						texture_user.UnloadFromCPU();
 
 						texture_user.FlagLoaded();
@@ -224,7 +240,7 @@ namespace fe
 				FE_CORE_ASSERT(!texture_user.IsLoaded(), "Internal Texture already marked Loaded during loading");
 				
 				TextureLoader::LoadTexture(texture_user);
-				texture_user.CreateGAPITexture2D(GAPI);
+				texture_user.SendDataToGPU(GAPI);
 				texture_user.UnloadFromCPU();
 
 				texture_user.FlagLoaded();
@@ -274,18 +290,19 @@ namespace fe
 		emitter << YAML::Key << "Uniforms" << YAML::Value << YAML::BeginMap;
 
 		char* uniform_data_ptr = (char*)core.UniformsData;
-		for (auto& uniform : shading_model_core.Uniforms)
+
+		for (auto& uniform : shading_model_observer.GetUniforms().Elements)
 		{
-			emitter << YAML::Key << uniform.m_Name << YAML::Value << YAML::BeginMap;
-			emitter << YAML::Key << "Type"  << YAML::Value << uniform.m_Type.ToConstCharPtr();
-			emitter << YAML::Key << "Count" << YAML::Value << uniform.m_Count;
+			emitter << YAML::Key << uniform.Name << YAML::Value << YAML::BeginMap;
+			emitter << YAML::Key << "Type"  << YAML::Value << uniform.Type.ToConstCharPtr();
+			emitter << YAML::Key << "Count" << YAML::Value << uniform.Count;
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
 
-			for (size_t i = 0; i < uniform.m_Count; i++)
+			for (size_t i = 0; i < uniform.Count; i++)
 			{
 				float* test = (float*)uniform_data_ptr;
-				EmitGPUDataType(emitter, uniform_data_ptr, uniform.m_Type);
-				uniform_data_ptr += uniform.GetSize();
+				EmitGPUDataType(emitter, uniform_data_ptr, uniform.Type);
+				uniform_data_ptr += uniform.Size();
 			}
 			emitter << YAML::EndSeq;
 			emitter << YAML::EndMap;
@@ -293,9 +310,14 @@ namespace fe
 		emitter << YAML::EndMap;
 
 		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
-		for (size_t i = 0; i < shading_model_core.TextureSlots.size(); ++i)
+
+		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[program_spec_id];
+		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
+		for (size_t i = 0; i < texture_sampler_ids.size(); ++i)
 		{
-			emitter << YAML::Key << shading_model_core.TextureSlots[i].m_Name << YAML::Value;
+			emitter << YAML::Key << library.TextureSamplers[texture_sampler_ids[i]].Name << YAML::Value;
 
 			if (core.TextureIDs[i] != NullAssetID)
 			{
@@ -314,7 +336,7 @@ namespace fe
 				}
 				if (is_internal)
 				{
-					Texture2D::SaveMetadata(emitter, core.TextureIDs[i]);
+					AssetObserver<Texture2D>(core.TextureIDs[i]).SaveMetadata(emitter);
 				}
 			}
 			else
@@ -329,18 +351,18 @@ namespace fe
 		emitter << YAML::EndMap;
 	}
 
-	static void LoadUniforms(const YAML::Node& node, void* uniformsData, const std::vector<Uniform>& uniforms)
+	static void LoadUniforms(const YAML::Node& node, void* uniformsData, const Description::Buffer::Layout& uniforms)
 	{
 		FE_PROFILER_FUNC();
 
 		char* uniform_data_ptr = (char*)uniformsData;
 
-		for (const auto& uniform : uniforms)
+		for (const auto& uniform : uniforms.Elements)
 		{
-			const auto size = uniform.GetSize();
-			const auto& count = uniform.m_Count;
-			const auto& type = uniform.m_Type;
-			const auto& name = uniform.m_Name;
+			const auto size = uniform.Size();
+			const auto& count = uniform.Count;
+			const auto& type = uniform.Type;
+			const auto& name = uniform.Name;
 
 			const auto& uniform_node = node[name];
 
@@ -387,16 +409,18 @@ namespace fe
 		}
 	}
 
-	static void LoadTextures(const YAML::Node& node, std::vector<AssetID>& textureIDs, const std::vector<ShaderTextureSlot>& textureSlots, const std::filesystem::path& parentPath, AssetID master)
+	static void LoadTextures(const YAML::Node& node, std::vector<AssetID>& textureIDs, const std::pmr::vector<uint32_t>& textureSamplerIDs, const std::filesystem::path& parentPath, AssetID master)
 	{
 		FE_PROFILER_FUNC();
 
 		auto& reg = AssetManager::Get().m_Registry;
+		const auto& library = Description::Library::Get();
 
-		for (size_t i = 0; i < textureSlots.size(); ++i)
+		for (size_t i = 0; i < textureSamplerIDs.size(); ++i)
 		{
-			const auto& texture_slot = textureSlots[i];
-			const auto& texture_node = node[texture_slot.m_Name];
+
+			const auto& texture_sampler = library.TextureSamplers[textureSamplerIDs[i]];
+			const auto& texture_node = node[texture_sampler.Name];
 
 			if (!texture_node.IsDefined())
 			{
@@ -450,11 +474,12 @@ namespace fe
 			texture_core.Init();
 
 			auto& spec = texture_core.Specification;
-			texture_core.Usage.FromString(usage_node.as<std::string>());
+			spec.Usage.FromString(usage_node.as<std::string>());
+			spec.ArchetypeID = texture_sampler.TextureArchetypeID;
 			//spec.Components.FromString(components_node.as<std::string>());
-			spec.Format.FromString(format_node.as<std::string>());
-			texture_core.Width = width_node.as<uint32_t>();
-			texture_core.Height = height_node.as<uint32_t>();
+			//spec.Format.FromString(format_node.as<std::string>());
+			spec.Width = width_node.as<uint32_t>();
+			spec.Height = height_node.as<uint32_t>();
 
 			AssetManager::SetSourcePath(texture_id, parentPath / texture_source_filepath_node.as<std::string>());
 
@@ -514,12 +539,17 @@ namespace fe
 		auto& sm_core = sm_observer.GetCoreComponent();
 		auto& core = reg.get<Material::Core>(assetID);
 
-		LoadUniforms(uniforms_node, core.UniformsData, sm_core.Uniforms);
+		auto& library = Description::Library::Get();
+		auto& program_spec = library.ProgramSpecs[sm_core.ProgramSpecificationID];
 
-		auto& texture_slots = sm_core.TextureSlots;
+		auto& uniforms = library.BufferLayouts[program_spec.MainUniformsLayoutID];
+
+		LoadUniforms(uniforms_node, core.UniformsData, uniforms);
+
+		auto& texture_samplers = program_spec.TextureSamplerIDs;
 		auto source_filepath = filepath.parent_path();
 
-		LoadTextures(textures_node, core.TextureIDs, sm_core.TextureSlots, source_filepath, assetID);
+		LoadTextures(textures_node, core.TextureIDs, texture_samplers, source_filepath, assetID);
 
 		return true;
 	}
@@ -576,9 +606,15 @@ namespace fe
 			FE_LOG_CORE_ERROR("Ill defined material");
 			return NullAssetID;
 		}
+
+		auto& library = Description::Library::Get();
+		auto& program_spec = library.ProgramSpecs[sm_core.ProgramSpecificationID];
+
+		auto& uniforms = library.BufferLayouts[program_spec.MainUniformsLayoutID];
 		
-		LoadUniforms(uniforms_node, core.UniformsData, sm_core.Uniforms);
-		LoadTextures(textures_node, core.TextureIDs, sm_core.TextureSlots, parentPath, master);
+		LoadUniforms(uniforms_node, core.UniformsData, uniforms);
+		auto& texture_samplers = program_spec.TextureSamplerIDs;
+		LoadTextures(textures_node, core.TextureIDs, texture_samplers, parentPath, master);
 
 		return asset_id;
 	}
@@ -605,9 +641,12 @@ namespace fe
 
 		std::memcpy(data, sm_core_component.DefaultUniformsData, size);
 
+		auto& library = Description::Library::Get();
+		auto& program_spec = library.ProgramSpecs[sm_core_component.ProgramSpecificationID];
+		
 		auto& textures = core_component.TextureIDs;
 		textures.clear();
-		textures.resize(sm_core_component.TextureSlots.size());
+		textures.resize(program_spec.TextureSamplerIDs.size());
 		for (auto& texture : textures)
 		{
 			texture = NullAssetID;

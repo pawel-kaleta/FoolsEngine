@@ -206,8 +206,9 @@ namespace fe::GeometryImport
 
 		auto& texture_core = texture_handle.Use().GetCoreComponent();
 		auto& spec = texture_core.Specification;
-		spec = TextureLoader::InspectTexture(full_texture_path);
-		texture_core.Usage = usage;
+		FE_CORE_ASSERT(false, "This is broken by renderer redesign");
+		//spec = TextureLoader::InspectTexture(full_texture_path);
+		//texture_core.Usage = usage;
 		AssetManager::SetSourcePath(textureID, filePath.C_Str());
 		materialUser.SetTexture(core, textureSlotName, textureID);
 	}

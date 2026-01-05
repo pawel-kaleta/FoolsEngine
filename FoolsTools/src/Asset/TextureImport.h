@@ -19,6 +19,7 @@ namespace fe
 		struct Data
 		{
 			Description::Texture::Archetype Archetype;
+			uint32_t ArchetypeID;
 		};
 	};
 }

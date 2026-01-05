@@ -20,12 +20,14 @@ namespace fe
         auto w = x.lexically_relative(assets_path);
 
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
-        AssetUser<Texture2D>(assetID).GetCoreComponent().Archetype = importData->Description.Archetype;
+        AssetUser<Texture2D> asset_user(assetID);
+        FE_CORE_ASSERT(false, "This is broken by renderer redesign");
+        asset_user.GetCoreComponent().Specification.ArchetypeID = importData->Description.ArchetypeID;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         YAML::Emitter emitter;
-        Texture2D::SaveMetadata(emitter, assetID);
-        std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Texture2D>(assetID).GetFilepath());
+        asset_user.SaveMetadata(emitter);
+        std::ofstream fout(Project::Get()->m_AssetsPath / asset_user.GetFilepath());
         fout << emitter.c_str();
 
         AssetSerializer::SerializeRegistry();

@@ -46,6 +46,18 @@ namespace fe
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
+		uint32_t GetGAPIResourceID(GAPIType gapi)
+		{
+			switch (gapi)
+			{
+			case GAPIType::OpenGL:
+				return GetResourceComponent<GAPIType::OpenGL>().Texture.OpenGLID;
+			default:
+				FE_CORE_ASSERT(false, "Unrecognised GAPIType");
+			}
+		}
+
+
 	protected:
 		Texture2DObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 	};

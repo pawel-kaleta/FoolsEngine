@@ -68,19 +68,19 @@ namespace fe::Command
 		template<GAPIType::ValueType GAPI>
 		void ClearAttachment(Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, uint32_t value)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(* (Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, value);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::ClearAttachment(* (Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, value);
 		}
 
 		template<GAPIType::ValueType GAPI>
 		void ClearAttachment(Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, float value)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Framebuffer_OpenGL*)&framebuffer, attachmentIndex, value);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::ClearAttachment(* (Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, value);
 		}
 
 		template<GAPIType::ValueType GAPI>
 		void ReadPixel(const Resource::FramebufferBase& framebuffer, uint32_t attachmentIndex, int x, int y, void* destination)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, x, y, destination);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::ReadPixel(*(Resource::Framebuffer_OpenGL*) & framebuffer, attachmentIndex, x, y, destination);
 		}
 
 		template<GAPIType::ValueType GAPI>

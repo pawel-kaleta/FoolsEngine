@@ -15,7 +15,7 @@ namespace fe
 		{
 			std::pmr::string Name;
 			Data::Type Type;
-			uint32_t Count;
+			uint32_t Count; // is count handled everywhere properly?
 			bool Normalized; // TO DO: do we need this?
 
 			Element();

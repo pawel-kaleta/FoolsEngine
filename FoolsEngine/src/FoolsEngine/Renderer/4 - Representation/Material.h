@@ -36,8 +36,8 @@ namespace fe
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
 
-		AssetID GetTextureID(const ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot) const;
-		AssetID GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSlotName) const;
+		AssetID GetTextureID(const ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler) const;
+		AssetID GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSamplerName) const;
 
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -59,8 +59,8 @@ namespace fe
 		void SetUniformValue(const ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
 		void SetUniformValue(const ACMaterialCore& dataComponent, const std::string& name, void* dataPointer) const;
 
-		void SetTexture(ACMaterialCore& dataComponent, const ShaderTextureSlot& textureSlot, AssetID textureID) const;
-		void SetTexture(ACMaterialCore& dataComponent, const std::string& textureSlotName, AssetID textureID) const;
+		void SetTexture(ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler, AssetID textureID) const;
+		void SetTexture(ACMaterialCore& dataComponent, const std::string& textureSamplerName, AssetID textureID) const;
 
 		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform) const;
 

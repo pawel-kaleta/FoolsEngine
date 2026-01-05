@@ -18,11 +18,12 @@ namespace fe::Command
 
 		void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot)
 		{
-			const auto& spec = Description::Library::Get().ProgramSpecs[program.SpecificationID];
+			const auto& lib = Description::Library::Get();
+			const auto& spec = lib.ProgramSpecs[program.SpecificationID];
 
-			for (size_t i = 0; i < spec.TextureSamplers.size(); ++i)
+			for (size_t i = 0; i < spec.TextureSamplerIDs.size(); ++i)
 			{
-				const auto& sampler = spec.TextureSamplers[i];
+				const auto& sampler = lib.TextureSamplers[spec.TextureSamplerIDs[i]];
 
 				if (sampler.Name.compare(samplerName))
 				{

@@ -42,6 +42,8 @@ namespace fe
 			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
 		}
 
+		const Description::Buffer::Layout& GetUniforms();
+
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 

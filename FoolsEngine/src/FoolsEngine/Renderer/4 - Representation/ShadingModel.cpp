@@ -109,6 +109,15 @@ namespace fe
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
 	}
 	
+	const Description::Buffer::Layout& ShadingModelObserver::GetUniforms()
+	{
+		auto& program_spec_id = GetCoreComponent().ProgramSpecificationID;
+		auto& library = Description::Library::Get();
+		auto& uniforms_spec_id = library.ProgramSpecs[program_spec_id].MainUniformsLayoutID;
+		auto& uniforms = library.BufferLayouts[uniforms_spec_id];
+		return uniforms;
+	}
+
 	void ShadingModelObserver::SaveMetadata(YAML::Emitter& emitter)
 	{
 		FE_PROFILER_FUNC();
