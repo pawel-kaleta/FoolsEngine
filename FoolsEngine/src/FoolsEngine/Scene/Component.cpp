@@ -166,7 +166,10 @@ namespace fe
 				}
 			}
 
-			ImGui::Text(sm_core_component.TextureSlots[i].m_Name.c_str());
+			const auto& library = Description::Library::Get();
+			const auto& program_spec = library.ProgramSpecs[sm_core_component.ProgramSpecificationID];
+			const auto& texture_sampler = library.TextureSamplers[program_spec.TextureSamplerIDs[i]];
+			ImGui::Text(texture_sampler.Name.c_str());
 
 			ImGui::PopID();
 		}

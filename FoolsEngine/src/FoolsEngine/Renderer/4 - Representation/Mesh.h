@@ -2,6 +2,7 @@
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
 #include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
+#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
 #include "Material.h"
 
 #include "FoolsEngine\Assets\Asset.h"
@@ -47,6 +48,7 @@ namespace fe
 		// vertex array!
 		Resource::StaticBuffer_OpenGL VertexBuffer;
 		Resource::StaticBuffer_OpenGL IndexBuffer;
+		Resource::VertexArray_OpenGL VertexArray;
 	};
 
 	class MeshObserver : public AssetInterface

@@ -171,6 +171,67 @@ namespace fe
 		}
 	}
 
+	bool ShadingModelUser::LoadBaseAssetMetadata(const char* filepath)
+	{
+		FE_PROFILER_FUNC();
+
+		auto& core = GetCoreComponent();
+
+		YAML::Node node;
+
+		{
+			FE_PROFILER_SCOPE("YAML::LoadFile");
+			node = YAML::LoadFile(filepath);
+		}
+
+		auto uuid_node = node["UUID"];
+		if (uuid_node) // Base Assets don't have UUID in their file
+		{
+			if (GetUUID() != node["UUID"].as<UUID>())
+			{
+				FE_CORE_ASSERT(false, "Not machting UUID in asset and its metafile!");
+				return false;
+			}
+		}
+		else
+		{
+			FE_LOG_CORE_WARN("Missing UUID in ShadingModel file");
+		}
+
+		const auto& program_spec_node = node["Program Specification"];
+		const auto& data_size_node = node["Uniforms Data Size"];
+		const auto& uniforms_node = node["Uniforms"];
+		const auto& vertex_node = node["Vertex Shader"];
+		const auto& fragmnent_node = node["Fragment Shader"];
+
+		if (!program_spec_node ||
+			!data_size_node ||
+			!uniforms_node ||
+			!vertex_node ||
+			!fragmnent_node)
+		{
+			FE_LOG_CORE_ERROR("Ill specified ShadingModel");
+			return false;
+		}
+
+		auto& library = Description::Library::Get();
+		UUID program_uuid = program_spec_node.as<UUID>();
+		uint32_t program_spec_id = library.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::ProgramSpecification>(program_uuid);
+		core.ProgramSpecificationID = program_spec_id;
+
+		core.UniformsDataSize = data_size_node.as<size_t>();
+		core.DefaultUniformsData = operator new(core.UniformsDataSize);
+
+		bool success = LoadUniforms(uniforms_node, core.DefaultUniformsData);
+		if (!success)
+		{
+			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
+			return false;
+		}
+
+		return true;
+	}
+
 	bool ShadingModelUser::LoadMetadata()
 	{
 		FE_PROFILER_FUNC();

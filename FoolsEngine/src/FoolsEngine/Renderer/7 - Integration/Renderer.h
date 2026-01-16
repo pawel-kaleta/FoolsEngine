@@ -55,12 +55,12 @@ namespace fe
 				AssetHandle<Texture2D> FlatBlack;
 			} Textures;
 
-			struct {
-				AssetHandle<Shader> Base2D;
-				AssetHandle<Shader> Base3DOpaque;
-				AssetHandle<Shader> Base3DCutout;
-				AssetHandle<Shader> Base3DBlend;
-			} Shaders;
+			//struct {
+			//	AssetHandle<Shader> Base2D;
+			//	AssetHandle<Shader> Base3DOpaque;
+			//	AssetHandle<Shader> Base3DCutout;
+			//	AssetHandle<Shader> Base3DBlend;
+			//} Shaders;
 
 			struct {
 				AssetHandle<ShadingModel> Base3DOpaque;

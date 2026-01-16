@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Uniform.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderTextureSlot.h"
-#include "FoolsEngine\Renderer\4 - GAPIIsolation\RenderCommands.h"
-#include "FoolsEngine\Renderer\9 - Integration\Renderer.h"
+#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
+#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\Render.h"
+#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
 #include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
 
@@ -38,12 +38,22 @@ namespace fe
 		if (!core.Data)
 			return false;
 
-		buffersComp.VertexBuffer = VertexBuffer::Create(core.GetVertexArrayPtr(), (spec.VertexCount * sizeof(Description::Buffer::Vertex)));
-		buffersComp.VertexBuffer->SetLayout(Description::Buffer::Vertex::GetLayout());
+		buffersComp.VertexBuffer.Usage = Description::Buffer::Usage::Vertex;
+		buffersComp.VertexBuffer.Create();
+		buffersComp.VertexBuffer.Upload(spec.VertexCount * sizeof(Description::Buffer::Vertex), core.GetVertexArrayPtr());
 
-		buffersComp.IndexBuffer = IndexBuffer::Create(core.GetIndexArrayPtr(), spec.IndexCount);
+		buffersComp.IndexBuffer.Usage = Description::Buffer::Usage::Index;
+		buffersComp.IndexBuffer.Create();
+		buffersComp.IndexBuffer.Upload(spec.IndexCount, core.GetIndexArrayPtr());
 
-		buffersComp.VertexBuffer->SetIndexBuffer(buffersComp.IndexBuffer);
+		const auto& library = Description::Library::Get();
+		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCoreComponent().ProgramSpecificationID;
+		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
+
+		buffersComp.VertexArray.LayoutID = vertex_input_layout_id;
+		buffersComp.VertexArray.Create();
+		buffersComp.VertexArray.BindVertexBuffer(buffersComp.VertexBuffer, 0);
+		buffersComp.VertexArray.BindIndexBuffer(buffersComp.IndexBuffer, 0, spec.IndexCount);
 
 		return true;
 	}
@@ -77,48 +87,54 @@ namespace fe
 		auto& material_core = materialObserver.GetCoreComponent();
 		AssetObserver<ShadingModel> shading_model_observer(material_core.ShadingModelID);
 		auto& sm_core = shading_model_observer.GetCoreComponent();
-		AssetUser<Shader> shader_user(sm_core.ShaderID);
 
-		auto GAPI = Renderer::GetActiveGAPIType();
+		const auto& library = Description::Library::Get();
+		const auto& program_spec = library.ProgramSpecs[sm_core.ProgramSpecificationID];
+		const auto uniforms_layout_id = program_spec.MainUniformsLayoutID;
 
+		const auto& uniforms_layout = library.BufferLayouts[uniforms_layout_id];
+
+		auto& program = shading_model_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
 		char* uniform_data_ptr = (char*)material_core.UniformsData;
 
-		for (const auto& uniform : sm_core.Uniforms)
+		for (size_t i=0; i<uniforms_layout.Elements.size(); i++)
 		{
-			shader_user.UploadUniform(
-				GAPI,
-				uniform,
-				(void*)uniform_data_ptr
-			);
+			const auto& uniform = uniforms_layout.Elements[i];
+			
+			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, i, uniform_data_ptr);
 
-			uniform_data_ptr += uniform.m_Count * uniform.GetSize();
+			uniform_data_ptr += uniform.Count * uniform.Size();
 		}
 
 		RenderTextureSlotID renderer_texture_slot = 0;
-		for (size_t i = 0; i < sm_core.TextureSlots.size(); ++i)
+		
+		for (size_t i = 0; i < program_spec.TextureSamplerIDs.size(); ++i)
 		{
 			auto textureID = material_core.TextureIDs[i];
-			auto& texture_slot = sm_core.TextureSlots[i];
+			auto& texture_sampler_id = program_spec.TextureSamplerIDs[i];
+			const auto& texture_sampler = library.TextureSamplers[texture_sampler_id];
 
 			if (textureID != NullAssetID)
 			{
 				AssetUser<Texture2D> texture(textureID);
-				texture.Bind(GAPI, renderer_texture_slot);
+				const auto& texture_resource = texture.GetResourceComponent<GAPIType::OpenGL>().Texture;
+				Command::DeviceState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
 			}
 			else
 			{
-				Renderer::BaseAssets.Textures.Default.Use().Bind(GAPI, renderer_texture_slot);
+				const auto& texture_resource = Renderer::BaseAssets.Textures.Default.Use().GetResourceComponent<GAPIType::OpenGL>().Texture;
+				Command::DeviceState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
 			}
 
-			shader_user.BindTextureSlot(GAPI, texture_slot, renderer_texture_slot);
+			Command::ResourceState::BindTextureSamplerToRendererTextureSlot<GAPIType::OpenGL>((Resource::ProgramBase&)program, texture_sampler.Name, renderer_texture_slot);
 
 			renderer_texture_slot++;
 		}
 
-		auto gpuBuffers = Get<ACGPUBuffers>();
+		const auto& gpuBuffers = Get<ACGPUBuffers>();
 
-		gpuBuffers.VertexBuffer->Bind();
-		RenderCommands::DrawIndexed(gpuBuffers.VertexBuffer.get());
+		Command::DeviceState::BindVertexArray<GAPIType::OpenGL>(gpuBuffers.VertexArray);
+		Command::Render::DrawIndexed<GAPIType::OpenGL>(gpuBuffers.VertexArray);
 	}
 
 	void Mesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)

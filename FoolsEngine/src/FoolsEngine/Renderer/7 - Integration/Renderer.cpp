@@ -90,9 +90,9 @@ namespace fe
 		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DCutout.glsl", BaseAssets.Shaders.Base3DCutout.Use());
 		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
 
-		bool succes_1 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DOpaque.GetID(),	"../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
-		bool succes_2 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DCutout.GetID(),	"../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
-		bool succes_3 = ShadingModel::DeserializeFromFile(BaseAssets.ShadingModels.Base3DBlend.GetID(),		"../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
+		bool succes_1 = BaseAssets.ShadingModels.Base3DOpaque.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
+		bool succes_2 = BaseAssets.ShadingModels.Base3DCutout.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
+		bool succes_3 = BaseAssets.ShadingModels.Base3DBlend.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
 
 		FE_CORE_ASSERT(succes_1, "Failed to load Base3DOpaque shading model");
 		FE_CORE_ASSERT(succes_2, "Failed to load Base3DCutout shading model");

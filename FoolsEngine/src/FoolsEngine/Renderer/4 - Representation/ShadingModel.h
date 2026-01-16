@@ -79,6 +79,7 @@ namespace fe
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
 
+		bool LoadBaseAssetMetadata(const char* filepath);
 		bool LoadMetadata();
 
 		bool SendDataToGPU(GAPIType GAPI) const;

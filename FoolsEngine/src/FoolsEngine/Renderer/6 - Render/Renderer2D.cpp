@@ -124,6 +124,7 @@ namespace fe
 		auto base_shader = m_BaseShader.Use();
 
 		// this needs to use a shading model, not a shader
+
 		base_shader.Bind(GAPI);
 		base_shader.UploadUniform(
 			GAPI,

@@ -56,9 +56,11 @@ namespace fe::Resource
 			glDetachShader(ProgramOpenGLID, shaders_OpenGL[i]); // do we need this?
 		}
 
-		const auto& spec = Description::Library::Get().ProgramSpecs[SpecificationID];
+		const auto& library = Description::Library::Get();
 
-		const auto& uniforms = Description::Library::Get().BufferLayouts[spec.MainUniformsLayoutID];
+		const auto& spec = library.ProgramSpecs[SpecificationID];
+
+		const auto& uniforms = library.BufferLayouts[spec.MainUniformsLayoutID];
 
 		for (const auto& uniform : uniforms.Elements)
 		{
@@ -66,8 +68,9 @@ namespace fe::Resource
 			BindingLocations.MainUniforms.push_back(location);
 		}
 
-		for (const auto& texture_sampler : spec.TextureSamplers)
+		for (const auto& texture_sampler_id : spec.TextureSamplerIDs)
 		{
+			const auto& texture_sampler = library.TextureSamplers[texture_sampler_id];
 			GLint location = glGetUniformLocation(ProgramOpenGLID, texture_sampler.Name.c_str());
 			BindingLocations.TextureSamplers.push_back(location);
 		}

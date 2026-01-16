@@ -69,7 +69,7 @@ namespace fe::Description
 	}
 
 	ShaderInterface::TextureSampler::TextureSampler()
-		: Spec(), Name(& Library::Get().m_Allocator), UUID() { }
+		: TextureArchetypeID(-1), Name(& Library::Get().m_Allocator), UUID() { }
 
 	ShaderInterface::Specification::Specification() :
 		Type(ShaderType::None),
@@ -87,7 +87,7 @@ namespace fe::Description
 		VertexOutputLayoutID(-1),
 		FragmentOutputLayoutID(-1),
 		MainUniformsLayoutID(-1),
-		TextureSamplers(& Library::Get().m_Allocator),
+		TextureSamplerIDs(& Library::Get().m_Allocator),
 		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
 		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
 		VertexOutputCapture(false),
