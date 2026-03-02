@@ -171,6 +171,44 @@ namespace fe
 		}
 	}
 
+	static bool LoadUniforms(const YAML::Node& node, void* uniformsData)
+	{
+		FE_PROFILER_FUNC();
+
+		char* uniform_data_ptr = (char*)uniformsData;
+
+		for (auto& uniform_node : node)
+		{
+			FE_PROFILER_SCOPE("Uniform");
+
+			const auto& name_node = uniform_node["Name"];
+			const auto& type_node = uniform_node["Type"];
+			const auto& count_node = uniform_node["Count"];
+			const auto& value_node = uniform_node["DefaultValue"];
+
+			if (!name_node) return false;
+			if (!type_node) return false;
+			if (!count_node) return false;
+			if (!value_node) return false;
+
+			const auto uniform_name = name_node.as<std::string>();
+			Description::Data::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
+			const auto uniform_count = count_node.as<uint32_t>();
+
+			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
+			auto uniform_size = Description::Data::SizeOfType(uniform_type);
+			for (size_t i = 0; i < uniform_count; ++i)
+			{
+				bool success = LoadGPUDataType(value_node[i], uniform_data_ptr, uniform_type);
+				if (!success) return false;
+
+				uniform_data_ptr += uniform_size;
+			}
+		}
+
+		return true;
+	}
+
 	bool ShadingModelUser::LoadBaseAssetMetadata(const char* filepath)
 	{
 		FE_PROFILER_FUNC();
@@ -289,44 +327,6 @@ namespace fe
 		{
 			FE_LOG_CORE_ERROR("Ill specified uniforms in ShadingModel");
 			return false;
-		}
-
-		return true;
-	}
-
-	static bool LoadUniforms(const YAML::Node& node, void* uniformsData)
-	{
-		FE_PROFILER_FUNC();
-
-		char* uniform_data_ptr = (char*)uniformsData;
-
-		for (auto& uniform_node : node)
-		{
-			FE_PROFILER_SCOPE("Uniform");
-
-			const auto& name_node = uniform_node["Name"];
-			const auto& type_node = uniform_node["Type"];
-			const auto& count_node = uniform_node["Count"];
-			const auto& value_node = uniform_node["DefaultValue"];
-
-			if (!name_node) return false;
-			if (!type_node) return false;
-			if (!count_node) return false;
-			if (!value_node) return false;
-
-			const auto uniform_name = name_node.as<std::string>();
-			Description::Data::Type uniform_type; uniform_type.FromString(type_node.as<std::string>());
-			const auto uniform_count = count_node.as<uint32_t>();
-
-			if (!value_node.IsSequence() || value_node.size() != uniform_count) return false;
-			auto uniform_size = Description::Data::SizeOfType(uniform_type);
-			for (size_t i = 0; i < uniform_count; ++i)
-			{
-				bool success = LoadGPUDataType(value_node[i], uniform_data_ptr, uniform_type);
-				if (!success) return false;
-
-				uniform_data_ptr += uniform_size;
-			}
 		}
 
 		return true;

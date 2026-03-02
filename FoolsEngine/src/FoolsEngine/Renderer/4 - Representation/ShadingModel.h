@@ -44,6 +44,7 @@ namespace fe
 
 		const Description::Buffer::Layout& GetUniforms();
 
+		//consider iterator
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 

@@ -4,7 +4,7 @@
 #include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 #include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
 #include "FoolsEngine\Renderer\3 - Command\Render.h"
 #include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
 #include "FoolsEngine\Renderer\4 - Representation\Texture.h"
@@ -111,7 +111,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Command::DeviceState::SetDepthTest<GAPIType::OpenGL>(true);
+		Command::PipelineState::SetDepthTest<GAPIType::OpenGL>(true);
 
 		auto GAPI = Renderer::GetActiveGAPIType();
 
@@ -295,7 +295,7 @@ namespace fe
 		}
 
 		m_VertexArray->IndexCount = m_Batch.QuadIndexCount;
-		Command::DeviceState::BindVertexArray<GAPIType::OpenGL>(*m_VertexArray);
+		Command::PipelineState::BindVertexArray<GAPIType::OpenGL>(*m_VertexArray);
 
 		Command::Render::DrawIndexed<GAPIType::OpenGL>(*m_VertexArray);
 

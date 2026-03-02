@@ -1,11 +1,11 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
 #include "FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h"
 
 namespace fe::Command
 {
-	namespace DeviceState::OpenGL
+	namespace PipelineState::OpenGL
 	{
 		void BindVertexArray(const Resource::VertexArray_OpenGL& vertexBinding)
 		{

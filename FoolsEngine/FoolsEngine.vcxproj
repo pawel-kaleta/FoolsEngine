@@ -214,7 +214,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\StaticBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexArray.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\DeviceState.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
@@ -312,7 +312,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexArray.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\DeviceState.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\PipelineState.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceState.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />

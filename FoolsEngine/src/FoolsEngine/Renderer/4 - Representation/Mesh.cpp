@@ -2,7 +2,7 @@
 #include "Mesh.h"
 
 #include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
-#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
 #include "FoolsEngine\Renderer\3 - Command\Render.h"
 #include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 
@@ -95,15 +95,12 @@ namespace fe
 		const auto& uniforms_layout = library.BufferLayouts[uniforms_layout_id];
 
 		auto& program = shading_model_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
-		char* uniform_data_ptr = (char*)material_core.UniformsData;
 
-		for (size_t i=0; i<uniforms_layout.Elements.size(); i++)
+		Description::Buffer::UniformBufferIterator uniform_it(&uniforms_layout.Elements, material_core.UniformsData);
+		while (!uniform_it.IsEnd())
 		{
-			const auto& uniform = uniforms_layout.Elements[i];
-			
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, i, uniform_data_ptr);
-
-			uniform_data_ptr += uniform.Count * uniform.Size();
+			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, uniform_it.m_Index, uniform_it.Get());
+			uniform_it.Move();
 		}
 
 		RenderTextureSlotID renderer_texture_slot = 0;
@@ -118,12 +115,12 @@ namespace fe
 			{
 				AssetUser<Texture2D> texture(textureID);
 				const auto& texture_resource = texture.GetResourceComponent<GAPIType::OpenGL>().Texture;
-				Command::DeviceState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
+				Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
 			}
 			else
 			{
 				const auto& texture_resource = Renderer::BaseAssets.Textures.Default.Use().GetResourceComponent<GAPIType::OpenGL>().Texture;
-				Command::DeviceState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
+				Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(renderer_texture_slot, texture_resource);
 			}
 
 			Command::ResourceState::BindTextureSamplerToRendererTextureSlot<GAPIType::OpenGL>((Resource::ProgramBase&)program, texture_sampler.Name, renderer_texture_slot);
@@ -133,7 +130,7 @@ namespace fe
 
 		const auto& gpuBuffers = Get<ACGPUBuffers>();
 
-		Command::DeviceState::BindVertexArray<GAPIType::OpenGL>(gpuBuffers.VertexArray);
+		Command::PipelineState::BindVertexArray<GAPIType::OpenGL>(gpuBuffers.VertexArray);
 		Command::Render::DrawIndexed<GAPIType::OpenGL>(gpuBuffers.VertexArray);
 	}
 

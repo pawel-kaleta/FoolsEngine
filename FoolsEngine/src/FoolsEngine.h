@@ -14,7 +14,7 @@
 #include "FoolsEngine\Platform\InputPolling.h"
 #include "FoolsEngine\Renderer\1 - Description\Framebuffer.h"
 #include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
 #include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
 #include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
 #include "FoolsEngine\Core\Time.h"

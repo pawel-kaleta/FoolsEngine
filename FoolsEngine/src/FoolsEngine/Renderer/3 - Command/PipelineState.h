@@ -8,7 +8,7 @@
 
 namespace fe::Command
 {
-	namespace DeviceState
+	namespace PipelineState
 	{
 		namespace Vulkan
 		{

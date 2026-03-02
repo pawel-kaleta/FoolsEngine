@@ -51,6 +51,26 @@ namespace fe
 			void CalculateOffsetsAndStride();
 		};
 
+		struct UniformBufferIterator
+		{
+			UniformBufferIterator(const std::pmr::vector<Element>* elements, void* data)
+				: m_Elements(elements), m_CurrentData((uint8_t*)data), m_Index(0) { }
+
+			void Move()
+			{
+				const auto& element = m_Elements->at(m_Index);
+				m_CurrentData += element.Size() * element.Count;
+			}
+
+			bool IsEnd() { if (m_Index >= m_Elements->size()) return true; }
+
+			void* Get() { return m_CurrentData; }
+
+			const std::pmr::vector<Element>* m_Elements;
+			uint8_t* m_CurrentData;
+			uint32_t m_Index;
+		};
+
 		struct Vertex {
 			glm::vec3 Position;
 			glm::vec3 Normal;

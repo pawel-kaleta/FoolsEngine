@@ -230,7 +230,7 @@ namespace fe
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
 			int attachment_index = m_Framebuffer->GetColorAttachmentIndex("EntityID");
-			Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
+			Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
 			Command::ResourceState::ReadPixel<GAPIType::OpenGL>(*m_Framebuffer, attachment_index, mouseX, mouseY, &entityID);
 		}
 

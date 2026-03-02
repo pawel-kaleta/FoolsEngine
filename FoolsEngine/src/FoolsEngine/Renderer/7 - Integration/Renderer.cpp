@@ -2,7 +2,7 @@
 #include "Renderer.h"
 
 #include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Command\DeviceState.h"
+#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
 #include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
 #include "FoolsEngine\Renderer\4 - Representation\Texture.h"
 #include "FoolsEngine\Renderer\4 - Representation\Shader.h"
@@ -159,12 +159,12 @@ namespace fe
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		Command::DeviceState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
+		Command::PipelineState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
 	}
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer)
 	{
-		Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(framebuffer);
+		Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(framebuffer);
 
 		int attachment_index = framebuffer.GetColorAttachmentIndex("EntityID");
 		Command::ResourceState::ClearAttachment<GAPIType::OpenGL>(framebuffer, attachment_index, (uint32_t)NullEntityID);

@@ -45,7 +45,6 @@ namespace fe
 
 	struct ACGPUBuffers final : public AssetComponent
 	{
-		// vertex array!
 		Resource::StaticBuffer_OpenGL VertexBuffer;
 		Resource::StaticBuffer_OpenGL IndexBuffer;
 		Resource::VertexArray_OpenGL VertexArray;

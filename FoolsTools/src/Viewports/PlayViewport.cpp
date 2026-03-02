@@ -52,7 +52,7 @@ namespace fe
 		}
 		else
 		{
-			Command::DeviceState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
+			Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
 			Command::ResourceState::Clear<GAPIType::OpenGL>();
 		}
 		
