@@ -55,21 +55,18 @@ namespace fe
 				AssetHandle<Texture2D> FlatBlack;
 			} Textures;
 
-			//struct {
-			//	AssetHandle<Shader> Base2D;
-			//	AssetHandle<Shader> Base3DOpaque;
-			//	AssetHandle<Shader> Base3DCutout;
-			//	AssetHandle<Shader> Base3DBlend;
-			//} Shaders;
-
 			struct {
+				AssetHandle<ShadingModel> Base2DFlat;
 				AssetHandle<ShadingModel> Base3DOpaque;
 				AssetHandle<ShadingModel> Base3DCutout;
 				AssetHandle<ShadingModel> Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				AssetHandle<Material> Default;
+				AssetHandle<Material> Default2DFlat;
+				AssetHandle<Material> DefaultOpaque;
+				AssetHandle<Material> DefaultCutout;
+				AssetHandle<Material> DefaultTranslucent;
 			} Materials;
 		} BaseAssets;
 
@@ -86,6 +83,5 @@ namespace fe
 
 	private:
 		static GAPIType s_ActiveGAPI;
-		//static std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> s_DeviceAPIs;
 	};
 }

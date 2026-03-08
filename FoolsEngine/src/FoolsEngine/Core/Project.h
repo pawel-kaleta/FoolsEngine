@@ -27,20 +27,26 @@ namespace fe
 			} Textures;
 
 			struct {
-				UUID Base2D;
-				UUID Base3DOpaque;
-				UUID Base3DCutout;
-				UUID Base3DBlend;
+				UUID Base2DVertex;
+				UUID Base2DFragment;
+				UUID Base3DVertex;
+				UUID Base3DFragmentBlend;
+				UUID Base3DFragmentCutout;
+				UUID Base3DFragmentOpaque;
 			} Shaders;
 
 			struct {
+				UUID Base2DFlat;
 				UUID Base3DOpaque;
 				UUID Base3DCutout;
 				UUID Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				UUID Default;
+				UUID Default2DFlat;
+				UUID DefaultOpaque;
+				UUID DefaultCutout;
+				UUID DefaultTranslucent;
 			} Materials;
 		} BaseAssets;
 

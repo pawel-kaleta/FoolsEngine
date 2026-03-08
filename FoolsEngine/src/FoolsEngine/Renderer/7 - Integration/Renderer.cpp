@@ -36,7 +36,6 @@ namespace fe
 	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
 	GAPIType Renderer::s_ActiveGAPI = GAPIType::None;
-	//std::unordered_map<GAPIType::ValueType, Scope<DeviceAPI>> Renderer::s_DeviceAPIs;
 
 	void Renderer::Startup()
 	{
@@ -68,42 +67,44 @@ namespace fe
 		MakeHandle("../FoolsEngine/base_assets/textures/FlatWhite.png",			BaseAssets.Textures.FlatWhite,		base_assets.Textures.FlatWhite);
 		MakeHandle("../FoolsEngine/base_assets/textures/FlatBlack.png",			BaseAssets.Textures.FlatBlack,		base_assets.Textures.FlatBlack);
 
-		MakeHandle("../FoolsEngine/base_assets/shaders/Base2DShader.glsl",	BaseAssets.Shaders.Base2D,			base_assets.Shaders.Base2D);
-		MakeHandle("../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl",	BaseAssets.Shaders.Base3DOpaque,	base_assets.Shaders.Base3DOpaque);
-		MakeHandle("../FoolsEngine/base_assets/shaders/Base3DCutout.glsl",	BaseAssets.Shaders.Base3DCutout,	base_assets.Shaders.Base3DCutout);
-		MakeHandle("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",	BaseAssets.Shaders.Base3DBlend,		base_assets.Shaders.Base3DBlend);
-
+		MakeHandle("../FoolsEngine/base_assets/shading_models/Base2DFlat.fesm",		BaseAssets.ShadingModels.Base2DFlat,	base_assets.ShadingModels.Base2DFlat);
 		MakeHandle("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm",	BaseAssets.ShadingModels.Base3DOpaque,	base_assets.ShadingModels.Base3DOpaque);
 		MakeHandle("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm",	BaseAssets.ShadingModels.Base3DCutout,	base_assets.ShadingModels.Base3DCutout);
 		MakeHandle("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm",	BaseAssets.ShadingModels.Base3DBlend,	base_assets.ShadingModels.Base3DBlend);
 
-		MakeHandle("Default.femat", BaseAssets.Materials.Default, base_assets.Materials.Default);
-		// "Default.femat" is a dummy path for name
+		MakeHandle("Default2DFlat.femat",		BaseAssets.Materials.Default2DFlat,			base_assets.Materials.Default2DFlat);
+		MakeHandle("DefaultOpaque.femat",		BaseAssets.Materials.DefaultOpaque,			base_assets.Materials.DefaultOpaque);
+		MakeHandle("DefaultCutout.femat",		BaseAssets.Materials.DefaultCutout,			base_assets.Materials.DefaultCutout);
+		MakeHandle("DefaultTranslucent.femat",	BaseAssets.Materials.DefaultTranslucent,	base_assets.Materials.DefaultTranslucent);
+		// "Default2DFlat.femat" is a dummy path for name
 
 		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/Default_Texture.png", BaseAssets.Textures.Default.Use());
 		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/FlatWhite.png"      , BaseAssets.Textures.FlatWhite.Use());
 		TextureLoader::LoadTexture("../FoolsEngine/base_assets/textures/FlatBlack.png"      , BaseAssets.Textures.FlatBlack.Use());
 
+		FE_CORE_ASSERT(false, "base shaders loading not implemented");
 
-		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl", BaseAssets.Shaders.Base3DOpaque.Use());
-		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DCutout.glsl", BaseAssets.Shaders.Base3DCutout.Use());
-		ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
+		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base2DShader.glsl", BaseAssets.Shaders.Base2D.Use());
+		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DOpaque.glsl", BaseAssets.Shaders.Base3DOpaque.Use());
+		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DCutout.glsl", BaseAssets.Shaders.Base3DCutout.Use());
+		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
 
-		bool succes_1 = BaseAssets.ShadingModels.Base3DOpaque.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
-		bool succes_2 = BaseAssets.ShadingModels.Base3DCutout.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
-		bool succes_3 = BaseAssets.ShadingModels.Base3DBlend.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
+		bool succes_1 = BaseAssets.ShadingModels.Base2DFlat.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base2DFlat.fesm");
+		bool succes_2 = BaseAssets.ShadingModels.Base3DOpaque.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
+		bool succes_3 = BaseAssets.ShadingModels.Base3DCutout.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
+		bool succes_4 = BaseAssets.ShadingModels.Base3DBlend.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
 
-		FE_CORE_ASSERT(succes_1, "Failed to load Base3DOpaque shading model");
-		FE_CORE_ASSERT(succes_2, "Failed to load Base3DCutout shading model");
-		FE_CORE_ASSERT(succes_3, "Failed to load Base3DBlend shading model");
+		FE_CORE_ASSERT(succes_1, "Failed to load Base2DFlat shading model");
+		FE_CORE_ASSERT(succes_2, "Failed to load Base3DOpaque shading model");
+		FE_CORE_ASSERT(succes_3, "Failed to load Base3DCutout shading model");
+		FE_CORE_ASSERT(succes_4, "Failed to load Base3DBlend shading model");
 
-		BaseAssets.Materials.Default.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DOpaque.Observe());
+		BaseAssets.Materials.Default2DFlat.Use().MakeMaterial(BaseAssets.ShadingModels.Base2DFlat.Observe());
+		BaseAssets.Materials.DefaultOpaque.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DOpaque.Observe());
+		BaseAssets.Materials.DefaultCutout.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DCutout.Observe());
+		BaseAssets.Materials.DefaultTranslucent.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DBlend.Observe());
 
 		UploadBaseAssetsToGPU(GetActiveGAPIType());
-
-		Renderer2D::Get().m_BaseShader = BaseAssets.Shaders.Base2D;
-		Renderer2D::Get().m_Batch.Textures[0] = BaseAssets.Textures.FlatWhite.GetID();
 
 		FE_LOG_CORE_INFO("Base Assets acquired");
 	}
@@ -114,11 +115,14 @@ namespace fe
 
 		BaseAssets.Textures.Default.Use().CreateResourceComponent<GAPIType::OpenGL>();
 		BaseAssets.Textures.FlatWhite.Use().CreateResourceComponent<GAPIType::OpenGL>();
+		BaseAssets.Textures.FlatBlack.Use().CreateResourceComponent<GAPIType::OpenGL>();
 
-		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base2D.Use());
-		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DOpaque.Use());
-		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DCutout.Use());
-		ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DBlend.Use());
+		FE_CORE_ASSERT(false, "base shaders compilation and linking for shading models not implemented");
+
+		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base2D.Use());
+		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DOpaque.Use());
+		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DCutout.Use());
+		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DBlend.Use());
 	}
 
 	void Renderer::SetAPI(GAPIType GAPI)

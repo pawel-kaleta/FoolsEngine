@@ -1,38 +1,3 @@
-#type vertex
-#version 450 core
-
-layout (location = 0) in vec3 a_Position;
-layout (location = 1) in vec3 a_Normal;
-layout (location = 2) in vec3 a_Tangent;
-layout (location = 3) in vec2 a_UV0;
-layout (location = 4) in vec2 a_UV1;
-
-// Geometry
-uniform mat4 u_ViewProjection;
-uniform mat4 u_ModelTransform;
-
-out vec2 v_TexCoord;
-out vec3 v_FragPos;
-out mat3 v_TBN;
-
-void main()
-{
-	vec3 T = normalize(vec3(u_ModelTransform * vec4(a_Tangent, 0.0)));
-	vec3 N = normalize(vec3(u_ModelTransform * vec4(a_Normal , 0.0)));
-	T = normalize(T - dot(T, N) * N);
-	vec3 B = cross(N, T);
-	v_TBN = mat3(T, B, N);
-
-	gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
-
-	v_FragPos = vec3(u_ModelTransform * vec4(a_Position, 1.0));
-	
-	v_TexCoord = a_UV0;
-}
-///////////////////////////////////////////////////////////////
-
-
-#type fragment
 #version 450 core
 
 out vec4 o_color;
@@ -51,15 +16,16 @@ uniform sampler2D u_NormalMap;
 uniform sampler2D u_ORMMap;
 
 // Material
-uniform bool u_ORMTexturePacking;
+uniform float u_AlphaCutOff;
+uniform bool  u_ORMTexturePacking;
 
 // Scene
-uniform vec3 u_MainLightDir;
-uniform vec3 u_MainLightColor;
+uniform vec3  u_MainLightDir;
+uniform vec3  u_MainLightColor;
 uniform float u_MainLightIntensity;
-uniform vec3 u_AmbientLight;
+uniform vec3  u_AmbientLight;
 uniform float u_AmbientLightIntensity;
-uniform vec3 u_CameraPosition;
+uniform vec3  u_CameraPosition;
 
 // Editor mouse picking
 uniform uint u_EntityID;
@@ -104,6 +70,11 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 
 void main()
 {
+	vec4 c = texture(u_BaseColorMap, v_TexCoord);
+	
+	if (c.w < u_AlphaCutOff)
+		discard;
+
 	float o;
 	float m;
 	float a;
@@ -124,10 +95,6 @@ void main()
 		m = texture(u_MetalnessMap, v_TexCoord).r;
 	}
 
-	vec3 c = texture(u_BaseColorMap, v_TexCoord).rgb;
-
-	//c *= u_BaseColor;
-
 	vec3 L = normalize(-u_MainLightDir);
 	vec3 V = normalize(u_CameraPosition - v_FragPos);
 	vec3 H = normalize(V + L);
@@ -139,7 +106,7 @@ void main()
 	float cosTheta = max(dot(L, H), 0.0);
 
 	vec3 F0 = vec3(0.04);
-	F0      = mix(F0, c, m);
+	F0      = mix(F0, c.rgb, m);
 	vec3 F	= fresnelSchlick(cosTheta, F0);
 
 	float D = NDF(N, H, a);       
@@ -155,12 +122,11 @@ void main()
 	vec3 kD = (vec3(1.0) - kS) * (1.0 - m);
 
 	float NdotL = max(dot(N, L), 0.0); 
-	vec3 Ld = kD * c / PI;
+	vec3 Ld = kD * c.rgb / PI;
     vec3 Ls = BRDF;
+	vec3 Lo = (Ld + Ls) * u_MainLightColor * u_MainLightIntensity * NdotL;
 
-	vec3 ambient_light = o * u_AmbientLight * u_AmbientLightIntensity * c;
-
-	vec3 Lo = (Ld + Ls) * (u_MainLightColor * u_MainLightIntensity * NdotL);
+	vec3 ambient_light = o * u_AmbientLight * u_AmbientLightIntensity * c.rgb;
 
 	vec3 color = Lo + ambient_light;
 
