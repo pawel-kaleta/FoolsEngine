@@ -33,7 +33,7 @@ namespace fe::Resource
 
 		const auto& layout = Description::Library::Get().BufferLayouts[LayoutID];
 
-		FE_CORE_ASSERT(layout.Type == Description::Buffer::LayoutType::Vertex, "Vertex Array can only have vertex layout");
+		FE_CORE_ASSERT(	layout.Type == Description::Buffer::LayoutType::Vertex, "Vertex Array can only have vertex layout");
 
 		size_t rows;
 		GLint columns;

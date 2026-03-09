@@ -25,37 +25,55 @@ namespace fe
 
 	bool MeshUser::SendDataToGPU(GAPIType GAPI) const
 	{
-		if (AllOf<ACGPUBuffers>())
+		if (AllOf<ACGPUBuffer>())
 		{
 			FE_CORE_ASSERT(false, "Already on GPU");
 			return false;
 		}
 
 		auto& core = Get<ACMeshCore>();
-		auto& spec = core.Specification;
-		auto& buffersComp = Emplace<ACGPUBuffers>();
 
 		if (!core.Data)
 			return false;
 
-		buffersComp.VertexBuffer.Usage = Description::Buffer::Usage::Vertex;
-		buffersComp.VertexBuffer.Create();
-		buffersComp.VertexBuffer.Upload(spec.VertexCount * sizeof(Description::Buffer::Vertex), core.GetVertexArrayPtr());
+		auto& buffer_comp = Emplace<ACGPUBuffer>();
+		auto& vertex_array = Emplace<ACGPUVertexArray>();
 
-		buffersComp.IndexBuffer.Usage = Description::Buffer::Usage::Index;
-		buffersComp.IndexBuffer.Create();
-		buffersComp.IndexBuffer.Upload(spec.IndexCount, core.GetIndexArrayPtr());
+		buffer_comp.Buffer.Usage = Description::Buffer::Usage::IndexVertex;
+		buffer_comp.Buffer.Create();
+		buffer_comp.Buffer.Upload(core.DataSize(), core.Data);
 
 		const auto& library = Description::Library::Get();
 		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCoreComponent().ProgramSpecificationID;
 		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
 
-		buffersComp.VertexArray.LayoutID = vertex_input_layout_id;
-		buffersComp.VertexArray.Create();
-		buffersComp.VertexArray.BindVertexBuffer(buffersComp.VertexBuffer, 0);
-		buffersComp.VertexArray.BindIndexBuffer(buffersComp.IndexBuffer, 0, spec.IndexCount);
+		vertex_array.VertexArray.LayoutID = vertex_input_layout_id;
+		vertex_array.VertexArray.Create();
+		vertex_array.VertexArray.BindIndexBuffer(buffer_comp.Buffer, 0, core.Specification.IndexCount);
+		vertex_array.VertexArray.BindVertexBuffer(buffer_comp.Buffer, core.GetVertexBufferPtr() - core.Data);
 
 		return true;
+	}
+
+	bool MeshUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
+	{
+		auto& core = Get<ACMeshCore>();
+
+		if (!core.Data)
+			return false;
+
+		buffer->Update(offset, core.DataSize(), core.Data);
+
+		auto& vertex_array = Emplace<ACGPUVertexArray>();
+
+		const auto& library = Description::Library::Get();
+		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCoreComponent().ProgramSpecificationID;
+		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
+
+		vertex_array.VertexArray.LayoutID = vertex_input_layout_id;
+		vertex_array.VertexArray.Create();
+		vertex_array.VertexArray.BindIndexBuffer(*buffer, offset, core.Specification.IndexCount);
+		vertex_array.VertexArray.BindVertexBuffer(*buffer, offset + (core.GetVertexBufferPtr() - core.Data));
 	}
 
 	void MeshUser::UnloadFromCPU() const

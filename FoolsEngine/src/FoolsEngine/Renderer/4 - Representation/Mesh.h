@@ -38,15 +38,18 @@ namespace fe
 		void Init();
 		~ACMeshCore();
 
-		uint32_t* GetIndexArrayPtr() { return (uint32_t*)Data; }
-		float* GetVertexArrayPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
+		uint32_t* GetIndexBufferPtr() { return (uint32_t*)Data; }
+		float* GetVertexBufferPtr() { return (float*)((uint32_t*)Data + Specification.IndexCount); }
 		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Description::Buffer::Vertex)); }
 	};
 
-	struct ACGPUBuffers final : public AssetComponent
+	struct ACGPUBuffer final : public AssetComponent
 	{
-		Resource::StaticBuffer_OpenGL VertexBuffer;
-		Resource::StaticBuffer_OpenGL IndexBuffer;
+		Resource::StaticBuffer_OpenGL Buffer;
+	};
+
+	struct ACGPUVertexArray
+	{
 		Resource::VertexArray_OpenGL VertexArray;
 	};
 
@@ -55,7 +58,9 @@ namespace fe
 	public:
 		const ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
 
-		const ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
+		const ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
+
+		const ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -67,11 +72,13 @@ namespace fe
 	public:
 		ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
 
-		ACGPUBuffers* GetBuffers() const { return GetIfExist<ACGPUBuffers>(); }
+		ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
+		ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
 		
 		void Release() const;
 
 		bool SendDataToGPU(GAPIType GAPI) const;
+		bool SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const;
 		void UnloadFromCPU() const;
 
 	protected:

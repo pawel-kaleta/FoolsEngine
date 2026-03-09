@@ -22,4 +22,9 @@ namespace fe::Resource
 		Size = (uint32_t)size;
 		glNamedBufferData(OpenGLID, size, data, GL_STATIC_DRAW);
 	}
+
+	void StaticBuffer_OpenGL::Update(size_t targetOffset, size_t size, const void* data)
+	{
+		glNamedBufferSubData(OpenGLID, targetOffset, size, data);
+	}
 }

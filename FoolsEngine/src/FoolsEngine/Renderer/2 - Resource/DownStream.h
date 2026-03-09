@@ -11,10 +11,7 @@ namespace fe::Resource
 {
 	struct DownStream_OpenGL;
 
-	struct StreamRegion
-	{
-		
-	};
+	struct StreamRegion { };
 
 	struct DownStream
 	{

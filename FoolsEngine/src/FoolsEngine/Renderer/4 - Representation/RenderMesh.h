@@ -18,6 +18,8 @@ namespace fe
 		void Init() {}
 	};
 
+
+
 	class RenderMeshObserver : public AssetInterface
 	{
 	public:

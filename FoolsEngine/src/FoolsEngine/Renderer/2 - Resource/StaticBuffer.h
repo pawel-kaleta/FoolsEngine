@@ -16,7 +16,8 @@ namespace fe::Resource
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
 
-		virtual void Upload(size_t size, const void* data) = 0;
+		virtual void Upload(size_t size, const void* data = nullptr) = 0;
+		virtual void Update(size_t targetOffset, size_t size, const void* data) = 0;
 	};
 
 	struct StaticBuffer_OpenGL final : StaticBufferBase
@@ -26,6 +27,7 @@ namespace fe::Resource
 		virtual void Create() override;
 		virtual void Delete() override;
 
-		virtual void Upload(size_t size, const void* data) override;
+		virtual void Upload(size_t size, const void* data = nullptr) override;
+		virtual void Update(size_t targetOffset, size_t size, const void* data) override;
 	};
 }
