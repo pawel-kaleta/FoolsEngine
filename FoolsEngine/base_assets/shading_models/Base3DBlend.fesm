@@ -1,4 +1,8 @@
-Shader: ../FoolsEngine/base_assets/shaders/Base3DBlend.glsl
+Shaders: 
+    Vertex Shader: ../FoolsEngine/base_assets/shaders/Base3DVertex.glsl
+    Tessellation Shader:
+    Geometry Shader:
+    Fragment Shader: ../FoolsEngine/base_assets/shaders/Base3DFragmentBlend.glsl
 Uniforms Data Size: 36
 Uniforms:
   - Name: u_AlphaCutOff
@@ -6,7 +10,7 @@ Uniforms:
     Count: 1
     DefaultValue:
       - 0.5
-  - Name: u_OMRTexturePacking
+  - Name: u_ORMTexturePacking
     Type: Bool
     Count: 1
     DefaultValue:

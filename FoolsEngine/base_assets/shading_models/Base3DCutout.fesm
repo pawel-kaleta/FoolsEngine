@@ -1,4 +1,8 @@
-Shader: ../FoolsEngine/base_assets/shaders/Base3DCutout.glsl
+Shaders: 
+    Vertex Shader: ../FoolsEngine/base_assets/shaders/Base3DVertex.glsl
+    Tessellation Shader:
+    Geometry Shader:
+    Fragment Shader: ../FoolsEngine/base_assets/shaders/Base3DFragmentCutout.glsl
 Uniforms Data Size: 36
 Uniforms:
   - Name: u_AlphaCutOff

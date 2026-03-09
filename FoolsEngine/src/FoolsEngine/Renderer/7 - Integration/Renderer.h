@@ -56,14 +56,14 @@ namespace fe
 			} Textures;
 
 			struct {
-				AssetHandle<ShadingModel> Base2DFlat;
+				AssetHandle<ShadingModel> Base2DBatchFlat;
 				AssetHandle<ShadingModel> Base3DOpaque;
 				AssetHandle<ShadingModel> Base3DCutout;
 				AssetHandle<ShadingModel> Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				AssetHandle<Material> Default2DFlat;
+				//AssetHandle<Material> Default2DBatchFlat; // do I need this material?
 				AssetHandle<Material> DefaultOpaque;
 				AssetHandle<Material> DefaultCutout;
 				AssetHandle<Material> DefaultTranslucent;
