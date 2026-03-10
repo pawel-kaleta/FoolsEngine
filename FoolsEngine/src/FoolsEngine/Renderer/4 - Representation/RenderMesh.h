@@ -15,16 +15,17 @@ namespace fe
 		AssetID MeshID;
 		AssetID MaterialID;
 
-		void Init() {}
+		size_t DataSize;
+
+		void Init() { MeshID = NullAssetID; MaterialID = NullAssetID; DataSize = 0; }
 	};
-
-
 
 	class RenderMeshObserver : public AssetInterface
 	{
 	public:
 		const ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
 
+		size_t GetDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSize; }
 	protected:
 		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
 	};
@@ -37,6 +38,7 @@ namespace fe
 		void Release() const;
 
 		bool SendDataToGPU(GAPIType GAPI) const;
+		bool SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const;
 		void UnloadFromCPU() const;
 	protected:
 		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }

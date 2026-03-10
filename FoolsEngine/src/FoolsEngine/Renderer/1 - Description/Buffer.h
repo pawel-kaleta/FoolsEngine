@@ -9,7 +9,7 @@ namespace fe
 {
 	namespace Description::Buffer
 	{
-		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Uniform, ShaderStorage);
+		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Material);
 
 		struct Element
 		{

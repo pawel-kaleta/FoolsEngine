@@ -15,12 +15,19 @@ namespace fe
 	void ACMaterialCore::Init()
 	{
 		TextureIDs.clear();
+		ShadingModelID = NullAssetID;
 
 		if (UniformsData) operator delete(UniformsData);
 		UniformsData = nullptr;
-
 		UniformsDataSize = 0;
-		ShadingModelID = NullAssetID;
+
+		if (UniformBufferData) operator delete(UniformBufferData);
+		UniformBufferData = nullptr;
+		UniformBufferDataSize = 0;
+
+		if (ShaderStorageData) operator delete(ShaderStorageData);
+		ShaderStorageData = nullptr;
+		ShaderStorageDataSize = 0;
 	}
 
 	void* MaterialObserver::GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const
@@ -204,9 +211,41 @@ namespace fe
 	bool MaterialUser::SendDataToGPU(GAPIType GAPI) const
 	{
 		auto& core = Get<ACMaterialCore>();
+
+		if (core.ShadingModelID == NullAssetID)
+			return false;
+
+		if (AllOf<ACGPUBuffer>())
+		{
+			FE_CORE_ASSERT(false, "Already on GPU");
+			return false;
+		}
+
+		auto& buffer_comp = Emplace<ACGPUBuffer>();
+		buffer_comp.Buffer.Usage = Description::Buffer::Usage::Material;
+		buffer_comp.Buffer.Create();
+		
+		buffer_comp.Buffer.Upload(GetDataSize(), nullptr);
+		
+		return SendDataToGPUInternal(GAPI, &buffer_comp.Buffer, 0);
+	}
+
+	bool MaterialUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
+	{
+		auto& core = Get<ACMaterialCore>();
 		
 		if (core.ShadingModelID == NullAssetID)
 			return false;
+
+		// devirtualize buffer->
+		if (core.UniformBufferDataSize && core.UniformBufferData)
+			buffer->Update(offset,								core.UniformBufferDataSize, core.UniformBufferData);
+		if (core.ShaderStorageDataSize && core.ShaderStorageData)
+			buffer->Update(offset + core.UniformBufferDataSize,	core.ShaderStorageDataSize, core.ShaderStorageData);
+
+		auto& gpu_data = Emplace<ACGPUData>();
+		gpu_data.Buffer = buffer;
+		gpu_data.Offset = offset;
 
 		for (const auto& texture_ID : core.TextureIDs)
 		{

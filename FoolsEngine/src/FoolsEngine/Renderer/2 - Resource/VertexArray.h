@@ -15,6 +15,7 @@ namespace fe::Resource
 		uint32_t VertexOffset;
 		uint32_t IndexOffset;
 		uint32_t IndexCount;
+		// ptrs to buffers with vertex data and index data?
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;

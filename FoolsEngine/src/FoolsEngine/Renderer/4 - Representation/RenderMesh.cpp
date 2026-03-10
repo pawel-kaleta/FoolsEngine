@@ -19,10 +19,18 @@ namespace fe
 		if (!core.MaterialID || !core.MeshID)
 			return false;
 		
+
+	}
+
+	bool RenderMeshUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
+	{
+		auto& core = Get<ACRenderMeshCore>();
+
+
 		// material loading
 		{
 			AssetUser<Material> material_user(core.MaterialID);
-			
+
 			auto refs = material_user.GetRefCounters();
 			if (refs) // Project asset
 			{
@@ -30,7 +38,7 @@ namespace fe
 				{
 					if (!material_user.IsLoaded())
 					{
-						if (!material_user.SendDataToGPU(GAPI))
+						if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset));
 							return false;
 
 						material_user.FlagLoaded();
@@ -43,8 +51,8 @@ namespace fe
 			{
 				FE_CORE_ASSERT(!material_user.IsLoadedAsDependency(), "Internal Material already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!material_user.IsLoaded(), "Internal Material already marked Loaded during loading");
-				
-				if (!material_user.SendDataToGPU(GAPI))
+
+				if (!material_user.SendDataToGPUInternal(GAPI))
 					return false;
 				material_user.FlagLoaded();
 				material_user.FlagLoadedAsDependency();
@@ -177,13 +185,15 @@ namespace fe
 
 		const auto& mesh_node = node["Mesh"];
 		const auto& material_node = node["Material"];
-		if (!mesh_node ||
-			!material_node)
-			return false;
+		if (!mesh_node || !material_node) return false;
 
 		const auto parent_path = filepath.parent_path();
-		core.MeshID = Mesh::LoadMetadataInternal(mesh_node, assetID, parent_path);
+		core.MeshID		=     Mesh::LoadMetadataInternal(    mesh_node, assetID, parent_path);
 		core.MaterialID = Material::LoadMetadataInternal(material_node, assetID, parent_path);
+
+		AssetObserver<Material> material_observer(core.MaterialID);
+		AssetObserver<Mesh>		    mesh_observer(core.MeshID);
+		core.DataSize = material_observer.GetDataSize() + mesh_observer.GetDataSize();
 
 		return true;
 	}
@@ -229,6 +239,7 @@ namespace fe
 		else
 		{
 			core.MeshID = Mesh::LoadMetadataInternal(mesh_node, master, parentPath);
+			core.DataSize += AssetObserver<Mesh>(core.MeshID).GetDataSize();
 		}
 
 		const auto& material_node = node["Material"];
@@ -240,6 +251,7 @@ namespace fe
 		else
 		{
 			core.MaterialID = Material::LoadMetadataInternal(material_node, master, parentPath);
+			core.DataSize += AssetObserver<Material>(core.MaterialID).GetDataSize();
 		}
 
 		return asset_id;

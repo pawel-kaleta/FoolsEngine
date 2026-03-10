@@ -24,7 +24,6 @@ namespace fe
 		m_LoadingGroups.Unload = m_Registry.group<>(
 			entt::get<ACLoaded>,
 			entt::exclude<
-				ACLoadedAsDependence,
 				ACLoadFlag<AssetLoadingPriority::Minimal>,
 				ACLoadFlag<AssetLoadingPriority::VeryLow>,
 				ACLoadFlag<AssetLoadingPriority::Low>,
@@ -188,6 +187,7 @@ namespace fe
 
 		std::pmr::vector<AssetID> assets_to_load(&sp);
 
+		// this will be separated in future
 		for (auto id : groups.Critical	) assets_to_load.emplace_back(id);
 		for (auto id : groups.VeryHigh	) assets_to_load.emplace_back(id);
 		for (auto id : groups.High		) assets_to_load.emplace_back(id);
@@ -221,7 +221,7 @@ namespace fe
 			case AssetType::Mesh:
 			{
 				auto mesh_user = AssetUser<Mesh>(id);
-				if (!mesh_user.GetBuffers())
+				if (!mesh_user.GetBuffer())
 				{
 					GeometryLoader::LoadMesh(mesh_user);
 					mesh_user.SendDataToGPU(GAPI);

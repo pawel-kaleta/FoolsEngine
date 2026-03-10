@@ -52,7 +52,6 @@ namespace fe
 			decltype(m_Registry.group<>(
 				entt::get<ACLoaded>,
 				entt::exclude<
-					ACLoadedAsDependence,
 					ACLoadFlag<AssetLoadingPriority::Minimal>,
 					ACLoadFlag<AssetLoadingPriority::VeryLow>,
 					ACLoadFlag<AssetLoadingPriority::Low>,

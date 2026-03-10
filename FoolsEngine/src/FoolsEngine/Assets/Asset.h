@@ -1,8 +1,10 @@
 #pragma once
 
-#include "FoolsEngine/Core/UUID.h"
+#include "FoolsEngine\Core\UUID.h"
 
 #include "FoolsEngine\Utils\DeclareEnum.h"
+
+#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
 
 #include <filesystem>
 #include <entt/entity/registry.hpp>
@@ -98,5 +100,10 @@ namespace fe
 		std::atomic<int> LiveHandles[AssetLoadingPriority::Count] = {};
 
 		bool ActiveUser = false; //TODO: make this a shared_mutex
+	};
+
+	struct ACGPUBuffer final : public AssetComponent
+	{
+		Resource::StaticBuffer_OpenGL Buffer;
 	};
 }

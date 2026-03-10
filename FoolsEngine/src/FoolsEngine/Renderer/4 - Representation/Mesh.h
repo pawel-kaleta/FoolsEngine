@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
 #include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
 #include "Material.h"
 
@@ -43,11 +42,6 @@ namespace fe
 		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Description::Buffer::Vertex)); }
 	};
 
-	struct ACGPUBuffer final : public AssetComponent
-	{
-		Resource::StaticBuffer_OpenGL Buffer;
-	};
-
 	struct ACGPUVertexArray
 	{
 		Resource::VertexArray_OpenGL VertexArray;
@@ -61,6 +55,8 @@ namespace fe
 		const ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
 
 		const ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
+
+		size_t GetDataSize() const { return Get<ACMeshCore>().DataSize(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:

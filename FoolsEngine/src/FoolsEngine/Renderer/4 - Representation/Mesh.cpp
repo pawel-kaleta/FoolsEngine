@@ -37,22 +37,11 @@ namespace fe
 			return false;
 
 		auto& buffer_comp = Emplace<ACGPUBuffer>();
-		auto& vertex_array = Emplace<ACGPUVertexArray>();
-
 		buffer_comp.Buffer.Usage = Description::Buffer::Usage::IndexVertex;
 		buffer_comp.Buffer.Create();
 		buffer_comp.Buffer.Upload(core.DataSize(), core.Data);
 
-		const auto& library = Description::Library::Get();
-		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCoreComponent().ProgramSpecificationID;
-		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
-
-		vertex_array.VertexArray.LayoutID = vertex_input_layout_id;
-		vertex_array.VertexArray.Create();
-		vertex_array.VertexArray.BindIndexBuffer(buffer_comp.Buffer, 0, core.Specification.IndexCount);
-		vertex_array.VertexArray.BindVertexBuffer(buffer_comp.Buffer, core.GetVertexBufferPtr() - core.Data);
-
-		return true;
+		return SendDataToGPUInternal(GAPI, &buffer_comp.Buffer, 0);
 	}
 
 	bool MeshUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
@@ -74,6 +63,8 @@ namespace fe
 		vertex_array.VertexArray.Create();
 		vertex_array.VertexArray.BindIndexBuffer(*buffer, offset, core.Specification.IndexCount);
 		vertex_array.VertexArray.BindVertexBuffer(*buffer, offset + (core.GetVertexBufferPtr() - core.Data));
+
+		return true;
 	}
 
 	void MeshUser::UnloadFromCPU() const
@@ -88,15 +79,22 @@ namespace fe
 
 	void MeshUser::Release() const
 	{
-		if (!AllOf<ACGPUBuffers>()) return;
+		FE_CORE_ASSERT(AllOf<ACGPUVertexArray>(), "Mesh not loaded");
 
-		Erase<ACGPUBuffers>();
+		Get<ACGPUVertexArray>().VertexArray.Delete();
+
+		if (!AllOf<ACGPUBuffer>()) return;
+
+		Get<ACGPUBuffer>().Buffer.Delete();
+		Erase<ACGPUBuffer>();
 	}
 
 	// mesh should not draw itself
 	void MeshObserver::Draw(const AssetObserver<Material>& materialObserver) const
 	{
-		if (!AllOf<ACGPUBuffers>())
+		FE_CORE_ASSERT(false, "mesh should not draw itself");
+
+		if (!AllOf<ACGPUBuffer>())
 		{
 			//FE_CORE_ASSERT(false, "Mesh not uploaded to GPU");
 			return;
@@ -146,10 +144,10 @@ namespace fe
 			renderer_texture_slot++;
 		}
 
-		const auto& gpuBuffers = Get<ACGPUBuffers>();
+		const auto& gpuBuffers = Get<ACGPUBuffer>();
 
-		Command::PipelineState::BindVertexArray<GAPIType::OpenGL>(gpuBuffers.VertexArray);
-		Command::Render::DrawIndexed<GAPIType::OpenGL>(gpuBuffers.VertexArray);
+		//Command::PipelineState::BindVertexArray<GAPIType::OpenGL>(gpuBuffers.VertexArray);
+		//Command::Render::DrawIndexed<GAPIType::OpenGL>(gpuBuffers.VertexArray);
 	}
 
 	void Mesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
