@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 namespace fe
 {

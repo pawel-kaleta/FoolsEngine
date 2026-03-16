@@ -1,8 +1,8 @@
 #include "FE_pch.h"
 #include "World.h"
 
-#include "BaseEntity.h"
 #include "Component.h"
+#include "BaseEntity.h"
 
 namespace fe
 {

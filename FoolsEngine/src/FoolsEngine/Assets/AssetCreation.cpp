@@ -1,8 +1,10 @@
 #include "FE_pch.h"
 #include "AssetManager.h"
+
 #include "AssetTypes.h"
-#include "Serialization\AssetsRegistrySerialization.h"
-#include "FoolsEngine\Core\Project.h"
+#include "Serialization/AssetsRegistrySerialization.h"
+
+#include "FoolsEngine/Application/Project.h"
 
 namespace fe
 {

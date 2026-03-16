@@ -1,16 +1,18 @@
 #include "FE_pch.h"
 #ifdef FE_PLATFORM_WINDOWS
 
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+
 #include "FoolsEngine/Platform/FileDialogs.h"
 
-#include <filesystem>
-#include <commdlg.h>
+#include "FoolsEngine/Application/Application.h"
+
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-#include "FoolsEngine/Core/Application.h"
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include <filesystem>
+#include <commdlg.h>
 
 namespace fe
 {

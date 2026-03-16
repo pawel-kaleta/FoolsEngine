@@ -1,9 +1,10 @@
 #include "FE_pch.h"
-#include "FoolsEngine\Platform\InputPolling.h"
+#include "FoolsEngine/Platform/InputPolling.h"
 
-#include "FoolsEngine\Core\Application.h"
-#include <GLFW\glfw3.h>
-#include <glm\glm.hpp>
+#include "FoolsEngine/Application/Application.h"
+
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #ifdef FE_PLATFORM_WINDOWS
 

@@ -1,10 +1,13 @@
 #include "FE_pch.h"
 #include "MeshComponents.h"
 
-#include "FoolsEngine\Scene\BaseEntity.h"
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+
+#include "FoolsEngine/Scene/BaseEntity.h"
+
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
 {

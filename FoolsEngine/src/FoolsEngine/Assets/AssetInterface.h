@@ -3,7 +3,9 @@
 #include "Asset.h"
 #include "AssetManager.h"
 
-#include "FoolsEngine\Debug\Asserts.h"
+#include "FoolsEngine/Application/UUID.h"
+
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 namespace fe
 {
@@ -35,6 +37,8 @@ namespace fe
 		}
 
 		auto GetRefCounters() const { return GetIfExist<ACRefsCounters>(); }
+
+		bool IsMaster() const { return m_ECSHandle.all_of<ACRefsCounters>(); }
 	protected:
 		AssetInterface() = default;
 		AssetInterface(AssetType type, AssetID assetID) :

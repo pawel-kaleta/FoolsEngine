@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm\glm.hpp>
+#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 
-#include "FoolsEngine\Utils\DeclareEnum.h"
+#include <glm/glm.hpp>
 
 namespace fe
 {

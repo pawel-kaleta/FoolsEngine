@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Data.h"
-#include "FoolsEngine\Core\UUID.h"
+
+#include "FoolsEngine/Application/UUID.h"
 
 #include <glm/glm.hpp>
 
@@ -9,7 +10,7 @@ namespace fe
 {
 	namespace Description::Buffer
 	{
-		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Material);
+		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Uniform, ShaderStorage);
 
 		struct Element
 		{

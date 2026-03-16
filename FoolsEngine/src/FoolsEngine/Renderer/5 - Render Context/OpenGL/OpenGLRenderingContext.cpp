@@ -1,10 +1,10 @@
 #include "FE_pch.h"
 #include "OpenGLRenderingContext.h"
 
-#include <map>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <map>
 
 namespace fe
 {

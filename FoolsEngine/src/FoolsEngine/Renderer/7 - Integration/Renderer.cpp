@@ -1,35 +1,34 @@
 #include "FE_pch.h"
 #include "Renderer.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
-#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
-#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
-#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
-#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\4 - Representation\Material.h"
-#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\6 - Render\Renderer2D.h"
-#include "FoolsEngine\Renderer\6 - Render\GeometryRenderer.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
-#include "FoolsEngine\Assets\Loaders\ShaderLoader.h"
+#include "FoolsEngine/Scene/Scene.h"
+#include "FoolsEngine/Scene/Component.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
+#include "FoolsEngine/Scene/Components/MeshComponents.h"
+#include "FoolsEngine/Scene/Components/LightComponents.h"
+#include "FoolsEngine/Scene/Components/RenderingComponents.h"
 
-#include "FoolsEngine\Scene\Scene.h"
-#include "FoolsEngine\Scene\Component.h"
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
+#include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 
-#include "FoolsEngine\Scene\Components\RenderingComponents.h"
-#include "FoolsEngine\Scene\Components\MeshComponents.h"
-#include "FoolsEngine\Scene\Components\LightComponents.h"
+#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
+#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
+#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/4 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/4 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
+#include "FoolsEngine/Renderer/6 - Render/GeometryRenderer.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include <glad/glad.h>
 
-#include <glad\glad.h>
-
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe
 {

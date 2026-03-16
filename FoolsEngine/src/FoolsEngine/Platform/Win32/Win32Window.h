@@ -1,7 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Platform\Window.h"
-#include "FoolsEngine\Renderer\5 - Render Context\RenderingContext.h"
+#include "FoolsEngine/Platform/Window.h"
+
+#include "FoolsEngine/Renderer/5 - Render Context/RenderingContext.h"
 
 #include <GLFW/glfw3.h>
 

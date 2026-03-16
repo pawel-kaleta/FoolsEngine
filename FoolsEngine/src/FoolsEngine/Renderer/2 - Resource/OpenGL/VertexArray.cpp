@@ -2,10 +2,10 @@
 
 #include "Utils.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
 
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe::Resource
 {

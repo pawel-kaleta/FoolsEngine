@@ -3,10 +3,10 @@
 
 #include "RenderMesh.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+#include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
 
 namespace fe
 {
@@ -17,7 +17,7 @@ namespace fe
 		Scratchpad sp;
 
 		AssetObserver<Model> asset_observer(assetID);
-		auto& model_core = asset_observer.GetCoreComponent();
+		auto& model_core = asset_observer.GetCore();
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();

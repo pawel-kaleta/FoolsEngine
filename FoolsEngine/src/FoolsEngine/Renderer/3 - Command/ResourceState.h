@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - Resource\Program.h"
-#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/2 - Resource/Program.h"
+#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
 
 namespace fe::Command
 {
@@ -54,7 +54,7 @@ namespace fe::Command
 		template<GAPIType::ValueType GAPI>
 		void UploadUniform(Resource::ProgramBase& program, size_t uniformIndex, const void* data)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::ProgramBase*) & program, uniformIndex, data);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Program_OpenGL*) & program, uniformIndex, data);
 		}
 
 		template<GAPIType::ValueType GAPI>

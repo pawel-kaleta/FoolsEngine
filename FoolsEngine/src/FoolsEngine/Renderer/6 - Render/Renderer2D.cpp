@@ -1,28 +1,28 @@
 #include "FE_pch.h"
 #include "Renderer2D.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
-#include "FoolsEngine\Renderer\3 - Command\Render.h"
-#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
-#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
-#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
-#include "FoolsEngine\Renderer\4 - Representation\Material.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
+#include "FoolsEngine/Scene/ECS.h"
+#include "FoolsEngine/Scene/Scene.h"
+#include "FoolsEngine/Scene/Component.h"
+#include "FoolsEngine/Scene/Components/2DComponents.h"
+#include "FoolsEngine/Scene/Components/RenderingComponents.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
-#include "FoolsEngine\Scene\ECS.h"
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\Scene.h"
+#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Renderer/3 - Command/Render.h"
+#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
+#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
+#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-#include "FoolsEngine\Scene\Component.h"
-#include "FoolsEngine\Scene\Components\RenderingComponents.h"
-#include "FoolsEngine\Scene\Components\2DComponents.h"
+#include <glad/glad.h>
 
-#include <glad\glad.h>
-
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe
 {
@@ -125,18 +125,18 @@ namespace fe
 
 		// this needs to use a shading model, not a shader
 
-		base_shader.Bind(GAPI);
-		base_shader.UploadUniform(
-			GAPI,
-			Uniform("u_ViewProjection", Description::Data::Type::Mat4),
-			(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
-		);
-		base_shader.BindTextureSlot(
-			GAPI,
-			m_BaseShaderTextureSlot,
-			m_BaseShaderSamplers,
-			ConstLimits::RendererTextureSlotsCount
-		);
+		//base_shader.Bind(GAPI);
+		//base_shader.UploadUniform(
+		//	GAPI,
+		//	Uniform("u_ViewProjection", Description::Data::Type::Mat4),
+		//	(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
+		//);
+		//base_shader.BindTextureSlot(
+		//	GAPI,
+		//	m_BaseShaderTextureSlot,
+		//	m_BaseShaderSamplers,
+		//	ConstLimits::RendererTextureSlotsCount
+		//);
 	}
 
 	void Renderer2D::ClearBatch()
@@ -291,7 +291,9 @@ namespace fe
 
 		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{
-			AssetUser<Texture2D>(m_Batch.Textures[i]).Bind(GAPI, i);
+			auto user = AssetUser<Texture2D>(m_Batch.Textures[i]);
+			auto texture_resource = user.GetResourceComponent<GAPIType::OpenGL>().Texture;
+			Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(i, texture_resource);
 		}
 
 		m_VertexArray->IndexCount = m_Batch.QuadIndexCount;

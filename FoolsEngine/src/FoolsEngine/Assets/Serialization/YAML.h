@@ -1,9 +1,9 @@
 #pragma once
 
-#include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
 
-#include <yaml-cpp\yaml.h>
-#include <glm\glm.hpp>
+#include <yaml-cpp/yaml.h>
+#include <glm/glm.hpp>
 
 namespace fe
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Core\UUID.h"
+#include "FoolsEngine/Application/UUID.h"
 
-#include "FoolsEngine\Scene\SimulationStage.h"
+#include "FoolsEngine/Scene/SimulationStage.h"
 
 namespace YAML
 {

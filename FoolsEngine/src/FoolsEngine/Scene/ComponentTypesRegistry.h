@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseEntity.h"
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "GameplayWorld/Entity.h"
 
 #include <vector>
 

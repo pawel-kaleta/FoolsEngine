@@ -2,10 +2,10 @@
 
 #include "Utils.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
 
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe::Resource
 {
@@ -36,7 +36,7 @@ namespace fe::Resource
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i]);
-					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, Width, Height, GL_FALSE);
+					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, spec.Width, spec.Height, GL_FALSE);
 					glNamedFramebufferTexture(OpenGLID, GL_COLOR_ATTACHMENT0 + i, ColorAttachmentOpenGLIDs[i], 0);
 				}
 			}
@@ -48,7 +48,7 @@ namespace fe::Resource
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					GLuint textureID = ColorAttachmentOpenGLIDs[i];
-					glTextureStorage2D(textureID, 1, internalFormat, Width, Height);
+					glTextureStorage2D(textureID, 1, internalFormat, spec.Width, spec.Height);
 					glTextureParameteri(textureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 					glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 					glTextureParameteri(textureID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -69,13 +69,13 @@ namespace fe::Resource
 
 				glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, 1, &DepthStencilAttachmentOpenGLID);
 				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, spec.Width, spec.Height, GL_FALSE);
 				glNamedFramebufferTexture(OpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, DepthStencilAttachmentOpenGLID, 0);
 			}
 			else
 			{
 				glCreateTextures(GL_TEXTURE_2D, 1, &DepthStencilAttachmentOpenGLID);
-				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, Width, Height);
+				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, spec.Width, spec.Height);
 				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -120,10 +120,12 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
+		FE_LOG_CORE_WARN("Framebuffer resizeing modifies specification!");
 
-		Width = width;
-		Height = height;
+		auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
+
+		spec.Width = width;
+		spec.Height = height;
 
 		bool multisampled = spec.Samples > 1;
 
@@ -139,7 +141,7 @@ namespace fe::Resource
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
 					glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ColorAttachmentOpenGLIDs[i]);
-					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, Width, Height, GL_FALSE);
+					glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, internalFormat, width, height, GL_FALSE);
 				}
 			}
 			else
@@ -147,7 +149,7 @@ namespace fe::Resource
 				for (int i = 0; i < ColorAttachmentOpenGLIDs.size(); ++i)
 				{
 					GLenum internalFormat = Utils::FormatToGLInternalFormat(spec.ColorAttachments[i].Format);
-					glTextureStorage2D(ColorAttachmentOpenGLIDs[i], 1, internalFormat, Width, Height);
+					glTextureStorage2D(ColorAttachmentOpenGLIDs[i], 1, internalFormat, width, height);
 				}
 			}
 		}
@@ -161,11 +163,11 @@ namespace fe::Resource
 				FE_CORE_ASSERTION_BREAK(false, "Multisampled framebuffer not supported yet because multisample textures dont support DSA OpenGL");
 
 				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, DepthStencilAttachmentOpenGLID);
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, Width, Height, GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, spec.Samples, dataFormat, width, height, GL_FALSE);
 			}
 			else
 			{
-				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, Width, Height);
+				glTextureStorage2D(DepthStencilAttachmentOpenGLID, 1, dataFormat, width, height);
 			}
 		}
 	}

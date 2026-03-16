@@ -3,13 +3,14 @@
 #include "ECS.h"
 #include "SimulationStage.h"
 
-#include "FoolsEngine\Core\UUID.h"
-#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\Tags.h"
-#include "FoolsEngine\Math\Transform.h"
+#include "FoolsEngine/Foundation/Math/Transform.h"
 
-#include "FoolsEngine\ImGui\ImGuiLayer.h"
+#include "FoolsEngine/Scene/GameplayWorld/Hierarchy/Tags.h"
 
-#include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+
+#include "FoolsEngine/Application/UUID.h"
+#include "FoolsEngine/Application/ImGui/ImGuiLayer.h"
 
 namespace YAML
 {

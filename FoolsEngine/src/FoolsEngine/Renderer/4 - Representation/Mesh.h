@@ -1,16 +1,17 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
 #include "Material.h"
 
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
-#include "FoolsEngine\Core\Core.h"
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
 
-#include <glm\glm.hpp>
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
+
+#include <glm/glm.hpp>
 
 namespace YAML { class Emitter; class Node; }
 
@@ -42,7 +43,7 @@ namespace fe
 		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Description::Buffer::Vertex)); }
 	};
 
-	struct ACGPUVertexArray
+	struct ACGPUVertexArray final : public AssetComponent
 	{
 		Resource::VertexArray_OpenGL VertexArray;
 	};
@@ -50,13 +51,13 @@ namespace fe
 	class MeshObserver : public AssetInterface
 	{
 	public:
-		const ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
+		const ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
 
 		const ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
 
 		const ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
 
-		size_t GetDataSize() const { return Get<ACMeshCore>().DataSize(); }
+		size_t GetGPUDataSize() const { return Get<ACMeshCore>().DataSize(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -66,7 +67,7 @@ namespace fe
 	class MeshUser : public MeshObserver
 	{
 	public:
-		ACMeshCore& GetCoreComponent() const { return Get<ACMeshCore>(); }
+		ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
 
 		ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
 		ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Assets\AssetAccessors.h"
+#include "FoolsEngine/Assets/AssetAccessors.h"
 
 #include <filesystem>
 

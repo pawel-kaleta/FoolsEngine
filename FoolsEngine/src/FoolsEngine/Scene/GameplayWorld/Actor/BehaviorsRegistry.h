@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Behavior.h"
 #include "Actor.h"
+#include "Behavior.h"
 
 namespace fe
 {

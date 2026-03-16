@@ -147,64 +147,64 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Application.h">
+    <ClInclude Include="src\FoolsEngine\Application\Application.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Core.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Layer.h">
+    <ClInclude Include="src\FoolsEngine\Application\Layer.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\LayerStack.h">
+    <ClInclude Include="src\FoolsEngine\Application\LayerStack.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Project.h">
+    <ClInclude Include="src\FoolsEngine\Application\Project.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\Time.h">
+    <ClInclude Include="src\FoolsEngine\Application\Time.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Core\UUID.h">
+    <ClInclude Include="src\FoolsEngine\Application\UUID.h">
       <Filter>FoolsEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Debug\Asserts.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h">
       <Filter>FoolsEngine\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Debug\Log.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h">
       <Filter>FoolsEngine\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Debug\Profiler.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h">
       <Filter>FoolsEngine\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\ApplicationEvent.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Events\ApplicationEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\Event.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Events\Event.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\KeyEvent.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Events\KeyEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\MainEventDispacher.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Events\MainEventDispacher.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Events\MouseEvent.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Events\MouseEvent.h">
       <Filter>FoolsEngine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiBackend.h">
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\ImGui\ImGuiLayer.h">
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.h">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Math\Math.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h">
       <Filter>FoolsEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Math\Transform.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h">
       <Filter>FoolsEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Memory\Scratchpad.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h">
       <Filter>FoolsEngine\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h">
@@ -390,19 +390,19 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\BitOperations.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\Colors.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\DeclareEnum.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\ForEach.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Utils\Xar.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Xar.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
@@ -445,43 +445,43 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Application.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\LayerStack.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\LayerStack.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Project.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\Project.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\Time.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\Time.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Core\UUID.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\UUID.cpp">
       <Filter>FoolsEngine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Debug\Asserts.cpp">
+    <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Debug\Log.cpp">
+    <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Debug\Profiler.cpp">
+    <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp">
       <Filter>FoolsEngine\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Events\MainEventDispacher.cpp">
+    <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp">
       <Filter>FoolsEngine\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiBackend.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\ImGui\ImGuiLayer.cpp">
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp">
       <Filter>FoolsEngine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Math\Math.cpp">
+    <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp">
       <Filter>FoolsEngine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Memory\Scratchpad.cpp">
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp">
       <Filter>FoolsEngine\Memory</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp">

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Pipeline.h"
-#include "FoolsEngine\Renderer\2 - Resource\Texture.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
-#include "FoolsEngine\Renderer\2 - Resource\FrameBuffer.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/1 - Description/Pipeline.h"
+#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
+#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
+#include "FoolsEngine/Renderer/2 - Resource/FrameBuffer.h"
 
 namespace fe::Command
 {
@@ -44,7 +44,7 @@ namespace fe::Command
 		template<GAPIType::ValueType GAPI>
 		void BindTextureToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::TextureBase& texture)
 		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindVertexArray(*(Resource::Texture_OpenGL*)&texture);
+			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureToRendererTextureSlot(rendererTextureSlot , *(Resource::Texture_OpenGL*)&texture);
 		}
 
 		template<GAPIType::ValueType GAPI>

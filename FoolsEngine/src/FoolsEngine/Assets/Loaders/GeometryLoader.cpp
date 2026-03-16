@@ -1,8 +1,9 @@
 #include "FE_pch.h"
 #include "GeometryLoader.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Application/Project.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -89,7 +90,7 @@ namespace fe
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile((Project::Get()->m_AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
 
-		auto& mesh_core_component = meshUser.GetCoreComponent();
+		auto& mesh_core_component = meshUser.GetCore();
 
 		auto& data_location = mesh_core_component.Data;
 		if (data_location)
@@ -173,14 +174,14 @@ namespace fe
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(direct_path.string().c_str(), s_assimp_load_flags);
 
-		const auto& render_meshes = modelUser.GetCoreComponent().RenderMeshIDs;
+		const auto& render_meshes = modelUser.GetCore().RenderMeshIDs;
 
 		for (size_t i = 0; i < render_meshes.size(); i++)
 		{
-			auto mesh_id = AssetObserver<RenderMesh>(render_meshes[i]).GetCoreComponent().MeshID;
+			auto mesh_id = AssetObserver<RenderMesh>(render_meshes[i]).GetCore().MeshID;
 			AssetUser<Mesh> mesh_user(mesh_id);
 
-			auto& core = mesh_user.GetCoreComponent();
+			auto& core = mesh_user.GetCore();
 
 			auto& data_location = core.Data;
 			if (data_location)

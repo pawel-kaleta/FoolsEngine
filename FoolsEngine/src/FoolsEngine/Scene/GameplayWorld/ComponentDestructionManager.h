@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Scene\ECS.h"
+#include "FoolsEngine/Scene/ECS.h"
 
 namespace fe
 {

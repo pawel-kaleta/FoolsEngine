@@ -1,11 +1,12 @@
 #include "FE_pch.h"
 #include "ShadingModel.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "Shader.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+#include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
 
 namespace fe
 {
@@ -15,9 +16,12 @@ namespace fe
 		DefaultUniformsData = nullptr;
 
 		UniformsDataSize = 0;
-		VertexShaderID = NullAssetID;
-		FragmentShaderID = NullAssetID;
 		ProgramSpecificationID = -1;
+
+		ShaderIDs.Vertex = NullAssetID;
+		ShaderIDs.Tessellation = NullAssetID;
+		ShaderIDs.Geometry = NullAssetID;
+		ShaderIDs.Fragment = NullAssetID;
 	}
 
 	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const
@@ -111,7 +115,7 @@ namespace fe
 	
 	const Description::Buffer::Layout& ShadingModelObserver::GetUniforms()
 	{
-		auto& program_spec_id = GetCoreComponent().ProgramSpecificationID;
+		auto& program_spec_id = GetCore().ProgramSpecificationID;
 		auto& library = Description::Library::Get();
 		auto& uniforms_spec_id = library.ProgramSpecs[program_spec_id].MainUniformsLayoutID;
 		auto& uniforms = library.BufferLayouts[uniforms_spec_id];
@@ -122,7 +126,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& core = GetCoreComponent();
+		auto& core = GetCore();
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[core.ProgramSpecificationID];
 
@@ -151,7 +155,7 @@ namespace fe
 
 		emitter << YAML::Key << "Vertex Shader" << YAML::Value;
 		{
-			AssetObserver<Shader> vertex_observer(core.VertexShaderID);
+			AssetObserver<Shader> vertex_observer(core.ShaderIDs.Vertex);
 			bool is_internal = vertex_observer.AllOf<ACMasterAsset>();
 
 			if (!is_internal)
@@ -161,7 +165,7 @@ namespace fe
 		}
 		emitter << YAML::Key << "Fragment Shader" << YAML::Value;
 		{
-			AssetObserver<Shader> fragment_observer(core.FragmentShaderID);
+			AssetObserver<Shader> fragment_observer(core.ShaderIDs.Fragment);
 			bool is_internal = fragment_observer.AllOf<ACMasterAsset>();
 
 			if (!is_internal)
@@ -213,7 +217,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& core = GetCoreComponent();
+		auto& core = GetCore();
 
 		YAML::Node node;
 
@@ -275,7 +279,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		const auto& filepath = GetFilepath();
-		auto& core = GetCoreComponent();
+		auto& core = GetCore();
 
 		YAML::Node node;
 
@@ -336,7 +340,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& core = GetCoreComponent();
+		auto& core = GetCore();
 
 
 		switch (GAPI.Value)
@@ -348,7 +352,12 @@ namespace fe
 		case GAPIType::OpenGL:
 			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Program;
 			resource.SpecificationID = core.ProgramSpecificationID;
-			resource.Shaders = { core.VertexShaderID, core.FragmentShaderID };
+
+			if (core.ShaderIDs.Vertex)			resource.Shaders.push_back(core.ShaderIDs.Vertex);
+			if (core.ShaderIDs.Tessellation)	resource.Shaders.push_back(core.ShaderIDs.Tessellation);
+			if (core.ShaderIDs.Geometry)		resource.Shaders.push_back(core.ShaderIDs.Geometry);
+			if (core.ShaderIDs.Fragment)		resource.Shaders.push_back(core.ShaderIDs.Fragment);
+
 			resource.Create();
 			break;
 		}

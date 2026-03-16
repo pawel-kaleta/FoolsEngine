@@ -1,9 +1,9 @@
 #include "FE_pch.h"
 #include "LoadersRegistry.h"
 
+#include "ShaderLoader.h"
 #include "TextureLoader.h"
 #include "GeometryLoader.h"
-#include "ShaderLoader.h"
 
 namespace fe
 {

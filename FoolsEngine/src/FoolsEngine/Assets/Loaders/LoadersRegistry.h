@@ -1,7 +1,8 @@
 #pragma once
 
 #include "LoaderType.h"
-#include "FoolsEngine\Assets\AssetTypes.h"
+
+#include "FoolsEngine/Assets/AssetTypes.h"
 
 namespace fe
 {

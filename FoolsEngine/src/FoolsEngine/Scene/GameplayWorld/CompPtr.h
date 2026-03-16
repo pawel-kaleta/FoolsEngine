@@ -1,7 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Core\Application.h"
 #include "Entity.h"
+
+#include "FoolsEngine/Application/Application.h"
 
 namespace fe
 {

@@ -2,10 +2,11 @@
 
 #include "Utils.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Texture.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
 
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/exponential.hpp>
 
 namespace fe::Resource
 {
@@ -68,7 +69,7 @@ namespace fe::Resource
 			}
 		}
 
-		auto levels = glm::log2(glm::max(instance.Width, instance.Height));
+		auto levels = (uint32_t)glm::log2((float)glm::max(instance.Width, instance.Height));
 		auto internal_format = Utils::FormatToGLInternalFormat(spec.Format);
 
 		glTextureStorage2D(OpenGLID, levels, internal_format, instance.Width, instance.Height);

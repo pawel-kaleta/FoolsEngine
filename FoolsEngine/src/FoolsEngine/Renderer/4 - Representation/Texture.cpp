@@ -1,18 +1,18 @@
 #include "FE_pch.h"
 #include "Texture.h"
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Assets\AssetAccessors.h"
-#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetAccessors.h"
+#include "FoolsEngine/Assets/Loaders/TextureLoader.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
 {

@@ -2,16 +2,15 @@
 #include "AssetManager.h"
 
 #include "AssetHandle.h"
+#include "Loaders/ShaderLoader.h"
+#include "Loaders/TextureLoader.h"
+#include "Loaders/GeometryLoader.h"
+#include "Serialization/YAML.h"
 
-#include "FoolsEngine\Renderer\4 - Representation\Material.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
-#include "Loaders\TextureLoader.h"
-#include "Loaders\ShaderLoader.h"
-#include "Loaders\GeometryLoader.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine\Memory\Scratchpad.h"
-
-#include "Serialization\YAML.h"
+#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
 {

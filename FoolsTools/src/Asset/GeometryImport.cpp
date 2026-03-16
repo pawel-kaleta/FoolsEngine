@@ -288,7 +288,7 @@ namespace fe::GeometryImport
 
 		{
 			AssetUser<Model> model_user(assetID);
-			auto& model_core = model_user.GetCoreComponent();
+			auto& model_core = model_user.GetCore();
 
 			Scratchpad sp;
 			std::pmr::vector<AssetID> material_IDs(&sp);
@@ -336,7 +336,7 @@ namespace fe::GeometryImport
 				AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
 
 				auto mesh_user = AssetUser<Mesh>(mesh_ID);
-				auto& mesh_core = mesh_user.GetCoreComponent();
+				auto& mesh_core = mesh_user.GetCore();
 
 				mesh_core.Specification.VertexCount = scene->mMeshes[i]->mNumVertices;
 				mesh_core.Specification.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
@@ -345,7 +345,7 @@ namespace fe::GeometryImport
 				model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
 
 				auto render_mesh_user = AssetUser<RenderMesh>(render_mesh_ID);
-				auto& render_mesh_core = render_mesh_user.GetCoreComponent();
+				auto& render_mesh_core = render_mesh_user.GetCore();
 
 				auto& material_index = scene->mMeshes[i]->mMaterialIndex;
 				auto& material_ID = material_IDs[material_index];
@@ -382,7 +382,7 @@ namespace fe::GeometryImport
 			auto mesh_user = AssetUser<Mesh>(assetID);
 
 			AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(y));
-			auto& core = mesh_user.GetCoreComponent();
+			auto& core = mesh_user.GetCore();
 			auto& specification = core.Specification;
 
 			for (size_t i = 0; i < scene->mNumMeshes; i++)

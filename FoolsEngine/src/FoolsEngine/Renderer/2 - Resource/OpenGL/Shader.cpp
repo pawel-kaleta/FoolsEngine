@@ -2,10 +2,9 @@
 
 #include "Utils.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Shader.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/Shader.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
 namespace fe::Resource
 {

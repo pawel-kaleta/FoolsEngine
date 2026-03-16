@@ -1,8 +1,8 @@
 #pragma once
 
 #include "System.h"
-#include "FoolsEngine\Scene\SimulationStage.h"
 
+#include "FoolsEngine/Scene/SimulationStage.h"
 
 namespace fe
 {

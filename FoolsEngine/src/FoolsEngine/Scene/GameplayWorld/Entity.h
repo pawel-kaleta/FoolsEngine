@@ -1,12 +1,11 @@
 #pragma once
 
-#include "FoolsEngine\Scene\BaseEntity.h"
-
-#include "Hierarchy\TagsHandle.h"
-#include "Hierarchy\TransformHandle.h"
-#include "Hierarchy\ChildrenList.h"
-
 #include "GameplayWorld.h"
+#include "Hierarchy/TagsHandle.h"
+#include "Hierarchy/TransformHandle.h"
+#include "Hierarchy/ChildrenList.h"
+
+#include "FoolsEngine/Scene/BaseEntity.h"
 
 namespace fe
 {

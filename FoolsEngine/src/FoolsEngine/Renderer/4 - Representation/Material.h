@@ -1,14 +1,14 @@
 #pragma once
 
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
-
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
-#include "ShadingModel.h"
 #include "Texture.h"
+#include "ShadingModel.h"
 
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -35,11 +35,6 @@ namespace fe
 		~ACMaterialCore() { if (UniformsData) operator delete(UniformsData); }
 	};
 
-	struct ACGPUBuffer final : public AssetComponent
-	{
-		Resource::StaticBuffer_OpenGL Buffer;
-	};
-
 	struct ACGPUData final : public AssetComponent
 	{
 		Resource::StaticBufferBase* Buffer;
@@ -49,7 +44,7 @@ namespace fe
 	class MaterialObserver : public AssetInterface
 	{
 	public:
-		const ACMaterialCore& GetCoreComponent() const { return Get<ACMaterialCore>(); }
+		const ACMaterialCore& GetCore() const { return Get<ACMaterialCore>(); }
 
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformValuePtr_Internal(dataComponent, targetUniform); };
 		const void* GetUniformValuePtr(const ACMaterialCore& dataComponent, const std::string& name) const { return GetUniformValuePtr_Internal(dataComponent, name); };
@@ -57,7 +52,8 @@ namespace fe
 		AssetID GetTextureID(const ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler) const;
 		AssetID GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSamplerName) const;
 
-		size_t GetDataSize() const { const auto& core = Get<ACMaterialCore>(); return core.UniformBufferDataSize + core.ShaderStorageDataSize;}
+		size_t GetCPUDataSize() const;
+		size_t GetGPUDataSize() const { const auto& core = Get<ACMaterialCore>(); return core.UniformBufferDataSize + core.ShaderStorageDataSize; }
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 

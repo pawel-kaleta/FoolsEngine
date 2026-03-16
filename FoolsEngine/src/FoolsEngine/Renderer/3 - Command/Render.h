@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - Resource\Texture.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
+#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
 
 namespace fe::Command
 {

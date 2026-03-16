@@ -1,11 +1,12 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\2 - Resource\Program.h"
-#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
-#include "FoolsEngine\Assets\AssetAccessors.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine/Assets/AssetAccessors.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/Program.h"
+#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
 
 namespace fe::Resource
 {

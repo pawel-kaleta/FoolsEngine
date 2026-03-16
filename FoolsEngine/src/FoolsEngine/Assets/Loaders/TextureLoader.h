@@ -1,9 +1,11 @@
 #pragma once
 
-#include "FoolsEngine\Assets\Loaders\LoaderType.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Application/Project.h"
+
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/Loaders/LoaderType.h"
+
+#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
 
 #include <string>
 

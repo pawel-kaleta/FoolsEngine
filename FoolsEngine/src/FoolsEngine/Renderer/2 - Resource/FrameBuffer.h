@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\Framebuffer.h"
+#include "FoolsEngine/Renderer/1 - Description/Framebuffer.h"
 
-#include <glad\glad.h>
+#include <glad/glad.h>
 
 namespace fe::Resource
 {

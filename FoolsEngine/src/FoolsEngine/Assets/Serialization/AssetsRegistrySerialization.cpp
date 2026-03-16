@@ -1,16 +1,16 @@
 #include "FE_pch.h"
 #include "AssetsRegistrySerialization.h"
+
 #include "YAML.h"
 
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetManager.h"
-#include "FoolsEngine\Assets\AssetTypes.h"
-#include "FoolsEngine\Assets\AssetTypesRegistry.h"
+#include "FoolsEngine/Foundation/Utils/Xar.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Utils\Xar.h"
-
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetTypes.h"
+#include "FoolsEngine/Assets/AssetManager.h"
+#include "FoolsEngine/Assets/AssetTypesRegistry.h"
 
 #include <string>
 

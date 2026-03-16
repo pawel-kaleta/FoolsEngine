@@ -2,14 +2,14 @@
 #include "SceneSerializer.h"
 
 #include "YAML.h"
-
-#include "FoolsEngine\Scene\GameplayWorld\Actor\Actor.h"
-#include "FoolsEngine\Scene\Component.h"
-#include "FoolsEngine\Scene\ComponentTypesRegistry.h"
-#include "FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h"
 #include "AssetsRegistrySerialization.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Application/Project.h"
+
+#include "FoolsEngine/Scene/Component.h"
+#include "FoolsEngine/Scene/ComponentTypesRegistry.h"
+#include "FoolsEngine/Scene/GameplayWorld/Actor/Actor.h"
+#include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
 
 #include <memory_resource>
 #include <fstream>

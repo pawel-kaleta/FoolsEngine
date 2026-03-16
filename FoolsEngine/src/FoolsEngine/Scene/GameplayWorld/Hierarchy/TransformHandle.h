@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Scene\Component.h"
+#include "FoolsEngine/Scene/Component.h"
 
 #include <queue>
 

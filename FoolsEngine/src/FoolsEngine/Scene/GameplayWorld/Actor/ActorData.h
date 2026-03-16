@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Scene\ECS.h"
-#include "FoolsEngine\Scene\SimulationStage.h"
-#include "FoolsEngine\Scene\Component.h"
-
 #include "Behavior.h"
+
+#include "FoolsEngine/Scene/ECS.h"
+#include "FoolsEngine/Scene/Component.h"
+#include "FoolsEngine/Scene/SimulationStage.h"
 
 namespace fe
 {

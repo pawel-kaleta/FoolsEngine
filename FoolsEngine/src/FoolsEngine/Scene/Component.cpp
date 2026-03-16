@@ -2,20 +2,21 @@
 #include "Component.h"
 
 #include "BaseEntity.h"
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
+#include "GameplayWorld/Entity.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
-#include "FoolsEngine\Renderer\4 - Representation\Material.h"
-#include "FoolsEngine\Renderer\4 - Representation\Mesh.h"
-#include "FoolsEngine\Renderer\4 - Representation\RenderMesh.h"
-#include "FoolsEngine\Renderer\4 - Representation\Model.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Assets\Loaders\LoadersRegistry.h"
-#include "FoolsEngine\Memory\Scratchpad.h"
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+#include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/4 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/4 - Representation/Model.h"
+#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/4 - Representation/RenderMesh.h"
 
 #include <type_traits>
 
@@ -92,7 +93,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> shading_model_observer(shading_model_current);
 
-		auto& sm_core_component = shading_model_observer.GetCoreComponent();
+		auto& sm_core_component = shading_model_observer.GetCore();
 		auto& material_core_component = materialUser.GetCoreComponent();
 
 		const auto& lib = Description::Library::Get();

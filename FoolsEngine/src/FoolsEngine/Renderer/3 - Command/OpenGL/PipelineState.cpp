@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
-#include "FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h"
+#include "FoolsEngine/Renderer/2 - Resource/OpenGL/Utils.h"
+#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
 
 namespace fe::Command
 {

@@ -1,16 +1,16 @@
 #include "FE_pch.h"
 #include "GeometryRenderer.h"
 
-#include "FoolsEngine\Scene\Scene.h"
-#include "FoolsEngine\Assets\AssetAccessors.h"
+#include "FoolsEngine/Scene/Scene.h"
+#include "FoolsEngine/Scene/Components/MeshComponents.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
+#include "FoolsEngine/Assets/AssetAccessors.h"
 
-#include "FoolsEngine\Scene\Components\MeshComponents.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe
 {
@@ -60,7 +60,7 @@ namespace fe
 			glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * component_CRenderMeshView.Offset.GetMatrix();
 			void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
-			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCoreComponent().ShadingModelID);
+			AssetObserver<ShadingModel> shading_model_observer(material_observer.GetCore().ShadingModelID);
 
 			const auto& lib = Description::Library::Get();
 			{
@@ -143,14 +143,14 @@ namespace fe
 				glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
 				void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
-				auto& model_core = model_observer.GetCoreComponent();
+				auto& model_core = model_observer.GetCore();
 				for (auto rendermeshID : model_core.RenderMeshIDs)
 				{
 					AssetObserver<RenderMesh> rendermesh_observer(rendermeshID);
-					auto& rendermesh_core = rendermesh_observer.GetCoreComponent();
+					auto& rendermesh_core = rendermesh_observer.GetCore();
 					AssetObserver<Material> material_observer(rendermesh_core.MaterialID);
 
-					if (material_observer.GetCoreComponent().ShadingModelID == cutout_sm_observer.GetID())
+					if (material_observer.GetCore().ShadingModelID == cutout_sm_observer.GetID())
 					{
 						FE_PROFILER_SCOPE("Mesh");
 
@@ -198,14 +198,14 @@ namespace fe
 				glm::mat4 model_transform = component_CTransform.GetRef().GetMatrix() * comp_CModel.Offset.GetMatrix();
 				void* model_transform_ptr = (void*)glm::value_ptr(model_transform);
 
-				auto& model_core = model_observer.GetCoreComponent();
+				auto& model_core = model_observer.GetCore();
 				for (auto rendermeshID : model_core.RenderMeshIDs)
 				{
 					AssetObserver<RenderMesh> rendermesh_observer(rendermeshID);
-					auto& rendermesh_core = rendermesh_observer.GetCoreComponent();
+					auto& rendermesh_core = rendermesh_observer.GetCore();
 					AssetObserver<Material> material_observer(rendermesh_core.MaterialID);
 
-					if (material_observer.GetCoreComponent().ShadingModelID == opaque_sm_observer.GetID())
+					if (material_observer.GetCore().ShadingModelID == opaque_sm_observer.GetID())
 					{
 						FE_PROFILER_SCOPE("Mesh");
 

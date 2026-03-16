@@ -2,10 +2,11 @@
 
 #include "Shader.h"
 
-#include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
-#include "FoolsEngine\Assets\Asset.h"
+#include "FoolsEngine/Assets/Asset.h"
 
-#include <glad\glad.h>
+#include "FoolsEngine/Renderer/1 - Description/ShaderInterface.h"
+
+#include <glad/glad.h>
 
 namespace fe::Resource
 {

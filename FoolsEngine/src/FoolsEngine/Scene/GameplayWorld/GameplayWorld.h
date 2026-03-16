@@ -1,14 +1,13 @@
 #pragma once
 
-#include "FoolsEngine\Scene\World.h"
-
-#include "Hierarchy\HierarchyDirector.h"
 #include "ComponentDestructionManager.h"
-#include "System\SystemsDirector.h"
+#include "System/SystemsDirector.h"
+#include "Hierarchy/HierarchyDirector.h"
 
-#include "FoolsEngine\Scene\SimulationStage.h"
+#include "FoolsEngine/Scene/World.h"
+#include "FoolsEngine/Scene/SimulationStage.h"
 
-#include "FoolsEngine\Renderer\4 - Representation\Lights.h"
+#include "FoolsEngine/Renderer/4 - Representation/Lights.h"
 
 namespace fe
 {

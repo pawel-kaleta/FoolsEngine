@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Scene\SimulationStage.h"
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
+#include "FoolsEngine/Scene/SimulationStage.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
+#include "FoolsEngine/Scene/GameplayWorld/CompPtr.h"
 
 namespace YAML
 {

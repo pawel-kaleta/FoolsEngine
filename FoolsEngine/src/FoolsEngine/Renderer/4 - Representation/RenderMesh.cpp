@@ -2,13 +2,14 @@
 #include "RenderMesh.h"
 
 #include "Mesh.h"
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\4 - Representation\Material.h"
 
-#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
-#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+#include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
+
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/4 - Representation/Material.h"
 
 namespace fe
 {
@@ -18,8 +19,6 @@ namespace fe
 
 		if (!core.MaterialID || !core.MeshID)
 			return false;
-		
-
 	}
 
 	bool RenderMeshUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
@@ -38,7 +37,7 @@ namespace fe
 				{
 					if (!material_user.IsLoaded())
 					{
-						if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset));
+						if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset))
 							return false;
 
 						material_user.FlagLoaded();
@@ -52,7 +51,7 @@ namespace fe
 				FE_CORE_ASSERT(!material_user.IsLoadedAsDependency(), "Internal Material already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!material_user.IsLoaded(), "Internal Material already marked Loaded during loading");
 
-				if (!material_user.SendDataToGPUInternal(GAPI))
+				if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset))
 					return false;
 				material_user.FlagLoaded();
 				material_user.FlagLoadedAsDependency();
@@ -76,7 +75,6 @@ namespace fe
 
 						mesh_user.FlagLoaded();
 					}
-
 					mesh_user.FlagLoadedAsDependency();
 				}
 			}
@@ -135,7 +133,7 @@ namespace fe
 	void RenderMesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto asset_observer = AssetObserver<RenderMesh>(assetID);
-		auto& core = asset_observer.GetCoreComponent();
+		auto& core = asset_observer.GetCore();
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
@@ -193,7 +191,7 @@ namespace fe
 
 		AssetObserver<Material> material_observer(core.MaterialID);
 		AssetObserver<Mesh>		    mesh_observer(core.MeshID);
-		core.DataSize = material_observer.GetDataSize() + mesh_observer.GetDataSize();
+		//core.DataSize = material_observer.GetDataSize() + mesh_observer.GetDataSize();
 
 		return true;
 	}
@@ -239,7 +237,7 @@ namespace fe
 		else
 		{
 			core.MeshID = Mesh::LoadMetadataInternal(mesh_node, master, parentPath);
-			core.DataSize += AssetObserver<Mesh>(core.MeshID).GetDataSize();
+			//core.DataSize += AssetObserver<Mesh>(core.MeshID).GetDataSize();
 		}
 
 		const auto& material_node = node["Material"];
@@ -251,7 +249,7 @@ namespace fe
 		else
 		{
 			core.MaterialID = Material::LoadMetadataInternal(material_node, master, parentPath);
-			core.DataSize += AssetObserver<Material>(core.MaterialID).GetDataSize();
+			//core.DataSize += AssetObserver<Material>(core.MaterialID).GetDataSize();
 		}
 
 		return asset_id;

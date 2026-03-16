@@ -1,8 +1,8 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\Framebuffer.h"
-#include "FoolsEngine\Renderer\2 - Resource\Program.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/2 - Resource/Program.h"
+#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
 
 namespace fe::Resource
 {

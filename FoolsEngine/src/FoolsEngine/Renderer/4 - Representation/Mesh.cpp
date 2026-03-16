@@ -1,16 +1,15 @@
 #include "FE_pch.h"
 #include "Mesh.h"
 
-#include "FoolsEngine\Renderer\3 - Command\ResourceState.h"
-#include "FoolsEngine\Renderer\3 - Command\PipelineState.h"
-#include "FoolsEngine\Renderer\3 - Command\Render.h"
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Assets\Loaders\GeometryLoader.h"
+#include "FoolsEngine/Assets/Loaders/GeometryLoader.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
+#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
+#include "FoolsEngine/Renderer/3 - Command/Render.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
 {
@@ -56,13 +55,13 @@ namespace fe
 		auto& vertex_array = Emplace<ACGPUVertexArray>();
 
 		const auto& library = Description::Library::Get();
-		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCoreComponent().ProgramSpecificationID;
+		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCore().ProgramSpecificationID;
 		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
 
 		vertex_array.VertexArray.LayoutID = vertex_input_layout_id;
 		vertex_array.VertexArray.Create();
 		vertex_array.VertexArray.BindIndexBuffer(*buffer, offset, core.Specification.IndexCount);
-		vertex_array.VertexArray.BindVertexBuffer(*buffer, offset + (core.GetVertexBufferPtr() - core.Data));
+		vertex_array.VertexArray.BindVertexBuffer(*buffer, offset + ((intptr_t)core.GetVertexBufferPtr() - (intptr_t)core.Data));
 
 		return true;
 	}
@@ -100,9 +99,9 @@ namespace fe
 			return;
 		}
 
-		auto& material_core = materialObserver.GetCoreComponent();
+		auto& material_core = materialObserver.GetCore();
 		AssetObserver<ShadingModel> shading_model_observer(material_core.ShadingModelID);
-		auto& sm_core = shading_model_observer.GetCoreComponent();
+		auto& sm_core = shading_model_observer.GetCore();
 
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[sm_core.ProgramSpecificationID];
@@ -153,7 +152,7 @@ namespace fe
 	void Mesh::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto asset_observer = AssetObserver<Mesh>(assetID);
-		auto& core = asset_observer.GetCoreComponent();
+		auto& core = asset_observer.GetCore();
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();

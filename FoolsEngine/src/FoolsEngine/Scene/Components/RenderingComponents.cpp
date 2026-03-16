@@ -1,11 +1,11 @@
 #include "FE_pch.h"
 #include "RenderingComponents.h"
 
-#include "FoolsEngine\Scene\BaseEntity.h"
-#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine/Scene/BaseEntity.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
+#include "FoolsEngine/Scene/GameplayWorld/GameplayWorld.h"
 
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
 
 namespace fe
 {

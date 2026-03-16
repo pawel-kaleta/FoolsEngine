@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
-
 #include <entt/entity/registry.hpp>
 #include <entt/entity/handle.hpp>
 #include <entt/entity/helper.hpp>
+
+#include <memory>
 
 namespace fe
 {

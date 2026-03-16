@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Texture.h"
-#include "FoolsEngine\Core\UUID.h"
+
+#include "FoolsEngine/Application/UUID.h"
 
 namespace fe
 {

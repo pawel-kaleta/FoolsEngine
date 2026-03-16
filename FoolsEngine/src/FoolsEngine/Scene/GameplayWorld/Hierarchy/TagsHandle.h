@@ -1,9 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Scene\Component.h"
 #include "Tags.h"
 
-
+#include "FoolsEngine/Scene/Component.h"
 
 namespace fe
 {

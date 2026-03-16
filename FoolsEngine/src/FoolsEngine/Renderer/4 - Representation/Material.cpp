@@ -1,14 +1,14 @@
 #include "FE_pch.h"
 #include "Material.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine\Core\Project.h"
+#include "FoolsEngine/Assets/Loaders/TextureLoader.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
+#include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
 
-#include "FoolsEngine\Assets\Serialization\YAML.h"
-#include "FoolsEngine\Assets\Serialization\GPUDataSerialization.h"
-#include "FoolsEngine\Assets\Loaders\TextureLoader.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
 namespace fe
 {
@@ -119,7 +119,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& program_spec_id = shading_model_observer.GetCore().ProgramSpecificationID;
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
@@ -139,7 +139,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& program_spec_id = shading_model_observer.GetCore().ProgramSpecificationID;
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
@@ -153,13 +153,26 @@ namespace fe
 		return NullAssetID;
 	}
 
+	size_t MaterialObserver::GetCPUDataSize() const
+	{
+		size_t result = 0;
+		const auto& core = GetCore();
+		
+		AssetObserver<ShadingModel> shading_model_observer(core.ShadingModelID);
+		if (shading_model_observer.IsMaster()) result += shading_model_observer.GetCPUDataSize();
+		
+		result += core.UniformsDataSize;
+
+		return result;
+	}
+
 	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const Description::ShaderInterface::TextureSampler& textureSampler, AssetID textureID) const
 	{
 		FE_PROFILER_FUNC();
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& program_spec_id = shading_model_observer.GetCore().ProgramSpecificationID;
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
@@ -181,7 +194,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
-		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& program_spec_id = shading_model_observer.GetCore().ProgramSpecificationID;
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
@@ -203,7 +216,7 @@ namespace fe
 		AssetObserver<ShadingModel> shading_model_observer(dataComponent.ShadingModelID);
 
 		auto offset = (std::byte*)dest - (std::byte*)dataComponent.UniformsData;
-		void* src = (std::byte*)shading_model_observer.GetCoreComponent().DefaultUniformsData + offset;
+		void* src = (std::byte*)shading_model_observer.GetCore().DefaultUniformsData + offset;
 
 		std::memcpy(dest, src, uniform.Size() * uniform.Count);
 	}
@@ -222,10 +235,10 @@ namespace fe
 		}
 
 		auto& buffer_comp = Emplace<ACGPUBuffer>();
-		buffer_comp.Buffer.Usage = Description::Buffer::Usage::Material;
+		buffer_comp.Buffer.Usage = Description::Buffer::Usage::ShaderStorage;
 		buffer_comp.Buffer.Create();
 		
-		buffer_comp.Buffer.Upload(GetDataSize(), nullptr);
+		buffer_comp.Buffer.Upload(GetGPUDataSize(), nullptr);
 		
 		return SendDataToGPUInternal(GAPI, &buffer_comp.Buffer, 0);
 	}
@@ -317,10 +330,10 @@ namespace fe
 	void Material::SaveMetadata(YAML::Emitter& emitter, AssetID assetID)
 	{
 		auto asset_observer = AssetObserver<Material>(assetID);
-		auto& core = asset_observer.GetCoreComponent();
+		auto& core = asset_observer.GetCore();
 
 		AssetObserver<ShadingModel> shading_model_observer(core.ShadingModelID);
-		const auto& shading_model_core = shading_model_observer.GetCoreComponent();
+		const auto& shading_model_core = shading_model_observer.GetCore();
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << asset_observer.GetUUID();
@@ -350,7 +363,7 @@ namespace fe
 
 		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
 
-		const auto& program_spec_id = shading_model_observer.GetCoreComponent().ProgramSpecificationID;
+		const auto& program_spec_id = shading_model_observer.GetCore().ProgramSpecificationID;
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
@@ -403,7 +416,7 @@ namespace fe
 			const auto& type = uniform.Type;
 			const auto& name = uniform.Name;
 
-			const auto& uniform_node = node[name];
+			const auto& uniform_node = node[name.c_str()];
 
 			if (!uniform_node.IsDefined())
 			{
@@ -459,7 +472,7 @@ namespace fe
 		{
 
 			const auto& texture_sampler = library.TextureSamplers[textureSamplerIDs[i]];
-			const auto& texture_node = node[texture_sampler.Name];
+			const auto& texture_node = node[texture_sampler.Name.c_str()];
 
 			if (!texture_node.IsDefined())
 			{
@@ -575,7 +588,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> sm_observer(shadingModelID);
 		Material::MakeMaterial(assetID, sm_observer);
-		auto& sm_core = sm_observer.GetCoreComponent();
+		auto& sm_core = sm_observer.GetCore();
 		auto& core = reg.get<Material::Core>(assetID);
 
 		auto& library = Description::Library::Get();
@@ -634,7 +647,7 @@ namespace fe
 
 		AssetObserver<ShadingModel> sm_observer(shadingModelID);
 		Material::MakeMaterial(asset_id, sm_observer);
-		const auto& sm_core = sm_observer.GetCoreComponent();
+		const auto& sm_core = sm_observer.GetCore();
 
 		const auto& uniforms_node = node["Uniforms"];
 		const auto& textures_node = node["Textures"];
@@ -665,7 +678,7 @@ namespace fe
 		auto& reg = AssetManager::Get().m_Registry;
 
 		auto& core_component = reg.get<Material::Core>(assetID);
-		auto& sm_core_component = shadingModelObserver.GetCoreComponent();
+		auto& sm_core_component = shadingModelObserver.GetCore();
 
 		core_component.ShadingModelID = shadingModelObserver.GetID();
 

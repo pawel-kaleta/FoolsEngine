@@ -2,10 +2,10 @@
 #include "ComponentTypesRegistry.h"
 
 #include "Component.h"
-#include "Components/RenderingComponents.h"
 #include "Components/2DComponents.h"
 #include "Components/MeshComponents.h"
 #include "Components/LightComponents.h"
+#include "Components/RenderingComponents.h"
 
 namespace fe
 {

@@ -2,7 +2,8 @@
 
 #include "AssetManager.h"
 #include "AssetInterface.h"
-#include "FoolsEngine\Debug\Asserts.h"
+
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 namespace fe
 {
@@ -93,10 +94,12 @@ namespace fe
 		}
 		
 		void FlagLoaded()				{ this->Flag<ACLoaded>(); }
+		void FlagLoadedAsDependency()	{ this->Flag<ACLoadedAsDependence>(); }
 		void FlagUnloaded()				{ this->UnFlag<ACLoaded>(); }
+		void ReleaseDependencyLoad()	{ this->UnFlag<ACLoadedAsDependence>(); }
 
 		bool IsLoaded()				{ return this->AllOf<ACLoaded>(); }
-		//bool IsLoadedAsDependency()	{ return this->AllOf<ACLoadedAsDependence>(); } // ?? check master?
+		bool IsLoadedAsDependency()	{ return this->AllOf<ACLoadedAsDependence>(); } // ?? check master?
 
 		static constexpr AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
 

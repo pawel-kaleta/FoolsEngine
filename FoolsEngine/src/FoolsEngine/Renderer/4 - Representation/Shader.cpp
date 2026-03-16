@@ -1,12 +1,11 @@
 #include "FE_pch.h"
 #include "Shader.h"
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine\Renderer\7 - Integration\Renderer.h"
-
-#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
 {
@@ -17,7 +16,7 @@ namespace fe
 
     void ShaderObserver::SaveMetadata(YAML::Emitter& emitter)
     {
-        const auto& core = GetCoreComponent();
+        const auto& core = GetCore();
         const auto& library = Description::Library::Get();
         const auto& spec = library.ShaderSpecs[core.SpecificationID];
 
@@ -66,7 +65,7 @@ namespace fe
         if (!type || !specID)
             return false;
 
-        auto& core = GetCoreComponent();
+        auto& core = GetCore();
         auto& lib = Description::Library::Get();
         auto spec_uuid = specID.as<UUID>();
         core.SpecificationID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
@@ -107,7 +106,7 @@ namespace fe
             if (!AllOf<ACShaderResource_OpenGL>())
             {
                 auto& shader = Emplace<ACShaderResource_OpenGL>().Shader;
-                const auto& core = GetCoreComponent();
+                const auto& core = GetCore();
 
                 shader.SpecificationID = core.SpecificationID;
                 shader.Create(core.ShaderSource.c_str());

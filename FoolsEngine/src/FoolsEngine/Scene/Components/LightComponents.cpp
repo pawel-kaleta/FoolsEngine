@@ -1,13 +1,13 @@
 #include "FE_pch.h"
 #include "LightComponents.h"
 
-#include "FoolsEngine\Scene\BaseEntity.h"
-#include "FoolsEngine\Assets\Serialization\YAML.h"
+#include "FoolsEngine/Scene/BaseEntity.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
+#include "FoolsEngine/Scene/GameplayWorld/GameplayWorld.h"
 
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
-#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
+#include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace fe
 {

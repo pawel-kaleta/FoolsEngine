@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 #include "Win32Window.h"
 
-#include "FoolsEngine\Events\Event.h"
+#include "FoolsEngine/Platform/Events/Event.h"
 
 #include <glad/glad.h>
 

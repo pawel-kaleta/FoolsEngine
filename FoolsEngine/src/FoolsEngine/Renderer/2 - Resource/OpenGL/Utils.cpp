@@ -86,7 +86,7 @@ namespace fe::Resource
 				return GL_NONE;
 			}
 		}
-
+		
 		GLenum BufferUsageToGLEnum(Description::Buffer::Usage usage)
 		{
 			switch (usage)
@@ -96,8 +96,11 @@ namespace fe::Resource
 				return GL_NONE;
 			case Description::Buffer::Usage::Vertex:		return GL_ARRAY_BUFFER;
 			case Description::Buffer::Usage::Index:			return GL_ELEMENT_ARRAY_BUFFER;
-			case Description::Buffer::Usage::Uniform:		return GL_UNIFORM_BUFFER;
+			case Description::Buffer::Usage::IndexVertex:	return GL_ARRAY_BUFFER;
+			case Description::Buffer::Usage::Batch:			return GL_ARRAY_BUFFER;
+			case Description::Buffer::Usage::Uniform:		return GL_UNIFORM;
 			case Description::Buffer::Usage::ShaderStorage:	return GL_SHADER_STORAGE_BUFFER;
+
 			default:
 				FE_LOG_CORE_ERROR("Unrecognized buffer usage");
 				return GL_NONE;

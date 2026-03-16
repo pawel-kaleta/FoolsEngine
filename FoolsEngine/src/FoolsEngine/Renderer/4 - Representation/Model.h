@@ -1,12 +1,12 @@
 #pragma once
 
-#include "FoolsEngine\Assets\AssetInterface.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
-
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-
 #include "Mesh.h"
 #include "RenderMesh.h"
+
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
+
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -22,7 +22,7 @@ namespace fe
 	class ModelObserver : public AssetInterface
 	{
 	public:
-		const ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
+		const ACModelCore& GetCore() const { return Get<ACModelCore>(); }
 		
 	protected:
 		ModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -36,7 +36,7 @@ namespace fe
 			Emplace<ACModelCore>();
 		}
 
-		ACModelCore& GetCoreComponent() const { return Get<ACModelCore>(); }
+		ACModelCore& GetCore() const { return Get<ACModelCore>(); }
 
 		bool SendDataToGPU(GAPIType GAPI) const;
 		void Release() const;

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "FoolsEngine\Math\Transform.h"
-#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
-#include "FoolsEngine\Renderer\2 - Resource\VertexArray.h"
-#include "FoolsEngine\Renderer\4 - Representation\Texture.h"
-#include "FoolsEngine\Renderer\4 - Representation\Shader.h"
+#include "FoolsEngine/Foundation/Math/Transform.h"
 
+#include "FoolsEngine/Application/Time.h"
 
-#include "FoolsEngine\Core\Time.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
 
-#include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
+#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
+#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
 
 namespace fe
 {

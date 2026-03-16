@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Events\Event.h"
-#include "FoolsEngine\Renderer\4 - Representation\Camera.h"
-#include "FoolsEngine\Math\Transform.h"
+#include "FoolsEngine/Platform/Events/Event.h"
+#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
+#include "FoolsEngine/Foundation/Math/Transform.h"
 
 namespace fe
 {

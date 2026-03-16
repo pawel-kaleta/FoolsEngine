@@ -1,6 +1,8 @@
 #pragma once
 
-#include "FoolsEngine\Core\Application.h"
+#include "FoolsEngine/Foundation/Debug/Profiler.h"
+
+#include "FoolsEngine/Application/Application.h"
 
 #ifdef FE_PLATFORM_WINDOWS
 

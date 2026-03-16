@@ -1,12 +1,11 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\Data.h"
-#include "FoolsEngine\Renderer\1 - Description\Texture.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
-#include "FoolsEngine\Renderer\1 - Description\Pipeline.h"
+#include "FoolsEngine/Renderer/1 - Description/Data.h"
+#include "FoolsEngine/Renderer/1 - Description/Texture.h"
+#include "FoolsEngine/Renderer/1 - Description/Pipeline.h"
+#include "FoolsEngine/Renderer/1 - Description/ShaderInterface.h"
 
-
-#include <glad\glad.h>
+#include <glad/glad.h>
 
 namespace fe::Resource
 {

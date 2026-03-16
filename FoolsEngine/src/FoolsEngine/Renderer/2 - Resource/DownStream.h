@@ -1,9 +1,10 @@
 #pragma once
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
 
-#include "FoolsEngine\Utils\Xar.h"
+#include "FoolsEngine/Foundation/Utils/Xar.h"
 
-#include <glad\glad.h>
+#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
+
+#include <glad/glad.h>
 
 #include <queue>
 

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Texture.h"
-#include "FoolsEngine\Renderer\2 - Resource\Texture.h"
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
+
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/1 - Description/Texture.h"
+#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -95,6 +96,8 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
 		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACTexture2DCore>(assetID).Init(); }
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
+		static bool LoadMetadata(AssetID assetID) { return false; }
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
 		using Observer = Texture2DObserver;

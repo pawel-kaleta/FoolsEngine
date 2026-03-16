@@ -1,9 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
 #include "StaticBuffer.h"
 
-#include <glad\glad.h>
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
+
+#include <glad/glad.h>
 
 namespace fe::Resource
 {

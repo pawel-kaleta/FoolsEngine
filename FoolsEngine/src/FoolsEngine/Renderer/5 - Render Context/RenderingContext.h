@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
 namespace fe
 {

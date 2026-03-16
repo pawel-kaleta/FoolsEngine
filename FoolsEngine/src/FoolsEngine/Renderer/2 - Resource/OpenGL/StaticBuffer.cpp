@@ -1,7 +1,7 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
-#include "FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h"
+#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/OpenGL/Utils.h"
 
 namespace fe::Resource
 {

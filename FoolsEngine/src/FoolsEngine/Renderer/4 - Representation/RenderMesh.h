@@ -1,10 +1,11 @@
 #pragma once
 
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
-#include "FoolsEngine\Assets\AssetAccessors.h"
 #include "Mesh.h"
+
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
+#include "FoolsEngine/Assets/AssetAccessors.h"
 
 namespace YAML { class Emitter; class Node; }
 
@@ -15,17 +16,19 @@ namespace fe
 		AssetID MeshID;
 		AssetID MaterialID;
 
-		size_t DataSize;
+		size_t DataSizeGPU;
+		size_t DataSizeCPU;
 
-		void Init() { MeshID = NullAssetID; MaterialID = NullAssetID; DataSize = 0; }
+		void Init() { MeshID = NullAssetID; MaterialID = NullAssetID; DataSizeGPU = 0; DataSizeCPU = 0;	}
 	};
 
 	class RenderMeshObserver : public AssetInterface
 	{
 	public:
-		const ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
+		const ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
 
-		size_t GetDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSize; }
+		size_t GetCPUDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSizeCPU; }
+		size_t GetGPUDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSizeGPU; }
 	protected:
 		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
 	};
@@ -33,7 +36,7 @@ namespace fe
 	class RenderMeshUser : public RenderMeshObserver
 	{
 	public:
-		ACRenderMeshCore& GetCoreComponent() const { return Get<ACRenderMeshCore>(); }
+		ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
 
 		void Release() const;
 

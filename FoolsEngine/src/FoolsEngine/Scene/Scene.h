@@ -1,12 +1,12 @@
 #pragma once
 #include "ECS.h"
 
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
-
 #include "SimulationStage.h"
 
-#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
+#include "FoolsEngine/Scene/GameplayWorld/GameplayWorld.h"
+
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
 
 namespace YAML { class Emitter; }
 

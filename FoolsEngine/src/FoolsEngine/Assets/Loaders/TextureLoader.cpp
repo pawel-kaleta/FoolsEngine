@@ -1,10 +1,11 @@
 #include "FE_pch.h"
 #include "TextureLoader.h"
 
-#include "FoolsEngine\Core\Project.h"
-#include "FoolsEngine\Memory\Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine\Renderer\1 - Description\Library.h"
+#include "FoolsEngine/Application/Project.h"
+
+#include "FoolsEngine/Renderer/1 - Description/Library.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

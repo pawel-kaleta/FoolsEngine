@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Asset.h"
-#include "Loaders\LoaderType.h"
+#include "Loaders/LoaderType.h"
 
 namespace YAML { class Emitter; }
 

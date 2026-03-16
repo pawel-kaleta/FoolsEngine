@@ -26,13 +26,12 @@
 	#include <Windows.h>
 #endif
 
-#include "FoolsEngine/Debug/Log.h"
-#include "FoolsEngine/Debug/Asserts.h"
-#include "FoolsEngine/Debug/Profiler.h"
+#include "FoolsEngine/Foundation/Debug/Log.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Debug/Profiler.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
+#include "FoolsEngine/Foundation/Utils/ForEach.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+
 #include "FoolsEngine/Platform/InputCodes.h"
-#include "FoolsEngine/Core/Core.h"
-
-#include "FoolsEngine\Memory\Scratchpad.h"
-
-#include "FoolsEngine\Utils\DeclareEnum.h"
-#include "FoolsEngine\Utils\ForEach.h"

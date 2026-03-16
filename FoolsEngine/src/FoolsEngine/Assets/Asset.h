@@ -1,15 +1,16 @@
 #pragma once
 
-#include "FoolsEngine\Core\UUID.h"
+#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 
-#include "FoolsEngine\Utils\DeclareEnum.h"
+#include "FoolsEngine/Application/UUID.h"
 
-#include "FoolsEngine\Renderer\2 - Resource\StaticBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
 
-#include <filesystem>
 #include <entt/entity/registry.hpp>
 #include <entt/entity/handle.hpp>
 #include <entt/entity/helper.hpp>
+
+#include <filesystem>
 
 namespace fe
 {

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Scene\GameplayWorld\Entity.h"
 #include "ActorData.h"
-#include "FoolsEngine\Scene\GameplayWorld\CompPtr.h"
-#include "FoolsEngine\Scene\GameplayWorld\GameplayWorld.h"
+
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
+#include "FoolsEngine/Scene/GameplayWorld/CompPtr.h"
+#include "FoolsEngine/Scene/GameplayWorld/GameplayWorld.h"
 
 namespace fe
 {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
+
 #include <glm/glm.hpp>
 
 namespace fe

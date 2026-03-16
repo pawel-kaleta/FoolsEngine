@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\2 - Resource\Shader.h"
-#include "FoolsEngine\Assets\Asset.h"
-#include "FoolsEngine\Assets\AssetInterface.h"
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
 
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/2 - Resource/Shader.h"
 
 namespace YAML { class Emitter; }
 
@@ -26,7 +26,7 @@ namespace fe
 	class ShaderObserver : public AssetInterface
 	{
 	public:
-		const ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
+		const ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
 		
 		template <GAPIType::ValueType GAPI>
 		const auto& GetResourceComponent()
@@ -43,7 +43,7 @@ namespace fe
 	class ShaderUser : public ShaderObserver
 	{
 	public:
-		ACShaderCore& GetCoreComponent() const { return Get<ACShaderCore>(); }
+		ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
 
 		template <GAPIType::ValueType GAPI>
 		auto& GetResourceComponent()
@@ -72,6 +72,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
 		static constexpr const char* GetMetaFileExtension() { return ""; }
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
+		static bool LoadMetadata(AssetID assetID) { return false; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShaderCore>(assetID).Init(); }
 
 		using Observer = ShaderObserver;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine\Utils\DeclareEnum.h"
+#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 
 namespace fe
 {

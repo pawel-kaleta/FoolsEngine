@@ -2,9 +2,11 @@
 #include "Scene.h"
 
 #include "ECS.h"
-#include "FoolsEngine\Scene\SimulationStage.h"
-#include "FoolsEngine\Scene\GameplayWorld\Hierarchy\HierarchyDirector.h"
-#include "FoolsEngine\Assets\Serialization\SceneSerializer.h"
+
+#include "FoolsEngine/Scene/SimulationStage.h"
+#include "FoolsEngine/Scene/GameplayWorld/Hierarchy/HierarchyDirector.h"
+
+#include "FoolsEngine/Assets/Serialization/SceneSerializer.h"
 
 namespace fe
 {

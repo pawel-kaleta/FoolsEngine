@@ -1,12 +1,12 @@
 #pragma once
 
-#include "FoolsEngine\Renderer\1 - Description\GAPIType.h"
-#include "FoolsEngine\Renderer\1 - Description\Buffer.h"
-#include "FoolsEngine\Renderer\1 - Description\ShaderInterface.h"
-#include "FoolsEngine\Renderer\2 - Resource\Program.h"
+#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine\Assets\AssetInterface.h"
-#include "FoolsEngine\Assets\AssetHandle.h"
+#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
+#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/1 - Description/ShaderInterface.h"
+#include "FoolsEngine/Renderer/2 - Resource/Program.h"
 
 namespace YAML { class Emitter; }
 
@@ -14,12 +14,17 @@ namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
 	{
-		AssetID VertexShaderID;
-		AssetID FragmentShaderID;
-		uint32_t ProgramSpecificationID;
+		struct {
+			AssetID Vertex;
+			AssetID Tessellation;
+			AssetID Geometry;
+			AssetID Fragment;
+		} ShaderIDs;
 
 		void* DefaultUniformsData;
 		size_t UniformsDataSize;
+
+		uint32_t ProgramSpecificationID;
 
 		void Init();
 
@@ -34,7 +39,7 @@ namespace fe
 	class ShadingModelObserver : public AssetInterface
 	{
 	public:
-		const ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
+		const ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
 
 		template <GAPIType::ValueType GAPI>
 		const auto& GetResourceComponent()
@@ -43,6 +48,8 @@ namespace fe
 		}
 
 		const Description::Buffer::Layout& GetUniforms();
+
+		size_t GetCPUDataSize() const { return GetCore().UniformsDataSize; }
 
 		//consider iterator
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
@@ -60,7 +67,7 @@ namespace fe
 	class ShadingModelUser : public ShadingModelObserver
 	{
 	public:
-		ACShadingModelCore& GetCoreComponent() const { return Get<ACShadingModelCore>(); }
+		ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
 
 		template <GAPIType::ValueType GAPI>
 		auto& GetResourceComponent() const
@@ -96,6 +103,8 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }
 		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
+		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
+		static bool LoadMetadata(AssetID assetID) { return false; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModelCore>(assetID).Init(); }
 
 		using User = ShadingModelUser;
