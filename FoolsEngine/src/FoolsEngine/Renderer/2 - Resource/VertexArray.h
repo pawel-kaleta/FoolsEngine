@@ -36,12 +36,12 @@ namespace fe::Resource
 		virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) override;
 	};
 
-	struct VertexArray_Vulkan final : VertexArrayBase
-	{
-		virtual void Create() override {};
-		virtual void Delete() override {};
-
-		virtual void BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset) override {};
-		virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) override {};
-	};
+	//struct VertexArray_Vulkan final : VertexArrayBase
+	//{
+	//	virtual void Create() override {};
+	//	virtual void Delete() override {};
+	//
+	//	virtual void BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset) override {};
+	//	virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) override {};
+	//};
 }

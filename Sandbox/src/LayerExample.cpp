@@ -17,17 +17,17 @@ void LayerExample::OnAttach()
 
 	auto& window = *fe::Application::Get().m_Window;
 
-	fe::FramebufferData::SpecificationBuilder specBuilder;
-	specBuilder
-		.SetWidth(window.GetWidth())
-		.SetHight(window.GetHeight())
-		.SetDepthStencilAttachmentFormat(fe::Description::TextureFormat::DEPTH24STENCIL8)
-		.SetColorAttachmentSpecifications({
-			{ "Final Frame", fe::Description::TextureComponents::RGBA, fe::Description::TextureFormat::RGBA_8		},
-			{ "EntityID"   , fe::Description::TextureComponents::R   , fe::Description::TextureFormat::R_UINT_32	}
-			});
-	m_Framebuffer = fe::Framebuffer::Create(specBuilder.Create());
-	m_FramebufferSize = { window.GetWidth(), window.GetHeight() };
+	//fe::FramebufferData::SpecificationBuilder specBuilder;
+	//specBuilder
+	//	.SetWidth(window.GetWidth())
+	//	.SetHight(window.GetHeight())
+	//	.SetDepthStencilAttachmentFormat(fe::Description::TextureFormat::DEPTH24STENCIL8)
+	//	.SetColorAttachmentSpecifications({
+	//		{ "Final Frame", fe::Description::TextureComponents::RGBA, fe::Description::TextureFormat::RGBA_8		},
+	//		{ "EntityID"   , fe::Description::TextureComponents::R   , fe::Description::TextureFormat::R_UINT_32	}
+	//		});
+	//m_Framebuffer = fe::Framebuffer::Create(specBuilder.Create());
+	//m_FramebufferSize = { window.GetWidth(), window.GetHeight() };
 }
 
 void LayerExample::OnUpdate()
@@ -93,7 +93,7 @@ void LayerExample::OnImGuiRender()
 
 	ImGui::PopStyleVar(3);
 
-	auto fbID = m_Framebuffer->GetColorAttachmentID();
+	auto fbID = m_Framebuffer->ColorAttachmentOpenGLIDs[m_Framebuffer->GetColorAttachmentIndex("Final Frame")];
 	auto vidgetSize = ImGui::GetContentRegionAvail();
 	ImGui::Image((void*)(uint64_t)fbID, vidgetSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
@@ -102,7 +102,7 @@ void LayerExample::OnImGuiRender()
 
 	ImGui::Begin("Stats");
 
-	auto stats = fe::Renderer2D::GetStats();
+	auto stats = fe::Renderer2D::Get().m_Stats;
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 	ImGui::Text("Quads: %d", stats.Quads);
 	ImGui::Text("Render Time: %F", stats.RenderTime.GetMilliseconds());

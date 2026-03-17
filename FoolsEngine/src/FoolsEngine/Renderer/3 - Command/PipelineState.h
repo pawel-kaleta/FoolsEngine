@@ -12,7 +12,7 @@ namespace fe::Command
 	{
 		namespace Vulkan
 		{
-			void BindVertexArray(const Resource::VertexArray_Vulkan& vertexBinding) {}
+			//void BindVertexArray(const Resource::VertexArray_Vulkan& vertexBinding);
 		}
 
 		namespace OpenGL
@@ -38,7 +38,7 @@ namespace fe::Command
 		void BindVertexArray(const Resource::VertexArrayBase& vertexBinding)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindVertexArray(*(Resource::VertexArray_OpenGL*)&vertexBinding);
-			if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindVertexArray(*(Resource::VertexArray_Vulkan*)&vertexBinding);
+			//if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindVertexArray(*(Resource::VertexArray_Vulkan*)&vertexBinding);
 		}
 
 		template<GAPIType::ValueType GAPI>

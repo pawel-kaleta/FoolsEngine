@@ -4,9 +4,9 @@
 // To do: create a nice include folder with include batches based on areas/namespaces
 
 #include "FoolsEngine/Foundation/Math/Math.h"
-#include "FoolsEngine/Foundation/Utils/Xar.h"
 #include "FoolsEngine/Foundation/Utils/Colors.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/Memory/Xar.h"
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 #include "FoolsEngine/Foundation/Debug/Log.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"

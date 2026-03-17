@@ -10,7 +10,7 @@ namespace fe::Command
 	{
 		namespace Vulkan
 		{
-			void BindTextureSamplerToRendererTextureSlot(Resource::Program_Vulkan& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot) {}
+			//void BindTextureSamplerToRendererTextureSlot(Resource::Program_Vulkan& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot);
 		}
 
 		namespace OpenGL
@@ -42,7 +42,7 @@ namespace fe::Command
 		void BindTextureSamplerToRendererTextureSlot(Resource::ProgramBase& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_OpenGL*) & program, samplerIndex, rendererTextureSlot);
-			if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_Vulkan*) & program, samplerIndex, rendererTextureSlot);
+			//if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_Vulkan*) & program, samplerIndex, rendererTextureSlot);
 		}
 
 		template<GAPIType::ValueType GAPI>

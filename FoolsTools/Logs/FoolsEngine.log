@@ -1,48 +1,33 @@
-17:04:52:870644 | FE  | info     | Logging innitialized!
-17:04:52:870918 | App | info     | Logging innitialized!
-17:04:52:871065 | FE  | info     | /////////////////////////////////////////////////////
-17:04:52:871196 | FE  | info     | ////////////////////// STARTUP //////////////////////
-17:04:52:871316 | FE  | info     | /////////////////////////////////////////////////////
-17:04:52:871910 | FE  | info     | Profiler session 'Startup' started.
-17:04:52:872365 | FE  | info     | Initializing GLFW
-17:04:52:892586 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-17:04:53:092967 | FE  | info     | Setting events callbacks for window:
-17:04:53:093392 | FE  | info     | 	WindowResizeEvent
-17:04:53:093695 | FE  | info     | 	WindowCloseEvent
-17:04:53:093914 | FE  | info     | 	WindowFocusChangeEvents
-17:04:53:094196 | FE  | info     | 	KeyEvents
-17:04:53:094408 | FE  | info     | 	KeyTypedEvent
-17:04:53:094634 | FE  | info     | 	MouseButtonEvents
-17:04:53:094807 | FE  | info     | 	MouseScrolledEvent
-17:04:53:094974 | FE  | info     | 	MouseMovedEvent
-17:04:53:095464 | FE  | info     | Creating rendering context
-17:04:53:098088 | FE  | info     | Rendering platform info:
-17:04:53:098335 | FE  | info     | 	Vendor:		NVIDIA Corporation
-17:04:53:098528 | FE  | info     | 	Renderer:	NVIDIA GeForce RTX 3070 Ti/PCIe/SSE2
-17:04:53:098764 | FE  | info     | 	Version:	4.6.0 NVIDIA 560.94
-17:04:53:099064 | FE  | info     | OpenGL Rendering Context created
-17:04:53:099327 | FE  | info     | VSync disabled.
-17:04:53:100080 | FE  | info     | OpenGLDeviceAPI creation!
-17:04:53:100310 | FE  | info     | OpenGLDeviceAPI Initialization.
-17:04:53:102253 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-17:04:53:103934 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-17:05:00:443077 | FE  | info     | Profiler session 'Startup' closed.
-17:05:00:443867 | FE  | info     | /////////////////////////////////////////////////////
-17:05:00:444043 | FE  | info     | ////////////////////// RUNTIME //////////////////////
-17:05:00:444182 | FE  | info     | /////////////////////////////////////////////////////
-17:05:02:215385 | FE  | info     | Profiler session 'ProjectLoading' started.
-17:05:02:227616 | FE  | info     | Project deserialized
-17:05:02:297165 | FE  | warning  | Missing UUID in ShadingModel file
-17:05:02:307258 | FE  | warning  | Missing UUID in ShadingModel file
-17:05:02:317336 | FE  | warning  | Missing UUID in ShadingModel file
-17:05:02:321584 | FE  | info     | Base Assets acquired
-17:05:02:335721 | FE  | info     | Asset Registry deserialized
-17:05:02:566834 | FE  | info     | Assets' meta data loaded
-17:05:02:567449 | FE  | info     | Profiler session 'ProjectLoading' closed.
-17:05:02:567616 | FE  | info     | New outer layer "EditorLayer" added to LayerStack
-17:05:02:567724 | App | info     | EditorLayer::OnAttach()
-17:05:02:567968 | FE  | info     | Scene initialization
-17:05:02:568097 | FE  | info     | World Creation
-17:05:02:568784 | FE  | info     | Profiler session 'SceneLoading' started.
-17:05:02:631971 | FE  | error    | CORE ASSERTION FAILED: in file OpenGLTexture.cpp in function unsigned int __cdecl fe::FormatToGlFormat(struct fe::Description::Texture::Format) at line 17.
-17:05:02:632201 | FE  | error    | Assertion Message: Not specified data format of attachment
+16:09:15:272761 | FE  | info     | Logging innitialized!
+16:09:15:273241 | App | info     | Logging innitialized!
+16:09:15:273508 | FE  | info     | /////////////////////////////////////////////////////
+16:09:15:273775 | FE  | info     | ////////////////////// STARTUP //////////////////////
+16:09:15:273976 | FE  | info     | /////////////////////////////////////////////////////
+16:09:15:275095 | FE  | info     | Profiler session 'Startup' started.
+16:09:15:275604 | FE  | info     | Initializing GLFW
+16:09:15:300824 | FE  | info     | Creating Window FoolsTools (1900, 1000)
+16:09:15:523561 | FE  | info     | Setting events callbacks for window:
+16:09:15:523896 | FE  | info     | 	WindowResizeEvent
+16:09:15:524164 | FE  | info     | 	WindowCloseEvent
+16:09:15:524762 | FE  | info     | 	WindowFocusChangeEvents
+16:09:15:525001 | FE  | info     | 	KeyEvents
+16:09:15:525248 | FE  | info     | 	KeyTypedEvent
+16:09:15:525458 | FE  | info     | 	MouseButtonEvents
+16:09:15:525808 | FE  | info     | 	MouseScrolledEvent
+16:09:15:526306 | FE  | info     | 	MouseMovedEvent
+16:09:15:526775 | FE  | info     | Creating rendering context
+16:09:15:529641 | FE  | info     | Rendering platform info:
+16:09:15:529913 | FE  | info     | 	Vendor:		NVIDIA Corporation
+16:09:15:530103 | FE  | info     | 	Renderer:	NVIDIA GeForce RTX 3070 Ti/PCIe/SSE2
+16:09:15:530318 | FE  | info     | 	Version:	4.6.0 NVIDIA 560.94
+16:09:15:530627 | FE  | info     | OpenGL Rendering Context created
+16:09:15:530879 | FE  | info     | VSync disabled.
+16:09:15:532575 | FE  | debug    | OpenGL:
+16:09:15:532776 | FE  | debug    | 	Source:		API
+16:09:15:532931 | FE  | debug    | 	Type:		OTHER
+16:09:15:533092 | FE  | debug    | 	ID:		131185
+16:09:15:533263 | FE  | debug    | 	Message:	Buffer detailed info: Buffer object 2 (bound to NONE, usage hint is GL_STATIC_DRAW) will use VIDEO memory as the source for buffer object operations.
+16:09:15:534907 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
+16:09:15:535573 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
+16:09:15:568430 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
+16:09:34:572317 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus

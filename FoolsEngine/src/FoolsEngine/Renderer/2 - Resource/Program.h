@@ -33,9 +33,9 @@ namespace fe::Resource
 		virtual void Destroy() override;
 	};
 
-	struct Program_Vulkan final : ProgramBase
-	{
-		virtual void Create() override {};
-		virtual void Destroy() override {};
-	};
+	//struct Program_Vulkan final : ProgramBase
+	//{
+	//	virtual void Create() override {};
+	//	virtual void Destroy() override {};
+	//};
 }
