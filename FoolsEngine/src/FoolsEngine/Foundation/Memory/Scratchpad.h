@@ -59,8 +59,8 @@ namespace fe
 		constexpr const static size_t s_BufferSize = 524'288;
 		static std::byte s_Buffer[s_BufferSize];
 		static std::byte* s_Free;
-		static uint32_t s_Count;
 		static uint64_t s_RollbackFlags;
+		static uint64_t s_Count;
 		// we don't use std::bitset, because it handles any number of bits
 		// solution for specific size that fits in one non-array type is slightly faster
 		// this is very hot code

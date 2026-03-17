@@ -1,7 +1,6 @@
 #pragma once
 
-#include "BitOperations.h"
-
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 #include <vector>

@@ -402,13 +402,17 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Xar.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h">
       <Filter>FoolsEngine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\MemReg.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Core\DataTypes.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Array.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
