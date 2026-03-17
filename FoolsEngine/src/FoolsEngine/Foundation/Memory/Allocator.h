@@ -4,6 +4,7 @@
 
 #include "DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 #include <cstdlib>
 
@@ -150,6 +151,103 @@ namespace fe
 				return m_SmallAllocator.DoesOwn(memReg);
 			else
 				return m_BigAllocator.DoesOwn(memReg);
+		}
+	};
+
+	template <UInt memRegSize, UInt memRegAlignment = 8>
+	class BitmappedPoolAllocator final : public Allocator
+	{
+		static_assert(memRegSize % memRegAlignment == 0, "Non matching size-alignment in BitmappedPoolAllocator");
+	public:
+		inline static constexpr UInt MemRegAlignment = memRegAlignment;
+		inline static constexpr UInt MemRegSize = memRegSize;
+		inline static constexpr UInt TotalSize = memRegSize * 64;
+		inline Byte* RegionsEnd() { return m_Regions + m_TotalSize; }
+
+		Byte* m_Regions = nullptr;
+		//true is free
+		U64 m_BitMapping = 0;
+
+		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
+		{
+			MemReg result;
+
+			if (alignment > memRegAlignment)
+			{
+				FE_CORE_ASSERT(false, "Overalignment in BitmappedPoolAllocator");
+				return result;
+			}
+			
+			if (bytes > memRegSize)
+			{
+				FE_CORE_ASSERT(false, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+				return result;
+			}
+
+			if (!m_BitMapping)
+				// out of free MemRegs
+				return result;
+
+			unsigned long outIndex;
+			MSB64(&outIndex, m_BitMapping);
+			U64 flag_mask = (U64)1 << (63 - outIndex);
+			m_BitMapping &= ~flag_mask;
+
+			result.Data = m_MemRegSize * outIndex;
+			result.Size = m_MemRegSize;
+
+			return result;
+		}
+
+		virtual void Allocate(MemReg& memReg, UInt alignment) override final
+		{
+			if (alignment > memRegAlignment)
+			{
+				FE_CORE_ASSERT(false, "Overalignment in BitmappedPoolAllocator");
+				memReg.Data = nullptr;
+				return;
+			}
+
+			if (memReg.Size > memRegSize)
+			{
+				FE_CORE_ASSERT(false, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+				memReg.Data = nullptr;
+				return;
+			}
+
+			if (!m_BitMapping)
+			{
+				// out of free MemRegs
+				memReg.Data = nullptr;
+				return;
+			}
+
+			unsigned long out_index;
+			MSB64(&out_index, m_BitMapping);
+			U64 flag_mask = (U64)1 << (63 - out_index);
+			m_BitMapping &= ~flag_mask;
+
+			result.Data = m_Regions + memRegSize * out_index;
+			result.Size = memRegSize;
+
+			return result;
+		}
+
+		virtual void Deallocate(MemReg& memReg) override final
+		{
+			UInt index = (memReg.Data - m_Regions) / memRegSize;
+			U64 flag_mask = (U64)1 << (63 - index);
+			m_BitMapping &= flag_mask;
+			memReg.Data = nullptr;
+		};
+
+		bool DoesOwn(const MemReg& memReg)
+		{
+			bool lower_bound = memReg.Data >= m_Regions;
+			bool  uper_bound = memReg.Data < RegionsEnd();
+			if (memReg.Data && lower_bound && uper_bound)
+				return true;
+			return false;
 		}
 	};
 }
