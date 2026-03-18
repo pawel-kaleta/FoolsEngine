@@ -24,7 +24,7 @@ namespace fe
 		static AssetTypesRegistry& Get() { return *s_Instance; }
 
 		static const Item* GetItem(AssetType assetType);
-		static const Item* GetItem(const std::pmr::string extension);
+		static const Item* GetItem(const std::pmr::string& extension);
 		
 		std::vector<Item> m_Items;
 	private:

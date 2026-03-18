@@ -288,6 +288,7 @@
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\test.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp" />

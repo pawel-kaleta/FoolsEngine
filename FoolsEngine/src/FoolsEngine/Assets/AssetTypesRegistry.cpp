@@ -17,7 +17,7 @@ namespace fe
 		return nullptr;
 	}
 
-	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(const std::pmr::string extension)
+	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(const std::pmr::string& extension)
 	{
 		for (const auto& item : s_Instance->m_Items)
 		{
