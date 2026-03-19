@@ -56,7 +56,7 @@ namespace fe
 			m_End = s_Free;
 		}
 	private:
-		constexpr const static size_t s_BufferSize = 524'288;
+		constexpr const static size_t s_BufferSize = 20 * 1024;
 		static std::byte s_Buffer[s_BufferSize];
 		static std::byte* s_Free;
 		static uint64_t s_RollbackFlags;

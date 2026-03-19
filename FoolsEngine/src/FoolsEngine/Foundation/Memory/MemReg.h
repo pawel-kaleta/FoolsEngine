@@ -37,8 +37,8 @@ namespace fe
 			Free += size;
 		}
 
-		template <typename tn>
-		void AppendObject(const tn& obj)
+		template <typename T>
+		void AppendObject(const T& obj)
 		{
 			FE_CORE_ASSERT(Free + sizeof(obj) <= Data + Size, "MemReg overflow!");
 

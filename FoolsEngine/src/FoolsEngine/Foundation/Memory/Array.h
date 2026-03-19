@@ -6,258 +6,263 @@
 
 namespace fe
 {
-	template <typename tn>
+	template <typename T>
 	struct Splice
 	{
-		tn* Elements = nullptr;
+		T* Elements = nullptr;
 		UInt Count = 0;
 
-		tn& operator[](UInt i)
+		T& operator[](UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Elements[i];
 		}
 	};
 
-	template <typename tn>
-	class Array : public Splice<tn>
+	template <typename T>
+	class Array : public Splice<T>
 	{
 	public:
 		UInt Capacity = 0;
 
-		void InitArray(tn* elements, UInt capacity)
+		void InitArray(T* elements, UInt capacity)
 		{
-			Splice<tn>::Elements = elements;
+			Splice<T>::Elements = elements;
 			Capacity = capacity;
-			Splice<tn>::Count = 0;
+			Splice<T>::Count = 0;
 		}
 
-		tn& operator[](UInt i)
+		void InitArray(MemReg& memReg)
+		{
+			Splice<T>::Elements = (T*)memReg.Data;
+			Capacity = memReg.Size / sizeof(T);
+			Splice<T>::Count = 0;
+		}
+
+		T& operator[](UInt i)
 		{
 			FE_CORE_ASSERT(i < Capacity, "Out of Splice bound!");
-			return Splice<tn>::Elements[i];
+			return Splice<T>::Elements[i];
 		}
 
-		tn& Append(const tn& element)
+		void Append(const T& element)
 		{
-			FE_CORE_ASSERT(Splice<tn>::Count < Capacity, "Out of Array bounds!");
-			Splice<tn>::Elements[Splice<tn>::Count] = element;
-			tn& result = Splice<tn>::Elements[Splice<tn>::Count];
-			++Splice<tn>::Count;
+			FE_CORE_ASSERT(Splice<T>::Count < Capacity, "Out of Array bounds!");
+			Splice<T>::Elements[Splice<T>::Count] = element;
+			++Splice<T>::Count;
+			return;
+		}
+
+		T& PushBack()
+		{
+			FE_CORE_ASSERT(Splice<T>::Count < Capacity, "Out of Array bounds!");
+			T& result = Splice<T>::Elements[Splice<T>::Count];
+			++Splice<T>::Count;
 			return result;
 		}
 
-		tn& PushBack()
+		T PopBack()
 		{
-			FE_CORE_ASSERT(Splice<tn>::Count < Capacity, "Out of Array bounds!");
-			tn& result = Splice<tn>::Elements[Splice<tn>::Count];
-			++Splice<tn>::Count;
+			FE_CORE_ASSERT(Splice<T>::Count, "Array is empty!");
+			T& result = Splice::Elements[Splice<T>::Count];
+			Splice<T>::Count--;
 			return result;
-		}
-
-		void PopBack()
-		{
-			FE_CORE_ASSERT(Splice<tn>::Count, "Array is empty!");
-			Splice<tn>::Count--;
 		}
 	};
 
 	// dont instantiate, use DynArrStat instead
-	template <typename tn>
-	class DynArr : public Array<tn>
+	template <typename T>
+	class DynArr : public Array<T>
 	{
 	public:
 		Allocator* Alloc = nullptr;
 
-		tn& Append(const tn& element)
+		void Release()
 		{
-			if (Array<tn>::Count == Array<tn>::Capacity)
-				ResizeAndRelocate();
-
-			Array<tn>::Elements[Array<tn>::Count] = element;
-			tn& result = Array<tn>::Elements[Array<tn>::Count];
-			++Array<tn>::Count;
-			return result;
-		}
-
-		tn& PushBack()
-		{
-			if (Array<tn>::Count == Array<tn>::Capacity)
-				ResizeAndRelocate();
-
-			tn& result = Array<tn>::Elements[Array<tn>::Count];
-			++Array<tn>::Count;
-			return result;
-		}
-
-		void ResizeAndRelocate()
-		{
-			UInt new_capacity;
-			if (Array<tn>::Capacity)
-				new_capacity = Array<tn>::Capacity + Array<tn>::Capacity / 2; // *1.5
-			else
-				new_capacity = 4;
-			MemReg new_elements = Alloc->Allocate<tn>(new_capacity);
-
-			if (Array<tn>::Elements)
+			if (Array<T>::Elements)
 			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				Alloc->Deallocate({ Array<tn>::Elements, old_size });
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)Array<T>::Elements;
+				to_dealloc.Size = Array<T>::Capacity * sizeof(T);
+				Alloc->Deallocate(to_dealloc);
 			}
+			Array<T>::Capacity = 0;
+			Array<T>::Count = 0;
+			Array<T>::Elements = nullptr;
+		}
 
-			Array<tn>::Elements = new_elements.Data;
-			Array<tn>::Capacity = new_capacity;
+		void Deinit()
+		{
+			Release();
+			Alloc = nullptr;
+		}
+
+		void Append(const T& element)
+		{
+			if (Array<T>::Count == Array<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			Array<T>::Elements[Array<T>::Count] = element;
+			++Array<T>::Count;
+			return;
+		}
+
+		T& PushBack()
+		{
+			if (Array<T>::Count == Array<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			T& result = Array<T>::Elements[Array<T>::Count];
+			++Array<T>::Count;
+			return result;
+		}
+
+		void DefaultResizeAndRelocate()
+		{
+			bool any_capacity = Array<T>::Capacity;
+			UInt new_capacity = Array<T>::Capacity + (Array<T>::Capacity >> 1); // *1.5
+			
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			RelocateToNewCapacity(new_capacity);
 		}
 
 		void ReserveExact(UInt capacity)
 		{
-			if (capacity <= Array<tn>::Capacity)
-			{
-				FE_LOG_CORE_WARN("Attempt to reserve DynArr capacity to no more then it already have!");
-				return;
-			}
-
-			MemReg new_elements = Alloc->Allocate<tn>(capacity);
-
-			if (Array<tn>::Elements)
-			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				Alloc->Deallocate({ Array<tn>::Elements, old_size });
-			}
-
-			Array<tn>::Elements = new_elements.Data;
-			Array<tn>::Capacity = capacity;
+			FE_CORE_ASSERT(capacity <= Array<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+			RelocateToNewCapacity(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
-			if (capacity <= Array<tn>::Capacity)
+			FE_CORE_ASSERT(capacity <= Array<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+
+			bool any_capacity = Array<T>::Capacity;
+			UInt new_capacity = Array<T>::Capacity + (Array<T>::Capacity >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			bool default_better = new_capacity > capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+	private:
+		void RelocateToNewCapacity(UInt newCapacity)
+		{
+			MemReg new_elements = Alloc->Allocate<T>(newCapacity);
+
+			if (Array<T>::Elements)
 			{
-				FE_LOG_CORE_WARN("Attempt to reserve DynArr capacity to no more then it already have!");
-				return;
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)Array<T>::Elements;
+				to_dealloc.Size = Array<T>::Capacity * sizeof(T);
+				std::memcpy(new_elements.Data, Array<T>::Elements, to_dealloc.Size);
+				Alloc->Deallocate(to_dealloc);
 			}
 
-			UInt new_capacity;
-			if (Array<tn>::Capacity)
-				new_capacity = Array<tn>::Capacity + Array<tn>::Capacity / 2; // *1.5
-			else
-				new_capacity = 4;
-
-			if (new_capacity < capacity)
-				new_capacity = capacity;
-
-			MemReg new_elements = Alloc->Allocate<tn>(new_capacity);
-
-			if (Array<tn>::Elements)
-			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				Alloc->Deallocate({ Array<tn>::Elements, old_size });
-			}
-
-			Array<tn>::Elements = new_elements.Data;
-			Array<tn>::Capacity = new_capacity;
+			Array<T>::Elements = new_elements.Data;
+			Array<T>::Capacity = newCapacity;
 		}
 	};
 
-	template <typename tn, class tAlloc>
-	class DynArrStat : public DynArr<tn>
+	template <typename T, class tAlloc>
+	class DynArrAlloc final : public DynArr<T>
 	{
 	public:
-		void InitDynArrStat(tAlloc* allocator) { DynArr<tn>::Alloc = allocator; }
+		DynArrAlloc() { };
+		DynArrAlloc(tAlloc& alloc) { DynArr<T>::Alloc = &alloc; }
+		~DynArrAlloc() { Release(); }
 
-		tn& Append(const tn& element)
+		void InitDynArrAlloc(tAlloc* allocator) { DynArr<T>::Alloc = allocator; }
+
+		void Release()
 		{
-			if (DynArr<tn>::Count == DynArr<tn>::Capacity)
-				ResizeAndRelocate();
-
-			DynArr<tn>::Elements[DynArr<tn>::Count] = element;
-			tn& result = DynArr<tn>::Elements[DynArr<tn>::Count];
-			++DynArr<tn>::Count;
-			return result;
-		}
-
-		tn& PushBack()
-		{
-			if (DynArr<tn>::Count == DynArr<tn>::Capacity)
-				ResizeAndRelocate();
-
-			tn& result = DynArr<tn>::Elements[DynArr<tn>::Count];
-			++DynArr<tn>::Count;
-			return result;
-		}
-
-		void ResizeAndRelocate()
-		{
-			UInt new_capacity;
-			if (Array<tn>::Capacity)
-				new_capacity = Array<tn>::Capacity + Array<tn>::Capacity / 2; // *1.5
-			else
-				new_capacity = 4;
-			MemReg new_elements = ((tAlloc*)DynArr<tn>::Alloc)->Allocate<tn>(new_capacity);
-
-			if (Array<tn>::Elements)
+			if (DynArr<T>::Elements)
 			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				((tAlloc*)DynArr<tn>::Alloc)->Deallocate({ Array<tn>::Elements, old_size });
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)Array<T>::Elements;
+				to_dealloc.Size = DynArr<T>::Capacity * sizeof(T);
+				((tAlloc*)DynArr<T>::Alloc)->Deallocate(to_dealloc);
 			}
+			DynArr<T>::Capacity = 0;
+			DynArr<T>::Count = 0;
+			DynArr<T>::Elements = nullptr;
+		}
 
-			DynArr<tn>::Elements = new_elements.Data;
-			DynArr<tn>::Capacity = new_capacity;
+		void Deinit()
+		{
+			Release();
+			DynArr<T>::Alloc = nullptr;
+		}
+
+		void Append(const T& element)
+		{
+			if (DynArr<T>::Count == DynArr<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			DynArr<T>::Elements[DynArr<T>::Count] = element;
+			++DynArr<T>::Count;
+			return;
+		}
+
+		T& PushBack()
+		{
+			if (DynArr<T>::Count == DynArr<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			T& result = DynArr<T>::Elements[DynArr<T>::Count];
+			++DynArr<T>::Count;
+			return result;
+		}
+
+		void DefaultResizeAndRelocate()
+		{
+			bool any_capacity = DynArr<T>::Capacity;
+			UInt new_capacity = DynArr<T>::Capacity + (DynArr<T>::Capacity >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			RelocateToNewCapacity(new_capacity);
 		}
 
 		void ReserveExact(UInt capacity)
 		{
-			if (capacity <= Array<tn>::Capacity)
-			{
-				FE_LOG_CORE_WARN("Attempt to reserve DynArr capacity to no more then it already have!");
-				return;
-			}
-
-			MemReg new_elements = ((tAlloc*)DynArr<tn>::Alloc)->Allocate<tn>(capacity);
-
-			if (Array<tn>::Elements)
-			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				((tAlloc*)DynArr<tn>::Alloc)->Deallocate({ Array<tn>::Elements, old_size });
-			}
-
-			Array<tn>::Elements = new_elements.Data;
-			Array<tn>::Capacity = capacity;
+			FE_CORE_ASSERT(capacity <= DynArr<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+			RelocateToNewCapacity(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
-			if (capacity <= Array<tn>::Capacity)
+			FE_CORE_ASSERT(capacity <= DynArr<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+
+			bool any_capacity = DynArr<T>::Capacity;
+			UInt new_capacity = DynArr<T>::Capacity + (DynArr<T>::Capacity >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			bool default_better = new_capacity > capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+
+	private:
+		void RelocateToNewCapacity(UInt newCapacity)
+		{
+			MemReg new_elements = ((tAlloc*)DynArr<T>::Alloc)->Allocate<T>(newCapacity);
+
+			if (DynArr<T>::Elements)
 			{
-				FE_LOG_CORE_WARN("Attempt to reserve DynArr capacity to no more then it already have!");
-				return;
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)DynArr<T>::Elements;
+				to_dealloc.Size = DynArr<T>::Capacity * sizeof(T);
+				std::memcpy(new_elements.Data, DynArr<T>::Elements, to_dealloc.Size);
+				((tAlloc*)DynArr<T>::Alloc)->Deallocate(to_dealloc);
 			}
 
-			UInt new_capacity;
-			if (Array<tn>::Capacity)
-				new_capacity = Array<tn>::Capacity + Array<tn>::Capacity / 2; // *1.5
-			else
-				new_capacity = 4;
-
-			if (new_capacity < capacity)
-				new_capacity = capacity;
-
-			MemReg new_elements = ((tAlloc*)DynArr<tn>::Alloc)->Allocate<tn>(new_capacity);
-
-			if (Array<tn>::Elements)
-			{
-				UInt old_size = Array<tn>::Capacity * sizeof(tn);
-				std::memcpy(new_elements.Data, Array<tn>::Elements, old_size);
-				((tAlloc*)DynArr<tn>::Alloc)->Deallocate({ Array<tn>::Elements, old_size });
-			}
-
-			Array<tn>::Elements = new_elements.Data;
-			Array<tn>::Capacity = new_capacity;
+			DynArr<T>::Elements = new_elements.Data;
+			DynArr<T>::Capacity = newCapacity;
 		}
 	};
+
+	template <typename T, class alloc>
+	inline DynArrAlloc<T, alloc> MakeDynArr(alloc& al) { return DynArrAlloc<T, alloc>(al); }
 }

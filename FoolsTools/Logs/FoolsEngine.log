@@ -1,28 +1,6 @@
-02:58:57:022695 | FE  | info     | Logging innitialized!
-02:58:57:023294 | App | info     | Logging innitialized!
-02:58:57:023392 | FE  | info     | /////////////////////////////////////////////////////
-02:58:57:023468 | FE  | info     | ////////////////////// STARTUP //////////////////////
-02:58:57:023539 | FE  | info     | /////////////////////////////////////////////////////
-02:58:57:023834 | FE  | info     | Profiler session 'Startup' started.
-02:58:57:024451 | FE  | info     | Initializing GLFW
-02:58:57:062338 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-02:58:57:235966 | FE  | info     | Setting events callbacks for window:
-02:58:57:236095 | FE  | info     | 	WindowResizeEvent
-02:58:57:236180 | FE  | info     | 	WindowCloseEvent
-02:58:57:236270 | FE  | info     | 	WindowFocusChangeEvents
-02:58:57:236350 | FE  | info     | 	KeyEvents
-02:58:57:236429 | FE  | info     | 	KeyTypedEvent
-02:58:57:236508 | FE  | info     | 	MouseButtonEvents
-02:58:57:236610 | FE  | info     | 	MouseScrolledEvent
-02:58:57:236698 | FE  | info     | 	MouseMovedEvent
-02:58:57:236933 | FE  | info     | Creating rendering context
-02:58:57:240387 | FE  | info     | Rendering platform info:
-02:58:57:240481 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-02:58:57:240594 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-02:58:57:240697 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-02:58:57:240873 | FE  | info     | OpenGL Rendering Context created
-02:58:57:241021 | FE  | info     | VSync disabled.
-02:58:57:243762 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-02:58:57:244601 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-02:58:57:252817 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
-02:58:59:844587 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
+04:39:11:915051 | FE  | info     | Logging innitialized!
+04:39:11:915927 | App | info     | Logging innitialized!
+04:39:11:916021 | FE  | info     | /////////////////////////////////////////////////////
+04:39:11:916117 | FE  | info     | ////////////////////// STARTUP //////////////////////
+04:39:11:916202 | FE  | info     | /////////////////////////////////////////////////////
+04:39:11:916493 | FE  | info     | Profiler session 'Startup' started.

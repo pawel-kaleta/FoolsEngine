@@ -4,6 +4,8 @@
 #include "Time.h"
 #include "Project.h"
 
+#include "FoolsEngine/Foundation/Memory/Xar.h"
+#include "FoolsEngine/Foundation/Memory/Allocator.h"
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
 #include "FoolsEngine/Platform/FileDialogs.h"

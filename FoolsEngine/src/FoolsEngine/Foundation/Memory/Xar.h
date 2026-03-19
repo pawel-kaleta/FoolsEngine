@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Allocator.h"
+#include "Array.h"
+
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 
@@ -9,6 +12,7 @@
 
 namespace fe
 {
+	// to be removed!
 	template <typename T>
 	class Xar
 	{
@@ -130,4 +134,244 @@ namespace fe
 		std::pmr::vector<T*> m_Chunks;
 		uint64_t m_Size;
 	};
+
+	// this is for function parameters only
+	// don't instantiate, use XarrAlloc or MakeXarr<T>(alloc) instead
+	template <typename T>
+	class Xarr
+	{
+	public:
+		UInt Count = 0;
+		Allocator* Alloc = nullptr;
+		Array<T*> Chunks;
+
+		UInt Capacity()
+		{
+			U64 result = -1;
+			// shift by 64 as 1 op is UB and sets result to -1
+			result = result >> (63 - Chunks.Count);
+			result = result >> 1;
+
+			return result;
+		}
+
+		void Release()
+		{
+			if (Chunks.Count)
+			{
+				UInt size = sizeof(T);
+				for (UInt i = 0; i < Chunks.Count; ++i)
+				{
+					MemReg region;
+					region.Data = (Byte*)(Chunks[i]);
+					region.Size = size;
+					Alloc->Deallocate(region);
+					size = size << 1;
+				}
+
+				MemReg region;
+				region.Data = (Byte*)Chunks.Elements;
+				region.Size = Chunks.Capacity * sizeof(T*);
+				Alloc->Deallocate(region);
+			}
+
+			Count = 0;
+			Chunks.Capacity = 0;
+			Chunks.Count = 0;
+			Chunks.Elements = nullptr;
+		}
+
+		void Deinit()
+		{
+			Release();
+			Alloc = nullptr;
+		}
+
+		T& operator[](UInt i)
+		{
+			++i;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, i);
+			UInt chunk_mask = UInt(1) << chunk_i;
+			UInt in_chunk_i = i - chunk_mask;
+			T* result_ptr = Chunks[chunk_i] + in_chunk_i;
+			return *result_ptr;
+		}
+
+		void Expand()
+		{
+			if (Chunks.Count == Chunks.Capacity)
+			{
+				bool any_capacity = Chunks.Capacity;
+				UInt chunks_new_capacity = Chunks.Capacity + (Chunks.Capacity >> 1); // *1.5
+				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+
+				MemReg new_elements = Alloc->Allocate<T*>(chunks_new_capacity);
+
+				UInt old_size = Chunks.Capacity * sizeof(T*);
+				std::memcpy(new_elements.Data, Chunks.Elements, old_size);
+				MemReg todealoc;
+				todealoc.Data = (Byte*)Chunks.Elements;
+				todealoc.Size = old_size;
+				Alloc->Deallocate(todealoc);
+
+				Chunks.Elements = (T**)new_elements.Data;
+				Chunks.Capacity = chunks_new_capacity;
+			}
+
+			UInt new_chunk_capacity = UInt(1) << Chunks.Count;
+			MemReg mem_reg = Alloc->Allocate<T>(new_chunk_capacity);
+			Chunks.Append((T*)mem_reg.Data);
+		}
+
+		void Append(const T& t)
+		{
+			if (Count == Capacity())
+				Expand();
+
+			++Count;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Count - chunk_mask;
+			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+
+			*result_ptr = t;
+		}
+
+		T& PushBack()
+		{
+			if (Count == Capacity())
+				Expand();
+
+			++Count;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Count - chunk_mask;
+			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+
+			return *result_ptr;
+		}
+
+		T PopBack()
+		{
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Count - chunk_mask;
+			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+
+			--Count;
+
+			return *result_ptr;
+		}
+	};
+
+	template <typename T, class tnAlloc>
+	class XarrAlloc final : public Xarr<T>
+	{
+	public:
+		XarrAlloc() { };
+		XarrAlloc(tnAlloc& alloc) {	Xarr<T>::Alloc = &alloc; }
+		~XarrAlloc() { Release(); }
+
+		void InitXarrAlloc(tnAlloc* alloc) { Xarr<T>::Alloc = alloc; }
+
+		void Release()
+		{
+			if (Xarr<T>::Chunks.Count)
+			{
+				UInt size = sizeof(T);
+				for (UInt i = 0; i < Xarr<T>::Chunks.Count; ++i)
+				{
+					MemReg region;
+					region.Data = (Byte*)(Xarr<T>::Chunks[i]);
+					region.Size = size;
+					((tnAlloc*)Xarr<T>::Alloc)->Deallocate(region);
+					size = size << 1;
+				}
+
+				MemReg region;
+				region.Data = (Byte*)Xarr<T>::Chunks.Elements;
+				region.Size = Xarr<T>::Chunks.Capacity * sizeof(T*);
+				((tnAlloc*)Xarr<T>::Alloc)->Deallocate(region);
+			}
+
+			Xarr<T>::Count = 0;
+			Xarr<T>::Chunks.Capacity = 0;
+			Xarr<T>::Chunks.Count = 0;
+			Xarr<T>::Chunks.Elements = nullptr;
+		}
+
+		void Deinit()
+		{
+			Release();
+			Xarr<T>::Alloc = nullptr;
+		}
+
+		void Expand()
+		{
+			if (Xarr<T>::Chunks.Count == Xarr<T>::Chunks.Capacity)
+			{
+				bool any_capacity = Xarr<T>::Chunks.Capacity;
+				UInt chunks_new_capacity = Xarr<T>::Chunks.Capacity + (Xarr<T>::Chunks.Capacity >> 1); // *1.5
+				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+
+				MemReg new_elements = ((tnAlloc*)Xarr<T>::Alloc)->Allocate<T*>(chunks_new_capacity);
+
+				UInt old_size = Xarr<T>::Chunks.Capacity * sizeof(T*);
+				std::memcpy(new_elements.Data, Xarr<T>::Chunks.Elements, old_size);
+				MemReg todealoc;
+				todealoc.Data = (Byte*)Xarr<T>::Chunks.Elements;
+				todealoc.Size = old_size;
+				((tnAlloc*)Xarr<T>::Alloc)->Deallocate(todealoc);
+
+				Xarr<T>::Chunks.Elements = (T**)new_elements.Data;
+				Xarr<T>::Chunks.Capacity = chunks_new_capacity;
+			}
+
+			UInt new_chunk_capacity = UInt(1) << Xarr<T>::Chunks.Count;
+			MemReg mem_reg = ((tnAlloc*)Xarr<T>::Alloc)->Allocate<T>(new_chunk_capacity);
+			Xarr<T>::Chunks.Append((T*)mem_reg.Data);
+		}
+
+		void Append(const T& t)
+		{
+			if (Xarr<T>::Count == Xarr<T>::Capacity())
+				Expand();
+
+			++Xarr<T>::Count;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Xarr<T>::Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Xarr<T>::Count - chunk_mask;
+			auto result_ptr = Xarr<T>::Chunks[chunk_i] + in_chunk_i;
+
+			*result_ptr = t;
+		}
+
+		T& PushBack()
+		{
+			if (Xarr<T>::Count == Xarr<T>::Capacity())
+				Expand();
+
+			++Xarr<T>::Count;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Xarr<T>::Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Xarr<T>::Count - chunk_mask;
+			auto result_ptr = Xarr<T>::Chunks[chunk_i] + in_chunk_i;
+
+			return *result_ptr;
+		}
+	};
+
+	template <typename T, class alloc>
+	inline XarrAlloc<T, alloc> MakeXarr(alloc& al) { return XarrAlloc<T, alloc>(al); }
 }

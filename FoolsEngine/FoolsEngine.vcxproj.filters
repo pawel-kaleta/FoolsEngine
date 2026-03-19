@@ -413,6 +413,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Array.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -632,6 +633,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Memory\test.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp" />
   </ItemGroup>
 </Project>

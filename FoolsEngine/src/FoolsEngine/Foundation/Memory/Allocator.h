@@ -13,8 +13,8 @@ namespace fe
 	class Allocator
 	{
 	public:
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) = 0;
 		virtual void Allocate(MemReg& memReg, UInt alignment) = 0;
@@ -36,8 +36,8 @@ namespace fe
 	public:
 		MemRegFiller m_MemRegFiller;
 
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) override final { return MemReg(); }
 		virtual void Allocate(MemReg& memReg, UInt alignment) override final { memReg.Data = nullptr; }
@@ -51,7 +51,7 @@ namespace fe
 				return;
 			}
 			FE_CORE_ASSERT(false, "ArenaAllocator does not deallocate individually");
-		};
+		}
 
 		void Clear() { m_MemRegFiller.Free = m_MemRegFiller.Data; }
 
@@ -70,8 +70,8 @@ namespace fe
 		Primary m_Primary;
 		Fallback m_Fallback;
 
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) final override
 		{
@@ -103,15 +103,16 @@ namespace fe
 	class MallocAllocator final : public Allocator
 	{
 	public:
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
 		{
+			FE_CORE_ASSERT(alignment <= 8, "MallocAllocator does not align to anything else then 8");
 			MemReg result;
-			result.Data = (Byte*) operator new (bytes, std::align_val_t(alignment));
+			result.Data = (Byte*) operator new (bytes);
 			result.Size = bytes;
-			
+
 			return result;
 		}
 		virtual void Allocate(MemReg& memReg, UInt alignment) override final { memReg.Data = (Byte*) operator new (memReg.Size, std::align_val_t(alignment)); }
@@ -120,7 +121,7 @@ namespace fe
 		{
 			operator delete (memReg.Data);
 			memReg.Data = nullptr;
-		};
+		}
 	};
 
 	template <class SmallAllocator, class BigAllocator, UInt threshold>
@@ -130,8 +131,8 @@ namespace fe
 		SmallAllocator m_SmallAllocator;
 		BigAllocator m_BigAllocator;
 
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
 		{
@@ -155,7 +156,7 @@ namespace fe
 				m_SmallAllocator.Deallocate(memReg);
 			else
 				m_BigAllocator.Deallocate(memReg);
-		};
+		}
 
 		bool DoesOwn(const MemReg& memReg)
 		{
@@ -180,8 +181,8 @@ namespace fe
 		//true is free
 		U64 m_BitMapping = 0;
 
-		template <typename tn>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(tn), alignof(tn)); }
+		template <typename T>
+		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T) * count, alignof(T)); }
 
 		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
 		{
@@ -253,7 +254,7 @@ namespace fe
 			U64 flag_mask = (U64)1 << (63 - index);
 			m_BitMapping &= flag_mask;
 			memReg.Data = nullptr;
-		};
+		}
 
 		bool DoesOwn(const MemReg& memReg)
 		{
