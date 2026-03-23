@@ -1,6 +1,7 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
 
 #include "FoolsEngine/Assets/AssetAccessors.h"
 
@@ -20,9 +21,9 @@ namespace fe::Resource
 
 		std::pmr::vector<GLuint> shaders_OpenGL(&sp);
 
-		for (const auto& shader_asset_id : Shaders)
+		for (UInt i =0; i<Shaders.Count; i++)
 		{
-			AssetObserver<Shader> shader_observer(shader_asset_id);
+			AssetObserver<Shader> shader_observer(Shaders[i]);
 			shaders_OpenGL.push_back(shader_observer.GetResourceComponent<GAPIType::OpenGL>().Shader.ShaderOpenGLID);
 		}
 
@@ -59,21 +60,30 @@ namespace fe::Resource
 
 		const auto& library = Description::Library::Get();
 
-		const auto& spec = library.ProgramSpecs[SpecificationID];
+		const auto& spec = library.ProgramSpecs[(UInt)SpecificationID];
 
 		const auto& uniforms = library.BufferLayouts[spec.MainUniformsLayoutID];
 
-		for (const auto& uniform : uniforms.Elements)
+		Pile p;
+		for (UInt i = 0; i < uniforms.Elements.Count; i++)
 		{
-			GLint location = glGetUniformLocation(ProgramOpenGLID, uniform.Name.c_str());
-			BindingLocations.MainUniforms.push_back(location);
+			const auto c_name = uniforms.Elements[i].Name.GetCString(p);
+			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
+
+			//static_assert(false, "allocate splice");
+			BindingLocations.MainUniforms[i] = location; // allocate first!
+			p.Clear();
 		}
 
-		for (const auto& texture_sampler_id : spec.TextureSamplerIDs)
+		for (UInt i = 0; i < spec.TextureSamplerIDs.Count; i++)
 		{
+			const auto& texture_sampler_id = spec.TextureSamplerIDs[i];
 			const auto& texture_sampler = library.TextureSamplers[texture_sampler_id];
-			GLint location = glGetUniformLocation(ProgramOpenGLID, texture_sampler.Name.c_str());
-			BindingLocations.TextureSamplers.push_back(location);
+			const auto c_name = texture_sampler.Name.GetCString(p);
+			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
+
+			//static_assert(false, "allocate splice");
+			BindingLocations.TextureSamplers[i] = location;
 		}
 	}
 
@@ -82,5 +92,7 @@ namespace fe::Resource
 		FE_PROFILER_FUNC();
 
 		glDeleteProgram(ProgramOpenGLID);
+
+		//Deallocate splices
 	}
 }

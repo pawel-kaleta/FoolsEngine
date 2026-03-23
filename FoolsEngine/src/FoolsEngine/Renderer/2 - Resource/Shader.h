@@ -10,7 +10,7 @@ namespace fe::Resource
 
 	struct ShaderBase
 	{
-		uint32_t SpecificationID;
+		UInt SpecificationID;
 
 		virtual void Create(const char* source) = 0;
 		virtual void Destroy() = 0;

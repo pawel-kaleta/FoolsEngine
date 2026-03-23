@@ -41,7 +41,7 @@ namespace fe::Resource
 		StaticBuffer_OpenGL & vertex_buffer = * (StaticBuffer_OpenGL*) & buffer;
 
 		uint32_t buffer_element_index = 0;
-		for (size_t i = 0; i < layout.Elements.size(); ++i)
+		for (size_t i = 0; i < layout.Elements.Count; ++i)
 		{
 			const auto& element = layout.Elements[i];
 			const auto& element_offset = layout.Offsets[i];

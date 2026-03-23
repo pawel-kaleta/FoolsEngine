@@ -6,14 +6,20 @@
 
 namespace fe::Resource
 {
-	uint32_t FramebufferBase::GetColorAttachmentIndex(const std::string& name) const
+	UInt FramebufferBase::GetColorAttachmentIndex(const String& name) const
 	{
 		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 
-		for (int i = 0; i < spec.ColorAttachments.size(); ++i)
+		for (UInt i = 0; i < spec.ColorAttachments.Count; ++i)
 		{
-			if (spec.ColorAttachments[i].Name.compare(name))
-				return i;
+			auto& attachment = spec.ColorAttachments[i];
+			if (attachment.Name.Length != name.Length)
+				continue;
+
+			if (!std::memcmp(attachment.Name.Data, name.Data, name.Length))
+				continue;
+
+			return i;
 		}
 
 		FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer", name);

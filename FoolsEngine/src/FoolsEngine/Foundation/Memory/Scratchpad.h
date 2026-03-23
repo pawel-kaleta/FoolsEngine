@@ -56,7 +56,7 @@ namespace fe
 			m_End = s_Free;
 		}
 	private:
-		constexpr const static size_t s_BufferSize = 20 * 1024;
+		constexpr const static size_t s_BufferSize = 24 * 1024;
 		static std::byte s_Buffer[s_BufferSize];
 		static std::byte* s_Free;
 		static uint64_t s_RollbackFlags;
@@ -99,7 +99,7 @@ namespace fe
 			return aligned;
 		};
 		virtual void do_deallocate(void* p, std::size_t bytes, std::size_t alignment) final override { };
-		virtual bool do_is_equal(const std::pmr::memory_resource& other)  const noexcept final override { return this == &other; };
+		virtual bool do_is_equal(const std::pmr::memory_resource& other) const noexcept final override { return this == &other; };
 	};
 #pragma warning(default : 6323)
 

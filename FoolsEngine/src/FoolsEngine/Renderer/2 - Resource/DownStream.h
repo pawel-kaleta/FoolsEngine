@@ -16,7 +16,7 @@ namespace fe::Resource
 
 	struct DownStream
 	{
-		Description::Buffer::Usage Usage;
+		//Description::Buffer::Usage Usage; // do we need this?
 
 		virtual void Create(size_t capacity) = 0;
 		virtual void Destroy() = 0;
@@ -36,51 +36,49 @@ namespace fe::Resource
 	struct StreamRegion_OpenGL final : StreamRegion
 	{
 		DownStream_OpenGL* Stream;
+		UInt Offset;
 		GLuint OpenGLBuffer;
-		uint32_t Offset;
-		uint32_t Size;
+		U32 Size;
 	};
 
 	struct DownStream_OpenGL final : DownStream
 	{
+		static inline constexpr UInt Alignment = 64;
+
 		struct Fence
 		{
 			GLsync OpenGLFence;
-			size_t Location;
+			UInt Location;
 		};
-
-		// change std::queue to a custom ringbuffer queue,
-		// std::queue is on top of std::deque and std::deque is bad https://godbolt.org/z/E53Ks8638
-		// on top of that, you can't even clear std::deque, you have to recreate it
-		//Note: beware of pointer stability in regards to RegionFences
-		//maybe merge Fence and Region?
-		std::vector<Fence> FrontFences;
-		std::vector<Fence> BackFences;
-		size_t NextFenceIndex;
 		
-		std::vector<StreamRegion_OpenGL> Regions;
-		std::vector<Fence*> RegionFences;
+		MonotonicAllocator Alloc;
 
-		//size_t CurrentRegionOffset;
-		size_t CurrentOffset;
-		void* CPUMemoryBegin;
-		size_t Capacity;
+		XarrAlloc<Fence, MonotonicAllocator> FrontFences;
+		XarrAlloc<Fence, MonotonicAllocator> BackFences;
+		UInt NextFenceIndex;
+		
+		XarrAlloc<StreamRegion_OpenGL, MonotonicAllocator> Regions;
+		XarrAlloc<Fence*, MonotonicAllocator> RegionFences;
+
+		UInt CurrentOffset;
+		Byte* CPUMemoryBegin;
+		UInt Capacity;
 		GLuint OpenGLBuffer;
 
 		// When we outgrow a buffer (hit a fence), we cannot orphan/recreate it,
 		// because there may stil be unsceduled draw calls involving it
 		// instead we postpone destruction to the end of the frame
 		// when we are guaranteed, that all draw call are allready issued
-		std::vector<GLuint> PastBuffersToDestroy;
+		XarrAlloc<GLuint, MonotonicAllocator> PastBuffersToDestroy; // does this need to be xarr?
 
-		virtual void Create(size_t capacity) override;
+		virtual void Create(UInt capacity) override;
 		virtual void Destroy() override;
 
 		virtual void BeginRegion() override;
-		virtual void PushData(void* data, size_t size) override;
+		virtual void PushData(void* data, UInt size) override;
 		virtual StreamRegion* EndRegion() override;
 
-		virtual StreamRegion* ReserveUncommitedRegion(size_t size) override;
+		virtual StreamRegion* ReserveUncommitedRegion(UInt size) override;
 		virtual void CommitRegion(StreamRegion* region) override;
 
 		virtual void RetireRegion(StreamRegion* region) override;
@@ -88,7 +86,7 @@ namespace fe::Resource
 		virtual void EndFrame() override;
 
 	private:
-		bool CheckFences(size_t pushSize);
-		void MakeNewBuffer(size_t pushSize);
+		bool CheckFences(UInt pushSize);
+		void MakeNewBuffer(UInt pushSize);
 	};
 }

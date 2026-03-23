@@ -14,11 +14,9 @@ namespace fe
 
 		struct TextureSampler
 		{
-			TextureSampler();
-
-			UUID UUID;
-			std::pmr::string Name;
-			uint32_t TextureArchetypeID;
+			String Name;
+			UUID UUID = fe::UUID();
+			U32 TextureArchetypeID = -1;
 		};
 
 		struct UniformBufferSampler { };
@@ -26,35 +24,30 @@ namespace fe
 
 		struct Specification
 		{
-			Specification();
+			UUID UUID = fe::UUID();
+			ShaderType Type = ShaderType::None;
 
-			UUID UUID;
-			ShaderType Type;
+			U32 InputLayoutID = -1;
+			U32 OutputLayoutID = -1;
+			U32 MainUniformsLayoutID = -1;
 
-			uint32_t InputLayoutID;
-			uint32_t OutputLayoutID;
-			uint32_t MainUniformsLayoutID;
-
-			std::pmr::vector<uint32_t> TextureSamplerIDs;
-			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
-			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
+			Splice<U32> TextureSamplerIDs;
+			Splice<U32> UniformBufferSamplerIDs;
+			Splice<U32> DynamicBufferSamplerIDs;
 		};
 
 		struct ProgramSpecification
 		{
-			ProgramSpecification();
+			UUID UUID = fe::UUID();
 
-			UUID UUID;
-			uint32_t VertexInputLayoutID;
-			uint32_t VertexOutputLayoutID; // needed only for VertexOutputCapture into buffer
-			uint32_t FragmentOutputLayoutID;
-			uint32_t MainUniformsLayoutID;
+			U32 VertexInputLayoutID = -1;
+			U32 VertexOutputLayoutID = -1; // needed only for VertexOutputCapture into buffer
+			U32 FragmentOutputLayoutID = -1;
+			U32 MainUniformsLayoutID = -1;
 
-			std::pmr::vector<uint32_t> TextureSamplerIDs;
-			std::pmr::vector<uint32_t> UniformBufferSamplerIDs;
-			std::pmr::vector<uint32_t> DynamicBufferSamplerIDs;
-
-			bool VertexOutputCapture; //TO DO: this is most likely not enough
+			Splice<U32> TextureSamplerIDs;
+			Splice<U32> UniformBufferSamplerIDs;
+			Splice<U32> DynamicBufferSamplerIDs;
 		};
 	}
 }

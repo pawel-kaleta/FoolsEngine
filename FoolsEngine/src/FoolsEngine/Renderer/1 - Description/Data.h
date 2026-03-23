@@ -26,9 +26,9 @@ namespace fe
 
 		constexpr Primitive PrimitiveInType(Type type)
 		{
-			int as_int = type.ToInt();
+			UInt as_int = type.ToInt();
 
-			if (as_int > 29 || as_int <= 0) {
+			if (as_int > 29) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return Primitive::None;
 			}
@@ -49,9 +49,9 @@ namespace fe
 
 		constexpr Structure StructureInType(Type type)
 		{
-			int as_int = type.ToInt();
+			UInt as_int = type.ToInt();
 
-			if (as_int > 29 || as_int <= 0) {
+			if (as_int > 29) {
 				FE_CORE_ASSERT(false, "Uknown Shader Data Type!");
 				return Structure::None;
 			}
@@ -69,25 +69,25 @@ namespace fe
 			return Structure::None;
 		}
 
-		constexpr uint32_t CountInVector(Type type)
+		constexpr UInt CountInVector(Type type)
 		{
-			int as_int = type.ToInt();
+			UInt as_int = type.ToInt();
 
 			if (as_int < 1 || as_int >= 21) {
 				FE_CORE_ASSERT(false, "It is not vector!");
 				return 0;
 			}
 
-			uint32_t result = as_int % 4;
+			UInt result = as_int % 4;
 
 			if (result)
 				return result;
 			return 4;
 		}
 
-		constexpr Type TypeOfMatrix(uint32_t rows, uint32_t columns)
+		constexpr Type TypeOfMatrix(UInt rows, UInt columns)
 		{
-			uint32_t result = 20;
+			UInt result = 20;
 			result += columns - 1;
 			result += (rows - 2) * 3;
 			Type type;
@@ -95,9 +95,9 @@ namespace fe
 			return type;
 		}
 
-		constexpr uint32_t RowsOfMatrix(Type matrix)
+		constexpr UInt RowsOfMatrix(Type matrix)
 		{
-			int as_int = matrix.ToInt();
+			UInt as_int = matrix.ToInt();
 
 #ifdef FE_INTERNAL_BUILD
 			if (as_int > 29 || as_int < 21) {
@@ -109,9 +109,9 @@ namespace fe
 			return (as_int / 3) - 5;
 		}
 
-		constexpr uint32_t ColumnsOfMatrix(Type matrix)
+		constexpr UInt ColumnsOfMatrix(Type matrix)
 		{
-			int as_int = matrix.ToInt();
+			UInt as_int = matrix.ToInt();
 
 #ifdef FE_INTERNAL_BUILD
 			if (as_int > 29 || as_int < 21) {
@@ -123,9 +123,9 @@ namespace fe
 			return (as_int % 3) + 2;
 		}
 		
-		constexpr size_t SizeOfType(Type type)
+		constexpr UInt SizeOfType(Type type)
 		{
-			int as_int = type.ToInt();
+			UInt as_int = type.ToInt();
 
 #ifdef FE_INTERNAL_BUILD
 			if (as_int > 29 || as_int <= 0) {
@@ -148,7 +148,7 @@ namespace fe
 
 			return SDSizeOfTypeLookupTable[type];*/
 
-			size_t count = 0;
+			UInt count = 0;
 			if (as_int < 21) // not a matrix
 			{
 				count = ((as_int - 1) % 4) + 1;
@@ -159,7 +159,7 @@ namespace fe
 			return RowsOfMatrix(type) * ColumnsOfMatrix(type) * 4;
 		}
 
-		constexpr size_t SizeOfPrimitive(Primitive primitive)
+		constexpr UInt SizeOfPrimitive(Primitive primitive)
 		{
 			switch (primitive)
 			{

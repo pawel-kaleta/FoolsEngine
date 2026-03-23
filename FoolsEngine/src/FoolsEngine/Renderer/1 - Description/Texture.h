@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
+#include "FoolsEngine/Application/UUID.h"
 
 #include <glm/glm.hpp>
 
@@ -30,22 +31,13 @@ namespace fe
 
 		struct Archetype
 		{
-			Archetype() :
-				Type(Type::None),
-				Format(Format::None),
-				Wrapping(Wrapping::None),
-				Filtering(Filtering::None),
-				Mipmapping(Mipmapping::None),
-				AnisotropicFiltering(AnisotropicFiltering::None)
-			{ }
-
 			UUID UUID;
-			Type Type;
-			Format Format;
-			Wrapping Wrapping;
-			Filtering Filtering;
-			Mipmapping Mipmapping;
-			AnisotropicFiltering AnisotropicFiltering;
+			Type Type = Type::None;
+			Format Format = Format::None;
+			Wrapping Wrapping = Wrapping::None;
+			Filtering Filtering = Filtering::None;
+			Mipmapping Mipmapping = Mipmapping::None;
+			AnisotropicFiltering AnisotropicFiltering = AnisotropicFiltering::None;
 		};
 
 		constexpr Components ComponentsInFormat(Format format)
@@ -67,10 +59,10 @@ namespace fe
 
 		struct Specification
 		{
-			uint32_t ArchetypeID;
-			Usage Usage;
-			uint32_t Width;
-			uint32_t Height;
+			U32 ArchetypeID = -1;
+			Usage Usage = Usage::None;
+			U32 Width = 0;
+			U32 Height = 0;
 			glm::vec3 BorderColor;
 		};
 	}

@@ -17,6 +17,40 @@ namespace fe
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Elements[i];
 		}
+
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
+		template <UInt size, class tnAllocator>
+		void Allocate(tnAllocator& alloc)
+		{
+			auto memReg = alloc.Allocate<T, size>();
+			*this = *(Splice<T>*)&memReg;
+		}
+
+		template <class tnAllocator>
+		void Allocate(tnAllocator& alloc, UInt size)
+		{
+			auto memReg = alloc.Allocate<T>(size);
+			*this = *(Splice<T>*)&memReg;
+		}
+
+		template <UInt size, class tnAllocator>
+		void Deallocate(tnAllocator& alloc)
+		{
+			alloc.Deallocate<T, size>();
+			Elements = nullptr;
+		}
+
+		template <class tnAllocator>
+		void Deallocate(tnAllocator& alloc, UInt size)
+		{
+			alloc.Deallocate<T>(size);
+			Elements = nullptr;
+		}
 	};
 
 	template <typename T>
@@ -57,6 +91,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(Splice<T>::Count < Capacity, "Out of Array bounds!");
 			T& result = Splice<T>::Elements[Splice<T>::Count];
+			new (&result) T();
 			++Splice<T>::Count;
 			return result;
 		}
@@ -70,7 +105,7 @@ namespace fe
 		}
 	};
 
-	// dont instantiate, use DynArrStat instead
+	// dont instantiate, use DynArrAlloc instead
 	template <typename T>
 	class DynArr : public Array<T>
 	{
@@ -113,6 +148,7 @@ namespace fe
 				DefaultResizeAndRelocate();
 
 			T& result = Array<T>::Elements[Array<T>::Count];
+			new (&result) T();
 			++Array<T>::Count;
 			return result;
 		}
@@ -160,7 +196,7 @@ namespace fe
 				Alloc->Deallocate(to_dealloc);
 			}
 
-			Array<T>::Elements = new_elements.Data;
+			Array<T>::Elements = (T*)new_elements.Data;
 			Array<T>::Capacity = newCapacity;
 		}
 	};
@@ -170,8 +206,8 @@ namespace fe
 	{
 	public:
 		DynArrAlloc() { };
-		DynArrAlloc(tAlloc& alloc) { DynArr<T>::Alloc = &alloc; }
-		~DynArrAlloc() { Release(); }
+		DynArrAlloc(tAlloc* alloc) { DynArr<T>::Alloc = alloc; }
+		~DynArrAlloc() { FE_CORE_ASSERT(!DynArr<T>::Elements, "Memory leak!"); }
 
 		void InitDynArrAlloc(tAlloc* allocator) { DynArr<T>::Alloc = allocator; }
 
@@ -211,6 +247,7 @@ namespace fe
 				DefaultResizeAndRelocate();
 
 			T& result = DynArr<T>::Elements[DynArr<T>::Count];
+			new (&result) T();
 			++DynArr<T>::Count;
 			return result;
 		}
@@ -258,7 +295,7 @@ namespace fe
 				((tAlloc*)DynArr<T>::Alloc)->Deallocate(to_dealloc);
 			}
 
-			DynArr<T>::Elements = new_elements.Data;
+			DynArr<T>::Elements = (T*)new_elements.Data;
 			DynArr<T>::Capacity = newCapacity;
 		}
 	};

@@ -11,7 +11,7 @@ namespace fe::Resource
 	struct StaticBufferBase
 	{
 		Buffer::Usage Usage;
-		uint32_t Size;
+		U32 Size;
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;

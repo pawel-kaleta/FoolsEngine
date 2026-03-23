@@ -28,4 +28,10 @@ namespace fe
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	template<class T>
+	const T& min(const T& a, const T& b)
+	{
+		return (b < a) ? b : a;
+	}
 }

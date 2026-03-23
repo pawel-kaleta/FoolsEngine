@@ -12,17 +12,17 @@ namespace fe::Resource
 
 	struct VertexArrayBase
 	{
-		uint32_t LayoutID;
-		uint32_t VertexOffset;
-		uint32_t IndexOffset;
-		uint32_t IndexCount;
+		U32 LayoutID;
+		U32 VertexOffset;
+		U32 IndexOffset;
+		U32 IndexCount;
 		// ptrs to buffers with vertex data and index data?
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
 
-		virtual void BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset) = 0;
-		virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) = 0;
+		virtual void BindVertexBuffer(const StaticBufferBase& buffer, U32 offset) = 0;
+		virtual void BindIndexBuffer(const StaticBufferBase& buffer, U32 offset, U32 indexCount) = 0;
 	};
 
 	struct VertexArray_OpenGL final : VertexArrayBase
@@ -32,8 +32,8 @@ namespace fe::Resource
 		virtual void Create() override;
 		virtual void Delete() override;
 
-		virtual void BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset) override;
-		virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) override;
+		virtual void BindVertexBuffer(const StaticBufferBase& buffer, U32 offset) override;
+		virtual void BindIndexBuffer(const StaticBufferBase& buffer, U32 offset, U32 indexCount) override;
 	};
 
 	//struct VertexArray_Vulkan final : VertexArrayBase
@@ -41,7 +41,7 @@ namespace fe::Resource
 	//	virtual void Create() override {};
 	//	virtual void Delete() override {};
 	//
-	//	virtual void BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset) override {};
-	//	virtual void BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount) override {};
+	//	virtual void BindVertexBuffer(const StaticBufferBase& buffer, U32 offset) override {};
+	//	virtual void BindIndexBuffer(const StaticBufferBase& buffer, U32 offset, U32 indexCount) override {};
 	//};
 }

@@ -49,7 +49,7 @@ namespace fe
 		static void Shutdown();
 
 		struct ConstLimits {
-			constexpr static uint32_t QuadsInBatch = 10000;
+			constexpr static uint32_t QuadsInBatch = 1000;
 			constexpr static uint32_t MaxVeritices = QuadsInBatch * 4;
 			constexpr static uint32_t MaxIndices = QuadsInBatch * 6;
 			constexpr static uint32_t RendererTextureSlotsCount = 32;

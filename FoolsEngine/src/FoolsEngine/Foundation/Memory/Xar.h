@@ -4,7 +4,7 @@
 #include "Array.h"
 
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
-#include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Common.h"
 
 #include <vector>
 #include <memory_resource>
@@ -199,30 +199,16 @@ namespace fe
 			return *result_ptr;
 		}
 
-		void Expand()
+		const T& operator[](UInt i) const
 		{
-			if (Chunks.Count == Chunks.Capacity)
-			{
-				bool any_capacity = Chunks.Capacity;
-				UInt chunks_new_capacity = Chunks.Capacity + (Chunks.Capacity >> 1); // *1.5
-				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+			++i;
 
-				MemReg new_elements = Alloc->Allocate<T*>(chunks_new_capacity);
-
-				UInt old_size = Chunks.Capacity * sizeof(T*);
-				std::memcpy(new_elements.Data, Chunks.Elements, old_size);
-				MemReg todealoc;
-				todealoc.Data = (Byte*)Chunks.Elements;
-				todealoc.Size = old_size;
-				Alloc->Deallocate(todealoc);
-
-				Chunks.Elements = (T**)new_elements.Data;
-				Chunks.Capacity = chunks_new_capacity;
-			}
-
-			UInt new_chunk_capacity = UInt(1) << Chunks.Count;
-			MemReg mem_reg = Alloc->Allocate<T>(new_chunk_capacity);
-			Chunks.Append((T*)mem_reg.Data);
+			unsigned long chunk_i;
+			MSB64(&chunk_i, i);
+			UInt chunk_mask = UInt(1) << chunk_i;
+			UInt in_chunk_i = i - chunk_mask;
+			T* result_ptr = (Chunks[chunk_i]) + in_chunk_i;
+			return *result_ptr;
 		}
 
 		void Append(const T& t)
@@ -254,6 +240,7 @@ namespace fe
 			auto in_chunk_i = Count - chunk_mask;
 			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
 
+			new (result_ptr) T();
 			return *result_ptr;
 		}
 
@@ -269,6 +256,58 @@ namespace fe
 
 			return *result_ptr;
 		}
+
+		Splice<T> GetCopyContiguous(Pile& pile)
+		{
+			MemReg allocation = pile.Allocate<T>(Count); // allocate on local splice!
+			Byte* current = allocation.Data;
+
+			UInt chunk_legth = 1;
+			UInt last_chunk = Chunks.Count - 1;
+			for (UInt i = 0; i < last_chunk; ++i)
+			{
+				UInt chunk_size = chunk_legth * sizeof(T);
+				std::memcpy(current, Chunks[i], chunk_size);
+				current += chunk_size;
+				chunk_legth = chunk_legth << 1;
+			}
+
+			auto in_chunk_i = Count - chunk_legth;
+			auto last_chunk_used_size = (in_chunk_i + 1) * sizeof(T);
+			std::memcpy(current, Chunks[last_chunk], last_chunk_used_size);
+
+			FE_CORE_ASSERT(current + last_chunk_used_size == allocation.Data + allocation.Size, "Sanity check failed");
+
+			return *(Splice<T>*) & allocation;
+		}
+	private:
+		void Expand()
+		{
+			if (Chunks.Count == Chunks.Capacity)
+			{
+				bool any_capacity = Chunks.Capacity;
+				UInt chunks_new_capacity = Chunks.Capacity + (Chunks.Capacity >> 1); // *1.5
+				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+
+				auto& alloc = Context::Allocators::System::GeneralPurpose;
+				MemReg new_elements = alloc->Allocate<T*>(chunks_new_capacity);
+
+				UInt old_size = Chunks.Capacity * sizeof(T*);
+				std::memcpy(new_elements.Data, Chunks.Elements, old_size);
+				MemReg todealoc;
+				todealoc.Data = (Byte*)Chunks.Elements;
+				todealoc.Size = old_size;
+				alloc->Deallocate(todealoc);
+
+				Chunks.Elements = (T**)new_elements.Data;
+				Chunks.Capacity = chunks_new_capacity;
+			}
+
+			UInt new_chunk_capacity = UInt(1) << Chunks.Count;
+			MemReg mem_reg = Alloc->Allocate<T>(new_chunk_capacity);
+			Chunks.Append((T*)mem_reg.Data);
+		}
+
 	};
 
 	template <typename T, class tnAlloc>
@@ -276,7 +315,7 @@ namespace fe
 	{
 	public:
 		XarrAlloc() { };
-		XarrAlloc(tnAlloc& alloc) {	Xarr<T>::Alloc = &alloc; }
+		XarrAlloc(tnAlloc* alloc) {	Xarr<T>::Alloc = alloc; }
 		~XarrAlloc() { Release(); }
 
 		void InitXarrAlloc(tnAlloc* alloc) { Xarr<T>::Alloc = alloc; }
@@ -313,32 +352,6 @@ namespace fe
 			Xarr<T>::Alloc = nullptr;
 		}
 
-		void Expand()
-		{
-			if (Xarr<T>::Chunks.Count == Xarr<T>::Chunks.Capacity)
-			{
-				bool any_capacity = Xarr<T>::Chunks.Capacity;
-				UInt chunks_new_capacity = Xarr<T>::Chunks.Capacity + (Xarr<T>::Chunks.Capacity >> 1); // *1.5
-				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
-
-				MemReg new_elements = ((tnAlloc*)Xarr<T>::Alloc)->Allocate<T*>(chunks_new_capacity);
-
-				UInt old_size = Xarr<T>::Chunks.Capacity * sizeof(T*);
-				std::memcpy(new_elements.Data, Xarr<T>::Chunks.Elements, old_size);
-				MemReg todealoc;
-				todealoc.Data = (Byte*)Xarr<T>::Chunks.Elements;
-				todealoc.Size = old_size;
-				((tnAlloc*)Xarr<T>::Alloc)->Deallocate(todealoc);
-
-				Xarr<T>::Chunks.Elements = (T**)new_elements.Data;
-				Xarr<T>::Chunks.Capacity = chunks_new_capacity;
-			}
-
-			UInt new_chunk_capacity = UInt(1) << Xarr<T>::Chunks.Count;
-			MemReg mem_reg = ((tnAlloc*)Xarr<T>::Alloc)->Allocate<T>(new_chunk_capacity);
-			Xarr<T>::Chunks.Append((T*)mem_reg.Data);
-		}
-
 		void Append(const T& t)
 		{
 			if (Xarr<T>::Count == Xarr<T>::Capacity())
@@ -368,10 +381,72 @@ namespace fe
 			auto in_chunk_i = Xarr<T>::Count - chunk_mask;
 			auto result_ptr = Xarr<T>::Chunks[chunk_i] + in_chunk_i;
 
+			new (result_ptr) T();
+
 			return *result_ptr;
 		}
+
+	private:
+		void Expand()
+		{
+			if (Xarr<T>::Chunks.Count == Xarr<T>::Chunks.Capacity)
+			{
+				bool any_capacity = Xarr<T>::Chunks.Capacity;
+				UInt chunks_new_capacity = Xarr<T>::Chunks.Capacity + (Xarr<T>::Chunks.Capacity >> 1); // *1.5
+				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+
+				auto& alloc = Context::Allocators::System::GeneralPurpose;
+				MemReg new_elements = alloc->Allocate<T*>(chunks_new_capacity);
+
+				UInt old_size = Xarr<T>::Chunks.Capacity * sizeof(T*);
+				std::memcpy(new_elements.Data, Xarr<T>::Chunks.Elements, old_size);
+				MemReg todealoc;
+				todealoc.Data = (Byte*)Xarr<T>::Chunks.Elements;
+				todealoc.Size = old_size;
+				alloc->Deallocate(todealoc);
+
+				Xarr<T>::Chunks.Elements = (T**)new_elements.Data;
+				Xarr<T>::Chunks.Capacity = chunks_new_capacity;
+			}
+
+			UInt new_chunk_capacity = UInt(1) << Xarr<T>::Chunks.Count;
+			MemReg mem_reg = ((tnAlloc*)Xarr<T>::Alloc)->Allocate<T>(new_chunk_capacity);
+			Xarr<T>::Chunks.Append((T*)mem_reg.Data);
+		}
+
 	};
 
 	template <typename T, class alloc>
-	inline XarrAlloc<T, alloc> MakeXarr(alloc& al) { return XarrAlloc<T, alloc>(al); }
+	inline XarrAlloc<T, alloc> MakeXarr(alloc* al) { return XarrAlloc<T, alloc>(al); }
+
+	template <typename T>
+	class XarrIt
+	{
+	public:
+		Xarr<T>* m_Xarr = nullptr;
+		T* ElementPtr = nullptr;
+		void* PastChunk = nullptr;
+		UInt ChunkIndex = -1;
+
+		XarrIt(Xarr<T>* xarr)
+		{
+			m_Xarr = xarr;
+			ElementPtr = xarr->Chunks[0];
+			PastChunk = ElementPtr + 1;
+			ChunkIndex = 0;
+		}
+
+		void operator++()
+		{
+			ElementPtr += 1;
+			if (ElementPtr != PastChunk)
+				return;
+
+			++ChunkIndex;
+			ElementPtr = m_Xarr->Chunks[ChunkIndex];
+
+			UInt chunk_capacity = (UInt)1 << ChunkIndex;
+			PastChunk = ElementPtr + chunk_capacity;
+		}
+	};
 }

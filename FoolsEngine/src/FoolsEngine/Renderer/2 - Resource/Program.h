@@ -12,8 +12,8 @@ namespace fe::Resource
 {
 	struct ProgramBase
 	{
-		uint32_t SpecificationID;
-		std::vector<AssetID> Shaders;
+		Splice<AssetID> Shaders;
+		U32 SpecificationID;
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
@@ -25,8 +25,8 @@ namespace fe::Resource
 
 		struct
 		{
-			std::vector<GLint> MainUniforms;
-			std::vector<GLint> TextureSamplers;
+			Splice<GLint> MainUniforms;
+			Splice<GLint> TextureSamplers;
 		} BindingLocations;
 
 		virtual void Create() override;

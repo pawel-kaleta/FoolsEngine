@@ -21,7 +21,7 @@ namespace fe::Command
 			const auto& lib = Description::Library::Get();
 			const auto& spec = lib.ProgramSpecs[program.SpecificationID];
 
-			for (size_t i = 0; i < spec.TextureSamplerIDs.size(); ++i)
+			for (size_t i = 0; i < spec.TextureSamplerIDs.Count; ++i)
 			{
 				const auto& sampler = lib.TextureSamplers[spec.TextureSamplerIDs[i]];
 

@@ -9,53 +9,53 @@ namespace fe::Description
 {
 	Library* Library::s_Library;
 
-	Buffer::Element::Element()
-		: Name(& Library::Get().m_Allocator), Type(Data::Type::None), Count(0), Normalized(false) { }
-
-	Buffer::Element::Element(Data::Type type, const std::string& name, uint32_t count, bool normalized)
-		: Name(name, & Library::Get().m_Allocator), Type(type), Count(count), Normalized(normalized) { }
-
-	Buffer::Layout::Layout() :
-		Type(LayoutType::None),
-		Stride(0),
-		Elements(& Library::Get().m_Allocator),
-		Offsets(& Library::Get().m_Allocator),
-		UUID()
-	{ }
-
 	void Buffer::Layout::CalculateOffsetsAndStride()
 	{
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(Type == LayoutType::Vertex, "Unsupported LayoutType");
 
-		uint32_t offset = 0;
+		UInt offset = 0;
 		Stride = 0;
 
-		for (auto& element : Elements)
+		for (UInt i = 0; i < Elements.Count; i++)
 		{
-			uint32_t size = (uint32_t)element.Size();
+			const auto& element = Elements[i];
+			UInt size = element.Size();
 
-			Offsets.push_back(offset);
+			Offsets[i] = offset;
 
 			offset += size;
 			Stride += size;
 		}
 	}
 
-	static uint32_t CreateDefaultVertexLayout()
+	static UInt CreateDefaultVertexLayout()
 	{
-		uint32_t id = (uint32_t)Library::Get().BufferLayouts.size();
+		auto& lib = Library::Get();
+		auto& alloc = lib.m_AllocPermanent;
 
-		auto& layout = Library::Get().BufferLayouts.emplace_back();
+		UInt id = lib.BufferLayouts.Count;
+		auto& layout = lib.BufferLayouts.PushBack();
+
+		layout.Elements.Allocate<5>(alloc);
+
+		layout.Elements[0].Type = Data::Type::Float3;
+		layout.Elements[0].Name.FromConstCharPtr("a_Position", 11);
+
+		layout.Elements[1].Type = Data::Type::Float3;
+		layout.Elements[1].Name.FromConstCharPtr("a_Normal", 9);
+
+		layout.Elements[2].Type = Data::Type::Float3;
+		layout.Elements[2].Name.FromConstCharPtr("a_Tangent", 10);
+
+		layout.Elements[3].Type = Data::Type::Float2;
+		layout.Elements[3].Name.FromConstCharPtr("a_UV0", 6);
+
+		layout.Elements[4].Type = Data::Type::Float2;
+		layout.Elements[4].Name.FromConstCharPtr("a_UV1", 6);
 
 		layout.Type = Buffer::LayoutType::Vertex;
-		layout.Elements.emplace_back(Data::Type::Float3, "a_Position");
-		layout.Elements.emplace_back(Data::Type::Float3, "a_Normal");
-		layout.Elements.emplace_back(Data::Type::Float3, "a_Tangent");
-		layout.Elements.emplace_back(Data::Type::Float2, "a_UV0");
-		layout.Elements.emplace_back(Data::Type::Float2, "a_UV1");
-
 		layout.CalculateOffsetsAndStride();
 
 		return id;
@@ -63,127 +63,85 @@ namespace fe::Description
 
 	const Buffer::Layout& Buffer::Vertex::GetLayout()
 	{
-		static uint32_t layoutID = CreateDefaultVertexLayout();
+		const static Buffer::Layout& layout = Library::Get().BufferLayouts[CreateDefaultVertexLayout()];
 
-		return Library::Get().BufferLayouts[layoutID];
+		return layout;
 	}
 
-	ShaderInterface::TextureSampler::TextureSampler()
-		: TextureArchetypeID(-1), Name(& Library::Get().m_Allocator), UUID() { }
-
-	ShaderInterface::Specification::Specification() :
-		Type(ShaderType::None),
-		InputLayoutID(-1),
-		OutputLayoutID(-1),
-		MainUniformsLayoutID(-1),
-		TextureSamplerIDs(& Library::Get().m_Allocator),
-		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
-		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
-		UUID()
-	{ }
-
-	ShaderInterface::ProgramSpecification::ProgramSpecification() :
-		VertexInputLayoutID(-1),
-		VertexOutputLayoutID(-1),
-		FragmentOutputLayoutID(-1),
-		MainUniformsLayoutID(-1),
-		TextureSamplerIDs(& Library::Get().m_Allocator),
-		UniformBufferSamplerIDs(& Library::Get().m_Allocator),
-		DynamicBufferSamplerIDs(& Library::Get().m_Allocator),
-		VertexOutputCapture(false),
-		UUID()
-	{ }
-
-	Framebuffer::Attachment::Attachment()
-		: Name(& Library::Get().m_Allocator), Format(Texture::Format::None) { }
-
-	Framebuffer::Attachment::Attachment(const std::pmr::string& name, Texture::Format format)
-		: Name(name, &Library::Get().m_Allocator), Format(format) { }
-
-	Framebuffer::Specification::Specification() :
-		Type(Texture::Type::Texture2D),
-		Width(), Height(),
-		Samples(1),
-		SwapChainTarget(false),
-		DepthStencilFormat(Texture::Format::None),
-		UUID(),
-		ColorAttachments(& Library::Get().m_Allocator)
-	{ }
-
-	uint32_t Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 		
-		uint32_t size = TextureArchetypes.size();
-		TextureArchetypes.emplace_back();
+		UInt size = TextureArchetypes.Count;
+		TextureArchetypes.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_Layout(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_Layout(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 		
-		uint32_t size = BufferLayouts.size();
-		BufferLayouts.emplace_back();
+		UInt size = BufferLayouts.Count;
+		BufferLayouts.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 		
-		uint32_t size = FramebufferSpecs.size();
-		FramebufferSpecs.emplace_back();
+		UInt size = FramebufferSpecs.Count;
+		FramebufferSpecs.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 
-		uint32_t size = TextureSamplers.size();
-		TextureSamplers.emplace_back();
+		UInt size = TextureSamplers.Count;
+		TextureSamplers.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 
-		uint32_t size = UniformBufferSamplers.size();
-		UniformBufferSamplers.emplace_back();
+		UInt size = UniformBufferSamplers.Count;
+		UniformBufferSamplers.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 		
-		uint32_t size = ShaderSpecs.size();
-		ShaderSpecs.emplace_back();
+		UInt size = ShaderSpecs.Count;
+		ShaderSpecs.PushBack();
 		return size;
 	}
 
-	uint32_t Library::CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 
-		uint32_t size = ProgramSpecs.size();
-		ProgramSpecs.emplace_back();
+		UInt size = ProgramSpecs.Count;
+		ProgramSpecs.PushBack();
 		return size;
 	}
 }

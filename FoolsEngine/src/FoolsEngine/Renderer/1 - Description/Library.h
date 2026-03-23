@@ -5,6 +5,9 @@
 #include "Framebuffer.h"
 #include "ShaderInterface.h"
 
+#include "FoolsEngine/Foundation/Common.h"
+#include "FoolsEngine/Foundation/Memory/Xar.h"
+
 #include <vector>
 #include <memory_resource>
 
@@ -12,22 +15,25 @@ namespace fe::Description
 {
 	struct Library
 	{
-		std::pmr::monotonic_buffer_resource m_Allocator;
+		MonotonicAllocator	m_AllocPermanent;
+		MallocAllocator		m_AllocGPA;
+		STD_PMR_Allocator<MallocAllocator>	m_AllocGPA_STD_PMR;
 
-		std::pmr::vector<Texture::Archetype>					TextureArchetypes;
-		std::pmr::vector<Buffer::Layout>						BufferLayouts;
-		std::pmr::vector<Framebuffer::Specification>			FramebufferSpecs;
-		std::pmr::vector<ShaderInterface::TextureSampler>		TextureSamplers;
-		std::pmr::vector<ShaderInterface::UniformBufferSampler>	UniformBufferSamplers;
-		std::pmr::vector<ShaderInterface::Specification>		ShaderSpecs;
-		std::pmr::vector<ShaderInterface::ProgramSpecification>	ProgramSpecs;
+		XarrAlloc<Texture::Archetype,						MonotonicAllocator>	TextureArchetypes;
+		XarrAlloc<Buffer::Layout,							MonotonicAllocator>	BufferLayouts;
+		XarrAlloc<Framebuffer::Specification,				MonotonicAllocator>	FramebufferSpecs;
+		XarrAlloc<ShaderInterface::TextureSampler,			MonotonicAllocator>	TextureSamplers;
+		XarrAlloc<ShaderInterface::UniformBufferSampler,	MonotonicAllocator>	UniformBufferSamplers;
+		XarrAlloc<ShaderInterface::Specification,			MonotonicAllocator>	ShaderSpecs;
+		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAllocator>	ProgramSpecs;
 		
 		std::pmr::map<UUID, uint32_t> UUIDToIDMap;
 		static Library& Get() { return *s_Library; }
 
 		template <typename tnDescriptor>
-		uint32_t CreateOrGetDescriptorWithUUID(UUID uuid)
+		UInt CreateOrGetDescriptorWithUUID(UUID uuid)
 		{
+			Context::ValueBackup<Allocator*>(&Context::Allocators::System::GeneralPurpose, & m_AllocGPA);
 			if constexpr (std::same_as<tnDescriptor, Texture::Archetype						>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
 			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
 			if constexpr (std::same_as<tnDescriptor, Framebuffer::Specification				>) return CreateOrGetDescriptorWithUUID_Framebuffer(uuid);
@@ -39,15 +45,17 @@ namespace fe::Description
 		
 	private:
 		Library() :
-			m_Allocator(),
-			TextureArchetypes(&m_Allocator),
-			BufferLayouts(&m_Allocator),
-			FramebufferSpecs(&m_Allocator),
-			TextureSamplers(&m_Allocator),
-			UniformBufferSamplers(&m_Allocator),
-			ShaderSpecs(&m_Allocator),
-			ProgramSpecs(&m_Allocator),
-			UUIDToIDMap(&m_Allocator)
+			m_AllocPermanent(),
+			m_AllocGPA(),
+			m_AllocGPA_STD_PMR(&m_AllocGPA),
+			TextureArchetypes(&m_AllocPermanent),
+			BufferLayouts(&m_AllocPermanent),
+			FramebufferSpecs(&m_AllocPermanent),
+			TextureSamplers(&m_AllocPermanent),
+			UniformBufferSamplers(&m_AllocPermanent),
+			ShaderSpecs(&m_AllocPermanent),
+			ProgramSpecs(&m_AllocPermanent),
+			UUIDToIDMap(&m_AllocGPA_STD_PMR)
 		{ }
 
 		friend class Application;
@@ -57,13 +65,13 @@ namespace fe::Description
 			s_Library = new Library();
 		}
 
-		uint32_t CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid);
-		uint32_t CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);
 
 		static Library* s_Library;
 	};

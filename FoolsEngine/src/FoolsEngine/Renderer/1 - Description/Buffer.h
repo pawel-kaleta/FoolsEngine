@@ -2,6 +2,7 @@
 
 #include "Data.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Application/UUID.h"
 
 #include <glm/glm.hpp>
@@ -10,22 +11,19 @@ namespace fe
 {
 	namespace Description::Buffer
 	{
-		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Uniform, ShaderStorage);
+		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Uniform, ShaderStorage); // do we need this?
 
 		struct Element
 		{
-			std::pmr::string Name;
-			Data::Type Type;
-			uint32_t Count; // is count handled everywhere properly?
-			bool Normalized; // TO DO: do we need this?
-
-			Element();
-			Element(Data::Type type, const std::string& name, uint32_t count = 1, bool normalized = false);
+			String Name;
+			Data::Type Type = Data::Type::None;
+			uint32_t Count = 1; // is count handled everywhere properly?
+			bool Normalized = 0; // TO DO: do we need this?
 
 			Data::Primitive Primitive() const { return Data::PrimitiveInType(Type); }
 			Data::Structure Structure() const { return Data::StructureInType(Type); }
-			size_t Size() const { return Data::SizeOfType(Type); }
-			size_t ComponentCount() const
+			UInt Size() const { return Data::SizeOfType(Type); }
+			UInt ComponentCount() const
 			{
 				bool ifDouble = Primitive() == Data::Primitive::Double;
 				return Size() / (4 * (1 + (int)ifDouble));
@@ -42,35 +40,34 @@ namespace fe
 		struct Layout
 		{
 		public:
-			std::pmr::vector<Element> Elements;
-			std::pmr::vector<uint32_t> Offsets;
+			Splice<Element> Elements;
+			Splice<U32> Offsets;
 			
-			UUID UUID;
-			LayoutType Type;
-			uint32_t Stride;
+			UUID UUID = fe::UUID();
+			LayoutType Type = LayoutType::None;
+			U32 Stride;
 
-			Layout();
 			void CalculateOffsetsAndStride();
 		};
 
 		struct UniformBufferIterator
 		{
-			UniformBufferIterator(const std::pmr::vector<Element>* elements, void* data)
-				: m_Elements(elements), m_CurrentData((uint8_t*)data), m_Index(0) { }
+			UniformBufferIterator(Splice<Element> elements, void* data)
+				: m_Elements(elements), m_CurrentData((Byte*)data), m_Index(0) { }
 
 			void Move()
 			{
-				const auto& element = m_Elements->at(m_Index);
+				const auto& element = m_Elements[m_Index];
 				m_CurrentData += element.Size() * element.Count;
 			}
 
-			bool IsEnd() { if (m_Index >= m_Elements->size()) return true; }
+			bool IsEnd() { if (m_Index >= m_Elements.Count) return true; }
 
 			void* Get() { return m_CurrentData; }
 
-			const std::pmr::vector<Element>* m_Elements;
-			uint8_t* m_CurrentData;
-			uint32_t m_Index;
+			Splice<Element> m_Elements;
+			Byte* m_CurrentData;
+			UInt m_Index;
 		};
 
 		struct Vertex {

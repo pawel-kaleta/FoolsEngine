@@ -25,9 +25,6 @@ namespace fe
 		Pile& operator=(Pile&& other) = delete;
 		Pile& operator=(const Pile& other) = delete;
 
-		template <typename T>
-		MemReg Allocate(UInt count = 1) { return Allocate(sizeof(T), alignof(T)); }
-
 		virtual MemReg Allocate(UInt bytes, UInt alignment) final override
 		{
 			MemReg result;
@@ -57,8 +54,19 @@ namespace fe
 			return result;
 		}
 
-		virtual void Allocate(MemReg& memReg, UInt alignment) final override
+		virtual void Deallocate(MemReg& memReg) final override
 		{
+			bool is_at_front = s_Free == memReg.Data + memReg.Size;
+			s_Free = (Byte*)((UInt)memReg.Data * is_at_front + (UInt)s_Free * !is_at_front);
+
+			memReg.Data = nullptr;
+		}
+
+		template <UInt Size, UInt Alignment = 8>
+		MemReg Allocate()
+		{
+			MemReg result;
+
 			const bool at_front = m_End == s_Free;
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
@@ -68,19 +76,75 @@ namespace fe
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			memReg.Data = (Byte*)(((UInt)s_Free + (alignment - 1)) & ~(alignment - 1));
+			result.Data = (Byte*)(((UInt)s_Free + (Alignment - 1)) & ~(Alignment - 1));
+			result.Size = Size;
 
-			s_Free = memReg.Data + memReg.Size;
+			s_Free = result.Data + Size;
 			m_End = s_Free;
 
 			FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
+
 #ifdef FE_INTERNAL_BUILD
 			bool new_max = s_Free > s_MaxFree;
 			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
 #endif // FE_INTERNAL_BUILD
+
+			return result;
 		}
 
-		virtual void Deallocate(MemReg& memReg) final override { memReg.Data = nullptr; }
+		template <typename T, UInt Count = 1>
+		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
+
+		template <typename T>
+		MemReg Allocate(UInt count)
+		{
+			MemReg result;
+
+			const bool at_front = m_End == s_Free;
+			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
+			const bool reset_begin = !at_front && !rollback_flag;
+
+			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
+
+			s_RollbackFlags &= m_FrontFlagsAntiMask;
+			s_RollbackFlags |= m_FlagMask;
+
+			result.Data = (Byte*)(((UInt)s_Free + (alignof(T) - 1)) & ~(alignof(T) - 1));
+			result.Size = sizeof(T) * count;
+
+			s_Free = result.Data + sizeof(T) * count;
+			m_End = s_Free;
+
+			FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
+
+#ifdef FE_INTERNAL_BUILD
+			bool new_max = s_Free > s_MaxFree;
+			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+#endif // FE_INTERNAL_BUILD
+
+			return result;
+		}
+
+		template <UInt Size>
+		void Deallocate(Byte* ptr)
+		{
+			MemReg memReg;
+			memReg.Data = ptr;
+			memReg.Size = Size;
+			return Deallocate(memReg);
+		}
+
+		template <typename T, UInt Count = 1>
+		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
+
+		template <typename T>
+		void Deallocate(T* ptr, UInt count)
+		{
+			MemReg memReg;
+			memReg.Data = ptr;
+			memReg.Size = sizeof(T) * count;
+			return Deallocate(memReg);
+		}
 
 		~Pile()
 		{

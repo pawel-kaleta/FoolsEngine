@@ -16,27 +16,4 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 	Byte*	Pile::s_MaxFree = s_Buffer;
 #endif // FE_INTERNAL_BUILD
-
-
-	//testing
-	int y(DynArr<int>* test) { int x = 0; return x; }
-	int z(Xarr<int>* test) { int x = 0; return x; }
-
-	void x()
-	{
-		static DynArrAlloc<int, MallocAllocator> test;
-
-		volatile auto x = y(&test);
-
-		NullAllocator a;
-		ArenaAllocator b;
-		FallbackAllocator<ArenaAllocator, NullAllocator> c;
-		MallocAllocator d;
-		SegragatorAllocator< NullAllocator, NullAllocator, 8> e;
-		BitmappedPoolAllocator<8, 8> f;
-
-		auto test2 = MakeXarr<int>(d);
-
-		x = z(&test2);
-	}
 }

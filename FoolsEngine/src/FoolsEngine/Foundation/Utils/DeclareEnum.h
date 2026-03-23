@@ -2,6 +2,7 @@
 
 #include "ForEach.h"
 
+#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 #define _FROM_STRING(x) if (string == #x) { Value = x; return; }
@@ -51,13 +52,13 @@ struct name                                                                     
         }                                                                                             \
     }                                                                                                 \
                                                                                                       \
-    constexpr void FromInt(int x)                                                                     \
+    constexpr void FromInt(fe::UInt x)                                                                \
     {                                                                                                 \
         Value = (ValueType)x;                                                                         \
     }                                                                                                 \
                                                                                                       \
-    constexpr int ToInt() const                                                                       \
+    constexpr fe::UInt ToInt() const                                                                  \
     {                                                                                                 \
-        return (int)Value;                                                                            \
+        return (fe::UInt)Value;                                                                       \
     }                                                                                                 \
 };

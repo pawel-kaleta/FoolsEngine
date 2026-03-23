@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Renderer/1 - Description/Framebuffer.h"
+#include "FoolsEngine/Foundation/Common.h"
 
 #include <glad/glad.h>
 
@@ -10,11 +11,11 @@ namespace fe::Resource
 
 	struct FramebufferBase
 	{
-		uint32_t SpecificationID;
+		UInt SpecificationID;
 
 		virtual void Create() = 0;
-		virtual void Resize(uint32_t width, uint32_t height) = 0;
-		uint32_t GetColorAttachmentIndex(const std::string& name) const;
+		virtual void Resize(U32 width, U32 height) = 0;
+		UInt GetColorAttachmentIndex(const String& name) const;
 		virtual void Destroy() = 0;
 
 	};
@@ -24,10 +25,10 @@ namespace fe::Resource
 		GLuint OpenGLID;
 
 		GLuint DepthStencilAttachmentOpenGLID;
-		std::vector<GLuint> ColorAttachmentOpenGLIDs;
+		Splice<GLuint> ColorAttachmentOpenGLIDs;
 
 		virtual void Create() override;
-		virtual void Resize(uint32_t width, uint32_t height) override;
+		virtual void Resize(U32 width, U32 height) override;
 		virtual void Destroy() override;
 	};
 
