@@ -3,6 +3,7 @@
 #include "DataTypes.h"
 #include "Allocator.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 namespace fe
 {
@@ -105,9 +106,103 @@ namespace fe
 		}
 	};
 
-	// dont instantiate, use DynArrAlloc instead
 	template <typename T>
 	class DynArr : public Array<T>
+	{
+	public:
+		void Release()
+		{
+			if (Array<T>::Elements)
+			{
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)Array<T>::Elements;
+				to_dealloc.Size = Array<T>::Capacity * sizeof(T);
+				Alloc->Deallocate(to_dealloc);
+			}
+			Array<T>::Capacity = 0;
+			Array<T>::Count = 0;
+			Array<T>::Elements = nullptr;
+		}
+
+		void Deinit()
+		{
+			Release();
+			Alloc = nullptr;
+		}
+
+		void Append(const T& element)
+		{
+			if (Array<T>::Count == Array<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			Array<T>::Elements[Array<T>::Count] = element;
+			++Array<T>::Count;
+			return;
+		}
+
+		T& PushBack()
+		{
+			if (Array<T>::Count == Array<T>::Capacity)
+				DefaultResizeAndRelocate();
+
+			T& result = Array<T>::Elements[Array<T>::Count];
+			new (&result) T();
+			++Array<T>::Count;
+			return result;
+		}
+
+		void DefaultResizeAndRelocate()
+		{
+			bool any_capacity = Array<T>::Capacity;
+			UInt new_capacity = Array<T>::Capacity + (Array<T>::Capacity >> 1); // *1.5
+
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+
+		void ReserveExact(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity <= Array<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+			RelocateToNewCapacity(capacity);
+		}
+
+		void ReserveAtLeast(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity <= Array<T>::Capacity, "Attempt to reserve DynArr capacity to no more then it already have!");
+
+			bool any_capacity = Array<T>::Capacity;
+			UInt new_capacity = Array<T>::Capacity + (Array<T>::Capacity >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+
+			bool default_better = new_capacity > capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+	private:
+		void RelocateToNewCapacity(UInt newCapacity)
+		{
+			auto alloc = Context::Allocators::Default;
+			MemReg new_elements = alloc->Allocate<T>(newCapacity);
+
+			if (Array<T>::Elements)
+			{
+				MemReg to_dealloc;
+				to_dealloc.Data = (Byte*)Array<T>::Elements;
+				to_dealloc.Size = Array<T>::Capacity * sizeof(T);
+				std::memcpy(new_elements.Data, Array<T>::Elements, to_dealloc.Size);
+				alloc->Deallocate(to_dealloc);
+			}
+
+			Array<T>::Elements = (T*)new_elements.Data;
+			Array<T>::Capacity = newCapacity;
+		}
+	};
+
+	// dont instantiate, use DynArrAlloc instead
+	template <typename T>
+	class DynArrAllocPM : public Array<T>
 	{
 	public:
 		Allocator* Alloc = nullptr;

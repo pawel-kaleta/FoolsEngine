@@ -69,7 +69,7 @@ namespace fe::Resource
 		// because there may stil be unsceduled draw calls involving it
 		// instead we postpone destruction to the end of the frame
 		// when we are guaranteed, that all draw call are allready issued
-		XarrAlloc<GLuint, MonotonicAllocator> PastBuffersToDestroy; // does this need to be xarr?
+		DynArr<GLuint> PastBuffersToDestroy;
 
 		virtual void Create(UInt capacity) override;
 		virtual void Destroy() override;

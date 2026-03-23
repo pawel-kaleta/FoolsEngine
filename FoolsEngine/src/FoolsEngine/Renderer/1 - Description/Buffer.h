@@ -17,7 +17,7 @@ namespace fe
 		{
 			String Name;
 			Data::Type Type = Data::Type::None;
-			uint32_t Count = 1; // is count handled everywhere properly?
+			U32 Count = 1; // is count handled everywhere properly?
 			bool Normalized = 0; // TO DO: do we need this?
 
 			Data::Primitive Primitive() const { return Data::PrimitiveInType(Type); }

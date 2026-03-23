@@ -5,19 +5,10 @@ namespace fe::Context
 {
 	namespace Allocators
 	{
-		namespace Global
-		{
-			Allocator* GeneralPurpose	= new MallocAllocator();
-			Allocator* Permanent		= new MonotonicAllocator();
-			Allocator* Temporary		= new MonotonicAllocator();
-		}
-
-		namespace System
-		{
-			Allocator* GeneralPurpose	= new MallocAllocator();
-			Allocator* Permanent		= new MonotonicAllocator();
-			Allocator* OutputAllocator	= new MonotonicAllocator();
-			Allocator* Temporary		= new MonotonicAllocator();
-		}
+		Allocator* GeneralPurpose	= new MallocAllocator();
+		Allocator* Default			= GeneralPurpose;
+		Allocator* Permanent		= new MonotonicAllocator();
+		Allocator* Temporary		= new MonotonicAllocator();
+		Allocator* SystemOutput		= new MonotonicAllocator();
 	}
 }

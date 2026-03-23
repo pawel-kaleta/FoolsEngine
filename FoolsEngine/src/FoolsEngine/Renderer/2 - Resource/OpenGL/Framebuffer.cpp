@@ -24,7 +24,7 @@ namespace fe::Resource
 
 		if (count)
 		{
-			auto& alloc = *Context::Allocators::System::GeneralPurpose;
+			auto& alloc = *Context::Allocators::GeneralPurpose;
 			ColorAttachmentOpenGLIDs.Allocate(alloc, count);
 
 			if (multisampled)

@@ -415,7 +415,6 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\ArrayInPlace.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
   </ItemGroup>

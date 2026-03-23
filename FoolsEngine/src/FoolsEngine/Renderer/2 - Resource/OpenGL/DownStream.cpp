@@ -11,7 +11,7 @@ namespace fe::Resource
 		BackFences.InitXarrAlloc(&Alloc);
 		Regions.InitXarrAlloc(&Alloc);
 		RegionFences.InitXarrAlloc(&Alloc);
-		PastBuffersToDestroy.InitXarrAlloc(&Alloc);
+		PastBuffersToDestroy.Alloc = Context::Allocators::SystemOutput;
 
 		CurrentOffset = 0;
 
@@ -161,12 +161,8 @@ namespace fe::Resource
 		RegionFences.Count = 0;
 		Regions.Count = 0;
 
-		if (PastBuffersToDestroy.Count)
-		{
-			auto buffers_to_destroy = PastBuffersToDestroy.GetCopyContiguous(p);
-			glDeleteBuffers(buffers_to_destroy.Count, buffers_to_destroy.Elements);
-			PastBuffersToDestroy.Count = 0;
-		}
+		glDeleteBuffers(PastBuffersToDestroy.Count, PastBuffersToDestroy.Elements);
+		PastBuffersToDestroy.Release();
 	}
 
 	bool DownStream_OpenGL::CheckFences(UInt pushSize)

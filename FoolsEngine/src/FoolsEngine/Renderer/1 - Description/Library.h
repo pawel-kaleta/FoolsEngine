@@ -8,7 +8,6 @@
 #include "FoolsEngine/Foundation/Common.h"
 #include "FoolsEngine/Foundation/Memory/Xar.h"
 
-#include <vector>
 #include <memory_resource>
 
 namespace fe::Description
@@ -27,7 +26,7 @@ namespace fe::Description
 		XarrAlloc<ShaderInterface::Specification,			MonotonicAllocator>	ShaderSpecs;
 		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAllocator>	ProgramSpecs;
 		
-		std::pmr::map<UUID, uint32_t> UUIDToIDMap;
+		std::pmr::map<UUID, U32> UUIDToIDMap;
 		static Library& Get() { return *s_Library; }
 
 		template <typename tnDescriptor>

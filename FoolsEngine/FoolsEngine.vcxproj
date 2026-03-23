@@ -172,7 +172,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Application\Application.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\ArrayInPlace.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Array.h" />
