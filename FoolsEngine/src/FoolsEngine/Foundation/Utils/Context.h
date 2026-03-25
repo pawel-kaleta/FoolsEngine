@@ -6,11 +6,11 @@ namespace fe::Context
 {
 	namespace Allocators
 	{
-		extern Allocator* GeneralPurpose;
-		extern Allocator* Default;
-		extern Allocator* Permanent;
-		extern Allocator* Temporary;
-		extern Allocator* SystemOutput;
+		extern TypedAlloc<Allocator> Default;
+		extern TypedAlloc<Allocator> Auxiliary;
+		extern TypedAlloc<Allocator> Temporary;
+		extern TypedAlloc<Allocator> Output;
+		
 		void GetExlusiveArena() { };
 	}
 

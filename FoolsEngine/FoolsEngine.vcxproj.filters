@@ -409,14 +409,16 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\MemReg.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Array.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

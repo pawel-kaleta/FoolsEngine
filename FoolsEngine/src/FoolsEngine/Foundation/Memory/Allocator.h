@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MemReg.h"
+#include "Splice.h"
 
 #include "DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
@@ -14,126 +14,159 @@ namespace fe
 	class Allocator
 	{
 	public:
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) = 0;
-		virtual void Deallocate(MemReg& memReg) = 0;
+		virtual Splice<Byte> Allocate(UInt bytes) = 0;
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) = 0;
+		virtual void Deallocate(Splice<Byte> memReg) = 0;
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate() { return Allocate(Size, Alignment); }
+		// below is interface definition for specific allocators
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate() { return (Array<Byte, Size>*)Allocate(Size, Alignment).Elements; }
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
-
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate(sizeof(T) * count, alignof(T)); }
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes) { return Allocate(bytes, Alignment); }
 
 		template <UInt Size>
 		void Deallocate(Byte* ptr)
 		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-			return Deallocate(memReg);
+			Splice<Byte> memReg;
+			memReg.Elements = ptr;
+			memReg.Count = Size;
+			Deallocate(memReg);
 		}
+	};
 
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
+	template <typename tnAlloc>
+	class TypedAlloc
+	{
+	public:
+		tnAlloc* m_Alloc = nullptr;
+
+		TypedAlloc() = default;
+		TypedAlloc(tnAlloc* alloc) : m_Alloc(alloc) { }
+
+		template <typename T, UInt Count>
+		Array<T, Count>* Allocate() { return (Array<T, Count>*)m_Alloc->Allocate<Count * sizeof(T), alignof(T)>(); }
 
 		template <typename T>
-		void Deallocate(T* ptr, UInt count)
+		T* Allocate() { return (T*)m_Alloc->Allocate<sizeof(T), alignof(T)>(); }
+
+		template <typename T>
+		Splice<T> Allocate(UInt Count)
 		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-			return Deallocate(memReg);
+			Splice<Byte> result = m_Alloc->Allocate<alignof(T)>(sizeof(T) * Count);
+			result.Count = Count;
+			return *(Splice<T>*) & result;
+		}
+
+		template <typename T>
+		void Deallocate(T* ptr) { m_Alloc->Deallocate<sizeof(T)>((Byte*)ptr); }
+
+		template <typename T, UInt Count>
+		void Deallocate(Array<T, Count>* ptr) { m_Alloc->Deallocate<sizeof(T) * Count>((Byte*)ptr); }
+
+		template <typename T>
+		void Deallocate(Splice<T> splice)
+		{
+			splice.Count *= sizeof(T);
+			m_Alloc->Deallocate(*(Splice<Byte>*) & splice);
 		}
 	};
 
 	class NullAllocator final : public Allocator
 	{
 	public:
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) override final { return MemReg(); }
-		virtual void Deallocate(MemReg& memReg) override final { FE_CORE_ASSERT(!memReg.Data, "NullAllocator should not be used for deallocation"); }
+		virtual Splice<Byte> Allocate(UInt bytes) override final { return Splice<Byte>(); }
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final { return Splice<Byte>(); }
+		virtual void Deallocate(Splice<Byte> memReg) override final { FE_CORE_ASSERT(!memReg.Elements, "NullAllocator should not be used for deallocation"); }
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate() { return MemReg(); }
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate() { return nullptr; }
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate() { return MemReg(); }
-		
-		template <typename T>
-		MemReg Allocate(UInt count) { return MemReg(); }
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes) { return Splice<Byte>(); }
 
 		template <UInt Size>
 		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(!ptr, "NullAllocator should not be used for deallocation"); }
-
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { FE_CORE_ASSERT(!ptr, "NullAllocator should not be used for deallocation"); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count) { FE_CORE_ASSERT(!ptr, "NullAllocator should not be used for deallocation"); }
 	};
 
 	class ArenaAllocator final : public Allocator
 	{
 	public:
-		MemRegFiller m_MemRegFiller;
+		Splice<Byte> Buffer;
+		Byte* Free;
 
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) override final
+		const Byte* End() const { return Buffer.Elements + Buffer.Count; }
+		bool IsFull() const { return Free == End(); }
+
+		virtual Splice<Byte> Allocate(UInt bytes) override final
 		{
-			MemReg memReg;
-			memReg.Size = bytes;
-			memReg.Data = (Byte*)(((UInt)m_MemRegFiller.Free + (alignment - 1)) & ~(alignment - 1));
-
-			if (memReg.Data + memReg.Size > m_MemRegFiller.Data + m_MemRegFiller.Size)
+			Splice<Byte> memReg;
+			memReg.Count = bytes;
+			memReg.Elements = (Byte*)(((UInt)Free + (7)) & ~(7)); // 7 is max_natural_align -1
+			Byte* new_free = memReg.Elements + memReg.Count;
+			if (new_free > End())
 			{
 				FE_CORE_ASSERT(false, "ArenaAllocator overflow!");
-				memReg.Data = nullptr;
+				memReg.Elements = nullptr;
 			}
+			Free = new_free;
 			return memReg;
 		}
-		virtual void Deallocate(MemReg& memReg) override final { FE_CORE_ASSERT(DoesOwn(memReg), "ArenaAllocator does not own this memory"); memReg.Data = nullptr; }
-
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate()
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
 		{
-			MemReg memReg;
-			memReg.Size = Size;
-			memReg.Data = (Byte*)(((UInt)m_MemRegFiller.Free + (Alignment - 1)) & ~(Alignment - 1));
-
-			if (memReg.Data + memReg.Size > m_MemRegFiller.Data + m_MemRegFiller.Size)
+			Splice<Byte> memReg;
+			memReg.Count = bytes;
+			memReg.Elements = (Byte*)(((UInt)Free + (alignment - 1)) & ~(alignment - 1));
+			Byte* new_free = memReg.Elements + memReg.Count;
+			if (new_free > End())
 			{
 				FE_CORE_ASSERT(false, "ArenaAllocator overflow!");
-				memReg.Data = nullptr;
+				memReg.Elements = nullptr;
 			}
+			Free = new_free;
 			return memReg;
 		}
-
-		template <typename T, UInt Count>
-		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
-
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate<sizeof(T) * count, alignof(T)>(); }
+		virtual void Deallocate(Splice<Byte> memReg) override final { FE_CORE_ASSERT(DoesOwn(memReg.Elements), "ArenaAllocator does not own this memory"); }
 
 		template <UInt Size, UInt Alignment>
-		void Deallocate(Byte* ptr)
+		Array<Byte, Size>* Allocate()
 		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-			return Deallocate(memReg);
+			Byte* allocation = (Byte*)(((UInt)Free + (Alignment - 1)) & ~(Alignment - 1));
+			Byte* new_free = allocation + Size;
+			if (new_free > End())
+			{
+				FE_CORE_ASSERT(false, "ArenaAllocator overflow!");
+				allocation = nullptr;
+			}
+			Free = new_free;
+			return (Array<Byte, Size>*)allocation;
 		}
 
-		template <typename T, UInt Count>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count, alignof(T)>(ptr); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count) { return Deallocate<sizeof(T) * count, alignof(T)>(ptr); }
-
-		void Clear() { m_MemRegFiller.Free = m_MemRegFiller.Data; }
-
-		bool DoesOwn(const MemReg& memReg)
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes)
 		{
-			if (memReg.Data >= m_MemRegFiller.Data && memReg.Data < m_MemRegFiller.Free)
+			Splice<Byte> memReg;
+			memReg.Count = bytes;
+			memReg.Elements = (Byte*)(((UInt)Free + (Alignment - 1)) & ~(Alignment - 1));
+			Byte* new_free = memReg.Elements + bytes;
+			if (new_free > End())
+			{
+				FE_CORE_ASSERT(false, "ArenaAllocator overflow!");
+				memReg.Elements = nullptr;
+			}
+			Free = new_free;
+			return memReg;
+		}
+
+		template <UInt Size>
+		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(DoesOwn(ptr), "ArenaAllocator does not own this memory"); }
+
+		void Clear() { Free = Buffer.Elements; }
+
+		bool DoesOwn(Splice<Byte> memReg) const { return DoesOwn(memReg.Elements); }
+		bool DoesOwn(Byte* ptr) const
+		{
+			if (ptr >= Buffer.Elements && ptr < Free)
 				return true;
 			return false;
 		}
@@ -146,16 +179,23 @@ namespace fe
 		Primary m_Primary;
 		Fallback m_Fallback;
 
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) final override
+		virtual Splice<Byte> Allocate(UInt bytes) final override
 		{
-			MemReg mem_reg = m_Primary.Allocate(bytes, alignment);
+			Splice<Byte> mem_reg = m_Primary.Allocate(bytes);
+			if (!mem_reg.Elements)
+				mem_reg = m_Fallback.Allocate(bytes);
+
+			return mem_reg;
+		}
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) final override
+		{
+			Splice<Byte> mem_reg = m_Primary.Allocate(bytes, alignment);
 			if (!mem_reg.Data)
 				mem_reg = m_Fallback.Allocate(bytes, alignment);
 
 			return mem_reg;
 		}
-
-		virtual void Deallocate(MemReg& memReg) final override
+		virtual void Deallocate(Splice<Byte> memReg) final override
 		{
 			if (m_Primary.DoesOwn(memReg))
 				m_Primary.Deallocate(memReg);
@@ -163,87 +203,67 @@ namespace fe
 				m_Fallback.Deallocate(memReg);
 		}
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate() { return Allocate(Size, Alignment); }
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate()
+		{
+			Array<Byte, Size>* result = m_Primary.Allocate<Size, Alignment>();
+			if (!result)
+				result = m_Fallback.Allocate<Size, Alignment>();
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
+			return result;
+		}
 
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate(sizeof(T) * count, alignof(T)); }
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes)
+		{
+			Splice<Byte> mem_reg = m_Primary.Allocate<Alignment>(bytes);
+			if (!mem_reg.Elements)
+				mem_reg = m_Fallback.Allocate<Alignment>(bytes);
+
+			return mem_reg;
+		}
 
 		template <UInt Size>
 		void Deallocate(Byte* ptr)
 		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-			return Deallocate(memReg);
+			Splice<Byte> mem_reg;
+			mem_reg.Elements = ptr;
+			mem_reg.Count = Size;
+			if (m_Primary.DoesOwn(mem_reg))
+				m_Primary.Deallocate<Size>(ptr);
+			else
+				m_Fallback.Deallocate<Size>(ptr);
 		}
 
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count)
-		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-			return Deallocate(memReg);
-		}
-
-		bool DoesOwn(const MemReg& memReg) { return m_Primary.DoesOwn(memReg) || m_Fallback.DoesOwn(memReg); }
+		bool DoesOwn(Splice<Byte> memReg) { return m_Primary.DoesOwn(memReg) || m_Fallback.DoesOwn(memReg); }
 	};
 
 	class MallocAllocator final : public Allocator
 	{
 	public:
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) override final
+		virtual Splice<Byte> Allocate(UInt bytes) override final
 		{
-			FE_CORE_ASSERT(alignment > 8, "MallocAllocator does not align to anything more then 8");
-			MemReg result;
-			result.Data = (Byte*) operator new (bytes);
-			result.Size = bytes;
+			Splice<Byte> result;
+			result.Elements = (Byte*) operator new (bytes);
+			result.Count = bytes;
 
 			return result;
 		}
-
-		virtual void Deallocate(MemReg& memReg) override final
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
 		{
-			operator delete (memReg.Data);
-			memReg.Data = nullptr;
+			FE_CORE_ASSERT(alignment > 8, "MallocAllocator does not align to anything more then 8");
+			return Allocate(bytes); //we dont allign, because delete() takes alignment and we dont require it in interface
 		}
+		virtual void Deallocate(Splice<Byte> memReg) override final { operator delete (memReg.Elements); }
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate() { return Allocate(Size, Alignment); }
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate() { return Allocate(Size, Alignment); }
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
-
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate(sizeof(T) * count, alignof(T)); }
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes) { return Allocate(bytes, Alignment); }
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
-		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-			return Deallocate(memReg);
-		}
-
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count)
-		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-			return Deallocate(memReg);
-		}
+		void Deallocate(Byte* ptr) { operator delete (ptr); }
 	};
 
 	template <class SmallAllocator, class BigAllocator, UInt threshold>
@@ -252,25 +272,31 @@ namespace fe
 	public:
 		SmallAllocator m_SmallAllocator;
 		BigAllocator m_BigAllocator;
+		
+		virtual Splice<Byte> Allocate(UInt bytes) override final
+		{
+			if (bytes <= threshold)
+				return m_SmallAllocator.Allocate(bytes);
 
-		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
+			return m_BigAllocator.Allocate(bytes);
+		}
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
 		{
 			if (bytes <= threshold)
 				return m_SmallAllocator.Allocate(bytes, alignment);
 			
 			return m_BigAllocator.Allocate(bytes, alignment);
 		}
-
-		virtual void Deallocate(MemReg& memReg) override final
+		virtual void Deallocate(Splice<Byte> memReg) override final
 		{
-			if (memReg.Size <= threshold)
+			if (memReg.Count <= threshold)
 				m_SmallAllocator.Deallocate(memReg);
 			else
 				m_BigAllocator.Deallocate(memReg);
 		}
 
 		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate()
+		Array<Byte, Size>* Allocate()
 		{
 			if constexpr (Size <= threshold)
 				return m_SmallAllocator.Allocate<Size, Alignment>();
@@ -278,17 +304,8 @@ namespace fe
 				return m_BigAllocator.Allocate<Size, Alignment>();
 		}
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate()
-		{
-			if constexpr (sizeof(T) * Count <= threshold)
-				return m_SmallAllocator.Allocate<sizeof(T) * Count, alignof(T)>();
-			else
-				return m_BigAllocator.Allocate<sizeof(T) * Count, alignof(T)>();
-		}
-
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate(sizeof(T) * count, alignof(T)); }
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt bytes) { return Allocate(bytes, Alignment); }
 
 		template <UInt Size>
 		void Deallocate(Byte* ptr)
@@ -299,33 +316,24 @@ namespace fe
 				return m_BigAllocator.Deallocate<Size>(ptr);
 		}
 
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count)
+		bool DoesOwn(Splice<Byte> memReg)
 		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-			return Deallocate(memReg);
-		}
-
-		bool DoesOwn(const MemReg& memReg)
-		{
-			if (memReg.Size <= threshold)
+			if (memReg.Count <= threshold)
 				return m_SmallAllocator.DoesOwn(memReg);
 			else
 				return m_BigAllocator.DoesOwn(memReg);
 		}
 
 		template <UInt Size>
-		bool DoesOwn(const MemReg& memReg)
+		bool DoesOwn(Byte* ptr)
 		{
+			Splice<Byte> mem_reg;
+			mem_reg.Count = Size;
+			mem_reg.Elements = ptr;
 			if constexpr (Size <= threshold)
-				return m_SmallAllocator.DoesOwn(memReg);
+				return m_SmallAllocator.DoesOwn(mem_reg);
 			else
-				return m_BigAllocator.DoesOwn(memReg);
+				return m_BigAllocator.DoesOwn(mem_reg);
 		}
 	};
 
@@ -342,9 +350,30 @@ namespace fe
 		//true is free
 		U64 m_BitMapping = 0;
 
-		virtual MemReg Allocate(UInt bytes, UInt alignment) override final
+		virtual Splice<Byte> Allocate(UInt bytes) override final
 		{
-			MemReg result;
+			Splice<Byte> result;
+
+			FE_CORE_ASSERT(8 > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
+			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
+			if (!m_BitMapping)
+				// out of free MemRegs
+				return result;
+
+			unsigned long outIndex;
+			MSB64(&outIndex, m_BitMapping);
+			U64 flag_mask = (U64)1 << outIndex;
+			m_BitMapping &= ~flag_mask;
+
+			result.Elements = m_Regions + MemRegSize * outIndex;
+			result.Count = bytes;
+
+			return result;
+		}
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
+		{
+			Splice<Byte> result;
 
 			FE_CORE_ASSERT(alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
 			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
@@ -358,88 +387,52 @@ namespace fe
 			U64 flag_mask = (U64)1 << outIndex;
 			m_BitMapping &= ~flag_mask;
 
-			result.Data = m_Regions + MemRegSize * outIndex;
-			result.Size = bytes;
+			result.Elements = m_Regions + MemRegSize * outIndex;
+			result.Count = bytes;
 
 			return result;
 		}
-
-		virtual void Deallocate(MemReg& memReg) override final
+		virtual void Deallocate(Splice<Byte> memReg) override final
 		{
 			FE_CORE_ASSERT(DoesOwn(memReg), "This BitmappedPoolAllocator does not own this MemReg");
 
-			UInt index = (memReg.Data - m_Regions) / memRegSize;
+			UInt index = (memReg.Elements - m_Regions) / memRegSize;
 			U64 flag_mask = (U64)1 << (63 - index);
 			m_BitMapping &= flag_mask;
-			memReg.Data = nullptr;
 		}
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate()
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate()
 		{
 			static_assert(Alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
 			static_assert(Size > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
-			return Allocate(Size, Alignment);
+			return (Array<Byte, Size>*)Allocate(Size, Alignment).Elements;
 		}
 
-		template <typename T, UInt Count = 1>
-		MemReg Allocate()
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt size)
 		{
-			static_assert(alignof(T) > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
-			static_assert(sizeof(T) * Count > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
-			return Allocate<sizeof(T) * Count, alignof(T)>();
-		}
-
-		template <typename T>
-		MemReg Allocate(UInt count)
-		{
-			static_assert(alignof(T) > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
-
-			FE_CORE_ASSERT(sizeof(T) * count > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
-
-			return Allocate(sizeof(T) * count, alignof(T));
+			static_assert(Alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
+			return Allocate(size, Alignment);
 		}
 
 		template <UInt Size>
 		void Deallocate(Byte* ptr)
 		{
 			static_assert(Size > memRegSize, "Oversized deallocation in BitmappedPoolAllocator!");
+			FE_CORE_ASSERT(DoesOwn(ptr), "This BitmappedPoolAllocator does not own this MemReg");
 
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-
-			FE_CORE_ASSERT(DoesOwn(memReg), "This BitmappedPoolAllocator does not own this MemReg");
-
-			return Deallocate(memReg);
+			UInt index = (ptr - m_Regions) / memRegSize;
+			U64 flag_mask = (U64)1 << (63 - index);
+			m_BitMapping &= flag_mask;
 		}
 
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr)
+		bool DoesOwn(Splice<Byte> memReg) { return DoesOwn(memReg.Elements); }
+		bool DoesOwn(Byte* ptr)
 		{
-			static_assert(sizeof(T) * Count > memRegSize, "Oversized deallocation in BitmappedPoolAllocator!");
-			return Deallocate<sizeof(T) * Count>(ptr);
-		}
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count)
-		{
-			FE_CORE_ASSERT(sizeof(T) * count > memRegSize, "Oversized deallocation in BitmappedPoolAllocator!");
-
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-
-			FE_CORE_ASSERT(DoesOwn(memReg), "This BitmappedPoolAllocator does not own this MemReg");
-
-			return Deallocate(memReg);
-		}
-
-		bool DoesOwn(const MemReg& memReg)
-		{
-			bool lower_bound = memReg.Data >= m_Regions;
-			bool  uper_bound = memReg.Data < RegionsEnd();
-			if (memReg.Data && lower_bound && uper_bound)
+			bool lower_bound = ptr >= m_Regions;
+			bool  uper_bound = ptr < RegionsEnd();
+			if (ptr && lower_bound && uper_bound)
 				return true;
 			return false;
 		}
@@ -450,46 +443,30 @@ namespace fe
 	public:
 		std::pmr::monotonic_buffer_resource MBR;
 
-		virtual MemReg Allocate(UInt bytes, UInt alignment = 8) final override
+		virtual Splice<Byte> Allocate(UInt bytes) final override
 		{
-			FE_CORE_ASSERT(alignment <= 8, "OverAlignment in MonotonicAllocator");
-			void* allocation = MBR.allocate(bytes);
-			MemReg memReg;
-			memReg.Data = (Byte*)allocation;
-			memReg.Size = bytes;
-			return memReg;
+			Splice<Byte> mem_reg;
+			mem_reg.Elements = (Byte*)MBR.allocate(bytes);
+			mem_reg.Count = bytes;
+			return mem_reg;
 		}
-		virtual void Deallocate(MemReg& memReg) final override { MBR.deallocate(memReg.Data, memReg.Size); memReg.Data = nullptr; }
+		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) final override
+		{
+			Splice<Byte> mem_reg;
+			mem_reg.Elements = (Byte*)MBR.allocate(bytes, alignment);
+			mem_reg.Count = bytes;
+			return mem_reg;
+		}
+		virtual void Deallocate(Splice<Byte> memReg) final override { FE_LOG_CORE_WARN("Deallocation in MonotonicAllocator"); }
 
-		template <UInt Size, UInt Alignment = 8>
-		MemReg Allocate() { return Allocate(Size, Alignment); }
-
-		template <typename T, UInt Count = 1>
-		MemReg Allocate() { return Allocate<sizeof(T) * Count, alignof(T)>(); }
-
-		template <typename T>
-		MemReg Allocate(UInt count) { return Allocate(sizeof(T) * count, alignof(T)); }
-
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* Allocate() { return (Array<Byte, Size>*)MBR.allocate(Size, Alignment); }
+		
+		template <UInt Alignment>
+		Splice<Byte> Allocate(UInt size) { return Allocate(size, Alignment); }
+		
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
-		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = Size;
-			return Deallocate(memReg);
-		}
-
-		template <typename T, UInt Count = 1>
-		void Deallocate(T* ptr) { return Deallocate<sizeof(T) * Count>(ptr); }
-
-		template <typename T>
-		void Deallocate(T* ptr, UInt count)
-		{
-			MemReg memReg;
-			memReg.Data = ptr;
-			memReg.Size = sizeof(T) * count;
-			return Deallocate(memReg);
-		}
+		void Deallocate(Byte* ptr) { FE_LOG_CORE_WARN("Deallocation in MonotonicAllocator"); }
 
 		void Clear() { MBR.release(); }
 	};
@@ -506,15 +483,15 @@ namespace fe
 	private:
 		virtual void* do_allocate(std::size_t bytes, std::size_t alignment) final override
 		{
-			MemReg allocation = fe_allocator->Allocate(bytes, alignment);
-			return allocation.Data;
+			Splice<Byte> allocation = fe_allocator->Allocate(bytes, alignment);
+			return allocation.Elements;
 		};
 		virtual void do_deallocate(void* p, std::size_t bytes, std::size_t alignment) final override
 		{
-			MemReg deallocation;
-			deallocation.Data = (Byte*)p;
-			deallocation.Size = bytes;
-			fe_allocator->Deallocate(deallocation);
+			Splice<Byte> mem_reg;
+			mem_reg.Elements = (Byte*)p;
+			mem_reg.Count = bytes;
+			fe_allocator->Deallocate(mem_reg);
 		};
 		virtual bool do_is_equal(const std::pmr::memory_resource& other) const noexcept final override { return false; };
 	};
