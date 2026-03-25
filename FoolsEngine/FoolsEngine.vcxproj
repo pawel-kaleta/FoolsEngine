@@ -154,6 +154,14 @@
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Application\Application.h" />
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.h" />
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\FoolsEngine\Application\Layer.h" />
+    <ClInclude Include="src\FoolsEngine\Application\LayerStack.h" />
+    <ClInclude Include="src\FoolsEngine\Application\Project.h" />
+    <ClInclude Include="src\FoolsEngine\Application\Time.h" />
+    <ClInclude Include="src\FoolsEngine\Application\UUID.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Asset.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetAccessors.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetHandle.h" />
@@ -170,36 +178,40 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
-    <ClInclude Include="src\FoolsEngine\Application\Application.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h" />
-    <ClInclude Include="src\FoolsEngine\Application\Layer.h" />
-    <ClInclude Include="src\FoolsEngine\Application\LayerStack.h" />
-    <ClInclude Include="src\FoolsEngine\Application\Project.h" />
-    <ClInclude Include="src\FoolsEngine\Application\Time.h" />
-    <ClInclude Include="src\FoolsEngine\Application\UUID.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Allocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Global.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\ApplicationEvent.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\Event.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\KeyEvent.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\MainEventDispacher.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\MouseEvent.h" />
-    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.h" />
-    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h" />
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h" />
     <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h" />
@@ -213,11 +225,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\DownStream.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Framebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\FrameBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Program.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Shader.h" />
@@ -227,7 +236,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceState.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Camera.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Lights.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Material.h" />
@@ -235,6 +243,10 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Model.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\RenderMesh.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
@@ -265,16 +277,18 @@
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h" />
     <ClInclude Include="src\FoolsEngine\Scene\SimulationStage.h" />
     <ClInclude Include="src\FoolsEngine\Scene\World.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\Application.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\LayerStack.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\Project.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\Time.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\UUID.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetTypesRegistry.cpp" />
@@ -286,54 +300,45 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\Application.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\LayerStack.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\Project.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\Time.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\UUID.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp" />
-    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\DownStream.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Framebuffer.cpp">
-      <ObjectFileName>$(IntDir)\Framebuffer1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Program.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Shader.cpp">
-      <ObjectFileName>$(IntDir)\Shader1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Shader.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\StaticBuffer.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Texture.cpp">
-      <ObjectFileName>$(IntDir)\Texture1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexArray.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\PipelineState.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceState.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Camera.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Mesh.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Model.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\RenderMesh.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp">
+      <ObjectFileName>$(IntDir)\Shader1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp">
+      <ObjectFileName>$(IntDir)\Texture1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.cpp" />

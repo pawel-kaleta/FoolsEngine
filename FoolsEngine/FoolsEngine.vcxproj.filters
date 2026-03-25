@@ -4,6 +4,12 @@
     <Filter Include="FoolsEngine">
       <UniqueIdentifier>{1E21718E-8AD6-E983-13CB-E35A7F7FE087}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Application">
+      <UniqueIdentifier>{E1F90A0E-4D31-53A5-563B-B7C8C2F1799E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Application\ImGui">
+      <UniqueIdentifier>{CB93996D-37AC-8097-0059-10316C301531}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Assets">
       <UniqueIdentifier>{403A6BB3-2C1E-2C09-957E-265C8181168B}</UniqueIdentifier>
     </Filter>
@@ -13,26 +19,29 @@
     <Filter Include="FoolsEngine\Assets\Serialization">
       <UniqueIdentifier>{CD82E250-B9D3-CD92-E237-BC54CEE760FC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Core">
-      <UniqueIdentifier>{36A8C180-22A1-E0D2-4BD3-C557372BC0DE}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation">
+      <UniqueIdentifier>{A45E3A38-9058-638A-79C5-F99A655EC9F6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Debug">
-      <UniqueIdentifier>{140A0399-8020-012F-C997-8C5035EDD1B6}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation\Debug">
+      <UniqueIdentifier>{1AD401A1-068F-F14C-AF46-6A979BE03BDD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Events">
-      <UniqueIdentifier>{429FEEBC-2E83-AF12-97E3-A96583E69994}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation\Math">
+      <UniqueIdentifier>{FD897133-6997-9F19-F27D-9B045E8A6BD0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\ImGui">
-      <UniqueIdentifier>{C8746199-348B-5F2F-7D02-EB50E95730B7}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation\Memory">
+      <UniqueIdentifier>{8CB540D6-F8CD-2700-C17A-B7992D52BC99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Math">
-      <UniqueIdentifier>{B7E8C680-A3E1-E5D2-CC13-CB57B86BC5DE}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation\Memory\Allocators">
+      <UniqueIdentifier>{CF1BE2E5-BB98-D528-E415-D63CD0F171BC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Memory">
-      <UniqueIdentifier>{C6AA68CE-B28E-2924-1BEF-237707F213A6}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Foundation\Utils">
+      <UniqueIdentifier>{04CB3DA2-F085-2D4E-993D-A69885D777DE}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Platform">
       <UniqueIdentifier>{327F31CF-1E0E-BB98-C72C-CF93B39ACB3E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Platform\Events">
+      <UniqueIdentifier>{D6DEFD46-42EC-2B2D-CBD2-271837DFF7E3}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Platform\Win32">
       <UniqueIdentifier>{94D4F850-80E4-A421-E99D-0940D5CC93BA}</UniqueIdentifier>
@@ -42,12 +51,6 @@
     </Filter>
     <Filter Include="FoolsEngine\Renderer\1 - Description">
       <UniqueIdentifier>{35E8F8BD-21CF-BAB5-CA1F-21D3B6E5331C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FoolsEngine\Renderer\2 - GAPIAbstraction">
-      <UniqueIdentifier>{8DB6E924-7933-DD67-A2B0-DD7B8E8C79FB}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL">
-      <UniqueIdentifier>{21DFBF34-8D1A-20F8-960F-9D8702CAA428}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Renderer\2 - Resource">
       <UniqueIdentifier>{9A663D6F-06D5-92EE-4FBE-4DEEBB6B888A}</UniqueIdentifier>
@@ -61,17 +64,20 @@
     <Filter Include="FoolsEngine\Renderer\3 - Command\OpenGL">
       <UniqueIdentifier>{666375D7-D2F2-36C2-DBEE-17DA47FD71CE}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\3 - Representation">
-      <UniqueIdentifier>{86E2E2ED-F271-A4D8-FB6D-85F0677CDFE4}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\4 - Representation">
+      <UniqueIdentifier>{A704F9DB-1394-BAC6-1C90-9BDE889EF5D2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\4 - GAPIIsolation">
-      <UniqueIdentifier>{478EF871-33E0-CF61-1CFF-0C7208F0E84A}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\5 - Render Context">
+      <UniqueIdentifier>{FADF1402-666F-D6EC-6F6B-B704DB7911F9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\8 - Render">
-      <UniqueIdentifier>{F8CC1001-64B0-1F41-6DB3-4D7DD915E691}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\5 - Render Context\OpenGL">
+      <UniqueIdentifier>{EE8BAA56-DA09-FBEF-C301-B987AF1E3D18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Renderer\9 - Integration">
-      <UniqueIdentifier>{3D7791A9-295E-53A1-D2AE-B9BEBE74CC07}</UniqueIdentifier>
+    <Filter Include="FoolsEngine\Renderer\6 - Render">
+      <UniqueIdentifier>{B6AAFBF8-228E-0A39-2B91-387597F3D089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Renderer\7 - Integration">
+      <UniqueIdentifier>{BB9B0263-A782-C45A-50D3-2A783C993DC1}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Scene">
       <UniqueIdentifier>{BB6C119A-2783-0F30-70FA-9A51DC4FE0B7}</UniqueIdentifier>
@@ -91,14 +97,35 @@
     <Filter Include="FoolsEngine\Scene\GameplayWorld\System">
       <UniqueIdentifier>{56AA3DE2-42FC-14D2-2B1B-52E2170C2EBB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FoolsEngine\Utils">
-      <UniqueIdentifier>{FE003F9A-6A17-3D30-B38E-C8511FE40DB8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\FE_pch.h" />
     <ClInclude Include="src\FoolsEngine.h" />
+    <ClInclude Include="src\FoolsEngine\Application\Application.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.h">
+      <Filter>FoolsEngine\Application\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.h">
+      <Filter>FoolsEngine\Application\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\Layer.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\LayerStack.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\Project.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\Time.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Application\UUID.h">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Asset.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
@@ -147,65 +174,107 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\Application.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\Layer.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\LayerStack.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\Project.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\Time.h">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\UUID.h">
-      <Filter>FoolsEngine\Core</Filter>
+    <ClInclude Include="src\FoolsEngine\Foundation\Common.h">
+      <Filter>FoolsEngine\Foundation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h">
-      <Filter>FoolsEngine\Debug</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h">
-      <Filter>FoolsEngine\Debug</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h">
-      <Filter>FoolsEngine\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Events\ApplicationEvent.h">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Events\Event.h">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Events\KeyEvent.h">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Events\MainEventDispacher.h">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Events\MouseEvent.h">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.h">
-      <Filter>FoolsEngine\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.h">
-      <Filter>FoolsEngine\ImGui</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h">
-      <Filter>FoolsEngine\Math</Filter>
+      <Filter>FoolsEngine\Foundation\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h">
-      <Filter>FoolsEngine\Math</Filter>
+      <Filter>FoolsEngine\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Allocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Global.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAllocator.h">
+      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h">
-      <Filter>FoolsEngine\Memory</Filter>
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Events\ApplicationEvent.h">
+      <Filter>FoolsEngine\Platform\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Events\Event.h">
+      <Filter>FoolsEngine\Platform\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Events\KeyEvent.h">
+      <Filter>FoolsEngine\Platform\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Events\MainEventDispacher.h">
+      <Filter>FoolsEngine\Platform\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Platform\Events\MouseEvent.h">
+      <Filter>FoolsEngine\Platform\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h">
       <Filter>FoolsEngine\Platform</Filter>
@@ -237,25 +306,19 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Library.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h">
+      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\DownStream.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Framebuffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\FrameBuffer.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h">
@@ -279,35 +342,53 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h">
       <Filter>FoolsEngine\Renderer\3 - Command</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h">
+      <Filter>FoolsEngine\Renderer\3 - Command</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceState.h">
       <Filter>FoolsEngine\Renderer\3 - Command</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Camera.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Lights.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Material.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Mesh.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Model.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\RenderMesh.h">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h">
+      <Filter>FoolsEngine\Renderer\5 - Render Context\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h">
+      <Filter>FoolsEngine\Renderer\5 - Render Context</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h">
-      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h">
-      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h">
-      <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
+      <Filter>FoolsEngine\Renderer\7 - Integration</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h">
       <Filter>FoolsEngine\Scene</Filter>
@@ -390,38 +471,30 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h">
-      <Filter>FoolsEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h">
-      <Filter>FoolsEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h">
-      <Filter>FoolsEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h">
-      <Filter>FoolsEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h">
-      <Filter>FoolsEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Context.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
+    <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp">
+      <Filter>FoolsEngine\Application\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp">
+      <Filter>FoolsEngine\Application\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\LayerStack.cpp">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\Project.cpp">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\Time.cpp">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Application\UUID.cpp">
+      <Filter>FoolsEngine\Application</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
@@ -455,44 +528,29 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\LayerStack.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\Project.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\Time.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\UUID.cpp">
-      <Filter>FoolsEngine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp">
-      <Filter>FoolsEngine\Debug</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp">
-      <Filter>FoolsEngine\Debug</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp">
-      <Filter>FoolsEngine\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp">
-      <Filter>FoolsEngine\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiBackend.cpp">
-      <Filter>FoolsEngine\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Application\ImGui\ImGuiLayer.cpp">
-      <Filter>FoolsEngine\ImGui</Filter>
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp">
-      <Filter>FoolsEngine\Math</Filter>
+      <Filter>FoolsEngine\Foundation\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp">
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp">
-      <Filter>FoolsEngine\Memory</Filter>
+      <Filter>FoolsEngine\Foundation\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp">
+      <Filter>FoolsEngine\Foundation\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp">
+      <Filter>FoolsEngine\Platform\Events</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
@@ -508,15 +566,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp">
-      <Filter>FoolsEngine\Renderer\2 - GAPIAbstraction</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\DownStream.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
@@ -548,32 +597,50 @@
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\PipelineState.cpp">
       <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp">
+      <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceState.cpp">
       <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Camera.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Material.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Mesh.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Model.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\RenderMesh.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Representation</Filter>
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp">
+      <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer\5 - Render Context\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp">
+      <Filter>FoolsEngine\Renderer\5 - Render Context</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp">
-      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.cpp">
-      <Filter>FoolsEngine\Renderer\8 - Render</Filter>
+      <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.cpp">
-      <Filter>FoolsEngine\Renderer\9 - Integration</Filter>
+      <Filter>FoolsEngine\Renderer\7 - Integration</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">
       <Filter>FoolsEngine\Scene</Filter>
@@ -635,10 +702,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Shader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp" />
   </ItemGroup>
 </Project>

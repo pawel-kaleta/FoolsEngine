@@ -14,17 +14,17 @@ namespace fe::Description
 {
 	struct Library
 	{
-		MonotonicAllocator	m_AllocPermanent;
-		MallocAllocator		m_AllocGPA;
-		STD_PMR_Allocator<MallocAllocator>	m_AllocGPA_STD_PMR;
+		MonotonicAlloc	m_AllocPermanent;
+		MallocAlloc		m_AllocGPA;
+		STD_PMR_Allocator<MallocAlloc>	m_AllocGPA_STD_PMR;
 
-		XarrAlloc<Texture::Archetype,						MonotonicAllocator>	TextureArchetypes;
-		XarrAlloc<Buffer::Layout,							MonotonicAllocator>	BufferLayouts;
-		XarrAlloc<Framebuffer::Specification,				MonotonicAllocator>	FramebufferSpecs;
-		XarrAlloc<ShaderInterface::TextureSampler,			MonotonicAllocator>	TextureSamplers;
-		XarrAlloc<ShaderInterface::UniformBufferSampler,	MonotonicAllocator>	UniformBufferSamplers;
-		XarrAlloc<ShaderInterface::Specification,			MonotonicAllocator>	ShaderSpecs;
-		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAllocator>	ProgramSpecs;
+		XarrAlloc<Texture::Archetype,						MonotonicAlloc, MallocAlloc>	TextureArchetypes;
+		XarrAlloc<Buffer::Layout,							MonotonicAlloc, MallocAlloc>	BufferLayouts;
+		XarrAlloc<Framebuffer::Specification,				MonotonicAlloc, MallocAlloc>	FramebufferSpecs;
+		XarrAlloc<ShaderInterface::TextureSampler,			MonotonicAlloc, MallocAlloc>	TextureSamplers;
+		XarrAlloc<ShaderInterface::UniformBufferSampler,	MonotonicAlloc, MallocAlloc>	UniformBufferSamplers;
+		XarrAlloc<ShaderInterface::Specification,			MonotonicAlloc, MallocAlloc>	ShaderSpecs;
+		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAlloc, MallocAlloc>	ProgramSpecs;
 		
 		std::pmr::map<UUID, U32> UUIDToIDMap;
 		static Library& Get() { return *s_Library; }
@@ -47,7 +47,7 @@ namespace fe::Description
 			m_AllocPermanent(),
 			m_AllocGPA(),
 			m_AllocGPA_STD_PMR(&m_AllocGPA),
-			TextureArchetypes(&m_AllocPermanent),
+			TextureArchetypes(&m_AllocPermanent, &m_AllocGPA),
 			BufferLayouts(&m_AllocPermanent),
 			FramebufferSpecs(&m_AllocPermanent),
 			TextureSamplers(&m_AllocPermanent),

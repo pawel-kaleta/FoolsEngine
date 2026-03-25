@@ -11,7 +11,7 @@ namespace fe
 	public:
 		Splice<T> Buffer;
 		UInt Count = 0;
-		TypedAlloc<Allocator> Alloc;
+		Allocator* Alloc;
 
 		T* Begin() const { return Buffer.Elements; }
 		T* End() const { return Buffer.Elements + Count; }
@@ -183,7 +183,7 @@ namespace fe
 		}
 
 	private:
-		TypedAlloc<tAlloc>& m_Alloc() { return *((TypedAlloc<tAlloc>*) & DynArrAllocPM<T>::Alloc); }
+		tAlloc& m_Alloc() { return *((tAlloc*) & DynArrAllocPM<T>::Alloc); }
 
 		void RelocateToNewCapacity(UInt newCapacity)
 		{

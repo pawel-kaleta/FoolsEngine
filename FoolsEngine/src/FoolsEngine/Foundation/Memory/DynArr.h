@@ -2,7 +2,7 @@
 
 #include "DataTypes.h"
 #include "Splice.h"
-#include "Allocator.h"
+#include "Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 
@@ -114,6 +114,4 @@ namespace fe
 			Buffer = new_buffer;
 		}
 	};
-
-	
 }

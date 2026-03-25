@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DataTypes.h"
-#include "Allocator.h"
+#include "Allocators/Allocator.h"
 #include "DynArrAlloc.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
@@ -54,7 +54,7 @@ namespace fe
 		CString GetCString(tnAllocator* alloc)
 		{
 			UInt size = 0;
-			for (UInt i=0; i<Container.)
+			//for (UInt i=0; i<Container.)
 
 			Splice<char> mem_reg = alloc->Allocate<char>(Container.Count + 1);
 			std::memcpy(mem_reg.Elements, Container.Buffer.Elements, Container.Count);
