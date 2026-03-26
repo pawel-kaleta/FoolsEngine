@@ -140,7 +140,7 @@ namespace fe
 	{
 	public:
 		UInt Count = 0;
-		Array<T*> Chunks;
+		SpliceArena<T*> Chunks;
 
 		UInt Capacity()
 		{

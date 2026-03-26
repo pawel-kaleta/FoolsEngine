@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Splice.h"
+
 namespace fe
 {
 	// this is for function parameters only
@@ -11,7 +13,7 @@ namespace fe
 		UInt Count = 0;
 		Allocator* AllocMain = nullptr;
 		Allocator* AllocAux = nullptr;
-		Array<T*> Chunks;
+		SpliceArena<T*> Chunks;
 
 		UInt Capacity()
 		{
@@ -167,86 +169,89 @@ namespace fe
 	public:
 		void InitXarrAlloc(tnAllocMain* allocMain, tnAllocAux* allocAux)
 		{
-			Xarr<T>::AllocMain = allocMain;
-			Xarr<T>::AllocAux = allocAux;
+			this->AllocMain = allocMain;
+			this->AllocAux = allocAux;
 		}
 
 		void Release()
 		{
-			if (XarrAllocPM<T>::Chunks.Count)
+			if (this->Chunks.Count)
 			{
 				UInt size = 1;
-				for (UInt i = 0; i < XarrAllocPM<T>::Chunks.Count; ++i)
+				for (UInt i = 0; i < this->Chunks.Count; ++i)
 				{
 					Splice<T> region;
-					region.Elements = XarrAllocPM<T>::Chunks[i];
+					region.Elements = this->Chunks[i];
 					region.Count = size;
-					((tnAllocMain*)XarrAllocPM<T>::AllocMain)->Deallocate(region);
+					((tnAllocMain*)this->AllocMain)->Deallocate(region);
 					size = size << 1;
 				}
 
-				((tnAllocMain*)XarrAllocPM<T>::AllocAux)->Deallocate(XarrAllocPM<T>::Chunks.Buffer);
+				((tnAllocMain*)this->AllocAux)->Deallocate(this->Chunks.Buffer);
 			}
 
-			XarrAllocPM<T>::Count = 0;
-			XarrAllocPM<T>::Chunks.Count = 0;
-			XarrAllocPM<T>::Chunks.Buffer.Count = 0;
-			XarrAllocPM<T>::Chunks.Buffer.Elements = nullptr;
+			this->Count = 0;
+			this->Chunks.Count = 0;
+			this->Chunks.Buffer.Count = 0;
+			this->Chunks.Buffer.Elements = nullptr;
 		}
 
 		void Append(const T* t)
 		{
-			if (XarrAllocPM<T>::Count == XarrAllocPM<T>::Capacity())
+			if (this->Count == this->Capacity())
 				Expand();
 
-			XarrAllocPM<T>::Count++;
+			this->Count++;
 
 			unsigned long chunk_i;
-			MSB64(&chunk_i, XarrAllocPM<T>::Count);
-			auto chunk_mask = (XarrAllocPM)1 << chunk_i;
-			auto in_chunk_i = XarrAllocPM<T>::Count - chunk_mask;
-			auto result_ptr = XarrAllocPM<T>::Chunks[chunk_i] + in_chunk_i;
+			MSB64(&chunk_i, this->Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = this->Count - chunk_mask;
+			auto result_ptr = this->Chunks[chunk_i] + in_chunk_i;
 
 			*result_ptr = *t;
 		}
 
 		T* PushBack()
 		{
-			if (XarrAllocPM<T>::Count == XarrAllocPM<T>::Capacity())
+			if (this->Count == this->Capacity())
 				Expand();
 
-			XarrAllocPM<T>::Count++;
+			this->Count++;
 
 			unsigned long chunk_i;
-			MSB64(&chunk_i, XarrAllocPM<T>::Count);
+			MSB64(&chunk_i, this->Count);
 			auto chunk_mask = (U64)1 << chunk_i;
-			auto in_chunk_i = XarrAllocPM<T>::Count - chunk_mask;
-			auto result_ptr = XarrAllocPM<T>::Chunks[chunk_i] + in_chunk_i;
+			auto in_chunk_i = this->Count - chunk_mask;
+			auto result_ptr = this->Chunks[chunk_i] + in_chunk_i;
 
 			return result_ptr;
 		}
 
 	private:
+		inline tnAllocMain*		GetAllocMain()	{ return (tnAllocMain*)this->AllocMain; }
+		inline tnAllocAux*		GetAllocAux()	{ return (tnAllocAux*) this->AllocAux; }
+
 		void Expand()
 		{
-			if (XarrAllocPM<T>::Chunks.Count == XarrAllocPM<T>::Chunks.Buffer.Count)
+			if (this->Chunks.Count == this->Chunks.Buffer.Count)
 			{
-				bool any_capacity = XarrAllocPM<T>::Chunks.Buffer.Count;
-				UInt chunks_new_capacity = XarrAllocPM<T>::Chunks.Buffer.Count + (XarrAllocPM<T>::Chunks.Buffer.Count >> 1); // *1.5
+				bool any_capacity = this->Chunks.Buffer.Count;
+				UInt chunks_new_capacity = this->Chunks.Buffer.Count + (this->Chunks.Buffer.Count >> 1); // *1.5
 				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
 
-				Splice<T*> new_chunks = ((tnAllocAux*)XarrAllocPM<T>::AllocAux)->Allocate<T*>(chunks_new_capacity);
+				Splice<T*> new_chunks = GetAllocAux()->Allocate<T*>(chunks_new_capacity);
 
-				UInt old_size = XarrAllocPM<T>::Chunks.Buffer.Count * sizeof(T*);
-				std::memcpy(new_chunks.Elements, XarrAllocPM<T>::Chunks.Buffer.Elements, old_size);
-				((tnAllocAux*)XarrAllocPM<T>::AllocAux)->Deallocate(Chunks.Buffer);
+				UInt old_size = this->Chunks.Buffer.Count * sizeof(T*);
+				std::memcpy(new_chunks.Elements, this->Chunks.Buffer.Elements, old_size);
+				GetAllocAux()->Deallocate(this->Chunks.Buffer);
 
-				XarrAllocPM<T>::Chunks.Buffer = new_chunks;
+				this->Chunks.Buffer = new_chunks;
 			}
 
-			UInt new_chunk_capacity = UInt(1) << XarrAllocPM<T>::Chunks.Count;
-			Splice<T> mem_reg = ((tnAllocMain*)XarrAllocPM<T>::AllocMain)->Allocate<T>(new_chunk_capacity);
-			XarrAllocPM<T>::Chunks.Append(mem_reg.Elements);
+			UInt new_chunk_capacity = UInt(1) << this->Chunks.Count;
+			Splice<T> mem_reg = GetAllocMain()->Allocate<T>(new_chunk_capacity);
+			this->Chunks.Append(mem_reg.Elements);
 		}
 	};
 }

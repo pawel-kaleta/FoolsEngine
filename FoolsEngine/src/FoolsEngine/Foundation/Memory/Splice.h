@@ -93,6 +93,13 @@ namespace fe
 			Count++;
 		}
 
+		void Append(T data)
+		{
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+			Buffer[Count] = data;
+			Count++;
+		}
+
 		T* PushBack()
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
@@ -144,6 +151,13 @@ namespace fe
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
 			Buffer[Count] = *data;
+			Count++;
+		}
+
+		void Append(T data)
+		{
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+			Buffer[Count] = data;
 			Count++;
 		}
 
