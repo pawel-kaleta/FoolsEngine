@@ -90,7 +90,8 @@ namespace fe
 			m_ViewportSize = new_viewport_size;
 		}
 
-		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex("Final Frame");
+		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
+		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 		GLuint attachment_id = static_cast<Resource::Framebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
 		ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 

@@ -64,6 +64,14 @@ namespace fe
 		void FromMemReg(Splice<Byte> splice)	{ *this = *(String*)&splice; }
 	};
 
+	inline bool CompareStringsEqual(String a, String b)
+	{
+		if (a.Length != b.Length)
+			return false;
+
+		return ! std::memcmp(a.Data, b.Data, a.Length);
+	}
+
 	struct StringBuilder
 	{
 		Splice<char8_t> Buffer;

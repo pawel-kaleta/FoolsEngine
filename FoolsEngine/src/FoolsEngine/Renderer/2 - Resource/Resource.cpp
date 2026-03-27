@@ -6,7 +6,7 @@
 
 namespace fe::Resource
 {
-	UInt FramebufferBase::GetColorAttachmentIndex(const String& name) const
+	UInt FramebufferBase::GetColorAttachmentIndex(String name) const
 	{
 		const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
 

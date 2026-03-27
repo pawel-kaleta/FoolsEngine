@@ -16,7 +16,7 @@ namespace fe::Command
 			glUniform1ui(program.BindingLocations.TextureSamplers[samplerIndex], texture_unit);
 		}
 
-		void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot)
+		void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, String samplerName, RenderTextureSlotID rendererTextureSlot)
 		{
 			const auto& lib = Description::Library::Get();
 			const auto& spec = lib.ProgramSpecs[program.SpecificationID];
@@ -25,7 +25,7 @@ namespace fe::Command
 			{
 				const auto& sampler = lib.TextureSamplers[spec.TextureSamplerIDs[i]];
 
-				if (sampler.Name.compare(samplerName))
+				if (CompareStringsEqual(sampler.Name, samplerName))
 				{
 					BindTextureSamplerToRendererTextureSlot(program, i, rendererTextureSlot);
 					return;
@@ -138,7 +138,7 @@ namespace fe::Command
 			UploadUniform(type, count, location, data);
 		}
 
-		void UploadUniform(Resource::Program_OpenGL& program, const std::pmr::string& uniformName, const void* data)
+		void UploadUniform(Resource::Program_OpenGL& program, String uniformName, const void* data)
 		{
 			const auto& spec = Description::Library::Get().ProgramSpecs[program.SpecificationID];
 
@@ -148,7 +148,7 @@ namespace fe::Command
 			{
 				const auto& uniform = uniforms.Elements[i];
 
-				if (uniform.Name.compare(uniformName))
+				if (CompareStringsEqual(uniform.Name, uniformName))
 				{
 					Description::Data::Type type = uniform.Type;
 					uint32_t count = uniform.Count;

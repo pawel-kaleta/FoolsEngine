@@ -15,7 +15,7 @@ namespace fe::Resource
 
 		virtual void Create() = 0;
 		virtual void Resize(U32 width, U32 height) = 0;
-		UInt GetColorAttachmentIndex(const String& name) const;
+		UInt GetColorAttachmentIndex(String name) const;
 		virtual void Destroy() = 0;
 
 	};

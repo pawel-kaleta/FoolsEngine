@@ -103,7 +103,8 @@ namespace fe
 			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
 		}
 
-		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex("Final Frame");
+		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
+		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 		GLuint attachment_id = static_cast<Resource::Framebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
 		ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
@@ -228,7 +229,8 @@ namespace fe
 
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
-			int attachment_index = m_Framebuffer->GetColorAttachmentIndex("EntityID");
+			String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
+			int attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 			Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
 			Command::ResourceState::ReadPixel<GAPIType::OpenGL>(*m_Framebuffer, attachment_index, mouseX, mouseY, &entityID);
 		}

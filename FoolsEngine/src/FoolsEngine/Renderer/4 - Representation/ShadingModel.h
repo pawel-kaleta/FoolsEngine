@@ -53,7 +53,7 @@ namespace fe
 
 		//consider iterator
 		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
-		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
+		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, String name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -61,7 +61,7 @@ namespace fe
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 
 		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const;
-		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const;
+		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, String name) const;
 	};
 
 	class ShadingModelUser : public ShadingModelObserver
@@ -82,10 +82,10 @@ namespace fe
 		}
 
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
-		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const std::string& name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
+		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, String name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
 		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
-		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const;
+		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, String name, void* dataPointer) const;
 
 		bool LoadBaseAssetMetadata(const char* filepath);
 		bool LoadMetadata();

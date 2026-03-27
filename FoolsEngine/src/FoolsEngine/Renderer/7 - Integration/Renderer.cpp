@@ -170,7 +170,8 @@ namespace fe
 	{
 		Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(framebuffer);
 
-		int attachment_index = framebuffer.GetColorAttachmentIndex("EntityID");
+		String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
+		int attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
 		Command::ResourceState::ClearAttachment<GAPIType::OpenGL>(framebuffer, attachment_index, (uint32_t)NullEntityID);
 
 		RenderScene(scene, camera, cameraTransform);

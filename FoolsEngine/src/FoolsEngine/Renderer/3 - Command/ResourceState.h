@@ -4,6 +4,8 @@
 #include "FoolsEngine/Renderer/2 - Resource/Program.h"
 #include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
+
 namespace fe::Command
 {
 	namespace ResourceState
@@ -19,11 +21,11 @@ namespace fe::Command
 
 			void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, size_t samplerIndex, RenderTextureSlotID rendererTextureSlot);
 
-			void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot);
+			void BindTextureSamplerToRendererTextureSlot(Resource::Program_OpenGL& program, String samplerName, RenderTextureSlotID rendererTextureSlot);
 
 			void UploadUniform(Resource::Program_OpenGL& program, size_t uniformIndex, const void* data);
 
-			void UploadUniform(Resource::Program_OpenGL& program, const std::pmr::string& uniformName, const void* data);
+			void UploadUniform(Resource::Program_OpenGL& program, String uniformName, const void* data);
 
 			// framebuffer
 
@@ -46,7 +48,7 @@ namespace fe::Command
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void BindTextureSamplerToRendererTextureSlot(Resource::ProgramBase& program, const std::pmr::string& samplerName, RenderTextureSlotID rendererTextureSlot)
+		void BindTextureSamplerToRendererTextureSlot(Resource::ProgramBase& program, String samplerName, RenderTextureSlotID rendererTextureSlot)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureSamplerToRendererTextureSlot(*(Resource::Program_OpenGL*) & program, samplerName, rendererTextureSlot);
 		}
@@ -58,7 +60,7 @@ namespace fe::Command
 		}
 
 		template<GAPIType::ValueType GAPI>
-		void UploadUniform(Resource::ProgramBase& program, const std::pmr::string& uniformName, const void* data)
+		void UploadUniform(Resource::ProgramBase& program, String uniformName, const void* data)
 		{
 			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::UploadUniform(*(Resource::Program_OpenGL*) & program, uniformName, data);
 		}

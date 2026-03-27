@@ -162,7 +162,7 @@ namespace fe::Resource
 		RegionFences.Count = 0;
 		Regions.Count = 0;
 
-		glDeleteBuffers(PastBuffersToDestroy.Count, PastBuffersToDestroy.Begin());
+		glDeleteBuffers(PastBuffersToDestroy.Count, PastBuffersToDestroy.begin());
 		PastBuffersToDestroy.Release();
 	}
 

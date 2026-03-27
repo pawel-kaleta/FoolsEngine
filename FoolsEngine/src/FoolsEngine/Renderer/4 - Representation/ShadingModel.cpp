@@ -47,7 +47,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const std::string& name) const
+	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, String name) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -59,7 +59,7 @@ namespace fe
 
 		for (const auto& uniform : uniforms_layout.Elements)
 		{
-			if (name.compare(uniform.Name))
+			if (CompareStringsEqual(name, uniform.Name))
 			{
 				return (void*)uniform_data_pointer;
 			}
@@ -84,7 +84,7 @@ namespace fe
 		std::memcpy((void*)dest, dataPointer, targetUniform.Size() *  targetUniform.Count);
 	}
 
-	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const std::string& name, void* dataPointer) const
+	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, String name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -102,7 +102,7 @@ namespace fe
 
 		for (const auto& uniform : uniforms_layout.Elements)
 		{
-			if (name.compare(uniform.Name))
+			if (CompareStringsEqual(name, uniform.Name))
 			{
 				std::memcpy((void*)dest, dataPointer, uniform.Size() * uniform.Count);
 				return;
@@ -136,10 +136,11 @@ namespace fe
 		
 		char* uniform_data_ptr = (char*)core.DefaultUniformsData;
 		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
+		Pile p;
 		for (auto& uniform : uniforms_layout.Elements)
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name" << YAML::Value << uniform.Name;
+			emitter << YAML::Key << "Name" << YAML::Value << uniform.Name.GetCString(&p).Data;
 			emitter << YAML::Key << "Type" << YAML::Value << uniform.Type.ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.Count;
 			emitter << YAML::Key << "Default Value" << YAML::Value << YAML::BeginSeq;

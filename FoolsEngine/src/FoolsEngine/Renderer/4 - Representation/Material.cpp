@@ -52,7 +52,7 @@ namespace fe
 		return nullptr;
 	}
 
-	void* MaterialObserver::GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, const std::string& name) const
+	void* MaterialObserver::GetUniformValuePtr_Internal(const ACMaterialCore& dataComponent, String name) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -63,7 +63,7 @@ namespace fe
 
 		for (const auto& uniform : uniforms.Elements)
 		{
-			if (name.compare(uniform.Name))
+			if (CompareStringsEqual(name, uniform.Name))
 			{
 				return (void*)uniform_data_pointer;
 			}
@@ -90,7 +90,7 @@ namespace fe
 		std::memcpy((void*)dest, dataPointer, targetUniform.Size() * targetUniform.Count);
 	}
 
-	void MaterialUser::SetUniformValue(const ACMaterialCore& dataComponent, const std::string& name, void* dataPointer) const
+	void MaterialUser::SetUniformValue(const ACMaterialCore& dataComponent, String name, void* dataPointer) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -102,7 +102,7 @@ namespace fe
 		{
 			auto size = uniform.Size();
 			auto count = uniform.Count;
-			if (name.compare(uniform.Name))
+			if (CompareStringsEqual(name, uniform.Name))
 			{
 				std::memcpy((void*)dest, dataPointer, size * count);
 				return;
@@ -133,7 +133,7 @@ namespace fe
 		return NullAssetID;
 	}
 
-	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, const std::string& textureSamplerName) const
+	AssetID MaterialObserver::GetTextureID(const ACMaterialCore& dataComponent, String textureSamplerName) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -145,7 +145,8 @@ namespace fe
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
 		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
-			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
+			const auto& texture_sampler = library.TextureSamplers[texture_sampler_ids[i]];
+			if (CompareStringsEqual(texture_sampler.Name, textureSamplerName))
 				return dataComponent.TextureIDs[i];
 		}
 
@@ -188,7 +189,7 @@ namespace fe
 		FE_CORE_ASSERT(false, "Texture not found in material!");
 	}
 
-	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, const std::string& textureSamplerName, AssetID textureID) const
+	void MaterialUser::SetTexture(ACMaterialCore& dataComponent, String textureSamplerName, AssetID textureID) const
 	{
 		FE_PROFILER_FUNC();
 
@@ -200,7 +201,8 @@ namespace fe
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
 		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
-			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
+			const auto& texture_sampler = library.TextureSamplers[texture_sampler_ids[i]];
+			if (CompareStringsEqual(texture_sampler.Name, textureSamplerName))
 			{
 				dataComponent.TextureIDs[i] = textureID;
 				return;
@@ -343,9 +345,10 @@ namespace fe
 
 		char* uniform_data_ptr = (char*)core.UniformsData;
 
+		Pile p;
 		for (auto& uniform : shading_model_observer.GetUniforms().Elements)
 		{
-			emitter << YAML::Key << uniform.Name << YAML::Value << YAML::BeginMap;
+			emitter << YAML::Key << uniform.Name.GetCString(&p).Data << YAML::Value << YAML::BeginMap;
 			emitter << YAML::Key << "Type"  << YAML::Value << uniform.Type.ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.Count;
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
@@ -358,6 +361,7 @@ namespace fe
 			}
 			emitter << YAML::EndSeq;
 			emitter << YAML::EndMap;
+			p.Clear();
 		}
 		emitter << YAML::EndMap;
 
@@ -369,7 +373,7 @@ namespace fe
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
 		for (size_t i = 0; i < texture_sampler_ids.Count; ++i)
 		{
-			emitter << YAML::Key << library.TextureSamplers[texture_sampler_ids[i]].Name << YAML::Value;
+			emitter << YAML::Key << library.TextureSamplers[texture_sampler_ids[i]].Name.GetCString(&p).Data << YAML::Value;
 
 			if (core.TextureIDs[i] != NullAssetID)
 			{
@@ -397,7 +401,7 @@ namespace fe
 				emitter << YAML::Key << "UUID" << YAML::Value << 0;
 				emitter << YAML::EndMap;
 			}
-
+			p.Clear();
 		}
 		emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
@@ -409,6 +413,7 @@ namespace fe
 
 		char* uniform_data_ptr = (char*)uniformsData;
 
+		Pile p;
 		for (const auto& uniform : uniforms.Elements)
 		{
 			const auto size = uniform.Size();
@@ -416,7 +421,7 @@ namespace fe
 			const auto& type = uniform.Type;
 			const auto& name = uniform.Name;
 
-			const auto& uniform_node = node[name.c_str()];
+			const auto& uniform_node = node[name.GetCString(&p).Data];
 
 			if (!uniform_node.IsDefined())
 			{
@@ -458,6 +463,7 @@ namespace fe
 				if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name);
 				uniform_data_ptr += size;
 			}
+			p.Clear();
 		}
 	}
 
@@ -537,6 +543,7 @@ namespace fe
 			AssetManager::SetSourcePath(texture_id, parentPath / texture_source_filepath_node.as<std::string>());
 
 			textureIDs[i] = texture_id;
+			p.Clear();
 		}
 	}
 
