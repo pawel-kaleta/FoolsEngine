@@ -25,7 +25,7 @@ namespace fe::Resource
 		GLuint OpenGLID;
 
 		GLuint DepthStencilAttachmentOpenGLID;
-		Splice<GLuint> ColorAttachmentOpenGLIDs;
+		Splice<GLuint> ColorAttachmentOpenGLIDs; // for now in stablealloc::gpa
 
 		virtual void Create() override;
 		virtual void Resize(U32 width, U32 height) override;

@@ -111,7 +111,7 @@ namespace fe
 
 		auto& program = shading_model_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
 
-		Description::Buffer::UniformBufferIterator uniform_it(&uniforms_layout.Elements, material_core.UniformsData);
+		Description::Buffer::UniformBufferIterator uniform_it(uniforms_layout.Elements, material_core.UniformsData);
 		while (!uniform_it.IsEnd())
 		{
 			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, uniform_it.m_Index, uniform_it.Get());
@@ -120,7 +120,7 @@ namespace fe
 
 		RenderTextureSlotID renderer_texture_slot = 0;
 		
-		for (size_t i = 0; i < program_spec.TextureSamplerIDs.size(); ++i)
+		for (size_t i = 0; i < program_spec.TextureSamplerIDs.Count; ++i)
 		{
 			auto textureID = material_core.TextureIDs[i];
 			auto& texture_sampler_id = program_spec.TextureSamplerIDs[i];

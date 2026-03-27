@@ -16,4 +16,6 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 	Byte*	PileBase::s_MaxFree = s_Buffer;
 #endif // FE_INTERNAL_BUILD
+
+
 }

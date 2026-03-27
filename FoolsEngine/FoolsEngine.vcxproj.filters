@@ -471,6 +471,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -570,7 +571,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\DownStream.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Framebuffer.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\FrameBuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Program.cpp">

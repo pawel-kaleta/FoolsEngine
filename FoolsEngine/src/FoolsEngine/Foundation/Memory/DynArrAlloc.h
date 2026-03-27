@@ -11,11 +11,13 @@ namespace fe
 	public:
 		Splice<T> Buffer;
 		UInt Count = 0;
-		Allocator* Alloc;
+		TypedAlloc<Allocator>* Alloc;
 
-		T* Begin() const { return Buffer.Elements; }
-		T* End() const { return Buffer.Elements + Count; }
-		T* BufferEnd() const { return Buffer.Elements + Buffer.Count; }
+		const	T* begin() const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end() const	{ return Buffer.Elements + Count; }
+				T* end()		{ return Buffer.Elements + Count; }
+		
 		bool IsFull() const { return Count == Buffer.Count; }
 
 		T& operator[](UInt i)
@@ -34,7 +36,7 @@ namespace fe
 		{
 			if (Buffer.Elements)
 			{
-				Alloc.Deallocate(Buffer);
+				Alloc->Deallocate(Buffer);
 			}
 			Count = 0;
 			Buffer.Count = 0;
@@ -49,6 +51,16 @@ namespace fe
 			Buffer.Elements[Count] = *element;
 			Count++;
 			return;
+		}
+
+		void Append(Splice<T> splice)
+		{
+			UInt new_count = Count + splice.Count;
+			if (new_count > Buffer.Count)
+				ReserveAtLeast(new_count);
+
+			std::memcpy(&Buffer[Count], splice.begin(), splice.Count);
+			Count = new_count;
 		}
 
 		T* PushBack()
@@ -74,7 +86,7 @@ namespace fe
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
 
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			RelocateToNewCapacity(new_capacity);
 		}
@@ -91,23 +103,23 @@ namespace fe
 
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			bool default_better = new_capacity > capacity;
-			new_capacity = new_capacity * default_better + capacity * !default_better;
+			new_capacity = default_better ? new_capacity : capacity;
 
 			RelocateToNewCapacity(new_capacity);
 		}
 	private:
 		void RelocateToNewCapacity(UInt newCapacity)
 		{
-			Splice<T> new_buffer = Alloc.Allocate<T>(newCapacity);
+			Splice<T> new_buffer = Alloc->Allocate<T>(newCapacity);
 
 			if (Buffer.Elements)
 			{
 				UInt size = Buffer.Count * sizeof(T);
 				std::memcpy(new_buffer.Elements, Buffer.Elements, size);
-				Alloc.Deallocate(Buffer);
+				Alloc->Deallocate(Buffer);
 			}
 
 			Buffer = new_buffer;
@@ -119,84 +131,94 @@ namespace fe
 	{
 	public:
 		DynArrAlloc() = default;
-		DynArrAlloc(tAlloc* alloc) : DynArrAllocPM<T>::Alloc(alloc) { }
-		void Init(tAlloc* alloc) { DynArrAllocPM<T>::Alloc.m_Alloc = alloc; }
+		DynArrAlloc(tAlloc* alloc) : DynArrAllocPM<T>::Alloc((TypedAlloc<Allocator>*)alloc) { }
+		void Init(tAlloc* alloc) { this->Alloc = (TypedAlloc<Allocator>*)alloc; }
 
 		void Release()
 		{
-			if (DynArrAllocPM<T>::Buffer.Elements)
+			if (this->Buffer.Elements)
 			{
-				m_Alloc().Deallocate(DynArrAllocPM<T>::Buffer);
+				GetAlloc()->Deallocate(this->Buffer);
 			}
-			DynArrAllocPM<T>::Count = 0;
-			DynArrAllocPM<T>::Buffer.Count = 0;
-			DynArrAllocPM<T>::Buffer.Elements = nullptr;
+			this->Count = 0;
+			this->Buffer.Count = 0;
+			this->Buffer.Elements = nullptr;
 		}
 
 		void Append(const T* element)
 		{
-			if (DynArrAllocPM<T>::Count == DynArrAllocPM<T>::Buffer.Count)
+			if (this->Count == this->Buffer.Count)
 				DefaultResizeAndRelocate();
 
-			DynArrAllocPM<T>::Buffer.Elements[DynArrAllocPM<T>::Count] = element;
-			DynArrAllocPM<T>::Count++;
+			this->Buffer.Elements[this->Count] = element;
+			this->Count++;
 			return;
+		}
+
+		void Append(Splice<T> splice)
+		{
+			UInt new_count = this->Count + splice.Count;
+			if (new_count > this->Buffer.Count)
+				ReserveAtLeast(new_count);
+
+			std::memcpy(&(this->Buffer[this->Count]), splice.Begin(), splice.Count);
+			this->Count = new_count;
 		}
 
 		T* PushBack()
 		{
-			if (DynArrAllocPM<T>::Count == DynArrAllocPM<T>::Buffer.Count)
+			if (this->Count == this->Buffer.Count)
 				DefaultResizeAndRelocate();
 
-			T& result = DynArrAllocPM<T>::Buffer.Elements[DynArrAllocPM<T>::Count];
-			DynArrAllocPM<T>::Count++;
+			T& result = this->Buffer.Elements[this->Count];
+			this->Count++;
 			return result;
 		}
 
 		void DefaultResizeAndRelocate()
 		{
-			bool any_capacity = DynArrAllocPM<T>::Buffer.Count;
-			UInt new_capacity = DynArrAllocPM<T>::Buffer.Count + (DynArrAllocPM<T>::Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			bool any_capacity = this->Buffer.Count;
+			UInt new_capacity = this->Buffer.Count + (this->Buffer.Count >> 1); // *1.5
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			RelocateToNewCapacity(new_capacity);
 		}
 
 		void ReserveExact(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity <= DynArrAllocPM<T>::Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacity <= this->Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
 			RelocateToNewCapacity(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity <= DynArrAllocPM<T>::Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacity <= this->Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
 
-			bool any_capacity = DynArrAllocPM<T>::Buffer.Count;
-			UInt new_capacity = DynArrAllocPM<T>::Buffer.Count + (DynArrAllocPM<T>::Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			bool any_capacity = this->Buffer.Count;
+			UInt new_capacity = this->Buffer.Count + (this->Buffer.Count >> 1); // *1.5
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			bool default_better = new_capacity > capacity;
-			new_capacity = new_capacity * default_better + capacity * !default_better;
+			new_capacity = default_better ? new_capacity : capacity;
 
 			RelocateToNewCapacity(new_capacity);
 		}
 
 	private:
-		tAlloc& m_Alloc() { return *((tAlloc*) & DynArrAllocPM<T>::Alloc); }
+		TypedAlloc<tAlloc>* GetAlloc() { return ((TypedAlloc<tAlloc>*) this->Alloc); }
 
 		void RelocateToNewCapacity(UInt newCapacity)
 		{
-			Splice<T> new_elements = m_Alloc().Allocate<T>(newCapacity);
+			Splice<T> new_elements = GetAlloc()->Allocate<T>(newCapacity);
 
-			if (DynArrAllocPM<T>::Elements)
+			if (this->Elements)
 			{
-				UInt size = DynArrAllocPM<T>::Buffer.Count * sizeof(T);
-				std::memcpy(new_elements.Elements, DynArrAllocPM<T>::Buffer.Elements, size);
-				m_Alloc().Deallocate(DynArrAllocPM<T>::Buffer);
+				UInt size = this->Buffer.Count * sizeof(T);
+				std::memcpy(new_elements.Elements, this->Buffer.Elements, size);
+				GetAlloc()->Deallocate(this->Buffer);
 			}
 
-			DynArrAllocPM<T>::Buffer = new_elements;
+			this->Buffer = new_elements;
 		}
 	};
 

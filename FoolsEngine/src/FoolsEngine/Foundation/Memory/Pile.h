@@ -17,7 +17,7 @@ namespace fe
 		void Clear()
 		{
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			s_Free = (Byte*)((UInt)m_Begin * rollback_flag + (UInt)s_Free * !rollback_flag);
+			s_Free = rollback_flag ? m_Begin : s_Free;
 
 			s_RollbackFlags |= m_FlagMask;
 			m_Begin = s_Free;
@@ -28,7 +28,6 @@ namespace fe
 		static Byte* s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
-	protected:
 		virtual Splice<Byte> Allocate(UInt bytes) final override
 		{
 			Splice<Byte> result;
@@ -37,12 +36,12 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
+			m_Begin = reset_begin ? s_Free : m_Begin;
 
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = (Byte*)(((UInt)s_Free + (7)) & ~(7));
+			result.Elements = AlignTo<7>(s_Free);
 			result.Count = bytes;
 
 			s_Free = result.Elements + bytes;
@@ -52,7 +51,7 @@ namespace fe
 
 #ifdef FE_INTERNAL_BUILD
 			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+			s_MaxFree = new_max ? s_Free : s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
 			return result;
@@ -65,12 +64,12 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
+			m_Begin = reset_begin ? s_Free : m_Begin;
 
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = (Byte*)(((UInt)s_Free + (alignment - 1)) & ~(alignment - 1));
+			result.Elements = AlignTo(s_Free, alignment);
 			result.Count = bytes;
 
 			s_Free = result.Elements + bytes;
@@ -80,7 +79,7 @@ namespace fe
 
 #ifdef FE_INTERNAL_BUILD
 			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+			s_MaxFree = new_max ? s_Free : s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
 			return result;
@@ -88,7 +87,7 @@ namespace fe
 		virtual void Deallocate(Splice<Byte> memReg) final override
 		{
 			bool is_at_front = s_Free == memReg.Elements + memReg.Count;
-			s_Free = (Byte*)((UInt)memReg.Elements * is_at_front + (UInt)s_Free * !is_at_front);
+			s_Free = is_at_front ? memReg.Elements : s_Free;
 		}
 
 		template <UInt Size, UInt Alignment>
@@ -100,12 +99,12 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
+			m_Begin = reset_begin ? s_Free : m_Begin;
 
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = (Byte*)(((UInt)s_Free + (Alignment - 1)) & ~(Alignment - 1));
+			result.Elements = AlignTo(s_Free, Alignment);
 			result.Count = Size;
 
 			s_Free = result.Elements + Size;
@@ -115,7 +114,7 @@ namespace fe
 
 #ifdef FE_INTERNAL_BUILD
 			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+			s_MaxFree = new_max ? s_Free : s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
 			return result;
@@ -130,12 +129,12 @@ namespace fe
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
 
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
+			m_Begin = reset_begin ? s_Free : m_Begin;
 
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = (Byte*)(((UInt)s_Free + (Alignment - 1)) & ~(Alignment - 1));
+			result.Elements = AlignTo(s_Free, Alignment);
 			result.Count = size;
 
 			s_Free = result.Elements + size;
@@ -145,7 +144,7 @@ namespace fe
 
 #ifdef FE_INTERNAL_BUILD
 			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+			s_MaxFree = new_max ? s_Free : s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
 			return result;
@@ -155,7 +154,7 @@ namespace fe
 		void Deallocate(Byte* ptr)
 		{
 			bool is_at_front = s_Free == ptr + Size;
-			s_Free = (Byte*)((UInt)ptr * is_at_front + (UInt)s_Free * !is_at_front);
+			s_Free = is_at_front ? ptr : s_Free;
 		}
 
 		PileBase() :
@@ -174,7 +173,7 @@ namespace fe
 		{
 			--s_Count;
 			bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			s_Free = (Byte*)((UInt)m_Begin * rollback_flag + (UInt)s_Free * !rollback_flag);
+			s_Free = rollback_flag ? m_Begin : s_Free;
 		}
 
 	private:
@@ -183,15 +182,11 @@ namespace fe
 		static Byte* s_Free;
 		static U64 s_RollbackFlags;
 		static UInt s_Count;
-		// we don't use std::bitset, because it handles any number of bits
-		// solution for specific size that fits in one non-array type is slightly faster
-		// this is very hot code
 
 		Byte* m_Begin;
 		Byte* m_End;
 		const U64 m_FlagMask;
 		const U64 m_FrontFlagsAntiMask;
-
 
 		void StackCheck()
 		{
@@ -203,85 +198,5 @@ namespace fe
 		}
 	};
 
-	class Pile final : public PileBase
-	{
-	public:
-		Pile() = default;
-		~Pile() = default;
-
-		template <typename T, UInt Count>
-		Array<T, Count>* Allocate()
-		{
-			const bool at_front = m_End == s_Free;
-			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			const bool reset_begin = !at_front && !rollback_flag;
-
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
-
-			s_RollbackFlags &= m_FrontFlagsAntiMask;
-			s_RollbackFlags |= m_FlagMask;
-
-			Array<T, Count>* result = (Array<T, Count>*)(((UInt)s_Free + (alignof(T) - 1)) & ~(alignof(T) - 1));
-
-			s_Free = (Byte*)((UInt)result + sizeof(T) * Count);
-			m_End = s_Free;
-
-			FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
-
-#ifdef FE_INTERNAL_BUILD
-			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
-#endif // FE_INTERNAL_BUILD
-
-			return result;
-		}
-
-		template <typename T>
-		T* Allocate(UInt count)
-		{
-			const bool at_front = m_End == s_Free;
-			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
-			const bool reset_begin = !at_front && !rollback_flag;
-
-			m_Begin = (Byte*)(((UInt)s_Free * reset_begin) + ((UInt)m_Begin * !reset_begin));
-
-			s_RollbackFlags &= m_FrontFlagsAntiMask;
-			s_RollbackFlags |= m_FlagMask;
-
-			T* result = (T*)(((UInt)s_Free + (alignof(T) - 1)) & ~(alignof(T) - 1));
-
-			s_Free = (Byte*)((UInt)result + sizeof(T) * count);
-			m_End = s_Free;
-
-			FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
-
-#ifdef FE_INTERNAL_BUILD
-			bool new_max = s_Free > s_MaxFree;
-			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
-#endif // FE_INTERNAL_BUILD
-
-			return result;
-		}
-
-		template <typename T>
-		void Deallocate(T* ptr)
-		{
-			bool is_at_front = s_Free == ptr + sizeof(T);
-			s_Free = (Byte*)((UInt)ptr * is_at_front + (UInt)s_Free * !is_at_front);
-		}
-
-		template <typename T, UInt Count>
-		void Deallocate(Array<T, Count>* ptr)
-		{
-			bool is_at_front = s_Free == (Byte*)ptr + sizeof(T) * Count;
-			s_Free = (Byte*)((UInt)ptr * is_at_front + (UInt)s_Free * !is_at_front);
-		}
-
-		template <typename T>
-		void Deallocate(Splice<T> splice)
-		{
-			bool is_at_front = s_Free == (Byte*)splice.Elements + sizeof(T) * splice.Count;
-			s_Free = (Byte*)((UInt)splice.Elements * is_at_front + (UInt)s_Free * !is_at_front);
-		}
-	};
+	using Pile = TypedAlloc<PileBase>;
 }

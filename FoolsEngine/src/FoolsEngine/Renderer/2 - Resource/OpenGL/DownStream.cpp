@@ -2,16 +2,17 @@
 
 #include "FoolsEngine/Renderer/2 - Resource/DownStream.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Global.h"
 
 namespace fe::Resource
 {
 	void DownStream_OpenGL::Create(UInt capacity)
 	{
-		FrontFences.InitXarrAlloc(&Alloc);
-		BackFences.InitXarrAlloc(&Alloc);
-		Regions.InitXarrAlloc(&Alloc);
-		RegionFences.InitXarrAlloc(&Alloc);
-		PastBuffersToDestroy.Alloc = Context::Allocators::SystemOutput;
+		auto gpa_alloc = StableAllocs::GeneralPurpose;
+		FrontFences.InitXarrAlloc(&Alloc, gpa_alloc);
+		BackFences.InitXarrAlloc(&Alloc, gpa_alloc);
+		Regions.InitXarrAlloc(&Alloc, gpa_alloc);
+		RegionFences.InitXarrAlloc(&Alloc, gpa_alloc);
 
 		CurrentOffset = 0;
 
@@ -35,12 +36,12 @@ namespace fe::Resource
 
 	void DownStream_OpenGL::BeginRegion()
 	{
-		auto& new_fence = BackFences.PushBack();
+		auto& new_fence = * BackFences.PushBack();
 		new_fence.OpenGLFence = nullptr;
 		new_fence.Location = CurrentOffset;
 		RegionFences.Append(&new_fence);
 
-		auto& region = Regions.PushBack();
+		auto& region = *Regions.PushBack();
 		region.Stream = this;
 		region.OpenGLBuffer = OpenGLBuffer;
 		region.Offset = CurrentOffset;
@@ -92,12 +93,12 @@ namespace fe::Resource
 
 	StreamRegion* DownStream_OpenGL::ReserveUncommitedRegion(UInt size)
 	{
-		auto& new_fence = BackFences.PushBack();
+		auto& new_fence = *BackFences.PushBack();
 		new_fence.OpenGLFence = nullptr;
 		new_fence.Location = CurrentOffset;
 		RegionFences.Append(&new_fence);
 
-		auto& region = Regions.PushBack();
+		auto& region = *Regions.PushBack();
 		region.Stream = this;
 		region.OpenGLBuffer = OpenGLBuffer;
 		region.Offset = CurrentOffset;
@@ -145,7 +146,7 @@ namespace fe::Resource
 	{
 		Pile p;
 #ifdef FE_INTERNAL_BUILD
-		auto region_fences = RegionFences.GetCopyContiguous(p);
+		auto region_fences = RegionFences.GetCopyContiguous(&p);
 
 		for (UInt i = 0; i<region_fences.Count; i++)
 		{
@@ -156,12 +157,12 @@ namespace fe::Resource
 					FE_LOG_CORE_ERROR("Unretired DownStream Region at the end of the frame!");
 				}
 		}
-		p.Clear();
+
 #endif // FE_INTERNAL_BUILD
 		RegionFences.Count = 0;
 		Regions.Count = 0;
 
-		glDeleteBuffers(PastBuffersToDestroy.Count, PastBuffersToDestroy.Elements);
+		glDeleteBuffers(PastBuffersToDestroy.Count, PastBuffersToDestroy.Begin());
 		PastBuffersToDestroy.Release();
 	}
 
@@ -239,7 +240,7 @@ namespace fe::Resource
 		CurrentOffset = region.Size;
 		region.Offset = 0;
 
-		auto& fence = BackFences.PushBack();
+		auto& fence = *BackFences.PushBack();
 		fence.OpenGLFence = nullptr;
 		fence.Location = 0;
 		RegionFences[RegionFences.Count] = &fence;

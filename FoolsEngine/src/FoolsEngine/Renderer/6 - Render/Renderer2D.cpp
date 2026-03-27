@@ -44,8 +44,8 @@ namespace fe
 		s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
 		s_Instance->m_QuadVertexBuffer->Create();
 
-		uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.size();
-		auto& layout = Description::Library::Get().BufferLayouts.emplace_back();
+		uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.Count;
+		auto& layout = *Description::Library::Get().BufferLayouts.PushBack();
 
 		layout.Type = Description::Buffer::LayoutType::Vertex;
 		layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");

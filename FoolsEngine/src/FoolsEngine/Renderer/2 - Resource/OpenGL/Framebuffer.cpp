@@ -4,6 +4,7 @@
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Global.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -24,8 +25,8 @@ namespace fe::Resource
 
 		if (count)
 		{
-			auto& alloc = *Context::Allocators::GeneralPurpose;
-			ColorAttachmentOpenGLIDs.Allocate(alloc, count);
+			auto alloc = (TypedAlloc<MallocAlloc>*)StableAllocs::GeneralPurpose;
+			ColorAttachmentOpenGLIDs = alloc->Allocate(ColorAttachmentOpenGLIDs, count);
 
 			if (multisampled)
 			{
@@ -90,9 +91,7 @@ namespace fe::Resource
 		if (count > 1)
 		{
 			Pile p;
-
-			Splice<GLenum> buffers;
-			buffers.Allocate(p, count);
+			Splice<GLenum> buffers = p.Allocate(buffers, count);
 
 			for (int i = 0; i < count; ++i)
 			{
@@ -212,11 +211,13 @@ namespace fe::Resource
 		glDeleteFramebuffers(1, &OpenGLID);
 		UInt count = ColorAttachmentOpenGLIDs.Count;
 		if (count)
+		{
 			glDeleteTextures((GLsizei)count, ColorAttachmentOpenGLIDs.Elements);
+			auto alloc = (TypedAlloc<MallocAlloc>*)StableAllocs::GeneralPurpose;
+			alloc->Deallocate(ColorAttachmentOpenGLIDs);
+		}
 		if (DepthStencilAttachmentOpenGLID)
 			glDeleteTextures(1, &DepthStencilAttachmentOpenGLID);
 
-		auto& alloc = *Context::Allocators::System::GeneralPurpose;
-		ColorAttachmentOpenGLIDs.Deallocate(alloc, count);
 	}
 }

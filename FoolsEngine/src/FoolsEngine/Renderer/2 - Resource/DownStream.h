@@ -1,6 +1,7 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/Xar.h"
+#include "FoolsEngine/Foundation/Memory/XarAlloc.h"
+#include "FoolsEngine/Foundation/Memory/DynArr.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 
@@ -51,14 +52,14 @@ namespace fe::Resource
 			UInt Location;
 		};
 		
-		MonotonicAllocator Alloc;
+		MonotonicAlloc Alloc;
 
-		XarrAlloc<Fence, MonotonicAllocator> FrontFences;
-		XarrAlloc<Fence, MonotonicAllocator> BackFences;
+		XarrAlloc<Fence, MonotonicAlloc, MallocAlloc> FrontFences;
+		XarrAlloc<Fence, MonotonicAlloc, MallocAlloc> BackFences;
 		UInt NextFenceIndex;
 		
-		XarrAlloc<StreamRegion_OpenGL, MonotonicAllocator> Regions;
-		XarrAlloc<Fence*, MonotonicAllocator> RegionFences;
+		XarrAlloc<StreamRegion_OpenGL, MonotonicAlloc, MallocAlloc> Regions;
+		XarrAlloc<Fence*, MonotonicAlloc, MallocAlloc> RegionFences;
 
 		UInt CurrentOffset;
 		Byte* CPUMemoryBegin;

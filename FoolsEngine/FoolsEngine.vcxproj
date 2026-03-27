@@ -199,6 +199,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h" />
@@ -314,7 +315,7 @@
     <ClCompile Include="src\FoolsEngine\Platform\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\DownStream.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Framebuffer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\FrameBuffer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Program.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Shader.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\StaticBuffer.cpp" />

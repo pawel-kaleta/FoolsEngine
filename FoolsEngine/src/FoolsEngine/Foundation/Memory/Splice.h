@@ -7,11 +7,19 @@
 
 namespace fe
 {
+	template <typename T, UInt N>
+	struct Array;
+
 	template <typename T>
 	struct Splice
 	{
 		T* Elements = nullptr;
 		UInt Count = 0;
+
+		const	T* begin()	const	{ return Elements; }
+				T* begin()			{ return Elements; }
+		const	T* end()	const	{ return Elements + Count; }
+				T* end()			{ return Elements + Count; }
 
 		T& operator[](UInt i)
 		{
@@ -24,6 +32,13 @@ namespace fe
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Elements[i];
 		}
+
+		template <UInt Size>
+		void FromArray(Array<T, Size>* array)
+		{
+			Elements = array->Elements;
+			Count = Size;
+		}
 	};
 
 	template <typename T, UInt N>
@@ -33,8 +48,10 @@ namespace fe
 
 		inline constexpr static UInt Count = N;
 
-		T* Begin() const { return Elements; }
-		T* End() const { return Elements + Count; }
+		const	T* begin()	const	{ return Elements; }
+				T* begin()			{ return Elements; }
+		const	T* end()	const	{ return Elements + Count; }
+				T* end()			{ return Elements + Count; }
 
 		T& operator[](UInt i)
 		{
@@ -63,9 +80,11 @@ namespace fe
 		Splice<T> Buffer;
 		UInt Count = 0;
 
-		T* Begin() const { return Buffer.Elements; }
-		T* End() const { return Buffer.Elements + Count; }
-		T* BufferEnd() const { return Buffer.Elements + Buffer.Count; }
+		const	T* begin() const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end() const	{ return Buffer.Elements + Count; }
+				T* end()		{ return Buffer.Elements + Count; }
+
 		bool IsFull() const { return Count == Buffer.Count; }
 
 		void Init(Splice<T> splice)
@@ -100,6 +119,13 @@ namespace fe
 			Count++;
 		}
 
+		void Append(Splice<T> splice)
+		{
+			FE_CORE_ASSERT(Count + splice.Count < Buffer.Count, "Arena overflow!");
+			std::memcpy(&Buffer[Count], splice.Begin(), splice.Count);
+			Count += splice.Count;
+		}
+
 		T* PushBack()
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
@@ -130,9 +156,11 @@ namespace fe
 		UInt Count = 0;
 		Array<T, N> Buffer;
 
-		T* Begin() const { return Buffer.Elements; }
-		T* End() const { return Buffer.Elements + Count; }
-		T* BufferEnd() const { return Buffer.Elements + Buffer.Count; }
+		const	T* begin() const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end() const	{ return Buffer.Elements + Count; }
+				T* end()		{ return Buffer.Elements + Count; }
+
 		bool IsFull() const { return Count == Buffer.Count; }
 
 		T& operator[](UInt i)

@@ -10,10 +10,10 @@ namespace fe::Context
 {
 	namespace Allocators
 	{
-		extern Allocator* Default;
-		extern Allocator* Auxiliary;
-		extern Allocator* Temporary;
-		extern Allocator* Output;
+		extern TypedAlloc<Allocator>* Default;
+		extern TypedAlloc<Allocator>* Auxiliary;
+		extern TypedAlloc<Allocator>* Temporary;
+		extern TypedAlloc<Allocator>* Output;
 	}
 
 	namespace Logging

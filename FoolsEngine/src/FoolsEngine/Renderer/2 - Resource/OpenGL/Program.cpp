@@ -67,7 +67,7 @@ namespace fe::Resource
 		Pile p;
 		for (UInt i = 0; i < uniforms.Elements.Count; i++)
 		{
-			const auto c_name = uniforms.Elements[i].Name.GetCString(p);
+			const auto c_name = uniforms.Elements[i].Name.GetCString(&p);
 			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
 
 			//static_assert(false, "allocate splice");
@@ -79,7 +79,7 @@ namespace fe::Resource
 		{
 			const auto& texture_sampler_id = spec.TextureSamplerIDs[i];
 			const auto& texture_sampler = library.TextureSamplers[texture_sampler_id];
-			const auto c_name = texture_sampler.Name.GetCString(p);
+			const auto c_name = texture_sampler.Name.GetCString(&p);
 			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
 
 			//static_assert(false, "allocate splice");

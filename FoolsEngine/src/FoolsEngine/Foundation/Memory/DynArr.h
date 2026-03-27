@@ -15,9 +15,11 @@ namespace fe
 		Splice<T> Buffer;
 		UInt Count = 0;
 
-		T* Begin() const { return Buffer.Elements; }
-		T* End() const { return Buffer.Elements + Count; }
-		T* BufferEnd() const { return Buffer.Elements + Buffer.Count; }
+		const	T* begin() const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end() const	{ return Buffer.Elements + Count; }
+				T* end()		{ return Buffer.Elements + Count; }
+
 		bool IsFull() const { return Count == Buffer.Count; }
 
 		T& operator[](UInt i)
@@ -36,7 +38,7 @@ namespace fe
 		{
 			if (Buffer.Elements)
 			{
-				Context::Allocators::Default.Deallocate(Buffer);
+				Context::Allocators::Default->Deallocate(Buffer);
 			}
 			Buffer.Elements = nullptr;
 			Buffer.Count = 0;
@@ -51,6 +53,26 @@ namespace fe
 			Buffer[Count] = *element;
 			Count++;
 			return;
+		}
+
+		void Append(T element)
+		{
+			if (Count == Buffer.Count)
+				DefaultResizeAndRelocate();
+
+			Buffer[Count] = element;
+			Count++;
+			return;
+		}
+
+		void Append(Splice<T> splice)
+		{
+			UInt new_count = Count + splice.Count;
+			if (new_count > Buffer.Count)
+				ReserveAtLeast(new_count);
+
+			std::memcpy(&Buffer[Count], splice.Begin(), splice.Count);
+			Count = new_count;
 		}
 
 		T* PushBack()
@@ -71,20 +93,20 @@ namespace fe
 
 		void ReserveExact(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity < Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
 			RelocateToNewCapacity(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity < Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve DynArr capacity to no more then it already have!");
 
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			bool default_better = new_capacity > capacity;
-			new_capacity = new_capacity * default_better + capacity * !default_better;
+			new_capacity = default_better ? new_capacity : capacity;
 
 			RelocateToNewCapacity(new_capacity);
 		}
@@ -95,20 +117,20 @@ namespace fe
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
 
-			new_capacity = new_capacity * any_capacity + (UInt)4 * !any_capacity;
+			new_capacity = any_capacity ? new_capacity : 4;
 
 			RelocateToNewCapacity(new_capacity);
 		}
 
 		void RelocateToNewCapacity(UInt newCapacity)
 		{
-			auto& alloc = Context::Allocators::Default;
-			Splice<T> new_buffer = alloc.Allocate<T>(newCapacity);
+			auto alloc = Context::Allocators::Default;
+			Splice<T> new_buffer = alloc->Allocate<T>(newCapacity);
 
 			if (Buffer.Elements)
 			{
 				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
-				alloc.Deallocate(Buffer);
+				alloc->Deallocate(Buffer);
 			}
 
 			Buffer = new_buffer;

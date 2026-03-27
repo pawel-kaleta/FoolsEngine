@@ -142,7 +142,7 @@ namespace fe {
 		bool changed = false;
 
 		Pile p;
-		auto name = uniform.Name.GetCString(p);
+		auto name = uniform.Name.GetCString(&p);
 		ImGuiDataType ImGuiType = -1;
 
 		switch (uniform.Primitive().Value)

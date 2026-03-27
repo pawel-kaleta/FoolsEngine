@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Splice.h"
+#include "Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 namespace fe
 {
@@ -11,8 +13,8 @@ namespace fe
 	{
 	public:
 		UInt Count = 0;
-		Allocator* AllocMain = nullptr;
-		Allocator* AllocAux = nullptr;
+		TypedAlloc<Allocator>* AllocMain = nullptr;
+		TypedAlloc<Allocator>* AllocAux = nullptr;
 		SpliceArena<T*> Chunks;
 
 		UInt Capacity()
@@ -73,6 +75,22 @@ namespace fe
 		}
 
 		void Append(const T* t)
+		{
+			if (Count == Capacity())
+				Expand();
+
+			Count++;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Count - chunk_mask;
+			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+
+			*result_ptr = *t;
+		}
+
+		void Append(T t)
 		{
 			if (Count == Capacity())
 				Expand();
@@ -146,7 +164,7 @@ namespace fe
 			{
 				bool any_capacity = Chunks.Buffer.Count;
 				UInt chunks_new_capacity = Chunks.Buffer.Count + (Chunks.Buffer.Count >> 1); // *1.5
-				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+				chunks_new_capacity = any_capacity ? chunks_new_capacity : 2;
 
 				Splice<T*> new_chunks = AllocAux->Allocate<T*>(chunks_new_capacity);
 
@@ -169,8 +187,8 @@ namespace fe
 	public:
 		void InitXarrAlloc(tnAllocMain* allocMain, tnAllocAux* allocAux)
 		{
-			this->AllocMain = allocMain;
-			this->AllocAux = allocAux;
+			this->AllocMain = (TypedAlloc<Allocator>*)allocMain;
+			this->AllocAux = (TypedAlloc<Allocator>*)allocAux;
 		}
 
 		void Release()
@@ -183,11 +201,11 @@ namespace fe
 					Splice<T> region;
 					region.Elements = this->Chunks[i];
 					region.Count = size;
-					((tnAllocMain*)this->AllocMain)->Deallocate(region);
+					GetAllocMain()->Deallocate(region);
 					size = size << 1;
 				}
 
-				((tnAllocMain*)this->AllocAux)->Deallocate(this->Chunks.Buffer);
+				GetAllocAux()->Deallocate(this->Chunks.Buffer);
 			}
 
 			this->Count = 0;
@@ -212,6 +230,22 @@ namespace fe
 			*result_ptr = *t;
 		}
 
+		void Append(T t)
+		{
+			if (this->Count == this->Capacity())
+				Expand();
+
+			this->Count++;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, this->Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = this->Count - chunk_mask;
+			auto result_ptr = this->Chunks[chunk_i] + in_chunk_i;
+
+			*result_ptr = t;
+		}
+
 		T* PushBack()
 		{
 			if (this->Count == this->Capacity())
@@ -229,8 +263,8 @@ namespace fe
 		}
 
 	private:
-		inline tnAllocMain*		GetAllocMain()	{ return (tnAllocMain*)this->AllocMain; }
-		inline tnAllocAux*		GetAllocAux()	{ return (tnAllocAux*) this->AllocAux; }
+		inline TypedAlloc<tnAllocMain>*	GetAllocMain()	{ return (TypedAlloc<tnAllocMain>*)this->AllocMain; }
+		inline TypedAlloc<tnAllocAux >*	GetAllocAux()	{ return (TypedAlloc<tnAllocAux >*)this->AllocAux; }
 
 		void Expand()
 		{
@@ -238,7 +272,7 @@ namespace fe
 			{
 				bool any_capacity = this->Chunks.Buffer.Count;
 				UInt chunks_new_capacity = this->Chunks.Buffer.Count + (this->Chunks.Buffer.Count >> 1); // *1.5
-				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
+				chunks_new_capacity = any_capacity ? chunks_new_capacity : 2;
 
 				Splice<T*> new_chunks = GetAllocAux()->Allocate<T*>(chunks_new_capacity);
 

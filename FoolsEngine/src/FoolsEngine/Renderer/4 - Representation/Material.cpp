@@ -123,7 +123,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
-		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
+		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
 			if (&(library.TextureSamplers[texture_sampler_ids[i]]) == &textureSampler)
 				return dataComponent.TextureIDs[i];
@@ -143,7 +143,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
-		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
+		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
 			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
 				return dataComponent.TextureIDs[i];
@@ -176,7 +176,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
-		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
+		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
 			if (&(library.TextureSamplers[texture_sampler_ids[i]]) == &textureSampler)
 			{
@@ -198,7 +198,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
-		for (size_t i = 0; i < texture_sampler_ids.size(); i++)
+		for (size_t i = 0; i < texture_sampler_ids.Count; i++)
 		{
 			if (library.TextureSamplers[texture_sampler_ids[i]].Name.compare(textureSamplerName))
 			{
@@ -367,7 +367,7 @@ namespace fe
 		const auto& library = Description::Library::Get();
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
-		for (size_t i = 0; i < texture_sampler_ids.size(); ++i)
+		for (size_t i = 0; i < texture_sampler_ids.Count; ++i)
 		{
 			emitter << YAML::Key << library.TextureSamplers[texture_sampler_ids[i]].Name << YAML::Value;
 
@@ -468,11 +468,12 @@ namespace fe
 		auto& reg = AssetManager::Get().m_Registry;
 		const auto& library = Description::Library::Get();
 
+		Pile p;
 		for (size_t i = 0; i < textureSamplerIDs.size(); ++i)
 		{
 
 			const auto& texture_sampler = library.TextureSamplers[textureSamplerIDs[i]];
-			const auto& texture_node = node[texture_sampler.Name.c_str()];
+			const auto& texture_node = node[texture_sampler.Name.GetCString(&p).Data];
 
 			if (!texture_node.IsDefined())
 			{
@@ -698,7 +699,7 @@ namespace fe
 		
 		auto& textures = core_component.TextureIDs;
 		textures.clear();
-		textures.resize(program_spec.TextureSamplerIDs.size());
+		textures.resize(program_spec.TextureSamplerIDs.Count);
 		for (auto& texture : textures)
 		{
 			texture = NullAssetID;

@@ -215,6 +215,22 @@ namespace fe
 			*result_ptr = *t;
 		}
 
+		void Append(T t)
+		{
+			if (Count == Capacity())
+				Expand();
+
+			Count++;
+
+			unsigned long chunk_i;
+			MSB64(&chunk_i, Count);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = Count - chunk_mask;
+			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+
+			*result_ptr = t;
+		}
+
 		T* PushBack()
 		{
 			if (Count == Capacity())

@@ -18,13 +18,12 @@ namespace fe
 		m_Framebuffer.reset(new Resource::Framebuffer_OpenGL());
 
 		auto& lib = Description::Library::Get();
-		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.size();
-		auto& framebuffer_spec = lib.FramebufferSpecs.emplace_back();
+		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
+		auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
 		framebuffer_spec.Width = 1;
 		framebuffer_spec.Height = 1;
 		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
 		framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
-		framebuffer_spec.Type = Description::Texture::Type::Texture2D;
 
 		m_Framebuffer->Create();
 

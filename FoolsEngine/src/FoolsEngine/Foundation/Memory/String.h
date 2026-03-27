@@ -2,21 +2,41 @@
 
 #include "DataTypes.h"
 #include "Allocators/Allocator.h"
-#include "DynArrAlloc.h"
-
-#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 namespace fe
 {
 	struct CString
 	{
-		char* Data = nullptr;
+		const char* Data = nullptr;
 		UInt LengthWithNull = 0;
+
+		void FromConstCharPtr(const char* string, UInt lengthWithNull)
+		{
+			Data = string;
+			LengthWithNull = lengthWithNull;
+		}
+
+		void FromConstCharPtr(const char* string)
+		{
+			Data = string;
+
+			auto current = string;
+			UInt size = 0;
+
+			while (*current != '\0')
+			{
+				size++;
+				current++;
+			}
+
+			LengthWithNull = size + 1;
+		}
 	};
 
 	struct String
 	{
-		char8_t* Data = nullptr;
+		const char8_t* Data = nullptr;
 		UInt Length = 0;
 
 		template <class tnAllocator>
@@ -30,56 +50,120 @@ namespace fe
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
 		{
-			Data = (char8_t*)string;
+			Data = (const char8_t*)string;
 			Length = lengthWithNull - 1;
 		}
 
 		void FromCString(CString* string)
 		{
-			Data = (char8_t*)string->Data;
+			Data = (const char8_t*)string->Data;
 			Length = string->LengthWithNull - 1;
 		}
+
+		void FromSplice(Splice<char8_t> splice) { *this = *(String*)&splice; }
+		void FromMemReg(Splice<Byte> splice)	{ *this = *(String*)&splice; }
 	};
 
-	template <class tnAlloc>
 	struct StringBuilder
 	{
-		DynArrAlloc<String, tnAlloc> Container;
+		Splice<char8_t> Buffer;
+		UInt Count = 0;
 
-		void Init(tnAlloc* alloc) { Container.Init(alloc); }
-
-		void Append(String string) { Container.Append(string); }
-
-		template <class tnAllocator>
-		CString GetCString(tnAllocator* alloc)
+		void Release()
 		{
-			UInt size = 0;
-			//for (UInt i=0; i<Container.)
-
-			Splice<char> mem_reg = alloc->Allocate<char>(Container.Count + 1);
-			std::memcpy(mem_reg.Elements, Container.Buffer.Elements, Container.Count);
-			mem_reg.Elements[Container.Count] = '\0';
-			return *(CString*) & mem_reg;
+			Context::Allocators::Default->Deallocate(Buffer);
+			Buffer.Elements = nullptr;
+			Buffer.Count = 0;
+			Count = 0;
 		}
 
-		template <class tnAllocator>
-		String GetString(tnAllocator* alloc)
-		{
-			MemReg memReg = alloc.Allocate(Container.Count, 1);
-			std::memcpy(memReg.Data, Container.Elements, Container.Count);
-			return (String)memReg;
-		}
-	};
-
-	template <class tnAllocator>
-	struct StringBuilderAlloc final : public StringBuilder
-	{
 		void Append(String string)
 		{
-			UInt new_count = Container.Count + string.Length;
-			((DynArrAlloc<char8_t, tnAllocator>)Container).ReserveAtLeast(new_count);
-			std::memcpy(&(Container.Elements[Container.Count]), string.Data, string.Length);
-			Container.Count = new_count;
+			if (Buffer.Count < Count + string.Length)
+				ReserveAtLeast(Count + string.Length);
+
+			std::memcpy(&Buffer[Count], string.Data, string.Length);
+			Count += string.Length;
+		}
+
+		void Append(const char* ptr)
+		{
+			auto current = ptr;
+			UInt size = 0;
+
+			while (*current != '\0')
+			{
+				size++;
+				current++;
+			}
+
+			if (Buffer.Count < Count + size)
+				ReserveAtLeast(Count + size);
+
+			std::memcpy(&Buffer[Count], ptr, size);
+			Count += size;
+		}
+
+		template <class tnAllocator>
+		CString GetCString(tnAllocator* alloc) const
+		{
+			Splice<char> mem_reg = alloc->Allocate<char>(Count + 1);
+			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
+			mem_reg.Elements[Count] = '\0';
+			return *(CString*)&mem_reg;
+		}
+
+		template <class tnAllocator>
+		String GetCString(tnAllocator* alloc) const
+		{
+			Splice<char> mem_reg = alloc->Allocate<char>(Count);
+			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
+			mem_reg.Elements[Count] = '\0';
+			return *(CString*)&mem_reg;
+		}
+
+		void ReserveExact(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
+			RelocateToNewCapacity(capacity);
+		}
+
+		void ReserveAtLeast(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
+
+			bool any_capacity = Buffer.Count;
+			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
+			new_capacity = any_capacity ? new_capacity : 8;
+
+			bool default_better = new_capacity > capacity;
+			new_capacity = default_better ? new_capacity : capacity;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+	private:
+		void DefaultResizeAndRelocate()
+		{
+			bool any_capacity = Buffer.Count;
+			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
+
+			new_capacity = any_capacity ? new_capacity : 8;
+
+			RelocateToNewCapacity(new_capacity);
+		}
+
+		void RelocateToNewCapacity(UInt newCapacity)
+		{
+			auto alloc = Context::Allocators::Default;
+			Splice<char8_t> new_buffer = alloc->Allocate<char8_t>(newCapacity);
+
+			if (Buffer.Elements)
+			{
+				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(char8_t));
+				alloc->Deallocate(Buffer);
+			}
+
+			Buffer = new_buffer;
 		}
 	};
 }

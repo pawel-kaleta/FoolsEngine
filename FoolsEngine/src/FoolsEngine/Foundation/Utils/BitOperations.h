@@ -15,4 +15,8 @@ namespace fe
 
 	inline constexpr bool IsPow2(UInt n) { return (n & (n - 1)); }
 	inline constexpr Byte* AlignTo(Byte* ptr, UInt alignment) { return (Byte*)(((UInt)ptr + (alignment - 1)) & ~(alignment - 1)); }
+
+	template<UInt alignment>
+	inline constexpr Byte* AlignTo(Byte* ptr) { return (Byte*)(((UInt)ptr + (alignment - 1)) & ~(alignment - 1)); }
+
 }

@@ -32,7 +32,6 @@ namespace fe::Description
 		template <typename tnDescriptor>
 		UInt CreateOrGetDescriptorWithUUID(UUID uuid)
 		{
-			Context::ValueBackup<Allocator*>(&Context::Allocators::System::GeneralPurpose, & m_AllocGPA);
 			if constexpr (std::same_as<tnDescriptor, Texture::Archetype						>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
 			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
 			if constexpr (std::same_as<tnDescriptor, Framebuffer::Specification				>) return CreateOrGetDescriptorWithUUID_Framebuffer(uuid);
@@ -47,15 +46,17 @@ namespace fe::Description
 			m_AllocPermanent(),
 			m_AllocGPA(),
 			m_AllocGPA_STD_PMR(&m_AllocGPA),
-			TextureArchetypes(&m_AllocPermanent, &m_AllocGPA),
-			BufferLayouts(&m_AllocPermanent),
-			FramebufferSpecs(&m_AllocPermanent),
-			TextureSamplers(&m_AllocPermanent),
-			UniformBufferSamplers(&m_AllocPermanent),
-			ShaderSpecs(&m_AllocPermanent),
-			ProgramSpecs(&m_AllocPermanent),
+			
 			UUIDToIDMap(&m_AllocGPA_STD_PMR)
-		{ }
+		{
+			TextureArchetypes.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			BufferLayouts.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			FramebufferSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			TextureSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			UniformBufferSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			ShaderSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+			ProgramSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		}
 
 		friend class Application;
 		static void Shutdown() { }

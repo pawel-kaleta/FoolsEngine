@@ -33,12 +33,12 @@ namespace fe::Description
 	static UInt CreateDefaultVertexLayout()
 	{
 		auto& lib = Library::Get();
-		auto& alloc = lib.m_AllocPermanent;
+		auto alloc = (TypedAlloc<MonotonicAlloc>*) & lib.m_AllocPermanent;
 
 		UInt id = lib.BufferLayouts.Count;
-		auto& layout = lib.BufferLayouts.PushBack();
-
-		layout.Elements.Allocate<5>(alloc);
+		auto& layout = *lib.BufferLayouts.PushBack();
+		
+		layout.Elements.FromArray(alloc->Allocate<Buffer::Element, 5>());
 
 		layout.Elements[0].Type = Data::Type::Float3;
 		layout.Elements[0].Name.FromConstCharPtr("a_Position", 11);

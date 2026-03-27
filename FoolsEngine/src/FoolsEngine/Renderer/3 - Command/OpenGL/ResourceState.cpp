@@ -144,7 +144,7 @@ namespace fe::Command
 
 			const auto& uniforms = Description::Library::Get().BufferLayouts[spec.MainUniformsLayoutID];
 
-			for (size_t i = 0; i < uniforms.Elements.size(); ++i)
+			for (size_t i = 0; i < uniforms.Elements.Count; ++i)
 			{
 				const auto& uniform = uniforms.Elements[i];
 
@@ -167,7 +167,7 @@ namespace fe::Command
 		{
 			FE_PROFILER_FUNC();
 
-			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
+			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.Count, "Framebuffer attachment index out of bounds");
 
 			const auto& spec = Description::Library::Get().FramebufferSpecs[framebuffer.SpecificationID];
 
@@ -179,7 +179,7 @@ namespace fe::Command
 		{
 			FE_PROFILER_FUNC();
 
-			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
+			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.Count, "Framebuffer attachment index out of bounds");
 
 			const auto& spec = Description::Library::Get().FramebufferSpecs[framebuffer.SpecificationID];
 
@@ -191,7 +191,7 @@ namespace fe::Command
 		{
 			FE_PROFILER_FUNC();
 
-			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.size(), "Framebuffer attachment index out of bounds");
+			FE_CORE_ASSERT(attachmentIndex < framebuffer.ColorAttachmentOpenGLIDs.Count, "Framebuffer attachment index out of bounds");
 
 			glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 
