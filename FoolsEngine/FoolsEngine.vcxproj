@@ -185,13 +185,13 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Allocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Global.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\StableAllocs.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
@@ -216,8 +216,10 @@
     <ClInclude Include="src\FoolsEngine\Platform\FileDialogs.h" />
     <ClInclude Include="src\FoolsEngine\Platform\InputCodes.h" />
     <ClInclude Include="src\FoolsEngine\Platform\InputPolling.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\WindowBase.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Buffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Data.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Framebuffer.h" />
@@ -246,8 +248,13 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\CommandQue.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\PipelineState.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\SwapChain.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
@@ -309,10 +316,10 @@
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\PlatformBase.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32InputPolling.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp" />
-    <ClCompile Include="src\FoolsEngine\Platform\Window.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\DownStream.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\FrameBuffer.cpp" />
@@ -339,6 +346,7 @@
       <ObjectFileName>$(IntDir)\Texture1.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\RenderContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.cpp" />

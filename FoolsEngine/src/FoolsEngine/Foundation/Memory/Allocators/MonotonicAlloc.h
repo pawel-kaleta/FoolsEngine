@@ -7,7 +7,26 @@ namespace fe
 	class MonotonicAlloc : public Allocator
 	{
 	public:
+		Allocator* UpStreamAlloc = nullptr;
 		std::pmr::monotonic_buffer_resource MBR;
+
+		void Init(Allocator* upStreamAlloc)
+		{
+			MBR.~monotonic_buffer_resource();
+			new(&MBR) std::pmr::monotonic_buffer_resource((STD_PMR_Allocator<Allocator>*)upStreamAlloc);
+			UpStreamAlloc = upStreamAlloc;
+		}
+		void Init()
+		{
+			MBR.~monotonic_buffer_resource();
+			new(&MBR) std::pmr::monotonic_buffer_resource();
+			UpStreamAlloc = nullptr;
+		}
+		void Deinit()
+		{
+			MBR.~monotonic_buffer_resource();
+			UpStreamAlloc = nullptr;
+		}
 
 		virtual Splice<Byte> Allocate(UInt bytes) final override
 		{

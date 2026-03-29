@@ -9,9 +9,6 @@
 
 namespace fe
 {
-	bool Win32Window::s_GLFWInitialized = false;
-	uint16_t Win32Window::s_GLFWWindowCount = 0;
-
 	Win32Window::Win32Window(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
@@ -25,30 +22,6 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		ShutDown();
-	}
-
-	void Win32Window::CreateRenderingContext(GAPIType GAPI)
-	{
-		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Creating rendering context");
-
-		if (m_RenderingContexts.count(GAPI))
-		{
-			FE_CORE_ASSERT(false, "Rendering context of this GAPI was already created for this window!");
-			return;
-		};
-
-		m_RenderingContexts[GAPI] = RenderingContext::Create(GAPI, m_Window);
-		m_CurrentRenderingContext = m_RenderingContexts.at(GAPI).get();
-		m_CurrentRenderingContext->Init();
-
-		SetVSync(false);
-	}
-
-	void Win32Window::MakeRenderingContextCurrent(GAPIType GAPI)
-	{
-		FE_PROFILER_FUNC();
-		FE_CORE_ASSERT(false, "Multiple rendering contexts not yet supported. Context is being made current upon creation.");
 	}
 
 	void Win32Window::OnUpdate()
@@ -66,11 +39,6 @@ namespace fe
 		m_CurrentRenderingContext->SwapBuffers();
 	}
 
-	void Win32Window::GLFWErrorCallback(int error, const char* msg)
-	{
-		FE_LOG_CORE_ERROR("GLFW Error ({0}): {1}", error, msg);
-	}
-
 	void Win32Window::Init(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
@@ -78,21 +46,6 @@ namespace fe
 		m_Data.Title = attr.Title;
 		m_Data.Width = attr.Width;
 		m_Data.Height = attr.Height;
-
-		if (!s_GLFWInitialized)
-		{
-			FE_PROFILER_SCOPE("GLFW_Initialization");
-			FE_LOG_CORE_INFO("Initializing GLFW");
-			
-			
-			if (!glfwInit())
-			{
-				FE_CORE_ASSERT(false, "GLFW initialization failed!");
-			}
-
-			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
-		}
 
 		// window creation
 		{
@@ -108,112 +61,6 @@ namespace fe
 		}		
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-
-		SetGLFWEventsCallbacks();
-	}
-
-	void Win32Window::SetGLFWEventsCallbacks()
-	{
-		FE_PROFILER_FUNC();
-
-		FE_LOG_CORE_INFO("Setting events callbacks for window:");
-
-		FE_LOG_CORE_INFO("	WindowResizeEvent");
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				data.Width = width;
-				data.Height = height;
-
-				FE_NEW_EVENT(data.EventCallback, event, Events::WindowResizeEvent, width, height);
-			});
-
-		FE_LOG_CORE_INFO("	WindowCloseEvent");
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::WindowCloseEvent);
-			});
-
-		FE_LOG_CORE_INFO("	WindowFocusChangeEvents");
-		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focus)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				if (focus)
-				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::WindowGainedFocusEvent);
-				}
-				else
-				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::WindowLostFocusEvent);
-				}
-			});
-
-		FE_LOG_CORE_INFO("	KeyEvents");
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int modes)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-
-				switch (action)
-				{
-					case GLFW_PRESS:
-					{
-						FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 0);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						FE_NEW_EVENT(data.EventCallback, event, Events::KeyReleasedEvent, key);
-						break;
-					}
-					case GLFW_REPEAT:
-					{
-						FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 1);
-						break;
-					}
-				}
-			});
-
-		FE_LOG_CORE_INFO("	KeyTypedEvent");
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::KeyTypedEvent, keycode);
-			});
-
-		FE_LOG_CORE_INFO("	MouseButtonEvents");
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-
-				switch (action)
-				{
-					case GLFW_PRESS:
-					{
-						FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonPressedEvent, button);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonReleasedEvent, button);
-						break;
-					}
-				}
-			});
-
-		FE_LOG_CORE_INFO("	MouseScrolledEvent");
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double x_offset, double y_offset)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::MouseScrolledEvent, (float)x_offset, (float)y_offset);
-			});
-
-		FE_LOG_CORE_INFO("	MouseMovedEvent");
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x_position, double y_position)
-			{
-				WinData& data = *(WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::MouseMovedEvent, (float)x_position, (float)y_position);
-			});
 	}
 
 	void Win32Window::ShutDown()
@@ -226,19 +73,17 @@ namespace fe
 			glfwDestroyWindow(m_Window);
 			s_GLFWWindowCount--;
 		}
-
-		// TO DO: windows counting system to manage glfwInit() and glfwTerminate()
-		if (s_GLFWWindowCount == 0)
-		{
-			FE_PROFILER_SCOPE("glfwTerminate()");
-			glfwTerminate();
-		}
 	}
 
 	void Win32Window::SetVSync(bool enabled)
 	{
 		FE_PROFILER_FUNC();
 
+		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+
+		if (backup_current_context != m_Window)
+			glfwMakeContextCurrent(m_Window);
+		
 		if (enabled)
 		{
 			glfwSwapInterval(1);
@@ -250,5 +95,8 @@ namespace fe
 			FE_LOG_CORE_INFO("VSync disabled.");
 		}
 		m_Data.VSync = enabled;
+
+		if (backup_current_context != m_Window)
+			glfwMakeContextCurrent(backup_current_context);
 	}
 }

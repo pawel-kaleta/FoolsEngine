@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
 namespace fe
@@ -33,4 +34,6 @@ namespace fe
 			m_Type(GAPI), m_ID(ContextsCount++), m_Window(nativeWindow)
 		{ };
 	};
+
+
 }

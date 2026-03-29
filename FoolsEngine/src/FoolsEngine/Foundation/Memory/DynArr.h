@@ -71,7 +71,7 @@ namespace fe
 			if (new_count > Buffer.Count)
 				ReserveAtLeast(new_count);
 
-			std::memcpy(&Buffer[Count], splice.Begin(), splice.Count);
+			std::memcpy(&Buffer[Count], splice.begin(), splice.Count);
 			Count = new_count;
 		}
 

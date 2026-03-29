@@ -195,25 +195,25 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Allocator.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\ArenaAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\BitmappedPoolAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\Global.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\StableAllocs.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAllocator.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h">
@@ -288,7 +288,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\Window.h">
+    <ClInclude Include="src\FoolsEngine\Platform\WindowBase.h">
       <Filter>FoolsEngine\Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Buffer.h">
@@ -472,6 +472,13 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\CommandQue.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\SwapChain.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\PipelineState.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -561,9 +568,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Platform\Window.cpp">
-      <Filter>FoolsEngine\Platform</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
@@ -703,5 +707,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\RenderContext.cpp" />
+    <ClCompile Include="src\FoolsEngine\Platform\Win32\PlatformBase.cpp" />
   </ItemGroup>
 </Project>

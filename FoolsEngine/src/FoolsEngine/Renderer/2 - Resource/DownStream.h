@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Foundation/Memory/XarAlloc.h"
 #include "FoolsEngine/Foundation/Memory/DynArr.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 
@@ -54,12 +56,12 @@ namespace fe::Resource
 		
 		MonotonicAlloc Alloc;
 
-		XarrAlloc<Fence, MonotonicAlloc, MallocAlloc> FrontFences;
-		XarrAlloc<Fence, MonotonicAlloc, MallocAlloc> BackFences;
+		XarrAlloc<Fence, MonotonicAlloc, Allocator> FrontFences;
+		XarrAlloc<Fence, MonotonicAlloc, Allocator> BackFences;
 		UInt NextFenceIndex;
 		
-		XarrAlloc<StreamRegion_OpenGL, MonotonicAlloc, MallocAlloc> Regions;
-		XarrAlloc<Fence*, MonotonicAlloc, MallocAlloc> RegionFences;
+		XarrAlloc<StreamRegion_OpenGL, MonotonicAlloc, Allocator> Regions;
+		XarrAlloc<Fence*, MonotonicAlloc, Allocator> RegionFences;
 
 		UInt CurrentOffset;
 		Byte* CPUMemoryBegin;

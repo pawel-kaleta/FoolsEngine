@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Platform/Window.h"
+#include "FoolsEngine/Platform/WindowBase.h"
 
 #include "FoolsEngine/Renderer/5 - Render Context/RenderingContext.h"
 
@@ -8,14 +8,11 @@
 
 namespace fe
 {
-	class Win32Window : public Window
+	class Win32Window : public WindowBase
 	{
 	public:
 		Win32Window(const WindowAttributes& attr);
 		~Win32Window() override;
-
-		virtual void CreateRenderingContext(GAPIType GAPI) override;
-		virtual void MakeRenderingContextCurrent(GAPIType GAPI) override;
 
 		virtual void OnUpdate() override;
 
@@ -29,7 +26,6 @@ namespace fe
 
 		void* GetNativeWindow() const override { return m_Window; };
 
-	private:
 		GLFWwindow* m_Window;
 		RenderingContext* m_CurrentRenderingContext;
 		std::unordered_map<GAPIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
@@ -46,11 +42,7 @@ namespace fe
 		WinData m_Data;
 
 		void Init(const WindowAttributes& attr);
-		void SetGLFWEventsCallbacks();
 		void ShutDown();
 
-		static void GLFWErrorCallback(int error, const char* msg);
-		static uint16_t s_GLFWWindowCount;
-		static bool s_GLFWInitialized;
 	};
 }

@@ -2,17 +2,21 @@
 
 #include "FoolsEngine/Renderer/2 - Resource/DownStream.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/Global.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/StableAllocs.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 namespace fe::Resource
 {
 	void DownStream_OpenGL::Create(UInt capacity)
 	{
-		auto gpa_alloc = StableAllocs::GeneralPurpose;
-		FrontFences.InitXarrAlloc(&Alloc, gpa_alloc);
-		BackFences.InitXarrAlloc(&Alloc, gpa_alloc);
-		Regions.InitXarrAlloc(&Alloc, gpa_alloc);
-		RegionFences.InitXarrAlloc(&Alloc, gpa_alloc);
+		auto default_alloc = Context::Allocators::Default;
+		auto auxilary_alloc = Context::Allocators::Auxiliary;
+
+		Alloc.Init(default_alloc);
+		FrontFences.InitXarrAlloc(&Alloc, auxilary_alloc);
+		BackFences.InitXarrAlloc(&Alloc, auxilary_alloc);
+		Regions.InitXarrAlloc(&Alloc, auxilary_alloc);
+		RegionFences.InitXarrAlloc(&Alloc, auxilary_alloc);
 
 		CurrentOffset = 0;
 
