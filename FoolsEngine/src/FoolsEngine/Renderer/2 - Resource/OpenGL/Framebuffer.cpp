@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/Global.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/StableAllocs.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

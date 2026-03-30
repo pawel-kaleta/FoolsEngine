@@ -57,7 +57,6 @@ namespace fe
 #endif // FE_INTERNAL_BUILD
 
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
-			s_GLFWWindowCount++;
 		}		
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -71,13 +70,15 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("glfwDestroyWindow()");
 			glfwDestroyWindow(m_Window);
-			s_GLFWWindowCount--;
 		}
 	}
 
 	void Win32Window::SetVSync(bool enabled)
 	{
 		FE_PROFILER_FUNC();
+
+		if (m_Data.VSync == enabled)
+			return;
 
 		GLFWwindow* backup_current_context = glfwGetCurrentContext();
 

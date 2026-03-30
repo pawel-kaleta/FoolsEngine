@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Allocator.h"
-#include "MallocAllocator.h"
-#include "MonotonicAllocator.h"
+#include "MallocAlloc.h"
+#include "MonotonicAlloc.h"
 
 class PageAllocator;
 class VirtualAllocator;
