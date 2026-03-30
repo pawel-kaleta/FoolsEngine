@@ -5,13 +5,16 @@
 
 namespace fe
 {
-	void RenderBackBuffer(Resource::FramebufferBase* frameBuffer, UInt ColorAttachmentIndex)
+	class Swapchain
 	{
+	public:
+		void CommitOutputBuffer(UInt ColorAttachmentIndex)
+		{
 
-	}
+		}
+	};
 
-	void SwapBuffers()
-	{
+	
 
-	}
+	
 }

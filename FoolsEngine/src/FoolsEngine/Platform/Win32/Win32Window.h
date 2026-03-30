@@ -1,14 +1,15 @@
 #pragma once
 
-#include "FoolsEngine/Platform/WindowBase.h"
+#include "FoolsEngine/Platform/Window.h"
 
+#include "FoolsEngine/Renderer/2 - Resource/FrameBuffer.h"
 #include "FoolsEngine/Renderer/5 - Render Context/RenderingContext.h"
 
 #include <GLFW/glfw3.h>
 
 namespace fe
 {
-	class Win32Window : public WindowBase
+	class Win32Window : public Window
 	{
 	public:
 		Win32Window(const WindowAttributes& attr);
@@ -27,8 +28,10 @@ namespace fe
 		void* GetNativeWindow() const override { return m_Window; };
 
 		GLFWwindow* m_Window;
-		RenderingContext* m_CurrentRenderingContext;
-		std::unordered_map<GAPIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
+		Resource::FramebufferBase* m_OutputFramebuffer;
+
+		//RenderingContext* m_CurrentRenderingContext;
+		//std::unordered_map<GAPIType::ValueType, Scope<RenderingContext>> m_RenderingContexts;
 
 		struct WinData
 		{
@@ -44,5 +47,6 @@ namespace fe
 		void Init(const WindowAttributes& attr);
 		void ShutDown();
 
+		virtual void CommitOutputBuffer() const;
 	};
 }

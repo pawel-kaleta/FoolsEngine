@@ -288,7 +288,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Platform\WindowBase.h">
+    <ClInclude Include="src\FoolsEngine\Platform\Window.h">
       <Filter>FoolsEngine\Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Buffer.h">
@@ -474,9 +474,8 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\CommandQue.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\SwapChain.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\SwapChain.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\PipelineState.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
     <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
   </ItemGroup>

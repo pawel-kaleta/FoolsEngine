@@ -219,7 +219,6 @@
     <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\WindowBase.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Buffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Data.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Framebuffer.h" />
@@ -254,7 +253,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\SwapChain.h" />
+    <ClInclude Include="src\FoolsEngine\Platform\SwapChain.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
