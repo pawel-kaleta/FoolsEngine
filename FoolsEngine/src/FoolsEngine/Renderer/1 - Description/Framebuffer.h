@@ -2,6 +2,8 @@
 
 #include "Texture.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/Splice.h"
 #include "FoolsEngine/Application/UUID.h"
 
 namespace fe

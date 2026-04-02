@@ -11,21 +11,21 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	void VertexArray_OpenGL::Create()
+	void MeshBindings_OpenGL::Create()
 	{
 		FE_PROFILER_FUNC();
 
 		glCreateVertexArrays(1, &OpenGLID);
 	}
 
-	void VertexArray_OpenGL::Delete()
+	void MeshBindings_OpenGL::Delete()
 	{
 		FE_PROFILER_FUNC();
 
 		glDeleteVertexArrays(1, &OpenGLID);
 	}
 
-	void VertexArray_OpenGL::BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset)
+	void MeshBindings_OpenGL::BindVertexBuffer(const StaticBufferBase& buffer, uint32_t offset)
 	{
 		FE_PROFILER_FUNC();
 
@@ -111,7 +111,7 @@ namespace fe::Resource
 		}
 	}
 
-	void VertexArray_OpenGL::BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount)
+	void MeshBindings_OpenGL::BindIndexBuffer(const StaticBufferBase& buffer, uint32_t offset, uint32_t indexCount)
 	{
 		glVertexArrayElementBuffer(OpenGLID, (*(StaticBuffer_OpenGL*)&buffer).OpenGLID);
 		IndexCount = indexCount;

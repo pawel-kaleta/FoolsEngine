@@ -9,11 +9,12 @@
 
 namespace fe
 {
-	Win32Window::Win32Window(const WindowAttributes& attr)
+	Win32Window::Win32Window(const WindowAttributes& attr, RenderContext* renderContext)
 	{
 		FE_PROFILER_FUNC();
 		
 		m_GAPI = attr.GAPI;
+		m_RenderContext = renderContext;
 		Init(attr);
 	}
 
@@ -35,8 +36,6 @@ namespace fe
 			FE_LOG_CORE_TRACE("GLFW events polling");
 			glfwPollEvents();
 		}
-		
-		m_CurrentRenderingContext->SwapBuffers();
 	}
 
 	void Win32Window::Init(const WindowAttributes& attr)

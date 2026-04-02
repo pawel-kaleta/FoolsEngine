@@ -248,12 +248,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\CommandQue.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\PipelineState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\SwapChain.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
@@ -344,9 +341,8 @@
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp">
       <ObjectFileName>$(IntDir)\Texture1.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\RenderContext.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\ResourceManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.cpp" />

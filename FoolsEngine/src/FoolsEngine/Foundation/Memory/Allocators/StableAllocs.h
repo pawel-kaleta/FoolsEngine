@@ -9,8 +9,9 @@ class VirtualAllocator;
 
 namespace fe::StableAllocs
 {
-	extern MallocAlloc* GeneralPurpose;
-	extern MonotonicAlloc* Permanent;
+	extern TypedAlloc<MallocAlloc>* GeneralPurpose;
+	extern TypedAlloc<MonotonicAlloc>* Permanent;
+
 	extern PageAllocator* Page;
 	extern VirtualAllocator* Virtual;
 	

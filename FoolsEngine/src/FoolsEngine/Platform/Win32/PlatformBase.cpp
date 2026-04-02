@@ -1,8 +1,7 @@
 #include "FE_pch.h"
 #include "FoolsEngine/Platform/PlatformBase.h"
 
-#include "FoolsEngine/Platform/Window.h"
-#include "FoolsEngine/Platform/WindowBase.h"
+#include "FoolsEngine/Platform/Win32/Win32Window.h"
 #include "FoolsEngine/Platform/Events/Event.h"
 #include "FoolsEngine/Foundation/Debug/Profiler.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"

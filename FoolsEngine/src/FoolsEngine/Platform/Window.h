@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/5 - Render Context/RenderContext.h"
 
 namespace fe
 {
@@ -9,6 +8,8 @@ namespace fe
 	{
 		class Event;
 	}
+
+	class RenderContext;
 
 	struct WindowAttributes
 	{
@@ -42,10 +43,7 @@ namespace fe
 
 		virtual void* GetNativeWindow() const = 0;
 
-		virtual void CommitOutputBuffer() const = 0;
-
 		GAPIType m_GAPI = GAPIType::None;
 		RenderContext* m_RenderContext;
-
 	};
 }

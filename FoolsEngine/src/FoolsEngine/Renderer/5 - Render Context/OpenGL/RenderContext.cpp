@@ -1,3 +1,5 @@
+#include "FE_pch.h"
+
 #include "FoolsEngine/Renderer/5 - Render Context/RenderContext.h"
 #include "FoolsEngine/Foundation/Debug/Profiler.h"
 #include "FoolsEngine/Foundation/Debug/Log.h"
@@ -68,6 +70,7 @@ namespace fe
 
 		ID.Create();
 		GAPIType = fe::GAPIType::OpenGL;
+		ResourceManager.Create();
 
 		// window creation
 		{

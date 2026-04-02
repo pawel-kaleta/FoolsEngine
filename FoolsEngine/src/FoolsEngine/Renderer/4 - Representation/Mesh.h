@@ -43,9 +43,9 @@ namespace fe
 		size_t DataSize() { return (Specification.IndexCount * sizeof(uint32_t)) + (Specification.VertexCount * sizeof(Description::Buffer::Vertex)); }
 	};
 
-	struct ACGPUVertexArray final : public AssetComponent
+	struct ACMeshBindings_OpenGL final : public AssetComponent
 	{
-		Resource::VertexArray_OpenGL VertexArray;
+		Resource::MeshBindings_OpenGL VertexArray;
 	};
 
 	class MeshObserver : public AssetInterface

@@ -375,12 +375,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Representation\Texture.h">
       <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.h">
-      <Filter>FoolsEngine\Renderer\5 - Render Context\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.h">
-      <Filter>FoolsEngine\Renderer\5 - Render Context</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h">
       <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClInclude>
@@ -474,7 +468,6 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\ResourceManager.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\CommandQue.h" />
-    <ClInclude Include="src\FoolsEngine\Platform\SwapChain.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\PipelineState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Render Context\RenderContext.h" />
     <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
@@ -631,12 +624,6 @@
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Representation\Texture.cpp">
       <Filter>FoolsEngine\Renderer\4 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\OpenGLRenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Render Context\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\RenderingContext.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Render Context</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp">
       <Filter>FoolsEngine\Renderer\6 - Render</Filter>
     </ClCompile>
@@ -708,5 +695,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\RenderContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\PlatformBase.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Render Context\OpenGL\ResourceManager.cpp" />
   </ItemGroup>
 </Project>

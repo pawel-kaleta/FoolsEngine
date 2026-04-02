@@ -7,11 +7,14 @@
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Platform/Window.h"
+#include "FoolsEngine/Platform/PlatformBase.h"
 #include "FoolsEngine/Platform/Events/MainEventDispacher.h"
 
 int main(int argc, char** argv);
 namespace fe
 {
+	struct OpenGLRenderContext;
+
 	namespace Events
 	{
 		class Event;
@@ -62,6 +65,8 @@ namespace fe
 		LayerStack*			m_LayerStack;
 
 		Window*					m_Window;
+		OpenGLRenderContext*	m_RenderContext;
+		PlatformBase*			m_PlatformBase;
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
 

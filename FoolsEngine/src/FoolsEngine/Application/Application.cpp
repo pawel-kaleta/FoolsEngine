@@ -7,11 +7,15 @@
 #include "FoolsEngine/Foundation/Memory/Xar.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/StableAllocs.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include "FoolsEngine/Platform/FileDialogs.h"
 #include "FoolsEngine/Platform/Events/Event.h"
+#include "FoolsEngine/Platform/Win32/Win32Window.h"
 					 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
+#include "FoolsEngine/Renderer/5 - Render Context/RenderContext.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 					 
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
@@ -75,27 +79,34 @@ namespace fe
 
 		// Rendering, Window and Platform Layer
 		{
+			FE_PROFILER_SCOPE("Platform Layer, Render Context, Window");
+
 			{
-				// Platform layer
+				FE_PROFILER_SCOPE("PlatformBase");
+				m_PlatformBase = StableAllocs::Permanent->Allocate<PlatformBase>();
+				m_PlatformBase->Create();
 			}
 
 			{
-				// Default:
-				//  - Graphics API
-				//  - Render Device
-				//  - Window
-				//  - Render Context
-				//  - Swapchain
+				FE_PROFILER_SCOPE("RenderContext");
+				m_RenderContext = StableAllocs::Permanent->Allocate<OpenGLRenderContext>();
+				m_RenderContext->Create();
 			}
 
-			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
+			{
+				FE_PROFILER_SCOPE("Window");
+				Win32Window* window = StableAllocs::Permanent->Allocate<Win32Window>();
+				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, m_RenderContext);
+				m_PlatformBase->SetEventCallbacks(window);
+				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
+				m_Window = window;
+			}
+		}
 
-			m_Window = Window::Create(s_ApplicationSpecification->WindowAttributes);
+		{
+			FE_PROFILER_SCOPE("Renderer");
 
-			m_Window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
-			m_Window->CreateRenderingContext();
-
-			GAPIType GAPI = m_Window->GetGAPIType();
+			GAPIType GAPI = m_RenderContext->GAPIType;
 			Renderer::Startup();
 			Renderer::CreateAPI(GAPI);
 			Renderer::InitAPI(GAPI);

@@ -10,7 +10,7 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	struct VertexArrayBase
+	struct MeshBindingsBase
 	{
 		U32 LayoutID;
 		U32 VertexOffset;
@@ -25,7 +25,7 @@ namespace fe::Resource
 		virtual void BindIndexBuffer(const StaticBufferBase& buffer, U32 offset, U32 indexCount) = 0;
 	};
 
-	struct VertexArray_OpenGL final : VertexArrayBase
+	struct MeshBindings_OpenGL final : MeshBindingsBase
 	{
 		GLuint OpenGLID;
 
@@ -36,7 +36,7 @@ namespace fe::Resource
 		virtual void BindIndexBuffer(const StaticBufferBase& buffer, U32 offset, U32 indexCount) override;
 	};
 
-	//struct VertexArray_Vulkan final : VertexArrayBase
+	//struct MeshBindings_Vulkan final : MeshBindingsBase
 	//{
 	//	virtual void Create() override {};
 	//	virtual void Delete() override {};
