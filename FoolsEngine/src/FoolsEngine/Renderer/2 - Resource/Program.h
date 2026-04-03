@@ -12,7 +12,7 @@ namespace fe::Resource
 {
 	struct ProgramBase
 	{
-		Splice<AssetID> Shaders;
+		Splice<AssetID> Shaders; //resource manager allocates
 		U32 SpecificationID;
 
 		virtual void Create() = 0;

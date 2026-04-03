@@ -27,12 +27,7 @@ namespace fe
 	{
 	public:
 		const ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
-		
-		template <GAPIType::ValueType GAPI>
-		const auto& GetResourceComponent()
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderResource_OpenGL>();
-		}
+		const ACShaderResource_OpenGL* GetResourceOpenGL() const { return GetIfExist<ACShaderResource_OpenGL>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -44,6 +39,7 @@ namespace fe
 	{
 	public:
 		ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
+		ACShaderResource_OpenGL* GetResourceOpenGL() const { return GetIfExist<ACShaderResource_OpenGL>(); }
 
 		bool LoadMetadata();
 

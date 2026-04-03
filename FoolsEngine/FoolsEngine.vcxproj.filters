@@ -336,7 +336,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\Texture.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\VertexArray.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\MeshBindings.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h">
@@ -585,7 +585,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\VertexArray.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\MeshBindings.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp">

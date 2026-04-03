@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/2 - Resource/Shader.h"
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
 
 namespace fe::Resource
 {
@@ -26,19 +26,19 @@ namespace fe::Resource
 
 		if (compilation_success == GL_FALSE)
 		{
-			Scratchpad sp;
+			Pile p;
 
 			GLint log_length = 0;
 			glGetShaderiv(ShaderOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
-			std::pmr::vector<GLchar> info_log(log_length, &sp);
-			glGetShaderInfoLog(ShaderOpenGLID, log_length, &log_length, info_log.data());
+			auto info_log = p.Allocate<GLchar>(log_length);
+			glGetShaderInfoLog(ShaderOpenGLID, log_length, &log_length, info_log.Elements);
 
 			glDeleteShader(ShaderOpenGLID);
 
 			ShaderOpenGLID = 0;
 
-			FE_LOG_CORE_ERROR("{0}", info_log.data());
+			FE_LOG_CORE_ERROR("{0}", info_log.Elements);
 			FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
 
 			return;

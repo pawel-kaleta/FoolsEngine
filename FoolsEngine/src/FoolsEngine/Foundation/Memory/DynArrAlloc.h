@@ -131,7 +131,7 @@ namespace fe
 	{
 	public:
 		DynArrAlloc() = default;
-		DynArrAlloc(tAlloc* alloc) : DynArrAllocPM<T>::Alloc((TypedAlloc<Allocator>*)alloc) { }
+		DynArrAlloc(tAlloc* alloc) { this->Alloc = (TypedAlloc<Allocator>*)alloc; }
 		void Init(tAlloc* alloc) { this->Alloc = (TypedAlloc<Allocator>*)alloc; }
 
 		void Release()
@@ -150,7 +150,7 @@ namespace fe
 			if (this->Count == this->Buffer.Count)
 				DefaultResizeAndRelocate();
 
-			this->Buffer.Elements[this->Count] = element;
+			this->Buffer.Elements[this->Count] = *element;
 			this->Count++;
 			return;
 		}
@@ -161,7 +161,7 @@ namespace fe
 			if (new_count > this->Buffer.Count)
 				ReserveAtLeast(new_count);
 
-			std::memcpy(&(this->Buffer[this->Count]), splice.Begin(), splice.Count);
+			std::memcpy(&(this->Buffer[this->Count]), splice.begin(), splice.Count);
 			this->Count = new_count;
 		}
 
@@ -172,7 +172,7 @@ namespace fe
 
 			T& result = this->Buffer.Elements[this->Count];
 			this->Count++;
-			return result;
+			return &result;
 		}
 
 		void DefaultResizeAndRelocate()
@@ -211,7 +211,7 @@ namespace fe
 		{
 			Splice<T> new_elements = GetAlloc()->Allocate<T>(newCapacity);
 
-			if (this->Elements)
+			if (this->Buffer.Elements)
 			{
 				UInt size = this->Buffer.Count * sizeof(T);
 				std::memcpy(new_elements.Elements, this->Buffer.Elements, size);

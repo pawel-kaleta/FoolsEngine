@@ -14,11 +14,15 @@ namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
 	{
-		struct {
-			AssetID Vertex;
-			AssetID Tessellation;
-			AssetID Geometry;
-			AssetID Fragment;
+
+		union {
+			struct {
+				AssetID Vertex;
+				AssetID Tessellation;
+				AssetID Geometry;
+				AssetID Fragment;
+			}ByName;
+			Array<AssetID, 4> AsArray;
 		} ShaderIDs;
 
 		void* DefaultUniformsData;

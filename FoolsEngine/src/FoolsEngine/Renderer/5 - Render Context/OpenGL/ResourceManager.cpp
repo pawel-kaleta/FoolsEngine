@@ -11,8 +11,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(false, "Shader loading not implemented yet");
-
 		if (assetUser.AnyOf<ACShaderResource_OpenGL>())
 		{
 			FE_CORE_ASSERT(false, "Already on GPU");
@@ -44,17 +42,27 @@ namespace fe
 			return false;
 		}
 
+		ContextScope scope(this);
+
 		auto& core = assetUser.GetCore();
 		auto& reg = AssetManager::Get().m_Registry;
 
 		auto& program_comp = reg.emplace<ACShaderModelResource_OpenGL>(assetUser.GetID());
 		program_comp.Program.SpecificationID = core.ProgramSpecificationID;
 
-		program_comp.Program.Shaders = this->PermanentAlloc.Allocate<AssetID>(4);
-		program_comp.Program.Shaders[0] = core.ShaderIDs.Vertex			? core.ShaderIDs.Vertex			: NullAssetID;
-		program_comp.Program.Shaders[1] = core.ShaderIDs.Tessellation	? core.ShaderIDs.Tessellation	: NullAssetID;
-		program_comp.Program.Shaders[2] = core.ShaderIDs.Geometry		? core.ShaderIDs.Geometry		: NullAssetID;
-		program_comp.Program.Shaders[3] = core.ShaderIDs.Fragment		? core.ShaderIDs.Fragment		: NullAssetID;
+		UInt shader_count
+			= UInt(NullAssetID != core.ShaderIDs.AsArray[0])
+			+ UInt(NullAssetID != core.ShaderIDs.AsArray[1])
+			+ UInt(NullAssetID != core.ShaderIDs.AsArray[2])
+			+ UInt(NullAssetID != core.ShaderIDs.AsArray[3]);
+
+		program_comp.Program.Shaders = this->DefaultAlloc.Allocate<AssetID>(shader_count);
+		
+		for (UInt i = 0; i < shader_count; i++)
+		{
+			if (!core.ShaderIDs.AsArray[i]) continue;
+			program_comp.Program.Shaders[i] = core.ShaderIDs.AsArray[i];
+		}
 
 		program_comp.Program.Create();
 
@@ -90,10 +98,18 @@ namespace fe
 		if (core.ShadingModelID == NullAssetID)
 			return false;
 
+		UInt current_offset = offset;
+
 		if (core.UniformBufferDataSize && core.UniformBufferData)
-			buffer->Update(offset, core.UniformBufferDataSize, core.UniformBufferData);
+		{
+			buffer->Update(current_offset, core.UniformBufferDataSize, core.UniformBufferData);
+			current_offset += core.UniformBufferDataSize;
+		}
 		if (core.ShaderStorageDataSize && core.ShaderStorageData)
-			buffer->Update(offset + core.UniformBufferDataSize, core.ShaderStorageDataSize, core.ShaderStorageData);
+		{
+			buffer->Update(current_offset, core.ShaderStorageDataSize, core.ShaderStorageData);
+			current_offset += core.ShaderStorageDataSize;
+		}
 
 		for (const auto& texture_ID : core.TextureIDs)
 		{
@@ -170,6 +186,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& core = assetUser.GetCore();
+		UInt current_offset = offset;
 
 		// material loading
 		{
@@ -182,7 +199,7 @@ namespace fe
 				{
 					if (!material_user.IsLoaded())
 					{
-						if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset))
+						if (!material_user.SendDataToGPU(GAPI))
 							return false;
 
 						material_user.FlagLoaded();
@@ -196,8 +213,10 @@ namespace fe
 				FE_CORE_ASSERT(!material_user.IsLoadedAsDependency(), "Internal Material already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!material_user.IsLoaded(), "Internal Material already marked Loaded during loading");
 
-				if (!material_user.SendDataToGPUInternal(GAPI, buffer, offset))
+				if (!this->SendDataToGPU(material_user, buffer, current_offset))
 					return false;
+				current_offset += material_user.GetGPUDataSize();
+
 				material_user.FlagLoaded();
 				material_user.FlagLoadedAsDependency();
 			}
@@ -228,8 +247,10 @@ namespace fe
 				FE_CORE_ASSERT(!mesh_user.IsLoadedAsDependency(), "Internal Mesh already marked LoadedAsDependency during loading");
 				FE_CORE_ASSERT(!mesh_user.IsLoaded(), "Internal Mesh already marked Loaded during loading");
 
-				if (!mesh_user.SendDataToGPU(GAPI))
+				if (!this->SendDataToGPU(mesh_user, buffer, current_offset))
 					return false;
+				current_offset += mesh_user.GetGPUDataSize();
+
 				mesh_user.FlagLoaded();
 				mesh_user.FlagLoadedAsDependency();
 			}
@@ -242,11 +263,116 @@ namespace fe
 		
 	}
 
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Shader      >& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Material    >& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser){}
-	bool ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Model       >& assetUser){}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Shader      >& assetUser)
+	{
+		FE_PROFILER_FUNC();
+
+		if (assetUser.AllOf<ACShaderResource_OpenGL>())
+		{
+			FE_CORE_ASSERT(false, "Not on GPU");
+			return;
+		}
+		
+		const auto& core = assetUser.GetCore();
+
+		auto& reg = AssetManager::Get().m_Registry;
+
+		auto shader_comp = reg.get<ACShaderResource_OpenGL>(assetUser.GetID());
+
+		shader_comp.Shader.Destroy();
+		reg.erase<ACShaderResource_OpenGL>(assetUser.GetID());
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser)
+	{
+		FE_PROFILER_FUNC();
+
+		if (assetUser.AllOf<ACShaderModelResource_OpenGL>())
+		{
+			FE_CORE_ASSERT(false, "Not on GPU");
+			return;
+		}
+
+		auto& core = assetUser.GetCore();
+		auto& reg = AssetManager::Get().m_Registry;
+
+		auto program_comp = reg.get<ACShaderModelResource_OpenGL>(assetUser.GetID());
+
+		ContextScope scope(this);
+		program_comp.Program.Destroy();
+
+		this->DefaultAlloc.Deallocate(program_comp.Program.Shaders);
+
+		reg.erase<ACShaderModelResource_OpenGL>(assetUser.GetID());
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser)
+	{
+		FE_PROFILER_FUNC();
+
+		if (assetUser.AllOf<ACTexture2DResource_OpenGL>())
+		{
+			FE_CORE_ASSERT(false, "Already on GPU");
+			return;
+		}
+
+		auto& reg = AssetManager::Get().m_Registry;
+
+		auto& resource_comp = reg.emplace<ACTexture2DResource_OpenGL>(assetUser.GetID());
+		resource_comp.Texture.Destroy();
+		reg.erase<ACTexture2DResource_OpenGL>(assetUser.GetID());
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Material    >& assetUser)
+	{
+		FE_PROFILER_FUNC();
+
+		if (assetUser.IsLoaded())
+		{
+			FE_CORE_ASSERT(false, "Already on GPU");
+			return;
+		}
+
+		auto& core = assetUser.GetCore();
+
+		for (const auto& texture_ID : core.TextureIDs)
+		{
+			if (texture_ID == NullAssetID)
+				continue;
+
+			AssetUser<Texture2D> texture_user(texture_ID);
+
+			auto refs = texture_user.GetRefCounters();
+			if (refs) // project asset
+			{
+				if (refs->LiveHandles[0].fetch_sub(1) == 1)
+					texture_user.ReleaseDependencyLoad();
+			}
+			else // internal asset
+			{
+				texture_user.ReleaseDependencyLoad();
+				ReleaseDataFromGPU(texture_user);
+			}
+		}
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser)
+	{
+		FE_PROFILER_FUNC();
+
+		if (assetUser.AllOf<ACMeshBindings_OpenGL>())
+		{
+			FE_CORE_ASSERT(false, "Not on GPU");
+			return;
+		}
+
+		auto& core = assetUser.GetCore();
+
+		auto& reg = AssetManager::Get().m_Registry;
+
+		auto& mesh_bindings = reg.get<ACMeshBindings_OpenGL>(assetUser.GetID());
+		mesh_bindings.MeshBindings.Delete();
+		reg.erase<ACMeshBindings_OpenGL>(assetUser.GetID());
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser)
+	{
+
+	}
+	void ResourceManagerOpenGL::ReleaseDataFromGPU(AssetUser<Model       >& assetUser){}
 }

@@ -1,9 +1,9 @@
 #include "FE_pch.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 
 #include "FoolsEngine/Assets/AssetAccessors.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/2 - Resource/Program.h"
@@ -15,19 +15,19 @@ namespace fe::Resource
 	{
 		FE_PROFILER_FUNC();
 
-		Scratchpad sp;
-
 		GLuint ProgramOpenGLID = glCreateProgram();
 
-		std::pmr::vector<GLuint> shaders_OpenGL(&sp);
+		Pile p;
+		auto shaders_OpenGL = p.Allocate<GLuint>(Shaders.Count);
 
 		for (UInt i =0; i<Shaders.Count; i++)
 		{
+			if (Shaders[i] == NullAssetID) continue; // should not be possible
 			AssetObserver<Shader> shader_observer(Shaders[i]);
-			shaders_OpenGL.push_back(shader_observer.GetResourceComponent<GAPIType::OpenGL>().Shader.ShaderOpenGLID);
+			shaders_OpenGL[i] = shader_observer.GetResourceOpenGL()->Shader.ShaderOpenGLID;
 		}
 
-		for (int i = 0; i < shaders_OpenGL.size(); i++)
+		for (int i = 0; i < shaders_OpenGL.Count; i++)
 			glAttachShader(ProgramOpenGLID, shaders_OpenGL[i]);
 
 		GLint linking_success = 0;
@@ -42,21 +42,22 @@ namespace fe::Resource
 			GLint log_length = 0;
 			glGetProgramiv(ProgramOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
-			std::pmr::vector<GLchar> info_log(log_length, &sp);
-			glGetProgramInfoLog(ProgramOpenGLID, log_length, &log_length, info_log.data());
+			auto info_log = p.Allocate<GLchar>(log_length);
+			glGetProgramInfoLog(ProgramOpenGLID, log_length, &log_length, info_log.Elements);
 
 			glDeleteProgram(ProgramOpenGLID);
 			ProgramOpenGLID = -1;
 
-			FE_LOG_CORE_ERROR("{0}", info_log.data());
+			FE_LOG_CORE_ERROR("{0}", info_log.Elements); // is this null terminated?
 			FE_CORE_ASSERT(false, "OpenGL shader program linking failed!");
 			return;
 		}
 
-		for (int i = 0; i < shaders_OpenGL.size(); i++)
+		for (int i = 0; i < shaders_OpenGL.Count; i++)
 		{
 			glDetachShader(ProgramOpenGLID, shaders_OpenGL[i]); // do we need this?
 		}
+
 
 		const auto& library = Description::Library::Get();
 
@@ -64,17 +65,17 @@ namespace fe::Resource
 
 		const auto& uniforms = library.BufferLayouts[spec.MainUniformsLayoutID];
 
-		Pile p;
+		BindingLocations.MainUniforms = Context::Allocators::Default->Allocate<GLint>(uniforms.Elements.Count);
 		for (UInt i = 0; i < uniforms.Elements.Count; i++)
 		{
 			const auto c_name = uniforms.Elements[i].Name.GetCString(&p);
 			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
 
-			//static_assert(false, "allocate splice");
 			BindingLocations.MainUniforms[i] = location; // allocate first!
 			p.Clear();
 		}
 
+		BindingLocations.TextureSamplers = Context::Allocators::Default->Allocate<GLint>(spec.TextureSamplerIDs.Count);
 		for (UInt i = 0; i < spec.TextureSamplerIDs.Count; i++)
 		{
 			const auto& texture_sampler_id = spec.TextureSamplerIDs[i];
@@ -82,8 +83,8 @@ namespace fe::Resource
 			const auto c_name = texture_sampler.Name.GetCString(&p);
 			GLint location = glGetUniformLocation(ProgramOpenGLID, c_name.Data);
 
-			//static_assert(false, "allocate splice");
 			BindingLocations.TextureSamplers[i] = location;
+			p.Clear();
 		}
 	}
 
@@ -93,6 +94,7 @@ namespace fe::Resource
 
 		glDeleteProgram(ProgramOpenGLID);
 
-		//Deallocate splices
+		Context::Allocators::Default->Deallocate(BindingLocations.MainUniforms);
+		Context::Allocators::Default->Deallocate(BindingLocations.TextureSamplers);
 	}
 }

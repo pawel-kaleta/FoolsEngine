@@ -9,40 +9,17 @@
 
 namespace fe
 {
-	struct ResourceManager
+	struct ResourceManager { };
+
+	struct ResourceManagerOpenGL final : public ResourceManager
 	{
 		TypedAlloc<MallocAlloc> DefaultAlloc;
 		TypedAlloc<MallocAlloc> AuxilaryAlloc;
 		TypedAlloc<MonotonicAlloc> PermanentAlloc;
 
-		void Create()
-		{
-			PermanentAlloc.Init();
-		}
+		void Create() { PermanentAlloc.Init(); }
 
-		class ContextScope
-		{
-		public:
-			ContextScope(ResourceManager* rm) :
-				DefaultAlloc(Context::Allocators::Default),
-				AuxilaryAlloc(Context::Allocators::Auxiliary)
-			{
-				Context::Allocators::Default	= (TypedAlloc<Allocator>*) & rm->DefaultAlloc;
-				Context::Allocators::Auxiliary	= (TypedAlloc<Allocator>*) & rm->AuxilaryAlloc;
-			}
-			~ContextScope()
-			{
-				Context::Allocators::Default = (TypedAlloc<Allocator>*) DefaultAlloc;
-				Context::Allocators::Auxiliary = (TypedAlloc<Allocator>*) AuxilaryAlloc;
-			}
-		private:
-			Allocator* DefaultAlloc;
-			Allocator* AuxilaryAlloc;
-		};
-	};
-
-	struct ResourceManagerOpenGL final : public ResourceManager
-	{
+		bool SendProjectAssetToGPU() {};
 
 		bool SendDataToGPU(AssetUser<Shader		 >& assetUser);
 		bool SendDataToGPU(AssetUser<ShadingModel>& assetUser);
@@ -52,12 +29,32 @@ namespace fe
 		bool SendDataToGPU(AssetUser<RenderMesh	 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
 		bool SendDataToGPU(AssetUser<Model		 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
 
-		bool ReleaseDataFromGPU(AssetUser<Shader      >& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<Material    >& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser);
-		bool ReleaseDataFromGPU(AssetUser<Model       >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<Shader      >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser);
+		void ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<Material    >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser);
+		void ReleaseDataFromGPU(AssetUser<Model       >& assetUser);
+
+		class ContextScope
+		{
+		public:
+			ContextScope(ResourceManagerOpenGL* rm) :
+				DefaultAlloc(Context::Allocators::Default),
+				AuxilaryAlloc(Context::Allocators::Auxiliary)
+			{
+				Context::Allocators::Default = (TypedAlloc<Allocator>*) & rm->DefaultAlloc;
+				Context::Allocators::Auxiliary = (TypedAlloc<Allocator>*) & rm->AuxilaryAlloc;
+			}
+			~ContextScope()
+			{
+				Context::Allocators::Default = DefaultAlloc;
+				Context::Allocators::Auxiliary = AuxilaryAlloc;
+			}
+		private:
+			TypedAlloc<Allocator>* DefaultAlloc;
+			TypedAlloc<Allocator>* AuxilaryAlloc;
+		};
 	};
 }
