@@ -77,7 +77,12 @@ namespace fe
 			glm::vec2 UV0;
 			glm::vec2 UV1;
 
+			static UInt GetLayoutID();
 			static const Layout& GetLayout();
+
+			static UInt CreateDefaultVertexLayout();
+		private:
+			static UInt LayoutID;
 		};
 	}
 }

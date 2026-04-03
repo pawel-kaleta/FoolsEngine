@@ -245,65 +245,6 @@ namespace fe
 		return SendDataToGPUInternal(GAPI, &buffer_comp.Buffer, 0);
 	}
 
-	bool MaterialUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
-	{
-		auto& core = Get<ACMaterialCore>();
-		
-		if (core.ShadingModelID == NullAssetID)
-			return false;
-
-		// devirtualize buffer->
-		if (core.UniformBufferDataSize && core.UniformBufferData)
-			buffer->Update(offset,								core.UniformBufferDataSize, core.UniformBufferData);
-		if (core.ShaderStorageDataSize && core.ShaderStorageData)
-			buffer->Update(offset + core.UniformBufferDataSize,	core.ShaderStorageDataSize, core.ShaderStorageData);
-
-		auto& gpu_data = Emplace<ACGPUData>();
-		gpu_data.Buffer = buffer;
-		gpu_data.Offset = offset;
-
-		for (const auto& texture_ID : core.TextureIDs)
-		{
-			if (texture_ID == NullAssetID)
-				continue;
-
-			AssetUser<Texture2D> texture_user(texture_ID);
-			
-			FE_CORE_ASSERT(texture_user.GetType() == AssetType::Texture2D, "Trying to load texture in material that is not a texture.");
-
-			auto refs = texture_user.GetRefCounters();
-			if (refs) //project asset
-			{
-				if (refs->LiveHandles[0].fetch_add(1) == 0)
-				{
-					if (!texture_user.IsLoaded())
-					{
-						TextureLoader::LoadTexture(texture_user);
-						texture_user.SendDataToGPU(GAPI);
-						texture_user.UnloadFromCPU();
-
-						texture_user.FlagLoaded();
-					}
-					
-					texture_user.FlagLoadedAsDependency();
-				}
-			}
-			else //internal asset
-			{
-				FE_CORE_ASSERT(!texture_user.IsLoadedAsDependency(), "Internal Texture already marked LoadedAsDependency during loading");
-				FE_CORE_ASSERT(!texture_user.IsLoaded(), "Internal Texture already marked Loaded during loading");
-				
-				TextureLoader::LoadTexture(texture_user);
-				texture_user.SendDataToGPU(GAPI);
-				texture_user.UnloadFromCPU();
-
-				texture_user.FlagLoaded();
-				texture_user.FlagLoadedAsDependency();
-			}
-		}
-		
-		return true;
-	}
 
 	void MaterialUser::Release() const
 	{

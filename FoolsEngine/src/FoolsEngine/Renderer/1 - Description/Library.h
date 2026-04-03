@@ -42,21 +42,7 @@ namespace fe::Description
 		}
 		
 	private:
-		Library() :
-			m_AllocPermanent(),
-			m_AllocGPA(),
-			m_AllocGPA_STD_PMR(&m_AllocGPA),
-			
-			UUIDToIDMap(&m_AllocGPA_STD_PMR)
-		{
-			TextureArchetypes.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			BufferLayouts.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			FramebufferSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			TextureSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			UniformBufferSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			ShaderSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-			ProgramSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-		}
+		Library();
 
 		friend class Application;
 		static void Shutdown() { }

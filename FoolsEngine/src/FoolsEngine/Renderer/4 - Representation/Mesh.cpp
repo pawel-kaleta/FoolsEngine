@@ -43,29 +43,6 @@ namespace fe
 		return SendDataToGPUInternal(GAPI, &buffer_comp.Buffer, 0);
 	}
 
-	bool MeshUser::SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const
-	{
-		auto& core = Get<ACMeshCore>();
-
-		if (!core.Data)
-			return false;
-
-		buffer->Update(offset, core.DataSize(), core.Data);
-
-		auto& vertex_array = Emplace<ACGPUVertexArray>();
-
-		const auto& library = Description::Library::Get();
-		auto program_spec_id = Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe().GetCore().ProgramSpecificationID;
-		auto vertex_input_layout_id = library.ProgramSpecs[program_spec_id].VertexInputLayoutID;
-
-		vertex_array.VertexArray.LayoutID = vertex_input_layout_id;
-		vertex_array.VertexArray.Create();
-		vertex_array.VertexArray.BindIndexBuffer(*buffer, offset, core.Specification.IndexCount);
-		vertex_array.VertexArray.BindVertexBuffer(*buffer, offset + ((intptr_t)core.GetVertexBufferPtr() - (intptr_t)core.Data));
-
-		return true;
-	}
-
 	void MeshUser::UnloadFromCPU() const
 	{
 		auto& data = Get<ACMeshCore>().Data;

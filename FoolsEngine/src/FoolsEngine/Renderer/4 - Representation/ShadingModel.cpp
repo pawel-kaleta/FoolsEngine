@@ -336,33 +336,4 @@ namespace fe
 
 		return true;
 	}
-
-	bool ShadingModelUser::SendDataToGPU(GAPIType GAPI) const
-	{
-		FE_PROFILER_FUNC();
-
-		auto& core = GetCore();
-
-
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			break;
-
-		case GAPIType::OpenGL:
-			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Program;
-			resource.SpecificationID = core.ProgramSpecificationID;
-
-			if (core.ShaderIDs.Vertex)			resource.Shaders.push_back(core.ShaderIDs.Vertex);
-			if (core.ShaderIDs.Tessellation)	resource.Shaders.push_back(core.ShaderIDs.Tessellation);
-			if (core.ShaderIDs.Geometry)		resource.Shaders.push_back(core.ShaderIDs.Geometry);
-			if (core.ShaderIDs.Fragment)		resource.Shaders.push_back(core.ShaderIDs.Fragment);
-
-			resource.Create();
-			break;
-		}
-
-		return true;
-	}
 }

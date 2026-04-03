@@ -16,29 +16,6 @@
 
 namespace fe
 {
-	bool Texture2DUser::SendDataToGPU(GAPIType GAPI) const
-	{
-		FE_PROFILER_FUNC();
-
-		auto& core = GetCoreComponent();
-
-		if (!core.Data)
-			return false;
-
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			break;
-
-		case GAPIType::OpenGL:
-			auto& resource = CreateResourceComponent<GAPIType::OpenGL>().Texture;
-			resource.Create(core.Specification, core.Data);
-			break;
-		}
-
-		return true;
-	}
 
 	void Texture2DUser::UnloadFromCPU() const
 	{
@@ -80,7 +57,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 		
 		Scratchpad sp;
-		auto& spec = GetCoreComponent().Specification;
+		auto& spec = GetCore().Specification;
 		const auto& library = Description::Library::Get();
 		const auto& archetype = library.TextureArchetypes[spec.ArchetypeID];
 
@@ -134,7 +111,7 @@ namespace fe
 			return false;
 		}
 
-		auto& spec = GetCoreComponent().Specification;
+		auto& spec = GetCore().Specification;
 		
 		spec.Usage.FromString(node["Usage"].as<std::string>());
 

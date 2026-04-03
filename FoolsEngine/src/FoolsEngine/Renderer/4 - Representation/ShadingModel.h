@@ -41,12 +41,6 @@ namespace fe
 	public:
 		const ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
 
-		template <GAPIType::ValueType GAPI>
-		const auto& GetResourceComponent()
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
-		}
-
 		const Description::Buffer::Layout& GetUniforms();
 
 		size_t GetCPUDataSize() const { return GetCore().UniformsDataSize; }
@@ -69,18 +63,6 @@ namespace fe
 	public:
 		ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
 
-		template <GAPIType::ValueType GAPI>
-		auto& GetResourceComponent() const
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
-		}
-
-		template <GAPIType::ValueType GAPI>
-		auto& CreateResourceComponent() const
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderModelResource_OpenGL>();
-		}
-
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
 		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, String name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
 
@@ -90,7 +72,6 @@ namespace fe
 		bool LoadBaseAssetMetadata(const char* filepath);
 		bool LoadMetadata();
 
-		bool SendDataToGPU(GAPIType GAPI) const;
 		void UnloadFromCPU() const {};
 		void Release() const;
 

@@ -92,29 +92,6 @@ namespace fe
         }
     }
 
-    void ShaderUser::SendDataToGPU(GAPIType GAPI, void* data)
-    {
-        FE_CORE_ASSERT(false, "Shader loading not implemented yet");
-
-        switch (GAPI.Value)
-        {
-        case GAPIType::None:
-            FE_CORE_ASSERT(false, "Unspecified GAPIType");
-            return;
-
-        case GAPIType::OpenGL:
-            if (!AllOf<ACShaderResource_OpenGL>())
-            {
-                auto& shader = Emplace<ACShaderResource_OpenGL>().Shader;
-                const auto& core = GetCore();
-
-                shader.SpecificationID = core.SpecificationID;
-                shader.Create(core.ShaderSource.c_str());
-            }
-            return;
-        }
-    }
-
     void ShaderUser::UnloadFromCPU() const
     {
         auto& core = Get<ACShaderCore>();

@@ -45,21 +45,8 @@ namespace fe
 	public:
 		ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
 
-		template <GAPIType::ValueType GAPI>
-		auto& GetResourceComponent()
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACShaderResource_OpenGL>();
-		}
-
-		template <GAPIType::ValueType GAPI>
-		auto& CreateResourceComponent()
-		{ 
-			if constexpr (GAPI == GAPIType::OpenGL) return Emplace<ACShaderResource_OpenGL>();
-		}
-
 		bool LoadMetadata();
 
-		void SendDataToGPU(GAPIType GAPI, void* data);
 		void UnloadFromCPU() const;
 		void Release() const;
 

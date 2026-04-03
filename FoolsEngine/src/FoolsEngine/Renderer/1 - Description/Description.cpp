@@ -30,7 +30,9 @@ namespace fe::Description
 		}
 	}
 
-	static UInt CreateDefaultVertexLayout()
+	UInt Buffer::Vertex::LayoutID = -1;
+
+	UInt Buffer::Vertex::CreateDefaultVertexLayout()
 	{
 		auto& lib = Library::Get();
 		auto alloc = (TypedAlloc<MonotonicAlloc>*) & lib.m_AllocPermanent;
@@ -61,11 +63,35 @@ namespace fe::Description
 		return id;
 	}
 
+
+	UInt Buffer::Vertex::GetLayoutID()
+	{
+		return LayoutID;
+	}
+
 	const Buffer::Layout& Buffer::Vertex::GetLayout()
 	{
-		const static Buffer::Layout& layout = Library::Get().BufferLayouts[CreateDefaultVertexLayout()];
+		const static Buffer::Layout& layout = Library::Get().BufferLayouts[LayoutID];
 
 		return layout;
+	}
+
+	Library::Library() :
+		m_AllocPermanent(),
+		m_AllocGPA(),
+		m_AllocGPA_STD_PMR(&m_AllocGPA),
+
+		UUIDToIDMap(&m_AllocGPA_STD_PMR)
+	{
+		TextureArchetypes.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		BufferLayouts.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		FramebufferSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		TextureSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		UniformBufferSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		ShaderSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		ProgramSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+
+		Buffer::Vertex::CreateDefaultVertexLayout();
 	}
 
 	UInt Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)

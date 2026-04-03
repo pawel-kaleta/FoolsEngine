@@ -37,27 +37,9 @@ namespace fe
 	class Texture2DObserver : public AssetInterface
 	{
 	public:
-		const ACTexture2DCore& GetCoreComponent() const { return Get<ACTexture2DCore>(); }
-
-		template <GAPIType::ValueType GAPI>
-		const auto& GetResourceComponent() const
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACTexture2DResource_OpenGL>();
-		}
+		const ACTexture2DCore& GetCore() const { return Get<ACTexture2DCore>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
-
-		uint32_t GetGAPIResourceID(GAPIType gapi)
-		{
-			switch (gapi)
-			{
-			case GAPIType::OpenGL:
-				return GetResourceComponent<GAPIType::OpenGL>().Texture.OpenGLID;
-			default:
-				FE_CORE_ASSERT(false, "Unrecognised GAPIType");
-			}
-		}
-
 
 	protected:
 		Texture2DObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -66,23 +48,10 @@ namespace fe
 	class Texture2DUser : public Texture2DObserver
 	{
 	public:
-		ACTexture2DCore& GetCoreComponent() const { return Get<ACTexture2DCore>(); }
-		
-		template <GAPIType::ValueType GAPI>
-		auto& GetResourceComponent() const
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Get<ACTexture2DResource_OpenGL>();
-		}
-
-		template <GAPIType::ValueType GAPI>
-		auto& CreateResourceComponent() const
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) return Emplace<ACTexture2DResource_OpenGL>();
-		}
+		ACTexture2DCore& GetCore() const { return Get<ACTexture2DCore>(); }
 
 		bool LoadMetadata();
 
-		bool SendDataToGPU(GAPIType GAPI) const;
 		void UnloadFromCPU() const;
 		void Release() const;
 

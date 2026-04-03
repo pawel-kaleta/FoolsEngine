@@ -35,12 +35,6 @@ namespace fe
 		~ACMaterialCore() { if (UniformsData) operator delete(UniformsData); }
 	};
 
-	struct ACGPUData final : public AssetComponent
-	{
-		Resource::StaticBufferBase* Buffer;
-		size_t Offset;
-	};
-
 	class MaterialObserver : public AssetInterface
 	{
 	public:
@@ -64,7 +58,7 @@ namespace fe
 	class MaterialUser : public MaterialObserver
 	{
 	public:
-		ACMaterialCore& GetCoreComponent() const { return Get<ACMaterialCore>(); }
+		ACMaterialCore& GetCore() const { return Get<ACMaterialCore>(); }
 
 		void MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const;
 
@@ -80,7 +74,6 @@ namespace fe
 		void ResetUniformValueToDefault(ACMaterialCore& dataComponent, const Description::Buffer::Element& uniform) const;
 
 		bool SendDataToGPU(GAPIType GAPI) const;
-		bool SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const;
 		void Release() const;
 		void UnloadFromCPU() const { };
 	protected:

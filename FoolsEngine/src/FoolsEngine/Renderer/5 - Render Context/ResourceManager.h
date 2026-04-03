@@ -44,20 +44,20 @@ namespace fe
 	struct ResourceManagerOpenGL final : public ResourceManager
 	{
 
-		void SendDataToGPU(AssetUser<Shader		 >& assetUser);
-		void SendDataToGPU(AssetUser<ShadingModel>& assetUser);
-		void SendDataToGPU(AssetUser<Texture2D	 >& assetUser);
-		void SendDataToGPU(AssetUser<Material	 >& assetUser);
-		void SendDataToGPU(AssetUser<Mesh		 >& assetUser);
-		void SendDataToGPU(AssetUser<RenderMesh	 >& assetUser);
-		void SendDataToGPU(AssetUser<Model		 >& assetUser);
+		bool SendDataToGPU(AssetUser<Shader		 >& assetUser);
+		bool SendDataToGPU(AssetUser<ShadingModel>& assetUser);
+		bool SendDataToGPU(AssetUser<Texture2D	 >& assetUser);
+		bool SendDataToGPU(AssetUser<Material	 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
+		bool SendDataToGPU(AssetUser<Mesh		 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
+		bool SendDataToGPU(AssetUser<RenderMesh	 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
+		bool SendDataToGPU(AssetUser<Model		 >& assetUser, Resource::StaticBuffer_OpenGL* buffer, uint32_t offset);
 
-		void ReleaseDataFromGPU(AssetUser<Shader      >& assetUser);
-		void ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser);
-		void ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser);
-		void ReleaseDataFromGPU(AssetUser<Material    >& assetUser);
-		void ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser);
-		void ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser);
-		void ReleaseDataFromGPU(AssetUser<Model       >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<Shader      >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<ShadingModel>& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<Texture2D   >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<Material    >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<Mesh        >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<RenderMesh  >& assetUser);
+		bool ReleaseDataFromGPU(AssetUser<Model       >& assetUser);
 	};
 }

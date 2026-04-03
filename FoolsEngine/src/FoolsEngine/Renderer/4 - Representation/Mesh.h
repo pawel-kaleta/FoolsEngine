@@ -45,7 +45,7 @@ namespace fe
 
 	struct ACMeshBindings_OpenGL final : public AssetComponent
 	{
-		Resource::MeshBindings_OpenGL VertexArray;
+		Resource::MeshBindings_OpenGL MeshBindings;
 	};
 
 	class MeshObserver : public AssetInterface
@@ -55,7 +55,7 @@ namespace fe
 
 		const ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
 
-		const ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
+		const ACMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACMeshBindings_OpenGL>(); }
 
 		size_t GetGPUDataSize() const { return Get<ACMeshCore>().DataSize(); }
 
@@ -70,12 +70,11 @@ namespace fe
 		ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
 
 		ACGPUBuffer* GetBuffer() const { return GetIfExist<ACGPUBuffer>(); }
-		ACGPUVertexArray* GetVertexArray() const { return GetIfExist<ACGPUVertexArray>(); }
+		ACMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACMeshBindings_OpenGL>(); }
 		
 		void Release() const;
 
 		bool SendDataToGPU(GAPIType GAPI) const;
-		bool SendDataToGPUInternal(GAPIType GAPI, Resource::StaticBufferBase* buffer, uint32_t offset) const;
 		void UnloadFromCPU() const;
 
 	protected:
