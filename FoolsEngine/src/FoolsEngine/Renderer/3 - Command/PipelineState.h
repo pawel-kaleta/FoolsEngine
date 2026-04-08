@@ -2,85 +2,51 @@
 
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 #include "FoolsEngine/Renderer/1 - Description/Pipeline.h"
-#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
-#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
-#include "FoolsEngine/Renderer/2 - Resource/FrameBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RTexture.h"
+#include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
+#include "FoolsEngine/Renderer/2 - Resource/RFrameBuffer.h"
 
 namespace fe::Command
 {
 	namespace PipelineState
 	{
-		namespace Vulkan
-		{
-			//void BindVertexArray(const Resource::VertexArray_Vulkan& vertexBinding);
-		}
+		template <GAPIType::ValueType GAPI> void BindFramebuffer(const Resource::RFramebuffer<GAPI>& framebuffer);
+		template <GAPIType::ValueType GAPI> void BindMeshBindings(const Resource::RMeshBindings<GAPI>& meshBindings);
+		template <GAPIType::ValueType GAPI> void BindTextureToRendererTextureSlot(U32 rendererTextureSlot, const Resource::RTexture<GAPI>& texture);
+		template <GAPIType::ValueType GAPI> void SetDepthTest(bool enable);
+		template <GAPIType::ValueType GAPI> void SetDepthTestType(Description::Pipeline::DepthTestType type);
+		template <GAPIType::ValueType GAPI> void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination);
+		template <GAPIType::ValueType GAPI> void SetBlending(bool enable);
+		template <GAPIType::ValueType GAPI> void SetViewport(U32 x, U32 y, U32 width, U32 height);
 
-		namespace OpenGL
-		{
-			void BindVertexArray(const Resource::VertexArray_OpenGL& vertexBinding);
 
-			void BindTextureToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::Texture_OpenGL& texture);
+		// Vulkan
+		template <> void BindFramebuffer<GAPIType::Vulkan>(const Resource::RFramebuffer<GAPIType::Vulkan>& framebuffer);
 
-			void SetDepthTest(bool enable);
+		// OpenGL
+		template <> void BindFramebuffer<GAPIType::OpenGL>(	const Resource::RFramebuffer<GAPIType::OpenGL>	& framebuffer);
+		inline		void BindFramebuffer_OpenGL(			const Resource::RFramebuffer_OpenGL				& framebuffer) { BindFramebuffer<GAPIType::OpenGL>(framebuffer); };
+		
+		template <> void BindMeshBindings<GAPIType::OpenGL>(const Resource::RMeshBindings<GAPIType::OpenGL>	& meshBindings);
+		inline		void BindMeshBindings_OpenGL(			const Resource::RMeshBindings_OpenGL			& meshBindings) { BindMeshBindings<GAPIType::OpenGL>(meshBindings); };
+		
+		template <> void BindTextureToRendererTextureSlot<GAPIType::OpenGL>(U32 rendererTextureSlot, const Resource::RTexture<GAPIType::OpenGL>	& texture);
+		inline		void BindTextureToRendererTextureSlot_OpenGL(			U32 rendererTextureSlot, const Resource::RTexture_OpenGL			& texture) { BindTextureToRendererTextureSlot<GAPIType::OpenGL>(rendererTextureSlot, texture); };
 
-			void SetDepthTestType(Description::Pipeline::DepthTestType type);
+		template <> void SetDepthTest<GAPIType::OpenGL>(bool enable);
+		inline		void SetDepthTest_OpenGL(bool enable) { SetDepthTest<GAPIType::OpenGL>(enable); }
 
-			void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination);
+		template <> void SetDepthTestType<GAPIType::OpenGL>(Description::Pipeline::DepthTestType type);
+		inline		void SetDepthTestType_OpenGL(			Description::Pipeline::DepthTestType type) { SetDepthTestType<GAPIType::OpenGL>(type); }
 
-			void SetBlending(bool enable);
+		template <> void SetBlendFunction<GAPIType::OpenGL>(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination);
+		inline		void SetBlendFunction_OpenGL(			Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination) { SetBlendFunction<GAPIType::OpenGL>( source, destination); }
+		
+		template <> void SetBlending<GAPIType::OpenGL>(	bool enable);
+		inline		void SetBlending_OpenGL(			bool enable) { SetBlending<GAPIType::OpenGL>(enable); }
 
-			void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+		template <> void SetViewport<GAPIType::OpenGL>(	U32 x, U32 y, U32 width, U32 height);
+		inline		void SetViewport_OpenGL(			U32 x, U32 y, U32 width, U32 height) { SetViewport<GAPIType::OpenGL>(x, y, width, height); }
 
-			void BindFramebuffer(const Resource::Framebuffer_OpenGL& framebuffer);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void BindVertexArray(const Resource::VertexArrayBase& vertexBinding)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindVertexArray(*(Resource::VertexArray_OpenGL*)&vertexBinding);
-			//if constexpr (GAPI == GAPIType::Vulkan) Vulkan::BindVertexArray(*(Resource::VertexArray_Vulkan*)&vertexBinding);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void BindTextureToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::TextureBase& texture)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindTextureToRendererTextureSlot(rendererTextureSlot , *(Resource::Texture_OpenGL*)&texture);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void SetDepthTest(bool enable)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetDepthTest(enable);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void SetDepthTestType(Description::Pipeline::DepthTestType type)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetDepthTestType(type);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void SetBlending(bool enable)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetBlending(enable);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetBlendFunction(source, destination);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::SetViewport(x, y, width, height);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void BindFramebuffer(const Resource::FramebufferBase& framebuffer)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::BindFramebuffer((const Resource::Framebuffer_OpenGL &)  framebuffer);
-		}
 	}
 }

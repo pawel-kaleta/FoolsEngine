@@ -7,7 +7,7 @@ namespace fe
 	class MallocAlloc : public Allocator
 	{
 	public:
-		virtual Splice<Byte> Allocate(UInt bytes) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes) override final
 		{
 			Splice<Byte> result;
 			result.Elements = (Byte*) operator new (bytes);
@@ -15,20 +15,26 @@ namespace fe
 
 			return result;
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final
 		{
-			FE_CORE_ASSERT(alignment > 8, "MallocAllocator does not align to anything more then 8");
-			return Allocate(bytes); //we dont allign, because delete() takes alignment and we dont require it in interface
+			//FE_CORE_ASSERT(alignment > 8, "MallocAllocator does not align to anything more then 8");
+			//return AllocateRaw(bytes); //we dont allign, because delete() takes alignment and we dont require it in interface
+
+			Splice<Byte> result;
+			result.Elements = (Byte*) operator new (bytes, (std::align_val_t)alignment);
+			result.Count = bytes;
+
+			return result;
 		}
-		virtual void Deallocate(Splice<Byte> memReg) override final { operator delete (memReg.Elements); }
+		virtual void DeallocateRaw(Splice<Byte> memReg) override final { operator delete (memReg.Elements); }
 
 		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* Allocate() { return Allocate(Size, Alignment); }
+		Array<Byte, Size>* AllocateRaw() { return AllocateRaw(Size, Alignment); }
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt bytes) { return Allocate(bytes, Alignment); }
+		Splice<Byte> AllocateRaw(UInt bytes) { return AllocateRaw(bytes, Alignment); }
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr) { operator delete (ptr); }
+		void DeallocateRaw(Byte* ptr) { operator delete (ptr); }
 	};
 }

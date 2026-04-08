@@ -1,8 +1,8 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/2 - Resource/Program.h"
-#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RProgram.h"
+#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
 
 namespace fe::Resource
 {
@@ -13,16 +13,11 @@ namespace fe::Resource
 		for (UInt i = 0; i < spec.ColorAttachments.Count; ++i)
 		{
 			auto& attachment = spec.ColorAttachments[i];
-			if (attachment.Name.Length != name.Length)
-				continue;
-
-			if (!std::memcmp(attachment.Name.Data, name.Data, name.Length))
-				continue;
-
-			return i;
+			if (CompareStringsEqual(attachment.Name, name))
+				return i;
 		}
 
-		FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer", name);
+		FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer", name.CData());
 		return 0;
 	}
 }

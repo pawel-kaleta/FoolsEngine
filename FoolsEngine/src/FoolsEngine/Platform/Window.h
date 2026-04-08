@@ -44,6 +44,5 @@ namespace fe
 		virtual void* GetNativeWindow() const = 0;
 
 		GAPIType m_GAPI = GAPIType::None;
-		RenderContext* m_RenderContext;
 	};
 }

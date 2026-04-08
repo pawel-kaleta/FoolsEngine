@@ -15,7 +15,7 @@ namespace fe
 		const Byte* End() const { return Buffer.Elements + Buffer.Count; }
 		bool IsFull() const { return Free == End(); }
 
-		virtual Splice<Byte> Allocate(UInt bytes) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes) override final
 		{
 			Splice<Byte> memReg;
 			memReg.Count = bytes;
@@ -29,7 +29,7 @@ namespace fe
 			Free = new_free;
 			return memReg;
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final
 		{
 			Splice<Byte> memReg;
 			memReg.Count = bytes;
@@ -43,10 +43,10 @@ namespace fe
 			Free = new_free;
 			return memReg;
 		}
-		virtual void Deallocate(Splice<Byte> memReg) override final { FE_CORE_ASSERT(DoesOwn(memReg.Elements), "ArenaAllocator does not own this memory"); }
+		virtual void DeallocateRaw(Splice<Byte> memReg) override final { FE_CORE_ASSERT(DoesOwn(memReg.Elements), "ArenaAllocator does not own this memory"); }
 	
 		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* Allocate()
+		Array<Byte, Size>* AllocateRaw()
 		{
 			Byte* allocation = AlignTo<Alignment>(Free);
 			Byte* new_free = allocation + Size;
@@ -60,7 +60,7 @@ namespace fe
 		}
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt bytes)
+		Splice<Byte> AllocateRaw(UInt bytes)
 		{
 			Splice<Byte> memReg;
 			memReg.Count = bytes;
@@ -76,7 +76,7 @@ namespace fe
 		}
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(DoesOwn(ptr), "ArenaAllocator does not own this memory"); }
+		void DeallocateRaw(Byte* ptr) { FE_CORE_ASSERT(DoesOwn(ptr), "ArenaAllocator does not own this memory"); }
 
 		bool DoesOwn(Splice<Byte> memReg) const { return DoesOwn(memReg.Elements); }
 		bool DoesOwn(Byte* ptr) const

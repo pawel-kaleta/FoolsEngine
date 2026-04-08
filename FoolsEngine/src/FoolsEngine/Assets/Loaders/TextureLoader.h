@@ -5,7 +5,7 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
-#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
 
 #include <string>
 

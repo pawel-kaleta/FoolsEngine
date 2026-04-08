@@ -13,7 +13,7 @@
 int main(int argc, char** argv);
 namespace fe
 {
-	struct OpenGLRenderContext;
+	struct RenderContext_OpenGL;
 
 	namespace Events
 	{
@@ -65,7 +65,7 @@ namespace fe
 		LayerStack*			m_LayerStack;
 
 		Window*					m_Window;
-		OpenGLRenderContext*	m_RenderContext;
+		RenderContext_OpenGL*	m_RenderContext;
 		PlatformBase*			m_PlatformBase;
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;

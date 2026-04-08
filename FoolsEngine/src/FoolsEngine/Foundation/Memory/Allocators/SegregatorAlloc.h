@@ -11,21 +11,21 @@ namespace fe
 		SmallAllocator m_SmallAllocator;
 		BigAllocator m_BigAllocator;
 
-		virtual Splice<Byte> Allocate(UInt bytes) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes) override final
 		{
 			if (bytes <= threshold)
 				return m_SmallAllocator.Allocate(bytes);
 
 			return m_BigAllocator.Allocate(bytes);
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final
 		{
 			if (bytes <= threshold)
 				return m_SmallAllocator.Allocate(bytes, alignment);
 
 			return m_BigAllocator.Allocate(bytes, alignment);
 		}
-		virtual void Deallocate(Splice<Byte> memReg) override final
+		virtual void DeallocateRaw(Splice<Byte> memReg) override final
 		{
 			if (memReg.Count <= threshold)
 				m_SmallAllocator.Deallocate(memReg);
@@ -34,7 +34,7 @@ namespace fe
 		}
 
 		template <UInt Size, UInt Alignment = 8>
-		Array<Byte, Size>* Allocate()
+		Array<Byte, Size>* AllocateRaw()
 		{
 			if constexpr (Size <= threshold)
 				return m_SmallAllocator.Allocate<Size, Alignment>();
@@ -43,10 +43,10 @@ namespace fe
 		}
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt bytes) { return Allocate(bytes, Alignment); }
+		Splice<Byte> AllocateRaw(UInt bytes) { return Allocate(bytes, Alignment); }
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
+		void DeallocateRaw(Byte* ptr)
 		{
 			if constexpr (Size <= threshold)
 				return m_SmallAllocator.Deallocate<Size>(ptr);

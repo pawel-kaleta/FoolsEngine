@@ -64,23 +64,24 @@ namespace fe
 
 			const auto& lib = Description::Library::Get();
 			{
-				auto& program = shading_model_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
-
-				//shader_observer.Bind(GAPI);
-				FE_CORE_ASSERT(false, "Bind program and textures!");
-
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection", VP_matrix_ptr);
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform", model_transform_ptr);
-				
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir",  main_light_dir);
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor", main_light_color);
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity",  main_light_intensity);
-				
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight", ambient_light);
-
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition", camera_position);
-				
-				Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID", &ID);
+				FE_CORE_ASSERT(false, "not implemented");
+				//auto& program = shading_model_observer.GetResource<GAPIType::OpenGL>().Program;
+				//
+				////shader_observer.Bind(GAPI);
+				//FE_CORE_ASSERT(false, "Bind program and textures!");
+				//
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection", VP_matrix_ptr);
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform", model_transform_ptr);
+				//
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir",  main_light_dir);
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor", main_light_color);
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity",  main_light_intensity);
+				//
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight", ambient_light);
+				//
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition", camera_position);
+				//
+				//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID", &ID);
 			}
 
 			mesh_observer.Draw(material_observer);
@@ -113,19 +114,20 @@ namespace fe
 
 			AssetObserver<ShadingModel> cutout_sm_observer(Renderer::BaseAssets.ShadingModels.Base3DCutout.GetID());
 
-			auto& program = cutout_sm_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
-
-			//cutout_shader_observer.Bind(GAPI);
-			FE_CORE_ASSERT(false, "Bind program and textures!");
-
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection",		VPmatrixPtr);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir",			main_light_dir);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor",		main_light_color);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity",	main_light_intensity);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight",			ambient_light);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLightIntensity",	ambient_light_intensity);
-			
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition",		camera_position);
+			FE_CORE_ASSERT(false, "not implemented");
+			//auto& program = cutout_sm_observer.GetResource<GAPIType::OpenGL>().Program;
+			//
+			////cutout_shader_observer.Bind(GAPI);
+			//FE_CORE_ASSERT(false, "Bind program and textures!");
+			//
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection",		VPmatrixPtr);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir",			main_light_dir);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor",		main_light_color);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity",	main_light_intensity);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight",			ambient_light);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLightIntensity",	ambient_light_intensity);
+			//
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition",		camera_position);
 
 
 			for (auto ID : view_of_CModelView_components)
@@ -155,8 +157,9 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform",	model_transform_ptr);
-						Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID",			&ID);
+						FE_CORE_ASSERT(false, "not implemented");
+						//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform",	model_transform_ptr);
+						//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID",			&ID);
 
 						mesh_observer.Draw(material_observer);
 					}
@@ -169,18 +172,19 @@ namespace fe
 
 			AssetObserver<ShadingModel> opaque_sm_observer(Renderer::BaseAssets.ShadingModels.Base3DOpaque.GetID());
 
-			auto& program = opaque_sm_observer.GetResourceComponent<GAPIType::OpenGL>().Program;
-
-			//opaque_shader_observer.Bind(GAPI);
-			FE_CORE_ASSERT(false, "Bind program and textures!");
-
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection"			, VPmatrixPtr);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir"			, main_light_dir);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor"			, main_light_color);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity"		, main_light_intensity);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight"			, ambient_light);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLightIntensity"	, ambient_light_intensity);
-			Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition"			, camera_position);
+			FE_CORE_ASSERT(false, "not implemented");
+			//auto& program = opaque_sm_observer.GetResource<GAPIType::OpenGL>().Program;
+			//
+			////opaque_shader_observer.Bind(GAPI);
+			//FE_CORE_ASSERT(false, "Bind program and textures!");
+			//
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ViewProjection"			, VPmatrixPtr);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightDir"			, main_light_dir);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightColor"			, main_light_color);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_MainLightIntensity"		, main_light_intensity);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLight"			, ambient_light);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_AmbientLightIntensity"	, ambient_light_intensity);
+			//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_CameraPosition"			, camera_position);
 
 
 			for (auto ID : view_of_CModelView_components)
@@ -210,8 +214,9 @@ namespace fe
 						FE_PROFILER_SCOPE("Mesh");
 
 						AssetObserver<Mesh> mesh_observer(rendermesh_core.MeshID);
-						Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform", model_transform_ptr);
-						Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID", &ID);
+						FE_CORE_ASSERT(false, "not implemented");
+						//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_ModelTransform", model_transform_ptr);
+						//Command::ResourceState::UploadUniform<GAPIType::OpenGL>((Resource::ProgramBase&)program, "u_EntityID", &ID);
 
 						mesh_observer.Draw(material_observer);
 					}

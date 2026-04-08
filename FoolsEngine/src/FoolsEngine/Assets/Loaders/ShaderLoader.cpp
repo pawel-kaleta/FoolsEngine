@@ -4,7 +4,7 @@
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
 
 #include <glad/glad.h>
 
@@ -26,11 +26,12 @@ namespace fe
 		auto& shader_core = shaderUser.GetCore();
 		auto& shader_source = shader_core.ShaderSource;
 		
-		in.seekg(0, std::ios::end);
-		shader_source.resize(in.tellg());
-		in.seekg(0, std::ios::beg);
-		in.read(&shader_source[0], shader_source.size());
-		in.close();
+		FE_CORE_ASSERT(false, "not implemented");
+		//in.seekg(0, std::ios::end);
+		//shader_source.resize(in.tellg());
+		//in.seekg(0, std::ios::beg);
+		//in.read(&shader_source[0], shader_source.size());
+		//in.close();
 
 		return;
 	}

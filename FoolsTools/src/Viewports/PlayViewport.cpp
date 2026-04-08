@@ -15,7 +15,7 @@ namespace fe
 		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
 		//m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 
-		m_Framebuffer.reset(new Resource::Framebuffer_OpenGL());
+		m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
 
 		auto& lib = Description::Library::Get();
 		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
@@ -23,7 +23,8 @@ namespace fe
 		framebuffer_spec.Width = 1;
 		framebuffer_spec.Height = 1;
 		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
-		framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
+		FE_CORE_ASSERT(false, "not implemented");
+		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
 
 		m_Framebuffer->Create();
 
@@ -51,7 +52,7 @@ namespace fe
 		}
 		else
 		{
-			Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*m_Framebuffer);
+			Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
 			Command::ResourceState::Clear<GAPIType::OpenGL>();
 		}
 		
@@ -92,7 +93,7 @@ namespace fe
 
 		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
 		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
-		GLuint attachment_id = static_cast<Resource::Framebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
+		GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
 		ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();

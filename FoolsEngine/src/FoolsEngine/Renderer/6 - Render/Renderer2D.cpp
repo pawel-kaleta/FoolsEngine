@@ -11,13 +11,13 @@
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
 #include "FoolsEngine/Renderer/3 - Command/Render.h"
 #include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
 #include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
-#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
-#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/5 - Representation/Material.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 #include <glad/glad.h>
@@ -39,7 +39,7 @@ namespace fe
 
 		Scratchpad sp;
 
-		s_Instance->m_QuadVertexBuffer.reset(new Resource::StaticBuffer_OpenGL());
+		s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
 		s_Instance->m_QuadVertexBuffer->Usage = Description::Buffer::Usage::Vertex;
 		s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
 		s_Instance->m_QuadVertexBuffer->Create();
@@ -48,12 +48,13 @@ namespace fe
 		auto& layout = *Description::Library::Get().BufferLayouts.PushBack();
 
 		layout.Type = Description::Buffer::LayoutType::Vertex;
-		layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");
-		layout.Elements.emplace_back(Description::Data::Type::Float4, "a_Color");
-		layout.Elements.emplace_back(Description::Data::Type::Float2, "a_TexCoord");
-		layout.Elements.emplace_back(Description::Data::Type::Float,  "a_TilingFactor");
-		layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_TextureSampler");
-		layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_EntityID");
+		FE_CORE_ASSERT(false, "not implemented");
+		//layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");
+		//layout.Elements.emplace_back(Description::Data::Type::Float4, "a_Color");
+		//layout.Elements.emplace_back(Description::Data::Type::Float2, "a_TexCoord");
+		//layout.Elements.emplace_back(Description::Data::Type::Float,  "a_TilingFactor");
+		//layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_TextureSampler");
+		//layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_EntityID");
 
 		layout.CalculateOffsetsAndStride();
 
@@ -76,13 +77,14 @@ namespace fe
 			}
 		}
 
-		s_Instance->m_QuadIndexBuffer.reset(new Resource::StaticBuffer_OpenGL());
+		s_Instance->m_QuadIndexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
 		s_Instance->m_QuadIndexBuffer->Usage = Description::Buffer::Usage::Index;
 		s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
 		s_Instance->m_QuadIndexBuffer->Create();
-		s_Instance->m_QuadIndexBuffer->Upload(ConstLimits::MaxIndices, quad_indices->data());
+		FE_CORE_ASSERT(false, "not implemented");
+		//s_Instance->m_QuadIndexBuffer->Replace(ConstLimits::MaxIndices, quad_indices->data());
 
-		s_Instance->m_VertexArray.reset(new Resource::VertexArray_OpenGL());
+		s_Instance->m_VertexArray.reset(new Resource::RMeshBindings_OpenGL());
 		s_Instance->m_VertexArray->LayoutID = layoutID;
 		s_Instance->m_VertexArray->Create();
 		s_Instance->m_VertexArray->BindIndexBuffer(*s_Instance->m_QuadIndexBuffer, 0, 0);
@@ -239,7 +241,7 @@ namespace fe
 		float aspect_ratio;
 		{
 			auto texture_observer = quad.Texture.Observe();
-			auto& spec = texture_observer.GetCoreComponent().Specification;
+			auto& spec = texture_observer.GetCore().Specification;
 			aspect_ratio = (float)spec.Height / (float)spec.Width;
 		}
 
@@ -285,21 +287,23 @@ namespace fe
 		// propably C-style array would look cleaner here then std::array
 		uint32_t data_size = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
 
-		m_QuadVertexBuffer->Upload(data_size, m_Batch.QuadVertices->data());
+		FE_CORE_ASSERT(false, "not implemented");
+		//m_QuadVertexBuffer->Update(data_size, m_Batch.QuadVertices->data());
 
 		auto GAPI = Renderer::GetActiveGAPIType();
 
 		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{
 			auto user = AssetUser<Texture2D>(m_Batch.Textures[i]);
-			auto texture_resource = user.GetResourceComponent<GAPIType::OpenGL>().Texture;
-			Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(i, texture_resource);
+			FE_CORE_ASSERT(false, "not implemented");
+			//auto texture_resource = user.GetResource<GAPIType::OpenGL>().Texture;
+			//Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(i, texture_resource);
 		}
 
 		m_VertexArray->IndexCount = m_Batch.QuadIndexCount;
-		Command::PipelineState::BindVertexArray<GAPIType::OpenGL>(*m_VertexArray);
+		Command::PipelineState::BindMeshBindings_OpenGL(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
 
-		Command::Render::DrawIndexed<GAPIType::OpenGL>(*m_VertexArray);
+		Command::Render::DrawIndexed(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
 
 		m_Stats.Quads += m_Batch.QuadIndexCount / 3 / 2;
 		m_Stats.DrawCalls++;

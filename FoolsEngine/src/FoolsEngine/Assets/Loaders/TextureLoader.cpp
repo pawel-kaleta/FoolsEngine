@@ -16,12 +16,12 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data_location = textureUser.GetCoreComponent().Data;
+		auto& data_location = textureUser.GetCore().Data;
 		if (data_location)
 			return;
 
 		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.GetCoreComponent().Specification;
+		auto& spec = textureUser.GetCore().Specification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk

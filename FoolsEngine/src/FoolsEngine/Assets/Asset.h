@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Application/UUID.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
 
 #include <entt/entity/registry.hpp>
 #include <entt/entity/handle.hpp>
@@ -103,8 +103,8 @@ namespace fe
 		bool ActiveUser = false; //TODO: make this a shared_mutex
 	};
 
-	struct ACGPUBuffer final : public AssetComponent
+	struct ACGPUBuffer_OpenGL final : public AssetComponent
 	{
-		Resource::StaticBuffer_OpenGL Buffer;
+		Resource::RStaticBuffer_OpenGL Buffer;
 	};
 }

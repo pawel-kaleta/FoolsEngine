@@ -28,7 +28,7 @@ namespace fe
 		static Byte* s_MaxFree;
 #endif // FE_INTERNAL_BUILD
 
-		virtual Splice<Byte> Allocate(UInt bytes) final override
+		virtual Splice<Byte> AllocateRaw(UInt bytes) final override
 		{
 			Splice<Byte> result;
 
@@ -56,7 +56,7 @@ namespace fe
 
 			return result;
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) final override
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) final override
 		{
 			Splice<Byte> result;
 
@@ -84,14 +84,14 @@ namespace fe
 
 			return result;
 		}
-		virtual void Deallocate(Splice<Byte> memReg) final override
+		virtual void DeallocateRaw(Splice<Byte> memReg) final override
 		{
 			bool is_at_front = s_Free == memReg.Elements + memReg.Count;
 			s_Free = (Byte*)((UInt)memReg.Elements * is_at_front + (UInt)s_Free * !is_at_front);
 		}
 
 		template <UInt Size, UInt Alignment>
-		Splice<Byte> Allocate()
+		Splice<Byte> AllocateRaw()
 		{
 			Splice<Byte> result;
 
@@ -121,7 +121,7 @@ namespace fe
 		}
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt size)
+		Splice<Byte> AllocateRaw(UInt size)
 		{
 			Splice<Byte> result;
 
@@ -151,11 +151,12 @@ namespace fe
 		}
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
+		void DeallocateRaw(Byte* ptr)
 		{
 			bool is_at_front = s_Free == ptr + Size;
 			s_Free = (Byte*)((UInt)ptr * is_at_front + (UInt)s_Free * !is_at_front);
 		}
+
 
 		PileBase() :
 			m_Begin(s_Free),

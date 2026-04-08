@@ -9,7 +9,7 @@
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine/Renderer/4 - Representation/Material.h"
+#include "FoolsEngine/Renderer/5 - Representation/Material.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
@@ -206,8 +206,9 @@ namespace fe
 				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);
-					auto& texture = texture_user.CreateResourceComponent<GAPIType::OpenGL>().Texture;
-					texture_user.SendDataToGPU(GAPI);
+					FE_CORE_ASSERT(false, "not implemented");
+					//auto& texture = texture_user.CreateResource<GAPIType::OpenGL>().Texture;
+					//texture_user.SendDataToGPU(GAPI);
 					texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}

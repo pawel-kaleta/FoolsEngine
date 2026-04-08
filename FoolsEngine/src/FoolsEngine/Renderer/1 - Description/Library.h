@@ -49,6 +49,7 @@ namespace fe::Description
 		static void Init()
 		{
 			s_Library = new Library();
+			Buffer::Vertex::CreateDefaultVertexLayout();
 		}
 
 		UInt CreateOrGetDescriptorWithUUID_Texture(UUID uuid);

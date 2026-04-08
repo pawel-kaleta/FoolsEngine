@@ -22,7 +22,7 @@ namespace fe
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
         AssetUser<Texture2D> asset_user(assetID);
         FE_CORE_ASSERT(false, "This is broken by renderer redesign");
-        asset_user.GetCoreComponent().Specification.ArchetypeID = importData->Description.ArchetypeID;
+        asset_user.GetCore().Specification.ArchetypeID = importData->Description.ArchetypeID;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         YAML::Emitter emitter;

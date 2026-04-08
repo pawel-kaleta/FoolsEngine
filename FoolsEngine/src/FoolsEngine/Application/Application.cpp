@@ -15,7 +15,7 @@
 #include "FoolsEngine/Platform/Win32/Win32Window.h"
 					 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/5 - Render Context/RenderContext.h"
+#include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 					 
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
@@ -89,14 +89,16 @@ namespace fe
 
 			{
 				FE_PROFILER_SCOPE("RenderContext");
-				m_RenderContext = StableAllocs::Permanent->Allocate<OpenGLRenderContext>();
+				Description::Library::Init();
+
+				m_RenderContext = StableAllocs::Permanent->Allocate<RenderContext_OpenGL>();
 				m_RenderContext->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("Window");
 				Win32Window* window = StableAllocs::Permanent->Allocate<Win32Window>();
-				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, m_RenderContext);
+				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, m_RenderContext->BaseWindow);
 				m_PlatformBase->SetEventCallbacks(window);
 				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
 				m_Window = window;

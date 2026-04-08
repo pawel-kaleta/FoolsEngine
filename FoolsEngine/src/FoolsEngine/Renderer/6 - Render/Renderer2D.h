@@ -6,10 +6,10 @@
 
 #include "FoolsEngine/Assets/AssetHandle.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
-#include "FoolsEngine/Renderer/2 - Resource/StaticBuffer.h"
-#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
+#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
+#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
 
 namespace fe
 {
@@ -80,7 +80,7 @@ namespace fe
 
 		Ref<Resource::StaticBufferBase> m_QuadVertexBuffer;
 		Ref<Resource::StaticBufferBase> m_QuadIndexBuffer;
-		Ref<Resource::VertexArrayBase> m_VertexArray;
+		Ref<Resource::MeshBindingsBase> m_VertexArray;
 		//Ref<VertexBuffer> m_QuadVertexBuffer;
 
 		BatchData m_Batch;

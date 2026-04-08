@@ -2,12 +2,12 @@
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/StableAllocs.h"
 
-
-namespace fe::StableAllocs
+namespace fe
 {
-	MallocAlloc*	GeneralPurpose	= new MallocAlloc();
-	MonotonicAlloc*	Permanent		= new MonotonicAlloc();
+	TypedAlloc<MallocAlloc>*	StableAllocs::GeneralPurpose	= (TypedAlloc<MallocAlloc>*) new MallocAlloc();
+	TypedAlloc<MonotonicAlloc>* StableAllocs::Permanent			= (TypedAlloc<MonotonicAlloc>*) new MonotonicAlloc();
 }
 
 namespace fe::Context

@@ -7,13 +7,16 @@
 class PageAllocator;
 class VirtualAllocator;
 
-namespace fe::StableAllocs
+namespace fe
 {
-	extern TypedAlloc<MallocAlloc>* GeneralPurpose;
-	extern TypedAlloc<MonotonicAlloc>* Permanent;
+	struct StableAllocs
+	{
+		static TypedAlloc<MallocAlloc>* GeneralPurpose;
+		static TypedAlloc<MonotonicAlloc>* Permanent;
 
-	extern PageAllocator* Page;
-	extern VirtualAllocator* Virtual;
-	
-	void GetExlusiveArena() {};
+		static PageAllocator* Page;
+		static VirtualAllocator* Virtual;
+
+		void GetExlusiveArena() {};
+	};
 }

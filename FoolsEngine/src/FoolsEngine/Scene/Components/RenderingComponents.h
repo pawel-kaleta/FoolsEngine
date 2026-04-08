@@ -2,7 +2,7 @@
 
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
 
 namespace fe
 {

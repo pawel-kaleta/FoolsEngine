@@ -12,11 +12,11 @@
 #include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/4 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/4 - Representation/Model.h"
-#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/4 - Representation/Material.h"
-#include "FoolsEngine/Renderer/4 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/5 - Representation/Model.h"
+#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/5 - Representation/Material.h"
+#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
 
 #include <type_traits>
 
@@ -63,7 +63,7 @@ namespace fe
 
 		bool modified = false;
 
-		auto& shading_model_current = materialUser.GetCoreComponent().ShadingModelID;
+		auto& shading_model_current = materialUser.GetCore().ShadingModelID;
 		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
 		{
 			bool is_selected;
@@ -94,7 +94,7 @@ namespace fe
 		AssetObserver<ShadingModel> shading_model_observer(shading_model_current);
 
 		auto& sm_core_component = shading_model_observer.GetCore();
-		auto& material_core_component = materialUser.GetCoreComponent();
+		auto& material_core_component = materialUser.GetCore();
 
 		const auto& lib = Description::Library::Get();
 		const auto& program_spec = lib.ProgramSpecs[sm_core_component.ProgramSpecificationID];
@@ -106,7 +106,7 @@ namespace fe
 				modified = true;
 		}
 
-		for (size_t i=0; i<material_core_component.TextureIDs.size(); i++)
+		for (size_t i=0; i<material_core_component.TextureIDs.Count; i++)
 		{
 			auto& textureID = material_core_component.TextureIDs[i];
 			
@@ -170,8 +170,8 @@ namespace fe
 			const auto& library = Description::Library::Get();
 			const auto& program_spec = library.ProgramSpecs[sm_core_component.ProgramSpecificationID];
 			const auto& texture_sampler = library.TextureSamplers[program_spec.TextureSamplerIDs[i]];
-			Pile p;
-			ImGui::Text(texture_sampler.Name.GetCString(&p).Data);
+
+			ImGui::Text(texture_sampler.Name.CData());
 
 			ImGui::PopID();
 		}

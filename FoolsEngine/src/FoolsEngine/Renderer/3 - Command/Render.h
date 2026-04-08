@@ -1,29 +1,20 @@
 #pragma once
 
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/2 - Resource/Texture.h"
-#include "FoolsEngine/Renderer/2 - Resource/VertexArray.h"
+#include "FoolsEngine/Renderer/2 - Resource/RTexture.h"
+#include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
 
 namespace fe::Command
 {
 	namespace Render
 	{
-		namespace Vulkan
-		{
-			//void DrawIndexed(const Resource::VertexArray_Vulkan& vertexArray) {}
-		}
+		template <GAPIType::ValueType GAPI> void DrawIndexed(const Resource::RMeshBindings<GAPI>& meshBindings);
 
-		namespace OpenGL
-		{
-			void DrawIndexed(const Resource::VertexArray_OpenGL& vertexArray);
-		}
-
-		template<GAPIType::ValueType GAPI>
-		void DrawIndexed(const Resource::VertexArrayBase& vertexArray)
-		{
-			if constexpr (GAPI == GAPIType::OpenGL) OpenGL::DrawIndexed(*(Resource::VertexArray_OpenGL*)&vertexArray);
-			//if constexpr (GAPI == GAPIType::Vulkan) Vulkan::DrawIndexed(*(Resource::VertexArray_Vulkan*)&vertexArray);
-		}
-
+		//Vulkan
+		//template <> void DrawIndexed<GAPIType::Vulkan>(const Resource::RMeshBindings<GAPIType::Vulkan>& meshBindings) {}
+		
+		//OpenGL
+		template <> void DrawIndexed<GAPIType::OpenGL>(	const Resource::RMeshBindings<GAPIType::OpenGL>	& meshBindings);
+		inline		void DrawIndexed_OpenGL(			const Resource::RMeshBindings_OpenGL			& meshBindings) { DrawIndexed<GAPIType::OpenGL>(meshBindings); }
 	}
 }

@@ -1,28 +1,22 @@
-21:58:21:876250 | FE  | info     | Logging innitialized!
-21:58:21:878236 | App | info     | Logging innitialized!
-21:58:21:878335 | FE  | info     | /////////////////////////////////////////////////////
-21:58:21:878412 | FE  | info     | ////////////////////// STARTUP //////////////////////
-21:58:21:878485 | FE  | info     | /////////////////////////////////////////////////////
-21:58:21:878808 | FE  | info     | Profiler session 'Startup' started.
-21:58:21:879495 | FE  | info     | Initializing GLFW
-21:58:21:958349 | FE  | info     | Creating Window FoolsTools (1900, 1000)
-21:58:22:215562 | FE  | info     | Setting events callbacks for window:
-21:58:22:215931 | FE  | info     | 	WindowResizeEvent
-21:58:22:216019 | FE  | info     | 	WindowCloseEvent
-21:58:22:216136 | FE  | info     | 	WindowFocusChangeEvents
-21:58:22:216218 | FE  | info     | 	KeyEvents
-21:58:22:216311 | FE  | info     | 	KeyTypedEvent
-21:58:22:216399 | FE  | info     | 	MouseButtonEvents
-21:58:22:216484 | FE  | info     | 	MouseScrolledEvent
-21:58:22:216579 | FE  | info     | 	MouseMovedEvent
-21:58:22:216850 | FE  | info     | Creating rendering context
-21:58:22:220285 | FE  | info     | Rendering platform info:
-21:58:22:220390 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-21:58:22:220481 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-21:58:22:220564 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-21:58:22:220740 | FE  | info     | OpenGL Rendering Context created
-21:58:22:221632 | FE  | info     | VSync disabled.
-21:58:22:224022 | FE  | info     | New outer layer "ApplicationLayer" added to LayerStack
-21:58:22:225219 | FE  | info     | New outer layer "ImGuiLayer" added to LayerStack
-21:58:22:239939 | FE  | trace    | NEW EVENT: EventType::WindowLostFocus
-21:58:28:134730 | FE  | trace    | NEW EVENT: EventType::WindowGainedFocus
+07:39:34:852887 | FE  | info     | Logging innitialized!
+07:39:34:853673 | App | info     | Logging innitialized!
+07:39:34:853772 | FE  | info     | /////////////////////////////////////////////////////
+07:39:34:853850 | FE  | info     | ////////////////////// STARTUP //////////////////////
+07:39:34:853923 | FE  | info     | /////////////////////////////////////////////////////
+07:39:34:854231 | FE  | info     | Profiler session 'Startup' started.
+07:39:35:082042 | FE  | info     | Rendering platform info:
+07:39:35:082758 | FE  | info     | 	Vendor:		ATI Technologies Inc.
+07:39:35:082873 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
+07:39:35:082962 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
+07:39:35:083160 | FE  | info     | OpenGL Rendering Context created
+07:39:35:132931 | FE  | info     | Setting events callbacks:
+07:39:35:133074 | FE  | info     | 	WindowResizeEvent
+07:39:35:133187 | FE  | info     | 	WindowCloseEvent
+07:39:35:133278 | FE  | info     | 	WindowFocusChangeEvents
+07:39:35:133362 | FE  | info     | 	KeyEvents
+07:39:35:133450 | FE  | info     | 	KeyTypedEvent
+07:39:35:133546 | FE  | info     | 	MouseButtonEvents
+07:39:35:133632 | FE  | info     | 	MouseScrolledEvent
+07:39:35:133713 | FE  | info     | 	MouseMovedEvent
+07:39:35:134222 | FE  | error    | CORE ASSERTION FAILED: in file Renderer2D.cpp in function void __cdecl fe::Renderer2D::Init(void) at line 51.
+07:39:35:135576 | FE  | error    | Assertion Message: not implemented

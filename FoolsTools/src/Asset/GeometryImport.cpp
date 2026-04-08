@@ -204,74 +204,83 @@ namespace fe::GeometryImport
 
 		auto full_texture_path = importData->FilepathToImport.parent_path() / std::filesystem::path(filePath.C_Str());
 
-		auto& texture_core = texture_handle.Use().GetCoreComponent();
+		auto& texture_core = texture_handle.Use().GetCore();
 		auto& spec = texture_core.Specification;
 		FE_CORE_ASSERT(false, "This is broken by renderer redesign");
 		//spec = TextureLoader::InspectTexture(full_texture_path);
 		//texture_core.Usage = usage;
 		AssetManager::SetSourcePath(textureID, filePath.C_Str());
-		materialUser.SetTexture(core, textureSlotName, textureID);
+		FE_CORE_ASSERT(false, "not implemented");
+		//materialUser.SetTexture(core, textureSlotName, textureID);
 	}
 
 	static void CreateBaseMaterial(const AssetUser<Material>& materialUser, GeometryImport::MaterialData& materialData, const ImportData* const importData)
 	{
-		auto& core = materialUser.GetCoreComponent();
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::Roughness)
-			materialUser.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::Metalness)
-			materialUser.SetUniformValue(core, "u_Metalness", &materialData.Uniforms.Metalness);
-
-		if (materialData.DetectedProperties & DetectedMaterialProperties::Ambient)
-			materialUser.SetUniformValue(core, "u_AO", &materialData.Uniforms.Ambient);
+		auto& core = materialUser.GetCore();
+		FE_CORE_ASSERT(false, "not implemented");
+		//if (materialData.DetectedProperties & DetectedMaterialProperties::Roughness)
+		//	materialUser.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
+		//
+		//if (materialData.DetectedProperties & DetectedMaterialProperties::Metalness)
+		//	materialUser.SetUniformValue(core, "u_Metalness", &materialData.Uniforms.Metalness);
+		//
+		//if (materialData.DetectedProperties & DetectedMaterialProperties::Ambient)
+		//	materialUser.SetUniformValue(core, "u_AO", &materialData.Uniforms.Ambient);
 
 		auto& all = *materialData.DetectedTextures;
 		auto& recognized = materialData.RecognizedTextures;
 
 		if (recognized.BaseColor != -1)
 			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData, Description::Texture::Usage::Map_BaseColor);
-		else
-			materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
+		FE_CORE_ASSERT(false, "not implemented");
+		//else
+		//	materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
 
 		auto& texture_packing = importData->GeometryData.GLTFTexturePacking;
-		materialUser.SetUniformValue(core, "u_ORMTexturePacking", (void*)&texture_packing);
+		FE_CORE_ASSERT(false, "not implemented");
+		//materialUser.SetUniformValue(core, "u_ORMTexturePacking", (void*)&texture_packing);
 
 		if (texture_packing)
 		{
 			if (recognized.PackedORM != -1)
 				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData, Description::Texture::Usage::Map_ORM);
-			else
-				materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
+			FE_CORE_ASSERT(false, "not implemented"); 
+			//else
+			//	materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
-			materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
-			materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
-			materialUser.SetTexture(core, "u_AOMap", NullAssetID);
+			//materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
+			//materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
+			//materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 		else
 		{
-			materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
+			FE_CORE_ASSERT(false, "not implemented");
+			//materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Roughness != -1)
 				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData, Description::Texture::Usage::Map_Roughness);
-			else
-				materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
+			FE_CORE_ASSERT(false, "not implemented");
+			//else
+			//	materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Metalness != -1)
 				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData, Description::Texture::Usage::Map_Metalness);
-			else
-				materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
+			FE_CORE_ASSERT(false, "not implemented"); 
+			//else
+			//	materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Occlusion != -1)
 				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData, Description::Texture::Usage::Map_AO);
-			else
-				materialUser.SetTexture(core, "u_AOMap", NullAssetID);
+			FE_CORE_ASSERT(false, "not implemented"); 
+			//else
+			//	materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 
 		if (recognized.Normal != -1)
 			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData, Description::Texture::Usage::Map_Normal);
-		else
-			materialUser.SetTexture(core, "u_NormalMap", NullAssetID);
+		FE_CORE_ASSERT(false, "not implemented"); 
+		//else
+		//	materialUser.SetTexture(core, "u_NormalMap", NullAssetID);
 	}
 
 	static void ImportAsModel(const std::filesystem::path& filepath, const ImportData* const importData)
@@ -303,15 +312,16 @@ namespace fe::GeometryImport
 				auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
 
 				AssetUser<Material> material_user(material_ID);
-				auto& material_core = material_user.GetCoreComponent();
+				auto& material_core = material_user.GetCore();
 
 				if (material_data.AlphaMode == AlphaMode::Opaque)
 				{
 					material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 					CreateBaseMaterial(material_user, material_data, importData);
 
-					if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
-						material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+					FE_CORE_ASSERT(false, "not implemented");
+					//if (material_data.DetectedProperties & DetectedMaterialProperties::BaseColor)
+					//	material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
 				}
 				else
 				{
@@ -324,10 +334,11 @@ namespace fe::GeometryImport
 						base_color = { material_data.Uniforms.BaseColor, 1.f };
 					if (material_data.DetectedProperties & DetectedMaterialProperties::Opacity)
 						base_color.a = material_data.Uniforms.Opacity;
-					material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
-
-					if (material_data.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
-						material_user.SetUniformValue(material_core, "u_AlphaCutOff", &material_data.Uniforms.AlphaCutoff);
+					FE_CORE_ASSERT(false, "not implemented");
+					//material_user.SetUniformValue(material_core, "u_BaseColor", &material_data.Uniforms.BaseColor);
+					//
+					//if (material_data.DetectedProperties & DetectedMaterialProperties::AlphaCutoff)
+					//	material_user.SetUniformValue(material_core, "u_AlphaCutOff", &material_data.Uniforms.AlphaCutoff);
 				}
 			}
 

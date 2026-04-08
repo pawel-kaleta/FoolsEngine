@@ -2,20 +2,21 @@
 #include "Win32Window.h"
 
 #include "FoolsEngine/Platform/Events/Event.h"
+#include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
 
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
 
 namespace fe
 {
-	Win32Window::Win32Window(const WindowAttributes& attr, RenderContext* renderContext)
+	Win32Window::Win32Window(const WindowAttributes& attr, GLFWwindow* nativeWindow)
 	{
 		FE_PROFILER_FUNC();
 		
 		m_GAPI = attr.GAPI;
-		m_RenderContext = renderContext;
-		Init(attr);
+		Init(attr, nativeWindow);
 	}
 
 	Win32Window::~Win32Window()
@@ -38,7 +39,7 @@ namespace fe
 		}
 	}
 
-	void Win32Window::Init(const WindowAttributes& attr)
+	void Win32Window::Init(const WindowAttributes& attr, GLFWwindow* nativeWindow)
 	{
 		FE_PROFILER_FUNC();
 
@@ -47,18 +48,19 @@ namespace fe
 		m_Data.Height = attr.Height;
 
 		// window creation
-		{
-			FE_PROFILER_SCOPE("GLFW_CreateWindow");
-			FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
-
-#ifdef FE_INTERNAL_BUILD
-			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
-#endif // FE_INTERNAL_BUILD
-
-			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
-		}		
-
-		glfwSetWindowUserPointer(m_Window, &m_Data);
+		//{
+		//	FE_PROFILER_SCOPE("GLFW_CreateWindow");
+		//	FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
+		//
+		//	#ifdef FE_INTERNAL_BUILD
+		//	glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
+		//	#endif // FE_INTERNAL_BUILD
+		//
+		//	m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
+		//}		
+		m_Window = nativeWindow;
+		glfwShowWindow(nativeWindow);
+		glfwSetWindowUserPointer(nativeWindow, &m_Data);
 	}
 
 	void Win32Window::ShutDown()

@@ -4,11 +4,11 @@
 
 namespace fe::Command
 {
-	namespace Render::OpenGL
+	namespace Render
 	{
-		void DrawIndexed(const Resource::VertexArray_OpenGL& vertexArray)
+		template <> void DrawIndexed<GAPIType::OpenGL>(const Resource::RMeshBindings<GAPIType::OpenGL>& meshBindings)
 		{
-			glDrawElements(GL_TRIANGLES, vertexArray.IndexCount, GL_UNSIGNED_INT, (const void *)(uint64_t)vertexArray.IndexOffset);
+			glDrawElements(GL_TRIANGLES, meshBindings.IndexCount, GL_UNSIGNED_INT, (const void *)(UInt)meshBindings.IndexOffset);
 		}
 	}
 }

@@ -14,15 +14,15 @@
 #include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
 #include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/Framebuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
 #include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
 #include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
-#include "FoolsEngine/Renderer/4 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/4 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/4 - Representation/RenderMesh.h"
-#include "FoolsEngine/Renderer/4 - Representation/Material.h"
-#include "FoolsEngine/Renderer/4 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/4 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/5 - Representation/Material.h"
+#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
 #include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
 #include "FoolsEngine/Renderer/6 - Render/GeometryRenderer.h"
 
@@ -113,9 +113,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		BaseAssets.Textures.Default.Use().CreateResourceComponent<GAPIType::OpenGL>();
-		BaseAssets.Textures.FlatWhite.Use().CreateResourceComponent<GAPIType::OpenGL>();
-		BaseAssets.Textures.FlatBlack.Use().CreateResourceComponent<GAPIType::OpenGL>();
+		FE_CORE_ASSERT(false, "not implemented");
+		//BaseAssets.Textures.Default.Use().CreateResource<GAPIType::OpenGL>();
+		//BaseAssets.Textures.FlatWhite.Use().CreateResource<GAPIType::OpenGL>();
+		//BaseAssets.Textures.FlatBlack.Use().CreateResource<GAPIType::OpenGL>();
 
 		FE_CORE_ASSERT(false, "base shaders compilation and linking for shading models not implemented");
 
@@ -168,11 +169,16 @@ namespace fe
 
 	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer)
 	{
-		Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(framebuffer);
+		Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*(Resource::RFramebuffer_OpenGL*)&framebuffer);
 
 		String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
-		int attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
-		Command::ResourceState::ClearAttachment<GAPIType::OpenGL>(framebuffer, attachment_index, (uint32_t)NullEntityID);
+		auto attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
+
+		U32 clearing_val = NullEntityID;
+		Splice<U32> clearing_val_splice;
+		clearing_val_splice.Elements = &clearing_val;
+		clearing_val_splice.Count = 1;
+		framebuffer.ClearAttachment(attachment_index, clearing_val_splice);
 
 		RenderScene(scene, camera, cameraTransform);
 	}
@@ -200,8 +206,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		Command::ResourceState::Clear<GAPIType::OpenGL>();
-
+		Command::ResourceState::Clear_OpenGL();
+		
 		switch (s_ActiveGAPI.Value)
 		{
 		case GAPIType::OpenGL:

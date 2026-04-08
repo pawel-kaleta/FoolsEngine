@@ -17,7 +17,7 @@ namespace fe
 		//true is free
 		U64 m_BitMapping = 0;
 
-		virtual Splice<Byte> Allocate(UInt bytes) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes) override final
 		{
 			Splice<Byte> result;
 
@@ -38,7 +38,7 @@ namespace fe
 
 			return result;
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) override final
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final
 		{
 			Splice<Byte> result;
 
@@ -59,7 +59,7 @@ namespace fe
 
 			return result;
 		}
-		virtual void Deallocate(Splice<Byte> memReg) override final
+		virtual void DeallocateRaw(Splice<Byte> memReg) override final
 		{
 			FE_CORE_ASSERT(DoesOwn(memReg), "This BitmappedPoolAllocator does not own this MemReg");
 
@@ -69,7 +69,7 @@ namespace fe
 		}
 
 		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* Allocate()
+		Array<Byte, Size>* AllocateRaw()
 		{
 			static_assert(Alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
 			static_assert(Size > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
@@ -77,14 +77,14 @@ namespace fe
 		}
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt size)
+		Splice<Byte> AllocateRaw(UInt size)
 		{
 			static_assert(Alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
 			return Allocate(size, Alignment);
 		}
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
+		void DeallocateRaw(Byte* ptr)
 		{
 			static_assert(Size > memRegSize, "Oversized deallocation in BitmappedPoolAllocator!");
 			FE_CORE_ASSERT(DoesOwn(ptr), "This BitmappedPoolAllocator does not own this MemReg");

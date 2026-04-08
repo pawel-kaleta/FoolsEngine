@@ -11,7 +11,7 @@ namespace fe
 		Primary m_Primary;
 		Fallback m_Fallback;
 
-		virtual Splice<Byte> Allocate(UInt bytes) final override
+		virtual Splice<Byte> AllocateRaw(UInt bytes) final override
 		{
 			Splice<Byte> mem_reg = m_Primary.Allocate(bytes);
 			if (!mem_reg.Elements)
@@ -19,7 +19,7 @@ namespace fe
 
 			return mem_reg;
 		}
-		virtual Splice<Byte> Allocate(UInt bytes, UInt alignment) final override
+		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) final override
 		{
 			Splice<Byte> mem_reg = m_Primary.Allocate(bytes, alignment);
 			if (!mem_reg.Data)
@@ -27,7 +27,7 @@ namespace fe
 
 			return mem_reg;
 		}
-		virtual void Deallocate(Splice<Byte> memReg) final override
+		virtual void DeallocateRaw(Splice<Byte> memReg) final override
 		{
 			if (m_Primary.DoesOwn(memReg))
 				m_Primary.Deallocate(memReg);
@@ -36,7 +36,7 @@ namespace fe
 		}
 
 		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* Allocate()
+		Array<Byte, Size>* AllocateRaw()
 		{
 			Array<Byte, Size>* result = m_Primary.Allocate<Size, Alignment>();
 			if (!result)
@@ -46,7 +46,7 @@ namespace fe
 		}
 
 		template <UInt Alignment>
-		Splice<Byte> Allocate(UInt bytes)
+		Splice<Byte> AllocateRaw(UInt bytes)
 		{
 			Splice<Byte> mem_reg = m_Primary.Allocate<Alignment>(bytes);
 			if (!mem_reg.Elements)
@@ -56,7 +56,7 @@ namespace fe
 		}
 
 		template <UInt Size>
-		void Deallocate(Byte* ptr)
+		void DeallocateRaw(Byte* ptr)
 		{
 			Splice<Byte> mem_reg;
 			mem_reg.Elements = ptr;

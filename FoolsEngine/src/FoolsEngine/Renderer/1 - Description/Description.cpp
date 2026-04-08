@@ -40,6 +40,7 @@ namespace fe::Description
 		UInt id = lib.BufferLayouts.Count;
 		auto& layout = *lib.BufferLayouts.PushBack();
 		
+		layout.Offsets.FromArray(alloc->Allocate<U32, 5>());
 		layout.Elements.FromArray(alloc->Allocate<Buffer::Element, 5>());
 
 		layout.Elements[0].Type = Data::Type::Float3;
@@ -91,7 +92,7 @@ namespace fe::Description
 		ShaderSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
 		ProgramSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
 
-		Buffer::Vertex::CreateDefaultVertexLayout();
+		
 	}
 
 	UInt Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)

@@ -93,20 +93,21 @@ namespace fe
 		auto& mesh_core_component = meshUser.GetCore();
 
 		auto& data_location = mesh_core_component.Data;
-		if (data_location)
+		if (data_location.Elements)
 		{
 			FE_LOG_CORE_WARN("Reloading mesh");
-			delete data_location;
+			delete data_location.Elements;
 		}
 
 		auto& spec = mesh_core_component.Specification;
 		
-		data_location = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
-		auto last = (float*)data_location + (mesh_core_component.DataSize() / sizeof(float));
-		uint32_t* first_index = (uint32_t*)data_location;
-		uint32_t* index_ptr = (uint32_t*)data_location;
-		Description::Buffer::Vertex* first_vertex_ptr = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
-		Description::Buffer::Vertex* vertex_ptr = first_vertex_ptr;
+		FE_CORE_ASSERT(false, "Not implemented");
+		//data_location = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
+		//auto last = (float*)data_location + (mesh_core_component.DataSize() / sizeof(float));
+		//uint32_t* first_index = (uint32_t*)data_location;
+		uint32_t* index_ptr;// = (uint32_t*)data_location;
+		Description::Buffer::Vertex* first_vertex_ptr;// = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
+		Description::Buffer::Vertex* vertex_ptr;// = first_vertex_ptr;
 
 		uint32_t index_offset = 0;
 
@@ -184,17 +185,17 @@ namespace fe
 			auto& core = mesh_user.GetCore();
 
 			auto& data_location = core.Data;
-			if (data_location)
+			if (data_location.Elements)
 			{
 				FE_LOG_CORE_WARN("Reloading mesh");
-				delete[] data_location;
+				delete[] data_location.Elements;
 			}
 
 			auto& spec = core.Specification;
 
-			data_location = (void*) new float[core.DataSize() / sizeof(float)];
+			//data_location = (void*) new float[core.DataSize() / sizeof(float)];
 
-			uint32_t* index_ptr = (uint32_t*)data_location;
+			uint32_t* index_ptr;// = (uint32_t*)data_location;
 			Description::Buffer::Vertex* vertex_ptr = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
 
 			auto& assimp_mesh = scene->mMeshes[i];

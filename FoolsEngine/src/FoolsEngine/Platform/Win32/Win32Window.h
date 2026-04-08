@@ -2,9 +2,9 @@
 
 #include "FoolsEngine/Platform/Window.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/FrameBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RFrameBuffer.h"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace fe
 {
@@ -13,7 +13,7 @@ namespace fe
 	class Win32Window : public Window
 	{
 	public:
-		Win32Window(const WindowAttributes& attr, RenderContext* renderContext);
+		Win32Window(const WindowAttributes& attr, GLFWwindow* nativeWindow);
 		~Win32Window() override;
 
 		virtual void OnUpdate() override;
@@ -41,7 +41,7 @@ namespace fe
 
 		WinData m_Data;
 
-		void Init(const WindowAttributes& attr);
+		void Init(const WindowAttributes& attr, GLFWwindow* nativeWindow);
 		void ShutDown();
 	};
 }

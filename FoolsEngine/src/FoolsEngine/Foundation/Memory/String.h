@@ -3,61 +3,62 @@
 #include "DataTypes.h"
 #include "Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
+#include "Splice.h"
 
 namespace fe
 {
-	struct CString
-	{
-		const char* Data = nullptr;
-		UInt LengthWithNull = 0;
-
-		void FromConstCharPtr(const char* string, UInt lengthWithNull)
-		{
-			Data = string;
-			LengthWithNull = lengthWithNull;
-		}
-
-		void FromConstCharPtr(const char* string)
-		{
-			Data = string;
-
-			auto current = string;
-			UInt size = 0;
-
-			while (*current != '\0')
-			{
-				size++;
-				current++;
-			}
-
-			LengthWithNull = size + 1;
-		}
-	};
+	//struct CString
+	//{
+	//	const char* Data = nullptr;
+	//	UInt LengthWithNull = 0;
+	//
+	//	bool IsValid() const { return (UInt)Data * LengthWithNull; }
+	//	bool IsEmpty() const { return LengthWithNull > 1; }
+	//
+	//	void FromConstCharPtr(const char* string, UInt lengthWithNull)
+	//	{
+	//		Data = string;
+	//		LengthWithNull = lengthWithNull;
+	//	}
+	//
+	//	void FromConstCharPtr(const char* string)
+	//	{
+	//		Data = string;
+	//
+	//		auto current = string;
+	//		UInt size = 0;
+	//
+	//		while (*current != '\0')
+	//		{
+	//			size++;
+	//			current++;
+	//		}
+	//
+	//		LengthWithNull = size + 1;
+	//	}
+	//};
 
 	struct String
 	{
-		const char8_t* Data = nullptr;
-		UInt Length = 0;
+		Splice<char8_t> Buffer;
 
-		template <class tnAllocator>
-		CString GetCString(tnAllocator* alloc) const
-		{
-			Splice<char> mem_reg = alloc->Allocate<char>(Length + 1);
-			std::memcpy(mem_reg.Elements, Data, Length);
-			mem_reg.Elements[Length] = '\0';
-			return *(CString*) & mem_reg;
-		}
+		const	char8_t* Data() const	{ return Buffer.Elements; }
+				char8_t* Data()			{ return Buffer.Elements; }
+		const char* CData() const { return (const char*)Buffer.Elements; }
+
+		//without null
+		UInt Length() const { return Buffer.Count - 1; }
+
+		bool IsValid() const { return Data(); }
+		bool IsEmpty() const { return Length(); }
+
+		String() = default;
+		String(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
 		{
-			Data = (const char8_t*)string;
-			Length = lengthWithNull - 1;
-		}
-
-		void FromCString(CString* string)
-		{
-			Data = (const char8_t*)string->Data;
-			Length = string->LengthWithNull - 1;
+			Buffer.Elements = (char8_t*)string;
+			Buffer.Count = lengthWithNull;
 		}
 
 		void FromSplice(Splice<char8_t> splice) { *this = *(String*)&splice; }
@@ -66,10 +67,10 @@ namespace fe
 
 	inline bool CompareStringsEqual(String a, String b)
 	{
-		if (a.Length != b.Length)
+		if (a.Buffer.Count != b.Buffer.Count)
 			return false;
 
-		return ! std::memcmp(a.Data, b.Data, a.Length);
+		return ! std::memcmp(a.Data(), b.Data(), a.Buffer.Count);
 	}
 
 	struct StringBuilder
@@ -87,11 +88,12 @@ namespace fe
 
 		void Append(String string)
 		{
-			if (Buffer.Count < Count + string.Length)
-				ReserveAtLeast(Count + string.Length);
+			UInt Required_capacity = Count + string.Length();
+			if (Buffer.Count < Required_capacity)
+				ReserveAtLeast(Required_capacity);
 
-			std::memcpy(&Buffer[Count], string.Data, string.Length);
-			Count += string.Length;
+			std::memcpy(&Buffer[Count], string.Data(), string.Length());
+			Count += string.Length();
 		}
 
 		void Append(const char* ptr)
@@ -113,39 +115,30 @@ namespace fe
 		}
 
 		template <class tnAllocator>
-		CString GetCString(tnAllocator* alloc) const
-		{
-			Splice<char> mem_reg = alloc->Allocate<char>(Count + 1);
-			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
-			mem_reg.Elements[Count] = '\0';
-			return *(CString*)&mem_reg;
-		}
-
-		template <class tnAllocator>
 		String GetCString(tnAllocator* alloc) const
 		{
-			Splice<char> mem_reg = alloc->Allocate<char>(Count);
+			Splice<char8_t> mem_reg = alloc->Allocate<char8_t>(Count+1);
 			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
-			mem_reg.Elements[Count] = '\0';
-			return *(CString*)&mem_reg;
+			mem_reg.Elements[Count] = u8'\0';
+			return *(String*)&mem_reg;
 		}
 
-		void ReserveExact(UInt capacity)
+		void ReserveExact(UInt capacityWithoutNull)
 		{
-			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
-			RelocateToNewCapacity(capacity);
+			FE_CORE_ASSERT(capacityWithoutNull+1 > Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
+			RelocateToNewCapacity(capacityWithoutNull+1);
 		}
 
-		void ReserveAtLeast(UInt capacity)
+		void ReserveAtLeast(UInt capacityWithoutNull)
 		{
-			FE_CORE_ASSERT(capacity <= Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacityWithoutNull > Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
 
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
 			new_capacity = any_capacity ? new_capacity : 8;
 
-			bool default_better = new_capacity > capacity;
-			new_capacity = default_better ? new_capacity : capacity;
+			bool default_better = new_capacity > capacityWithoutNull+1;
+			new_capacity = default_better ? new_capacity : capacityWithoutNull+1;
 
 			RelocateToNewCapacity(new_capacity);
 		}

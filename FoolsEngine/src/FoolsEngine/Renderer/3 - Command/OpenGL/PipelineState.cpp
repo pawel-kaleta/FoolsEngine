@@ -5,19 +5,26 @@
 
 namespace fe::Command
 {
-	namespace PipelineState::OpenGL
+	namespace PipelineState
 	{
-		void BindVertexArray(const Resource::VertexArray_OpenGL& vertexBinding)
+		template <> void BindFramebuffer<GAPIType::OpenGL>(const Resource::RFramebuffer<GAPIType::OpenGL>& framebuffer)
 		{
-			glBindVertexArray(vertexBinding.OpenGLID);
+			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.OpenGLID);
+			const auto& spec = Description::Library::Get().FramebufferSpecs[framebuffer.SpecificationID];
+			glViewport(0, 0, spec.Width, spec.Height); // ??-> SetViewport()
 		}
 
-		void BindTextureToRendererTextureSlot(uint32_t rendererTextureSlot, const Resource::Texture_OpenGL& texture)
+		template <> void BindMeshBindings<GAPIType::OpenGL>(const Resource::RMeshBindings<GAPIType::OpenGL>& meshBindings)
+		{
+			glBindVertexArray(meshBindings.OpenGLID);
+		}
+
+		template <> void BindTextureToRendererTextureSlot<GAPIType::OpenGL>(U32 rendererTextureSlot, const Resource::RTexture<GAPIType::OpenGL>& texture)
 		{
 			glBindTextureUnit(rendererTextureSlot, texture.OpenGLID);
 		}
 
-		void SetDepthTest(bool enable)
+		template <> void SetDepthTest<GAPIType::OpenGL>(bool enable)
 		{
 			if (enable)
 				glEnable(GL_DEPTH_TEST);
@@ -25,13 +32,20 @@ namespace fe::Command
 				glDisable(GL_DEPTH_TEST);
 		}
 
-		void SetDepthTestType(Description::Pipeline::DepthTestType type)
+		template <> void SetDepthTestType<GAPIType::OpenGL>(Description::Pipeline::DepthTestType type)
 		{
 			GLenum func = Resource::Utils::DepthTestTypeToGLEnum(type);
 			glDepthFunc(func);
 		}
 
-		void SetBlending(bool enable)
+		template <> void SetBlendFunction<GAPIType::OpenGL>(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination)
+		{
+			GLenum source_factor = Resource::Utils::BlendFunctionToGLEnum(source);
+			GLenum destination_factor = Resource::Utils::BlendFunctionToGLEnum(source);
+			glBlendFunc(source_factor, destination_factor);
+		}
+
+		template <> void SetBlending<GAPIType::OpenGL>(bool enable)
 		{
 			if (enable)
 				glEnable(GL_BLEND);
@@ -39,23 +53,9 @@ namespace fe::Command
 				glDisable(GL_BLEND);
 		}
 
-		void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination)
-		{
-			GLenum source_factor = Resource::Utils::BlendFunctionToGLEnum(source);
-			GLenum destination_factor = Resource::Utils::BlendFunctionToGLEnum(source);
-			glBlendFunc(source_factor, destination_factor);
-		}
-
-		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+		template <> void SetViewport<GAPIType::OpenGL>(U32 x, U32 y, U32 width, U32 height)
 		{
 			glViewport(x, y, width, height); // ??-> BindFramebuffer()
-		}
-
-		void BindFramebuffer(const Resource::Framebuffer_OpenGL& framebuffer)
-		{
-			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.OpenGLID);
-			const auto& spec = Description::Library::Get().FramebufferSpecs[framebuffer.SpecificationID];
-			glViewport(0, 0, spec.Width, spec.Height); // ??-> SetViewport()
 		}
 	}
 }

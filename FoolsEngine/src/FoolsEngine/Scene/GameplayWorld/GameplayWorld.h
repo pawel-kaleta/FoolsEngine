@@ -7,7 +7,7 @@
 #include "FoolsEngine/Scene/World.h"
 #include "FoolsEngine/Scene/SimulationStage.h"
 
-#include "FoolsEngine/Renderer/4 - Representation/Lights.h"
+#include "FoolsEngine/Renderer/5 - Representation/Lights.h"
 
 namespace fe
 {
