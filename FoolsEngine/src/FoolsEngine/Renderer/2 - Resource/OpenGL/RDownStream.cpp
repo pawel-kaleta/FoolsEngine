@@ -7,7 +7,7 @@
 
 namespace fe::Resource
 {
-	void RDownStream<GAPIType::OpenGL>::Create(UInt capacity)
+	void RDownStream_OpenGL::Create(UInt capacity)
 	{
 		auto default_alloc = Context::Allocators::Default;
 		auto auxilary_alloc = Context::Allocators::Auxiliary;
@@ -33,13 +33,13 @@ namespace fe::Resource
 		Capacity = aligned_capacity;
 	}
 
-	void RDownStream<GAPIType::OpenGL>::Destroy()
+	void RDownStream_OpenGL::Destroy()
 	{
 		FE_LOG_CORE_ERROR("DownStream_OpenGL::Destroy not implemented yet -> memory leak");
 		glDeleteBuffers(1, &OpenGLBuffer);
 	}
 
-	void RDownStream<GAPIType::OpenGL>::BeginRegion()
+	void RDownStream_OpenGL::BeginRegion()
 	{
 		auto& new_fence = * BackFences.PushBack();
 		new_fence.OpenGLFence = nullptr;
@@ -53,7 +53,7 @@ namespace fe::Resource
 		region.Size = 0;
 	}
 
-	void RDownStream<GAPIType::OpenGL>::PushData(Splice<Byte> data)
+	void RDownStream_OpenGL::PushData(Splice<Byte> data)
 	{
 		auto& region = Regions[Regions.Count];
 		UInt push_size = data.Count;
@@ -84,7 +84,7 @@ namespace fe::Resource
 		region.Size += push_size;
 	}
 
-	StreamRegion* RDownStream<GAPIType::OpenGL>::EndRegion()
+	RStreamRegion* RDownStream_OpenGL::EndRegion()
 	{
 		auto& region = Regions[Regions.Count];
 		UInt aligned_size = ((region.Size + (Alignment - 1)) & ~(Alignment - 1));
@@ -98,7 +98,7 @@ namespace fe::Resource
 		return &region;
 	}
 
-	StreamRegion* RDownStream<GAPIType::OpenGL>::ReserveUncommitedRegion(UInt size)
+	RStreamRegion* RDownStream_OpenGL::ReserveUncommitedRegion(UInt size)
 	{
 		auto& new_fence = *BackFences.PushBack();
 		new_fence.OpenGLFence = nullptr;
@@ -118,13 +118,13 @@ namespace fe::Resource
 		return &region;
 	}
 
-	void RDownStream<GAPIType::OpenGL>::CommitRegion(StreamRegion* region)
+	void RDownStream_OpenGL::CommitRegion(RStreamRegion* region)
 	{
 		RStreamRegion_OpenGL* region_opengl = (RStreamRegion_OpenGL*)region;
 		glFlushMappedNamedBufferRange(OpenGLBuffer, region_opengl->Offset, region_opengl->Size);
 	}
 
-	void RDownStream<GAPIType::OpenGL>::RetireRegion(StreamRegion* region)
+	void RDownStream_OpenGL::RetireRegion(RStreamRegion* region)
 	{
 		UInt region_index;
 		for (UInt i = 0; i < Regions.Chunks.Count; i++)
@@ -149,7 +149,7 @@ namespace fe::Resource
 			fence_ptr->OpenGLFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 	}
 
-	void RDownStream<GAPIType::OpenGL>::EndFrame()
+	void RDownStream_OpenGL::EndFrame()
 	{
 		Pile p;
 #ifdef FE_INTERNAL_BUILD
@@ -173,7 +173,7 @@ namespace fe::Resource
 		PastBuffersToDestroy.Release();
 	}
 
-	bool RDownStream<GAPIType::OpenGL>::CheckFences(UInt pushSize)
+	bool RDownStream_OpenGL::CheckFences(UInt pushSize)
 	{
 		UInt new_offset = CurrentOffset + pushSize;
 
@@ -205,7 +205,7 @@ namespace fe::Resource
 		return false;
 	}
 
-	void RDownStream<GAPIType::OpenGL>::MakeNewBuffer(UInt pushSize)
+	void RDownStream_OpenGL::MakeNewBuffer(UInt pushSize)
 	{
 		auto& region = Regions[Regions.Count];
 		Byte* region_begin = CPUMemoryBegin + region.Offset;

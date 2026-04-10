@@ -11,7 +11,7 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	struct MeshBindingsBase
+	struct RMeshBindings
 	{
 		U32 LayoutID;
 		U32 VertexOffset;
@@ -22,24 +22,19 @@ namespace fe::Resource
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
 
-		virtual void BindVertexBuffer(const StaticBufferBase& buffer, UInt offset) = 0;
-		virtual void BindIndexBuffer(const StaticBufferBase& buffer, UInt offset, UInt indexCount) = 0;
+		virtual void BindVertexBuffer(const RStaticBuffer& buffer, UInt offset) = 0;
+		virtual void BindIndexBuffer(const RStaticBuffer& buffer, UInt offset, UInt indexCount) = 0;
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RMeshBindings;
-
-	template <>
-	struct RMeshBindings<GAPIType::OpenGL> final : public MeshBindingsBase
+	struct RMeshBindings_OpenGL final : public RMeshBindings
 	{
 		GLuint OpenGLID;
 
 		virtual void Create() override;
 		virtual void Delete() override;
 
-		virtual void BindVertexBuffer(const StaticBufferBase& buffer, UInt offset) override;
-		virtual void BindIndexBuffer(const StaticBufferBase& buffer, UInt offset, UInt indexCount) override;
+		virtual void BindVertexBuffer(const RStaticBuffer& buffer, UInt offset) override;
+		virtual void BindIndexBuffer(const RStaticBuffer& buffer, UInt offset, UInt indexCount) override;
 	};
 
-	using RMeshBindings_OpenGL = RMeshBindings<GAPIType::OpenGL>;
 }

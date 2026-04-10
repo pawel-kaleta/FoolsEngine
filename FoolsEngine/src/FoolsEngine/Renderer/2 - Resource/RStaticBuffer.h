@@ -9,7 +9,7 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	struct StaticBufferBase
+	struct RStaticBuffer
 	{
 		Buffer::Usage Usage;
 		U32 Size;
@@ -21,11 +21,7 @@ namespace fe::Resource
 		virtual void Update(UInt targetOffset, Splice<Byte> data) = 0;
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RStaticBuffer;
-
-	template<>
-	struct RStaticBuffer<GAPIType::OpenGL> final : public StaticBufferBase
+	struct RStaticBuffer_OpenGL final : public RStaticBuffer
 	{
 		GLuint OpenGLID;
 
@@ -35,6 +31,4 @@ namespace fe::Resource
 		virtual void Replace(Splice<Byte> data = Splice<Byte>()) override;
 		virtual void Update(UInt targetOffset, Splice<Byte> data) override;
 	};
-
-	using RStaticBuffer_OpenGL = RStaticBuffer<GAPIType::OpenGL>;
 }

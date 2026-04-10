@@ -11,7 +11,7 @@
 
 namespace fe::Resource
 {
-	void RProgram<GAPIType::OpenGL>::Create()
+	void RProgram_OpenGL::Create()
 	{
 		FE_PROFILER_FUNC();
 
@@ -79,11 +79,11 @@ namespace fe::Resource
 		}
 	}
 
-	void RProgram<GAPIType::OpenGL>::Destroy()
+	void RProgram_OpenGL::Destroy()
 	{
 		FE_PROFILER_FUNC();
 
-		glDeleteProgram(ProgramOpenGLID);
+		glDeleteProgram(OpenGLID);
 
 		Context::Allocators::Default->Deallocate(BindingLocations.MainUniforms);
 		Context::Allocators::Default->Deallocate(BindingLocations.TextureSamplers);

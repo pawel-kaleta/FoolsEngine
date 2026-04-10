@@ -18,10 +18,9 @@ namespace fe
 		void Init();
 	};
 
-	template <GAPIType::ValueType GAPI, UInt RenderContextID>
-	struct ACResource final : public AssetComponent
+	struct ACRShader_OpenGL final : public AssetComponent
 	{
-		Resource::RShader<GAPI> Shader;
+		Resource::RShader_OpenGL Shader;
 	};
 
 	class ShaderObserver : public AssetInterface
@@ -29,8 +28,7 @@ namespace fe
 	public:
 		const ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
 
-		template <GAPIType::ValueType GAPI, UInt RenderContextID>
-		const ACResource<GAPI, RenderContextID>* GetResource() const { return GetIfExist<ACResource<GAPI, RenderContextID>>(); }
+		const ACRShader_OpenGL* GetResource_OpenGL() const { return GetIfExist<ACRShader_OpenGL>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -43,8 +41,7 @@ namespace fe
 	public:
 		ACShaderCore& GetCore() const { return Get<ACShaderCore>(); }
 
-		template <GAPIType::ValueType GAPI, UInt RenderContextID>
-		ACResource<GAPI, RenderContextID>* GetResource() const { return GetIfExist<ACResource<GAPI, RenderContextID>>(); }
+		ACRShader_OpenGL* GetResource_OpenGL() const { return GetIfExist<ACRShader_OpenGL>(); }
 
 		bool LoadMetadata();
 

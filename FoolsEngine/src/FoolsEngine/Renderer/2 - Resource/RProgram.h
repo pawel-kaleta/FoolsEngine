@@ -11,7 +11,7 @@
 
 namespace fe::Resource
 {
-	struct ProgramBase
+	struct RProgram
 	{
 		U32 SpecificationID;
 
@@ -19,13 +19,9 @@ namespace fe::Resource
 		virtual void Destroy() = 0;
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RProgram;
-
-	template <>
-	struct RProgram<GAPIType::OpenGL> final : public ProgramBase
+	struct RProgram_OpenGL final : public RProgram
 	{
-		GLuint ProgramOpenGLID;
+		GLuint OpenGLID;
 		Splice<GLuint> ShaderOpenGLIDs;
 
 		struct
@@ -37,6 +33,4 @@ namespace fe::Resource
 		virtual void Create() override;
 		virtual void Destroy() override;
 	};
-
-	using RProgram_OpenGL = RProgram<GAPIType::OpenGL>;
 }

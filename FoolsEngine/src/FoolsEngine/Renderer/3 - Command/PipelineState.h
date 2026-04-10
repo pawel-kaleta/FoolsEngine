@@ -8,45 +8,27 @@
 
 namespace fe::Command
 {
-	namespace PipelineState
+	struct PipelineState
 	{
-		template <GAPIType::ValueType GAPI> void BindFramebuffer(const Resource::RFramebuffer<GAPI>& framebuffer);
-		template <GAPIType::ValueType GAPI> void BindMeshBindings(const Resource::RMeshBindings<GAPI>& meshBindings);
-		template <GAPIType::ValueType GAPI> void BindTextureToRendererTextureSlot(U32 rendererTextureSlot, const Resource::RTexture<GAPI>& texture);
-		template <GAPIType::ValueType GAPI> void SetDepthTest(bool enable);
-		template <GAPIType::ValueType GAPI> void SetDepthTestType(Description::Pipeline::DepthTestType type);
-		template <GAPIType::ValueType GAPI> void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination);
-		template <GAPIType::ValueType GAPI> void SetBlending(bool enable);
-		template <GAPIType::ValueType GAPI> void SetViewport(U32 x, U32 y, U32 width, U32 height);
+		virtual void BindFramebuffer(const Resource::RFramebuffer& framebuffer) = 0;
+		virtual void BindMeshBindings(const Resource::RMeshBindings& meshBindings) = 0;
+		virtual void BindTextureToRendererTextureSlot(U32 rendererTextureSlot, const Resource::RTexture& texture) = 0;
+		virtual void SetDepthTest(bool enable) = 0;
+		virtual void SetDepthTestType(Description::Pipeline::DepthTestType type) = 0;
+		virtual void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination) = 0;
+		virtual void SetBlending(bool enable) = 0;
+		virtual void SetViewport(U32 x, U32 y, U32 width, U32 height) = 0;
+	};
 
-
-		// Vulkan
-		template <> void BindFramebuffer<GAPIType::Vulkan>(const Resource::RFramebuffer<GAPIType::Vulkan>& framebuffer);
-
-		// OpenGL
-		template <> void BindFramebuffer<GAPIType::OpenGL>(	const Resource::RFramebuffer<GAPIType::OpenGL>	& framebuffer);
-		inline		void BindFramebuffer_OpenGL(			const Resource::RFramebuffer_OpenGL				& framebuffer) { BindFramebuffer<GAPIType::OpenGL>(framebuffer); };
-		
-		template <> void BindMeshBindings<GAPIType::OpenGL>(const Resource::RMeshBindings<GAPIType::OpenGL>	& meshBindings);
-		inline		void BindMeshBindings_OpenGL(			const Resource::RMeshBindings_OpenGL			& meshBindings) { BindMeshBindings<GAPIType::OpenGL>(meshBindings); };
-		
-		template <> void BindTextureToRendererTextureSlot<GAPIType::OpenGL>(U32 rendererTextureSlot, const Resource::RTexture<GAPIType::OpenGL>	& texture);
-		inline		void BindTextureToRendererTextureSlot_OpenGL(			U32 rendererTextureSlot, const Resource::RTexture_OpenGL			& texture) { BindTextureToRendererTextureSlot<GAPIType::OpenGL>(rendererTextureSlot, texture); };
-
-		template <> void SetDepthTest<GAPIType::OpenGL>(bool enable);
-		inline		void SetDepthTest_OpenGL(bool enable) { SetDepthTest<GAPIType::OpenGL>(enable); }
-
-		template <> void SetDepthTestType<GAPIType::OpenGL>(Description::Pipeline::DepthTestType type);
-		inline		void SetDepthTestType_OpenGL(			Description::Pipeline::DepthTestType type) { SetDepthTestType<GAPIType::OpenGL>(type); }
-
-		template <> void SetBlendFunction<GAPIType::OpenGL>(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination);
-		inline		void SetBlendFunction_OpenGL(			Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination) { SetBlendFunction<GAPIType::OpenGL>( source, destination); }
-		
-		template <> void SetBlending<GAPIType::OpenGL>(	bool enable);
-		inline		void SetBlending_OpenGL(			bool enable) { SetBlending<GAPIType::OpenGL>(enable); }
-
-		template <> void SetViewport<GAPIType::OpenGL>(	U32 x, U32 y, U32 width, U32 height);
-		inline		void SetViewport_OpenGL(			U32 x, U32 y, U32 width, U32 height) { SetViewport<GAPIType::OpenGL>(x, y, width, height); }
-
-	}
+	struct PipelineState_OpenGL final : public PipelineState
+	{
+		virtual void BindFramebuffer(const Resource::RFramebuffer& framebuffer) final override;
+		virtual void BindMeshBindings(const Resource::RMeshBindings& meshBindings) final override;
+		virtual void BindTextureToRendererTextureSlot(U32 rendererTextureSlot, const Resource::RTexture& texture) final override;
+		virtual void SetDepthTest(bool enable) final override;
+		virtual void SetDepthTestType(Description::Pipeline::DepthTestType type) final override;
+		virtual void SetBlendFunction(Description::Pipeline::BlendFunction source, Description::Pipeline::BlendFunction destination) final override;
+		virtual void SetBlending(bool enable) final override;
+		virtual void SetViewport(U32 x, U32 y, U32 width, U32 height) final override;
+	};
 }

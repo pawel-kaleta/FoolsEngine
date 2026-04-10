@@ -3,11 +3,12 @@
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/3 - Command/ProgramState.h"
 
-namespace fe::Command::ProgramState
+namespace fe::Command
 {
-	template <> void BindTextureSamplerToRendererTextureSlot<GAPIType::OpenGL>(const Resource::RProgram<GAPIType::OpenGL>& program, UInt samplerIndex, RenderTextureSlotID renderTextureSlot)
+	void ProgramState_OpenGL::BindTextureSamplerToRendererTextureSlot(const Resource::RProgram& program, UInt samplerIndex, RenderTextureSlotID renderTextureSlot)
 	{
-		GLint sampler_location = program.BindingLocations.TextureSamplers[samplerIndex];
+		const Resource::RProgram_OpenGL* opengl_program = (const Resource::RProgram_OpenGL*) & program;
+		GLint sampler_location = opengl_program->BindingLocations.TextureSamplers[samplerIndex];
 		GLuint texture_unit = renderTextureSlot;
 		glUniform1ui(sampler_location, texture_unit);
 	}
@@ -30,15 +31,16 @@ namespace fe::Command::ProgramState
 	//	}
 	//}
 
-	template <> void UpladUniform<GAPIType::OpenGL>(const Resource::RProgram<GAPIType::OpenGL>& program, UInt uniformIndex, Splice<Byte> data)
+	void ProgramState_OpenGL::UpladUniform(const Resource::RProgram& program, UInt uniformIndex, Splice<Byte> data)
 	{
+		const Resource::RProgram_OpenGL* opengl_program = (const Resource::RProgram_OpenGL*) & program;
 		const auto& spec = Description::Library::Get().ProgramSpecs[program.SpecificationID];
 		const auto& uniforms = Description::Library::Get().BufferLayouts[spec.MainUniformsLayoutID];
 		const auto& uniform = uniforms.Elements[uniformIndex];
 	
 		Description::Data::Type type = uniform.Type;
 		const auto& count = uniform.Count;
-		GLint location = program.BindingLocations.MainUniforms[uniformIndex];
+		GLint location = opengl_program->BindingLocations.MainUniforms[uniformIndex];
 	
 		FE_CORE_ASSERT(data.Count == uniform.Size() * count, "Wrong data size for this uniform type");
 	

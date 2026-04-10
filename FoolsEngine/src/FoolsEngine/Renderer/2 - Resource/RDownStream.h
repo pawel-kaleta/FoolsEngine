@@ -14,16 +14,9 @@
 
 namespace fe::Resource
 {
+	struct RStreamRegion {};
 
-	struct StreamRegion {};
-
-	template <GAPIType::ValueType GAPI>
-	struct RStreamRegion;
-
-	template <GAPIType::ValueType GAPI>
-	struct RDownStream;
-
-	struct DownStreamBase
+	struct RDownStream
 	{
 		//Description::Buffer::Usage Usage; // do we need this?
 
@@ -32,29 +25,27 @@ namespace fe::Resource
 
 		virtual void BeginRegion() = 0;
 		virtual void PushData(Splice<Byte> data) = 0;
-		virtual StreamRegion* EndRegion() = 0;
+		virtual RStreamRegion* EndRegion() = 0;
 
-		virtual StreamRegion* ReserveUncommitedRegion(size_t size) = 0;
-		virtual void CommitRegion(StreamRegion* region) = 0;
+		virtual RStreamRegion* ReserveUncommitedRegion(size_t size) = 0;
+		virtual void CommitRegion(RStreamRegion* region) = 0;
 
-		virtual void RetireRegion(StreamRegion* region) = 0;
+		virtual void RetireRegion(RStreamRegion* region) = 0;
 
 		virtual void EndFrame() = 0;
 	};
 
-	template <>
-	struct RStreamRegion<GAPIType::OpenGL> final : public StreamRegion
+	struct RDownStream_OpenGL;
+
+	struct RStreamRegion_OpenGL final : public RStreamRegion
 	{
-		RDownStream<GAPIType::OpenGL>* Stream;
+		RDownStream_OpenGL* Stream;
 		UInt Offset;
 		GLuint OpenGLBuffer;
 		U32 Size;
 	};
 
-	using RStreamRegion_OpenGL = RStreamRegion<GAPIType::OpenGL>;
-
-	template <>
-	struct RDownStream<GAPIType::OpenGL> final : public DownStreamBase
+	struct RDownStream_OpenGL final : public RDownStream
 	{
 		static inline constexpr UInt Alignment = 64;
 
@@ -89,12 +80,12 @@ namespace fe::Resource
 
 		virtual void BeginRegion() override;
 		virtual void PushData(Splice<Byte> data) override;
-		virtual StreamRegion* EndRegion() override;
+		virtual RStreamRegion* EndRegion() override;
 
-		virtual StreamRegion* ReserveUncommitedRegion(UInt size) override;
-		virtual void CommitRegion(StreamRegion* region) override;
+		virtual RStreamRegion* ReserveUncommitedRegion(UInt size) override;
+		virtual void CommitRegion(RStreamRegion* region) override;
 
-		virtual void RetireRegion(StreamRegion* region) override;
+		virtual void RetireRegion(RStreamRegion* region) override;
 
 		virtual void EndFrame() override;
 
@@ -102,6 +93,4 @@ namespace fe::Resource
 		bool CheckFences(UInt pushSize);
 		void MakeNewBuffer(UInt pushSize);
 	};
-
-	using RDownStream_OpenGL = RDownStream<GAPIType::OpenGL>;
 }

@@ -15,8 +15,8 @@ namespace fe
 
 	struct ACTexture2DCore final : public AssetComponent
 	{
-		void* Data;
 		Description::Texture::Specification Specification;
+		Splice<Byte> Data;
 
 		void Init()
 		{
@@ -25,11 +25,10 @@ namespace fe
 			Specification.Usage = Description::Texture::Usage::None;
 			Specification.ArchetypeID = -1;
 			Specification.BorderColor = { 0, 0, 0 };
-			Data = nullptr;
 		}
 	};
 
-	struct ACTexture2DResource_OpenGL final : public AssetComponent
+	struct ACRTexture2D_OpenGL final : public AssetComponent
 	{
 		Resource::RTexture_OpenGL Texture;
 	};

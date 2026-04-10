@@ -14,28 +14,24 @@ namespace fe
 {
 	struct ACShadingModelCore final : public AssetComponent
 	{
-
 		union {
 			struct {
 				AssetID Vertex;
 				AssetID Tessellation;
 				AssetID Geometry;
 				AssetID Fragment;
-			}ByName;
+			} ByName;
 			Array<AssetID, 4> AsArray;
 		} ShaderIDs;
 
-		void* DefaultUniformsData;
-		size_t UniformsDataSize;
+		Splice<Byte> DefaultUniformsData;
 
-		uint32_t ProgramSpecificationID;
+		UInt ProgramSpecificationID;
 
 		void Init();
-
-		~ACShadingModelCore() { if (DefaultUniformsData) operator delete(DefaultUniformsData); }
 	};
 
-	struct ACShaderModelResource_OpenGL final : public AssetComponent
+	struct ACRShadingModel_OpenGL final : public AssetComponent
 	{
 		Resource::RProgram_OpenGL Program;
 	};
@@ -47,19 +43,15 @@ namespace fe
 
 		const Description::Buffer::Layout& GetUniforms();
 
-		size_t GetCPUDataSize() const { return GetCore().UniformsDataSize; }
+		Description::Buffer::UniformBufferIterator GetUniformDefaultValuesIterator();
 
-		//consider iterator
-		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
-		const void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, String name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
+		Splice<Byte> GetUniformDefaultValue(const Description::Buffer::Element& targetUniform) const;
+		Splice<Byte> GetUniformDefaultValue(String name) const;
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
 	protected:
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
-
-		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const;
-		void* GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, String name) const;
 	};
 
 	class ShadingModelUser : public ShadingModelObserver
@@ -67,11 +59,8 @@ namespace fe
 	public:
 		ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
 
-		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const { return GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform); };
-		void* GetUniformDefaultValuePtr(const ACShadingModelCore& dataComponent, String name) const { return GetUniformDefaultValuePtr_Internal(dataComponent, name); };
-
-		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& uniform, void* dataPointer) const;
-		void SetUniformDefaultValue(const ACShadingModelCore& dataComponent, String name, void* dataPointer) const;
+		void SetUniformDefaultValue(const Description::Buffer::Element& uniform, Splice<Byte> data) const;
+		void SetUniformDefaultValue(String name, Splice<Byte> data) const;
 
 		bool LoadBaseAssetMetadata(const char* filepath);
 		bool LoadMetadata();

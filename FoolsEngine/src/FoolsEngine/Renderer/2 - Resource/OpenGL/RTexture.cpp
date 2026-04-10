@@ -12,7 +12,7 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	void RTexture<GAPIType::OpenGL>::Create(const Description::Texture::Specification& instance, Splice<Byte> data)
+	void RTexture_OpenGL::Create(const Description::Texture::Specification& instance, Splice<Byte> data)
 	{
 		FE_PROFILER_FUNC();
 
@@ -81,7 +81,7 @@ namespace fe::Resource
 		glGenerateTextureMipmap(OpenGLID);
 	}
 
-	void RTexture<GAPIType::OpenGL>::Clear(Splice<U32> values)
+	void RTexture_OpenGL::Clear(Splice<U32> values)
 	{
 		FE_PROFILER_FUNC();
 
@@ -93,7 +93,7 @@ namespace fe::Resource
 		glClearTexImage(OpenGLID, 0, Resource::Utils::FormatToGLFormat(arch.Format), GL_UNSIGNED_INT, values.Elements);
 	}
 
-	void RTexture<GAPIType::OpenGL>::Clear(Splice<float> values)
+	void RTexture_OpenGL::Clear(Splice<float> values)
 	{
 		FE_PROFILER_FUNC();
 
@@ -105,7 +105,7 @@ namespace fe::Resource
 		glClearTexImage(OpenGLID, 0, Resource::Utils::FormatToGLFormat(arch.Format), GL_FLOAT, values.Elements);
 	}
 
-	void RTexture<GAPIType::OpenGL>::Destroy()
+	void RTexture_OpenGL::Destroy()
 	{
 		FE_PROFILER_FUNC();
 

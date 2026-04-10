@@ -17,23 +17,12 @@ namespace YAML { class Emitter; class Node; }
 
 namespace fe
 {
-	struct MeshSpecification
+	struct ACMeshCore final : public AssetComponent
 	{
 		U32 VertexCount;
 		U32 IndexCount;
-		const Description::Buffer::Layout& VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
-
-		void Init()
-		{
-			VertexCount = 0;
-			IndexCount = 0;
-		}
-	};
-
-	struct ACMeshCore final : public AssetComponent
-	{
-		MeshSpecification Specification;
 		Splice<Byte> Data;
+		const Description::Buffer::Layout& VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
 		using Vert = Description::Buffer::Vertex;
 
 		void Init();
@@ -43,20 +32,20 @@ namespace fe
 		{
 			Splice<U32> result;
 			result.Elements = (U32*)Data.Elements;
-			result.Count = Specification.IndexCount;
+			result.Count = IndexCount;
 			return result;
 		}
 		Splice<Vert> GetVertexBuffer()
 		{
 			Splice<Vert> result;
-			result.Elements = (Vert*)(Data.Elements + sizeof(U32) * Specification.IndexCount);
-			result.Count = Specification.VertexCount;
+			result.Elements = (Vert*)(Data.Elements + sizeof(U32) * IndexCount);
+			result.Count = VertexCount;
 			return result;
 		}
-		UInt DataSize() const { return (Specification.IndexCount * sizeof(U32)) + (Specification.VertexCount * sizeof(Vert)); }
+		UInt DataSize() const { return (IndexCount * sizeof(U32)) + (VertexCount * sizeof(Vert)); }
 	};
 
-	struct ACMeshBindings_OpenGL final : public AssetComponent
+	struct ACRMeshBindings_OpenGL final : public AssetComponent
 	{
 		Resource::RMeshBindings_OpenGL MeshBindings;
 	};
@@ -68,9 +57,9 @@ namespace fe
 
 		const ACGPUBuffer_OpenGL* GetBuffer() const { return GetIfExist<ACGPUBuffer_OpenGL>(); }
 
-		const ACMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACMeshBindings_OpenGL>(); }
+		const ACRMeshBindings_OpenGL* GetMeshBindings() const { return GetIfExist<ACRMeshBindings_OpenGL>(); }
 
-		size_t GetGPUDataSize() const { return Get<ACMeshCore>().DataSize(); }
+		UInt GetGPUDataSize() const { return Get<ACMeshCore>().DataSize(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -82,7 +71,7 @@ namespace fe
 	public:
 		ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
 
-		ACMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACMeshBindings_OpenGL>(); }
+		ACRMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACRMeshBindings_OpenGL>(); }
 		
 		void Release() const;
 

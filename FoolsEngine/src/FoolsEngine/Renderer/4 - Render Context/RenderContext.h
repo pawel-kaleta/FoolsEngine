@@ -5,6 +5,7 @@
 #include "ProgramManager.h"
 #include "ResourceManager.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/3 - Command/Render.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -35,7 +36,7 @@ namespace fe
 		GLFWwindow* BaseWindow = nullptr;
 		ResourceManager_OpenGL ResourceManager;
 		PipelineManager_OpenGL PipelineState;
-
+		Command::Render_OpenGL Commands;
 
 		bool Create();
 	};

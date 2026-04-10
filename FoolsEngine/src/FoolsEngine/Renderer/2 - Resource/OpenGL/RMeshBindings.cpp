@@ -11,21 +11,21 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	void RMeshBindings<GAPIType::OpenGL>::Create()
+	void RMeshBindings_OpenGL::Create()
 	{
 		FE_PROFILER_FUNC();
 
 		glCreateVertexArrays(1, &OpenGLID);
 	}
 
-	void RMeshBindings<GAPIType::OpenGL>::Delete()
+	void RMeshBindings_OpenGL::Delete()
 	{
 		FE_PROFILER_FUNC();
 
 		glDeleteVertexArrays(1, &OpenGLID);
 	}
 
-	void RMeshBindings<GAPIType::OpenGL>::BindVertexBuffer(const StaticBufferBase& buffer, UInt offset)
+	void RMeshBindings_OpenGL::BindVertexBuffer(const RStaticBuffer& buffer, UInt offset)
 	{
 		FE_PROFILER_FUNC();
 
@@ -111,7 +111,7 @@ namespace fe::Resource
 		}
 	}
 
-	void RMeshBindings<GAPIType::OpenGL>::BindIndexBuffer(const StaticBufferBase& buffer, UInt offset, UInt indexCount)
+	void RMeshBindings_OpenGL::BindIndexBuffer(const RStaticBuffer& buffer, UInt offset, UInt indexCount)
 	{
 		glVertexArrayElementBuffer(OpenGLID, (*(RStaticBuffer_OpenGL*)&buffer).OpenGLID);
 		IndexCount = indexCount;

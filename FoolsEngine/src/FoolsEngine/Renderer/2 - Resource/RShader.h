@@ -9,7 +9,7 @@ namespace fe::Resource
 {
 	using namespace Description::ShaderInterface;
 
-	struct ShaderBase
+	struct RShader
 	{
 		UInt SpecificationID;
 
@@ -17,17 +17,13 @@ namespace fe::Resource
 		virtual void Destroy() = 0;
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RShader;
 
-	template <>
-	struct RShader<GAPIType::OpenGL> final : public ShaderBase
+
+	struct RShader_OpenGL final : public RShader
 	{
-		GLuint ShaderOpenGLID;
+		GLuint OpenGLID;
 
 		virtual void Create(String source) override;
 		virtual void Destroy() override;
 	};
-
-	using RShader_OpenGL = RShader<GAPIType::OpenGL>;
 }

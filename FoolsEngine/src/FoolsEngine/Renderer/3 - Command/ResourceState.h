@@ -8,11 +8,13 @@
 
 namespace fe::Command
 {
-	namespace ResourceState
+	struct ResourceState
 	{
-		template <GAPIType::ValueType GAPI> void Clear();
+		virtual void Clear() = 0;
+	};
 
-		template <> void Clear<GAPIType::OpenGL>();
-		inline		void Clear_OpenGL() { Clear<GAPIType::OpenGL>(); }
-	}
+	struct ResourceState_OpenGL final : public ResourceState
+	{
+		virtual void Clear() final override;
+	};
 }

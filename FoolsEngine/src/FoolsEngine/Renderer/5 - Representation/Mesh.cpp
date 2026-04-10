@@ -15,9 +15,8 @@ namespace fe
 {
 	void ACMeshCore::Init()
 	{
-		Specification.Init();
-		if (Data.Elements) GeometryLoader::UnloadMesh(Data.Elements);
-		Data = Splice<Byte>();
+		VertexCount = 0;
+		IndexCount = 0;
 	}
 
 	ACMeshCore::~ACMeshCore() { if (Data.Elements) GeometryLoader::UnloadMesh(Data.Elements); }

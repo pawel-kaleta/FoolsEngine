@@ -12,10 +12,6 @@ namespace fe
 {
 	void ACShadingModelCore::Init()
 	{
-		if (DefaultUniformsData) operator delete(DefaultUniformsData);
-		DefaultUniformsData = nullptr;
-
-		UniformsDataSize = 0;
 		ProgramSpecificationID = -1;
 
 		ShaderIDs.ByName.Vertex = NullAssetID;
@@ -24,93 +20,94 @@ namespace fe
 		ShaderIDs.ByName.Fragment = NullAssetID;
 	}
 
-	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform) const
+	Splice<Byte> ShadingModelObserver::GetUniformDefaultValue(const Description::Buffer::Element& targetUniform) const
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.DefaultUniformsData);
+		const auto& core = GetCore();
+
+		Splice<Byte> result;
+		result.Elements = core.DefaultUniformsData.Elements;
 
 		const auto& library = Description::Library::Get();
-		const auto& program_spec = library.ProgramSpecs[dataComponent.ProgramSpecificationID];
+		const auto& program_spec = library.ProgramSpecs[core.ProgramSpecificationID];
 		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
 
 		for (const auto& uniform : uniforms_layout.Elements)
 		{
 			if (&targetUniform == &uniform)
 			{
-				return (void*)uniform_data_pointer;
+				result.Count = uniform.Size() * uniform.Count;
+				return result;
 			}
-			uniform_data_pointer += uniform.Size() * uniform.Count;
+			result.Elements += uniform.Size() * uniform.Count;
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
-		return nullptr;
+		return Splice<Byte>();
 	}
 
-	void* ShadingModelObserver::GetUniformDefaultValuePtr_Internal(const ACShadingModelCore& dataComponent, String name) const
+	Splice<Byte> ShadingModelObserver::GetUniformDefaultValue(String name) const
 	{
 		FE_PROFILER_FUNC();
 
-		uint8_t* uniform_data_pointer = (uint8_t*)(dataComponent.DefaultUniformsData);
+		const auto& core = GetCore();
+
+		Splice<Byte> result;
+		result.Elements = core.DefaultUniformsData.Elements;
 
 		const auto& library = Description::Library::Get();
-		const auto& program_spec = library.ProgramSpecs[dataComponent.ProgramSpecificationID];
+		const auto& program_spec = library.ProgramSpecs[core.ProgramSpecificationID];
 		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
 
 		for (const auto& uniform : uniforms_layout.Elements)
 		{
 			if (CompareStringsEqual(name, uniform.Name))
 			{
-				return (void*)uniform_data_pointer;
+				result.Count = uniform.Size() * uniform.Count;
+				return result;
 			}
-			uniform_data_pointer += uniform.Size() * uniform.Count;
+			result.Elements += uniform.Size() * uniform.Count;
 		}
 
 		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
-		return nullptr;
+		return Splice<Byte>();
 	}
 
-	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, const Description::Buffer::Element& targetUniform, void* dataPointer) const
+	void ShadingModelUser::SetUniformDefaultValue(const Description::Buffer::Element& targetUniform, Splice<Byte> data) const
 	{
 		FE_PROFILER_FUNC();
 
-		if (!dataPointer)
+		if (!data.Elements)
 		{
 			FE_CORE_ASSERT(false, "Pointer is null!");
 			return;
 		}
 
-		void* dest = GetUniformDefaultValuePtr_Internal(dataComponent, targetUniform);
-		std::memcpy((void*)dest, dataPointer, targetUniform.Size() *  targetUniform.Count);
+		auto dest = GetUniformDefaultValue(targetUniform);
+
+		FE_CORE_ASSERT(dest.Count == data.Count, "Data size for uniform does not mach uniform size");
+
+		if (dest.Count >= data.Count)
+			std::memcpy(dest.Elements, data.Elements, dest.Count);
 	}
 
-	void ShadingModelUser::SetUniformDefaultValue(const ACShadingModelCore& dataComponent, String name, void* dataPointer) const
+	void ShadingModelUser::SetUniformDefaultValue(String name, Splice<Byte> data) const
 	{
 		FE_PROFILER_FUNC();
 
-		if (!dataPointer)
+		if (!data.Elements)
 		{
 			FE_CORE_ASSERT(false, "Pointer is null!");
 			return;
 		}
 
-		uint8_t* dest = (uint8_t*)(dataComponent.DefaultUniformsData);
+		auto dest = GetUniformDefaultValue(name);
 
-		const auto& library = Description::Library::Get();
-		const auto& program_spec = library.ProgramSpecs[dataComponent.ProgramSpecificationID];
-		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
-
-		for (const auto& uniform : uniforms_layout.Elements)
-		{
-			if (CompareStringsEqual(name, uniform.Name))
-			{
-				std::memcpy((void*)dest, dataPointer, uniform.Size() * uniform.Count);
-				return;
-			}
-			dest += uniform.Size() * uniform.Count;
-		}
-
-		FE_CORE_ASSERT(false, "Uniform not found in ShadingModel!");
+		FE_CORE_ASSERT(dest.Count == data.Count, "Data size for uniform does not mach uniform size");
+		
+		if (dest.Count >= data.Count)
+			std::memcpy(dest.Elements, data.Elements, dest.Count);
 	}
 	
 	const Description::Buffer::Layout& ShadingModelObserver::GetUniforms()
@@ -120,6 +117,16 @@ namespace fe
 		auto& uniforms_spec_id = library.ProgramSpecs[program_spec_id].MainUniformsLayoutID;
 		auto& uniforms = library.BufferLayouts[uniforms_spec_id];
 		return uniforms;
+	}
+
+	Description::Buffer::UniformBufferIterator ShadingModelObserver::GetUniformDefaultValuesIterator()
+	{
+		const auto& library = Description::Library::Get();
+		const auto& core = GetCore();
+		const auto& program_spec = library.ProgramSpecs[core.ProgramSpecificationID];
+		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
+
+		return Description::Buffer::UniformBufferIterator(uniforms_layout.Elements, core.DefaultUniformsData);
 	}
 
 	void ShadingModelObserver::SaveMetadata(YAML::Emitter& emitter)

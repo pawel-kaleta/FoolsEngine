@@ -52,8 +52,8 @@ namespace fe
 
 		struct UniformBufferIterator
 		{
-			UniformBufferIterator(Splice<Element> elements, void* data)
-				: m_Elements(elements), m_CurrentData((Byte*)data), m_Index(0) { }
+			UniformBufferIterator(Splice<Element> elements, Splice<Byte> data)
+				: m_Elements(elements), m_CurrentData(data.Elements), m_Index(0) { }
 
 			void Move()
 			{

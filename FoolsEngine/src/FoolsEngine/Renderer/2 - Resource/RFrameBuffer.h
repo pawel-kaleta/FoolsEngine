@@ -10,7 +10,7 @@ namespace fe::Resource
 {
 	using namespace Description::Framebuffer;
 
-	struct FramebufferBase
+	struct RFramebuffer
 	{
 		UInt SpecificationID;
 
@@ -25,11 +25,7 @@ namespace fe::Resource
 
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RFramebuffer;
-
-	template <>
-	struct RFramebuffer<GAPIType::OpenGL> final : public FramebufferBase
+	struct RFramebuffer_OpenGL final : public RFramebuffer
 	{
 		GLuint OpenGLID;
 
@@ -44,6 +40,4 @@ namespace fe::Resource
 
 		virtual void Destroy() final override;
 	};
-
-	using RFramebuffer_OpenGL = RFramebuffer<GAPIType::OpenGL>;
 }

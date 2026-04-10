@@ -13,7 +13,7 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	void RFramebuffer<GAPIType::OpenGL>::Create()
+	void RFramebuffer_OpenGL::Create()
 	{
 		FE_PROFILER_FUNC();
 
@@ -119,7 +119,7 @@ namespace fe::Resource
 		FE_CORE_ASSERT(status == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete.");
 	}
 
-	void RFramebuffer<GAPIType::OpenGL>::Resize(U32 width, U32 height)
+	void RFramebuffer_OpenGL::Resize(U32 width, U32 height)
 	{
 		FE_PROFILER_FUNC();
 
@@ -204,7 +204,7 @@ namespace fe::Resource
 		}
 	}
 
-	void RFramebuffer<GAPIType::OpenGL>::Destroy()
+	void RFramebuffer_OpenGL::Destroy()
 	{
 		FE_PROFILER_FUNC();
 
@@ -221,7 +221,7 @@ namespace fe::Resource
 
 	}
 
-	void RFramebuffer<GAPIType::OpenGL>::ReadPixel(UInt attachmentIndex, UInt x, UInt y, Splice<Byte> destination)
+	void RFramebuffer_OpenGL::ReadPixel(UInt attachmentIndex, UInt x, UInt y, Splice<Byte> destination)
 	{
 		FE_PROFILER_FUNC();
 
@@ -237,7 +237,7 @@ namespace fe::Resource
 		glReadPixels((GLint)x, (GLint)y, 1, 1, glFormat, glType, destination.Elements);
 	}
 
-	void RFramebuffer<GAPIType::OpenGL>::ClearAttachment(UInt attachmentIndex, Splice<U32> values)
+	void RFramebuffer_OpenGL::ClearAttachment(UInt attachmentIndex, Splice<U32> values)
 	{
 		FE_PROFILER_FUNC();
 
@@ -251,7 +251,7 @@ namespace fe::Resource
 		glClearTexImage(attachmentID, 0, Resource::Utils::FormatToGLFormat(format), GL_UNSIGNED_INT, values.Elements);
 	}
 
-	void RFramebuffer<GAPIType::OpenGL>::ClearAttachment(UInt attachmentIndex, Splice<float> values)
+	void RFramebuffer_OpenGL::ClearAttachment(UInt attachmentIndex, Splice<float> values)
 	{
 		FE_PROFILER_FUNC();
 

@@ -11,7 +11,7 @@ namespace fe::Resource
 {
 	using namespace Description::Texture;
 
-	struct TextureBase
+	struct RTexture
 	{
 		Description::Texture::Specification Specification;
 
@@ -21,11 +21,7 @@ namespace fe::Resource
 		virtual void Destroy() = 0;
 	};
 
-	template <GAPIType::ValueType GAPI>
-	struct RTexture;
-
-	template <>
-	struct RTexture<GAPIType::OpenGL> final : public TextureBase
+	struct RTexture_OpenGL final : public RTexture
 	{
 		GLuint OpenGLID;
 
@@ -34,6 +30,4 @@ namespace fe::Resource
 		virtual void Clear(Splice<float> values) final override;
 		virtual void Destroy() override;
 	};
-
-	using RTexture_OpenGL = RTexture<GAPIType::OpenGL>;
 }

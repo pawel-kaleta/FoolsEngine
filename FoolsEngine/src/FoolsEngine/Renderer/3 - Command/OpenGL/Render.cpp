@@ -4,11 +4,8 @@
 
 namespace fe::Command
 {
-	namespace Render
+	void Render_OpenGL::DrawIndexed(const Resource::RMeshBindings& meshBindings)
 	{
-		template <> void DrawIndexed<GAPIType::OpenGL>(const Resource::RMeshBindings<GAPIType::OpenGL>& meshBindings)
-		{
-			glDrawElements(GL_TRIANGLES, meshBindings.IndexCount, GL_UNSIGNED_INT, (const void *)(UInt)meshBindings.IndexOffset);
-		}
+		glDrawElements(GL_TRIANGLES, meshBindings.IndexCount, GL_UNSIGNED_INT, (const void *)(UInt)meshBindings.IndexOffset);
 	}
 }

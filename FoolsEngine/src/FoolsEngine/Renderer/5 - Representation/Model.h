@@ -14,7 +14,7 @@ namespace fe
 {
 	struct ACModelCore final : public AssetComponent
 	{
-		std::vector<AssetID> RenderMeshIDs;
+		Splice<AssetID> RenderMeshIDs;
 
 		void Init()	{ }
 	};

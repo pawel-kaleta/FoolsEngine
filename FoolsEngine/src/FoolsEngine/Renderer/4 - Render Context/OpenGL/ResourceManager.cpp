@@ -90,7 +90,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(shaders[i], "Shouldnt be a nullptr");
 			if (!shaders[i]) continue;
-			program.ShaderOpenGLIDs[i] = shaders[i]->ShaderOpenGLID;
+			program.ShaderOpenGLIDs[i] = shaders[i]->OpenGLID;
 		}
 
 		program.Create();

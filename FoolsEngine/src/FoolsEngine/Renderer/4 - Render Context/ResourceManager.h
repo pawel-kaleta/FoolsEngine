@@ -13,6 +13,7 @@
 #include "FoolsEngine/Renderer/2 - Resource/RProgram.h"
 #include "FoolsEngine/Renderer/2 - Resource/RTexture.h"
 #include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
+#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
 
 namespace fe
 {
@@ -21,6 +22,8 @@ namespace fe
 	using namespace Resource;
 	struct ResourceManager_OpenGL final : public ResourceManager
 	{
+		Command::ResourceState_OpenGL Commands;
+
 		TypedAlloc<Allocator>* DefaultAlloc;
 		TypedAlloc<Allocator>* AuxilaryAlloc;
 		TypedAlloc<MonotonicAlloc> PermanentAlloc;

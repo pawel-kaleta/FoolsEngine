@@ -6,15 +6,14 @@
 
 namespace fe::Command
 {
-	namespace Render
+	struct Render
 	{
-		template <GAPIType::ValueType GAPI> void DrawIndexed(const Resource::RMeshBindings<GAPI>& meshBindings);
+		virtual void DrawIndexed(const Resource::RMeshBindings& meshBindings) = 0;
+	};
 
-		//Vulkan
-		//template <> void DrawIndexed<GAPIType::Vulkan>(const Resource::RMeshBindings<GAPIType::Vulkan>& meshBindings) {}
-		
-		//OpenGL
-		template <> void DrawIndexed<GAPIType::OpenGL>(	const Resource::RMeshBindings<GAPIType::OpenGL>	& meshBindings);
-		inline		void DrawIndexed_OpenGL(			const Resource::RMeshBindings_OpenGL			& meshBindings) { DrawIndexed<GAPIType::OpenGL>(meshBindings); }
-	}
+	struct Render_OpenGL final : public Render
+	{
+
+		virtual void DrawIndexed(const Resource::RMeshBindings& meshBindings) final override;
+	};
 }
