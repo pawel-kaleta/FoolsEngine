@@ -8,6 +8,20 @@
 
 namespace fe::Command
 {
+	// cost in order
+	//Render target
+	//Program
+	//ROP (raster operations pipeline - blending/depth test/cull test/ etc.)
+	// ------ state based recompilation boundary -------
+	//texture sampler binding to binding point (sampler to render texture slot binding) - is there a need fot this ever?
+	//texture bindings (different texture data format and filtering cause recompilation)
+	//vertex layout
+	// ------ possible state based recompilation boundary -------
+	//uniform buffer binding
+	//vertex / index binding
+	//uniform update
+	//draw call params
+
 	struct PipelineState
 	{
 		virtual void BindFramebuffer(const Resource::RFramebuffer& framebuffer) = 0;
