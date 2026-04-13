@@ -4,6 +4,7 @@
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
 #include <glad/glad.h>
 
@@ -13,11 +14,19 @@ namespace fe::Resource
 
 	struct RMeshBindings
 	{
-		U32 LayoutID;
-		U32 VertexOffset;
+		struct AttributeArray
+		{
+			RStaticBuffer* VertexBuffer;
+			U32 LayoutID;
+			U32 VertexOffset;
+			Splice<U08> AttributeBindingLocations;
+		};
+
+		RStaticBuffer* IndexBuffer;
 		U32 IndexOffset;
 		U32 IndexCount;
-		// ptrs to buffers with vertex data and index data?
+
+		Splice<AttributeArray> AttributeArrays;
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;

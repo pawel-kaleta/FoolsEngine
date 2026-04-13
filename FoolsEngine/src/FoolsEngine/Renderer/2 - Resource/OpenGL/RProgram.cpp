@@ -53,30 +53,29 @@ namespace fe::Resource
 		const auto& library = Description::Library::Get();
 
 		const auto& spec = library.ProgramSpecs[(UInt)SpecificationID];
+		
+		const auto& uniforms = spec.Uniforms;
 
-		const auto& uniforms = library.BufferLayouts[spec.MainUniformsLayoutID];
-
-		BindingLocations.MainUniforms = Context::Allocators::Default->Allocate<GLint>(uniforms.Elements.Count);
-		for (UInt i = 0; i < uniforms.Elements.Count; i++)
+		BindingLocations.Uniforms = Context::Allocators::Default->Allocate<GLint>(uniforms.Count);
+		for (UInt i = 0; i < uniforms.Count; i++)
 		{
 			const auto& name = uniforms.Elements[i].Name;
 			GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.Data());
 
-			BindingLocations.MainUniforms[i] = location; // allocate first!
-
+			BindingLocations.Uniforms[i] = location;
 		}
 
-		BindingLocations.TextureSamplers = Context::Allocators::Default->Allocate<GLint>(spec.TextureSamplerIDs.Count);
-		for (UInt i = 0; i < spec.TextureSamplerIDs.Count; i++)
+		BindingLocations.TextureSamplers = Context::Allocators::Default->Allocate<GLint>(spec.TextureSamplers.Count);
+		for (UInt i = 0; i < spec.TextureSamplers.Count; i++)
 		{
-			const auto& texture_sampler_id = spec.TextureSamplerIDs[i];
-			const auto& texture_sampler = library.TextureSamplers[texture_sampler_id];
+			const auto& texture_sampler = spec.TextureSamplers[i];
 			const auto& name = texture_sampler.Name;
 			GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.Data());
 
 			BindingLocations.TextureSamplers[i] = location;
-
 		}
+
+		glGetAttribLocation
 	}
 
 	void RProgram_OpenGL::Destroy()

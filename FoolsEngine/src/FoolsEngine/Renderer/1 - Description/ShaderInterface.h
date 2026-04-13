@@ -5,6 +5,7 @@
 #include "Texture.h"
 
 #include "FoolsEngine/Application/UUID.h"
+#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
 namespace fe
 {
@@ -12,42 +13,52 @@ namespace fe
 	{
 		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment);
 
+		struct VertexAttribute
+		{
+			String Name;
+			Data::Type Type;
+		};
+
 		struct TextureSampler
 		{
 			String Name;
-			UUID UUID = fe::UUID();
 			U32 TextureArchetypeID = -1;
 		};
 
 		struct UniformBufferSampler { };
 		struct DynamicBufferSampler { };
 
-		struct Specification
+		struct FragmentAttribute
 		{
-			UUID UUID = fe::UUID();
-			ShaderType Type = ShaderType::None;
+			String Name;
+			Texture::Format Format;
+		};
 
-			U32 InputLayoutID = -1;
-			U32 OutputLayoutID = -1;
-			U32 MainUniformsLayoutID = -1;
+		struct Uniform
+		{
+			String Name;
+			Data::Type Type;
+			U32 Count;
 
-			Splice<U32> TextureSamplerIDs;
-			Splice<U32> UniformBufferSamplerIDs;
-			Splice<U32> DynamicBufferSamplerIDs;
+			Data::Primitive Primitive() const { return Data::PrimitiveInType(Type); }
+			Data::Structure Structure() const { return Data::StructureInType(Type); }
+			UInt Size() const { return Data::SizeOfType(Type); }
+			UInt ComponentCount() const
+			{
+				bool ifDouble = Primitive() == Data::Primitive::Double;
+				return Size() / (4 * (1 + (int)ifDouble));
+			}
 		};
 
 		struct ProgramSpecification
 		{
 			UUID UUID = fe::UUID();
 
-			U32 VertexInputLayoutID = -1;
-			U32 VertexOutputLayoutID = -1; // needed only for VertexOutputCapture into buffer
-			U32 FragmentOutputLayoutID = -1;
-			U32 MainUniformsLayoutID = -1;
-
-			Splice<U32> TextureSamplerIDs;
-			Splice<U32> UniformBufferSamplerIDs;
-			Splice<U32> DynamicBufferSamplerIDs;
+			Splice<Uniform> Uniforms;
+			Splice<VertexAttribute> VertexAttributes;
+			Splice<TextureSampler> TextureSamplers;
+			Splice<UniformBufferSampler> UniformBufferSamplers;
+			Splice<DynamicBufferSampler> DynamicBufferSamplers;
 		};
 	}
 }

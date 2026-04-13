@@ -35,13 +35,13 @@ namespace fe::Resource
 
 		FE_CORE_ASSERT(	layout.Type == Description::Buffer::LayoutType::Vertex, "Vertex Array can only have vertex layout");
 
-		size_t rows;
+		UInt rows;
 		GLint columns;
 		
 		RStaticBuffer_OpenGL & vertex_buffer = * (RStaticBuffer_OpenGL*) & buffer;
 
-		uint32_t buffer_element_index = 0;
-		for (size_t i = 0; i < layout.Elements.Count; ++i)
+		GLuint buffer_element_index = 0;
+		for (UInt i = 0; i < layout.Elements.Count; ++i)
 		{
 			const auto& element = layout.Elements[i];
 			const auto& element_offset = layout.Offsets[i];
@@ -87,7 +87,7 @@ namespace fe::Resource
 
 					FE_LOG_CORE_DEBUG("rows: {0}, columns: {1}", rows, columns);
 					FE_LOG_CORE_WARN("Vertex buffer layout setting, matrix - is this working?");
-					for (size_t j = 0; j < rows; j++)
+					for (UInt j = 0; j < rows; j++)
 					{
 						glEnableVertexArrayAttrib(OpenGLID, buffer_element_index);
 						glVertexArrayVertexBuffer(OpenGLID, buffer_element_index, vertex_buffer.OpenGLID, layout.Stride, offset);

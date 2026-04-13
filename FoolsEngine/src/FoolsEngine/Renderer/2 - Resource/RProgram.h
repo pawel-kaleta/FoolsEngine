@@ -2,8 +2,6 @@
 
 #include "RShader.h"
 
-#include "FoolsEngine/Assets/Asset.h"
-
 #include "FoolsEngine/Renderer/1 - Description/ShaderInterface.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
@@ -14,6 +12,7 @@ namespace fe::Resource
 	struct RProgram
 	{
 		U32 SpecificationID;
+		Splice<UInt> VertexAttributesStreamIDs;
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
@@ -23,11 +22,16 @@ namespace fe::Resource
 	{
 		GLuint OpenGLID;
 		Splice<GLuint> ShaderOpenGLIDs;
+		UInt PipelineStateID;
+
 
 		struct
 		{
-			Splice<GLint> MainUniforms;
+			Splice<GLint> Uniforms;
 			Splice<GLint> TextureSamplers;
+			Splice<GLint> UniformBufferSamplers; // not handled yet
+			Splice<GLint> DynamicBufferSamplers; // not handled yet
+			Splice<GLint> VertexAttributesLocations;
 		} BindingLocations;
 
 		virtual void Create() override;

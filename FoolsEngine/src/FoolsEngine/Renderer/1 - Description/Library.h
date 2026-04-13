@@ -2,6 +2,7 @@
 
 #include "Buffer.h"
 #include "Texture.h"
+#include "Pipeline.h"
 #include "Framebuffer.h"
 #include "ShaderInterface.h"
 
@@ -20,10 +21,8 @@ namespace fe::Description
 
 		XarrAlloc<Texture::Archetype,						MonotonicAlloc, MallocAlloc>	TextureArchetypes;
 		XarrAlloc<Buffer::Layout,							MonotonicAlloc, MallocAlloc>	BufferLayouts;
+		XarrAlloc<Pipeline::State,							MonotonicAlloc, MallocAlloc>	PipelineStates;
 		XarrAlloc<Framebuffer::Specification,				MonotonicAlloc, MallocAlloc>	FramebufferSpecs;
-		XarrAlloc<ShaderInterface::TextureSampler,			MonotonicAlloc, MallocAlloc>	TextureSamplers;
-		XarrAlloc<ShaderInterface::UniformBufferSampler,	MonotonicAlloc, MallocAlloc>	UniformBufferSamplers;
-		XarrAlloc<ShaderInterface::Specification,			MonotonicAlloc, MallocAlloc>	ShaderSpecs;
 		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAlloc, MallocAlloc>	ProgramSpecs;
 		
 		std::pmr::map<UUID, U32> UUIDToIDMap;
@@ -34,10 +33,8 @@ namespace fe::Description
 		{
 			if constexpr (std::same_as<tnDescriptor, Texture::Archetype						>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
 			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
+			if constexpr (std::same_as<tnDescriptor, Pipeline::State						>) return CreateOrGetDescriptorWithUUID_Pipeline(uuid);
 			if constexpr (std::same_as<tnDescriptor, Framebuffer::Specification				>) return CreateOrGetDescriptorWithUUID_Framebuffer(uuid);
-			if constexpr (std::same_as<tnDescriptor, ShaderInterface::TextureSampler		>) return CreateOrGetDescriptorWithUUID_TextureSampler(uuid);
-			if constexpr (std::same_as<tnDescriptor, ShaderInterface::UniformBufferSampler	>) return CreateOrGetDescriptorWithUUID_UniformBufferSampler(uuid);
-			if constexpr (std::same_as<tnDescriptor, ShaderInterface::Specification			>) return CreateOrGetDescriptorWithUUID_ShaderInterface(uuid);
 			if constexpr (std::same_as<tnDescriptor, ShaderInterface::ProgramSpecification	>) return CreateOrGetDescriptorWithUUID_ProgramSpecification(uuid);
 		}
 		
@@ -54,10 +51,8 @@ namespace fe::Description
 
 		UInt CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
+		UInt CreateOrGetDescriptorWithUUID_Pipeline(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
-		UInt CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid);
-		UInt CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid);
-		UInt CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);
 
 		static Library* s_Library;

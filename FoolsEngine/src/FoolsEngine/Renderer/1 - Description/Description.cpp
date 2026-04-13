@@ -87,12 +87,8 @@ namespace fe::Description
 		TextureArchetypes.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
 		BufferLayouts.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
 		FramebufferSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-		TextureSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-		UniformBufferSamplers.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-		ShaderSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
+		PipelineStates.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
 		ProgramSpecs.InitXarrAlloc(&m_AllocPermanent, &m_AllocGPA);
-
-		
 	}
 
 	UInt Library::CreateOrGetDescriptorWithUUID_Texture(UUID uuid)
@@ -128,36 +124,14 @@ namespace fe::Description
 		return size;
 	}
 
-	UInt Library::CreateOrGetDescriptorWithUUID_TextureSampler(UUID uuid)
+	UInt Library::CreateOrGetDescriptorWithUUID_Pipeline(UUID uuid)
 	{
 		auto search_result = UUIDToIDMap.find(uuid);
 		if (search_result != UUIDToIDMap.end())
 			return search_result->second;
 
-		UInt size = TextureSamplers.Count;
-		TextureSamplers.PushBack();
-		return size;
-	}
-
-	UInt Library::CreateOrGetDescriptorWithUUID_UniformBufferSampler(UUID uuid)
-	{
-		auto search_result = UUIDToIDMap.find(uuid);
-		if (search_result != UUIDToIDMap.end())
-			return search_result->second;
-
-		UInt size = UniformBufferSamplers.Count;
-		UniformBufferSamplers.PushBack();
-		return size;
-	}
-
-	UInt Library::CreateOrGetDescriptorWithUUID_ShaderInterface(UUID uuid)
-	{
-		auto search_result = UUIDToIDMap.find(uuid);
-		if (search_result != UUIDToIDMap.end())
-			return search_result->second;
-		
-		UInt size = ShaderSpecs.Count;
-		ShaderSpecs.PushBack();
+		UInt size = PipelineStates.Count;
+		PipelineStates.PushBack();
 		return size;
 	}
 
