@@ -75,7 +75,17 @@ namespace fe::Resource
 			BindingLocations.TextureSamplers[i] = location;
 		}
 
-		glGetAttribLocation
+		BindingLocations.VertexAttributesLocations = Context::Allocators::Default->Allocate<Splice<GLint>>(VertexAttributesStreamIDs.Count);
+		for (UInt i = 0; i < VertexAttributesStreamIDs.Count; i++)
+		{
+			const auto& vertex_attributes_stream = library.BufferLayouts[VertexAttributesStreamIDs[i]];
+			BindingLocations.VertexAttributesLocations[i] = Context::Allocators::Default->Allocate<GLint>(vertex_attributes_stream.Elements.Count);
+			for (UInt j = 0; j < vertex_attributes_stream.Elements.Count; j++)
+			{
+				BindingLocations.VertexAttributesLocations[i][j] = glGetAttribLocation(ProgramOpenGLID, vertex_attributes_stream.Elements[j].Name.CData());
+			}
+		}
+		
 	}
 
 	void RProgram_OpenGL::Destroy()
@@ -84,7 +94,7 @@ namespace fe::Resource
 
 		glDeleteProgram(OpenGLID);
 
-		Context::Allocators::Default->Deallocate(BindingLocations.MainUniforms);
+		Context::Allocators::Default->Deallocate(BindingLocations.Uniforms);
 		Context::Allocators::Default->Deallocate(BindingLocations.TextureSamplers);
 	}
 }

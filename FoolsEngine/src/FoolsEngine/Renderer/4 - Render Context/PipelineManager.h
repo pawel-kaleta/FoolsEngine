@@ -11,6 +11,7 @@ namespace fe
 
 	struct PipelineManager_OpenGL final : public PipelineManager
 	{
+		Description::Pipeline::State State;
 		Command::PipelineState_OpenGL Commands;
 	};
 }

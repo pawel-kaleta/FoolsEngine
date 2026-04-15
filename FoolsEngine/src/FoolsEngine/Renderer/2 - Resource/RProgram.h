@@ -13,6 +13,7 @@ namespace fe::Resource
 	{
 		U32 SpecificationID;
 		Splice<UInt> VertexAttributesStreamIDs;
+		UInt PipelineStateID;
 
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
@@ -22,8 +23,6 @@ namespace fe::Resource
 	{
 		GLuint OpenGLID;
 		Splice<GLuint> ShaderOpenGLIDs;
-		UInt PipelineStateID;
-
 
 		struct
 		{
@@ -31,7 +30,7 @@ namespace fe::Resource
 			Splice<GLint> TextureSamplers;
 			Splice<GLint> UniformBufferSamplers; // not handled yet
 			Splice<GLint> DynamicBufferSamplers; // not handled yet
-			Splice<GLint> VertexAttributesLocations;
+			Splice<Splice<GLint>> VertexAttributesLocations;
 		} BindingLocations;
 
 		virtual void Create() override;
