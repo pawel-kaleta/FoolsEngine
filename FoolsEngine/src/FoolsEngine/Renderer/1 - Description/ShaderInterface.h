@@ -23,6 +23,10 @@ namespace fe
 		{
 			String Name;
 			U32 TextureArchetypeID = -1;
+			Texture::Wrapping Wrapping = Texture::Wrapping::None;
+			Texture::Filtering Filtering = Texture::Filtering::None;
+			Texture::Mipmapping Mipmapping = Texture::Mipmapping::None;
+			Texture::AnisotropicFiltering AnisotropicFiltering = Texture::AnisotropicFiltering::None;
 		};
 
 		struct UniformBufferSampler { };

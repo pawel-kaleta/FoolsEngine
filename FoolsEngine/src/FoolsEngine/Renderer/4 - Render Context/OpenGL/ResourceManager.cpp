@@ -7,11 +7,10 @@
 
 namespace fe
 {
-	bool ResourceManager_OpenGL::MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Description::Buffer::Usage usage, Splice<Byte> data)
+	bool ResourceManager_OpenGL::MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Splice<Byte> data)
 	{
 		FE_PROFILER_FUNC();
 
-		buffer.Usage = usage;
 		buffer.Size = data.Count;
 		buffer.Create();
 		if (data.Elements)

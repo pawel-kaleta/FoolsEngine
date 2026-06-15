@@ -7,6 +7,8 @@ namespace fe
 {
 	namespace Description::Pipeline
 	{
+		FE_DECLARE_ENUM(PrimitiveType, None, Point, Line, Triangle);
+
 		FE_DECLARE_ENUM(FaceCullTest, None, Never, Back, Front, Always);
 
 		FE_DECLARE_ENUM(DepthTestType, None, Never, Always, NotEqual, Less, LessEqual, Equal, GreaterEqual, Greater);
@@ -28,6 +30,7 @@ namespace fe
 		{
 			UUID UUID = fe::UUID();
 
+			PrimitiveType		mPrimitiveType		= PrimitiveType::None;
 			FaceCullTest		mFaceCullTest		= FaceCullTest::None;
 			DepthTestType		mDepthTestType		= DepthTestType::None;
 			StencilTestType		mStencilTestType	= StencilTestType::None;

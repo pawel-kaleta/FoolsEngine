@@ -120,10 +120,6 @@ namespace fe
 			UUID UUID;
 			Type Type = Type::None;
 			Format Format = Format::None;
-			Wrapping Wrapping = Wrapping::None;
-			Filtering Filtering = Filtering::None;
-			Mipmapping Mipmapping = Mipmapping::None;
-			AnisotropicFiltering AnisotropicFiltering = AnisotropicFiltering::None;
 		};
 
 		struct Specification

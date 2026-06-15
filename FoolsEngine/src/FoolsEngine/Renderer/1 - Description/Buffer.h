@@ -11,8 +11,6 @@ namespace fe
 {
 	namespace Description::Buffer
 	{
-		FE_DECLARE_ENUM(Usage, None, Vertex, Index, IndexVertex, Batch, Uniform, ShaderStorage); // do we need this?
-
 		struct Element
 		{
 			String Name;

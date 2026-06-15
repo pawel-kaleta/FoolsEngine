@@ -37,7 +37,7 @@ namespace fe
 			PermanentAlloc.Init(Context::Allocators::Default);
 		}
 
-		bool MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Description::Buffer::Usage usage, Splice<Byte> data = Splice<Byte>());
+		bool MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Splice<Byte> data = Splice<Byte>());
 		bool MakeDownStream(RDownStream_OpenGL& downStream, UInt initCapacity = 64);
 		bool MakeFramebuffer(RFramebuffer_OpenGL& framebuffer, UInt specyficationID);
 		bool MakeMeshBindings(RStaticBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData);

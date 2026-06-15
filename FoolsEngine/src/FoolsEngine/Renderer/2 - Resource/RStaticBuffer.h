@@ -11,7 +11,6 @@ namespace fe::Resource
 
 	struct RStaticBuffer
 	{
-		Buffer::Usage Usage;
 		U32 Size;
 
 		virtual void Create() = 0;

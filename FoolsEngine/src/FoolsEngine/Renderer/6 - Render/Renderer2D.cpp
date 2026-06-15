@@ -40,7 +40,6 @@ namespace fe
 		Scratchpad sp;
 
 		s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		s_Instance->m_QuadVertexBuffer->Usage = Description::Buffer::Usage::Vertex;
 		s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
 		s_Instance->m_QuadVertexBuffer->Create();
 
@@ -78,7 +77,6 @@ namespace fe
 		}
 
 		s_Instance->m_QuadIndexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		s_Instance->m_QuadIndexBuffer->Usage = Description::Buffer::Usage::Index;
 		s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
 		s_Instance->m_QuadIndexBuffer->Create();
 		FE_CORE_ASSERT(false, "not implemented");
