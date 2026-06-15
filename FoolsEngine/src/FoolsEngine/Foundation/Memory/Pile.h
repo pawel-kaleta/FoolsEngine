@@ -41,7 +41,7 @@ namespace fe
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = AlignTo<7>(s_Free);
+			result.Elements = AlignTo<8>(s_Free);
 			result.Count = bytes;
 
 			s_Free = result.Elements + bytes;
@@ -161,8 +161,8 @@ namespace fe
 		PileBase() :
 			m_Begin(s_Free),
 			m_End(s_Free),
-			m_FlagMask(U64(1) << (U64(63) - s_Count)),
-			m_FrontFlagsAntiMask(U64(-1) << (U64(63) - s_Count))
+			m_FlagMask(U64(1) << (UInt(63) - s_Count)),
+			m_FrontFlagsAntiMask(U64(-1) << (UInt(63) - s_Count))
 		{
 			s_RollbackFlags |= m_FlagMask;
 			++s_Count;

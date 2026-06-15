@@ -22,11 +22,11 @@ namespace fe
 
 		void Append(String string)
 		{
-			if (Buffer.Count < Count + string.Length)
-				ReserveAtLeast(Count + string.Length);
+			if (Buffer.Count < Count + string.Length())
+				ReserveAtLeast(Count + string.Length());
 
-			std::memcpy(&Buffer[Count], string.Data, string.Length);
-			Count += string.Length;
+			std::memcpy(&Buffer[Count], string.Data(), string.Length());
+			Count += string.Length();
 		}
 
 		void Append(const char* ptr)
@@ -48,21 +48,12 @@ namespace fe
 		}
 
 		template <class tnAllocator>
-		CString GetCString(tnAllocator* alloc) const
+		String GetString(tnAllocator* alloc) const
 		{
-			Splice<char> mem_reg = alloc->Allocate<char>(Count + 1);
+			Splice<char8_t> mem_reg = alloc->Allocate<char8_t>(Count);
 			std::memcpy(mem_reg.Elements, Data, Count);
 			mem_reg.Elements[Count] = '\0';
-			return *(CString*)&mem_reg;
-		}
-
-		template <class tnAllocator>
-		String GetCString(tnAllocator* alloc) const
-		{
-			Splice<char> mem_reg = alloc->Allocate<char>(Count);
-			std::memcpy(mem_reg.Elements, Data, Count);
-			mem_reg.Elements[Count] = '\0';
-			return *(CString*)&mem_reg;
+			return *(String*)&mem_reg;
 		}
 
 		void ReserveExact(UInt capacity)
@@ -86,16 +77,6 @@ namespace fe
 		}
 
 	private:
-		void DefaultResizeAndRelocate()
-		{
-			bool any_capacity = Buffer.Count;
-			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-
-			new_capacity = any_capacity ? new_capacity : 8;
-
-			RelocateToNewCapacity(new_capacity);
-		}
-
 		void RelocateToNewCapacity(UInt newCapacity)
 		{
 			Splice<char8_t> new_buffer = Alloc->Allocate<char8_t>(newCapacity);
@@ -111,7 +92,7 @@ namespace fe
 	};
 
 	template <class tnAllocator>
-	struct StringBuilderAlloc final : public StringBuilder
+	struct StringBuilderAlloc final : public StringBuilderAllocPM
 	{
 	public:
 		void Release()
@@ -171,16 +152,6 @@ namespace fe
 
 	private:
 		TypedAlloc<tnAllocator>* GetAlloc() { return ((TypedAlloc<tnAllocator>*) this->Alloc); }
-
-		void DefaultResizeAndRelocate()
-		{
-			bool any_capacity = this->Buffer.Count;
-			UInt new_capacity = this->Buffer.Count + (this->Buffer.Count >> 1); // *1.5
-
-			new_capacity = any_capacity ? new_capacity : 8;
-
-			RelocateToNewCapacity(new_capacity);
-		}
 
 		void RelocateToNewCapacity(UInt newCapacity)
 		{

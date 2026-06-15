@@ -7,37 +7,6 @@
 
 namespace fe
 {
-	//struct CString
-	//{
-	//	const char* Data = nullptr;
-	//	UInt LengthWithNull = 0;
-	//
-	//	bool IsValid() const { return (UInt)Data * LengthWithNull; }
-	//	bool IsEmpty() const { return LengthWithNull > 1; }
-	//
-	//	void FromConstCharPtr(const char* string, UInt lengthWithNull)
-	//	{
-	//		Data = string;
-	//		LengthWithNull = lengthWithNull;
-	//	}
-	//
-	//	void FromConstCharPtr(const char* string)
-	//	{
-	//		Data = string;
-	//
-	//		auto current = string;
-	//		UInt size = 0;
-	//
-	//		while (*current != '\0')
-	//		{
-	//			size++;
-	//			current++;
-	//		}
-	//
-	//		LengthWithNull = size + 1;
-	//	}
-	//};
-
 	struct String
 	{
 		Splice<char8_t> Buffer;
@@ -115,7 +84,7 @@ namespace fe
 		}
 
 		template <class tnAllocator>
-		String GetCString(tnAllocator* alloc) const
+		String GetString(tnAllocator* alloc) const
 		{
 			Splice<char8_t> mem_reg = alloc->Allocate<char8_t>(Count+1);
 			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
@@ -143,16 +112,6 @@ namespace fe
 			RelocateToNewCapacity(new_capacity);
 		}
 	private:
-		void DefaultResizeAndRelocate()
-		{
-			bool any_capacity = Buffer.Count;
-			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-
-			new_capacity = any_capacity ? new_capacity : 8;
-
-			RelocateToNewCapacity(new_capacity);
-		}
-
 		void RelocateToNewCapacity(UInt newCapacity)
 		{
 			auto alloc = Context::Allocators::Default;

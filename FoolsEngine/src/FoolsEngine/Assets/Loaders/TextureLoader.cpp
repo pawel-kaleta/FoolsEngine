@@ -17,7 +17,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto& data_location = textureUser.GetCore().Data;
-		if (data_location)
+		if (data_location.Elements)
 			return;
 
 		//TO DO: dont override specification, use import settings
@@ -37,7 +37,8 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Archetype Init");
 
-			data_location = data;
+			data_location.Elements = (Byte*)data;
+			data_location.Count = -1; // ?!
 
 			FE_CORE_ASSERT(data, "Failed to load image!");
 			spec.Width = width;
