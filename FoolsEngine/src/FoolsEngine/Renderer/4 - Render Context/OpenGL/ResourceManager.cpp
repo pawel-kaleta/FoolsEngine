@@ -58,8 +58,8 @@ namespace fe
 		
 		bindings.LayoutID = Vert::GetLayoutID();
 		bindings.Create();
-		bindings.BindIndexBuffer(buffer, index_offset, indexData.Count);
-		bindings.BindVertexBuffer(buffer, vertex_offset);
+		bindings.BindIndexData(buffer, index_offset, indexData.Count);
+		bindings.BindVertexData(buffer, vertex_offset);
 
 		return true;
 	}

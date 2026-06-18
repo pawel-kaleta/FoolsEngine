@@ -25,20 +25,21 @@ namespace fe::Resource
 		glDeleteVertexArrays(1, &OpenGLID);
 	}
 
-	void RMeshBindings_OpenGL::BindVertexBuffer(const RStaticBuffer& buffer, UInt offset)
+	void RMeshBindings_OpenGL::BindVertexData(UInt attributeArrayIndex)
 	{
 		FE_PROFILER_FUNC();
 
-		VertexOffset = offset;
+		auto& attribute_array = AttributeArrays[attributeArrayIndex];
 
-		const auto& layout = Description::Library::Get().BufferLayouts[LayoutID];
+		const auto& layout = Description::Library::Get().BufferLayouts[attribute_array.LayoutID];
 
 		FE_CORE_ASSERT(	layout.Type == Description::Buffer::LayoutType::Vertex, "Vertex Array can only have vertex layout");
 
 		UInt rows;
 		GLint columns;
 		
-		RStaticBuffer_OpenGL & vertex_buffer = * (RStaticBuffer_OpenGL*) & buffer;
+		RStaticBuffer_OpenGL & vertex_buffer = * (RStaticBuffer_OpenGL*) attribute_array.VertexData.Buffer;
+		auto offset = attribute_array.VertexData.Offset;
 
 		GLuint buffer_element_index = 0;
 		for (UInt i = 0; i < layout.Elements.Count; ++i)
@@ -111,10 +112,9 @@ namespace fe::Resource
 		}
 	}
 
-	void RMeshBindings_OpenGL::BindIndexBuffer(const RStaticBuffer& buffer, UInt offset, UInt indexCount)
+	void RMeshBindings_OpenGL::BindIndexData(RMemReg memReg, UInt indexCount)
 	{
-		glVertexArrayElementBuffer(OpenGLID, (*(RStaticBuffer_OpenGL*)&buffer).OpenGLID);
+		glVertexArrayElementBuffer(OpenGLID, (*(RStaticBuffer_OpenGL*)memReg.Buffer).OpenGLID);
 		IndexCount = indexCount;
-		IndexOffset = offset;
 	}
 }

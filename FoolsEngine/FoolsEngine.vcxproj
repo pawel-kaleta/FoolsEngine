@@ -235,6 +235,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RStaticBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RTexture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RMeshBindings.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Allocation.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ProgramState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h" />

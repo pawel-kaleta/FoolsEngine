@@ -20,14 +20,14 @@ namespace fe::Resource
 	{
 		//Description::Buffer::Usage Usage; // do we need this?
 
-		virtual void Create(size_t capacity) = 0;
+		virtual void Create(UInt capacity) = 0;
 		virtual void Destroy() = 0;
 
 		virtual void BeginRegion() = 0;
 		virtual void PushData(Splice<Byte> data) = 0;
 		virtual RStreamRegion* EndRegion() = 0;
 
-		virtual RStreamRegion* ReserveUncommitedRegion(size_t size) = 0;
+		virtual RStreamRegion* ReserveUncommitedRegion(Splice<Byte> & CPURegion) = 0;
 		virtual void CommitRegion(RStreamRegion* region) = 0;
 
 		virtual void RetireRegion(RStreamRegion* region) = 0;
@@ -82,7 +82,7 @@ namespace fe::Resource
 		virtual void PushData(Splice<Byte> data) override;
 		virtual RStreamRegion* EndRegion() override;
 
-		virtual RStreamRegion* ReserveUncommitedRegion(UInt size) override;
+		virtual RStreamRegion* ReserveUncommitedRegion(Splice<Byte>& CPURegion) override;
 		virtual void CommitRegion(RStreamRegion* region) override;
 
 		virtual void RetireRegion(RStreamRegion* region) override;

@@ -9,12 +9,41 @@ namespace fe::Resource
 {
 	using namespace Description;
 
-	struct RStaticBuffer
+	struct RBuffer
 	{
 		U32 Size;
 
 		virtual void Create() = 0;
 		virtual void Delete() = 0;
+		virtual bool IsStatic() = 0;
+	};
+
+	struct RMemReg
+	{
+		RBuffer* Buffer;
+		U32 Offset;
+		U32 Size;
+	};
+
+	struct RStaticBuffer : public RBuffer
+	{
+		virtual bool IsStatic() final override { return true; }
+
+		// from RBuffer
+		//virtual void Create() = 0;
+		//virtual void Delete() = 0;
+
+		virtual void Replace(Splice<Byte> data = Splice<Byte>()) = 0;
+		virtual void Update(UInt targetOffset, Splice<Byte> data) = 0;
+	};
+
+	struct RGenericBuffer : public RBuffer
+	{
+		virtual bool IsStatic() final override { return true; }
+
+		// from RBuffer
+		//virtual void Create() = 0;
+		//virtual void Delete() = 0;
 
 		virtual void Replace(Splice<Byte> data = Splice<Byte>()) = 0;
 		virtual void Update(UInt targetOffset, Splice<Byte> data) = 0;
@@ -30,4 +59,6 @@ namespace fe::Resource
 		virtual void Replace(Splice<Byte> data = Splice<Byte>()) override;
 		virtual void Update(UInt targetOffset, Splice<Byte> data) override;
 	};
+
+
 }

@@ -473,6 +473,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ProgramState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\ProgramManager.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Allocation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

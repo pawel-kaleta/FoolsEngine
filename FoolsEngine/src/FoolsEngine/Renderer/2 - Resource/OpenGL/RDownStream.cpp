@@ -98,7 +98,7 @@ namespace fe::Resource
 		return &region;
 	}
 
-	RStreamRegion* RDownStream_OpenGL::ReserveUncommitedRegion(UInt size)
+	RStreamRegion* RDownStream_OpenGL::ReserveUncommitedRegion(Splice<Byte>& CPURegion)
 	{
 		auto& new_fence = *BackFences.PushBack();
 		new_fence.OpenGLFence = nullptr;
@@ -112,8 +112,10 @@ namespace fe::Resource
 		region.Size = 0;
 
 		Splice<Byte> push_placeholder;
-		push_placeholder.Count = ((size + (Alignment - 1)) & ~(Alignment - 1));
+		push_placeholder.Count = ((CPURegion.Count + (Alignment - 1)) & ~(Alignment - 1));
 		PushData(push_placeholder);
+
+		CPURegion.Elements = CPUMemoryBegin + CurrentOffset;
 
 		return &region;
 	}

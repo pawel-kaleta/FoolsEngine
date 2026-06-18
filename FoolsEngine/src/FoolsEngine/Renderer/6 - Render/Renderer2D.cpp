@@ -85,8 +85,8 @@ namespace fe
 		s_Instance->m_VertexArray.reset(new Resource::RMeshBindings_OpenGL());
 		s_Instance->m_VertexArray->LayoutID = layoutID;
 		s_Instance->m_VertexArray->Create();
-		s_Instance->m_VertexArray->BindIndexBuffer(*s_Instance->m_QuadIndexBuffer, 0, 0);
-		s_Instance->m_VertexArray->BindVertexBuffer(*s_Instance->m_QuadVertexBuffer, 0);
+		s_Instance->m_VertexArray->BindIndexData(*s_Instance->m_QuadIndexBuffer, 0, 0);
+		s_Instance->m_VertexArray->BindVertexData(*s_Instance->m_QuadVertexBuffer, 0);
 
 		//s_Instance.m_BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
