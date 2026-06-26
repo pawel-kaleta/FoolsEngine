@@ -274,9 +274,10 @@ namespace fe
 
 		char* uniform_data_ptr = (char*)core.UniformsData.Elements;
 
+		Pile p;
 		for (auto& uniform : shading_model_observer.GetUniforms().Elements)
 		{
-			emitter << YAML::Key << uniform.Name.CData() << YAML::Value << YAML::BeginMap;
+			emitter << YAML::Key << uniform.Name.GetCString(&p).Data << YAML::Value << YAML::BeginMap;
 			emitter << YAML::Key << "Type"  << YAML::Value << uniform.Type.ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.Count;
 			emitter << YAML::Key << "Value" << YAML::Value << YAML::BeginSeq;
@@ -290,6 +291,7 @@ namespace fe
 			emitter << YAML::EndSeq;
 			emitter << YAML::EndMap;
 		}
+		p.Clear();
 		emitter << YAML::EndMap;
 
 		emitter << YAML::Key << "Textures" << YAML::Value << YAML::BeginMap;
@@ -299,7 +301,6 @@ namespace fe
 		const auto& program_spec = library.ProgramSpecs[program_spec_id];
 		const auto& texture_sampler_ids = program_spec.TextureSamplerIDs;
 
-		Pile p;
 		STD_PMR_Allocator pmr_p(&p);
 		for (size_t i = 0; i < texture_sampler_ids.Count; ++i)
 		{
@@ -342,14 +343,16 @@ namespace fe
 
 		char* uniform_data_ptr = (char*)uniformsData;
 
+		Pile p;
 		for (const auto& uniform : uniforms.Elements)
 		{
 			const auto size = uniform.Size();
 			const auto& count = uniform.Count;
 			const auto& type = uniform.Type;
 			const auto& name = uniform.Name;
+			auto name_cstring = name.GetCString(&p);
 
-			const auto& uniform_node = node[name.CData()];
+			const auto& uniform_node = node[name_cstring.Data];
 
 			if (!uniform_node.IsDefined())
 			{
@@ -379,7 +382,7 @@ namespace fe
 				value_node.size() != uniform_count ||
 				count != uniform_count)
 			{
-				FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name.CData());
+				FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name_cstring.Data);
 				uniform_data_ptr += size * count;
 
 				continue;
@@ -388,9 +391,11 @@ namespace fe
 			for (size_t i = 0; i < count; ++i)
 			{
 				bool success = LoadGPUDataType(value_node[i], uniform_data_ptr, type);
-				if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name.CData());
+				if (!success) FE_LOG_CORE_WARN("Ill defined uniform '{0}' in material definition", name_cstring.Data);
 				uniform_data_ptr += size;
 			}
+
+			p.Clear();
 		}
 	}
 
@@ -401,11 +406,12 @@ namespace fe
 		auto& reg = AssetManager::Get().m_Registry;
 		const auto& library = Description::Library::Get();
 
+		Pile p;
 		for (size_t i = 0; i < textureSamplerIDs.size(); ++i)
 		{
-
 			const auto& texture_sampler = library.TextureSamplers[textureSamplerIDs[i]];
-			const auto& texture_node = node[texture_sampler.Name.CData()];
+			CString sampler_name_cstring = texture_sampler.Name.GetCString(&p);
+			const auto& texture_node = node[sampler_name_cstring.Data];
 
 			if (!texture_node.IsDefined())
 			{
@@ -469,6 +475,8 @@ namespace fe
 			AssetManager::SetSourcePath(texture_id, parentPath / texture_source_filepath_node.as<std::string>());
 
 			textureIDs[i] = texture_id;
+
+			p.Clear();
 		}
 	}
 

@@ -7,39 +7,60 @@
 
 namespace fe
 {
+	struct CString
+	{
+		char* Data = nullptr;
+		UInt CountWithNull = 0;
+
+		CString() = default;
+		CString(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
+
+		void FromConstCharPtr(const char* string, UInt lengthWithNull)
+		{
+			Data = (char*)string;
+			CountWithNull = lengthWithNull;
+		}
+	};
+
 	struct String
 	{
-		Splice<char8_t> Buffer;
-
-		const	char8_t* Data() const	{ return Buffer.Elements; }
-				char8_t* Data()			{ return Buffer.Elements; }
-		const char* CData() const { return (const char*)Buffer.Elements; }
-
-		//without null
-		UInt Length() const { return Buffer.Count - 1; }
-
-		bool IsValid() const { return Data(); }
-		bool IsEmpty() const { return Length(); }
+		char8_t* Data = nullptr;
+		UInt Count = 0;
 
 		String() = default;
 		String(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
 		{
-			Buffer.Elements = (char8_t*)string;
-			Buffer.Count = lengthWithNull;
+			Data = (char8_t*)string;
+			Count = lengthWithNull-1;
 		}
 
-		void FromSplice(Splice<char8_t> splice) { *this = *(String*)&splice; }
-		void FromMemReg(Splice<Byte> splice)	{ *this = *(String*)&splice; }
+		template <typename T>
+		void FromSplice(Splice<T> splice)
+		{
+			Data = (char8_t*)splice.Elements;
+			Count = splice.Count * sizeof(T);
+		}
+
+		template <typename Allocator>
+		CString GetCString(Allocator* alloc) const
+		{
+			CString output;
+			output.Data = alloc->Allocate<char8_t>(Count + 1).Elements;
+			output.CountWithNull = Count + 1;
+			std::memcpy(output.Data, Data, Count);
+			output.Data[Count + 1] = u8'\0';
+			return output;
+		}
 	};
 
 	inline bool CompareStringsEqual(String a, String b)
 	{
-		if (a.Buffer.Count != b.Buffer.Count)
+		if (a.Count != b.Count)
 			return false;
 
-		return ! std::memcmp(a.Data(), b.Data(), a.Buffer.Count);
+		return ! std::memcmp(a.Data, b.Data, a.Count);
 	}
 
 	struct StringBuilder
@@ -57,12 +78,23 @@ namespace fe
 
 		void Append(String string)
 		{
-			UInt Required_capacity = Count + string.Length();
-			if (Buffer.Count < Required_capacity)
-				ReserveAtLeast(Required_capacity);
+			UInt required_capacity = Count + string.Count;
+			if (Buffer.Count < required_capacity)
+				ReserveAtLeast(required_capacity);
 
-			std::memcpy(&Buffer[Count], string.Data(), string.Length());
-			Count += string.Length();
+			std::memcpy(&Buffer[Count], string.Data, string.Count);
+			Count += string.Count;
+		}
+
+		void Append(const char* ptr, UInt lengthWithNull)
+		{
+			UInt append_count = lengthWithNull - 1;
+			UInt required_capacity = Count + append_count;
+			if (Buffer.Count < required_capacity)
+				ReserveAtLeast(required_capacity);
+
+			std::memcpy(&Buffer[Count], ptr, append_count);
+			Count += append_count;
 		}
 
 		void Append(const char* ptr)
@@ -83,13 +115,21 @@ namespace fe
 			Count += size;
 		}
 
-		template <class tnAllocator>
-		String GetString(tnAllocator* alloc) const
+		String GetString() const
 		{
-			Splice<char8_t> mem_reg = alloc->Allocate<char8_t>(Count+1);
+			Splice<char8_t> mem_reg = Context::Allocators::Output->Allocate<char8_t>(Count);
 			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
-			mem_reg.Elements[Count] = u8'\0';
-			return *(String*)&mem_reg;
+			return String((char*)mem_reg.Elements, mem_reg.Count);
+		}
+
+		CString GetCString() const
+		{
+			CString output;
+			output.Data = Context::Allocators::Output->Allocate<char8_t>(Count+1).Elements;
+			output.CountWithNull = Count + 1;
+			std::memcpy(output.Data, Buffer.begin(), Count);
+			output.Data[Count + 1] = u8'\0';
+			return output;
 		}
 
 		void ReserveExact(UInt capacityWithoutNull)

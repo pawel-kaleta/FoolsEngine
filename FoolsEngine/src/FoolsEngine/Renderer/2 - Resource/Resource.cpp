@@ -17,7 +17,9 @@ namespace fe::Resource
 				return i;
 		}
 
-		FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer", name.CData());
+		Pile p;
+		FE_CORE_ASSERT(false, "Attachment {0} not found in framebuffer", name.GetCString(&p).Data);
+
 		return 0;
 	}
 }

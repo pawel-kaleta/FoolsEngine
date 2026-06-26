@@ -330,7 +330,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RShader.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RStaticBuffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RBuffer.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RTexture.h">
@@ -579,7 +579,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RShader.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RStaticBuffer.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RBuffer.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RTexture.cpp">

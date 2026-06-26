@@ -15,7 +15,11 @@ namespace fe::Resource
 		const auto& spec = Description::Library::Get().ShaderSpecs[SpecificationID];
 
 		OpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(spec.Type));
-		glShaderSource(OpenGLID, 1, (GLchar**) & source.Buffer.Elements, 0);
+		Pile p;
+		
+		auto source_cstring = source.GetCString(&p);
+
+		glShaderSource(OpenGLID, 1, (GLchar**)source_cstring.Data, 0);
 
 		GLint compilation_success;
 		{
@@ -26,7 +30,7 @@ namespace fe::Resource
 
 		if (compilation_success == GL_FALSE)
 		{
-			Pile p;
+			p.Clear();
 
 			GLint log_length = 0;
 			glGetShaderiv(OpenGLID, GL_INFO_LOG_LENGTH, &log_length);

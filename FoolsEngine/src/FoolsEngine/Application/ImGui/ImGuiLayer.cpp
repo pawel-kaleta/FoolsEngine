@@ -141,7 +141,8 @@ namespace fe {
 
 		bool changed = false;
 
-		auto& name = uniform.Name;
+		Pile p;
+		auto name_cstring = uniform.Name.GetCString(&p);
 		ImGuiDataType ImGuiType = -1;
 
 		switch (uniform.Primitive().Value)
@@ -160,7 +161,7 @@ namespace fe {
 				
 				ImGui::SameLine();
 			}
-			if (ImGui::Checkbox((char*)name.Data(), dataPtr))
+			if (ImGui::Checkbox(name_cstring.Data, dataPtr))
 				changed = true;
 			return changed;
 		}
@@ -184,7 +185,7 @@ namespace fe {
 		}
 
 		int count = (int)Description::Data::SizeOfType(uniform.Type) / (int)Description::Data::SizeOfPrimitive(uniform.Primitive());
-		if (ImGui::DragScalarN((char*)name.Data(), ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
+		if (ImGui::DragScalarN(name_cstring.Data, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
 			changed = true;
 
 		return changed;

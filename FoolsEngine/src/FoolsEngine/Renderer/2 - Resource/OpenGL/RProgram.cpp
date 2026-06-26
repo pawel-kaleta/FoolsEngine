@@ -27,12 +27,12 @@ namespace fe::Resource
 			glGetProgramiv(ProgramOpenGLID, GL_LINK_STATUS, (int*)&linking_success);
 		}
 
-		Pile p;
 		if (linking_success == GL_FALSE)
 		{
 			GLint log_length = 0;
 			glGetProgramiv(ProgramOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
+			Pile p;
 			auto info_log = p.Allocate<GLchar>(log_length);
 			glGetProgramInfoLog(ProgramOpenGLID, log_length, &log_length, info_log.Elements);
 
@@ -53,39 +53,45 @@ namespace fe::Resource
 		const auto& library = Description::Library::Get();
 
 		const auto& spec = library.ProgramSpecs[(UInt)SpecificationID];
-		
+
 		const auto& uniforms = spec.Uniforms;
 
-		BindingLocations.Uniforms = Context::Allocators::Default->Allocate<GLint>(uniforms.Count);
-		for (UInt i = 0; i < uniforms.Count; i++)
 		{
-			const auto& name = uniforms.Elements[i].Name;
-			GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.Data());
+			Pile p;
 
-			BindingLocations.Uniforms[i] = location;
-		}
-
-		BindingLocations.TextureSamplers = Context::Allocators::Default->Allocate<GLint>(spec.TextureSamplers.Count);
-		for (UInt i = 0; i < spec.TextureSamplers.Count; i++)
-		{
-			const auto& texture_sampler = spec.TextureSamplers[i];
-			const auto& name = texture_sampler.Name;
-			GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.Data());
-
-			BindingLocations.TextureSamplers[i] = location;
-		}
-
-		BindingLocations.VertexAttributesLocations = Context::Allocators::Default->Allocate<Splice<GLint>>(VertexAttributesStreamIDs.Count);
-		for (UInt i = 0; i < VertexAttributesStreamIDs.Count; i++)
-		{
-			const auto& vertex_attributes_stream = library.BufferLayouts[VertexAttributesStreamIDs[i]];
-			BindingLocations.VertexAttributesLocations[i] = Context::Allocators::Default->Allocate<GLint>(vertex_attributes_stream.Elements.Count);
-			for (UInt j = 0; j < vertex_attributes_stream.Elements.Count; j++)
+			BindingLocations.Uniforms = Context::Allocators::Default->Allocate<GLint>(uniforms.Count);
+			for (UInt i = 0; i < uniforms.Count; i++)
 			{
-				BindingLocations.VertexAttributesLocations[i][j] = glGetAttribLocation(ProgramOpenGLID, vertex_attributes_stream.Elements[j].Name.CData());
+				const auto& name = uniforms.Elements[i].Name;
+				GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.GetCString(&p).Data);
+
+				BindingLocations.Uniforms[i] = location;
 			}
+			p.Clear();
+
+			BindingLocations.TextureSamplers = Context::Allocators::Default->Allocate<GLint>(spec.TextureSamplers.Count);
+			for (UInt i = 0; i < spec.TextureSamplers.Count; i++)
+			{
+				const auto& texture_sampler = spec.TextureSamplers[i];
+				const auto& name = texture_sampler.Name;
+				GLint location = glGetUniformLocation(ProgramOpenGLID, (GLchar*)name.GetCString(&p).Data);
+
+				BindingLocations.TextureSamplers[i] = location;
+			}
+			p.Clear();
+
+			BindingLocations.VertexAttributesLocations = Context::Allocators::Default->Allocate<Splice<GLint>>(VertexAttributesStreamIDs.Count);
+			for (UInt i = 0; i < VertexAttributesStreamIDs.Count; i++)
+			{
+				const auto& vertex_attributes_stream = library.BufferLayouts[VertexAttributesStreamIDs[i]];
+				BindingLocations.VertexAttributesLocations[i] = Context::Allocators::Default->Allocate<GLint>(vertex_attributes_stream.Elements.Count);
+				for (UInt j = 0; j < vertex_attributes_stream.Elements.Count; j++)
+				{
+					BindingLocations.VertexAttributesLocations[i][j] = glGetAttribLocation(ProgramOpenGLID, (GLchar*)vertex_attributes_stream.Elements[j].Name.GetCString(&p).Data);
+				}
+			}
+			p.Clear();
 		}
-		
 	}
 
 	void RProgram_OpenGL::Destroy()

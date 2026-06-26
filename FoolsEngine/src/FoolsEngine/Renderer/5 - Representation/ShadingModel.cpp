@@ -144,10 +144,11 @@ namespace fe
 		char* uniform_data_ptr = (char*)core.DefaultUniformsData;
 		const auto& uniforms_layout = library.BufferLayouts[program_spec.MainUniformsLayoutID];
 
+		Pile p;
 		for (auto& uniform : uniforms_layout.Elements)
 		{
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Name" << YAML::Value << uniform.Name.CData();
+			emitter << YAML::Key << "Name" << YAML::Value << uniform.Name.GetCString(&p).Data;
 			emitter << YAML::Key << "Type" << YAML::Value << uniform.Type.ToConstCharPtr();
 			emitter << YAML::Key << "Count" << YAML::Value << uniform.Count;
 			emitter << YAML::Key << "Default Value" << YAML::Value << YAML::BeginSeq;
@@ -158,6 +159,7 @@ namespace fe
 				uniform_data_ptr += uniform.Size();
 			}
 			emitter << YAML::EndSeq << YAML::EndMap;
+			p.Clear();
 		}
 		emitter << YAML::EndSeq;
 
