@@ -227,6 +227,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RDownStream.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RFrameBuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h" />
