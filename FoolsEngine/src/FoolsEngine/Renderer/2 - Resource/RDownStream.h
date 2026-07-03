@@ -18,8 +18,6 @@ namespace fe::Resource
 
 	struct RDownStream
 	{
-		//Description::Buffer::Usage Usage; // do we need this?
-
 		virtual void Create(UInt capacity) = 0;
 		virtual void Destroy() = 0;
 

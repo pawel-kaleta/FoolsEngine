@@ -8,7 +8,7 @@
 
 namespace fe::Command
 {
-	// cost in order
+	// "cost" in order (may be driver internal cost of managing its own bookkeeping metadata and validation, not necesserily GPU state change)
 	//Render target
 	//Program
 	//ROP (raster operations pipeline - blending/depth test/cull test/ etc.)

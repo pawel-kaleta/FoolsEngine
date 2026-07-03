@@ -102,9 +102,9 @@ namespace fe::Resource
 		template <UInt Size>
 		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(false, "RArenaAllocator does not deallocate individually"); }
 	};
-
-	template <UInt memRegSize, UInt memRegAlignment>
-	class BitmappedPoolAlloc : public RAllocator
+	
+	template <UInt memRegSize, UInt memRegAlignment, UInt memRegCount>
+	class RBitmappedPoolAlloc : public RAllocator
 	{
 	public:
 		inline static constexpr UInt MemRegAlignment = memRegAlignment;
@@ -204,6 +204,57 @@ namespace fe::Resource
 			UInt index = memReg.Offset / memRegSize;
 			U64 flag_mask = (U64)1 << (63 - index);
 			m_BitMapping &= flag_mask;
+		}
+	};
+
+	class RCoallesingAlloc : public RAllocator
+	{
+	public:
+		RBuffer* Buffer;
+
+		virtual RMemReg Allocate(UInt bytes) override final
+		{
+			RMemReg result;
+
+			FE_CORE_ASSERT(false, "Not implemented");
+			
+
+			return result;
+		}
+		virtual RMemReg Allocate(UInt bytes, UInt alignment) override final
+		{
+			RMemReg result;
+			FE_CORE_ASSERT(false, "Not implemented");
+			
+			return result;
+		}
+		virtual void Deallocate(RMemReg memReg) override final
+		{
+			FE_CORE_ASSERT(memReg.Buffer == Buffer, "This BitmappedPoolAllocator does not own this MemReg");
+			FE_CORE_ASSERT(false, "Not implemented");
+			
+		}
+
+		template <UInt Size, UInt Alignment>
+		RMemReg Allocate()
+		{
+			RMemReg result;
+			FE_CORE_ASSERT(false, "Not implemented");
+			return result;
+		}
+
+		template <UInt Alignment>
+		RMemReg Allocate(UInt size)
+		{
+			RMemReg result;
+			FE_CORE_ASSERT(false, "Not implemented");
+			return result;
+		}
+
+		template <UInt Size>
+		void Deallocate(RMemReg memReg)
+		{
+			FE_CORE_ASSERT(false, "Not implemented");
 		}
 	};
 }
