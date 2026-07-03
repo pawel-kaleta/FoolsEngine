@@ -2,6 +2,8 @@
 
 #include "RBuffer.h"
 
+#include "FoolsEngine/Foundation/Memory/Bitset.h"
+
 namespace fe::Resource
 {
 	class RAllocator
@@ -103,24 +105,37 @@ namespace fe::Resource
 		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(false, "RArenaAllocator does not deallocate individually"); }
 	};
 	
-	template <UInt memRegSize, UInt memRegAlignment, UInt memRegCount>
+	template <UInt memRegSize, UInt memRegCount>
 	class RBitmappedPoolAlloc : public RAllocator
 	{
 	public:
-		inline static constexpr UInt MemRegAlignment = memRegAlignment;
 		inline static constexpr UInt MemRegSize = memRegSize;
+		inline static constexpr UInt MemRegCount = memRegCount;
 		inline static constexpr UInt TotalSize = memRegSize * 64;
-		inline Byte* RegionsEnd() { return m_Regions + TotalSize; }
 
 		RBuffer* Buffer;
 		//true is free
-		U64 m_BitMapping = 0;
+
+		Bitset<memRegCount> Bits;
 
 		virtual RMemReg Allocate(UInt bytes) override final
 		{
 			RMemReg result;
 
+			FE_CORE_ASSERT(false, "Not implemented");
+
 			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
+			for (UInt i = 0; i < Bits.WordsCount; i++)
+			{
+				if (Bits.Data[i] == -1)
+					continue;
+
+				unsigned long outIndex;
+				MSB64(&outIndex, m_BitMapping);
+				U64 flag_mask = (U64)1 << outIndex;
+				m_BitMapping &= ~flag_mask;
+			}
 
 			if (!m_BitMapping)
 			{// out of free MemRegs
@@ -128,10 +143,7 @@ namespace fe::Resource
 				return result;
 			}
 
-			unsigned long outIndex;
-			MSB64(&outIndex, m_BitMapping);
-			U64 flag_mask = (U64)1 << outIndex;
-			m_BitMapping &= ~flag_mask;
+			
 
 			result.Buffer = Buffer;
 			result.Offset = MemRegSize * (outIndex-1);

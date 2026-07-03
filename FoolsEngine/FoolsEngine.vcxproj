@@ -192,6 +192,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
