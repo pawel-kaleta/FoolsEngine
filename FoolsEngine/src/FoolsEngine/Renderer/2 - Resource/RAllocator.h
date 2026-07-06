@@ -3,6 +3,7 @@
 #include "RBuffer.h"
 
 #include "FoolsEngine/Foundation/Memory/Bitset.h"
+#include "FoolsEngine/Foundation/Memory/Xar.h"
 
 namespace fe::Resource
 {
@@ -114,115 +115,102 @@ namespace fe::Resource
 		inline static constexpr UInt TotalSize = memRegSize * 64;
 
 		RBuffer* Buffer;
-		//true is free
 
+		//true is occupied
 		Bitset<memRegCount> Bits;
 
 		virtual RMemReg Allocate(UInt bytes) override final
 		{
-			RMemReg result;
-
-			FE_CORE_ASSERT(false, "Not implemented");
-
 			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
 
-			for (UInt i = 0; i < Bits.WordsCount; i++)
+			RMemReg result;
+			UInt position = Bits.FirstFalse();
+
+			if (position != -1)
 			{
-				if (Bits.Data[i] == -1)
-					continue;
-
-				unsigned long outIndex;
-				MSB64(&outIndex, m_BitMapping);
-				U64 flag_mask = (U64)1 << outIndex;
-				m_BitMapping &= ~flag_mask;
+				Bits.Set(position);
+				result.Buffer = Buffer;
+				result.Offset = MemRegSize * position;
+				result.Size = bytes;
 			}
-
-			if (!m_BitMapping)
-			{// out of free MemRegs
+			else
+			{
 				result.Buffer = nullptr;
-				return result;
+				result.Offset = 0;
+				result.Size = 0;
 			}
-
-			
-
-			result.Buffer = Buffer;
-			result.Offset = MemRegSize * (outIndex-1);
-			result.Size = bytes;
 
 			return result;
 		}
 		virtual RMemReg Allocate(UInt bytes, UInt alignment) override final
 		{
-			RMemReg result;
-
-			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
-
-			if (!m_BitMapping)
-			{// out of free MemRegs
-				result.Buffer = nullptr;
-				return result;
-			}
-
-			unsigned long outIndex;
-			MSB64(&outIndex, m_BitMapping);
-			U64 flag_mask = (U64)1 << outIndex;
-			m_BitMapping &= ~flag_mask;
-
-			UInt base_offset = MemRegSize * outIndex;
-			UInt alligned_offset = (UInt)AlignTo((Byte*)base_offset, alignment);
-
-			if (alligned_offset - base_offset + bytes > memRegSize)
-			{
-				result.Buffer = nullptr;
-				return result;
-			}
-
-			result.Offset = alligned_offset;
-			result.Buffer = Buffer;
-			result.Size = bytes;
-
-			return result;
+			FE_CORE_ASSERT(memRegSize % alignment == 0, "This allocator cannot accomodate this allignment");
+			return Allocate(bytes);
 		}
 		virtual void Deallocate(RMemReg memReg) override final
 		{
 			FE_CORE_ASSERT(memReg.Buffer == Buffer, "This BitmappedPoolAllocator does not own this MemReg");
 
 			UInt index = memReg.Offset / memRegSize;
-			U64 flag_mask = (U64)1 << (63 - index);
-			m_BitMapping &= flag_mask;
+			Bits.Set(index, false);
 		}
 
 		template <UInt Size, UInt Alignment>
 		RMemReg Allocate()
 		{
+			FE_CORE_ASSERT(memRegSize % Alignment == 0, "This allocator cannot accomodate this allignment");
+			FE_CORE_ASSERT(Size > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
 			RMemReg result;
-			FE_CORE_ASSERT(false, "Not implemented");
+			UInt position = Bits.FirstFalse();
+
+			if (position != -1)
+			{
+				Bits.Set(position);
+				result.Buffer = Buffer;
+				result.Offset = MemRegSize * position;
+				result.Size = Size;
+			}
+			else
+			{
+				result.Buffer = nullptr;
+				result.Offset = 0;
+				result.Size = 0;
+			}
+
 			return result;
 		}
 
 		template <UInt Alignment>
 		RMemReg Allocate(UInt size)
 		{
-			RMemReg result;
-			FE_CORE_ASSERT(false, "Not implemented");
-			return result;
+			FE_CORE_ASSERT(memRegSize % Alignment == 0, "This allocator cannot accomodate this allignment");
+			return Allocate(bytes);
 		}
 
 		template <UInt Size>
 		void Deallocate(RMemReg memReg)
 		{
 			FE_CORE_ASSERT(memReg.Buffer == Buffer, "This BitmappedPoolAllocator does not own this MemReg");
+			FE_CORE_ASSERT(memReg.Size == Size, "MemReg size != provided size in deallocation");
 
 			UInt index = memReg.Offset / memRegSize;
-			U64 flag_mask = (U64)1 << (63 - index);
-			m_BitMapping &= flag_mask;
+			Bits.Set(index, false);
 		}
 	};
 
 	class RCoallesingAlloc : public RAllocator
 	{
 	public:
+		struct Region
+		{
+			UInt Offset;
+			UInt Size;
+
+		};
+
 		RBuffer* Buffer;
+		Xarr<Region> Regions;
 
 		virtual RMemReg Allocate(UInt bytes) override final
 		{
