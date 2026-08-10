@@ -3,10 +3,11 @@
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
+#include "FoolsEngine/Foundation/Memory/Xar.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
-#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RBuffer.h"
 #include "FoolsEngine/Renderer/2 - Resource/RDownStream.h"
 #include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
 #include "FoolsEngine/Renderer/2 - Resource/RShader.h"
@@ -30,6 +31,8 @@ namespace fe
 
 		using Vert = Description::Buffer::Vertex;
 
+		Xarr<RBuffer_OpenGL> GPBuffers;
+
 		void Create()
 		{
 			DefaultAlloc = Context::Allocators::Default;
@@ -37,10 +40,12 @@ namespace fe
 			PermanentAlloc.Init(Context::Allocators::Default);
 		}
 
-		bool MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Splice<Byte> data = Splice<Byte>());
+		RBuffer_OpenGL* MakeStaticBuffer(UInt capcity);
+		RBuffer_OpenGL* MakeStaticBufferFill(Splice<Byte> data);
+
 		bool MakeDownStream(RDownStream_OpenGL& downStream, UInt initCapacity = 64);
 		bool MakeFramebuffer(RFramebuffer_OpenGL& framebuffer, UInt specyficationID);
-		bool MakeMeshBindings(RStaticBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData);
+		bool MakeMeshBindings(RBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData);
 
 		bool SendDataToGPU(RShader_OpenGL& shader, UInt specificationID, String source);
 		bool SendDataToGPU(RProgram_OpenGL& program, UInt specificationID, Splice<RShader_OpenGL*> shaders);
@@ -50,7 +55,7 @@ namespace fe
 		void ReleaseDataFromGPU(RProgram_OpenGL& program);
 		void ReleaseDataFromGPU(RTexture_OpenGL& texture);
 		void ReleaseDataFromGPU(RMeshBindings_OpenGL& bindings);
-		void ReleaseDataFromGPU(RStaticBuffer_OpenGL& buffer);
+		void ReleaseDataFromGPU(RBuffer_OpenGL& buffer);
 
 
 		class ContextScope

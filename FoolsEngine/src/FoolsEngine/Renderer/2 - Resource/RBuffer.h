@@ -3,6 +3,8 @@
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
+#include <glad/glad.h>
+
 namespace fe::Resource
 {
 	using namespace Description;

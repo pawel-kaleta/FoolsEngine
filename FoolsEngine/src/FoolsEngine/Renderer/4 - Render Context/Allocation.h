@@ -1,13 +1,15 @@
 #pragma once
 
-#include "RBuffer.h"
+#include "FoolsEngine/Renderer/2 - Resource/RBuffer.h"
 
 #include "FoolsEngine/Foundation/Memory/Bitset.h"
 #include "FoolsEngine/Foundation/Memory/Xar.h"
 
-namespace fe::Resource
+namespace fe::Command::Allocation
 {
-	class RAllocator
+	using namespace Resource;
+
+	class Allocator
 	{
 	public:
 		virtual RMemReg Allocate(UInt bytes) = 0;
@@ -24,7 +26,7 @@ namespace fe::Resource
 		void Deallocate(RMemReg memReg) { Deallocate(memReg); } // assert Size == memReg.Size
 	};
 
-	class RArenaAlloc : public RAllocator
+	class ArenaAlloc final : public Allocator
 	{
 	public:
 		RBuffer* Buffer;
@@ -105,9 +107,9 @@ namespace fe::Resource
 		template <UInt Size>
 		void Deallocate(Byte* ptr) { FE_CORE_ASSERT(false, "RArenaAllocator does not deallocate individually"); }
 	};
-	
+
 	template <UInt memRegSize, UInt memRegCount>
-	class RBitmappedPoolAlloc : public RAllocator
+	class BitmappedPoolAlloc final : public Allocator
 	{
 	public:
 		inline static constexpr UInt MemRegSize = memRegSize;
@@ -196,65 +198,6 @@ namespace fe::Resource
 
 			UInt index = memReg.Offset / memRegSize;
 			Bits.Set(index, false);
-		}
-	};
-
-	class RCoallesingAlloc : public RAllocator
-	{
-	public:
-		struct Region
-		{
-			UInt Offset;
-			UInt Size;
-
-		};
-
-		RBuffer* Buffer;
-		Xarr<Region> Regions;
-
-		virtual RMemReg Allocate(UInt bytes) override final
-		{
-			RMemReg result;
-
-			FE_CORE_ASSERT(false, "Not implemented");
-			
-
-			return result;
-		}
-		virtual RMemReg Allocate(UInt bytes, UInt alignment) override final
-		{
-			RMemReg result;
-			FE_CORE_ASSERT(false, "Not implemented");
-			
-			return result;
-		}
-		virtual void Deallocate(RMemReg memReg) override final
-		{
-			FE_CORE_ASSERT(memReg.Buffer == Buffer, "This BitmappedPoolAllocator does not own this MemReg");
-			FE_CORE_ASSERT(false, "Not implemented");
-			
-		}
-
-		template <UInt Size, UInt Alignment>
-		RMemReg Allocate()
-		{
-			RMemReg result;
-			FE_CORE_ASSERT(false, "Not implemented");
-			return result;
-		}
-
-		template <UInt Alignment>
-		RMemReg Allocate(UInt size)
-		{
-			RMemReg result;
-			FE_CORE_ASSERT(false, "Not implemented");
-			return result;
-		}
-
-		template <UInt Size>
-		void Deallocate(RMemReg memReg)
-		{
-			FE_CORE_ASSERT(false, "Not implemented");
 		}
 	};
 }

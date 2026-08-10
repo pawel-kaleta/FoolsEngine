@@ -7,17 +7,30 @@
 
 namespace fe
 {
-	bool ResourceManager_OpenGL::MakeStaticBuffer(RStaticBuffer_OpenGL& buffer, Splice<Byte> data)
+	RBuffer_OpenGL* ResourceManager_OpenGL::MakeStaticBuffer(UInt capcity)
 	{
 		FE_PROFILER_FUNC();
 
-		buffer.Size = data.Count;
-		buffer.Create();
-		if (data.Elements)
-			buffer.Update(0, data);
+		auto buffer = GPBuffers.PushBack();
 
-		return true;
+		buffer->Size = capcity;
+		buffer->Create();
+
+		return buffer;
 	}
+
+	RBuffer_OpenGL* ResourceManager_OpenGL::MakeStaticBufferFill(Splice<Byte> data)
+	{
+		FE_PROFILER_FUNC();
+
+		auto buffer = GPBuffers.PushBack();
+
+		buffer->Size = data.Count;
+		buffer->Create();
+
+		return buffer;
+	}
+
 	bool ResourceManager_OpenGL::MakeDownStream(RDownStream_OpenGL& downStream, UInt initCapacity)
 	{
 		FE_PROFILER_FUNC();
@@ -37,7 +50,7 @@ namespace fe
 
 		return true;
 	}
-	bool ResourceManager_OpenGL::MakeMeshBindings(RStaticBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData)
+	bool ResourceManager_OpenGL::MakeMeshBindings(RBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData)
 	{
 		FE_PROFILER_FUNC();
 
@@ -316,7 +329,7 @@ namespace fe
 
 		bindings.Delete();
 	}
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RStaticBuffer_OpenGL& buffer)
+	void ResourceManager_OpenGL::ReleaseDataFromGPU(RBuffer_OpenGL& buffer)
 	{
 		FE_PROFILER_FUNC();
 

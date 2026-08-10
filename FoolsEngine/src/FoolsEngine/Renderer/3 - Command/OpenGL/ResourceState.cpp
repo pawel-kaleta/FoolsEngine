@@ -11,4 +11,10 @@ namespace fe::Command
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void ResourceState_OpenGL::AllocateBuffer(Resource::RBuffer* buffer, UInt size)
+	{
+		buffer->Size = size;
+		buffer->Create();
+	}
+
 }
