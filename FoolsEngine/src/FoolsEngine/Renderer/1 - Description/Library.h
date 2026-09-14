@@ -20,7 +20,6 @@ namespace fe::Description
 		STD_PMR_Allocator<MallocAlloc>	m_AllocGPA_STD_PMR;
 
 		XarrAlloc<Texture::Archetype,						MonotonicAlloc, MallocAlloc>	TextureArchetypes;
-		XarrAlloc<Buffer::Layout,							MonotonicAlloc, MallocAlloc>	BufferLayouts;
 		XarrAlloc<Pipeline::State,							MonotonicAlloc, MallocAlloc>	PipelineStates;
 		XarrAlloc<Framebuffer::Specification,				MonotonicAlloc, MallocAlloc>	FramebufferSpecs;
 		XarrAlloc<ShaderInterface::ProgramSpecification,	MonotonicAlloc, MallocAlloc>	ProgramSpecs;
@@ -32,7 +31,6 @@ namespace fe::Description
 		UInt CreateOrGetDescriptorWithUUID(UUID uuid)
 		{
 			if constexpr (std::same_as<tnDescriptor, Texture::Archetype						>) return CreateOrGetDescriptorWithUUID_Texture(uuid);
-			if constexpr (std::same_as<tnDescriptor, Buffer::Layout							>) return CreateOrGetDescriptorWithUUID_Layout(uuid);
 			if constexpr (std::same_as<tnDescriptor, Pipeline::State						>) return CreateOrGetDescriptorWithUUID_Pipeline(uuid);
 			if constexpr (std::same_as<tnDescriptor, Framebuffer::Specification				>) return CreateOrGetDescriptorWithUUID_Framebuffer(uuid);
 			if constexpr (std::same_as<tnDescriptor, ShaderInterface::ProgramSpecification	>) return CreateOrGetDescriptorWithUUID_ProgramSpecification(uuid);
@@ -46,11 +44,9 @@ namespace fe::Description
 		static void Init()
 		{
 			s_Library = new Library();
-			Buffer::Vertex::CreateDefaultVertexLayout();
 		}
 
 		UInt CreateOrGetDescriptorWithUUID_Texture(UUID uuid);
-		UInt CreateOrGetDescriptorWithUUID_Layout(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_Pipeline(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_Framebuffer(UUID uuid);
 		UInt CreateOrGetDescriptorWithUUID_ProgramSpecification(UUID uuid);

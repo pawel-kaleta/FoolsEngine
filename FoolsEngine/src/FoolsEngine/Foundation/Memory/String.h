@@ -117,15 +117,15 @@ namespace fe
 
 		String GetString() const
 		{
-			Splice<char8_t> mem_reg = Context::Allocators::Output->Allocate<char8_t>(Count);
+			Splice<char> mem_reg = Context::Allocators::Output->Allocate<char>(Count);
 			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
-			return String((char*)mem_reg.Elements, mem_reg.Count);
+			return String(mem_reg.Elements, mem_reg.Count);
 		}
 
 		CString GetCString() const
 		{
 			CString output;
-			output.Data = Context::Allocators::Output->Allocate<char8_t>(Count+1).Elements;
+			output.Data = Context::Allocators::Output->Allocate<char>(Count+1).Elements;
 			output.CountWithNull = Count + 1;
 			std::memcpy(output.Data, Buffer.begin(), Count);
 			output.Data[Count + 1] = u8'\0';

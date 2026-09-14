@@ -26,17 +26,21 @@ namespace fe
 
 		FE_DECLARE_ENUM(BlendFunction, None, SourceAlpha, OneMinusSourceAlpha);
 
-		struct State
+		struct RasterState
 		{
 			UUID UUID = fe::UUID();
 
-			PrimitiveType		mPrimitiveType		= PrimitiveType::None;
-			FaceCullTest		mFaceCullTest		= FaceCullTest::None;
-			DepthTestType		mDepthTestType		= DepthTestType::None;
-			StencilTestType		mStencilTestType	= StencilTestType::None;
-			StencilOperation	mStencilOperation	= StencilOperation::None;
+			PrimitiveType		mPrimitiveType = PrimitiveType::None;
+			FaceCullTest		mFaceCullTest = FaceCullTest::None;
+
+			fe::UUID FramebufferSpec = 0;
+		};
+
+		struct DepthStencilState
+		{
+			DepthTestType		mDepthTestType = DepthTestType::None;
+			StencilTestType		mStencilTestType = StencilTestType::None;
 			StencilCases		mStencilCases;
-			BlendFunction		mBlendFunction		= BlendFunction::None;
 		};
 	}
 }
