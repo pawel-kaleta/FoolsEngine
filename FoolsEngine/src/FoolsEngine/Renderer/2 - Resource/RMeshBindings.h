@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RStaticBuffer.h"
+#include "RBuffer.h"
 
 #include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"

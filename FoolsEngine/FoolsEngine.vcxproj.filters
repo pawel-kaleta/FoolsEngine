@@ -473,8 +473,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\PlatformBase.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ProgramState.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\ProgramManager.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Allocation.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\Allocation.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
   </ItemGroup>
   <ItemGroup>

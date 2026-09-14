@@ -14,6 +14,15 @@ namespace fe::Resource
 		glNamedBufferStorage(OpenGLID, Size, nullptr, 0);
 	}
 
+	void RBuffer_OpenGL::Create(Splice<Byte> data)
+	{
+		glCreateBuffers(1, &OpenGLID);
+
+		Size = data.Count;
+
+		glNamedBufferStorage(OpenGLID, data.Count, data.Elements, 0);
+	}
+
 	void RBuffer_OpenGL::Delete()
 	{
 		glDeleteBuffers(1, &OpenGLID);

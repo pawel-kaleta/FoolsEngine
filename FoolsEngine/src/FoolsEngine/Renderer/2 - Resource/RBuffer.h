@@ -3,6 +3,8 @@
 #include "FoolsEngine/Renderer/1 - Description/Buffer.h"
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 
+#include <glad/glad.h>
+
 namespace fe::Resource
 {
 	using namespace Description;
@@ -12,6 +14,7 @@ namespace fe::Resource
 		U32 Size;
 
 		virtual void Create() = 0;
+		virtual void Create(Splice<Byte> data) = 0;
 		virtual void Delete() = 0;
 	};
 
@@ -27,6 +30,7 @@ namespace fe::Resource
 		GLuint OpenGLID;
 
 		virtual void Create() override;
+		virtual void Create(Splice<Byte> data);
 		virtual void Delete() override;
 	};
 }
