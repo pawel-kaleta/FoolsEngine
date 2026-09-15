@@ -291,31 +291,13 @@
     <ClInclude Include="src\FoolsEngine\Platform\Window.h">
       <Filter>FoolsEngine\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Buffer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPIType.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Data.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h">
       <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Framebuffer.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\GAPIType.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Library.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Pipeline.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\ShaderInterface.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - Description\Texture.h">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RDownStream.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\DownStream.h">
       <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RFrameBuffer.h">
@@ -475,6 +457,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\ProgramManager.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\Allocation.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -564,9 +548,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\1 - Description\Description.cpp">
-      <Filter>FoolsEngine\Renderer\1 - Description</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RDownStream.cpp">
       <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
