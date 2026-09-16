@@ -56,10 +56,8 @@ namespace fe::GAPI::DownStream
 			FE_CORE_ASSERT(false, "Not implemented");
 		}
 
-		void BeginRegion(U32 alignment)
+		Region* ReserveRegion(U32 size, U32 alignment = 128)
 		{
-			CurrentOffset = ((CurrentOffset + (alignment - 1)) & ~(alignment - 1));
-
 			auto& new_fence = *BackFences.PushBack();
 			new_fence.OpenGLFence = nullptr;
 			new_fence.Location = CurrentOffset;
@@ -67,41 +65,18 @@ namespace fe::GAPI::DownStream
 
 			auto& region = *Regions.PushBack();
 			region.Stream = this;
+			region.OpenGLBuffer = OpenGLBuffer;
 			region.Offset = CurrentOffset;
 			region.Size = 0;
+
+			Splice<Byte> push_placeholder;
+			push_placeholder.Count = ((CPURegion.Count + (Alignment - 1)) & ~(Alignment - 1));
+			PushData(push_placeholder);
+
+			CPURegion.Elements = CPUMemoryBegin + CurrentOffset;
+
+			return &region;
 		};
-		void PushData(Splice<Byte> data)
-		{
-			auto& region = Regions[Regions.Count];
-			UInt push_size = data.Count;
-
-			CheckFences(push_size);
-
-			if (CurrentOffset + push_size > Capacity)
-			{
-				FrontFences.Count = 0;
-				std::swap(BackFences, FrontFences);
-				NextFenceIndex = 0;
-				CurrentOffset = 0;
-
-				CheckFences(push_size + region.Size);
-
-				void* region_old_begin = DMABegin + region.Offset;
-				FE_CORE_ASSERT(false, "Stream read is illegal"); // mem move
-				std::memmove(DMABegin, region_old_begin, region.Size);
-
-				region.Offset = 0;
-				CurrentOffset = region.Size;
-
-			}
-
-			if (data.Elements) std::memcpy(DMABegin + CurrentOffset, data.Elements, push_size);
-			CurrentOffset += push_size;
-			region.Size += push_size;
-		};
-		Region* EndRegion() {};
-
-		Region* ReserveRegion(U32 size, U32 alignment) {};
 		void CommitRegion(Region* region) {};
 
 		void RetireRegion(Region* region) {};
@@ -128,22 +103,26 @@ namespace fe::GAPI::DownStream
 						continue;
 					}
 				}
-
-				if (new_offset > next_fence.Location)
+				else
 				{
-					auto result = glClientWaitSync(FrontFences[NextFenceIndex].OpenGLFence, GL_SYNC_FLUSH_COMMANDS_BIT, 10000);
 
-					switch (result)
-					{
-					case GL_ALREADY_SIGNALED:
-						continue;
+				}
+			}
 
-					case GL_WAIT_FAILED:
-						FE_CORE_ASSERT(false, "Down stream sync error!");
-					case GL_TIMEOUT_EXPIRED:
-					case GL_CONDITION_SATISFIED:
-						FE_CORE_ASSERT(false, "Down stream stall on fence!");
-					}
+			if (new_offset > FrontFences[NextFenceIndex].Location)
+			{
+				auto result = glClientWaitSync(FrontFences[NextFenceIndex].OpenGLFence, GL_SYNC_FLUSH_COMMANDS_BIT, 10000);
+
+				switch (result)
+				{
+				case GL_ALREADY_SIGNALED:
+					continue;
+
+				case GL_WAIT_FAILED:
+					FE_CORE_ASSERT(false, "Down stream sync error!");
+				case GL_TIMEOUT_EXPIRED:
+				case GL_CONDITION_SATISFIED:
+					FE_CORE_ASSERT(false, "Down stream stall on fence!");
 				}
 			}
 		}

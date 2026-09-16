@@ -221,6 +221,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Win32\Win32Window.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Buffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPIType.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />

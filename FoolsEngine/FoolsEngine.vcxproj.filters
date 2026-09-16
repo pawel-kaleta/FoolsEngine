@@ -459,6 +459,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Buffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
