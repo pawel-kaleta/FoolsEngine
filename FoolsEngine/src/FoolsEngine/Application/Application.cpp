@@ -74,7 +74,6 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Allocators");
 			Scratchpad::Init();
-			Description::Library::Init();
 		}
 
 		// Rendering, Window and Platform Layer
@@ -89,7 +88,6 @@ namespace fe
 
 			{
 				FE_PROFILER_SCOPE("RenderContext");
-				Description::Library::Init();
 
 				m_RenderContext = StableAllocs::Permanent->Allocate<RenderContext_OpenGL>();
 				m_RenderContext->Create();

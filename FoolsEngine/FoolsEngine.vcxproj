@@ -192,11 +192,14 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Arena.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pool.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Queue.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
@@ -224,6 +227,8 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPIType.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Pipeline.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\DownStream.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RFrameBuffer.h" />

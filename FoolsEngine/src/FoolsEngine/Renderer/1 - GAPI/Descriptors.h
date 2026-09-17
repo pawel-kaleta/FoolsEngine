@@ -95,4 +95,9 @@ namespace fe::GAPI::Descriptors
 			BlendFunction	mBlendFunction = BlendFunction::None;
 		};
 	}
+
+	namespace Shader
+	{
+		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment, Compute);
+	}
 }

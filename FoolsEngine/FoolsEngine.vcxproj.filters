@@ -460,6 +460,11 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Buffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Arena.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Queue.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pool.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Pipeline.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

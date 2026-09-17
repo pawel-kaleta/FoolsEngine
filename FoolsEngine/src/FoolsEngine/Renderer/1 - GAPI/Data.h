@@ -3,8 +3,6 @@
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 
-#include <glm/glm.hpp>
-
 namespace fe::GAPI::Data
 {
 	using std140_bool = U32;
@@ -35,7 +33,7 @@ namespace fe::GAPI::Data
 	template <typename T, UInt count>
 	struct std140_Array
 	{
-		struct __declspec(align((sizeof(T) + (15)) & ~(15))) ElementType : T{};
+		struct __declspec(align(sizeof(T) + 15) & ~15) ElementType : T{};
 		Array<ElementType, count> Data;
 	};
 
