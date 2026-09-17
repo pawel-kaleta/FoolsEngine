@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 #include "FoolsEngine/Foundation/Memory/Splice.h"
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 
 #include <glm/glm.hpp>
 
@@ -56,10 +58,10 @@ namespace fe::GAPI::Descriptors
 
 		struct Specification
 		{
-			PrimitiveType		mPrimitiveType = PrimitiveType::None;
-			FaceCullTest		mFaceCullTest = FaceCullTest::None;
-			Splice<Attachment>	mColorAttachments;
-			Texture::Format		mDepthStencilFormat = Texture::Format::None;
+			PrimitiveType				mPrimitiveType = PrimitiveType::None;
+			FaceCullTest				mFaceCullTest = FaceCullTest::None;
+			ArrayArena<Attachment, 6>	mColorAttachments;
+			Texture::Format				mDepthStencilFormat = Texture::Format::None;
 		};
 	}
 

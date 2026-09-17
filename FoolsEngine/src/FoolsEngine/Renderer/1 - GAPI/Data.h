@@ -33,9 +33,11 @@ namespace fe::GAPI::Data
 	template <typename T, UInt count>
 	struct std140_Array
 	{
-		struct __declspec(align(sizeof(T) + 15) & ~15) ElementType : T{};
+		struct __declspec(align((sizeof(T) + 15) & ~15) ElementType : T {};
 		Array<ElementType, count> Data;
 	};
+
+	struct alignas(16) std140_Struct {};
 
 	using std140_mat2x2 = std140_Array<std140_vec2, 2>;
 	using std140_mat2x3 = std140_Array<std140_vec3, 2>;

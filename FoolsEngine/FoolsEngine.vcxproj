@@ -227,7 +227,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPIType.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Pipeline.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GraphicsPipeline.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Texture.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\DownStream.h" />
