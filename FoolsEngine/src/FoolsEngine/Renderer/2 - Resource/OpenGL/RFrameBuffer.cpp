@@ -104,6 +104,8 @@ namespace fe::Resource
 			glDrawBuffer(GL_NONE);
 		}
 
+		
+
 		auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
 			FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");

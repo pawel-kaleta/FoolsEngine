@@ -80,9 +80,9 @@ project "glad"
 	objdir    ("../../bin-int/" .. outputdir .. "/externals/%{prj.name}")
 
 	files {
-		"%{prj.name}/include/glad/glad.h",
+		"%{prj.name}/include/glad/gl.h",
 		"%{prj.name}/include/KHR/khrplatform.h",
-		"%{prj.name}/src/glad.c"
+		"%{prj.name}/src/gl.c"
 	}
 
 	includedirs	{

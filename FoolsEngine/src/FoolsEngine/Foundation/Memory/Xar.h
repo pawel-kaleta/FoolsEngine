@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Allocators/Allocator.h"
-#include "Splice.h"
+#include "Arena.h"
 
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Common.h"
 
-#include <vector>
 #include <memory_resource>
 #include <memory>
 
@@ -135,6 +134,8 @@ namespace fe
 		uint64_t m_Size;
 	};
 
+
+	// TO DO: check edge cases! (removing elements below last chunk)
 	template <typename T>
 	class Xarr
 	{

@@ -6,7 +6,7 @@
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 #include "FoolsEngine/Renderer/5 - Representation/Shader.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace fe
 {

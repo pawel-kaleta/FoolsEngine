@@ -4,13 +4,13 @@
 #include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 
-#include "Descriptors.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
-namespace fe::GAPI::Resource
+namespace fe::GAPI::OpenGL
 {
-	using namespace Descriptors::Shader;
+	using namespace Resource::Descriptors;
 
 	namespace Utils
 	{

@@ -2,41 +2,26 @@
 
 #include "FoolsEngine/Foundation/Memory/Queue.h"
 #include "FoolsEngine/Foundation/Memory/Pool.h"
-#include "FoolsEngine/Foundation/Memory/Pile.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
-#include <glad/glad.h>
+#include "FoolsEngine/Renderer/1 - GAPI/GAPI.h"
 
-namespace fe::GAPI::DownStream
+#include <glad/gl.h>
+
+#include <numeric>
+
+namespace fe::GAPI::OpenGL
 {
-	struct Stream;
-
-	struct Region
+	struct DownStream : Stream
 	{
-		UInt Size; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
-		Stream* Stream;
-		Byte* Data;
-	};
-
-	struct Stream
-	{
-		GLuint OpenGLBuffer = 0;
-		U32 Capacity = 0;
-		Byte* DMABegin = nullptr;
 		Byte* CurrentPosition = 0;
-
-		struct Fence
-		{
-			GLsync OpenGLFence;
-			Byte* Location;
-		};
 
 		Queue<Fence> FrontFences;
 		Queue<Fence> BackFences;
 		Pool<Region> Regions;
 		Splice<Fence*> RegionFences;
 
-		void Make(U32 size, U32 maxRegionCount)
+		void Create(U32 size, U32 maxRegionCount)
 		{
 			FE_CORE_ASSERT(size && maxRegionCount, "Size or maxRegionCount is 0.");
 
@@ -88,9 +73,10 @@ namespace fe::GAPI::DownStream
 			CurrentPosition = 0;
 		}
 
-		const Region* MakeRegion(U32 size, U32 alignment = 128)
+		const Region* CreateRegion(U32 size, U32 alignment = 16)
 		{
-			Byte* position_candidate = AlignTo(CurrentPosition, alignment);
+			auto alligned_offset = (U32)AlignTo((Byte*)(CurrentPosition - DMABegin), alignment);
+			Byte* position_candidate = DMABegin + alligned_offset;
 			Byte* region_end_candidate = position_candidate + size;
 
 			while (!FrontFences.IsEmpty())
@@ -120,7 +106,8 @@ namespace fe::GAPI::DownStream
 			}
 			else if (region_end_candidate > DMABegin + Capacity) //  need to wrap around (ring buffer)
 			{
-				position_candidate = AlignTo(DMABegin, alignment);
+				alligned_offset = (U32)AlignTo((Byte*)DMABegin, alignment);
+				position_candidate = DMABegin + alligned_offset;
 				region_end_candidate = position_candidate + size;
 
 				if (region_end_candidate > DMABegin + Capacity) // region most likely bigger then whole stream

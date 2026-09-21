@@ -4,7 +4,7 @@
 #include "FoolsEngine/Platform/Events/Event.h"
 #include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed

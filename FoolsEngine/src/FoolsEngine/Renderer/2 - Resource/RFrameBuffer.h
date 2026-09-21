@@ -4,7 +4,7 @@
 #include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 #include "FoolsEngine/Foundation/Common.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace fe::Resource
 {

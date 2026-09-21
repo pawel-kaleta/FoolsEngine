@@ -20,7 +20,7 @@
 #include "FoolsEngine/Renderer/5 - Representation/Material.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <glm/gtc/type_ptr.hpp>
 

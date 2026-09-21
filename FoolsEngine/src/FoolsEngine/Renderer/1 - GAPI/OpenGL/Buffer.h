@@ -2,9 +2,9 @@
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
-namespace fe::GAPI::Resource
+namespace fe::GAPI::OpenGL
 {
 	struct Buffer
 	{
@@ -13,7 +13,7 @@ namespace fe::GAPI::Resource
 		bool mCommited = false;
 		bool mReleased = false;
 
-		Byte* Make(U32 size)
+		Byte* AllocateBuffer(U32 size)
 		{
 			glCreateBuffers(1, &mGLID);
 
@@ -25,7 +25,7 @@ namespace fe::GAPI::Resource
 			mSize = size;
 			return CPUMemoryBegin;
 		}
-		void Commit()
+		void CommitCmd()
 		{
 			glUnmapNamedBuffer(mGLID);
 			mCommited = true;
@@ -38,4 +38,28 @@ namespace fe::GAPI::Resource
 		}
 	};
 
+	struct Stream
+	{
+		GLuint OpenGLBuffer = 0;
+		U32 Capacity = 0;
+		Byte* DMABegin = nullptr;
+
+		struct Fence
+		{
+			GLsync OpenGLFence;
+			Byte* Location;
+		};
+	};
+
+	struct Region
+	{
+		UInt Size; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
+		Stream* Stream;
+		Byte* Data;
+
+		U32 GetOffset() const
+		{
+			return Data - Stream->DMABegin;
+		}
+	};
 }

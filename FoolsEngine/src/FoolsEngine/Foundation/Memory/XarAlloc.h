@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Splice.h"
+#include "Arena.h"
 #include "Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 

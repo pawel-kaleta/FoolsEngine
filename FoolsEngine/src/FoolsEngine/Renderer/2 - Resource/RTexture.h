@@ -5,7 +5,7 @@
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace fe::Resource
 {

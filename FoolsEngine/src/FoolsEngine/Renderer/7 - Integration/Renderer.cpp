@@ -26,7 +26,7 @@
 #include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
 #include "FoolsEngine/Renderer/6 - Render/GeometryRenderer.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <glm/gtc/type_ptr.hpp>
 

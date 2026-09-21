@@ -70,7 +70,7 @@ namespace fe::Resource
 			}
 		}
 
-		GLsizei levels = glm::log2((float)glm::max(instance.Width, instance.Height));
+		GLsizei levels = glm::log2((float)glm::max(Width, Height));
 		auto internal_format = Utils::FormatToGLInternalFormat(arch.Format);
 
 		glTextureStorage2D(OpenGLID, levels, internal_format, instance.Width, instance.Height);

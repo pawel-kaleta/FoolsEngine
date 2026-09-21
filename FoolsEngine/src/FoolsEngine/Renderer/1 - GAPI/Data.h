@@ -48,4 +48,17 @@ namespace fe::GAPI::Data
 	using std140_mat4x2 = std140_Array<std140_vec2, 4>;
 	using std140_mat4x3 = std140_Array<std140_vec3, 4>;
 	using std140_mat4x4 = std140_Array<std140_vec4, 4>;
+
+	struct DrawParams
+	{
+		Data::std140_uint mPrimitiveCount = 0;
+		// instance count
+		Data::std140_uint mIgnoreThis = 1;
+		// assumes index buffer is an array of indices, it's not offset from begining of that buffer in bytes, its an index within array of indices
+		Data::std140_uint mFirstIndex = 0;
+		// base vertex
+		Data::std140_int mIgnoreThis2 = 0;
+		// base instance
+		Data::std140_uint mIgnoreThis3 = 0;
+	};
 }
