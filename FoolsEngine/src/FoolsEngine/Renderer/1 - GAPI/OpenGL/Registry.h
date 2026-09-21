@@ -29,12 +29,18 @@ namespace fe::GAPI::OpenGL
 	template <typename tObj>
 	struct Registry
 	{
-		union RegElement;
+		// basically dynamic pool backed by xar for separatelly gapi objects and their generation trackers
 
 		struct FreeListElement
 		{
 			FreeListElement* Next;
 			U16 RegIndex;
+		};
+
+		union RegElement
+		{
+			tObj mObj;
+			FreeListElement mFree;
 		};
 
 		struct Chunks
@@ -43,17 +49,11 @@ namespace fe::GAPI::OpenGL
 			U08* GenerationsChunk;
 		};
 
-		union RegElement
-		{
-			tObj mObj;
-			FreeListElement mNext;
-		};
-
 		SpliceArena<Chunks> mChunks;
 
 		FreeListElement* mFreeList = nullptr;
-		TypedAlloc<Allocator>* AllocMain = nullptr;
-		TypedAlloc<Allocator>* AllocAux = nullptr;
+		TypedAlloc<Allocator>* mAllocMain = nullptr;
+		TypedAlloc<Allocator>* mAllocAux = nullptr;
 
 		InternalID GetNew()
 		{
@@ -62,34 +62,83 @@ namespace fe::GAPI::OpenGL
 
 			if (mFreeList)
 			{
-				FreeListElement* result_ptr = mFreeList;
+				FreeListElement* result_obj_ptr = mFreeList;
 				mFreeList = mFreeList->FreeListNext;
 
-				result.mComps.RegIndex = result_ptr->Index;
+				result.mComps.RegIndex = result_obj_ptr->RegIndex;
 
 				unsigned long chunk_i;
-				MSB64(&chunk_i, (U64)result_ptr->Index);
+				MSB64(&chunk_i, (U64)result_obj_ptr->RegIndex);
 				auto chunk_mask = (U64)1 << chunk_i;
-				auto in_chunk_i = result_ptr->Index - chunk_mask;
+				auto in_chunk_i = result_obj_ptr->RegIndex - chunk_mask;
 				auto generation = mChunks[chunk_i].GenerationsChunk + in_chunk_i;
 
 				result.mComps.Generation = generation;
 
 				return result;
 			}
+			
+			if (mChunks.IsFull())
+			{
+				bool arena_any_capacity = mChunks.Count > 1;
+				UInt arena_new_capacity = arena_any_capacity ? mChunks.Count + (mChunks.Count >> 1) : mChunks.Count + 1;
 
-			if (Count == Capacity())
-				Expand();
+				Splice<Chunks> new_chunks = mAllocAux->Allocate<Chunks>(arena_new_capacity);
 
-			Count++;
+				UInt old_arena_size = mChunks.Buffer.Count * sizeof(Chunks);
+				std::memcpy(new_chunks.Elements, mChunks.Buffer.Elements, old_arena_size);
+				mAllocAux->Deallocate(mChunks.Buffer);
+
+				mChunks.Buffer = new_chunks;
+			}
+
+			auto new_chunks = mChunks.PushBack();
+			UInt new_chunk_capacity = UInt(1) << mChunks.Count;
+			new_chunks->ElementsChunk = mAllocMain->Allocate<RegElement>(new_chunk_capacity).Elements;
+			new_chunks->GenerationsChunk = mAllocMain->Allocate<U08>(new_chunk_capacity).Elements;
+
+			new_chunks->GenerationsChunk[0] = 0;
+			result.mComps.Generation = 0;
+			result.mComps.RegIndex = reg_index_base;
+
+			U16 reg_index_base = 2 ^ mChunks.Count;
+			mFreeList = &(new_chunks->ElementsChunk[1].mFree);
+			for (UInt i = 1; i < new_chunk_capacity; i++) // i=0 is result
+			{
+				new_chunks->ElementsChunk[i].mFree = { .Next = &(new_chunks->ElementsChunk[i+1].mFree), .RegIndex = reg_index_base + i };
+				new_chunks->GenerationsChunk[i] = 0;
+			}
+			new_chunks->ElementsChunk[new_chunk_capacity - 1].mFree.Next = nullptr;
+
+			mChunks.Count++;
+
+			return result;
+		}
+
+		void Free(InternalID id)
+		{
+			FE_CORE_ASSERT(id.mComps.Type == tObj::Type, "This GAPI object does not belong to this registry");
 
 			unsigned long chunk_i;
-			MSB64(&chunk_i, Count);
+			MSB64(&chunk_i, (U64)id.mComps.RegIndex);
 			auto chunk_mask = (U64)1 << chunk_i;
-			auto in_chunk_i = Count - chunk_mask;
-			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+			auto in_chunk_i = id.mComps.RegIndex - chunk_mask;
+			auto& generation = mChunks[chunk_i].GenerationsChunk[in_chunk_i];
 
-			return result_ptr;
+			FE_CORE_ASSERT(generation == id.mComps.Generation, "Double free in GAPI registry");
+			
+			generation++;
+
+			auto& free_list_element = mChunks[chunk_i].ElementsChunk[in_chunk_i].mFree;
+			free_list_element.Next = mFreeList;
+			free_list_element.RegIndex = id.mComps.RegIndex;
+
+			mFreeList = &free_list_element;
+		}
+
+		tObj* GetObj(InternalID id)
+		{
+
 		}
 	};
 }
