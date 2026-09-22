@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 #include "GAPI.h"
 #include "Data.h"
 #include "Resource.h"
@@ -14,7 +16,7 @@ namespace fe::GAPI::Pipeline
 
 		struct Attachment
 		{
-			Resource::Texture::Format Format = Resource::Texture::Format::None;
+			Resource::Descriptors::TextureFormat Format = Resource::Descriptors::TextureFormat::None;
 			U08 mWriteMask = 0b1111;
 		};
 
@@ -23,7 +25,7 @@ namespace fe::GAPI::Pipeline
 			PrimitiveType				mPrimitiveType = PrimitiveType::None;
 			FaceCullTest				mFaceCullTest = FaceCullTest::None;
 			ArrayArena<Attachment, 6>	mColorAttachments;
-			Resource::Texture::Format	mDepthStencilFormat = Resource::Texture::Format::None;
+			Resource::Descriptors::TextureFormat mDepthStencilFormat = Resource::Descriptors::TextureFormat::None;
 		};
 	}
 

@@ -83,6 +83,12 @@ namespace fe::GAPI::OpenGL
 		GLuint OpenGLID = 0;
 		TextureSpec Spec;
 
+		void Init()
+		{
+			OpenGLID = 0;
+			Spec = TextureSpec();
+		}
+
 		void Create(const TextureSpec& spec)
 		{
 			Spec = spec;
@@ -118,36 +124,6 @@ namespace fe::GAPI::OpenGL
 		}
 	};
 
-	void CopyToTextureCmd(Texture* texture, const Region* region)
-	{
-		auto& spec = texture->Spec;
-
-		auto& dim = texture->Spec.mDimentions;
-		GLenum format = Utils::FormatToGLFormat(spec.mFormat);
-		GLenum type = Utils::FormatToGLType(spec.mFormat);
-
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, region->Stream->OpenGLBuffer);
-		glTextureSubImage2D(texture->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, region->Data);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-
-		glGenerateTextureMipmap(texture->OpenGLID);
-	}
-
-	void CopyToTextureCmd(Texture* texture, const Buffer* buffer, UInt offset)
-	{
-		auto& spec = texture->Spec;
-
-		auto& dim = texture->Spec.mDimentions;
-		GLenum format = Utils::FormatToGLFormat(spec.mFormat);
-		GLenum type = Utils::FormatToGLType(spec.mFormat);
-
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer->mGLID);
-		glTextureSubImage2D(texture->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, (void*)offset);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-
-		glGenerateTextureMipmap(texture->OpenGLID);
-	}
-
 	struct TextureView
 	{
 		TextureViewSpec mSampler;
@@ -155,7 +131,15 @@ namespace fe::GAPI::OpenGL
 		GLuint mSamplerID = 0;
 		GLuint64 mTextureSamplerHandleGL = -1;
 
-		void CreateCmd(const TextureViewSpec& sampler, Texture* texture)
+		void Init()
+		{
+			mSampler = TextureViewSpec();
+			mTexture = nullptr;
+			mSamplerID = 0;
+			mTextureSamplerHandleGL = -1;
+		}
+
+		void Create(const TextureViewSpec& sampler, Texture* texture)
 		{
 			mSampler = sampler;
 			mTexture = texture;
@@ -218,7 +202,10 @@ namespace fe::GAPI::OpenGL
 					FE_LOG_CORE_ERROR("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
 				}
 			}
+		}
 
+		void CommitCmd()
+		{
 			mTextureSamplerHandleGL = glGetTextureSamplerHandleARB(mTexture->OpenGLID, mSamplerID);
 
 			glMakeTextureHandleResidentARB(mTextureSamplerHandleGL);
@@ -228,6 +215,9 @@ namespace fe::GAPI::OpenGL
 		{
 			glMakeTextureHandleNonResidentARB(mTextureSamplerHandleGL);
 			glDeleteSamplers(1, &mSamplerID);
+
+			mSamplerID = -1;
+			mTextureSamplerHandleGL = -1;
 		}
 	};
 }

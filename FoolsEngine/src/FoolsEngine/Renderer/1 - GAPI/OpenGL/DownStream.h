@@ -5,6 +5,7 @@
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/GAPI.h"
+#include "Buffer.h"
 
 #include <glad/gl.h>
 
@@ -14,12 +15,22 @@ namespace fe::GAPI::OpenGL
 {
 	struct DownStream : Stream
 	{
-		Byte* CurrentPosition = 0;
+		Byte* CurrentPosition = nullptr;
 
 		Queue<Fence> FrontFences;
 		Queue<Fence> BackFences;
 		Pool<Region> Regions;
 		Splice<Fence*> RegionFences;
+
+		void Init()
+		{
+			CurrentPosition = nullptr;
+
+			Queue<Fence> FrontFences;
+			Queue<Fence> BackFences;
+			Pool<Region> Regions;
+			Splice<Fence*> RegionFences;
+		}
 
 		void Create(U32 size, U32 maxRegionCount)
 		{
@@ -30,7 +41,7 @@ namespace fe::GAPI::OpenGL
 			Regions.InitAllocate(maxRegionCount);
 			RegionFences = Context::Allocators::Default->Allocate<Fence*>(maxRegionCount);
 
-			CurrentPosition = 0;
+			CurrentPosition = nullptr;
 
 			glCreateBuffers(1, &OpenGLBuffer);
 
@@ -70,7 +81,7 @@ namespace fe::GAPI::OpenGL
 			OpenGLBuffer = 0;
 			Capacity = 0;
 			DMABegin = nullptr;
-			CurrentPosition = 0;
+			CurrentPosition = nullptr;
 		}
 
 		const Region* CreateRegion(U32 size, U32 alignment = 16)

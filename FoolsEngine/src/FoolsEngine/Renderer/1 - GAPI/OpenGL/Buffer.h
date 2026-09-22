@@ -43,7 +43,7 @@ namespace fe::GAPI::OpenGL
 			return;
 		}
 
-		void CommitCmd()
+		void Commit()
 		{
 			FE_CORE_ASSERT(!mCommited, "Allready commited!");
 			glUnmapNamedBuffer(mGLID);

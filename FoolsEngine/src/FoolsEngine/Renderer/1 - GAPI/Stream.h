@@ -9,10 +9,11 @@ namespace fe::GAPI::Stream
 	void	DestroyDownStreamCmd(GID downStream);
 
 	GID		CreateRegion(GID stream, U32 size, U32 offsetAlignment = 16);
+	void	CommitRegion(GID region);
+	void	RetireRegionCmd(GID region);
 	Byte*	GetRegionLocation(GID region);
 	U32		GetRegionOffset(GID region);
-	void	CommitRegion();
-	void	RetireRegionCmd();
+	GID		GetStreamOfRegion(GID region);
 
 	template <typename T>
 	UInt GetOffsetAlligmentFor()

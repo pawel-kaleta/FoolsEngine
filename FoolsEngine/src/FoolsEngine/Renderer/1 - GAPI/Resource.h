@@ -56,7 +56,7 @@ namespace fe::GAPI::Resource
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
 	void	AllocateCommit(GID buffer, U32 size);
-	void	CommitBufferCmd(GID buffer);
+	void	CommitBuffer(GID buffer);
 	void	DestroyBufferCmd(GID buffer);
 
 
@@ -70,7 +70,8 @@ namespace fe::GAPI::Resource
 	void	CopyToTextureCmd(GID texture, GID buffer, U32 offset);
 	void	DestroyTextureCmd(GID texture);
 
-	GID		CreateTextureViewCmd(GID texture, const Descriptors::TextureViewSpec& textureSpecView);
-	GID		DestroyTextureViewCmd(GID textureView);
+	GID		CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureSpecView);
+	void	CommitTextureViewCmd(GID textureView);
 	Data::std140_uvec2 GetTextureViewHandle(GID textureView);
+	void	DestroyTextureViewCmd(GID textureView);
 }

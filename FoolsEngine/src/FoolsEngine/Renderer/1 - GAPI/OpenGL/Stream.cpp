@@ -39,12 +39,12 @@ namespace fe::GAPI::Stream
 
 	}
 
-	void CommitRegion()
+	void CommitRegion(GID region)
 	{
 
 	}
 
-	void RetireRegionCmd()
+	void RetireRegionCmd(GID region)
 	{
 
 	}

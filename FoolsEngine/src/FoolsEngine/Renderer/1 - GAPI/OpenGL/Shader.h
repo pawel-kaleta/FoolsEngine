@@ -36,6 +36,12 @@ namespace fe::GAPI::OpenGL
 		GLuint OpenGLID = 0;
 		ShaderType Type = ShaderType::None;
 
+		void Init()
+		{
+			OpenGLID = 0;
+			Type = ShaderType::None;
+		}
+
 		void Create(CString source, ShaderType type)
 		{
 			FE_PROFILER_FUNC();
