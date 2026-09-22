@@ -55,6 +55,7 @@ namespace fe::GAPI::Resource
 
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
+	void	AllocateCommit(GID buffer, U32 size);
 	void	CommitBufferCmd(GID buffer);
 	void	DestroyBufferCmd(GID buffer);
 

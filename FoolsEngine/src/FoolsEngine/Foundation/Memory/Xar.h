@@ -184,8 +184,7 @@ namespace fe
 			MSB64(&chunk_i, i);
 			UInt chunk_mask = UInt(1) << chunk_i;
 			UInt in_chunk_i = i - chunk_mask;
-			T* result_ptr = Chunks[chunk_i] + in_chunk_i;
-			return *result_ptr;
+			return Chunks[chunk_i][in_chunk_i];
 		}
 
 		const T& operator[](UInt i) const
@@ -196,8 +195,7 @@ namespace fe
 			MSB64(&chunk_i, i);
 			UInt chunk_mask = UInt(1) << chunk_i;
 			UInt in_chunk_i = i - chunk_mask;
-			T* result_ptr = (Chunks[chunk_i]) + in_chunk_i;
-			return *result_ptr;
+			return Chunks[chunk_i][in_chunk_i];
 		}
 
 		void Append(const T* t)
@@ -211,9 +209,9 @@ namespace fe
 			MSB64(&chunk_i, Count);
 			auto chunk_mask = (U64)1 << chunk_i;
 			auto in_chunk_i = Count - chunk_mask;
-			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+			T& result = Chunks[chunk_i][in_chunk_i];
 
-			*result_ptr = *t;
+			result = *t;
 		}
 
 		void Append(T t)
@@ -227,9 +225,9 @@ namespace fe
 			MSB64(&chunk_i, Count);
 			auto chunk_mask = (U64)1 << chunk_i;
 			auto in_chunk_i = Count - chunk_mask;
-			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+			T& result = Chunks[chunk_i][in_chunk_i];
 
-			*result_ptr = t;
+			result = t;
 		}
 
 		T* PushBack()
@@ -243,9 +241,9 @@ namespace fe
 			MSB64(&chunk_i, Count);
 			auto chunk_mask = (U64)1 << chunk_i;
 			auto in_chunk_i = Count - chunk_mask;
-			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+			auto& result = Chunks[chunk_i][in_chunk_i];
 
-			return result_ptr;
+			return &result;
 		}
 
 		T PopBack()
@@ -254,11 +252,11 @@ namespace fe
 			MSB64(&chunk_i, Count);
 			auto chunk_mask = (U64)1 << chunk_i;
 			auto in_chunk_i = Count - chunk_mask;
-			auto result_ptr = Chunks[chunk_i] + in_chunk_i;
+			auto& result = Chunks[chunk_i][in_chunk_i];
 
 			Count--;
 
-			return *result_ptr;
+			return &result;
 		}
 
 		template <class tnAllocator>

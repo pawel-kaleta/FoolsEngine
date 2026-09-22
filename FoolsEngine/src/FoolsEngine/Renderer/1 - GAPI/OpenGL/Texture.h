@@ -3,6 +3,7 @@
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
+#include "Buffer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -117,7 +118,7 @@ namespace fe::GAPI::OpenGL
 		}
 	};
 
-	void CopyToTextureCmd(Texture* texture, const Stream::Region* region)
+	void CopyToTextureCmd(Texture* texture, const Region* region)
 	{
 		auto& spec = texture->Spec;
 

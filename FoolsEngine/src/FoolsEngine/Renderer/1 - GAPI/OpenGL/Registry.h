@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Utils/Context.h"
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/Arena.h"
 
@@ -55,7 +56,13 @@ namespace fe::GAPI::OpenGL
 		TypedAlloc<Allocator>* mAllocMain = nullptr;
 		TypedAlloc<Allocator>* mAllocAux = nullptr;
 
-		InternalID GetNew()
+		void Create()
+		{
+			mAllocMain = Context::Allocators::Default;
+			mAllocAux = Context::Allocators::Auxiliary;
+		}
+
+		InternalID GetNewID()
 		{
 			InternalID result;
 			result.mComps.Type = tObj::Type;
@@ -71,7 +78,7 @@ namespace fe::GAPI::OpenGL
 				MSB64(&chunk_i, (U64)result_obj_ptr->RegIndex);
 				auto chunk_mask = (U64)1 << chunk_i;
 				auto in_chunk_i = result_obj_ptr->RegIndex - chunk_mask;
-				auto generation = mChunks[chunk_i].GenerationsChunk + in_chunk_i;
+				auto generation = mChunks[chunk_i].GenerationsChunk[in_chunk_i];
 
 				result.mComps.Generation = generation;
 
@@ -115,7 +122,7 @@ namespace fe::GAPI::OpenGL
 			return result;
 		}
 
-		void Free(InternalID id)
+		void FreeObj(InternalID id)
 		{
 			FE_CORE_ASSERT(id.mComps.Type == tObj::Type, "This GAPI object does not belong to this registry");
 
@@ -138,7 +145,19 @@ namespace fe::GAPI::OpenGL
 
 		tObj* GetObj(InternalID id)
 		{
+			FE_CORE_ASSERT(id.mComps.Type == tObj::Type, "This GAPI object does not belong to this registry");
+			
+			unsigned long chunk_i;
+			MSB64(&chunk_i, (U64)id.mComps.RegIndex);
+			auto chunk_mask = (U64)1 << chunk_i;
+			auto in_chunk_i = id.mComps.RegIndex - chunk_mask;
+			auto& generation = mChunks[chunk_i].GenerationsChunk[in_chunk_i];
+			
+			FE_CORE_ASSERT(generation == id.mComps.Generation, "Allready freed from GAPI registry");
 
+			auto& result = mChunks[chunk_i].ElementsChunk[in_chunk_i];
+
+			return &result;
 		}
 	};
 }

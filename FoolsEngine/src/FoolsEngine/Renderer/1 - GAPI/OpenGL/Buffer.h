@@ -13,7 +13,15 @@ namespace fe::GAPI::OpenGL
 		bool mCommited = false;
 		bool mReleased = false;
 
-		Byte* AllocateBuffer(U32 size)
+		void Init()
+		{
+			mGLID = 0;
+			mSize = 0;
+			mCommited = false;
+			mReleased = false;
+		}
+
+		Byte* Allocate(U32 size)
 		{
 			glCreateBuffers(1, &mGLID);
 
@@ -25,13 +33,26 @@ namespace fe::GAPI::OpenGL
 			mSize = size;
 			return CPUMemoryBegin;
 		}
+
+		void AllocateCommit(U32 size)
+		{
+			glCreateBuffers(1, &mGLID);
+			glNamedBufferStorage(mGLID, size, nullptr, 0);
+			mSize = size;
+			mCommited = true;
+			return;
+		}
+
 		void CommitCmd()
 		{
+			FE_CORE_ASSERT(!mCommited, "Allready commited!");
 			glUnmapNamedBuffer(mGLID);
 			mCommited = true;
 		}
+
 		void ReleaseCmd()
 		{
+			FE_CORE_ASSERT(!mReleased, "Allready commited!");
 			glDeleteBuffers(1, &mGLID);
 			mReleased = true;
 			mGLID = 0;
