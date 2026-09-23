@@ -102,8 +102,8 @@ namespace fe::GAPI::Resource
 		GLenum format = OpenGL::Utils::FormatToGLFormat(spec.mFormat);
 		GLenum type = OpenGL::Utils::FormatToGLType(spec.mFormat);
 
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, region_obj->Stream->OpenGLBuffer);
-		glTextureSubImage2D(texture_obj->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, region_obj->Data);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, region_obj->mStream->OpenGLBuffer);
+		glTextureSubImage2D(texture_obj->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, region_obj->mData);
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
 		glGenerateTextureMipmap(texture_obj->OpenGLID);

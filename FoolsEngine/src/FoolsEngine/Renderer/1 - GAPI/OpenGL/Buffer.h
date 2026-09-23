@@ -74,13 +74,14 @@ namespace fe::GAPI::OpenGL
 
 	struct Region
 	{
-		UInt Size; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
-		Stream* Stream;
-		Byte* Data;
+		UInt mSize; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
+		Stream* mStream;
+		Byte* mData;
+		Stream::Fence* mFence;
 
 		U32 GetOffset() const
 		{
-			return Data - Stream->DMABegin;
+			return mData - mStream->DMABegin;
 		}
 	};
 }

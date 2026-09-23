@@ -4,8 +4,8 @@
 
 namespace fe::GAPI::Stream
 {
-	GID		CreateDownStream(U32 size, U32 maxRegionCount);
-	void	AllocateDownStream(GID downStream);
+	GID		CreateDownStream();
+	void	AllocateDownStream(GID downStream, U32 size);
 	void	DestroyDownStreamCmd(GID downStream);
 
 	GID		CreateRegion(GID stream, U32 size, U32 offsetAlignment = 16);

@@ -17,10 +17,10 @@ namespace fe::GAPI::OpenGL
 	{
 		Byte* CurrentPosition = nullptr;
 
-		Queue<Fence> FrontFences;
-		Queue<Fence> BackFences;
-		Pool<Region> Regions;
-		Splice<Fence*> RegionFences;
+		Queue<Fence> FrontFences; // to do: make this dynamic size
+		Queue<Fence> BackFences; // to do: make this dynamic size
+		Pool<Region> Regions; // to do: remove and use registry
+		Splice<Fence*> RegionFences; // to do: remove, and use ptr inside region
 
 		void Init()
 		{
@@ -32,9 +32,9 @@ namespace fe::GAPI::OpenGL
 			Splice<Fence*> RegionFences;
 		}
 
-		void Create(U32 size, U32 maxRegionCount)
+		void Create(U32 size)
 		{
-			FE_CORE_ASSERT(size && maxRegionCount, "Size or maxRegionCount is 0.");
+			FE_CORE_ASSERT(size, "Size is 0.");
 
 			FrontFences.InitAllocate(maxRegionCount);
 			BackFences.InitAllocate(maxRegionCount);
@@ -84,7 +84,7 @@ namespace fe::GAPI::OpenGL
 			CurrentPosition = nullptr;
 		}
 
-		const Region* CreateRegion(U32 size, U32 alignment = 16)
+		const InternalID CreateRegion(U32 size, U32 alignment = 16)
 		{
 			auto alligned_offset = (U32)AlignTo((Byte*)(CurrentPosition - DMABegin), alignment);
 			Byte* position_candidate = DMABegin + alligned_offset;
