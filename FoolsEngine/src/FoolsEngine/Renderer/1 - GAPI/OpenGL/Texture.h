@@ -80,6 +80,8 @@ namespace fe::GAPI::OpenGL
 
 	struct Texture
 	{
+		constexpr static ObjType Type = ObjType::Texture;
+
 		GLuint OpenGLID = 0;
 		TextureSpec Spec;
 
@@ -126,6 +128,8 @@ namespace fe::GAPI::OpenGL
 
 	struct TextureView
 	{
+		constexpr static ObjType Type = ObjType::TextureView;
+
 		TextureViewSpec mSampler;
 		Texture* mTexture = nullptr;
 		GLuint mSamplerID = 0;

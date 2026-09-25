@@ -33,29 +33,31 @@ namespace fe::GAPI::OpenGL
 
 	struct Shader
 	{
-		GLuint OpenGLID = 0;
-		ShaderType Type = ShaderType::None;
+		constexpr static ObjType Type = ObjType::Shader;
+
+		GLuint mOpenGLID = 0;
+		ShaderType mType = ShaderType::None;
 
 		void Init()
 		{
-			OpenGLID = 0;
-			Type = ShaderType::None;
+			mOpenGLID = 0;
+			mType = ShaderType::None;
 		}
 
 		void Create(CString source, ShaderType type)
 		{
 			FE_PROFILER_FUNC();
 
-			Type = type;
-			OpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(type));
+			mType = type;
+			mOpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(type));
 
-			glShaderSource(OpenGLID, 1, (GLchar**)source.Data, 0);
+			glShaderSource(mOpenGLID, 1, (GLchar**)source.Data, 0);
 
 			GLint compilation_success;
 			{
 				FE_PROFILER_SCOPE("OpenGL shader compilation");
-				glCompileShader(OpenGLID);
-				glGetShaderiv(OpenGLID, GL_COMPILE_STATUS, &compilation_success);
+				glCompileShader(mOpenGLID);
+				glGetShaderiv(mOpenGLID, GL_COMPILE_STATUS, &compilation_success);
 			}
 
 			if (compilation_success == GL_FALSE)
@@ -63,14 +65,14 @@ namespace fe::GAPI::OpenGL
 				Pile p;
 
 				GLint log_length = 0;
-				glGetShaderiv(OpenGLID, GL_INFO_LOG_LENGTH, &log_length);
+				glGetShaderiv(mOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
 				auto info_log = p.Allocate<GLchar>(log_length);
-				glGetShaderInfoLog(OpenGLID, log_length, &log_length, info_log.Elements);
+				glGetShaderInfoLog(mOpenGLID, log_length, &log_length, info_log.Elements);
 
-				glDeleteShader(OpenGLID);
+				glDeleteShader(mOpenGLID);
 
-				OpenGLID = 0;
+				mOpenGLID = 0;
 
 				FE_LOG_CORE_ERROR("{0}", info_log.Elements);
 				FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
@@ -83,7 +85,7 @@ namespace fe::GAPI::OpenGL
 		{
 			FE_PROFILER_FUNC();
 
-			glDeleteShader(OpenGLID);
+			glDeleteShader(mOpenGLID);
 		}
 	};
 }

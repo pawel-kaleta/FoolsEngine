@@ -37,6 +37,8 @@ namespace fe::GAPI::OpenGL
 
 	struct GraphicsPipeline
 	{
+		constexpr static ObjType Type = ObjType::GraphicsPipeline;
+
 		GLuint mOpenGLID = 0;
 		GLint mRootDataOffsetUniformLocation;
 		Raster::Specification mRaster;

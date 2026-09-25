@@ -8,6 +8,7 @@ namespace fe::GAPI::OpenGL
 {
 	struct Buffer
 	{
+		constexpr static ObjType Type = ObjType::Buffer;
 		GLuint mGLID = 0;
 		U32 mSize = 0;
 		bool mCommited = false;
@@ -61,6 +62,7 @@ namespace fe::GAPI::OpenGL
 
 	struct Stream
 	{
+		InternalID mID;
 		GLuint OpenGLBuffer = 0;
 		U32 Capacity = 0;
 		Byte* DMABegin = nullptr;
@@ -74,6 +76,7 @@ namespace fe::GAPI::OpenGL
 
 	struct Region
 	{
+		constexpr static ObjType Type = ObjType::Region;
 		UInt mSize; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
 		Stream* mStream;
 		Byte* mData;

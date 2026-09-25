@@ -15,6 +15,8 @@ namespace fe::GAPI::OpenGL
 {
 	struct DownStream : Stream
 	{
+		constexpr static ObjType Type = ObjType::DownStream;
+
 		Byte* CurrentPosition = nullptr;
 
 		Queue<Fence> FrontFences; // to do: make this dynamic size
@@ -22,8 +24,9 @@ namespace fe::GAPI::OpenGL
 		Pool<Region> Regions; // to do: remove and use registry
 		Splice<Fence*> RegionFences; // to do: remove, and use ptr inside region
 
-		void Init()
+		void Init(InternalID id)
 		{
+			mID = id;
 			CurrentPosition = nullptr;
 
 			Queue<Fence> FrontFences;
@@ -112,7 +115,7 @@ namespace fe::GAPI::OpenGL
 				if (FrontFences.First()->Location < position_candidate)
 				{
 					FE_LOG_CORE_WARN("Not enough space in DownStream");
-					return nullptr;
+					return InternalID();
 				}
 			}
 			else if (region_end_candidate > DMABegin + Capacity) //  need to wrap around (ring buffer)
@@ -124,7 +127,7 @@ namespace fe::GAPI::OpenGL
 				if (region_end_candidate > DMABegin + Capacity) // region most likely bigger then whole stream
 				{
 					FE_LOG_CORE_WARN("Not enough space in DownStream");
-					return nullptr;
+					return InternalID();
 				}
 
 				while (!BackFences.IsEmpty())
@@ -148,7 +151,7 @@ namespace fe::GAPI::OpenGL
 					if (BackFences.First()->Location < position_candidate)
 					{
 						FE_LOG_CORE_WARN("Not enough space in DownStream");
-						return nullptr;
+						return InternalID();
 					}
 
 					std::swap(BackFences, FrontFences);

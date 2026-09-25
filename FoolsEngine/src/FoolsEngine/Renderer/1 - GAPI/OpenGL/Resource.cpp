@@ -29,34 +29,29 @@ namespace fe::GAPI::Resource
 	{
 		OpenGL::InternalID id = OpenGL::BufferRegistry.GetNewID();
 		OpenGL::BufferRegistry.GetObj(id)->Init();
-		return id.mGID;
+		return id;
 	}
 
 	Byte* AllocateBuffer(GID buffer, U32 size)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)buffer;
-		
-		return OpenGL::BufferRegistry.GetObj(id)->Allocate(size);
+		return OpenGL::BufferRegistry.GetObj(buffer)->Allocate(size);
 	}
 
 	void AllocateCommit(GID buffer, U32 size)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)buffer;
-		OpenGL::BufferRegistry.GetObj(id)->AllocateCommit(size);
+		OpenGL::BufferRegistry.GetObj(buffer)->AllocateCommit(size);
 	}
 
 	void CommitBuffer(GID buffer)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)buffer;
-		OpenGL::BufferRegistry.GetObj(id)->Commit();
+		OpenGL::BufferRegistry.GetObj(buffer)->Commit();
 	}
 
 	void DestroyBufferCmd(GID buffer)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)buffer;
-		OpenGL::Buffer* obj = OpenGL::BufferRegistry.GetObj(id);
+		OpenGL::Buffer* obj = OpenGL::BufferRegistry.GetObj(buffer);
 		obj->ReleaseCmd();
-		OpenGL::BufferRegistry.FreeObj(id);
+		OpenGL::BufferRegistry.FreeObj(buffer);
 	}
 
 	GID CreateShader(Descriptors::ShaderType type, CString source)
@@ -64,15 +59,14 @@ namespace fe::GAPI::Resource
 		OpenGL::InternalID id = OpenGL::ShaderRegistry.GetNewID();
 		OpenGL::Shader* shader = OpenGL::ShaderRegistry.GetObj(id);
 		shader->Create(source, type);
-		return id.mGID;
+		return id;
 	}
 
 	void DestroyShader(GID shader)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)shader;
-		OpenGL::Shader* obj = OpenGL::ShaderRegistry.GetObj(id);
+		OpenGL::Shader* obj = OpenGL::ShaderRegistry.GetObj(shader);
 		obj->Destroy();
-		OpenGL::ShaderRegistry.FreeObj(id);
+		OpenGL::ShaderRegistry.FreeObj(shader);
 	}
 
 	GID CreateTexture(const Descriptors::TextureSpec& spec)
@@ -80,21 +74,19 @@ namespace fe::GAPI::Resource
 		OpenGL::InternalID id = OpenGL::TextureRegistry.GetNewID();
 		OpenGL::Texture* texture = OpenGL::TextureRegistry.GetObj(id);
 		texture->Create(spec);
-		return id.mGID;
+		return id;
 	}
 
 	void AllocateTexture(GID texture)
 	{
-		OpenGL::InternalID id = (OpenGL::InternalID)texture;
-		OpenGL::Texture* obj = OpenGL::TextureRegistry.GetObj(id);
+		OpenGL::Texture* obj = OpenGL::TextureRegistry.GetObj(texture);
 		obj->Allocate();
 	}
 
 	void CopyToTextureCmd(GID texture, GID region)
 	{
-		OpenGL::Texture*	texture_obj	= OpenGL::TextureRegistry.GetObj((OpenGL::InternalID)texture);
-		OpenGL::Region*		region_obj	= OpenGL::RegionRegistry.GetObj((OpenGL::InternalID)region);
-
+		OpenGL::Texture*	texture_obj	= OpenGL::TextureRegistry.GetObj(texture);
+		OpenGL::Region*		region_obj	= OpenGL::RegionRegistry.GetObj(region);
 
 		auto& spec = texture_obj->Spec;
 
@@ -111,8 +103,8 @@ namespace fe::GAPI::Resource
 
 	void CopyToTextureCmd(GID texture, GID buffer, U32 offset)
 	{
-		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj((OpenGL::InternalID)texture);
-		OpenGL::Buffer* buffer_obj = OpenGL::BufferRegistry.GetObj((OpenGL::InternalID)buffer);
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
+		OpenGL::Buffer* buffer_obj = OpenGL::BufferRegistry.GetObj(buffer);
 
 		auto& spec = texture_obj->Spec;
 
@@ -129,14 +121,14 @@ namespace fe::GAPI::Resource
 
 	void DestroyTextureCmd(GID texture)
 	{
-		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj((OpenGL::InternalID)texture);
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		texture_obj->DestroyCmd();
-		OpenGL::TextureRegistry.FreeObj((OpenGL::InternalID)texture);
+		OpenGL::TextureRegistry.FreeObj(texture);
 	}
 
 	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureSpecView)
 	{
-		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj((OpenGL::InternalID)texture);
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 
 		OpenGL::InternalID textureview_id = OpenGL::TextureViewRegistry.GetNewID();
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureview_id);
@@ -144,25 +136,25 @@ namespace fe::GAPI::Resource
 		textureview_obj->Init();
 		textureview_obj->Create(textureSpecView, texture_obj);
 
-		return textureview_id.mGID;
+		return textureview_id;
 	}
 
 	void CommitTextureViewCmd(GID textureView)
 	{
-		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj((OpenGL::InternalID)textureView);
+		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 		textureview_obj->CommitCmd();
 	}
 
 	void DestroyTextureViewCmd(GID textureView)
 	{
-		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj((OpenGL::InternalID)textureView);
+		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 		textureview_obj->DestroyCmd();
-		OpenGL::TextureViewRegistry.FreeObj((OpenGL::InternalID)textureView);
+		OpenGL::TextureViewRegistry.FreeObj(textureView);
 	}
 
 	Data::std140_uvec2 GetTextureViewHandle(GID textureView)
 	{
-		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj((OpenGL::InternalID)textureView);
+		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 		return (Data::std140_uvec2)(textureview_obj->mTextureSamplerHandleGL);
 	}
 }

@@ -12,6 +12,9 @@ namespace fe::GAPI::OpenGL
 {
 	union InternalID
 	{
+		InternalID() : mGID() {};
+		InternalID(GID gid) : mGID(gid) {}
+		operator GID() { return mGID; }
 		GID mGID;
 		struct
 		{
@@ -23,14 +26,13 @@ namespace fe::GAPI::OpenGL
 
 	ObjType GetObjType(GID obj)
 	{
-		const InternalID& internalID = *(InternalID*)&obj;
-		return (ObjType::ValueType)(internalID.mComps.Type);
+		return (ObjType::ValueType)(InternalID(obj).mComps.Type);
 	}
 
 	template <typename tObj>
 	struct Registry
 	{
-		// basically dynamic pool backed by xar for separatelly gapi objects and their generation trackers
+		// basically dynamic pool backed by xars for separatelly gapi objects and their generation trackers
 
 		struct FreeListElement
 		{
@@ -51,6 +53,7 @@ namespace fe::GAPI::OpenGL
 		};
 
 		SpliceArena<Chunks> mChunks;
+		SpliceArena<U64> mOccupancyFlags; // true is free
 
 		FreeListElement* mFreeList = nullptr;
 		TypedAlloc<Allocator>* mAllocMain = nullptr;
@@ -65,12 +68,37 @@ namespace fe::GAPI::OpenGL
 		InternalID GetNewID()
 		{
 			InternalID result;
-			result.mComps.Type = tObj::Type;
+			result.mComps.Type = tObj::Type.Value;
+
+			{
+				unsigned long index_IN_flags_bin;
+				UInt index_OF_flags_bin = 0;
+				bool found = false;
+				for (; index_OF_flags_bin < mOccupancyFlags.Count; index_OF_flags_bin++)
+				{
+					if (mOccupancyFlags[index_OF_flags_bin])
+					{
+						MSB64(&index_IN_flags_bin, mOccupancyFlags[index_OF_flags_bin]);
+						found = true;
+						break;
+					}
+				}
+				
+				if (found)
+				{
+					U64 flag_mask = (U64)1 << index_OF_flags_bin;
+					mOccupancyFlags[index_OF_flags_bin] &= ~flag_mask;
+
+					index_OF_flags_bin * 64 + index_IN_flags_bin;
+				}
+				
+			}
+
 
 			if (mFreeList)
 			{
 				FreeListElement* result_obj_ptr = mFreeList;
-				mFreeList = mFreeList->FreeListNext;
+				mFreeList = mFreeList->Next;
 
 				result.mComps.RegIndex = result_obj_ptr->RegIndex;
 
@@ -104,15 +132,16 @@ namespace fe::GAPI::OpenGL
 			new_chunks->ElementsChunk = mAllocMain->Allocate<RegElement>(new_chunk_capacity).Elements;
 			new_chunks->GenerationsChunk = mAllocMain->Allocate<U08>(new_chunk_capacity).Elements;
 
+			U16 reg_index_base = 2 ^ mChunks.Count;
+
 			new_chunks->GenerationsChunk[0] = 0;
 			result.mComps.Generation = 0;
 			result.mComps.RegIndex = reg_index_base;
 
-			U16 reg_index_base = 2 ^ mChunks.Count;
 			mFreeList = &(new_chunks->ElementsChunk[1].mFree);
 			for (UInt i = 1; i < new_chunk_capacity; i++) // i=0 is result
 			{
-				new_chunks->ElementsChunk[i].mFree = { .Next = &(new_chunks->ElementsChunk[i+1].mFree), .RegIndex = reg_index_base + i };
+				new_chunks->ElementsChunk[i].mFree = { .Next = &(new_chunks->ElementsChunk[i+1].mFree), .RegIndex = (U16)(reg_index_base + i) };
 				new_chunks->GenerationsChunk[i] = 0;
 			}
 			new_chunks->ElementsChunk[new_chunk_capacity - 1].mFree.Next = nullptr;
@@ -124,7 +153,7 @@ namespace fe::GAPI::OpenGL
 
 		void FreeObj(InternalID id)
 		{
-			FE_CORE_ASSERT(id.mComps.Type == tObj::Type, "This GAPI object does not belong to this registry");
+			FE_CORE_ASSERT(id.mComps.Type == tObj::Type.Value, "This GAPI object does not belong to this registry");
 
 			unsigned long chunk_i;
 			MSB64(&chunk_i, (U64)id.mComps.RegIndex);
@@ -145,7 +174,7 @@ namespace fe::GAPI::OpenGL
 
 		tObj* GetObj(InternalID id)
 		{
-			FE_CORE_ASSERT(id.mComps.Type == tObj::Type, "This GAPI object does not belong to this registry");
+			FE_CORE_ASSERT(id.mComps.Type == tObj::Type.Value, "This GAPI object does not belong to this registry");
 			
 			unsigned long chunk_i;
 			MSB64(&chunk_i, (U64)id.mComps.RegIndex);
@@ -155,7 +184,7 @@ namespace fe::GAPI::OpenGL
 			
 			FE_CORE_ASSERT(generation == id.mComps.Generation, "Allready freed from GAPI registry");
 
-			auto& result = mChunks[chunk_i].ElementsChunk[in_chunk_i];
+			auto& result = mChunks[chunk_i].ElementsChunk[in_chunk_i].mObj;
 
 			return &result;
 		}
