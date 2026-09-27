@@ -225,7 +225,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Buffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Context.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\DownStream.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPI.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\GraphicsPipeline.h" />

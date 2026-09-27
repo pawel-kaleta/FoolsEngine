@@ -4,19 +4,11 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 
-#include "DownStream.h"
 #include "Registry.h"
+#include "DownStream.h"
 
 #include <glad/gl.h>
 
-
-namespace fe::GAPI::OpenGL
-{
-	Registry<DownStream> DownStreamRegistry;
-	Registry<Region> RegionRegistry;
-
-	// TO DO: Create() on all registries
-}
 
 namespace fe::GAPI::Stream
 {
@@ -48,7 +40,16 @@ namespace fe::GAPI::Stream
 		{
 			OpenGL::DownStream* stream_ptr = OpenGL::DownStreamRegistry.GetObj(id);
 
-			OpenGL::InternalID region_id = stream_ptr->CreateRegion(size, offsetAlignment);
+			OpenGL::InternalID region_id = OpenGL::RegionRegistry.GetNewID();
+			OpenGL::Region* region_ptr = OpenGL::RegionRegistry.GetObj(region_id);
+
+			bool success = stream_ptr->CreateRegion(region_ptr, size, offsetAlignment);
+
+			if (!success)
+			{
+				OpenGL::RegionRegistry.FreeObj(region_id);
+				return GID();
+			}
 
 			return region_id;
 		}
@@ -100,6 +101,8 @@ namespace fe::GAPI::Stream
 		if (stream_obj->mID.mComps.Type == ObjType::DownStream)
 		{
 			((OpenGL::DownStream*)stream_obj)->RetireRegionCmd(region_obj);
+			OpenGL::RegionRegistry.FreeObj(region);
+
 			return;
 		}
 		if (stream_obj->mID.mComps.Type == ObjType::UpStream)

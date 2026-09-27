@@ -14,11 +14,17 @@ namespace fe
 		UInt Count = 0;
 
 		const	T* begin() const { return Buffer.Elements; }
-		T* begin() { return Buffer.Elements; }
+				T* begin() { return Buffer.Elements; }
 		const	T* end() const { return Buffer.Elements + Count; }
-		T* end() { return Buffer.Elements + Count; }
+				T* end() { return Buffer.Elements + Count; }
 
 		bool IsFull() const { return Count == Buffer.Count; }
+
+		void Init()
+		{
+			Buffer.Init();
+			Count = 0;
+		}
 
 		void Init(Splice<T> splice)
 		{
@@ -68,7 +74,7 @@ namespace fe
 		void Append(Splice<T> splice)
 		{
 			FE_CORE_ASSERT(Count + splice.Count < Buffer.Count, "Arena overflow!");
-			std::memcpy(&Buffer[Count], splice.Begin(), splice.Count);
+			std::memcpy(&Buffer[Count], splice.begin(), splice.Count);
 			Count += splice.Count;
 		}
 
@@ -103,9 +109,9 @@ namespace fe
 		Array<T, N> Buffer;
 
 		const	T* begin() const { return Buffer.Elements; }
-		T* begin() { return Buffer.Elements; }
+				T* begin() { return Buffer.Elements; }
 		const	T* end() const { return Buffer.Elements + Count; }
-		T* end() { return Buffer.Elements + Count; }
+				T* end() { return Buffer.Elements + Count; }
 
 		bool IsFull() const { return Count == Buffer.Count; }
 

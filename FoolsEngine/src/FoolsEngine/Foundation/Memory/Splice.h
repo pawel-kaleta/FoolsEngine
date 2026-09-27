@@ -16,6 +16,12 @@ namespace fe
 		T* Elements = nullptr;
 		UInt Count = 0;
 
+		void Init()
+		{
+			Elements = nullptr;
+			Count = 0;
+		}
+
 		const	T* begin()	const	{ return Elements; }
 				T* begin()			{ return Elements; }
 		const	T* end()	const	{ return Elements + Count; }

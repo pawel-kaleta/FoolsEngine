@@ -3,7 +3,6 @@
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
-#include "Buffer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

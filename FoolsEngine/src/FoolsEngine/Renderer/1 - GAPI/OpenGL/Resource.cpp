@@ -9,19 +9,7 @@
 #include "Shader.h"
 #include "Registry.h"
 
-
 #include <glad/gl.h>
-
-namespace fe::GAPI::OpenGL
-{
-	Registry<Buffer> BufferRegistry;
-	Registry<Texture> TextureRegistry;
-	Registry<TextureView> TextureViewRegistry;
-	Registry<Shader> ShaderRegistry;
-	Registry<Region> RegionRegistry;
-
-	// TO DO: Create() on all regiestries
-}
 
 namespace fe::GAPI::Resource
 {

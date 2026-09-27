@@ -63,9 +63,9 @@ namespace fe::GAPI::OpenGL
 	struct Stream
 	{
 		InternalID mID;
-		GLuint OpenGLBuffer = 0;
-		U32 Capacity = 0;
-		Byte* DMABegin = nullptr;
+		GLuint mOpenGLBuffer = 0;
+		U32 mCapacity = 0;
+		Byte* mDMABegin = nullptr;
 
 		struct Fence
 		{
@@ -77,14 +77,14 @@ namespace fe::GAPI::OpenGL
 	struct Region
 	{
 		constexpr static ObjType Type = ObjType::Region;
-		UInt mSize; // size first, as pool makes union of this with ptr of a freelist, its safer to not overlapp with ptrs in region
 		Stream* mStream;
 		Byte* mData;
 		Stream::Fence* mFence;
+		UInt mSize;
 
 		U32 GetOffset() const
 		{
-			return mData - mStream->DMABegin;
+			return mData - mStream->mDMABegin;
 		}
 	};
 }

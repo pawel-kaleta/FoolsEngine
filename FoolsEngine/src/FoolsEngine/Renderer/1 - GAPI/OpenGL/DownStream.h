@@ -1,11 +1,11 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/Queue.h"
-#include "FoolsEngine/Foundation/Memory/Pool.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
+
 
 #include "FoolsEngine/Renderer/1 - GAPI/GAPI.h"
 #include "Buffer.h"
+#include "Registry.h"
 
 #include <glad/gl.h>
 
@@ -17,181 +17,234 @@ namespace fe::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::DownStream;
 
-		Byte* CurrentPosition = nullptr;
+		Byte* mCurrentPosition = nullptr;
 
-		Queue<Fence> FrontFences; // to do: make this dynamic size
-		Queue<Fence> BackFences; // to do: make this dynamic size
-		Pool<Region> Regions; // to do: remove and use registry
-		Splice<Fence*> RegionFences; // to do: remove, and use ptr inside region
+		struct Fences
+		{
+			SpliceArena<Array<Fence, 64>*> mFencesChunks;
+			UInt mCount = 0;
+			void Init()
+			{
+				mFencesChunks.Init();
+				mCount = 0;
+			}
+		};
+
+		UInt mNextFrontFenceIndex;
+		Fences* mFrontFences;
+		Fences* mBackFences;
 
 		void Init(InternalID id)
 		{
 			mID = id;
-			CurrentPosition = nullptr;
+			mCurrentPosition = nullptr;
+			mNextFrontFenceIndex = 0;
 
-			Queue<Fence> FrontFences;
-			Queue<Fence> BackFences;
-			Pool<Region> Regions;
-			Splice<Fence*> RegionFences;
+			mOpenGLBuffer = 0;
+			mCapacity = 0;
+			mDMABegin = nullptr;
 		}
 
 		void Create(U32 size)
 		{
 			FE_CORE_ASSERT(size, "Size is 0.");
 
-			FrontFences.InitAllocate(maxRegionCount);
-			BackFences.InitAllocate(maxRegionCount);
-			Regions.InitAllocate(maxRegionCount);
-			RegionFences = Context::Allocators::Default->Allocate<Fence*>(maxRegionCount);
-
-			CurrentPosition = nullptr;
-
-			glCreateBuffers(1, &OpenGLBuffer);
+			glCreateBuffers(1, &mOpenGLBuffer);
 
 			GLbitfield create_flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT;
 			GLbitfield map_flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_FLUSH_EXPLICIT_BIT;
 
-			glNamedBufferStorage(OpenGLBuffer, size, nullptr, create_flags);
-			DMABegin = (Byte*)glMapNamedBufferRange(OpenGLBuffer, 0, size, map_flags);
-			Capacity = size;
+			glNamedBufferStorage(mOpenGLBuffer, size, nullptr, create_flags);
+			mDMABegin = (Byte*)glMapNamedBufferRange(mOpenGLBuffer, 0, size, map_flags);
+			mCapacity = size;
+
+			mFrontFences = Context::Allocators::Default->Allocate<Fences>();
+			mBackFences = Context::Allocators::Default->Allocate<Fences>();
+
+			mFrontFences->Init();
+			mBackFences->Init();
 		}
 
 		void ReleaseCmd()
 		{
-			while (!FrontFences.IsEmpty())
+			while (mNextFrontFenceIndex < mFrontFences->mCount)
 			{
-				auto& opengl_fence = FrontFences.First()->OpenGLFence;
+				auto& opengl_fence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
 				if (opengl_fence)
 					glDeleteSync(opengl_fence);
-				FrontFences.PopFront();
+				mNextFrontFenceIndex++;
 			}
 
-			while (!BackFences.IsEmpty())
+			UInt mNextBackFenceIndex = 0;
+			while (mNextBackFenceIndex < mBackFences->mCount)
 			{
-				auto& opengl_fence = FrontFences.First()->OpenGLFence;
+				auto& opengl_fence = mBackFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
 				if (opengl_fence)
 					glDeleteSync(opengl_fence);
-				FrontFences.PopFront();
+				mNextBackFenceIndex++;
 			}
 
-			glDeleteBuffers(1, &OpenGLBuffer);
+			glDeleteBuffers(1, &mOpenGLBuffer);
 
-			Context::Allocators::Default->Deallocate(RegionFences);
-			Regions.Release();
-			BackFences.Release();
-			FrontFences.Release();
+			for (auto& fencechunk : mFrontFences->mFencesChunks)
+			{
+				Context::Allocators::Default->Deallocate(fencechunk);
+			}
+			for (auto& fencechunk : mBackFences->mFencesChunks)
+			{
+				Context::Allocators::Default->Deallocate(fencechunk);
+			}
+			mFrontFences->mFencesChunks.Release();
+			mBackFences->mFencesChunks.Release();
 
-			OpenGLBuffer = 0;
-			Capacity = 0;
-			DMABegin = nullptr;
-			CurrentPosition = nullptr;
+			mOpenGLBuffer = 0;
+			mCapacity = 0;
+			mDMABegin = nullptr;
+			mCurrentPosition = nullptr;
 		}
 
-		const InternalID CreateRegion(U32 size, U32 alignment = 16)
+		bool CreateRegion(Region* region, U32 size, U32 alignment = 16)
 		{
-			auto alligned_offset = (U32)AlignTo((Byte*)(CurrentPosition - DMABegin), alignment);
-			Byte* position_candidate = DMABegin + alligned_offset;
+			auto alligned_offset = (U32)AlignTo((Byte*)(mCurrentPosition - mDMABegin), alignment);
+			Byte* position_candidate = mDMABegin + alligned_offset;
 			Byte* region_end_candidate = position_candidate + size;
 
-			while (!FrontFences.IsEmpty())
+			while (mNextFrontFenceIndex < mFrontFences->mCount)
 			{
-				if (!FrontFences.First()->OpenGLFence) // false means region not even retired yet and opengl fence not placed
+				auto& OpenGLFence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+				
+				if (!OpenGLFence) // false means region not even retired yet and opengl fence not placed
 					break;
 				
 				GLint sync_status;
 
-				glGetSynciv(FrontFences.First()->OpenGLFence, GL_SYNC_STATUS, 1, nullptr, &sync_status);
+				glGetSynciv(OpenGLFence, GL_SYNC_STATUS, 1, nullptr, &sync_status);
 
 				if (sync_status != GL_SIGNALED)
 					break;
 				
-				glDeleteSync(FrontFences.First()->OpenGLFence);
-				FrontFences.First()->OpenGLFence = nullptr;
-				FrontFences.PopFront();
+				glDeleteSync(OpenGLFence);
+				OpenGLFence = nullptr;
+				mNextFrontFenceIndex++;
 			}
 
-			if (!FrontFences.IsEmpty())
+			if (mNextFrontFenceIndex < mFrontFences->mCount)
 			{
-				if (FrontFences.First()->Location < position_candidate)
+				auto& fence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64);
+				if (fence.Location < position_candidate)
 				{
 					FE_LOG_CORE_WARN("Not enough space in DownStream");
-					return InternalID();
+					return false;
 				}
 			}
-			else if (region_end_candidate > DMABegin + Capacity) //  need to wrap around (ring buffer)
+			else if (region_end_candidate > mDMABegin + mCapacity) //  need to wrap around (ring buffer)
 			{
-				alligned_offset = (U32)AlignTo((Byte*)DMABegin, alignment);
-				position_candidate = DMABegin + alligned_offset;
+				alligned_offset = (UInt)AlignTo((Byte*)0, alignment);
+				position_candidate = mDMABegin + alligned_offset;
 				region_end_candidate = position_candidate + size;
 
-				if (region_end_candidate > DMABegin + Capacity) // region most likely bigger then whole stream
+				if (region_end_candidate > mDMABegin + mCapacity) // region most likely bigger then whole stream
 				{
 					FE_LOG_CORE_WARN("Not enough space in DownStream");
-					return InternalID();
+					return false;
 				}
 
-				while (!BackFences.IsEmpty())
+				// test how many fences can be passed (dont remove them, we are not commit yet to wraping if we have not enough space)
+				UInt next_back_fence_index = 0;
+				while (next_back_fence_index < mBackFences->mCount)
 				{
-					if (!BackFences.First()->OpenGLFence) // false means region not even retired yet and opengl fence not placed
+					auto& fence = mFrontFences->mFencesChunks[next_back_fence_index / 64]->operator[](next_back_fence_index % 64);
+					if (fence.OpenGLFence) // false means region not even retired yet and opengl fence not placed
 						break;
 
 					GLint sync_status;
-					glGetSynciv(BackFences.First()->OpenGLFence, GL_SYNC_STATUS, 1, nullptr, &sync_status);
+					glGetSynciv(fence.OpenGLFence, GL_SYNC_STATUS, 1, nullptr, &sync_status);
 
 					if (sync_status != GL_SIGNALED)
 						break;
 
-					glDeleteSync(BackFences.First()->OpenGLFence);
-					BackFences.First()->OpenGLFence = nullptr;
-					BackFences.PopFront();
+					next_back_fence_index++;
 				}
 
-				if (!BackFences.IsEmpty())
+				// any fances left after potencial wrap?
+				if (next_back_fence_index < mBackFences->mCount)
 				{
-					if (BackFences.First()->Location < position_candidate)
+					auto& fence = mFrontFences->mFencesChunks[next_back_fence_index / 64]->operator[](next_back_fence_index % 64);
+					if (fence.Location < position_candidate) // can we fit?
 					{
 						FE_LOG_CORE_WARN("Not enough space in DownStream");
-						return InternalID();
+						return false;
 					}
+				}
 
-					std::swap(BackFences, FrontFences);
+				// we now know we can fit after wrapping, so lets wrap
+				mFrontFences->mCount = 0;
+				mNextFrontFenceIndex = 0;
+				std::swap(mBackFences, mFrontFences);
+
+				// delete all fences we checked before wrapping
+				while (mNextFrontFenceIndex < next_back_fence_index)
+				{
+					auto& OpenGLFence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+
+					glDeleteSync(OpenGLFence);
+					OpenGLFence = nullptr;
+
+					mNextFrontFenceIndex++;
 				}
 			}
 
-			CurrentPosition = region_end_candidate;
+			mCurrentPosition = region_end_candidate;
 
-			auto new_fence = BackFences.AppendBack();
-			new_fence->Location = position_candidate;
-			new_fence->OpenGLFence = nullptr;
+			auto& chunks_arena = mBackFences->mFencesChunks;
+			if (chunks_arena.Count * 64 >= mBackFences->mCount)
+			{
+				if (chunks_arena.IsFull())
+				{
+					bool arena_any_capacity = chunks_arena.Count > 1;
+					UInt arena_new_capacity = arena_any_capacity ? chunks_arena.Count + (chunks_arena.Count >> 1) : chunks_arena.Count + 1;
+					auto new_arena_buffer = Context::Allocators::Auxiliary->Allocate<Array<Fence, 64>*>(arena_new_capacity);
 
-			Region* region = Regions.Emplace();
-			region->Data = position_candidate;
-			region->Size = size;
-			region->Stream = this;
+					std::memcpy(new_arena_buffer.Elements, chunks_arena.Buffer.Elements, sizeof(Array<Fence, 64>*) * chunks_arena.Count);
+					Context::Allocators::Auxiliary->Deallocate(chunks_arena.Buffer);
 
-			auto region_index = region - (Region*)Regions.Buffer.Elements;
-			RegionFences[region_index] = new_fence;
+					chunks_arena.Buffer = new_arena_buffer;
+				}
 
-			return region;
+				auto& chunk_ptr = * mBackFences->mFencesChunks.PushBack();
+				chunk_ptr = Context::Allocators::Default->Allocate<Fence, 64>();
+			}
+
+			auto& new_fence = mBackFences->mFencesChunks[mBackFences->mCount / 64]->operator[](mBackFences->mCount % 64);
+			mBackFences->mCount++;
+
+			new_fence.Location = position_candidate;
+			new_fence.OpenGLFence = nullptr;
+
+			region->mData = position_candidate;
+			region->mSize = size;
+			region->mStream = this;
+			region->mFence = &new_fence;
+
+			return true;
 		};
 
 		void CommitRegion(Region* region)
 		{
-			FE_CORE_ASSERT(region->Stream == this, "This region is not in this stream");
-			glFlushMappedNamedBufferRange(OpenGLBuffer, region->Data - DMABegin, region->Size);
+			FE_CORE_ASSERT(region->mStream == this, "This region is not in this stream");
+			glFlushMappedNamedBufferRange(mOpenGLBuffer, region->mData - mDMABegin, region->mSize);
 		};
 
 		void RetireRegionCmd(Region* region)
 		{
-			FE_CORE_ASSERT(region->Stream == this, "This region is not in this stream");
-			UInt region_index = region - (Region*)Regions.Buffer.Elements;
+			FE_CORE_ASSERT(region->mStream == this, "This region is not in this stream");
 
-			RegionFences[region_index]->OpenGLFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+			region->mFence->OpenGLFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
-			region->Size = 0;
-			region->Data = nullptr;
-			region->Stream = nullptr;
-			Regions.Remove(region);
+			region->mSize = 0;
+			region->mData = nullptr;
+			region->mStream = nullptr;
+			region->mFence = nullptr;
 		};
 	};
 }

@@ -49,6 +49,7 @@ namespace fe::GAPI::Pipeline
 			DepthTestType	mDepthTestType = DepthTestType::None;
 			StencilTestType	mStencilTestType = StencilTestType::None;
 			StencilCases	mStencilCases;
+			bool			mDepthTest = true;
 		};
 	}
 
