@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
 	struct Buffer
 	{

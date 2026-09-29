@@ -7,49 +7,7 @@
 
 namespace fe
 {
-	RBuffer_OpenGL* ResourceManager_OpenGL::MakeStaticBuffer(UInt capcity)
-	{
-		FE_PROFILER_FUNC();
 
-		auto buffer = GPBuffers.PushBack();
-
-		buffer->Size = capcity;
-		buffer->Create();
-
-		return buffer;
-	}
-
-	RBuffer_OpenGL* ResourceManager_OpenGL::MakeStaticBufferFill(Splice<Byte> data)
-	{
-		FE_PROFILER_FUNC();
-
-		auto buffer = GPBuffers.PushBack();
-
-		buffer->Size = data.Count;
-		buffer->Create();
-
-		return buffer;
-	}
-
-	bool ResourceManager_OpenGL::MakeDownStream(RDownStream_OpenGL& downStream, UInt initCapacity)
-	{
-		FE_PROFILER_FUNC();
-
-		ContextScope scope(this);
-		downStream.Create(initCapacity);
-
-		return true;
-	}
-	bool ResourceManager_OpenGL::MakeFramebuffer(RFramebuffer_OpenGL& framebuffer, UInt specyficationID)
-	{
-		FE_PROFILER_FUNC();
-
-		ContextScope scope(this);
-		framebuffer.SpecificationID = specyficationID;
-		framebuffer.Create();
-
-		return true;
-	}
 	bool ResourceManager_OpenGL::MakeMeshBindings(RBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData)
 	{
 		FE_PROFILER_FUNC();
@@ -76,50 +34,7 @@ namespace fe
 
 		return true;
 	}
-	
-	bool ResourceManager_OpenGL::SendDataToGPU(RShader_OpenGL& shader, UInt specificationID, String source)
-	{
-		FE_PROFILER_FUNC();
 
-		if (!source.IsValid() || source.IsEmpty())
-			return false;
-
-		shader.SpecificationID = specificationID;
-		shader.Create(source);
-
-		return true;
-	}
-	bool ResourceManager_OpenGL::SendDataToGPU(RProgram_OpenGL& program, UInt specificationID, Splice<RShader_OpenGL*> shaders)
-	{
-		FE_PROFILER_FUNC();
-
-		ContextScope scope(this);
-		program.SpecificationID = specificationID;
-
-		program.ShaderOpenGLIDs = this->DefaultAlloc->Allocate(program.ShaderOpenGLIDs, shaders.Count);
-		
-		for (UInt i = 0; i < shaders.Count; i++)
-		{
-			FE_CORE_ASSERT(shaders[i], "Shouldnt be a nullptr");
-			if (!shaders[i]) continue;
-			program.ShaderOpenGLIDs[i] = shaders[i]->OpenGLID;
-		}
-
-		program.Create();
-
-		return true;
-	}
-	bool ResourceManager_OpenGL::SendDataToGPU(RTexture_OpenGL& texture, const Description::Texture::Specification& specification, Splice<Byte> data)
-	{
-		FE_PROFILER_FUNC();
-
-		if (!data.Elements)
-			return false;
-
-		texture.Create(specification, data);
-
-		return true;
-	}
 
 //material
 #if aaaa //move higher level
@@ -268,26 +183,7 @@ namespace fe
 	}
 #endif
 
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RShader_OpenGL& shader)
-	{
-		FE_PROFILER_FUNC();
 
-		shader.Destroy();
-	}
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RProgram_OpenGL& program)
-	{
-		FE_PROFILER_FUNC();
-
-		ContextScope scope(this);	
-		program.Destroy();
-		this->DefaultAlloc->Deallocate(program.ShaderOpenGLIDs);
-	}
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RTexture_OpenGL& texture)
-	{
-		FE_PROFILER_FUNC();
-
-		texture.Destroy();
-	}
 	//material release
 #ifdef aaaa //move higher level
 	void ResourceManager_OpenGL::ReleaseDataFromGPU(AssetUser<Material    >& assetUser)
@@ -323,16 +219,4 @@ namespace fe
 		}
 	}
 #endif
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RMeshBindings_OpenGL& bindings)
-	{
-		FE_PROFILER_FUNC();
-
-		bindings.Delete();
-	}
-	void ResourceManager_OpenGL::ReleaseDataFromGPU(RBuffer_OpenGL& buffer)
-	{
-		FE_PROFILER_FUNC();
-
-		buffer.Delete();
-	}
 }

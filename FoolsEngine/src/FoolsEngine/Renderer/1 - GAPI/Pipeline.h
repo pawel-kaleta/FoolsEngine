@@ -2,11 +2,11 @@
 
 #include "FoolsEngine/Foundation/Memory/Arena.h"
 
-#include "GAPI.h"
+#include "Context.h"
 #include "Data.h"
 #include "Resource.h"
 
-namespace fe::GAPI::Pipeline
+namespace fe::Render::GAPI
 {
 	namespace Raster
 	{
@@ -16,7 +16,7 @@ namespace fe::GAPI::Pipeline
 
 		struct Attachment
 		{
-			Resource::Descriptors::TextureFormat Format = Resource::Descriptors::TextureFormat::None;
+			Descriptors::TextureFormat Format = Descriptors::TextureFormat::None;
 			U08 mWriteMask = 0b1111;
 		};
 
@@ -25,7 +25,7 @@ namespace fe::GAPI::Pipeline
 			PrimitiveType				mPrimitiveType = PrimitiveType::None;
 			FaceCullTest				mFaceCullTest = FaceCullTest::None;
 			ArrayArena<Attachment, 6>	mColorAttachments;
-			Resource::Descriptors::TextureFormat mDepthStencilFormat = Resource::Descriptors::TextureFormat::None;
+			Descriptors::TextureFormat mDepthStencilFormat = Descriptors::TextureFormat::None;
 		};
 	}
 
@@ -69,19 +69,20 @@ namespace fe::GAPI::Pipeline
 	void	SetDepthStencilAttachment(GID pipeline, GID texture);
 	void	SetDepthStencilSpec(GID pipeline, const DepthStencil::Specification& depthStencil);
 	void	SetBlendSpec(GID pipeline, const Blend::Specification& blend);
-	void	SetUBO(GID pipeline, GID stream, UInt bindingIndex);
+	// buffer or downstream
+	void	SetUBO(GID pipeline, GID source, UInt bindingIndex);
+	// buffer, downstream or upstream
 	void	SetSSBO(GID pipeline, GID buffer, UInt bindingIndex);
-	// buffer or stream
+	// buffer or downstream
 	void	SetIndexSource(GID pipeline, GID source);
-	// buffer or stream
+	// buffer or downstream
 	void	SetDrawParamsSource(GID pipeline, GID source);
 
 	void	ActivatePipelineCmd(GID pipeline);
-	void	DrawCmd(UInt primitiveCount, UInt indicesOffset);
-	void	DrawIndirectCmd(UInt paramsOffset);
-	void	MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount);
-	void	MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount);
-	void	DeactivatePipelineCmd();
+	void	DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset);
+	void	DrawIndirectCmd(GID pipeline, UInt paramsOffset);
+	void	MultiDrawIndirectCmd(GID pipeline, UInt paramsOffset, UInt drawCount);
+	void	MultiDrawIndirectCountCmd(GID pipeline, UInt paramsOffset, UInt maxDrawCount);
 
 	void	DestroyPipelineCmd(GID pipeline);
 }

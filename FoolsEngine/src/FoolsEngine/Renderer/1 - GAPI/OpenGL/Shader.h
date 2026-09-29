@@ -8,9 +8,9 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
-	using namespace Resource::Descriptors;
+	using namespace Descriptors;
 
 	namespace Utils
 	{

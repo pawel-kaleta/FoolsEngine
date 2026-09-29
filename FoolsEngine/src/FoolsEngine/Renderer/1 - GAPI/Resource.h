@@ -3,12 +3,12 @@
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/String.h"
 
-#include "GAPI.h"
+#include "Context.h"
 #include "Data.h"
 
 #include <glm/glm.hpp>
 
-namespace fe::GAPI::Resource
+namespace fe::Render::GAPI
 {
 	namespace Descriptors
 	{
@@ -55,7 +55,7 @@ namespace fe::GAPI::Resource
 
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
-	void	AllocateCommit(GID buffer, U32 size);
+	void	AllocateCommitBuffer(GID buffer, U32 size);
 	void	CommitBuffer(GID buffer);
 	void	DestroyBufferCmd(GID buffer);
 
@@ -68,10 +68,12 @@ namespace fe::GAPI::Resource
 	void	AllocateTexture(GID texture);
 	void	CopyToTextureCmd(GID texture, GID region);
 	void	CopyToTextureCmd(GID texture, GID buffer, U32 offset);
+	void	Clear(GID texture, Splice<U32> values);
+	void	Clear(GID texture, Splice<F32> values);
 	void	DestroyTextureCmd(GID texture);
 
-	GID		CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureSpecView);
+	GID		CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec);
 	void	CommitTextureViewCmd(GID textureView);
-	Data::std140_uvec2 GetTextureViewHandle(GID textureView);
+	std140_uvec2 GetTextureViewHandle(GID textureView);
 	void	DestroyTextureViewCmd(GID textureView);
 }

@@ -11,7 +11,7 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::Resource
+namespace fe::Render::GAPI
 {
 	GID CreateBuffer()
 	{
@@ -25,7 +25,7 @@ namespace fe::GAPI::Resource
 		return OpenGL::BufferRegistry.GetObj(buffer)->Allocate(size);
 	}
 
-	void AllocateCommit(GID buffer, U32 size)
+	void AllocateCommitBuffer(GID buffer, U32 size)
 	{
 		OpenGL::BufferRegistry.GetObj(buffer)->AllocateCommit(size);
 	}
@@ -73,20 +73,20 @@ namespace fe::GAPI::Resource
 
 	void CopyToTextureCmd(GID texture, GID region)
 	{
-		OpenGL::Texture*	texture_obj	= OpenGL::TextureRegistry.GetObj(texture);
-		OpenGL::Region*		region_obj	= OpenGL::RegionRegistry.GetObj(region);
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
+		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
 
-		auto& spec = texture_obj->Spec;
+		auto& spec = texture_obj->mSpec;
 
-		auto& dim = texture_obj->Spec.mDimentions;
+		auto& dim = texture_obj->mSpec.mDimentions;
 		GLenum format = OpenGL::Utils::FormatToGLFormat(spec.mFormat);
 		GLenum type = OpenGL::Utils::FormatToGLType(spec.mFormat);
 
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, region_obj->mStream->OpenGLBuffer);
-		glTextureSubImage2D(texture_obj->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, region_obj->mData);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, region_obj->mStream->mOpenGLBuffer);
+		glTextureSubImage2D(texture_obj->mOpenGLID, 0, 0, 0, dim.x, dim.y, format, type, region_obj->mData);
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-		glGenerateTextureMipmap(texture_obj->OpenGLID);
+		glGenerateTextureMipmap(texture_obj->mOpenGLID);
 	}
 
 	void CopyToTextureCmd(GID texture, GID buffer, U32 offset)
@@ -94,17 +94,31 @@ namespace fe::GAPI::Resource
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		OpenGL::Buffer* buffer_obj = OpenGL::BufferRegistry.GetObj(buffer);
 
-		auto& spec = texture_obj->Spec;
+		auto& spec = texture_obj->mSpec;
 
-		auto& dim = texture_obj->Spec.mDimentions;
+		auto& dim = texture_obj->mSpec.mDimentions;
 		GLenum format = OpenGL::Utils::FormatToGLFormat(spec.mFormat);
 		GLenum type = OpenGL::Utils::FormatToGLType(spec.mFormat);
 
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer_obj->mGLID);
-		glTextureSubImage2D(texture_obj->OpenGLID, 0, 0, 0, dim.x, dim.y, format, type, (void*)offset);
+		glTextureSubImage2D(texture_obj->mOpenGLID, 0, 0, 0, dim.x, dim.y, format, type, (void*)offset);
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-		glGenerateTextureMipmap(texture_obj->OpenGLID);
+		glGenerateTextureMipmap(texture_obj->mOpenGLID);
+	}
+
+	void Clear(GID texture, Splice<U32> values)
+	{
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
+
+		texture_obj->ClearCmd(values);
+	}
+
+	void Clear(GID texture, Splice<F32> values)
+	{
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
+
+		texture_obj->ClearCmd(values);
 	}
 
 	void DestroyTextureCmd(GID texture)
@@ -114,7 +128,7 @@ namespace fe::GAPI::Resource
 		OpenGL::TextureRegistry.FreeObj(texture);
 	}
 
-	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureSpecView)
+	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec)
 	{
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 
@@ -122,7 +136,7 @@ namespace fe::GAPI::Resource
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureview_id);
 
 		textureview_obj->Init();
-		textureview_obj->Create(textureSpecView, texture_obj);
+		textureview_obj->Create(textureViewSpec, texture_obj);
 
 		return textureview_id;
 	}
@@ -140,9 +154,9 @@ namespace fe::GAPI::Resource
 		OpenGL::TextureViewRegistry.FreeObj(textureView);
 	}
 
-	Data::std140_uvec2 GetTextureViewHandle(GID textureView)
+	std140_uvec2 GetTextureViewHandle(GID textureView)
 	{
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
-		return (Data::std140_uvec2)(textureview_obj->mTextureSamplerHandleGL);
+		return (std140_uvec2)(textureview_obj->mTextureSamplerHandleGL);
 	}
 }

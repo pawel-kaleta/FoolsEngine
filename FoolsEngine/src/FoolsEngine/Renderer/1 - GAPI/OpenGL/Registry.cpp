@@ -4,7 +4,7 @@
 
 #include "Registry.h"
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
 	Registry<GraphicsPipeline> GraphicsPipelineRegistry;
 	Registry<Buffer> BufferRegistry;
@@ -15,5 +15,15 @@ namespace fe::GAPI::OpenGL
 	Registry<Region> RegionRegistry;
 	Registry<DownStream> DownStreamRegistry;
 
-	// to do: create these
+	void CreateRegistries()
+	{
+		GraphicsPipelineRegistry.Create();
+		BufferRegistry.Create();
+		TextureRegistry.Create();
+		TextureViewRegistry.Create();
+		ShaderRegistry.Create();
+		RegionRegistry.Create();
+		RegionRegistry.Create();
+		DownStreamRegistry.Create();
+	}
 }

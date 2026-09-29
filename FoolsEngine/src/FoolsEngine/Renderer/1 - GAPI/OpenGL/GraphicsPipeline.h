@@ -10,10 +10,8 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
-	using namespace Pipeline;
-
 	namespace Utils
 	{
 		GLenum PrimitiveTypeToGLmode(Raster::PrimitiveType primitive)
@@ -54,6 +52,22 @@ namespace fe::GAPI::OpenGL
 				return GL_GEQUAL;
 			}
 		}
+
+		GLenum BlendFunctionToGLEnum(Blend::BlendFunction func)
+		{
+			switch (func)
+			{
+			case Blend::BlendFunction::None:
+				FE_CORE_ASSERT(false, "Not specified BlendFunction");
+				return GL_NONE;
+			case Blend::BlendFunction::SourceAlpha:			return GL_SRC_ALPHA;
+			case Blend::BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
+
+			default:
+				FE_LOG_CORE_ERROR("Unrecognized BlendFunction");
+				return GL_NONE;
+			}
+		}
 	}
 
 	struct GraphicsPipeline
@@ -70,6 +84,9 @@ namespace fe::GAPI::OpenGL
 		Array<GLuint, 8> mShaderStorageBuffers = { 0,0,0,0,0,0,0,0 };
 		GLuint mInidicesBuffer = 0;
 		GLuint mDrawParamsBuffer = 0;
+		GLenum mMode = GL_TRIANGLES;
+		GLenum mDepthFunk = GL_ALWAYS;
+		GLenum mFaceCull = GL_BACK;
 
 		void Init()
 		{
@@ -83,6 +100,9 @@ namespace fe::GAPI::OpenGL
 			mShaderStorageBuffers = { 0,0,0,0,0,0,0,0 };
 			mInidicesBuffer = 0;
 			mDrawParamsBuffer = 0;
+			mMode = GL_TRIANGLES;
+			mDepthFunk = GL_ALWAYS;
+			mFaceCull = GL_BACK;
 		}
 
 		void CreateCmd(const Shader& vertexShader, const Shader& fragmentShader, const Raster::Specification& spec)
@@ -92,6 +112,17 @@ namespace fe::GAPI::OpenGL
 			mOpenGLID = glCreateProgram();
 			glCreateFramebuffers(1, &mFramebufferOpenGLID);
 			mRaster = spec;
+			mMode = Utils::PrimitiveTypeToGLmode(spec.mPrimitiveType);
+
+			if (mRaster.mFaceCullTest != Raster::FaceCullTest::Never)
+			{
+				if (mRaster.mFaceCullTest == Raster::FaceCullTest::Back)
+					mFaceCull = GL_BACK;
+				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Front)
+					mFaceCull = GL_FRONT;
+				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Always)
+					mFaceCull = GL_FRONT_AND_BACK;
+			}
 
 			Pile p;
 
@@ -142,18 +173,9 @@ namespace fe::GAPI::OpenGL
 			case Raster::FaceCullTest::Never:
 				glDisable(GL_CULL_FACE);
 				break;
-			case Raster::FaceCullTest::Back:
+			default:
 				glEnable(GL_CULL_FACE);
-				glCullFace(GL_BACK);
-				break;
-			case Raster::FaceCullTest::Front:
-				glEnable(GL_CULL_FACE);
-				glCullFace(GL_FRONT);
-				break;
-			case Raster::FaceCullTest::Always:
-				glEnable(GL_CULL_FACE);
-				glCullFace(GL_FRONT_AND_BACK);
-				break;
+				glCullFace(mFaceCull);
 			}
 
 
@@ -211,6 +233,7 @@ namespace fe::GAPI::OpenGL
 		void SetDepthStencilSpec(const DepthStencil::Specification& depthStencil)
 		{
 			mDepthStencil = depthStencil;
+			mDepthFunk = Utils::DepthTestTypeToGLenum(depthStencil.mDepthTestType);
 		}
 
 		void SetBlendSpec(const Blend::Specification& blend)
@@ -218,34 +241,24 @@ namespace fe::GAPI::OpenGL
 			mBlend = blend;
 		}
 
-		void SetUniformBuffer(const Stream* stream, UInt bindingIndex)
+		void SetUniformBuffer(GLuint buffer, UInt bindingIndex)
 		{
-			mUniformBuffers[bindingIndex] = stream->mOpenGLBuffer;
+			mUniformBuffers[bindingIndex] = buffer;
 		}
 
-		void SetShaderStorageBuffer(const Buffer* buffer, UInt bindingIndex)
+		void SetShaderStorageBuffer(GLuint buffer, UInt bindingIndex)
 		{
-			mShaderStorageBuffers[bindingIndex] = buffer->mGLID;
+			mShaderStorageBuffers[bindingIndex] = buffer;
 		}
 
-		void SetIndicesBuffer(const Buffer* buffer)
+		void SetIndicesBuffer(GLuint buffer)
 		{
-			mInidicesBuffer = buffer->mGLID;
+			mInidicesBuffer = buffer;
 		}
 
-		void SetDrawParamsBuffer(const Buffer* buffer)
+		void SetDrawParamsBuffer(GLuint buffer)
 		{
-			mDrawParamsBuffer = buffer->mGLID;
-		}
-
-		void SetIndicesBuffer(const Stream* stream)
-		{
-			mInidicesBuffer = stream->mOpenGLBuffer;
-		}
-
-		void SetDrawParamsBuffer(const Stream* stream)
-		{
-			mDrawParamsBuffer = stream->mOpenGLBuffer;
+			mDrawParamsBuffer = buffer;
 		}
 
 		void ActivateCmd()
@@ -266,7 +279,7 @@ namespace fe::GAPI::OpenGL
 			if (mDepthStencil.mDepthTest)
 			{
 				glEnable(GL_DEPTH_TEST);
-				glDepthFunc(Utils::DepthTestTypeToGLenum(mDepthStencil.mDepthTestType));
+				glDepthFunc(mDepthFunk);
 			}
 			else
 				glDisable(GL_DEPTH_TEST);
@@ -292,6 +305,11 @@ namespace fe::GAPI::OpenGL
 			glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferOpenGLID);
 		}
 
+		void ClearCmd()
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
 		void SetRootDataOffset(U32 offset)
 		{
 			glUniform1ui(mRootDataOffsetUniformLocation, offset);
@@ -299,30 +317,22 @@ namespace fe::GAPI::OpenGL
 
 		void DrawCmd(UInt primitiveCount, UInt indicesOffset)
 		{
-			GLenum mode = Utils::PrimitiveTypeToGLmode(mRaster.mPrimitiveType);
-
-			glDrawElements(mode, primitiveCount, GL_UNSIGNED_INT, (void*)indicesOffset);
+			glDrawElements(mMode, primitiveCount, GL_UNSIGNED_INT, (void*)indicesOffset);
 		}
 
 		void DrawIndirectCmd(UInt paramsOffset)
 		{
-			GLenum mode = Utils::PrimitiveTypeToGLmode(mRaster.mPrimitiveType);
-
-			glDrawElementsIndirect(mode, GL_UNSIGNED_INT, (void*)paramsOffset);
+			glDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset);
 		}
 
 		void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount)
 		{
-			GLenum mode = Utils::PrimitiveTypeToGLmode(mRaster.mPrimitiveType);
-
-			glMultiDrawElementsIndirect(mode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(Data::DrawParams));
+			glMultiDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(Data::DrawParams));
 		}
 
 		void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount)
 		{
-			GLenum mode = Utils::PrimitiveTypeToGLmode(mRaster.mPrimitiveType);
-
-			glMultiDrawElementsIndirectCount(mode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(Data::DrawParams));
+			glMultiDrawElementsIndirectCount(mMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(Data::DrawParams));
 		}
 		
 		void DestroyCmd()

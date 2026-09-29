@@ -6,8 +6,6 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-
 namespace YAML { class Emitter; class Node; }
 
 namespace fe

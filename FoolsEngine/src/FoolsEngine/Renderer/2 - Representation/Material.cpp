@@ -7,9 +7,6 @@
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 #include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 
 namespace fe

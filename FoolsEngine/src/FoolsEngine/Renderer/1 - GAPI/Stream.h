@@ -1,8 +1,8 @@
 #pragma once
 
-#include "GAPI.h"
+#include "Context.h"
 
-namespace fe::GAPI::Stream
+namespace fe::Render::GAPI
 {
 	GID		CreateDownStream();
 	void	AllocateDownStream(GID downStream, U32 size);

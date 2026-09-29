@@ -3,15 +3,14 @@
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 
-#include "FoolsEngine/Renderer/1 - GAPI/GAPI.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "Buffer.h"
-#include "Registry.h"
 
 #include <glad/gl.h>
 
 #include <numeric>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
 	struct DownStream : Stream
 	{
@@ -96,6 +95,9 @@ namespace fe::GAPI::OpenGL
 			}
 			mFrontFences->mFencesChunks.Release();
 			mBackFences->mFencesChunks.Release();
+
+			mFrontFences = Context::Allocators::Default->Allocate<Fences>();
+			mBackFences = Context::Allocators::Default->Allocate<Fences>();
 
 			mOpenGLBuffer = 0;
 			mCapacity = 0;

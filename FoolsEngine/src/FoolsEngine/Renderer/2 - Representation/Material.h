@@ -7,12 +7,10 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
-#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe
+namespace fe::Representation
 {
 	FE_DECLARE_ENUM(AlphaMode, Opaque, Cutout, Blend);
 

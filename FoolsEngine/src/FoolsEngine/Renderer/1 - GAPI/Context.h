@@ -2,7 +2,7 @@
 
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 
-namespace fe::GAPI
+namespace fe::Render::GAPI
 {
 	FE_DECLARE_ENUM(Platform, None, OpenGL, Vulkan);
 
@@ -13,7 +13,12 @@ namespace fe::GAPI
 		U32 mID = -1;
 	};
 
-	FE_DECLARE_ENUM(ObjType, None, Buffer, DownStream, UpStream, Region, Texture, TextureView, Shader, GraphicsPipeline);
+	FE_DECLARE_ENUM(ObjType, None, Buffer, DownStream, UpStream, Region, Texture, TextureView, Shader, GraphicsPipeline, ComputePipeline);
 
 	ObjType GetObjType(GID obj);
+
+
+	bool Create();
+
+	void SetViewport(U32 x, U32 y, U32 width, U32 height);
 }

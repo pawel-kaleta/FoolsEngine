@@ -6,7 +6,7 @@
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
-#include "FoolsEngine/Renderer/1 - GAPI/GAPI.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
 #include "GraphicsPipeline.h"
 #include "Shader.h"
@@ -18,7 +18,7 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
 	union InternalID
 	{
@@ -169,4 +169,6 @@ namespace fe::GAPI::OpenGL
 	extern Registry<Region> RegionRegistry;
 	extern Registry<Region> RegionRegistry;
 	extern Registry<DownStream> DownStreamRegistry;
+
+	void CreateRegistries();
 }

@@ -10,7 +10,7 @@
 #include <glad/gl.h>
 
 
-namespace fe::GAPI::Stream
+namespace fe::Render::GAPI
 {
 	GID CreateDownStream()
 	{
@@ -64,18 +64,6 @@ namespace fe::GAPI::Stream
 		return GID();
 	}
 
-	Byte* GetRegionLocation(GID region)
-	{
-		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
-		return region_obj->mData;
-	}
-
-	U32 GetRegionOffset(GID region)
-	{
-		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
-		return region_obj->GetOffset();
-	}
-
 	void CommitRegion(GID region)
 	{
 		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
@@ -93,7 +81,7 @@ namespace fe::GAPI::Stream
 
 		FE_CORE_ASSERT(false, "Aaaaa!!");
 	}
-
+	
 	void RetireRegionCmd(GID region)
 	{
 		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
@@ -112,5 +100,23 @@ namespace fe::GAPI::Stream
 		}
 
 		FE_CORE_ASSERT(false, "Aaaaa!!");
+	}
+	
+	Byte* GetRegionLocation(GID region)
+	{
+		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
+		return region_obj->mData;
+	}
+
+	U32 GetRegionOffset(GID region)
+	{
+		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
+		return region_obj->GetOffset();
+	}
+
+	GID GetStreamOfRegion(GID region)
+	{
+		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
+		return region_obj->mStream->mID;
 	}
 }

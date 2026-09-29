@@ -14,7 +14,7 @@
 #include "Registry.h"
 
 
-namespace fe::GAPI::Pipeline
+namespace fe::Render::GAPI
 {
 	GID CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Raster::Specification& spec)
 	{
@@ -56,64 +56,113 @@ namespace fe::GAPI::Pipeline
 		pipeline_obj->SetBlendSpec(blend);
 	}
 
-	void SetUBO(GID pipeline, GID stream, UInt bindingIndex)
+	// buffer or downstream
+	void SetUBO(GID pipeline, GID source, UInt bindingIndex)
 	{
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		OpenGL::Stream* stream_obj = OpenGL::DownStreamRegistry.GetObj(stream); // to do: test stream type and fail if upstream
-		pipeline_obj->SetUniformBuffer(stream_obj, bindingIndex);
+		GLuint buffer;
+
+		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
+		{
+		case ObjType::Buffer:		buffer = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
+		case ObjType::DownStream:	buffer = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
+		case ObjType::None:
+		default:
+			FE_CORE_ASSERT(false, "Urecognised type of source for UBO binding");
+		}
+
+		pipeline_obj->SetUniformBuffer(buffer, bindingIndex);
 	}
 
-	void SetSSBO(GID pipeline, GID buffer, UInt bindingIndex)
+	// buffer, downstream or upstream
+	void SetSSBO(GID pipeline, GID target, UInt bindingIndex)
 	{
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		OpenGL::Buffer* buffer_obj = OpenGL::BufferRegistry.GetObj(buffer);
-		pipeline_obj->SetShaderStorageBuffer(buffer_obj, bindingIndex);
+		GLuint buffer_gl;
+
+		switch ((ObjType::ValueType)((OpenGL::InternalID)target).mComps.Type)
+		{
+		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(target)->mGLID; break;
+		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(target)->mOpenGLBuffer; break;
+		case ObjType::UpStream:		FE_CORE_ASSERT(false, "Not implemented yet"); return;
+		case ObjType::None:
+		default:
+			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
+		}
+
+		pipeline_obj->SetShaderStorageBuffer(buffer_gl, bindingIndex);
 	}
 
-	// buffer or stream
+	// buffer or downstream
 	void SetIndexSource(GID pipeline, GID source)
 	{
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		GLuint buffer_gl;
 
+		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
+		{
+		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
+		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
+		case ObjType::None:
+		default:
+			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
+		}
+
+		pipeline_obj->SetIndicesBuffer(buffer_gl);
 	}
 
-	// buffer or stream
+	// buffer or downstream
 	void SetDrawParamsSource(GID pipeline, GID source)
 	{
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		GLuint buffer_gl;
 
+		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
+		{
+		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
+		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
+		case ObjType::None:
+		default:
+			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
+		}
+
+		pipeline_obj->SetDrawParamsBuffer(buffer_gl);
 	}
 
 	void ActivatePipelineCmd(GID pipeline)
 	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->ActivateCmd();
 	}
 
-	void DrawCmd(UInt primitiveCount, UInt indicesOffset)
+	void DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset)
 	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->DrawCmd(primitiveCount, indicesOffset);
 	}
 
-	void DrawIndirectCmd(UInt paramsOffset)
+	void DrawIndirectCmd(GID pipeline, UInt paramsOffset)
 	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->DrawIndirectCmd(paramsOffset);
 	}
 
-	void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount)
+	void MultiDrawIndirectCmd(GID pipeline, UInt paramsOffset, UInt drawCount)
 	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->MultiDrawIndirectCmd(paramsOffset, drawCount);
 	}
 
-	void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount)
+	void MultiDrawIndirectCountCmd(GID pipeline, UInt paramsOffset, UInt maxDrawCount)
 	{
-
-	}
-
-	void DeactivatePipelineCmd()
-	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->MultiDrawIndirectCountCmd(paramsOffset, maxDrawCount);
 	}
 
 	void DestroyPipelineCmd(GID pipeline)
 	{
-
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->DestroyCmd();
+		OpenGL::GraphicsPipelineRegistry.FreeObj(pipeline);
 	}
 }

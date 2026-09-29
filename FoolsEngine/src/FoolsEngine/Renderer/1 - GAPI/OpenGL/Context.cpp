@@ -1,11 +1,28 @@
+#pragma once
+
 #include "FE_pch.h"
 
-#include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
-#include "FoolsEngine/Foundation/Debug/Profiler.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
-namespace fe
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+
+namespace fe::Render::GAPI
 {
+	// "cost" in order (may be driver internal cost of managing its own bookkeeping metadata and validation, not necesserily GPU state change)
+	//Render target
+	//Program
+	//ROP (raster operations pipeline - blending/depth test/cull test/ etc.)
+	// ------ state based recompilation boundary -------
+	//texture sampler binding to binding point (sampler to render texture slot binding) - is there a need fot this ever?
+	//texture bindings (different texture data format and filtering cause recompilation)
+	//vertex layout
+	// ------ possible state based recompilation boundary -------
+	//uniform buffer binding
+	//vertex / index binding
+	//uniform update
+	//draw call params
+
 	void OpenGLMessageCallback(
 		GLenum source,
 		GLenum type,
@@ -64,13 +81,10 @@ namespace fe
 			FE_ASSERTION_BREAK();
 	}
 
-	bool RenderContext_OpenGL::Create()
+	GLFWwindow* BaseWindow = nullptr;
+
+	bool Create()
 	{
-		FE_PROFILER_FUNC();
-
-		ID.Create();
-		GAPIType = fe::GAPIType::OpenGL;
-
 		// window creation
 		{
 			FE_PROFILER_SCOPE("GLFW_Create_BaseWindowInvisible");
@@ -96,7 +110,7 @@ namespace fe
 
 		{
 			FE_PROFILER_SCOPE("gladLoadGLLoader");
-			int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
 			FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
 		}
 
@@ -107,7 +121,7 @@ namespace fe
 			FE_LOG_CORE_INFO("	Renderer:	{0}", (const char*)glGetString(GL_RENDERER));
 			FE_LOG_CORE_INFO("	Version:	{0}", (const char*)glGetString(GL_VERSION));
 
-			FE_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Minimal required OpenGL version is 4.5!");
+			FE_CORE_ASSERT(GL_MAJOR_VERSION > 4 || (GL_MAJOR_VERSION == 4 && GL_MINOR_VERSION >= 5), "Minimal required OpenGL version is 4.5!");
 		}
 
 #ifdef FE_INTERNAL_BUILD
@@ -120,9 +134,12 @@ namespace fe
 		}
 #endif // FE_INTERNAL_BUILD
 
-		ResourceManager.Create();
-
 
 		FE_LOG_CORE_INFO("OpenGL Rendering Context created");
+	}
+
+	void SetViewport(U32 x, U32 y, U32 width, U32 height)
+	{
+		glViewport(x, y, width, height);
 	}
 }

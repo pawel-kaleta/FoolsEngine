@@ -3,7 +3,7 @@
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 
-namespace fe::GAPI::Data
+namespace fe::Render::GAPI
 {
 	using std140_bool = U32;
 	struct alignas( 8) std140_bvec2 : Array< std140_bool, 2 > {};
@@ -37,8 +37,6 @@ namespace fe::GAPI::Data
 		Array<ElementType, count> Data;
 	};
 
-	struct alignas(16) std140_Struct {};
-
 	using std140_mat2x2 = std140_Array<std140_vec2, 2>;
 	using std140_mat2x3 = std140_Array<std140_vec3, 2>;
 	using std140_mat2x4 = std140_Array<std140_vec4, 2>;
@@ -51,14 +49,14 @@ namespace fe::GAPI::Data
 
 	struct DrawParams
 	{
-		Data::std140_uint mPrimitiveCount = 0;
+		std140_uint mPrimitiveCount = 0;
 		// instance count
-		Data::std140_uint mIgnoreThis = 1;
+		std140_uint mIgnoreThis = 1;
 		// assumes index buffer is an array of indices, it's not offset from begining of that buffer in bytes, its an index within array of indices
-		Data::std140_uint mFirstIndex = 0;
+		std140_uint mFirstIndex = 0;
 		// base vertex
-		Data::std140_int mIgnoreThis2 = 0;
+		std140_int mIgnoreThis2 = 0;
 		// base instance
-		Data::std140_uint mIgnoreThis3 = 0;
+		std140_uint mIgnoreThis3 = 0;
 	};
 }

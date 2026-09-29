@@ -2,20 +2,19 @@
 
 #include "Material.h"
 
+#include "FoolsEngine/Foundation/Memory/Splice.h"
+
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
-
 #include <glm/glm.hpp>
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe
+namespace fe::Representation
 {
 	struct ACMeshCore final : public AssetComponent
 	{

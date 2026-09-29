@@ -318,9 +318,6 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\DownStream.h">
       <Filter>FoolsEngine\Renderer\1 - GAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\GAPI.h">
-      <Filter>FoolsEngine\Renderer\1 - GAPI</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\GraphicsPipeline.h">
       <Filter>FoolsEngine\Renderer\1 - GAPI</Filter>
     </ClInclude>
@@ -330,82 +327,31 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Texture.h">
       <Filter>FoolsEngine\Renderer\1 - GAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RBuffer.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RFrameBuffer.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RMeshBindings.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RProgram.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RShader.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Resource\RTexture.h">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\PipelineState.h">
-      <Filter>FoolsEngine\Renderer\3 - Command</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ProgramState.h">
-      <Filter>FoolsEngine\Renderer\3 - Command</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\Render.h">
-      <Filter>FoolsEngine\Renderer\3 - Command</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Command\ResourceState.h">
-      <Filter>FoolsEngine\Renderer\3 - Command</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\Allocation.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\CommandQue.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\PipelineManager.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\ProgramManager.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\RenderContext.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\4 - Render Context\ResourceManager.h">
-      <Filter>FoolsEngine\Renderer\4 - Render Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Camera.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Camera.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Lights.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Lights.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Material.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Material.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Mesh.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Mesh.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Model.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Model.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\RenderMesh.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\RenderMesh.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Shader.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Shader.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\ShadingModel.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Representation\Texture.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Texture.h">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h">
@@ -504,6 +450,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Pipeline.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Context.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -597,79 +544,31 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RBuffer.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RDownStream.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RFrameBuffer.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RMeshBindings.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RProgram.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RShader.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\RTexture.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\OpenGL\Utils.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Resource\Resource.cpp">
-      <Filter>FoolsEngine\Renderer\2 - Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\PipelineState.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ProgramState.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\Render.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\3 - Command\OpenGL\ResourceState.cpp">
-      <Filter>FoolsEngine\Renderer\3 - Command\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Render Context\OpenGL\PipelineManager.cpp">
-      <Filter>FoolsEngine\Renderer\4 - Render Context\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Render Context\OpenGL\ProgramManager.cpp">
-      <Filter>FoolsEngine\Renderer\4 - Render Context\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Render Context\OpenGL\RenderContext.cpp">
-      <Filter>FoolsEngine\Renderer\4 - Render Context\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Render Context\OpenGL\ResourceManager.cpp">
       <Filter>FoolsEngine\Renderer\4 - Render Context\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Camera.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Camera.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Material.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Material.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Mesh.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Mesh.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Model.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Model.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\RenderMesh.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\RenderMesh.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Shader.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Shader.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\ShadingModel.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Representation\Texture.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Texture.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp">
@@ -743,5 +642,6 @@
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Resource.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Stream.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Context.cpp" />
   </ItemGroup>
 </Project>

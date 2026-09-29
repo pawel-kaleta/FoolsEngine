@@ -9,9 +9,9 @@
 
 #include <glad/gl.h>
 
-namespace fe::GAPI::OpenGL
+namespace fe::Render::GAPI::OpenGL
 {
-	using namespace Resource::Descriptors;
+	using namespace Descriptors;
 
 	namespace Utils
 	{
@@ -81,18 +81,24 @@ namespace fe::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::Texture;
 
-		GLuint OpenGLID = 0;
-		TextureSpec Spec;
+		GLuint mOpenGLID = 0;
+		TextureSpec mSpec;
+		GLenum mGLType;
+		GLenum mGLFormat;
+		GLenum mGLInternalFormat;
 
 		void Init()
 		{
-			OpenGLID = 0;
-			Spec = TextureSpec();
+			mOpenGLID = 0;
+			mSpec = TextureSpec();
 		}
 
 		void Create(const TextureSpec& spec)
 		{
-			Spec = spec;
+			mSpec = spec;
+			mGLType = Utils::FormatToGLType(spec.mFormat);
+			mGLFormat = Utils::FormatToGLFormat(spec.mFormat);
+			mGLInternalFormat = Utils::FormatToGLInternalFormat(spec.mFormat);
 
 			switch (spec.mType.Value)
 			{
@@ -100,7 +106,7 @@ namespace fe::GAPI::OpenGL
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
 			case TextureType::Texture2D:
-				glCreateTextures(GL_TEXTURE_2D, 1, &OpenGLID);			
+				glCreateTextures(GL_TEXTURE_2D, 1, &mOpenGLID);			
 				break;
 			case TextureType::Texture3D:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
@@ -115,13 +121,42 @@ namespace fe::GAPI::OpenGL
 
 		void Allocate()
 		{
-			GLenum internal_format = Utils::FormatToGLInternalFormat(Spec.mFormat);
-			glTextureStorage2D(OpenGLID, Spec.mMipCount, internal_format, Spec.mDimentions.x, Spec.mDimentions.y);
+			glTextureStorage2D(mOpenGLID, mSpec.mMipCount, mGLInternalFormat, mSpec.mDimentions.x, mSpec.mDimentions.y);
 		}
+
+		void ClearCmd(Splice<U32> values)
+		{
+			FE_CORE_ASSERT(mSpec.mFormat != TextureFormat::DEPTH24STENCIL8, "This is a depth and/or stencil texture!");
+			
+			glClearTexImage(mOpenGLID, 0, mGLFormat, GL_UNSIGNED_INT, values.Elements);
+		}
+
+		void ClearCmd(Splice<F32> values)
+		{
+			FE_CORE_ASSERT(mSpec.mFormat != TextureFormat::DEPTH24STENCIL8, "This is a depth and/or stencil texture!");
+			
+			glClearTexImage(mOpenGLID, 0, mGLFormat, GL_UNSIGNED_INT, values.Elements);
+		}
+
+		//void ReadPixel(UInt attachmentIndex, UInt x, UInt y, Splice<Byte> destination)
+		//{
+		//	FE_PROFILER_FUNC();
+		//
+		//	glNamedFramebufferReadBuffer(mOpenGLID, GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		//
+		//	const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
+		//	auto& format = spec.ColorAttachments[attachmentIndex].Format;
+		//
+		//	FE_CORE_ASSERT(Description::Texture::SizeOfFormat(format) == destination.Count, "Format size and destination capacity!");
+		//
+		//	GLenum glFormat = Resource::Utils::FormatToGLFormat(format);
+		//	GLenum glType = Resource::Utils::FormatToGLType(format);
+		//	glReadPixels((GLint)x, (GLint)y, 1, 1, glFormat, glType, destination.Elements);
+		//}
 
 		void DestroyCmd()
 		{
-			glDeleteTextures(1, &OpenGLID);
+			glDeleteTextures(1, &mOpenGLID);
 		}
 	};
 
@@ -209,7 +244,7 @@ namespace fe::GAPI::OpenGL
 
 		void CommitCmd()
 		{
-			mTextureSamplerHandleGL = glGetTextureSamplerHandleARB(mTexture->OpenGLID, mSamplerID);
+			mTextureSamplerHandleGL = glGetTextureSamplerHandleARB(mTexture->mOpenGLID, mSamplerID);
 
 			glMakeTextureHandleResidentARB(mTextureSamplerHandleGL);
 		}
