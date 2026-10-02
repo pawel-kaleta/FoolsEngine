@@ -10,7 +10,7 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe::Representation
+namespace fe::Render::Representation
 {
 	FE_DECLARE_ENUM(AlphaMode, Opaque, Cutout, Blend);
 

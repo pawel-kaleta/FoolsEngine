@@ -3,11 +3,9 @@
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
     void ACShaderCore::Init()
     {

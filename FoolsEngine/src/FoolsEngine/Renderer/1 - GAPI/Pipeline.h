@@ -16,8 +16,14 @@ namespace fe::Render::GAPI
 
 		struct Attachment
 		{
-			Descriptors::TextureFormat Format = Descriptors::TextureFormat::None;
+			Descriptors::TextureFormat mFormat = Descriptors::TextureFormat::None;
 			U08 mWriteMask = 0b1111;
+
+			void Init()
+			{
+				mFormat = Descriptors::TextureFormat::None;
+				mWriteMask = 0b1111;
+			}
 		};
 
 		struct Specification
@@ -26,6 +32,14 @@ namespace fe::Render::GAPI
 			FaceCullTest				mFaceCullTest = FaceCullTest::None;
 			ArrayArena<Attachment, 6>	mColorAttachments;
 			Descriptors::TextureFormat mDepthStencilFormat = Descriptors::TextureFormat::None;
+
+			void Init()
+			{
+				mPrimitiveType = PrimitiveType::None;
+				mFaceCullTest = FaceCullTest::None;
+				mColorAttachments.Count = 0;
+				mDepthStencilFormat = Descriptors::TextureFormat::None;
+			}
 		};
 	}
 

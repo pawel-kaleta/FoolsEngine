@@ -8,7 +8,7 @@
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 #include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
 	//extern void EmitGPUDataType(YAML::Emitter& emitter, char* dataPtr, const Description::Data::Type& type);
 

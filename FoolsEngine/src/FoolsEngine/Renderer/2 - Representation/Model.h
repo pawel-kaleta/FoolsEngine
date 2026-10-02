@@ -8,7 +8,7 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe
+namespace fe::Render::Representation
 {
 	struct ACModelCore final : public AssetComponent
 	{

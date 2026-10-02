@@ -3,40 +3,34 @@
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/1 - Description/Texture.h"
-#include "FoolsEngine/Renderer/2 - Resource/RTexture.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe
+namespace fe::Render::Representation
 {
 	struct GAPIType;
 
-	struct ACTexture2DCore final : public AssetComponent
+	struct ACTexture2D_Core final : public AssetComponent
 	{
-		Description::Texture::Specification Specification;
-		Splice<Byte> Data;
+		GAPI::Descriptors::TextureSpec mSpecification;
 
 		void Init()
 		{
-			Specification.Width = 0;
-			Specification.Height = 0;
-			Specification.Usage = Description::Texture::Usage::None;
-			Specification.ArchetypeID = -1;
-			Specification.BorderColor = { 0, 0, 0 };
+			mSpecification.Init();
 		}
 	};
 
-	struct ACRTexture2D_OpenGL final : public AssetComponent
+	template <GAPI::Platform::ValueType tPlatform>
+	struct ACTexture2D_GID final : public AssetComponent
 	{
-		Resource::RTexture_OpenGL Texture;
+		GAPI::GID mGID;
 	};
 
 	class Texture2DObserver : public AssetInterface
 	{
 	public:
-		const ACTexture2DCore& GetCore() const { return Get<ACTexture2DCore>(); }
+		const ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -47,12 +41,9 @@ namespace fe
 	class Texture2DUser : public Texture2DObserver
 	{
 	public:
-		ACTexture2DCore& GetCore() const { return Get<ACTexture2DCore>(); }
+		ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
 
 		bool LoadMetadata();
-
-		void UnloadFromCPU() const;
-		void Release() const;
 
 	protected:
 		Texture2DUser(ECS_AssetHandle ECS_handle) : Texture2DObserver(ECS_handle) {}
@@ -63,13 +54,13 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
 		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACTexture2DCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACTexture2D_Core>(assetID).Init(); }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
 		static bool LoadMetadata(AssetID assetID) { return false; }
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
 		using Observer = Texture2DObserver;
 		using User = Texture2DUser;
-		typedef ACTexture2DCore Core;
+		using Core = ACTexture2D_Core;
 	};
 }

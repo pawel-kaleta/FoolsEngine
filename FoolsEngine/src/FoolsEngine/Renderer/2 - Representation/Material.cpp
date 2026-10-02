@@ -9,7 +9,7 @@
 
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
 	Splice<Byte> MaterialObserver::GetUniformValue(const Description::Buffer::Element& targetUniform) const
 	{

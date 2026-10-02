@@ -3,7 +3,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace fe::Representation
+namespace fe::Render::Representation
 {
 	void Camera::SetOrthographic(float zoom, float nearClip, float farClip)
 	{

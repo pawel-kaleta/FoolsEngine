@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-namespace fe::Representation
+namespace fe::Render::Representation
 {
 	class Camera
 	{

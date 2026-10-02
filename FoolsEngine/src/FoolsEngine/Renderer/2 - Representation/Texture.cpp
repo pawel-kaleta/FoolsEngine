@@ -10,56 +10,16 @@
 #include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
-
-	void Texture2DUser::UnloadFromCPU() const
-	{
-		FE_PROFILER_FUNC();
-
-		auto& data_ptr = Get<ACTexture2DCore>().Data;
-		if (data_ptr)
-		{
-			TextureLoader::UnloadTexture(data_ptr);
-			data_ptr = nullptr;
-		}
-	}
-
-	void Texture2DUser::Release() const
-	{
-		FE_PROFILER_FUNC();
-
-		auto GAPI = Renderer::GetActiveGAPIType();
-		switch (GAPI.Value)
-		{
-		case GAPIType::None:
-			FE_CORE_ASSERT(false, "Unspecified GAPIType");
-			break;
-
-		case GAPIType::OpenGL:
-			if (AllOf<ACTexture2DResource_OpenGL>())
-			{
-				Scratchpad sp;
-				FE_LOG_CORE_DEBUG("Unloading Texture from GPU, AssetID: {0}, Name: {1}", GetID(), GetFilepath().string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
-				Get<ACTexture2DResource_OpenGL>().Texture.Destroy();
-				Erase<ACTexture2DResource_OpenGL>();
-			}
-			break;
-		}
-	}
-
 	void Texture2DObserver::SaveMetadata(YAML::Emitter& emitter)
 	{
 		FE_PROFILER_FUNC();
 		
 		Scratchpad sp;
 		auto& spec = GetCore().Specification;
-		const auto& library = Description::Library::Get();
-		const auto& archetype = library.TextureArchetypes[spec.ArchetypeID];
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();

@@ -3,12 +3,11 @@
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/2 - Resource/RShader.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
 namespace YAML { class Emitter; }
 
-namespace fe
+namespace fe::Render::Representation
 {
 	struct ACShaderCore final : public AssetComponent
 	{

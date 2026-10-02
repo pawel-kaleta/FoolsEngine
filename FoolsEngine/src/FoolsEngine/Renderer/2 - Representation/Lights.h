@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-namespace fe::Representation
+namespace fe::Render::Representation
 {
 	struct Light
 	{
@@ -18,14 +18,14 @@ namespace fe::Representation
 	{
 		struct alignas(16) GPUStruct 
 		{
-			GAPI::Data::std140_float Direction_x;
-			GAPI::Data::std140_float Direction_y;
-			GAPI::Data::std140_float Direction_z;
-			GAPI::Data::std140_float Intensity;
-			GAPI::Data::std140_float Color_r;
-			GAPI::Data::std140_float Color_g;
-			GAPI::Data::std140_float Color_b;
-			GAPI::Data::std140_float zPadding_1;
+			GAPI::std140_float Direction_x;
+			GAPI::std140_float Direction_y;
+			GAPI::std140_float Direction_z;
+			GAPI::std140_float Intensity;
+			GAPI::std140_float Color_r;
+			GAPI::std140_float Color_g;
+			GAPI::std140_float Color_b;
+			GAPI::std140_float zPadding_1;
 		};
 
 		glm::vec3 Direction;

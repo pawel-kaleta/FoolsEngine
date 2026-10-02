@@ -3,50 +3,37 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/1 - Description/ShaderInterface.h"
-#include "FoolsEngine/Renderer/2 - Resource/RProgram.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"
+
 
 namespace YAML { class Emitter; }
 
-namespace fe
+namespace fe::Render::Representation
 {
-	struct ACShadingModelCore final : public AssetComponent
+	struct ACShadingModel_Core final : public AssetComponent
 	{
-		union {
-			struct {
-				AssetID Vertex;
-				AssetID Tessellation;
-				AssetID Geometry;
-				AssetID Fragment;
-			} ByName;
-			Array<AssetID, 4> AsArray;
-		} ShaderIDs;
+		GAPI::Raster::Specification mRasterSpec;
+		Splice<Byte> DefaultParamsData;
+		Splice<AssetID> mShaders;
 
-		Splice<Byte> DefaultUniformsData;
-
-		UInt ProgramSpecificationID;
-
-		void Init();
+		void Init()
+		{
+			mRasterSpec.Init();
+			DefaultParamsData = Splice<Byte>();
+		}
 	};
 
-	struct ACRShadingModel_OpenGL final : public AssetComponent
+	template <GAPI::Platform::ValueType tPlatform>
+	struct ACShadingModel_GID final : public AssetComponent
 	{
-		Resource::RProgram_OpenGL Program;
+		GAPI::GID mPipelineGID;
 	};
 
 	class ShadingModelObserver : public AssetInterface
 	{
 	public:
-		const ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
-
-		const Description::Buffer::Layout& GetUniforms();
-
-		Description::Buffer::UniformBufferIterator GetUniformDefaultValuesIterator();
-
-		Splice<Byte> GetUniformDefaultValue(const Description::Buffer::Element& targetUniform) const;
-		Splice<Byte> GetUniformDefaultValue(String name) const;
+		const ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -57,10 +44,7 @@ namespace fe
 	class ShadingModelUser : public ShadingModelObserver
 	{
 	public:
-		ACShadingModelCore& GetCore() const { return Get<ACShadingModelCore>(); }
-
-		void SetUniformDefaultValue(const Description::Buffer::Element& uniform, Splice<Byte> data) const;
-		void SetUniformDefaultValue(String name, Splice<Byte> data) const;
+		ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
 
 		bool LoadBaseAssetMetadata(const char* filepath);
 		bool LoadMetadata();
@@ -79,10 +63,10 @@ namespace fe
 		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
 		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
 		static bool LoadMetadata(AssetID assetID) { return false; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModelCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModel_Core>(assetID).Init(); }
 
 		using User = ShadingModelUser;
 		using Observer = ShadingModelObserver;
-		using Core = ACShadingModelCore;
+		using Core = ACShadingModel_Core;
 	};
 }

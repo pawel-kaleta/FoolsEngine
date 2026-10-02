@@ -32,6 +32,15 @@ namespace fe::Render::GAPI
 			}
 
 			// UsageFlags mUsageFlags = UsageFlags::None;  ?? Sampled, Storage, ColorAttachment, DepthStencilAttachment
+
+			void Init()
+			{
+				mType = TextureType::None;
+				mFormat = TextureFormat::None;
+				mDimentions = { 0, 0, 0 };
+				mMipCount = 1;
+				mLayerCount = 1;
+			}
 		};
 
 		FE_DECLARE_ENUM(Wrapping, None, Repeat, MirrorRepeat, Clamp, Border);

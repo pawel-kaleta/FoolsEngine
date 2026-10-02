@@ -14,7 +14,7 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe::Representation
+namespace fe::Render::Representation
 {
 	struct ACMeshCore final : public AssetComponent
 	{

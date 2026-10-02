@@ -544,7 +544,7 @@
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32Window.cpp">
       <Filter>FoolsEngine\Platform\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\4 - Render Context\OpenGL\ResourceManager.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\3 - Render Context\OpenGL\ResourceManager.cpp">
       <Filter>FoolsEngine\Renderer\4 - Render Context\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Camera.cpp">

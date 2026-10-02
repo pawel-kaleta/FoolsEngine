@@ -8,10 +8,9 @@
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 #include "FoolsEngine/Assets/Serialization/GPUDataSerialization.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
 	bool RenderMeshUser::SendDataToGPU(GAPIType GAPI) const
 	{
