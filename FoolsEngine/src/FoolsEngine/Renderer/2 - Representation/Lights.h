@@ -53,14 +53,14 @@ namespace fe::Render::Representation
 	{
 		struct alignas(16) GPUStruct
 		{
-			GAPI::Data::std140_float Position_x;
-			GAPI::Data::std140_float Position_y;
-			GAPI::Data::std140_float Position_z;
-			GAPI::Data::std140_float Intensity;
-			GAPI::Data::std140_float Color_r;
-			GAPI::Data::std140_float Color_g;
-			GAPI::Data::std140_float Color_b;
-			GAPI::Data::std140_float Range;
+			GAPI::std140_float Position_x;
+			GAPI::std140_float Position_y;
+			GAPI::std140_float Position_z;
+			GAPI::std140_float Intensity;
+			GAPI::std140_float Color_r;
+			GAPI::std140_float Color_g;
+			GAPI::std140_float Color_b;
+			GAPI::std140_float Range;
 		};
 
 		glm::vec3 Position;

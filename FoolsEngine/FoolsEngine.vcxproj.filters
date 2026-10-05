@@ -165,9 +165,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.h">
-      <Filter>FoolsEngine\Assets\Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
@@ -451,6 +448,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Context.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\GeometryManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -497,9 +495,6 @@
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.cpp">
-      <Filter>FoolsEngine\Assets\Serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.cpp">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp">

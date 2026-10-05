@@ -69,6 +69,9 @@ namespace fe::Render::GAPI
 	void	DestroyBufferCmd(GID buffer);
 
 
+	void	CopyRegionCmd(GID sourceBuffer, U32 sourceOffset, U32 sourceSize, GID targetBuffer, U32 targetOffset);
+
+
 	GID		CreateShader(Descriptors::ShaderType type, CString source);
 	void	DestroyShader(GID shader);
 

@@ -1,40 +1,9 @@
 #include "FE_pch.h"
-#include "FoolsEngine/Renderer/4 - Render Context/ResourceManager.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/RDownStream.h"
-#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
 #include "FoolsEngine/Assets/AssetManager.h"
 
 namespace fe
 {
-
-	bool ResourceManager_OpenGL::MakeMeshBindings(RBuffer_OpenGL& buffer, UInt offset, RMeshBindings_OpenGL& bindings, Splice<U32> indexData, Splice<Vert> vertexData)
-	{
-		FE_PROFILER_FUNC();
-
-		if (!indexData.Elements || !vertexData.Elements)
-			return false;
-
-		Splice<Byte> index_mem_reg;
-		index_mem_reg.Elements = (Byte*)indexData.Elements;
-		index_mem_reg.Count = indexData.Count * sizeof(U32);
-		UInt index_offset = offset;
-		buffer.Update(offset, index_mem_reg);
-
-		Splice<Byte> vertex_mem_reg;
-		vertex_mem_reg.Elements = (Byte*)vertexData.Elements;
-		vertex_mem_reg.Count = vertexData.Count * sizeof(Vert);
-		UInt vertex_offset = offset + index_mem_reg.Count;
-		buffer.Update(vertex_offset, vertex_mem_reg);
-		
-		bindings.LayoutID = Vert::GetLayoutID();
-		bindings.Create();
-		bindings.BindIndexData(buffer, index_offset, indexData.Count);
-		bindings.BindVertexData(buffer, vertex_offset);
-
-		return true;
-	}
-
 
 //material
 #if aaaa //move higher level

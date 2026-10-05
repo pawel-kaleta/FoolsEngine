@@ -16,49 +16,60 @@ namespace YAML { class Emitter; class Node; }
 
 namespace fe::Render::Representation
 {
-	struct ACMeshCore final : public AssetComponent
+	struct alignas(16) Vertex
 	{
-		U32 VertexCount;
-		U32 IndexCount;
-		Splice<Byte> Data;
-		const Description::Buffer::Layout& VertexLayout() { return Description::Buffer::Vertex::GetLayout(); };
-		using Vert = Description::Buffer::Vertex;
+		GAPI::std140_float Position_x;
+		GAPI::std140_float Position_y;
+		GAPI::std140_float Position_z;
+		GAPI::std140_float Normal_x;
+		GAPI::std140_float Normal_y;
+		GAPI::std140_float Normal_z;
+		GAPI::std140_float Tangent_x;
+		GAPI::std140_float Tangent_y;
+		GAPI::std140_float Tangent_z;
+		GAPI::std140_float UV_x;
+		GAPI::std140_float UV_y;
 
-		void Init();
-		~ACMeshCore();
-
-		Splice<U32> GetIndexBuffer()
-		{
-			Splice<U32> result;
-			result.Elements = (U32*)Data.Elements;
-			result.Count = IndexCount;
-			return result;
-		}
-		Splice<Vert> GetVertexBuffer()
-		{
-			Splice<Vert> result;
-			result.Elements = (Vert*)(Data.Elements + sizeof(U32) * IndexCount);
-			result.Count = VertexCount;
-			return result;
-		}
-		UInt DataSize() const { return (IndexCount * sizeof(U32)) + (VertexCount * sizeof(Vert)); }
+		GAPI::std140_float Padding;
 	};
 
-	struct ACRMeshBindings_OpenGL final : public AssetComponent
+	struct alignas(16) VertexCPU
 	{
-		Resource::RMeshBindings_OpenGL MeshBindings;
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec3 Tangent;
+		glm::vec2 UV0;
+	};
+
+	struct ACMesh_Core final : public AssetComponent
+	{
+		U32 mVertexCount;
+		U32 mIndexCount;
+		
+		void Init()
+		{
+			mVertexCount = 0;
+			mIndexCount = 0;
+		}
+
+		UInt DataSize() const { return (mIndexCount * sizeof(U32)) + (mVertexCount * sizeof(Vertex)); }
+	};
+
+	template <GAPI::Platform::ValueType tPlatform>
+	struct ACMesh_RegionGPU final : public AssetComponent
+	{
+		GAPI::GID mBuffer;
+		U32 mBufferOffset;
+		void* mRegion;
 	};
 
 	class MeshObserver : public AssetInterface
 	{
 	public:
-		const ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
+		const ACMesh_Core& GetCore() const { return Get<ACMesh_Core>(); }
 
-		const ACGPUBuffer_OpenGL* GetBuffer() const { return GetIfExist<ACGPUBuffer_OpenGL>(); }
-
-		const ACRMeshBindings_OpenGL* GetMeshBindings() const { return GetIfExist<ACRMeshBindings_OpenGL>(); }
-
-		UInt GetGPUDataSize() const { return Get<ACMeshCore>().DataSize(); }
+		template <GAPI::Platform::ValueType tPlatform>
+		const ACMesh_RegionGPU<tPlatform>* GetRegionGPU() { return GetIfExist<ACMesh_RegionGPU<tPlatform>>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -68,17 +79,19 @@ namespace fe::Render::Representation
 	class MeshUser : public MeshObserver
 	{
 	public:
-		ACMeshCore& GetCore() const { return Get<ACMeshCore>(); }
+		ACMesh_Core& GetCore() const { return Get<ACMesh_Core>(); }
 
-		ACRMeshBindings_OpenGL* GetVertexArray() const { return GetIfExist<ACRMeshBindings_OpenGL>(); }
-		
-		void Release() const;
+		template <GAPI::Platform::ValueType tPlatform>
+		ACMesh_RegionGPU<tPlatform>* GetRegionGPU() { return GetIfExist<ACMesh_RegionGPU<tPlatform>>(); }
 
-		bool SendDataToGPU(GAPIType GAPI) const;
-		void UnloadFromCPU() const;
+		template <GAPI::Platform::ValueType tPlatform>
+		ACMesh_RegionGPU<tPlatform>& EmplaceRegionGPU() { return Emplace<ACMesh_RegionGPU<tPlatform>>().Init(); }
+
+		template <GAPI::Platform::ValueType tPlatform>
+		void RemoveRegionGPU() { Erase<ACMesh_RegionGPU<tPlatform>>(); }
 
 	protected:
-		MeshUser(ECS_AssetHandle ECS_handle) : MeshObserver(ECS_handle) {}
+		MeshUser(ECS_AssetHandle ECS_handle) : MeshObserver(ECS_handle) { }
 	};
 
 	class Mesh : public Asset
@@ -86,13 +99,10 @@ namespace fe::Render::Representation
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Mesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".femesh"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMeshCore>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
-		static bool LoadMetadata(AssetID assetID);
-		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMesh_Core>(assetID).Init(); }
 
 		using Observer = MeshObserver;
 		using User = MeshUser;
-		using Core = ACMeshCore;
+		using Core = ACMesh_Core;
 	};
 }

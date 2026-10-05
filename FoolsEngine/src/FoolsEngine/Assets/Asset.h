@@ -102,9 +102,4 @@ namespace fe
 
 		bool ActiveUser = false; //TODO: make this a shared_mutex
 	};
-
-	struct ACGPUBuffer_OpenGL final : public AssetComponent
-	{
-		Resource::RStaticBuffer_OpenGL Buffer;
-	};
 }

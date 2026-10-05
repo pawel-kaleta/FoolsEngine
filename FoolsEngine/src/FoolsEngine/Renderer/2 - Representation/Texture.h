@@ -5,6 +5,8 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
+#include <bit>
+
 namespace YAML { class Emitter; class Node; }
 
 namespace fe::Render::Representation
@@ -18,6 +20,7 @@ namespace fe::Render::Representation
 		void Init()
 		{
 			mSpecification.Init();
+			std::bit_width(UInt(15));
 		}
 	};
 
@@ -55,8 +58,7 @@ namespace fe::Render::Representation
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
 		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACTexture2D_Core>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
-		static bool LoadMetadata(AssetID assetID) { return false; }
+		
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
 		using Observer = Texture2DObserver;

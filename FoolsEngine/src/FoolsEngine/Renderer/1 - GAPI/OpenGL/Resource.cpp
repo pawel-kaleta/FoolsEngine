@@ -42,6 +42,17 @@ namespace fe::Render::GAPI
 		OpenGL::BufferRegistry.FreeObj(buffer);
 	}
 
+	void GAPI::CopyRegionCmd(GID sourceBuffer, U32 sourceOffset, U32 size, GID targetBuffer, U32 targetOffset)
+	{
+		OpenGL::Buffer* source_obj = OpenGL::BufferRegistry.GetObj(sourceBuffer);
+		OpenGL::Buffer* target_obj = OpenGL::BufferRegistry.GetObj(targetBuffer);
+
+		FE_CORE_ASSERT(source_obj->mSize <= sourceOffset + size, "AAAA");
+		FE_CORE_ASSERT(target_obj->mSize <= targetOffset + size, "AAAA");
+
+		glCopyNamedBufferSubData(source_obj->mGLID, target_obj->mGLID, sourceOffset, targetOffset, size);
+	}
+
 	GID CreateShader(Descriptors::ShaderType type, CString source)
 	{
 		OpenGL::InternalID id = OpenGL::ShaderRegistry.GetNewID();

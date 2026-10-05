@@ -14,31 +14,25 @@ namespace fe::Render::Representation
 {
 	FE_DECLARE_ENUM(AlphaMode, Opaque, Cutout, Blend);
 
-	struct ACMaterialCore
+	struct ACMaterial_Core
 	{
-		AssetID ShadingModelID;
-		Splice<AssetID> TextureIDs;
+		AssetID mShadingModelID;
+		Splice<AssetID> mTextureIDs;
+		Splice<Byte> mParamsData;
 
-		Splice<Byte> UniformsData;
-		Splice<Byte> UniformBufferData;
-		Splice<Byte> ShaderStorageData;
-
-		void Init() { ShadingModelID = NullAssetID; }
+		void Init()
+		{
+			mShadingModelID = NullAssetID;
+			mTextureIDs.Init();
+			mParamsData.Init();
+		}
 	};
 
 	class MaterialObserver : public AssetInterface
 	{
 	public:
-		const ACMaterialCore& GetCore() const { return Get<ACMaterialCore>(); }
+		const ACMaterial_Core& GetCore() const { return Get<ACMaterial_Core>(); }
 
-		Splice<Byte> GetUniformValue(const Description::Buffer::Element& targetUniform) const;
-		Splice<Byte> GetUniformValue(String name) const;
-
-		AssetID GetTextureID(const Description::ShaderInterface::TextureSampler& textureSampler) const;
-		AssetID GetTextureID(String textureSamplerName) const;
-
-		UInt GetCPUDataSize() const { return GetCore().UniformsData.Count; }
-		UInt GetGPUDataSize() const { const auto& core = Get<ACMaterialCore>(); return core.UniformBufferData.Count + core.ShaderStorageData.Count; }
 	protected:
 		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 	};
@@ -46,21 +40,8 @@ namespace fe::Render::Representation
 	class MaterialUser : public MaterialObserver
 	{
 	public:
-		ACMaterialCore& GetCore() const { return Get<ACMaterialCore>(); }
+		ACMaterial_Core& GetCore() const { return Get<ACMaterial_Core>(); }
 
-		void MakeMaterial(const AssetObserver<ShadingModel>& shadingModelObserver) const;
-
-		void SetUniformValue(const Description::Buffer::Element& uniform, Splice<Byte> data) const;
-		void SetUniformValue(String name, Splice<Byte> data) const;
-
-		void SetTexture(const Description::ShaderInterface::TextureSampler& textureSampler, AssetID textureID) const;
-		void SetTexture(String textureSamplerName, AssetID textureID) const;
-
-		void ResetUniformValueToDefault(const Description::Buffer::Element& uniform) const;
-
-		bool SendDataToGPU(GAPIType GAPI) const;
-		void Release() const;
-		void UnloadFromCPU() const { };
 	protected:
 		MaterialUser(ECS_AssetHandle ECS_handle) : MaterialObserver(ECS_handle) {}
 	};
@@ -70,15 +51,11 @@ namespace fe::Render::Representation
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Material; }
 		static constexpr const char* GetMetaFileExtension() { return ".femat"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMaterialCore>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
-		static bool LoadMetadata(AssetID assetID);
-		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
-		static void MakeMaterial(AssetID assetID, const AssetObserver<ShadingModel>& shadingModelObserver);
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMaterial_Core>(assetID).Init(); }
 
 		using User = MaterialUser;
 		using Observer = MaterialObserver;
-		using Core = ACMaterialCore;
+		using Core = ACMaterial_Core;
 	};
 }

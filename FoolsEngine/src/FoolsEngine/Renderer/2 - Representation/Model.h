@@ -10,17 +10,17 @@ namespace YAML { class Emitter; class Node; }
 
 namespace fe::Render::Representation
 {
-	struct ACModelCore final : public AssetComponent
+	struct ACModel_Core final : public AssetComponent
 	{
-		Splice<AssetID> RenderMeshIDs;
+		Splice<AssetID> mRenderMeshIDs;
 
-		void Init()	{ }
+		void Init() { mRenderMeshIDs.Init(); }
 	};
 
 	class ModelObserver : public AssetInterface
 	{
 	public:
-		const ACModelCore& GetCore() const { return Get<ACModelCore>(); }
+		const ACModel_Core& GetCore() const { return Get<ACModel_Core>(); }
 		
 	protected:
 		ModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
@@ -29,16 +29,7 @@ namespace fe::Render::Representation
 	class ModelUser : public ModelObserver
 	{
 	public:
-		void PlaceCoreComponent() const
-		{
-			Emplace<ACModelCore>();
-		}
-
-		ACModelCore& GetCore() const { return Get<ACModelCore>(); }
-
-		bool SendDataToGPU(GAPIType GAPI) const;
-		void Release() const;
-		void UnloadFromCPU() const { };
+		ACModel_Core& GetCore() const { return Get<ACModel_Core>(); }
 
 	protected:
 		ModelUser(ECS_AssetHandle ECS_handle) : ModelObserver(ECS_handle) {}
@@ -49,12 +40,10 @@ namespace fe::Render::Representation
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Model; }
 		static constexpr const char* GetMetaFileExtension() { return ".femodel"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACModelCore>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
-		static bool LoadMetadata(AssetID assetID);
+		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACModel_Core>(assetID).Init(); }
 
 		using Observer = ModelObserver;
 		using User = ModelUser;
-		using Core = ACModelCore;
+		using Core = ACModel_Core;
 	};
 }

@@ -13,13 +13,10 @@ namespace fe::Render::Representation
 {
 	struct ACRenderMeshCore final : public AssetComponent
 	{
-		AssetID MeshID;
-		AssetID MaterialID;
+		AssetID mMeshID;
+		AssetID mMaterialID;
 
-		size_t DataSizeGPU;
-		size_t DataSizeCPU;
-
-		void Init() { MeshID = NullAssetID; MaterialID = NullAssetID; DataSizeGPU = 0; DataSizeCPU = 0;	}
+		void Init() { mMeshID = NullAssetID; mMaterialID = NullAssetID; }
 	};
 
 	class RenderMeshObserver : public AssetInterface
@@ -27,8 +24,6 @@ namespace fe::Render::Representation
 	public:
 		const ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
 
-		size_t GetCPUDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSizeCPU; }
-		size_t GetGPUDataSize() const { const auto& core = Get<ACRenderMeshCore>(); return core.DataSizeGPU; }
 	protected:
 		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
 	};
@@ -38,10 +33,6 @@ namespace fe::Render::Representation
 	public:
 		ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
 
-		void Release() const;
-
-		bool SendDataToGPU(GAPIType GAPI) const;
-		void UnloadFromCPU() const;
 	protected:
 		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }
 	};
@@ -52,9 +43,6 @@ namespace fe::Render::Representation
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".ferm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACRenderMeshCore>(assetID).Init(); }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID);
-		static bool LoadMetadata(AssetID assetID);
-		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
 		using Observer = RenderMeshObserver;
 		using User = RenderMeshUser;

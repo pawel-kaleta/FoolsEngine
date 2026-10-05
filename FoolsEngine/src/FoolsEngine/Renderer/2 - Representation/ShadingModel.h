@@ -11,16 +11,35 @@ namespace YAML { class Emitter; }
 
 namespace fe::Render::Representation
 {
+	struct ACMaterial_Core;
+
 	struct ACShadingModel_Core final : public AssetComponent
 	{
 		GAPI::Raster::Specification mRasterSpec;
-		Splice<Byte> DefaultParamsData;
+		Splice<Byte> mDefaultParamsData;
+		Splice<Byte> mConstantsData;
 		Splice<AssetID> mShaders;
+
+		void (*mDeserializeMetadata)(ACShadingModel_Core* core, YAML::Node& data);
+		void (*mSerializeMetadata)(ACShadingModel_Core* core, YAML::Node& data);
+		void (*mDrawInspectorWidget)(ACShadingModel_Core* core);
+
+		void (*mDeserializeMaterialMetadata)(ACMaterial_Core* core, YAML::Node& data);
+		void (*mSerializeMaterialMetadata)(ACMaterial_Core* core, YAML::Node& data);
+		void (*mDrawMaterialInspectorWidget)(ACMaterial_Core* core);
 
 		void Init()
 		{
 			mRasterSpec.Init();
-			DefaultParamsData = Splice<Byte>();
+			mDefaultParamsData.Init();
+			mConstantsData.Init();
+			mShaders.Init();
+			mDeserializeMetadata = nullptr;
+			mSerializeMetadata = nullptr;
+			mDrawInspectorWidget = nullptr;
+			mDeserializeMaterialMetadata = nullptr;
+			mSerializeMaterialMetadata = nullptr;
+			mDrawMaterialInspectorWidget = nullptr;
 		}
 	};
 
@@ -34,9 +53,6 @@ namespace fe::Render::Representation
 	{
 	public:
 		const ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
-
-		void SaveMetadata(YAML::Emitter& emitter);
-
 	protected:
 		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
 	};
@@ -45,12 +61,6 @@ namespace fe::Render::Representation
 	{
 	public:
 		ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
-
-		bool LoadBaseAssetMetadata(const char* filepath);
-		bool LoadMetadata();
-
-		void UnloadFromCPU() const {};
-		void Release() const;
 
 	protected:
 		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
@@ -61,8 +71,7 @@ namespace fe::Render::Representation
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::ShadingModel; }
 		static constexpr const char* GetMetaFileExtension() { return ".fesm"; }
-		static void SaveMetadata(YAML::Emitter& emitter, AssetID assetID) {}
-		static bool LoadMetadata(AssetID assetID) { return false; }
+
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModel_Core>(assetID).Init(); }
 
 		using User = ShadingModelUser;

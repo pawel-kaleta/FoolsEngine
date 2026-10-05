@@ -175,7 +175,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\TextureLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h" />
-    <ClInclude Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
@@ -245,6 +244,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Texture.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\GeometryManager.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
@@ -295,7 +295,6 @@
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\TextureLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.cpp" />
-    <ClCompile Include="src\FoolsEngine\Assets\Serialization\GPUDataSerialization.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp" />

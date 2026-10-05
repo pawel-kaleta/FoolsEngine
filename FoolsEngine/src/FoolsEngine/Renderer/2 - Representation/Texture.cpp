@@ -19,14 +19,14 @@ namespace fe::Render::Representation
 		FE_PROFILER_FUNC();
 		
 		Scratchpad sp;
-		auto& spec = GetCore().Specification;
+		auto& spec = GetCore().mSpecification;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();
 		emitter << YAML::Key << "Source Filepath" << YAML::Value << GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
 		emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
 		emitter << YAML::Key << "Archetype" << YAML::Value << archetype.UUID;
-		emitter << YAML::Key << "Width" << YAML::Value << spec.Width;
+		emitter << YAML::Key << "Width" << YAML::Value << spec.mDimentions;
 		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
 		emitter << YAML::EndMap;
 	}
