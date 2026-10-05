@@ -13,12 +13,12 @@ namespace fe
 		UInt Count;
 		Array<T, N> Buffer;
 
-		const	T* begin() const { return Buffer.Elements; }
-				T* begin()       { return Buffer.Elements; }
-		const	T* end() const { return Buffer.Elements + Count; }
-				T* end()       { return Buffer.Elements + Count; }
+		const	T* begin()	const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end()	const	{ return Buffer.Elements + Count; }
+				T* end()			{ return Buffer.Elements + Count; }
 
-		bool IsFull() const { return Count == Buffer.Count; }
+		bool IsFull() const { return Count >= Buffer.Count; }
 
 		void Init()
 		{
@@ -31,11 +31,57 @@ namespace fe
 			return Buffer[i];
 		}
 
+		void Insert(T& data, UInt index)
+		{
+			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+
+			Pile p;
+
+			UInt move_count = Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, Buffer[index], move_size);
+			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			Buffer[index] = data;
+
+			++Count;
+		}
+
+		T* Emplace(UInt index)
+		{
+			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+
+			Pile p;
+
+			UInt move_count = Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, Buffer[index], move_size);
+			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+
+			++Count;
+			return &Buffer[index];
+		}
+
 		void Append(T& data)
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
 			Buffer[Count] = data;
 			Count++;
+		}
+
+		void Append(Splice<T> splice)
+		{
+			FE_CORE_ASSERT(Count + splice.Count < Buffer.Count, "Arena overflow!");
+			FE_CORE_ASSERT(splice.Elements, "Appending invalid splice to ArrayArena");
+			std::memcpy(&Buffer[Count], splice.begin(), splice.Count);
+			Count += splice.Count;
 		}
 
 		T* EmplaceBack()
@@ -46,12 +92,38 @@ namespace fe
 			return result;
 		}
 
+		T Pop(UInt index)
+		{
+			FE_CORE_ASSERT(index < Count, "Index past occupied part of arena");
+
+			T result = Buffer[index];
+
+			Pile p;
+
+			UInt move_count = Count - index - 1;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_size);
+			std::memcpy(tmp.Elements, Buffer[index + 1], move_size);
+			std::memcpy(Buffer[index], tmp.Elements, move_size);
+
+			return result;
+		}
+
 		T PopBack()
 		{
 			FE_CORE_ASSERT(Count, "Arena is empty!");
 			Count--;
 			T* result = Buffer.Elements + Count;
 			return *result;
+		}
+
+		T SwapWithBackAndPop(UInt index)
+		{
+			FE_CORE_ASSERT(index < Count, "Index past occupied part of arena");
+
+			std::swap(Buffer[index], Buffer[Count - 1]);
+			return PopBack();
 		}
 
 		Splice<T> GetSplice()
@@ -66,15 +138,15 @@ namespace fe
 	template <typename T>
 	struct SpliceArena
 	{
-		Splice<T> Buffer;
 		UInt Count;
+		Splice<T> Buffer;
 
-		const	T* begin() const { return Buffer.Elements; }
-				T* begin()       { return Buffer.Elements; }
-		const	T* end() const { return Buffer.Elements + Count; }
-				T* end()       { return Buffer.Elements + Count; }
+		const	T* begin()	const	{ return Buffer.Elements; }
+				T* begin()			{ return Buffer.Elements; }
+		const	T* end()	const	{ return Buffer.Elements + Count; }
+				T* end()			{ return Buffer.Elements + Count; }
 
-		bool IsFull() const { return Count == Buffer.Count; }
+		bool IsFull() const { return Count <=> = Buffer.Count; }
 
 		void Init()
 		{
@@ -99,12 +171,51 @@ namespace fe
 		{
 			Context::Allocators::Default->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
+			Count = 0;
 		}
 
 		T& operator[](UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Buffer[i];
+		}
+
+		void Insert(T& data, UInt index)
+		{
+			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+
+			Pile p;
+
+			UInt move_count = Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, Buffer[index], move_size);
+			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			Buffer[index] = data;
+
+			++Count;
+		}
+
+		T* Emplace(UInt index)
+		{
+			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
+			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
+
+			Pile p;
+
+			UInt move_count = Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, Buffer[index], move_size);
+			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+
+			++Count;
+			return &Buffer[index];
 		}
 
 		void Append(T& data)
@@ -117,7 +228,7 @@ namespace fe
 		void Append(Splice<T> splice)
 		{
 			FE_CORE_ASSERT(Count + splice.Count < Buffer.Count, "Arena overflow!");
-			FE_CORE_ASSERT(splice.Elements, "Appending invalid splice to ApliceArena");
+			FE_CORE_ASSERT(splice.Elements, "Appending invalid splice to SpliceArena");
 			std::memcpy(&Buffer[Count], splice.begin(), splice.Count);
 			Count += splice.Count;
 		}
@@ -129,12 +240,38 @@ namespace fe
 			Count++;
 		}
 
+		T Pop(UInt index)
+		{
+			FE_CORE_ASSERT(index < Count, "Index past occupied part of arena");
+
+			T result = Buffer[index];
+
+			Pile p;
+
+			UInt move_count = Count - index - 1;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_size);
+			std::memcpy(tmp.Elements, Buffer[index + 1], move_size);
+			std::memcpy(Buffer[index], tmp.Elements, move_size);
+
+			return result;
+		}
+
 		T PopBack()
 		{
 			FE_CORE_ASSERT(Count, "Arena is empty!");
 			Count--;
 			T* result = Buffer.Elements + Count;
 			return *result;
+		}
+
+		T SwapWithBackAndPop(UInt index)
+		{
+			FE_CORE_ASSERT(index < Count, "Index past occupied part of arena");
+
+			std::swap(Buffer[index], Buffer[Count - 1]);
+			return PopBack();
 		}
 
 		Splice<T> GetSplice()
@@ -145,7 +282,6 @@ namespace fe
 			return result;
 		}
 	};
-
 
 	template <typename T, UInt N>
 	struct DynamicArena
@@ -275,40 +411,47 @@ namespace fe
 			return result;
 		}
 
+		void ReserveExact(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity > Buffer.Count, "DynamicArena allready bigger");
+
+			AllocateAndMove(capacity);
+		}
+
+		void ReserveAtLeast(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity > Buffer.Count, "DynamicArena allready bigger");
+
+			bool any_capacity = Buffer.Count;
+			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+
+			bool default_better = capacity < new_capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
+
+			AllocateAndMove(new_capacity);
+		}
+
 		void ExpandDefault()
 		{
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !new_capacity;
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
-			Splice<T> new_buffer = Context::Allocators::Default->Allocate<T>(new_capacity);
+			AllocateAndMove(new_capacity);
+		}
 
-			std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
+		void AllocateAndMove(UInt capacity)
+		{
+			Splice<T> new_buffer = Context::Allocators::Default->Allocate<T>(capacity);
 
-			Context::Allocators::Default->Deallocate(Buffer);
+			if (Buffer.Elements)
+			{
+				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
+				Context::Allocators::Default->Deallocate(Buffer);
+			}
 
 			Buffer = new_buffer;
-		}
-
-		void ReserveExact(UInt capacity)
-		{
-
-		}
-
-		template <UInt capacity>
-		void ReserveExact()
-		{
-
-		}
-
-		void ReserveAtLeast(UInt capacity)
-		{
-
-		}
-
-		void ReserveAtLeast(UInt capacity)
-		{
-
 		}
 	};
 }

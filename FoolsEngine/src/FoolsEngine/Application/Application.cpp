@@ -7,15 +7,12 @@
 #include "FoolsEngine/Foundation/Memory/Xar.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/StableAllocs.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include "FoolsEngine/Platform/FileDialogs.h"
 #include "FoolsEngine/Platform/Events/Event.h"
 #include "FoolsEngine/Platform/Win32/Win32Window.h"
 					 
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 					 
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
@@ -29,6 +26,11 @@
 
 namespace fe
 {
+	namespace Context
+	{
+		extern void Init(UInt mainLoopArenaSize);
+	}
+
 	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
 
 	namespace Time
@@ -66,6 +68,7 @@ namespace fe
 		*s_ApplicationSpecification = appSpecification;
 	}
 
+
 	void Application::Startup()
 	{
 		FE_PROFILER_FUNC();
@@ -73,6 +76,7 @@ namespace fe
 		// Allocators
 		{
 			FE_PROFILER_SCOPE("Allocators");
+			Context::Init(24 * 1024);
 			Scratchpad::Init();
 		}
 
@@ -82,20 +86,20 @@ namespace fe
 
 			{
 				FE_PROFILER_SCOPE("PlatformBase");
-				m_PlatformBase = StableAllocs::Permanent->Allocate<PlatformBase>();
+				m_PlatformBase = Context::Allocators::Permanent.Allocate<PlatformBase>();
 				m_PlatformBase->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("RenderContext");
 
-				m_RenderContext = StableAllocs::Permanent->Allocate<RenderContext_OpenGL>();
+				m_RenderContext = Context::Allocators::Permanent.Allocate<RenderContext_OpenGL>();
 				m_RenderContext->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("Window");
-				Win32Window* window = StableAllocs::Permanent->Allocate<Win32Window>();
+				Win32Window* window = Context::Allocators::Permanent.Allocate<Win32Window>();
 				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, m_RenderContext->BaseWindow);
 				m_PlatformBase->SetEventCallbacks(window);
 				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));

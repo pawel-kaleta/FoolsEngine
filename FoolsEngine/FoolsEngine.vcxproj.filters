@@ -210,9 +210,6 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\StableAllocs.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Arena.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
@@ -220,12 +217,6 @@
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\DataTypes.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArr.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\DynArrAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h">
@@ -246,13 +237,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilderAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\XarAlloc.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h">

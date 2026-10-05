@@ -1,19 +1,23 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/ArenaAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
-
 
 
 namespace fe::Context
 {
 	namespace Allocators
 	{
-		extern TypedAlloc<Allocator>* Default;
-		extern TypedAlloc<Allocator>* Auxiliary;
-		extern TypedAlloc<Allocator>* Temporary;
-		extern TypedAlloc<Allocator>* Output;
+		//extern PageAllocator					Page;
+		//extern VirtualAllocator					Virtual;
+		extern TypedAlloc<MonotonicAlloc>		Permanent;
+		extern TypedAlloc<MallocAlloc>			GeneralPurpose;
+		extern TypedAlloc<ArenaAlloc>			MainLoopArena;
+		extern TypedAlloc<Allocator>		*	Default;
+		extern TypedAlloc<Allocator>		*	Auxiliary;
+		extern TypedAlloc<Allocator>		*	Output;
 	}
 
 	namespace Logging

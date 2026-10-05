@@ -15,7 +15,6 @@ namespace fe
 			T Element;
 			PoolElement* NextFree;
 		};
-		static_assert(sizeof(T) == sizeof(PoolElement));
 
 		Splice<PoolElement> Buffer;
 		PoolElement* FreeList = nullptr;
@@ -71,5 +70,11 @@ namespace fe
 			FreeList = (PoolElement*)element;
 			return;
 		}
+	};
+
+	template <typename T>
+	struct DynamicPool
+	{
+
 	};
 }
