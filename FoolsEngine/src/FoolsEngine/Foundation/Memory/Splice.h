@@ -25,6 +25,12 @@ namespace fe
 			return Elements[i];
 		}
 
+		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
 		Splice<T> GetSplice()
 		{
 			Splice<T> result;
@@ -53,6 +59,12 @@ namespace fe
 				T* end()			{ return Elements + Count; }
 
 		T& operator[](UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
+		T& At(UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Elements[i];

@@ -54,8 +54,6 @@ namespace fe
 	template <typename alloc>
 	class TypedAlloc : public alloc
 	{
-		static_assert(  sizeof(TypedAlloc<alloc>) ==  sizeof(alloc) );
-		static_assert( alignof(TypedAlloc<alloc>) == alignof(alloc) );
 	public:
 		template <typename T, UInt Count>
 		Array<T, Count>* Allocate()
@@ -101,6 +99,8 @@ namespace fe
 			nasty_fix->DeallocateRaw(*(Splice<Byte>*) & splice);
 		}
 	};
+
+	using PMAlloc = TypedAlloc<Allocator>;
 
 	template <class tnAllocator>
 	class STD_PMR_Allocator final : public std::pmr::memory_resource

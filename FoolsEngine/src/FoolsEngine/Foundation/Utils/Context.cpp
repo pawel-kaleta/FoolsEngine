@@ -17,9 +17,9 @@ namespace fe::Context
 		TypedAlloc<MonotonicAlloc>		Permanent;
 		TypedAlloc<MallocAlloc>			GeneralPurpose;
 		TypedAlloc<ArenaAlloc>			MainLoopArena;
-		TypedAlloc<Allocator>		*	Default		= (TypedAlloc<Allocator>*) & GeneralPurpose;
-		TypedAlloc<Allocator>		*	Auxiliary	= (TypedAlloc<Allocator>*) & GeneralPurpose;
-		TypedAlloc<Allocator>		*	Output		= (TypedAlloc<Allocator>*) & GeneralPurpose;
+		PMAlloc						*	Default		= (PMAlloc*) & GeneralPurpose;
+		PMAlloc						*	Auxiliary	= (PMAlloc*) & GeneralPurpose;
+		PMAlloc						*	Output		= (PMAlloc*) & GeneralPurpose;
 	}
 
 	void Init(UInt mainLoopArenaSize)

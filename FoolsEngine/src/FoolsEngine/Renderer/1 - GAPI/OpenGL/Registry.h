@@ -42,7 +42,8 @@ namespace fe::Render::GAPI::OpenGL
 	template <typename tObj>
 	struct Registry
 	{
-		// basically dynamic pool backed by deque for separatelly gapi objects and their generation trackers
+		// basically dynamic pool for separatelly gapi objects and their generation trackers
+		// with unified occupancy tracking uasing bit flags instead of free list
 
 		struct Chunk
 		{
@@ -53,8 +54,8 @@ namespace fe::Render::GAPI::OpenGL
 		SpliceArena<Chunk> mChunks;
 		Splice<U64> mOccupancyFlags; // true is free; "splicearena" not needed as its syncronised with mChunks
 
-		TypedAlloc<Allocator>* mAllocMain = nullptr;
-		TypedAlloc<Allocator>* mAllocAux = nullptr;
+		PMAlloc* mAllocMain = nullptr;
+		PMAlloc* mAllocAux = nullptr;
 
 		void Create()
 		{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Splice.h"
+#include "Pile.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include <cstring>
@@ -29,6 +30,12 @@ namespace fe
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Buffer[i];
+		}
+
+		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
 		}
 
 		void Insert(T& data, UInt index)
@@ -167,6 +174,11 @@ namespace fe
 			Count = 0;
 		}
 
+		void Clear()
+		{
+			Count = 0;
+		}
+
 		void Release()
 		{
 			Context::Allocators::Default->Deallocate(Buffer);
@@ -178,6 +190,12 @@ namespace fe
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Buffer[i];
+		}
+
+		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
 		}
 
 		void Insert(T& data, UInt index)
@@ -283,9 +301,10 @@ namespace fe
 		}
 	};
 
-	template <typename T, UInt N>
+	template <typename T>
 	struct DynamicArena
 	{
+		PMAlloc* Alloc;
 		UInt Count;
 		Splice<T> Buffer;
 
@@ -296,15 +315,21 @@ namespace fe
 
 		bool IsFull() const { return Count == Buffer.Count; }
 
-		void Init()
+		void Init(PMAlloc* allocator = Context::Allocators::Default)
 		{
+			Alloc = allocator;
 			Count = 0;
 			Buffer.Init();
 		}
 
+		void Clear()
+		{
+			Count = 0;
+		}
+
 		void Release()
 		{
-			Context::Allocators::Default->Deallocate(Buffer);
+			allocator->Deallocate(Buffer);
 			Count = 0;
 			Buffer.Init();
 		}
@@ -313,6 +338,12 @@ namespace fe
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Buffer[i];
+		}
+
+		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
 		}
 
 		void Insert(T& data, UInt index)
@@ -443,12 +474,12 @@ namespace fe
 
 		void AllocateAndMove(UInt capacity)
 		{
-			Splice<T> new_buffer = Context::Allocators::Default->Allocate<T>(capacity);
+			Splice<T> new_buffer = allocator->Allocate<T>(capacity);
 
 			if (Buffer.Elements)
 			{
 				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
-				Context::Allocators::Default->Deallocate(Buffer);
+				allocator->Deallocate(Buffer);
 			}
 
 			Buffer = new_buffer;

@@ -15,9 +15,9 @@ namespace fe::Context
 		extern TypedAlloc<MonotonicAlloc>		Permanent;
 		extern TypedAlloc<MallocAlloc>			GeneralPurpose;
 		extern TypedAlloc<ArenaAlloc>			MainLoopArena;
-		extern TypedAlloc<Allocator>		*	Default;
-		extern TypedAlloc<Allocator>		*	Auxiliary;
-		extern TypedAlloc<Allocator>		*	Output;
+		extern PMAlloc						*	Default;
+		extern PMAlloc						*	Auxiliary;
+		extern PMAlloc						*	Output;
 	}
 
 	namespace Logging

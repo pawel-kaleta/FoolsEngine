@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 #include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Memory/Pool.h"
+
 
 #include "FoolsEngine/Assets/Asset.h"
 
@@ -13,38 +15,30 @@ namespace fe::Render::Representation
 {
 	class GeometryManager
 	{
-		union Region
+		struct Region
 		{
-			struct
-			{
-				Region* mPrevious;
-				Region* mNext;
-				AssetID mMeshID;
-				U32 mSize;
-				U32 mOffset;
-			} mRegion;
-			struct
-			{
-				Region* mNext;
-			} mFreeListElement;
+			Region* mPrevious;
+			Region* mNext;
+			AssetID mMeshID;
+			U32 mSize;
+			U32 mOffset;
 		};
 
 		GAPI::GID mBuffer;
 		GAPI::GID mScrachBuffer;
-		Region* mFreeList;
 		Region* mFirstRegion;
 		U32 mScrachBufferSize;
 		U32 mFreeOffset;
 		U32 mBufferSize;
 		U32 mCopyBudget;
 
-		SpliceArena<Array<Region, 64>> mChunks;
+		DynamicPool<Region, 64> mRegions;
+
 
 		void Init()
 		{
 			mBuffer = GAPI::GID();
 			mScrachBuffer = GAPI::GID();
-			mFreeList = nullptr;
 			mFirstRegion = nullptr;
 			mScrachBufferSize = 0;
 			mFreeOffset = 0;
@@ -64,36 +58,37 @@ namespace fe::Render::Representation
 			Region* region = (Region*) region_component->mRegion;
 
 			FE_CORE_ASSERT(region, "AAAAA!");
-			FE_CORE_ASSERT(meshUser.GetID() == region->mRegion.mMeshID, "AAAAA!");
+			FE_CORE_ASSERT(meshUser.GetID() == region->mMeshID, "AAAAA!");
 
-			region->mRegion.mMeshID = NullAssetID;
+			region->mMeshID = NullAssetID;
+
 			meshUser.RemoveRegionGPU<GAPI::Platform::OpenGL>();
 
-			Region* prev_region = region->mRegion.mPrevious;
-			Region* next_region = region->mRegion.mNext;
+			Region* prev_region = region->mPrevious;
+			Region* next_region = region->mNext; // what if null ??!!
 
-			if (prev_region->mRegion.mMeshID == NullAssetID)
+			// coalessing left
+			if (prev_region->mMeshID == NullAssetID)
 			{
-				prev_region->mRegion.mSize += region->mRegion.mSize;
-				prev_region->mRegion.mNext = region->mRegion.mNext;
-				next_region->mRegion.mPrevious = prev_region;
+				prev_region->mSize += region->mSize;
+				prev_region->mNext = region->mNext;
+				next_region->mPrevious = prev_region;
 
-				region->mFreeListElement.mNext = mFreeList;
-				mFreeList = region;
+				mRegions.Remove(region);
 
 				region = prev_region;
-				prev_region = prev_region->mRegion.mPrevious;
+				prev_region = prev_region->mPrevious;
 			}
-			if (next_region->mRegion.mMeshID == NullAssetID)
+			// coalessing right
+			if (next_region->mMeshID == NullAssetID)
 			{
-				region->mRegion.mSize += next_region->mRegion.mSize;
-				region->mRegion.mNext = next_region->mRegion.mNext;
-				next_region->mRegion.mNext->mRegion.mPrevious = region;
+				region->mSize += next_region->mSize;
+				region->mNext = next_region->mNext;
+				next_region->mNext->mPrevious = region;
 
-				next_region->mFreeListElement.mNext = mFreeList;
-				mFreeList = next_region;
+				mRegions.Remove(next_region);
 
-				next_region = region->mRegion.mNext;
+				next_region = region->mNext;
 			}
 		}
 
@@ -105,19 +100,21 @@ namespace fe::Render::Representation
 			Region* potencial_empty_region = mFirstRegion;
 			UInt copy_budget = 0;
 
-			while (potencial_empty_region->mRegion.mMeshID != NullAssetID)
+			while (potencial_empty_region->mMeshID != NullAssetID)
 			{
-				potencial_empty_region = potencial_empty_region->mRegion.mNext;
+				potencial_empty_region = potencial_empty_region->mNext;
+				if (!potencial_empty_region)
+					return;
 			}
 
 			Region* empty_region = potencial_empty_region;
-			while (empty_region->mRegion.mNext->mRegion.mMeshID != NullAssetID)
+			while (empty_region->mNext->mMeshID != NullAssetID) // what if mNext null ??!!
 			{
 				if (copy_budget >= mCopyBudget)
 					break;
 
-				auto& l_region = empty_region->mRegion;
-				auto& r_region = empty_region->mRegion.mNext->mRegion;
+				auto& l_region = *empty_region;
+				auto& r_region = *(empty_region->mNext); // what if mNext null ??!!
 
 				if (l_region.mSize >= r_region.mSize)
 				{
@@ -136,23 +133,22 @@ namespace fe::Render::Representation
 				r_region.mMeshID = NullAssetID;
 				std::swap(l_region.mSize, r_region.mSize);
 				r_region.mOffset = l_region.mSize + l_region.mOffset;
-
+				// naming change vs main loop?
 				while (r_region.mNext)
 				{
-					if (r_region.mNext->mRegion.mMeshID != NullAssetID)
+					if (r_region.mNext->mMeshID != NullAssetID)
 						break;
 
 					auto region = (Region*) & r_region;
 					auto next_region = r_region.mNext;
 
-					region->mRegion.mSize += next_region->mRegion.mSize;
-					region->mRegion.mNext = next_region->mRegion.mNext;
-					next_region->mRegion.mNext->mRegion.mPrevious = region;
+					region->mSize += next_region->mSize;
+					region->mNext = next_region->mNext;
+					next_region->mNext->mPrevious = region;
 
-					next_region->mFreeListElement.mNext = mFreeList;
-					mFreeList = next_region;
+					mRegions.Remove(next_region);
 
-					next_region = region->mRegion.mNext;
+					next_region = region->mNext;
 				}
 
 				if (!r_region.mNext)
