@@ -1,17 +1,22 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine/Assets/AssetManager.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 
-namespace fe
+
+namespace fe::Render::Representation
 {
 
 //material
-#if aaaa //move higher level
-	bool ResourceManager_OpenGL::SendDataToGPU(Resource::StaticBuffer_OpenGL& buffer, UInt offset, )
+
+	bool SendDataToGPU(UInt offset)
 	{
 		FE_PROFILER_FUNC();
 
-		if (core.ShadingModelID == NullAssetID)
+		Material::Core core;
+
+		if (core.mShadingModelID == NullAssetID)
 			return false;
 
 		UInt current_offset = offset;
@@ -69,10 +74,8 @@ namespace fe
 
 		return true;
 	}
-#endif
 
 	//render mesh
-#if aaaa //move higher level
 	bool ResourceManager_OpenGL::SendDataToGPU(AssetUser<RenderMesh	>& assetUser,  Resource::StaticBuffer_OpenGL* buffer, uint32_t offset)
 	{
 		FE_PROFILER_FUNC();
@@ -150,11 +153,9 @@ namespace fe
 
 		return true;
 	}
-#endif
 
 
 	//material release
-#ifdef aaaa //move higher level
 	void ResourceManager_OpenGL::ReleaseDataFromGPU(AssetUser<Material    >& assetUser)
 	{
 		FE_PROFILER_FUNC();
@@ -187,5 +188,4 @@ namespace fe
 			}
 		}
 	}
-#endif
 }

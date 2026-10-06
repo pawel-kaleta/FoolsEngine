@@ -5,6 +5,7 @@
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetHandle.h"
@@ -52,14 +53,20 @@ namespace fe::Render::Representation
 			mIndexCount = 0;
 		}
 
-		UInt DataSize() const { return (mIndexCount * sizeof(U32)) + (mVertexCount * sizeof(Vertex)); }
+		UInt DataSize() const
+		{
+			UInt result = 0;
+			result += mVertexCount * sizeof(Vertex);
+			result += AlignOffsetTo<16>(mIndexCount * sizeof(U32));
+			return result;
+		}
 	};
 
 	template <GAPI::Platform::ValueType tPlatform>
 	struct ACMesh_RegionGPU final : public AssetComponent
 	{
 		GAPI::GID mBuffer;
-		U32 mBufferOffset;
+		U32 mBufferOffset; //vertices first
 		void* mRegion;
 	};
 

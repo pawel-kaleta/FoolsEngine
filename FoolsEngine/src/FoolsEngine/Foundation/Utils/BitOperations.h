@@ -14,9 +14,12 @@ namespace fe
 	inline unsigned char MSB32(unsigned long* outIndex, unsigned long mask) { return _BitScanReverse(outIndex, mask); }
 
 	inline constexpr bool IsPow2(UInt n) { return (n & (n - 1)); }
+
 	inline constexpr Byte* AlignTo(Byte* ptr, UInt alignment) { return (Byte*)(((UInt)ptr + (alignment - 1)) & ~(alignment - 1)); }
+	inline constexpr UInt AlignOffsetTo(UInt offset, UInt alignment) { return (offset + (alignment - 1)) & ~(alignment - 1); }
 
 	template<UInt alignment>
 	inline constexpr Byte* AlignTo(Byte* ptr) { return (Byte*)(((UInt)ptr + (alignment - 1)) & ~(alignment - 1)); }
-
+	template<UInt alignment>
+	inline constexpr UInt AlignOffsetTo(UInt offset) { return (offset + (alignment - 1)) & ~(alignment - 1); }
 }

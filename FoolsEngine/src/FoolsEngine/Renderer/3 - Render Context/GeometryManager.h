@@ -27,13 +27,13 @@ namespace fe::Render::Representation
 		GAPI::GID mBuffer;
 		GAPI::GID mScrachBuffer;
 		Region* mFirstRegion;
+		Region* mLastRegion;
 		U32 mScrachBufferSize;
 		U32 mFreeOffset;
 		U32 mBufferSize;
 		U32 mCopyBudget;
 
 		DynamicPool<Region, 64> mRegions;
-
 
 		void Init()
 		{
@@ -44,12 +44,23 @@ namespace fe::Render::Representation
 			mFreeOffset = 0;
 			mBufferSize = 0;
 			mCopyBudget = 0;
+			mRegions.Init();
 		}
 
-		void Create(UInt bufferSize, UInt scrachBufferSize)
+		void Create(UInt bufferSize, UInt scrachBufferSize, UInt copyBudget)
 		{
-
+			mFreeOffset = 0;
+			mFirstRegion = nullptr;
+			mBufferSize = bufferSize;
+			mScrachBufferSize = scrachBufferSize;
+			mCopyBudget = copyBudget;
+			mBuffer = GAPI::CreateBuffer();
+			mScrachBuffer = GAPI::CreateBuffer();
+			GAPI::AllocateCommitBuffer(mBuffer, bufferSize);
+			GAPI::AllocateCommitBuffer(mScrachBuffer, scrachBufferSize);
 		}
+
+		UInt AvailableCapacity() { return mBufferSize - mFreeOffset; }
 
 		void FreeMesh(AssetUser<Mesh>& meshUser)
 		{
@@ -60,35 +71,48 @@ namespace fe::Render::Representation
 			FE_CORE_ASSERT(region, "AAAAA!");
 			FE_CORE_ASSERT(meshUser.GetID() == region->mMeshID, "AAAAA!");
 
+			meshUser.RemoveRegionGPU<GAPI::Platform::OpenGL>();
 			region->mMeshID = NullAssetID;
 
-			meshUser.RemoveRegionGPU<GAPI::Platform::OpenGL>();
-
 			Region* prev_region = region->mPrevious;
-			Region* next_region = region->mNext; // what if null ??!!
+			Region* next_region = region->mNext; 
 
 			// coalessing left
-			if (prev_region->mMeshID == NullAssetID)
+			if (prev_region)
 			{
-				prev_region->mSize += region->mSize;
-				prev_region->mNext = region->mNext;
-				next_region->mPrevious = prev_region;
+				if (prev_region->mMeshID == NullAssetID)
+				{
+					prev_region->mSize += region->mSize;
+					prev_region->mNext = region->mNext;
+					if (next_region)
+						next_region->mPrevious = prev_region;
 
-				mRegions.Remove(region);
+					mRegions.Remove(region);
 
-				region = prev_region;
-				prev_region = prev_region->mPrevious;
+					region = prev_region;
+					prev_region = prev_region->mPrevious;
+				}
 			}
 			// coalessing right
-			if (next_region->mMeshID == NullAssetID)
+			if (next_region)
 			{
-				region->mSize += next_region->mSize;
-				region->mNext = next_region->mNext;
-				next_region->mNext->mPrevious = region;
+				if (next_region->mMeshID == NullAssetID)
+				{
+					region->mSize += next_region->mSize;
+					region->mNext = next_region->mNext;
+					next_region->mNext->mPrevious = region;
 
-				mRegions.Remove(next_region);
+					mRegions.Remove(next_region);
 
-				next_region = region->mNext;
+					next_region = region->mNext;
+				}
+			}
+			else
+			{
+				prev_region->mNext = nullptr;
+				mFreeOffset = prev_region->mOffset + prev_region->mSize;
+				mRegions.Remove(region);
+				mLastRegion = prev_region;
 			}
 		}
 
@@ -108,32 +132,48 @@ namespace fe::Render::Representation
 			}
 
 			Region* empty_region = potencial_empty_region;
-			while (empty_region->mNext->mMeshID != NullAssetID) // what if mNext null ??!!
+
+			if (!empty_region->mNext)
+			{
+				FE_CORE_ASSERT(false, "Shouldnt be possible"); // FreeMesh should not leave empty regions at the end
+				return;
+			}
+
+			while (empty_region->mNext->mMeshID != NullAssetID)
 			{
 				if (copy_budget >= mCopyBudget)
 					break;
 
 				auto& l_region = *empty_region;
-				auto& r_region = *(empty_region->mNext); // what if mNext null ??!!
+				auto& r_region = *(empty_region->mNext);
 
-				if (l_region.mSize >= r_region.mSize)
 				{
-					copy_budget += r_region.mSize;
-					GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
-				}
-				else
-				{
-					copy_budget += r_region.mSize * 2;
+					AssetUser<Mesh> mesh_user(r_region.mMeshID);
 
-					GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, mScrachBuffer, 0);
-					GAPI::CopyRegionCmd(mScrachBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
+					if (l_region.mSize >= r_region.mSize)
+					{
+						copy_budget += r_region.mSize;
+						GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
+					}
+					else
+					{
+						copy_budget += r_region.mSize * 2;
+
+						GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, mScrachBuffer, 0);
+						GAPI::CopyRegionCmd(mScrachBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
+					}
+
+					l_region.mMeshID = r_region.mMeshID;
+					r_region.mMeshID = NullAssetID;
+					std::swap(l_region.mSize, r_region.mSize);
+					r_region.mOffset = l_region.mSize + l_region.mOffset;
+
+					auto region_component = mesh_user.GetRegionGPU<GAPI::Platform::OpenGL>();
+					region_component->mRegion = &l_region;
+					region_component->mBufferOffset = l_region.mOffset;
 				}
 
-				l_region.mMeshID = r_region.mMeshID;
-				r_region.mMeshID = NullAssetID;
-				std::swap(l_region.mSize, r_region.mSize);
-				r_region.mOffset = l_region.mSize + l_region.mOffset;
-				// naming change vs main loop?
+				// coalessing rigth
 				while (r_region.mNext)
 				{
 					if (r_region.mNext->mMeshID != NullAssetID)
@@ -147,26 +187,47 @@ namespace fe::Render::Representation
 					next_region->mNext->mPrevious = region;
 
 					mRegions.Remove(next_region);
-
-					next_region = region->mNext;
 				}
 
 				if (!r_region.mNext)
 				{
 					l_region.mNext = nullptr;
-					((Region*)&r_region)->mFreeListElement.mNext = mFreeList;
-					mFreeList = (Region*)&r_region;
+					mFreeOffset = r_region.mOffset;
+					mRegions.Remove(&r_region);
+					mLastRegion = &l_region;
 					break;
 				}
+
+				empty_region = &r_region;
 			}
 		}
 
-		void AllocateMesh(AssetUser<Mesh>& meshUser)
+		bool AllocateMesh(AssetUser<Mesh>& meshUser)
 		{
-			if (!mFreeList)
-			{
+			auto& core_component = meshUser.GetCore();
 
-			}
+			UInt alloc_size = core_component.DataSize();
+
+			if (mFreeOffset + alloc_size < mBufferSize)
+				return false;
+
+			auto region = mRegions.Emplace();
+			region->mMeshID = meshUser.GetID();
+			region->mOffset = mFreeOffset;
+			region->mSize = alloc_size;
+			region->mNext = nullptr;
+			region->mPrevious = mLastRegion;
+
+			mLastRegion = region;
+			
+			auto& region_component = meshUser.EmplaceRegionGPU<GAPI::Platform::OpenGL>();
+			region_component.mBuffer = mBuffer;
+			region_component.mBufferOffset = mFreeOffset;
+			region_component.mRegion = region;
+
+			mFreeOffset += alloc_size;
+
+			return true;
 		}
 	};
 }

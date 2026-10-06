@@ -20,14 +20,15 @@ namespace fe::Render::Representation
 		void Init()
 		{
 			mSpecification.Init();
-			std::bit_width(UInt(15));
 		}
 	};
 
 	template <GAPI::Platform::ValueType tPlatform>
 	struct ACTexture2D_GID final : public AssetComponent
 	{
-		GAPI::GID mGID;
+		GAPI::GID mTextureGID;
+		GAPI::GID mTextureViewGID;
+		GAPI::std140_uvec2 mTextureViewHandle;
 	};
 
 	class Texture2DObserver : public AssetInterface
