@@ -35,10 +35,10 @@ namespace fe
 		T& At(UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
-			return Elements[i];
+			return Buffer[i];
 		}
 
-		void Insert(T& data, UInt index)
+		void Insert(const T& data, UInt index)
 		{
 			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
@@ -50,8 +50,8 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
-			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
+			std::memcpy(& Buffer[index + 1], tmp.Elements, move_size);
 			Buffer[index] = data;
 
 			++Count;
@@ -69,14 +69,14 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
-			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
+			std::memcpy(& Buffer[index + 1], tmp.Elements, move_size);
 
 			++Count;
 			return &Buffer[index];
 		}
 
-		void Append(T& data)
+		void Append(const T& data)
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
 			Buffer[Count] = data;
@@ -111,8 +111,8 @@ namespace fe
 			UInt move_size = move_count * sizeof(T);
 
 			Splice<T> tmp = p.Allocate<T>(move_size);
-			std::memcpy(tmp.Elements, Buffer[index + 1], move_size);
-			std::memcpy(Buffer[index], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index + 1], move_size);
+			std::memcpy(& Buffer[index], tmp.Elements, move_size);
 
 			return result;
 		}
@@ -153,7 +153,7 @@ namespace fe
 		const	T* end()	const	{ return Buffer.Elements + Count; }
 				T* end()			{ return Buffer.Elements + Count; }
 
-		bool IsFull() const { return Count <=> = Buffer.Count; }
+		bool IsFull() const { return Count >= Buffer.Count; }
 
 		void Init()
 		{
@@ -195,10 +195,10 @@ namespace fe
 		T& At(UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
-			return Elements[i];
+			return Buffer[i];
 		}
 
-		void Insert(T& data, UInt index)
+		void Insert(const T& data, UInt index)
 		{
 			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
@@ -210,8 +210,8 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
-			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
+			std::memcpy(& Buffer[index + 1], tmp.Elements, move_size);
 			Buffer[index] = data;
 
 			++Count;
@@ -229,14 +229,14 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
-			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
+			std::memcpy(& Buffer[index + 1], tmp.Elements, move_size);
 
 			++Count;
 			return &Buffer[index];
 		}
 
-		void Append(T& data)
+		void Append(const T& data)
 		{
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
 			Buffer[Count] = data;
@@ -270,8 +270,8 @@ namespace fe
 			UInt move_size = move_count * sizeof(T);
 
 			Splice<T> tmp = p.Allocate<T>(move_size);
-			std::memcpy(tmp.Elements, Buffer[index + 1], move_size);
-			std::memcpy(Buffer[index], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index + 1], move_size);
+			std::memcpy(& Buffer[index], tmp.Elements, move_size);
 
 			return result;
 		}
@@ -329,7 +329,7 @@ namespace fe
 
 		void Release()
 		{
-			allocator->Deallocate(Buffer);
+			Alloc->Deallocate(Buffer);
 			Count = 0;
 			Buffer.Init();
 		}
@@ -343,10 +343,10 @@ namespace fe
 		T& At(UInt i)
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
-			return Elements[i];
+			return Buffer[i];
 		}
 
-		void Insert(T& data, UInt index)
+		void Insert(const T& data, UInt index)
 		{
 			FE_CORE_ASSERT(Count > index);
 
@@ -364,9 +364,9 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
 			Buffer[index] = data;
-			std::memcpy(Buffer[index+1], tmp.Elements, move_size);
+			std::memcpy(& Buffer[index+1], tmp.Elements, move_size);
 
 			++Count;
 		}
@@ -389,14 +389,14 @@ namespace fe
 
 			Splice<T> tmp = p.Allocate<T>(move_count);
 
-			std::memcpy(tmp.Elements, Buffer[index], move_size);
-			std::memcpy(Buffer[index + 1], tmp.Elements, move_size);
+			std::memcpy(tmp.Elements, & Buffer[index], move_size);
+			std::memcpy(& Buffer[index + 1], tmp.Elements, move_size);
 
 			++Count;
 			return &Buffer[index];
 		}
 
-		void Append(T& data)
+		void Append(const T& data)
 		{
 			if (Count == Buffer.Count)
 			{
@@ -474,12 +474,12 @@ namespace fe
 
 		void AllocateAndMove(UInt capacity)
 		{
-			Splice<T> new_buffer = allocator->Allocate<T>(capacity);
+			Splice<T> new_buffer = Alloc->Allocate<T>(capacity);
 
 			if (Buffer.Elements)
 			{
 				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
-				allocator->Deallocate(Buffer);
+				Alloc->Deallocate(Buffer);
 			}
 
 			Buffer = new_buffer;

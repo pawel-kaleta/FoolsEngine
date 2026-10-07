@@ -37,7 +37,7 @@ namespace fe::Render::GAPI
 			{
 				mType = TextureType::None;
 				mFormat = TextureFormat::None;
-				mDimentions = { 0, 0, 0 };
+				mDimentions = { 0, 0, 1 };
 				mMipCount = 1;
 				mLayerCount = 1;
 			}

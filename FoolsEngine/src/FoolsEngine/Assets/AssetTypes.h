@@ -2,15 +2,15 @@
 
 #include "FoolsEngine/Scene/Scene.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/5 - Representation/ShadingModel.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/Model.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/2 - Representation/ShadingModel.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/Model.h"
 
-namespace fe
+namespace fe::Render::Representation
 {
 #define FE_ASSET_TYPES_LIST Texture2D, Shader, ShadingModel, Material, Mesh, RenderMesh, Model, Scene
 

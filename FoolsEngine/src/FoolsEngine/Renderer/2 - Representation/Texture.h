@@ -1,11 +1,11 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetInterface.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
-
-#include <bit>
 
 namespace YAML { class Emitter; class Node; }
 
@@ -21,20 +21,56 @@ namespace fe::Render::Representation
 		{
 			mSpecification.Init();
 		}
+
+		UInt GetSourceSize() const
+		{
+			using namespace GAPI::Descriptors;
+			UInt texel_size = 0;
+
+			switch (mSpecification.mFormat.Value)
+			{
+			case TextureFormat::None:
+				FE_CORE_ASSERT(false, "Not specified texture data format");
+				texel_size = 0;
+				break;
+			case TextureFormat::R_8:				texel_size = 1; break;
+			case TextureFormat::RG_8:				texel_size = 2; break;
+			case TextureFormat::RGB_8:				texel_size = 3; break;
+			case TextureFormat::RGBA_8:				texel_size = 4; break;
+			case TextureFormat::R_UINT_32:			texel_size = 4; break;
+			case TextureFormat::DEPTH24STENCIL8:	texel_size = 4; break;
+			default:
+				FE_CORE_ASSERT(false, "Uknown texture data format");
+				texel_size = 0;
+			}
+
+			UInt texel_count = (UInt)mSpecification.mDimentions.x * mSpecification.mDimentions.y * mSpecification.mDimentions.z;
+
+			return texel_size * texel_count;
+		}
 	};
 
 	template <GAPI::Platform::ValueType tPlatform>
-	struct ACTexture2D_GID final : public AssetComponent
+	struct ACTexture2D_GPU final : public AssetComponent
 	{
 		GAPI::GID mTextureGID;
-		GAPI::GID mTextureViewGID;
-		GAPI::std140_uvec2 mTextureViewHandle;
+		DynamicArena<GAPI::GID> mTextureViewsGIDs;
+
+		void Init()
+		{
+			mTextureGID = -1;
+			mTextureViewsGIDs.Init();
+			mTextureViewHandles.Init();
+		}
 	};
 
 	class Texture2DObserver : public AssetInterface
 	{
 	public:
 		const ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
+
+		template <GAPI::Platform::ValueType tPlatform>
+		const ACTexture2D_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACTexture2D_GPU<tPlatform>>(); }
 
 		void SaveMetadata(YAML::Emitter& emitter);
 
@@ -46,6 +82,15 @@ namespace fe::Render::Representation
 	{
 	public:
 		ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
+
+		template <GAPI::Platform::ValueType tPlatform>
+		ACTexture2D_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACTexture2D_GPU<tPlatform>>(); }
+
+		template <GAPI::Platform::ValueType tPlatform>
+		ACTexture2D_GPU<tPlatform>& Emplace_GPU() { return Emplace<ACTexture2D_GPU<tPlatform>>(); }
+
+		template <GAPI::Platform::ValueType tPlatform>
+		void Remove_GPU() { Erase<ACTexture2D_GPU<tPlatform>>(); }
 
 		bool LoadMetadata();
 

@@ -64,14 +64,14 @@ namespace fe::Render::Representation
 
 		void FreeMesh(AssetUser<Mesh>& meshUser)
 		{
-			auto region_component = meshUser.GetRegionGPU<GAPI::Platform::OpenGL>();
+			auto region_component = meshUser.Get_GPU<GAPI::Platform::OpenGL>();
 
 			Region* region = (Region*) region_component->mRegion;
 
 			FE_CORE_ASSERT(region, "AAAAA!");
 			FE_CORE_ASSERT(meshUser.GetID() == region->mMeshID, "AAAAA!");
 
-			meshUser.RemoveRegionGPU<GAPI::Platform::OpenGL>();
+			meshUser.Remove_GPU<GAPI::Platform::OpenGL>();
 			region->mMeshID = NullAssetID;
 
 			Region* prev_region = region->mPrevious;
@@ -168,7 +168,7 @@ namespace fe::Render::Representation
 					std::swap(l_region.mSize, r_region.mSize);
 					r_region.mOffset = l_region.mSize + l_region.mOffset;
 
-					auto region_component = mesh_user.GetRegionGPU<GAPI::Platform::OpenGL>();
+					auto region_component = mesh_user.Get_GPU<GAPI::Platform::OpenGL>();
 					region_component->mRegion = &l_region;
 					region_component->mBufferOffset = l_region.mOffset;
 				}
@@ -220,7 +220,7 @@ namespace fe::Render::Representation
 
 			mLastRegion = region;
 			
-			auto& region_component = meshUser.EmplaceRegionGPU<GAPI::Platform::OpenGL>();
+			auto& region_component = meshUser.Emplace_GPU<GAPI::Platform::OpenGL>();
 			region_component.mBuffer = mBuffer;
 			region_component.mBufferOffset = mFreeOffset;
 			region_component.mRegion = region;

@@ -7,6 +7,9 @@
 
 namespace fe
 {
+	template <typename T>
+	struct Splice;
+
 	template <typename T, UInt N>
 	struct Array
 	{

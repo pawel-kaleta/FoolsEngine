@@ -4,8 +4,6 @@
 
 #include "FoolsEngine/Application/UUID.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
-
 #include <entt/entity/registry.hpp>
 #include <entt/entity/handle.hpp>
 #include <entt/entity/helper.hpp>
