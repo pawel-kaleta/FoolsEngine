@@ -5,6 +5,7 @@
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
 
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
 namespace fe::Context
 {
@@ -33,6 +34,13 @@ namespace fe::Context
 	namespace Rand
 	{
 
+	}
+
+	namespace GPU
+	{
+		using namespace Render;
+		extern GAPI::GID ScrachBuffer;
+		extern U32 ScrachBufferSize;
 	}
 
 	template <typename T>

@@ -10,7 +10,7 @@
 
 namespace fe::Render::Representation
 {
-	class TexturesManager
+	class TextureAllocator
 	{
 		UInt mTexturesCount;
 		UInt mTexturesCountBudget;
@@ -94,14 +94,59 @@ namespace fe::Render::Representation
 			return view_id;
 		}
 
-		void FreeTextureView()
+		void FreeTextureView(AssetUser<Texture2D>& textureUser, GAPI::GID textureViewGID)
 		{
+			auto texture_component = textureUser.Get_GPU<GAPI::Platform::OpenGL>();
 
+			if (!texture_component)
+			{
+				FE_CORE_ASSERT(false, "Texture does not exist and we are trying to free its view?");
+				return;
+			}
+
+			FE_CORE_ASSERT(mViewsCount, "TextureViews count is 0, but still we are trying to free some view.");
+
+			bool found = false;
+			auto& views = texture_component->mTextureViewsGIDs;
+			for (UInt i = 0; i < views.Count; i++)
+			{
+				if (views[i] != textureViewGID)
+					continue;
+				
+				found = true;
+				texture_component->mTextureViewsGIDs.SwapWithBackAndPop(i);
+				break;
+			}
+
+			FE_CORE_ASSERT(found, "Not found texture view in texture asset");
+
+			GAPI::DestroyTextureViewCmd(textureViewGID);
+
+			--mViewsCount;
 		}
 
-		void FreeTexture()
+		void FreeTexture(AssetUser<Texture2D>& textureUser)
 		{
-			
+			auto& core = textureUser.GetCore();
+			auto texture_component = textureUser.Get_GPU<GAPI::Platform::OpenGL>();
+			UInt footprint_estimate = core.GetSourceSize();
+
+			FE_CORE_ASSERT(mTexturesCount, "Trying to free texture while there are no textures allocated on gpu");
+			FE_CORE_ASSERT(mTexturesSize, "Trying to free texture while there are no textures allocated on gpu");
+			FE_CORE_ASSERT(texture_component, "Trying to free texture that is not allocated on gpu");
+			FE_CORE_ASSERT(texture_component->mTextureViewsGIDs.Count == 0, "Trying to free texture that still has views to it");
+
+			mTexturesCount -= 1;
+			mTexturesSize -= footprint_estimate;
+
+			GAPI::GID& texture_id = texture_component->mTextureGID;
+			GAPI::DestroyTextureCmd(texture_id);
+			texture_id = GAPI::GID();
+
+			texture_component->mTextureViewsGIDs.Release();
+			textureUser.Remove_GPU<GAPI::Platform::OpenGL>();
+
+			return;
 		}
 	};
 }

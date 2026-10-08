@@ -39,14 +39,6 @@ namespace fe
 		auto GetRefCounters() const { return GetIfExist<ACRefsCounters>(); }
 
 		bool IsMaster() const { return m_ECSHandle.all_of<ACRefsCounters>(); }
-	protected:
-		AssetInterface() = default;
-		AssetInterface(AssetType type, AssetID assetID) :
-			m_ECSHandle(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
-		{ }
-		AssetInterface(ECS_AssetHandle ECS_handle) :
-			m_ECSHandle(std::move(ECS_handle))
-		{ }
 
 		template<typename tnAssetFlagComponent>
 		void Flag() const
@@ -121,6 +113,15 @@ namespace fe
 
 		template<typename tnAssetComponent>
 		void Erase() const { m_ECSHandle.erase<tnAssetComponent>(); }
+
+	protected:
+		AssetInterface() = default;
+		AssetInterface(AssetType type, AssetID assetID) :
+			m_ECSHandle(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
+		{ }
+		AssetInterface(ECS_AssetHandle ECS_handle) :
+			m_ECSHandle(std::move(ECS_handle))
+		{ }
 
 		ECS_AssetHandle m_ECSHandle;
 	};

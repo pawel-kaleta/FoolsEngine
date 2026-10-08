@@ -57,26 +57,15 @@ namespace fe::Render::Representation
 		{
 			UInt result = 0;
 			result += mVertexCount * sizeof(Vertex);
-			result += AlignOffsetTo<16>(mIndexCount * sizeof(U32));
+			result += mIndexCount * sizeof(U32);
 			return result;
 		}
-	};
-
-	template <GAPI::Platform::ValueType tPlatform>
-	struct ACMesh_GPU final : public AssetComponent
-	{
-		GAPI::GID mBuffer;
-		U32 mBufferOffset; //vertices first
-		void* mRegion;
 	};
 
 	class MeshObserver : public AssetInterface
 	{
 	public:
 		const ACMesh_Core& GetCore() const { return Get<ACMesh_Core>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		const ACMesh_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACMesh_GPU<tPlatform>>(); }
 
 		void Draw(const AssetObserver<Material>& materialObserver) const;
 	protected:
@@ -87,15 +76,6 @@ namespace fe::Render::Representation
 	{
 	public:
 		ACMesh_Core& GetCore() const { return Get<ACMesh_Core>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		ACMesh_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACMesh_GPU<tPlatform>>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		ACMesh_GPU<tPlatform>& Emplace_GPU() { return Emplace<ACMesh_GPU<tPlatform>>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		void Remove_GPU() { Erase<ACMesh_GPU<tPlatform>>(); }
 
 	protected:
 		MeshUser(ECS_AssetHandle ECS_handle) : MeshObserver(ECS_handle) { }

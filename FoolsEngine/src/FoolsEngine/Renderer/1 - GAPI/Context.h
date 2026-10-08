@@ -20,5 +20,5 @@ namespace fe::Render::GAPI
 
 	bool Create();
 
-	void SetViewport(U32 x, U32 y, U32 width, U32 height);
+	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height);
 }

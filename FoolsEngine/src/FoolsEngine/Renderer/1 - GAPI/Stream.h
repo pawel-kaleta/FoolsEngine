@@ -16,8 +16,13 @@ namespace fe::Render::GAPI
 	GID		GetStreamOfRegion(GID region);
 
 	template <typename T>
-	UInt GetOffsetAlligmentFor()
+	UInt GetOffsetAlignmentFor()
 	{
 		return std::lcm(16, std::lcm(alignof(T), sizeof(T)));
+	}
+
+	UInt GetOffsetAlignmentFor(UInt size)
+	{
+		return std::lcm(16, sizeof(size));
 	}
 }

@@ -433,8 +433,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Context.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\GeometryManager.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TexturesManager.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MeshAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TextureAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MaterialAllocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />

@@ -4,9 +4,9 @@
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
 
-namespace fe
-{
-}
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+
 
 namespace fe::Context
 {
@@ -22,10 +22,24 @@ namespace fe::Context
 		PMAlloc						*	Output		= (PMAlloc*) & GeneralPurpose;
 	}
 
-	void Init(UInt mainLoopArenaSize)
+	namespace GPU
+	{
+		using namespace Render;
+		GAPI::GID ScrachBuffer;
+		U32 ScrachBufferSize;
+	}
+
+	void InitAllocators(UInt mainLoopArenaSize)
 	{
 		Allocators::Permanent.Init();
 		Allocators::MainLoopArena.Buffer = Allocators::Permanent.AllocateRaw(mainLoopArenaSize);
 		Allocators::MainLoopArena.Clear();
+	}
+
+	void InitGPU(U32 scrachBufferSize)
+	{
+		GPU::ScrachBufferSize = scrachBufferSize;
+		GPU::ScrachBuffer = Render::GAPI::CreateBuffer();
+		Render::GAPI::AllocateCommitBuffer(GPU::ScrachBuffer, scrachBufferSize);
 	}
 }

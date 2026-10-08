@@ -69,9 +69,6 @@ namespace fe::Render::Representation
 	public:
 		const ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
 
-		template <GAPI::Platform::ValueType tPlatform>
-		const ACTexture2D_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACTexture2D_GPU<tPlatform>>(); }
-
 		void SaveMetadata(YAML::Emitter& emitter);
 
 	protected:
@@ -82,15 +79,6 @@ namespace fe::Render::Representation
 	{
 	public:
 		ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		ACTexture2D_GPU<tPlatform>* Get_GPU() { return GetIfExist<ACTexture2D_GPU<tPlatform>>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		ACTexture2D_GPU<tPlatform>& Emplace_GPU() { return Emplace<ACTexture2D_GPU<tPlatform>>(); }
-
-		template <GAPI::Platform::ValueType tPlatform>
-		void Remove_GPU() { Erase<ACTexture2D_GPU<tPlatform>>(); }
 
 		bool LoadMetadata();
 

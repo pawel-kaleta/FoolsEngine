@@ -9,26 +9,25 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
-#include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
 
 namespace fe::Render::Representation
 {
-	class GeometryManager
+	class MaterialAllocator
 	{
 		struct Region
 		{
 			Region* mPrevious;
 			Region* mNext;
-			AssetID mMeshID;
+			AssetID mMaterialID;
 			U32 mSize;
 			U32 mOffset;
 		};
 
 		GAPI::GID mBuffer;
-		GAPI::GID mScrachBuffer;
 		Region* mFirstRegion;
 		Region* mLastRegion;
-		U32 mScrachBufferSize;
 		U32 mFreeOffset;
 		U32 mBufferSize;
 		U32 mCopyBudget;
@@ -38,49 +37,44 @@ namespace fe::Render::Representation
 		void Init()
 		{
 			mBuffer = GAPI::GID();
-			mScrachBuffer = GAPI::GID();
 			mFirstRegion = nullptr;
-			mScrachBufferSize = 0;
 			mFreeOffset = 0;
 			mBufferSize = 0;
 			mCopyBudget = 0;
 			mRegions.Init();
 		}
 
-		void Create(UInt bufferSize, UInt scrachBufferSize, UInt copyBudget)
+		void Create(UInt bufferSize, UInt copyBudget)
 		{
 			mFreeOffset = 0;
 			mFirstRegion = nullptr;
 			mBufferSize = bufferSize;
-			mScrachBufferSize = scrachBufferSize;
 			mCopyBudget = copyBudget;
 			mBuffer = GAPI::CreateBuffer();
-			mScrachBuffer = GAPI::CreateBuffer();
 			GAPI::AllocateCommitBuffer(mBuffer, bufferSize);
-			GAPI::AllocateCommitBuffer(mScrachBuffer, scrachBufferSize);
 		}
 
 		UInt AvailableCapacity() { return mBufferSize - mFreeOffset; }
 
-		void FreeMesh(AssetUser<Mesh>& meshUser)
+		void FreeMesh(AssetUser<Material>& materialUser)
 		{
-			auto region_component = meshUser.Get_GPU<GAPI::Platform::OpenGL>();
+			auto region_component = materialUser.Get_GPU<GAPI::Platform::OpenGL>();
 
-			Region* region = (Region*) region_component->mRegion;
+			Region* region = (Region*)region_component->mRegion;
 
 			FE_CORE_ASSERT(region, "AAAAA!");
-			FE_CORE_ASSERT(meshUser.GetID() == region->mMeshID, "AAAAA!");
+			FE_CORE_ASSERT(materialUser.GetID() == region->mMaterialID, "AAAAA!");
 
-			meshUser.Remove_GPU<GAPI::Platform::OpenGL>();
-			region->mMeshID = NullAssetID;
+			materialUser.Remove_GPU<GAPI::Platform::OpenGL>();
+			region->mMaterialID = NullAssetID;
 
 			Region* prev_region = region->mPrevious;
-			Region* next_region = region->mNext; 
+			Region* next_region = region->mNext;
 
 			// coalessing left
 			if (prev_region)
 			{
-				if (prev_region->mMeshID == NullAssetID)
+				if (prev_region->mMaterialID == NullAssetID)
 				{
 					prev_region->mSize += region->mSize;
 					prev_region->mNext = region->mNext;
@@ -96,7 +90,7 @@ namespace fe::Render::Representation
 			// coalessing right
 			if (next_region)
 			{
-				if (next_region->mMeshID == NullAssetID)
+				if (next_region->mMaterialID == NullAssetID)
 				{
 					region->mSize += next_region->mSize;
 					region->mNext = next_region->mNext;
@@ -124,7 +118,7 @@ namespace fe::Render::Representation
 			Region* potencial_empty_region = mFirstRegion;
 			UInt copy_budget = 0;
 
-			while (potencial_empty_region->mMeshID != NullAssetID)
+			while (potencial_empty_region->mMaterialID != NullAssetID)
 			{
 				potencial_empty_region = potencial_empty_region->mNext;
 				if (!potencial_empty_region)
@@ -139,7 +133,7 @@ namespace fe::Render::Representation
 				return;
 			}
 
-			while (empty_region->mNext->mMeshID != NullAssetID)
+			while (empty_region->mNext->mMaterialID != NullAssetID)
 			{
 				if (copy_budget >= mCopyBudget)
 					break;
@@ -148,7 +142,7 @@ namespace fe::Render::Representation
 				auto& r_region = *(empty_region->mNext);
 
 				{
-					AssetUser<Mesh> mesh_user(r_region.mMeshID);
+					AssetUser<Material> mesh_user(r_region.mMaterialID);
 
 					if (l_region.mSize >= r_region.mSize)
 					{
@@ -159,12 +153,14 @@ namespace fe::Render::Representation
 					{
 						copy_budget += r_region.mSize * 2;
 
-						GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, mScrachBuffer, 0);
-						GAPI::CopyRegionCmd(mScrachBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
+						FE_CORE_ASSERT(Context::GPU::ScrachBufferSize >= r_region.mSize, "Region bigger then scrachBuffer");
+
+						GAPI::CopyRegionCmd(mBuffer, r_region.mOffset, r_region.mSize, Context::GPU::ScrachBuffer, 0);
+						GAPI::CopyRegionCmd(Context::GPU::ScrachBuffer, r_region.mOffset, r_region.mSize, mBuffer, l_region.mOffset);
 					}
 
-					l_region.mMeshID = r_region.mMeshID;
-					r_region.mMeshID = NullAssetID;
+					l_region.mMaterialID = r_region.mMaterialID;
+					r_region.mMaterialID = NullAssetID;
 					std::swap(l_region.mSize, r_region.mSize);
 					r_region.mOffset = l_region.mSize + l_region.mOffset;
 
@@ -176,10 +172,10 @@ namespace fe::Render::Representation
 				// coalessing rigth
 				while (r_region.mNext)
 				{
-					if (r_region.mNext->mMeshID != NullAssetID)
+					if (r_region.mNext->mMaterialID != NullAssetID)
 						break;
 
-					auto region = (Region*) & r_region;
+					auto region = (Region*)&r_region;
 					auto next_region = r_region.mNext;
 
 					region->mSize += next_region->mSize;
@@ -202,25 +198,26 @@ namespace fe::Render::Representation
 			}
 		}
 
-		bool AllocateMesh(AssetUser<Mesh>& meshUser)
+		bool AllocateMesh(AssetUser<Material>& materialUser)
 		{
-			auto& core_component = meshUser.GetCore();
+			auto& core_component = materialUser.GetCore();
 
-			UInt alloc_size = core_component.DataSize();
+			UInt alloc_size = core_component.DataSizeGPU();
+			UInt alloc_offset = GAPI::GetOffsetAlignmentFor(alloc_size);
 
-			if (mFreeOffset + alloc_size < mBufferSize)
+			if (mFreeOffset + alloc_size > mBufferSize)
 				return false;
 
 			auto region = mRegions.Emplace();
-			region->mMeshID = meshUser.GetID();
+			region->mMaterialID = materialUser.GetID();
 			region->mOffset = mFreeOffset;
 			region->mSize = alloc_size;
 			region->mNext = nullptr;
 			region->mPrevious = mLastRegion;
 
 			mLastRegion = region;
-			
-			auto& region_component = meshUser.Emplace_GPU<GAPI::Platform::OpenGL>();
+
+			auto& region_component = materialUser.Emplace_GPU<GAPI::Platform::OpenGL>();
 			region_component.mBuffer = mBuffer;
 			region_component.mBufferOffset = mFreeOffset;
 			region_component.mRegion = region;

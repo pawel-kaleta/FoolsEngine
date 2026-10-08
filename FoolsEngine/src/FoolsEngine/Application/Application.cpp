@@ -28,7 +28,7 @@ namespace fe
 {
 	namespace Context
 	{
-		extern void Init(UInt mainLoopArenaSize);
+		extern void InitAllocators(UInt mainLoopArenaSize);
 	}
 
 	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this

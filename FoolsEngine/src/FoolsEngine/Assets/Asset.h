@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
 
 #include "FoolsEngine/Application/UUID.h"
@@ -100,4 +102,12 @@ namespace fe
 
 		bool ActiveUser = false; //TODO: make this a shared_mutex
 	};
+
+	//template <Render::GAPI::Platform::ValueType tPlatform>
+	//struct ACGPURegion final : AssetComponent
+	//{
+	//	void* mAllocatorsRegionPtr;
+	//	Render::GAPI::GID mBufferGID;
+	//	U32 mOffset;
+	//};
 }

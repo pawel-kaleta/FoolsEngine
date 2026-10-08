@@ -26,6 +26,11 @@ namespace fe::Render::Representation
 			mTextureIDs.Init();
 			mParamsData.Init();
 		}
+
+		UInt DataSizeGPU() const
+		{
+			 return AlignOffsetTo<16>(mParamsData.Count);
+		}
 	};
 
 	class MaterialObserver : public AssetInterface

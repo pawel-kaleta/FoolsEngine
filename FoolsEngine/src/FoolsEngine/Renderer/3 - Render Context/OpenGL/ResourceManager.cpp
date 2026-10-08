@@ -115,7 +115,6 @@ namespace fe::Render::Representation
 				material_user.FlagLoaded();
 				material_user.FlagLoadedAsDependency();
 			}
-
 		}
 
 		// mesh loading

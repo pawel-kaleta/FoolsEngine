@@ -7,6 +7,11 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+namespace fe::Context
+{
+	extern void InitGPU(U32 scrachBufferSize);
+}
+
 namespace fe::Render::GAPI
 {
 	// "cost" in order (may be driver internal cost of managing its own bookkeeping metadata and validation, not necesserily GPU state change)
@@ -134,11 +139,12 @@ namespace fe::Render::GAPI
 		}
 #endif // FE_INTERNAL_BUILD
 
+		Context::InitGPU(1024 * 64);
 
 		FE_LOG_CORE_INFO("OpenGL Rendering Context created");
 	}
 
-	void SetViewport(U32 x, U32 y, U32 width, U32 height)
+	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height)
 	{
 		glViewport(x, y, width, height);
 	}

@@ -239,8 +239,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Texture.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\GeometryManager.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TexturesManager.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MeshAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MaterialAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TextureAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\7 - Integration\Renderer.h" />
