@@ -34,13 +34,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		m_Icons.File = EditorAssetHandle<Texture2D>(AssetManager::AssetCreation::EditorAsset<Texture2D>());
-		m_Icons.Folder = EditorAssetHandle<Texture2D>(AssetManager::AssetCreation::EditorAsset<Texture2D>());
+		m_Icons.File = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
+		m_Icons.Folder = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
-		auto GAPI = Renderer::GetActiveGAPIType();
+		auto GAPI = Renderer::GetActivePlatform();
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_Icons.File.SendDataToGPU(GAPI);
 		//m_Icons.Folder.SendDataToGPU(GAPI);

@@ -38,6 +38,18 @@ namespace fe
 			return Buffer[i];
 		}
 
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
+		const T& At(UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
 		void Insert(const T& data, UInt index)
 		{
 			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
@@ -198,6 +210,18 @@ namespace fe
 			return Buffer[i];
 		}
 
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
+		const T& At(UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
 		void Insert(const T& data, UInt index)
 		{
 			FE_CORE_ASSERT(Count > index, "Index past occupied part of arena");
@@ -256,6 +280,7 @@ namespace fe
 			FE_CORE_ASSERT(Count < Buffer.Count, "Arena overflow!");
 			T* result = Buffer.Elements + Count;
 			Count++;
+			return result;
 		}
 
 		T Pop(UInt index)
@@ -341,6 +366,18 @@ namespace fe
 		}
 
 		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Buffer[i];
+		}
+
+		const T& At(UInt i) const
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Buffer[i];

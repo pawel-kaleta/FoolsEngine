@@ -39,6 +39,11 @@ namespace fe
 		extern TimeStep	s_LastFrameTimeStep;
 	}
 
+	namespace Render::GAPI
+	{
+		extern GLFWwindow* BaseWindow;
+	}
+
 	class ApplicationLayer : public Layer
 	{
 	public:
@@ -76,7 +81,7 @@ namespace fe
 		// Allocators
 		{
 			FE_PROFILER_SCOPE("Allocators");
-			Context::Init(24 * 1024);
+			Context::InitAllocators(24 * 1024);
 			Scratchpad::Init();
 		}
 
@@ -92,15 +97,15 @@ namespace fe
 
 			{
 				FE_PROFILER_SCOPE("RenderContext");
-
-				m_RenderContext = Context::Allocators::Permanent.Allocate<RenderContext_OpenGL>();
-				m_RenderContext->Create();
+				FE_CORE_ASSERT(false, "Not implemented");
+				//m_RenderContext = Context::Allocators::Permanent.Allocate<RenderContext_OpenGL>();
+				//m_RenderContext->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("Window");
 				Win32Window* window = Context::Allocators::Permanent.Allocate<Win32Window>();
-				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, m_RenderContext->BaseWindow);
+				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, Render::GAPI::BaseWindow);
 				m_PlatformBase->SetEventCallbacks(window);
 				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
 				m_Window = window;
@@ -110,7 +115,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Renderer");
 
-			GAPIType GAPI = m_RenderContext->GAPIType;
+			Render::GAPI::Platform GAPI;// = m_RenderContext->GAPIType;
 			Renderer::Startup();
 			Renderer::CreateAPI(GAPI);
 			Renderer::InitAPI(GAPI);

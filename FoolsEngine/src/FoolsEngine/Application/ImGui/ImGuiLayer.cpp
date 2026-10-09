@@ -1,10 +1,11 @@
 #include "FE_pch.h"
 #include "ImGuiLayer.h"
 
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+
 #include "FoolsEngine/Platform/Events/Event.h"
 
 #include "FoolsEngine/Application/Application.h"
-#include "FoolsEngine/Foundation/Common.h"
 
 //tmp backend renderer for ImGui
 #include <GLFW/glfw3.h>
@@ -134,59 +135,63 @@ namespace fe {
 		}
 	}
 
-	bool ImGuiLayer::RenderUniform(const Description::Buffer::Element& uniform, void* uniformDataPtr, const UniformRenderSettings& options)
+	bool ImGuiLayer::RenderUniform(
+		//const Description::Buffer::Element& uniform,
+		void* uniformDataPtr, const UniformRenderSettings& options)
 	{
 		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(false, "Not implemented");
 		// TO DO: handle uniform.GetCount() > 1;
 
 		bool changed = false;
 
 		Pile p;
-		auto name_cstring = uniform.Name.GetCString(&p);
+		//auto name_cstring = uniform.Name.GetCString(&p);
 		ImGuiDataType ImGuiType = -1;
 
-		switch (uniform.Primitive().Value)
-		{
-		case Description::Data::Primitive::None:
-			FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
-			return false;
-		
-		case Description::Data::Primitive::Bool:
-		{
-			bool* dataPtr = (bool*)uniformDataPtr;
-			for (unsigned int i = 1; i < uniform.Count; i++)
-			{
-				if (ImGui::Checkbox("", dataPtr++))
-					changed = true;
-				
-				ImGui::SameLine();
-			}
-			if (ImGui::Checkbox(name_cstring.Data, dataPtr))
-				changed = true;
-			return changed;
-		}
+		//switch (uniform.Primitive().Value)
+		//{
+		//case Description::Data::Primitive::None:
+		//	FE_CORE_ASSERT(false, "Unknown Shader Data Primitive of uniform!");
+		//	return false;
+		//
+		//case Description::Data::Primitive::Bool:
+		//{
+		//	bool* dataPtr = (bool*)uniformDataPtr;
+		//	for (unsigned int i = 1; i < uniform.Count; i++)
+		//	{
+		//		if (ImGui::Checkbox("", dataPtr++))
+		//			changed = true;
+		//		
+		//		ImGui::SameLine();
+		//	}
+		//	if (ImGui::Checkbox(name_cstring.Data, dataPtr))
+		//		changed = true;
+		//	return changed;
+		//}
+		//
+		//case Description::Data::Primitive::Int:
+		//	ImGuiType = ImGuiDataType_::ImGuiDataType_S32;
+		//	break;
+		//case Description::Data::Primitive::UInt:
+		//	ImGuiType = ImGuiDataType_::ImGuiDataType_U32;
+		//	break;
+		//case Description::Data::Primitive::Float:
+		//	ImGuiType = ImGuiDataType_::ImGuiDataType_Float;
+		//	break;
+		//case Description::Data::Primitive::Double:
+		//	ImGuiType = ImGuiDataType_::ImGuiDataType_Double;
+		//	break;
+		//
+		//default:
+		//	FE_CORE_ASSERT(false, "Unrecognised Shader Data Primitive of uniform!");
+		//	return false;
+		//}
 
-		case Description::Data::Primitive::Int:
-			ImGuiType = ImGuiDataType_::ImGuiDataType_S32;
-			break;
-		case Description::Data::Primitive::UInt:
-			ImGuiType = ImGuiDataType_::ImGuiDataType_U32;
-			break;
-		case Description::Data::Primitive::Float:
-			ImGuiType = ImGuiDataType_::ImGuiDataType_Float;
-			break;
-		case Description::Data::Primitive::Double:
-			ImGuiType = ImGuiDataType_::ImGuiDataType_Double;
-			break;
-
-		default:
-			FE_CORE_ASSERT(false, "Unrecognised Shader Data Primitive of uniform!");
-			return false;
-		}
-
-		int count = (int)Description::Data::SizeOfType(uniform.Type) / (int)Description::Data::SizeOfPrimitive(uniform.Primitive());
-		if (ImGui::DragScalarN(name_cstring.Data, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
-			changed = true;
+		//int count = (int)Description::Data::SizeOfType(uniform.Type) / (int)Description::Data::SizeOfPrimitive(uniform.Primitive());
+		//if (ImGui::DragScalarN(name_cstring.Data, ImGuiType, uniformDataPtr, count, options.Speed, options.MinValue, options.MaxValue, options.Format, options.Flags))
+		//	changed = true;
 
 		return changed;
 	}

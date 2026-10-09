@@ -9,7 +9,7 @@ namespace fe::Render::Representation
 {
 
 //material
-
+	/*
 	bool SendDataToGPU(UInt offset)
 	{
 		FE_PROFILER_FUNC();
@@ -187,4 +187,5 @@ namespace fe::Render::Representation
 			}
 		}
 	}
+	*/
 }

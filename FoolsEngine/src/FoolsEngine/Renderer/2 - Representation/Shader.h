@@ -7,40 +7,22 @@
 
 namespace YAML { class Emitter; }
 
-namespace fe::Render::Representation
+namespace fe
 {
 	struct ACShader_Core final : public AssetComponent
 	{
-		GAPI::Descriptors::ShaderType mType;
+		Render::GAPI::Descriptors::ShaderType mType;
 
 		void Init()
 		{
-			mType = GAPI::Descriptors::ShaderType::None;
+			mType = Render::GAPI::Descriptors::ShaderType::None;
 		}
 	};
 
-	template <GAPI::Platform::ValueType tPlatform>
+	template <Render::GAPI::Platform::ValueType tPlatform>
 	struct ACShader_GID final : public AssetComponent
 	{
-		GAPI::GID mShaderGID;
-	};
-
-	class ShaderObserver : public AssetInterface
-	{
-	public:
-		const ACShader_Core& GetCore() const { return Get<ACShader_Core>(); }
-
-	protected:
-		ShaderObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {};
-	};
-
-	class ShaderUser : public ShaderObserver
-	{
-	public:
-		ACShader_Core& GetCore() const { return Get<ACShader_Core>(); }
-
-	protected:
-		ShaderUser(ECS_AssetHandle ECS_handle) : ShaderObserver(ECS_handle) {}
+		Render::GAPI::GID mShaderGID;
 	};
 
 	class Shader : public Asset
@@ -51,8 +33,6 @@ namespace fe::Render::Representation
 
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShader_Core>(assetID).Init(); }
 
-		using Observer = ShaderObserver;
-		using User = ShaderUser;
 		using Core = ACShader_Core;
 	};
 }

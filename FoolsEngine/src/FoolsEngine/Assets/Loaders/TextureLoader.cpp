@@ -5,23 +5,24 @@
 
 #include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 namespace fe
 {
-	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser)
+	void TextureLoader::LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser& textureUser)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& data_location = textureUser.GetCore().Data;
-		if (data_location.Elements)
-			return;
+		FE_CORE_ASSERT(false, "Not implemented!");
+
+		//auto& data_location = textureUser.Get<Texture2D::Core>().Data;
+		//if (data_location.Elements)
+		//	return;
 
 		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.GetCore().Specification;
+		auto& spec = textureUser.Get<Texture2D::Core>().mSpecification;
 		int width, height, channels;
 
 		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
@@ -37,24 +38,24 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Archetype Init");
 
-			data_location.Elements = (Byte*)data;
-			data_location.Count = -1; // ?!
+			//data_location.Elements = (Byte*)data;
+			//data_location.Count = -1; // ?!
 
 			FE_CORE_ASSERT(data, "Failed to load image!");
-			spec.Width = width;
-			spec.Height = height;
-			auto& archetype = Description::Library::Get().TextureArchetypes[spec.ArchetypeID];
+			spec.mDimentions.x = width;
+			spec.mDimentions.y = height;
+			//auto& archetype = Description::Library::Get().TextureArchetypes[spec.ArchetypeID];
 
 			switch (channels)
 			{
 			case 1:
-				archetype.Format = Description::Texture::Format::R_8;
+				//archetype.Format = Description::Texture::Format::R_8;
 				return;
 			case 3:
-				archetype.Format = Description::Texture::Format::RGB_8;
+				//archetype.Format = Description::Texture::Format::RGB_8;
 				return;
 			case 4:
-				archetype.Format = Description::Texture::Format::RGBA_8;
+				//archetype.Format = Description::Texture::Format::RGBA_8;
 				return;
 			default:
 				FE_CORE_ASSERT(false, "Unimplemented texture format");
@@ -67,9 +68,9 @@ namespace fe
 		stbi_image_free(data);
 	}
 
-	Description::Texture::Archetype TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
+	Render::GAPI::Descriptors::TextureSpec TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
 	{
-		using namespace Description;
+		using namespace Render::GAPI::Descriptors;
 		int width, height, channels;
 		int result = 0;
 		result = stbi_info(sourceFilePath.string().c_str(), &width, &height, &channels);
@@ -82,7 +83,7 @@ namespace fe
 			result = stbi_info(file_path.c_str(), &width, &height, &channels);
 		}
 		
-		Description::Texture::Archetype spec;
+		TextureSpec spec;
 
 		if (!result)
 		{
@@ -90,8 +91,8 @@ namespace fe
 			return spec;
 		}
 
-		spec.Type = Description::Texture::Type::Texture2D;
-		spec.Format.FromInt(channels); // TO DO: this is a dangerous hack
+		spec.mType = TextureType::Texture2D;
+		spec.mFormat.FromInt(channels); // TO DO: this is a dangerous hack
 
 		return spec;
 	}

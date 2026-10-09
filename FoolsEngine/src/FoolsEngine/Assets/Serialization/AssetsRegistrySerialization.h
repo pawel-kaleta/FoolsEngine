@@ -12,7 +12,7 @@ namespace fe
 		bool DeserializeRegistry();
 
 		template<typename tnAsset>
-		void SerializeAsset(const AssetObserver<tnAsset>& assetObserver)
+		void SerializeAsset(const AssetObserver& assetObserver)
 		{
 			tnAsset::Serialize(assetObserver);
 		}

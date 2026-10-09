@@ -9,7 +9,8 @@ namespace fe
 {
 	void TextureImport::InitImport(ImportData*  importData)
 	{      
-        importData->Description.Archetype = TextureLoader::InspectTexture(importData->FilepathToImport);
+        FE_CORE_ASSERT(false, "Not implemented");
+        //importData->Description.Archetype = TextureLoader::InspectTexture(importData->FilepathToImport);
 	}
 
     static void Import(const std::filesystem::path& filepath, const ImportData* importData)
@@ -20,13 +21,14 @@ namespace fe
         auto w = x.lexically_relative(assets_path);
 
         AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Texture2D>(w);
-        AssetUser<Texture2D> asset_user(assetID);
+        AssetUser asset_user(assetID);
         FE_CORE_ASSERT(false, "This is broken by renderer redesign");
-        asset_user.GetCore().Specification.ArchetypeID = importData->Description.ArchetypeID;
+        asset_user.Get<Texture2D::Core>().mSpecification = importData->Description.Spec;
         AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
         YAML::Emitter emitter;
-        asset_user.SaveMetadata(emitter);
+        FE_CORE_ASSERT(false, "Not implemented");
+        //asset_user.SaveMetadata(emitter);
         std::ofstream fout(Project::Get()->m_AssetsPath / asset_user.GetFilepath());
         fout << emitter.c_str();
 
@@ -35,11 +37,12 @@ namespace fe
 
     void TextureImport::RenderWindow(ImportData* const importData)
     {
-        auto& spec = importData->Description.Archetype;
+        FE_CORE_ASSERT(false, "Not implemented");
+        auto& spec = importData->Description.Spec;
         Scratchpad sp;
         ImGui::Text("m_File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
         //ImGui::Text("Components: %d", spec.Components);
-        ImGui::Text("Format: %d", spec.Format);
+        ImGui::Text("Format: %d", spec.mFormat);
         //ImGui::Text("Width: %d", spec.Width);
         //ImGui::Text("Height: %d", spec.Height);
 

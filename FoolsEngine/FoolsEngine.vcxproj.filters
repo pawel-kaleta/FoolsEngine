@@ -171,9 +171,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Common.h">
-      <Filter>FoolsEngine\Foundation</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
@@ -433,9 +430,9 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Context.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MeshAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TextureAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MaterialAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\DataAssetAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\InternalID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FE_pch.cpp" />
@@ -532,22 +529,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Camera.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Material.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Mesh.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Model.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\RenderMesh.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Shader.cpp">
-      <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.cpp">
       <Filter>FoolsEngine\Renderer\5 - Representation</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Texture.cpp">

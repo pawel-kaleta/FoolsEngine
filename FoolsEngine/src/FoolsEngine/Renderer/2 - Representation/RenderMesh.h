@@ -9,7 +9,7 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe::Render::Representation
+namespace fe
 {
 	struct ACRenderMeshCore final : public AssetComponent
 	{
@@ -19,24 +19,6 @@ namespace fe::Render::Representation
 		void Init() { mMeshID = NullAssetID; mMaterialID = NullAssetID; }
 	};
 
-	class RenderMeshObserver : public AssetInterface
-	{
-	public:
-		const ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
-
-	protected:
-		RenderMeshObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) { }
-	};
-
-	class RenderMeshUser : public RenderMeshObserver
-	{
-	public:
-		ACRenderMeshCore& GetCore() const { return Get<ACRenderMeshCore>(); }
-
-	protected:
-		RenderMeshUser(ECS_AssetHandle ECS_handle) : RenderMeshObserver(ECS_handle) { }
-	};
-
 	class RenderMesh final : public Asset
 	{
 	public:
@@ -44,8 +26,6 @@ namespace fe::Render::Representation
 		static constexpr const char* GetMetaFileExtension() { return ".ferm"; }
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACRenderMeshCore>(assetID).Init(); }
 
-		using Observer = RenderMeshObserver;
-		using User = RenderMeshUser;
 		using Core = ACRenderMeshCore;
 	};
 }

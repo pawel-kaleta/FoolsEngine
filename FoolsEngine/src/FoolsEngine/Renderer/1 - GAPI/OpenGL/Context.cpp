@@ -3,6 +3,7 @@
 #include "FE_pch.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "Registry.h"
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -142,6 +143,8 @@ namespace fe::Render::GAPI
 		Context::InitGPU(1024 * 64);
 
 		FE_LOG_CORE_INFO("OpenGL Rendering Context created");
+
+		OpenGL::CreateRegistries();
 	}
 
 	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height)

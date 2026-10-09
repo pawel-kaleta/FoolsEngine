@@ -11,12 +11,11 @@
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 #include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/Model.h"
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/Model.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/RenderMesh.h"
 
 #include <type_traits>
 
@@ -57,29 +56,30 @@ namespace fe
 		Offset.Scale = node["Scale"].as<glm::vec3>();
 	}
 
-	static bool EditMaterial(const AssetUser<Material>& materialUser)
+	static bool EditMaterial(const AssetUser& materialUser)
 	{
 		Scratchpad sp;
 
 		bool modified = false;
 
-		auto& shading_model_current = materialUser.GetCore().ShadingModelID;
-		if (ImGui::BeginCombo("Shading Model", AssetObserver<ShadingModel>(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
+		auto& shading_model_current = materialUser.Get<Material::Core>().mShadingModelID;
+		if (ImGui::BeginCombo("Shading Model", AssetObserver(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
 		{
 			bool is_selected;
 
-			auto shading_models = AssetManager::Get().m_Registry.view<ACShadingModelCore>();
+			auto shading_models = AssetManager::Get().m_Registry.view<ShadingModel::Core>();
 
 			Scratchpad sp2;
 
 			for (auto id : shading_models)
 			{
-				auto shading_model_observer = AssetObserver<ShadingModel>(id);
+				auto shading_model_observer = AssetObserver(id);
 				is_selected = (shading_model_current == id);
 
 				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp2).c_str(), is_selected))
 				{
-					materialUser.MakeMaterial(shading_model_observer);
+					FE_CORE_ASSERT(false, "Not implemented");
+					//materialUser.MakeMaterial(shading_model_observer);
 					shading_model_current = id;
 					modified = true;
 				}
@@ -91,24 +91,24 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		AssetObserver<ShadingModel> shading_model_observer(shading_model_current);
+		AssetObserver shading_model_observer(shading_model_current);
 
-		auto& sm_core_component = shading_model_observer.GetCore();
-		auto& material_core_component = materialUser.GetCore();
+		auto& sm_core_component = shading_model_observer.Get<ShadingModel::Core>();
+		auto& material_core_component = materialUser.Get<Material::Core>();
 
-		const auto& lib = Description::Library::Get();
-		const auto& program_spec = lib.ProgramSpecs[sm_core_component.ProgramSpecificationID];
-		const auto& uniforms_layout = lib.BufferLayouts[program_spec.MainUniformsLayoutID];
+		FE_CORE_ASSERT(false, "not implemented");
+		const auto& program_spec = sm_core_component.mRasterSpec;
+		//const auto& uniforms_layout = lib.BufferLayouts[program_spec.MainUniformsLayoutID];
+		//
+		//for (auto& uniform : uniforms_layout.Elements)
+		//{
+		//	if (ImGuiLayer::RenderUniform(uniform, materialUser.GetUniformValuePtr(material_core_component, uniform)))
+		//		modified = true;
+		//}
 
-		for (auto& uniform : uniforms_layout.Elements)
+		for (size_t i=0; i<material_core_component.mTextureIDs.Count; i++)
 		{
-			if (ImGuiLayer::RenderUniform(uniform, materialUser.GetUniformValuePtr(material_core_component, uniform)))
-				modified = true;
-		}
-
-		for (size_t i=0; i<material_core_component.TextureIDs.Count; i++)
-		{
-			auto& textureID = material_core_component.TextureIDs[i];
+			auto& textureID = material_core_component.mTextureIDs[i];
 			
 			ImGui::PushID((const void*)&textureID);
 			
@@ -122,7 +122,7 @@ namespace fe
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
 			std::pmr::string asset_name(&sp);
-			asset_name = handle_valid ? AssetObserver<Texture2D>(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp) : "<empty>";
+			asset_name = handle_valid ? AssetObserver(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp) : "<empty>";
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
 			ImGui::Button(asset_name.c_str(), { button_width__handle, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
@@ -167,11 +167,11 @@ namespace fe
 				}
 			}
 
-			const auto& library = Description::Library::Get();
-			const auto& program_spec = library.ProgramSpecs[sm_core_component.ProgramSpecificationID];
-			const auto& texture_sampler = library.TextureSamplers[program_spec.TextureSamplerIDs[i]];
+			FE_CORE_ASSERT(false, "Not implemented");
+			//const auto& program_spec = library.ProgramSpecs[sm_core_component.ProgramSpecificationID];
+			//const auto& texture_sampler = library.TextureSamplers[program_spec.TextureSamplerIDs[i]];
 
-			ImGui::Text(texture_sampler.Name.CData());
+			//ImGui::Text(texture_sampler.Name.CData());
 
 			ImGui::PopID();
 		}
@@ -317,7 +317,8 @@ namespace fe
 				if (EditMaterial(assetHandle.Use()))
 				{
 					YAML::Emitter emitter;
-					Material::SaveMetadata(emitter, assetHandle.GetID());
+					FE_CORE_ASSERT(false, "Not implemented");
+					//Material::SaveMetadata(emitter, assetHandle.GetID());
 					std::ofstream fout(Project::Get()->m_AssetsPath / assetHandle.Observe().GetFilepath());
 					fout << emitter.c_str();
 				}

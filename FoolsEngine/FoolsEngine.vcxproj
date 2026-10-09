@@ -177,7 +177,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\AssetsRegistrySerialization.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Common.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h" />
@@ -219,6 +218,7 @@
     <ClInclude Include="src\FoolsEngine\Platform\Window.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Buffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Data.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\InternalID.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Registry.cpp" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\DownStream.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\GraphicsPipeline.h" />
@@ -239,8 +239,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Shader.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Texture.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MeshAllocator.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\MaterialAllocator.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\DataAssetAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Render Context\TextureAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.h" />
@@ -311,12 +310,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Stream.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\3 - Render Context\OpenGL\ResourceManager.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Camera.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Material.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Mesh.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Model.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\RenderMesh.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Shader.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\ShadingModel.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\6 - Render\Renderer2D.cpp" />

@@ -197,15 +197,15 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void CreateTextureForMaterial(const char* textureSlotName, ACMaterialCore& core, const aiString& filePath, const AssetUser<Material>& materialUser, const ImportData* const importData, Description::Texture::Usage usage)
+	static void CreateTextureForMaterial(const char* textureSlotName, Material::Core& core, const aiString& filePath, const AssetUser& materialUser, const ImportData* const importData)
 	{
 		AssetID textureID = AssetManager::AssetCreation::InternalAsset<Texture2D>(materialUser.GetID());
 		AssetHandle<Texture2D> texture_handle(textureID);
 
 		auto full_texture_path = importData->FilepathToImport.parent_path() / std::filesystem::path(filePath.C_Str());
 
-		auto& texture_core = texture_handle.Use().GetCore();
-		auto& spec = texture_core.Specification;
+		auto& texture_core = texture_handle.Use().Get<Texture2D::Core>();
+		auto& spec = texture_core.mSpecification;
 		FE_CORE_ASSERT(false, "This is broken by renderer redesign");
 		//spec = TextureLoader::InspectTexture(full_texture_path);
 		//texture_core.Usage = usage;
@@ -214,9 +214,9 @@ namespace fe::GeometryImport
 		//materialUser.SetTexture(core, textureSlotName, textureID);
 	}
 
-	static void CreateBaseMaterial(const AssetUser<Material>& materialUser, GeometryImport::MaterialData& materialData, const ImportData* const importData)
+	static void CreateBaseMaterial(const AssetUser& materialUser, GeometryImport::MaterialData& materialData, const ImportData* const importData)
 	{
-		auto& core = materialUser.GetCore();
+		auto& core = materialUser.Get<Material::Core>();
 		FE_CORE_ASSERT(false, "not implemented");
 		//if (materialData.DetectedProperties & DetectedMaterialProperties::Roughness)
 		//	materialUser.SetUniformValue(core, "u_Roughness", &materialData.Uniforms.Roughness);
@@ -231,7 +231,7 @@ namespace fe::GeometryImport
 		auto& recognized = materialData.RecognizedTextures;
 
 		if (recognized.BaseColor != -1)
-			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData, Description::Texture::Usage::Map_BaseColor);
+			CreateTextureForMaterial("u_BaseColorMap", core, all[recognized.BaseColor], materialUser, importData);
 		FE_CORE_ASSERT(false, "not implemented");
 		//else
 		//	materialUser.SetTexture(core, "u_BaseColorMap", NullAssetID);
@@ -243,7 +243,7 @@ namespace fe::GeometryImport
 		if (texture_packing)
 		{
 			if (recognized.PackedORM != -1)
-				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData, Description::Texture::Usage::Map_ORM);
+				CreateTextureForMaterial("u_ORMMap", core, all[recognized.PackedORM], materialUser, importData);
 			FE_CORE_ASSERT(false, "not implemented"); 
 			//else
 			//	materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
@@ -258,26 +258,26 @@ namespace fe::GeometryImport
 			//materialUser.SetTexture(core, "u_ORMMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Roughness != -1)
-				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData, Description::Texture::Usage::Map_Roughness);
+				CreateTextureForMaterial("u_RoughnessMap", core, all[recognized.NonPackedORM.Roughness], materialUser, importData);
 			FE_CORE_ASSERT(false, "not implemented");
 			//else
 			//	materialUser.SetTexture(core, "u_RoughnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Metalness != -1)
-				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData, Description::Texture::Usage::Map_Metalness);
+				CreateTextureForMaterial("u_MetalnessMap", core, all[recognized.NonPackedORM.Metalness], materialUser, importData);
 			FE_CORE_ASSERT(false, "not implemented"); 
 			//else
 			//	materialUser.SetTexture(core, "u_MetalnessMap", NullAssetID);
 
 			if (recognized.NonPackedORM.Occlusion != -1)
-				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData, Description::Texture::Usage::Map_AO);
+				CreateTextureForMaterial("u_AOMap", core, all[recognized.NonPackedORM.Occlusion], materialUser, importData);
 			FE_CORE_ASSERT(false, "not implemented"); 
 			//else
 			//	materialUser.SetTexture(core, "u_AOMap", NullAssetID);
 		}
 
 		if (recognized.Normal != -1)
-			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData, Description::Texture::Usage::Map_Normal);
+			CreateTextureForMaterial("u_NormalMap", core, all[recognized.Normal], materialUser, importData);
 		FE_CORE_ASSERT(false, "not implemented"); 
 		//else
 		//	materialUser.SetTexture(core, "u_NormalMap", NullAssetID);
@@ -296,8 +296,8 @@ namespace fe::GeometryImport
 		AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(assets_path));
 
 		{
-			AssetUser<Model> model_user(assetID);
-			auto& model_core = model_user.GetCore();
+			AssetUser model_user(assetID);
+			auto& model_core = model_user.Get<Model::Core>();
 
 			Scratchpad sp;
 			std::pmr::vector<AssetID> material_IDs(&sp);
@@ -311,12 +311,13 @@ namespace fe::GeometryImport
 
 				auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
 
-				AssetUser<Material> material_user(material_ID);
-				auto& material_core = material_user.GetCore();
+				AssetUser material_user(material_ID);
+				auto& material_core = material_user.Get<Material::Core>();
 
 				if (material_data.AlphaMode == AlphaMode::Opaque)
 				{
-					material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
+					FE_CORE_ASSERT(false, "not implemented");
+					//material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 					CreateBaseMaterial(material_user, material_data, importData);
 
 					FE_CORE_ASSERT(false, "not implemented");
@@ -325,7 +326,8 @@ namespace fe::GeometryImport
 				}
 				else
 				{
-					material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
+					FE_CORE_ASSERT(false, "not implemented");
+					//material_user.MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DBlend.Observe());
 					CreateBaseMaterial(material_user, material_data, importData);
 
 					glm::vec4 base_color = { 1.f, 1.f, 1.f, 1.f };
@@ -346,29 +348,32 @@ namespace fe::GeometryImport
 			{
 				AssetID mesh_ID = AssetManager::AssetCreation::InternalAsset<Mesh>(assetID);
 
-				auto mesh_user = AssetUser<Mesh>(mesh_ID);
-				auto& mesh_core = mesh_user.GetCore();
+				auto mesh_user = AssetUser(mesh_ID);
+				auto& mesh_core = mesh_user.Get<Mesh::Core>();
 
-				mesh_core.Specification.VertexCount = scene->mMeshes[i]->mNumVertices;
-				mesh_core.Specification.IndexCount = scene->mMeshes[i]->mNumFaces * 3;
+				mesh_core.mVertexCount = scene->mMeshes[i]->mNumVertices;
+				mesh_core.mIndexCount = scene->mMeshes[i]->mNumFaces * 3;
 
 				AssetID render_mesh_ID = AssetManager::AssetCreation::InternalAsset<RenderMesh>(assetID);
-				model_core.RenderMeshIDs.emplace_back(render_mesh_ID);
 
-				auto render_mesh_user = AssetUser<RenderMesh>(render_mesh_ID);
-				auto& render_mesh_core = render_mesh_user.GetCore();
+				FE_CORE_ASSERT(false, "not implemented");
+				//model_core.mRenderMeshIDs.emplace_back(render_mesh_ID);
+
+				auto render_mesh_user = AssetUser(render_mesh_ID);
+				auto& render_mesh_core = render_mesh_user.Get<RenderMesh::Core>();
 
 				auto& material_index = scene->mMeshes[i]->mMaterialIndex;
 				auto& material_ID = material_IDs[material_index];
 
-				render_mesh_core.MeshID = mesh_ID;
-				render_mesh_core.MaterialID = material_ID;
+				render_mesh_core.mMeshID = mesh_ID;
+				render_mesh_core.mMaterialID = material_ID;
 			}
 		}
 
 		YAML::Emitter emitter;
-		Model::SaveMetadata(emitter, assetID);
-		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Model>(assetID).GetFilepath());
+		FE_CORE_ASSERT(false, "not implemented");
+		//Model::SaveMetadata(emitter, assetID);
+		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver(assetID).GetFilepath());
 		fout << emitter.c_str();
 
 		AssetSerializer::SerializeRegistry();
@@ -390,23 +395,23 @@ namespace fe::GeometryImport
 		auto w = x.lexically_relative(y);
 		const AssetID assetID = AssetManager::AssetCreation::ProjectAsset<Mesh>(w);
 		{
-			auto mesh_user = AssetUser<Mesh>(assetID);
+			auto mesh_user = AssetUser(assetID);
 
 			AssetManager::SetSourcePath(assetID, importData->FilepathToImport.lexically_relative(y));
-			auto& core = mesh_user.GetCore();
-			auto& specification = core.Specification;
+			auto& core = mesh_user.Get<Mesh::Core>();
 
 			for (size_t i = 0; i < scene->mNumMeshes; i++)
 			{
-				specification.VertexCount += scene->mMeshes[i]->mNumVertices;
-				specification.IndexCount += scene->mMeshes[i]->mNumFaces;
+				core.mVertexCount += scene->mMeshes[i]->mNumVertices;
+				core.mIndexCount += scene->mMeshes[i]->mNumFaces;
 			}
-			specification.IndexCount *= 3;
+			core.mIndexCount *= 3;
 		}
 
 		YAML::Emitter emitter;
-		Mesh::SaveMetadata(emitter, assetID);
-		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Mesh>(assetID).GetFilepath());
+		FE_CORE_ASSERT(false, "not implemented");
+		//Mesh::SaveMetadata(emitter, assetID);
+		std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver(assetID).GetFilepath());
 		fout << emitter.c_str();
 
 		AssetSerializer::SerializeRegistry();

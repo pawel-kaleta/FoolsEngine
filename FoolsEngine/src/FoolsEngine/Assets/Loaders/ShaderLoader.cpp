@@ -3,14 +3,14 @@
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 
 #include <glad/gl.h>
 
 namespace fe
 {
-	void ShaderLoader::LoadShader(const std::filesystem::path& filePath, const AssetUser<Shader>& shaderUser)
+	void ShaderLoader::LoadShader(const std::filesystem::path& filePath, const AssetUser& shaderUser)
 	{
 		FE_PROFILER_FUNC();
 
@@ -23,8 +23,8 @@ namespace fe
 			return;
 		}
 
-		auto& shader_core = shaderUser.GetCore();
-		auto& shader_source = shader_core.ShaderSource;
+		auto& shader_core = shaderUser.Get<Shader::Core>();
+		//auto& shader_source = shader_core.ShaderSource;
 		
 		FE_CORE_ASSERT(false, "not implemented");
 		//in.seekg(0, std::ios::end);

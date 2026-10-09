@@ -168,6 +168,6 @@ namespace fe::Render::GAPI
 	std140_uvec2 GetTextureViewHandle(GID textureView)
 	{
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
-		return (std140_uvec2)(textureview_obj->mTextureSamplerHandleGL);
+		return *(std140_uvec2*)&(textureview_obj->mTextureSamplerHandleGL);
 	}
 }

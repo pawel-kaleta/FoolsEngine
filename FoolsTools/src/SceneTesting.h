@@ -196,12 +196,12 @@ namespace fe
 		once = true;
 	}
 
-	void TestSceneSetup(const AssetObserver<Scene>& sceneObserver)
+	void TestSceneSetup(const AssetObserver& sceneObserver)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_INFO("Test Scene Setup");
 
-		auto gameplay_world = sceneObserver.GetCoreComponent().GameplayWorld.get();
+		auto gameplay_world = sceneObserver.Get<Scene::Core>().GameplayWorld.get();
 		Actor enviro_actor = gameplay_world->CreateActor("Enviro");
 
 		Entity tinted_texture_tile = enviro_actor.CreateChildEntity("TestEntity");

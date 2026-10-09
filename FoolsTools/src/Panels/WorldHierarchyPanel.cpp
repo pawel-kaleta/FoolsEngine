@@ -27,7 +27,7 @@ namespace fe
 		bool node_clicked = false;
 
 		auto scene_observer = m_Scene.Observe();
-		auto& gameplay_world = scene_observer.GetCoreComponent().GameplayWorld;
+		auto& gameplay_world = scene_observer.Get<Scene::Core>().GameplayWorld;
 		auto& hierarchy = gameplay_world->GetHierarchy();
 
 		hierarchy.EnforceSafeOrder();
@@ -61,11 +61,11 @@ namespace fe
 		ImGui::End();
 	}
 
-	bool WorldHierarchyPanel::DrawEntity(const AssetObserver<Scene>& sceneObserver, EntityID entityID)
+	bool WorldHierarchyPanel::DrawEntity(const AssetObserver& sceneObserver, EntityID entityID)
 	{
 		FE_PROFILER_FUNC();
 
-		auto& gameplay_world = sceneObserver.GetCoreComponent().GameplayWorld;
+		auto& gameplay_world = sceneObserver.Get<Scene::Core>().GameplayWorld;
 		auto& node = gameplay_world->m_Registry.get<CEntityNode>(entityID);
 
 		Entity entity(entityID, gameplay_world.get());

@@ -3,7 +3,7 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 
 #include <filesystem>
 
@@ -14,8 +14,8 @@ namespace fe
 	public:
 		static constexpr LoaderType GetTypeStatic() { return LoaderType::Shader; }
 		static constexpr AssetType GetAssetTypeStatic() { return AssetType::Shader; }
-		static void LoadShader(const std::filesystem::path& filePath, const AssetUser<Shader>& shaderUser);
-		static void LoadShader(const AssetUser<Shader>& shaderUser)
+		static void LoadShader(const std::filesystem::path& filePath, const AssetUser& shaderUser);
+		static void LoadShader(const AssetUser& shaderUser)
 		{
 			auto& path = shaderUser.GetFilepath();
 			LoadShader(path, shaderUser);

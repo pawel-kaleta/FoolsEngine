@@ -1,6 +1,5 @@
 #pragma once
 
-#include "FoolsEngine/Scene/Scene.h"
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
 #include <filesystem>
@@ -18,14 +17,14 @@ namespace fe
 	class SceneSerializerYAML
 	{
 	public:
-		static void SerializeToFile(const AssetObserver<Scene>& scene);
-		static bool DeserializeFromFile(const AssetUser<Scene>& scene);
+		static void SerializeToFile(const AssetObserver& scene);
+		static bool DeserializeFromFile(const AssetUser& scene);
 
-		static std::string SerializeToString(const AssetObserver<Scene>& scene);
-		static bool DeserializeFromString(const AssetUser<Scene>& scene, const std::string& buffer);
+		static std::string SerializeToString(const AssetObserver& scene);
+		static bool DeserializeFromString(const AssetUser& scene, const std::string& buffer);
 	private:
-		static void Serialize(const AssetObserver<Scene>& scene, YAML::Emitter& emitter);
-		static bool Deserialize(const AssetUser<Scene>& scene, YAML::Node& node);
+		static void Serialize(const AssetObserver& scene, YAML::Emitter& emitter);
+		static bool Deserialize(const AssetUser& scene, YAML::Node& node);
 
 		static void SerializeEntity(Entity entity, YAML::Emitter& emitter);
 		static void SerializeEntityNode(Entity entity, YAML::Emitter& emitter);

@@ -15,18 +15,19 @@ namespace fe
 		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
 		//m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 
-		m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
+		FE_CORE_ASSERT(false, "Not implemented");
+		//m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
 
-		auto& lib = Description::Library::Get();
-		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
-		auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
-		framebuffer_spec.Width = 1;
-		framebuffer_spec.Height = 1;
-		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
+		//auto& lib = Description::Library::Get();
+		//m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
+		//auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
+		//framebuffer_spec.Width = 1;
+		//framebuffer_spec.Height = 1;
+		//framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
 		FE_CORE_ASSERT(false, "not implemented");
 		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
 
-		m_Framebuffer->Create();
+		//m_Framebuffer->Create();
 
 
 		m_ViewportSize = { 1,1 };
@@ -40,7 +41,7 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		Entity camera_entity = scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		Entity camera_entity = scene_observer.Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera();
 		if (camera_entity)
 		{
 			auto& camera_component = camera_entity.Get<CCamera>();
@@ -48,12 +49,14 @@ namespace fe
 			auto camera_transform = camera_entity.GetTransformHandle().GetGlobal();
 			camera_transform.Scale = { 1.f,1.f,1.f };
 			camera_transform = camera_transform + camera_component.Offset;
-			Renderer::RenderScene(scene_observer, camera, camera_transform, *m_Framebuffer.get());
+			FE_CORE_ASSERT(false, "not implemented");
+			//Renderer::RenderScene(scene_observer, camera, camera_transform, *m_Framebuffer.get());
 		}
 		else
 		{
-			Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
-			Command::ResourceState::Clear<GAPIType::OpenGL>();
+			FE_CORE_ASSERT(false, "not implemented");
+			//Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
+			//Command::ResourceState::Clear<GAPIType::OpenGL>();
 		}
 		
 	}
@@ -81,20 +84,21 @@ namespace fe
 			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
 				new_viewport_size = { 1, 1 };
 
-			auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+			auto camera_entity = m_Scene.Observe().Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera();
 			if (camera_entity)
 			{
 				auto& camera_component = camera_entity.Get<CCamera>();
 				camera_component.Camera.SetViewportSize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			}
-			m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
+			FE_CORE_ASSERT(false, "not implemented");
+			//m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			m_ViewportSize = new_viewport_size;
 		}
 
 		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
-		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
-		GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
-		ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		//auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
+		//GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
+		//ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();
 	}
@@ -103,7 +107,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto camera_entity = m_Scene.Observe().GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera();
+		auto camera_entity = m_Scene.Observe().Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera();
 		if (camera_entity)
 		{
 			auto& camera_component = camera_entity.Get<CCamera>();

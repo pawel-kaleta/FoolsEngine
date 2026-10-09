@@ -100,7 +100,9 @@ namespace fe::AssetSerializer
 				FE_PROFILER_SCOPE("Asset");
 
 				tnAssetType::EmplaceCore(asset_id);
-				bool result = tnAssetType::LoadMetadata(asset_id);
+
+				FE_CORE_ASSERT(false, "not implemented");
+				bool result;// = tnAssetType::LoadMetadata(asset_id);
 
 				FE_CORE_ASSERT(result, "Failed to load asset metadata");
 			}

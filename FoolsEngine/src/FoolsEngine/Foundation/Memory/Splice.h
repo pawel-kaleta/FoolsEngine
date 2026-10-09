@@ -34,6 +34,18 @@ namespace fe
 			return Elements[i];
 		}
 
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
+		const T& At(UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
 		Splice<T> GetSplice()
 		{
 			Splice<T> result;
@@ -68,6 +80,18 @@ namespace fe
 		}
 
 		T& At(UInt i)
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
+		const T& operator[](UInt i) const
+		{
+			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
+			return Elements[i];
+		}
+
+		const T& At(UInt i) const
 		{
 			FE_CORE_ASSERT(i < Count, "Out of Splice bound!");
 			return Elements[i];

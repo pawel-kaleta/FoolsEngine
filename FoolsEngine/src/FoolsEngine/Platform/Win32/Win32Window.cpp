@@ -2,7 +2,6 @@
 #include "Win32Window.h"
 
 #include "FoolsEngine/Platform/Events/Event.h"
-#include "FoolsEngine/Renderer/4 - Render Context/RenderContext.h"
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>

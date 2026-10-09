@@ -32,8 +32,8 @@ namespace fe
 
 		struct
 		{
-			EditorAssetHandle<Texture2D> File;
-			EditorAssetHandle<Texture2D> Folder;
+			EditorAssetHandle File;
+			EditorAssetHandle Folder;
 			void* FileID = nullptr;
 			void* FolderID = nullptr;
 		} m_Icons;

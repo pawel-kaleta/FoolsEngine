@@ -9,13 +9,11 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe::Render::Representation
+namespace fe
 {
-	struct GAPIType;
-
 	struct ACTexture2D_Core final : public AssetComponent
 	{
-		GAPI::Descriptors::TextureSpec mSpecification;
+		Render::GAPI::Descriptors::TextureSpec mSpecification;
 
 		void Init()
 		{
@@ -24,7 +22,7 @@ namespace fe::Render::Representation
 
 		UInt GetSourceSize() const
 		{
-			using namespace GAPI::Descriptors;
+			using namespace Render::GAPI::Descriptors;
 			UInt texel_size = 0;
 
 			switch (mSpecification.mFormat.Value)
@@ -50,40 +48,17 @@ namespace fe::Render::Representation
 		}
 	};
 
-	template <GAPI::Platform::ValueType tPlatform>
+	template <Render::GAPI::Platform::ValueType tPlatform>
 	struct ACTexture2D_GPU final : public AssetComponent
 	{
-		GAPI::GID mTextureGID;
-		DynamicArena<GAPI::GID> mTextureViewsGIDs;
+		Render::GAPI::GID mTextureGID;
+		DynamicArena<Render::GAPI::GID> mTextureViewsGIDs;
 
 		void Init()
 		{
-			mTextureGID = -1;
+			mTextureGID = Render::GAPI::GID();
 			mTextureViewsGIDs.Init();
-			mTextureViewHandles.Init();
 		}
-	};
-
-	class Texture2DObserver : public AssetInterface
-	{
-	public:
-		const ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
-
-		void SaveMetadata(YAML::Emitter& emitter);
-
-	protected:
-		Texture2DObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
-	};
-
-	class Texture2DUser : public Texture2DObserver
-	{
-	public:
-		ACTexture2D_Core& GetCore() const { return Get<ACTexture2D_Core>(); }
-
-		bool LoadMetadata();
-
-	protected:
-		Texture2DUser(ECS_AssetHandle ECS_handle) : Texture2DObserver(ECS_handle) {}
 	};
 
 	class Texture2D : public Asset
@@ -95,8 +70,6 @@ namespace fe::Render::Representation
 		
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 
-		using Observer = Texture2DObserver;
-		using User = Texture2DUser;
 		using Core = ACTexture2D_Core;
 	};
 }

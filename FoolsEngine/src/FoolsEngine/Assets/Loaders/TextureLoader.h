@@ -5,7 +5,7 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 
 #include <string>
 
@@ -16,8 +16,8 @@ namespace fe
 	public:
 		static constexpr LoaderType GetTypeStatic() { return LoaderType::Texture; }
 		static constexpr AssetType GetAssetTypeStatic() { return AssetType::Texture2D; }
-		static void LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser<Texture2D>& textureUser);
-		static void LoadTexture(const AssetUser<Texture2D>& textureUser)
+		static void LoadTexture(const std::filesystem::path& sourceFilePath, const AssetUser& textureUser);
+		static void LoadTexture(const AssetUser& textureUser)
 		{
 			auto filepath = Project::Get()->m_AssetsPath;
 			auto source =  textureUser.GetSourceFilepath();
@@ -33,7 +33,7 @@ namespace fe
 			}
 		}
 		static void UnloadTexture(void* data);
-		static Description::Texture::Archetype InspectTexture(const std::filesystem::path& filePath);
+		static Render::GAPI::Descriptors::TextureSpec InspectTexture(const std::filesystem::path& filePath);
 		static bool IsKnownExtension(const std::pmr::string& extension);
 		static bool IsKnownAssetType(AssetType assetType);
 		static const char* GetExtensionAlias() { return "Texture Source"; }

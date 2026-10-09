@@ -6,6 +6,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		FE_CORE_ASSERT(false, "not implemented");
 		//Description::Framebuffer::SpecificationBuilder spec_builder;
 		//spec_builder
 		//	.SetWidth(1280)
@@ -13,19 +14,19 @@ namespace fe
 		//	.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
 		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
 		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID", Description::Texture::Format::R_UINT_32));
-		m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
+		//m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
 
-		auto& lib = Description::Library::Get();
-		m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
-		auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
-		framebuffer_spec.Width = 1280;
-		framebuffer_spec.Height = 720;
-		framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
+		//auto& lib = Description::Library::Get();
+		//m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
+		//auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
+		//framebuffer_spec.Width = 1280;
+		//framebuffer_spec.Height = 720;
+		//framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
 		FE_CORE_ASSERT(false, "not implemented");
 		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
 		//framebuffer_spec.ColorAttachments.emplace_back("EntityID", Description::Texture::Format::R_UINT_32);
 
-		m_Framebuffer->Create();
+		//m_Framebuffer->Create();
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 	}
@@ -47,7 +48,8 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
+		FE_CORE_ASSERT(false, "Not implemented");
+		//Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
 	}
 
 	void EditViewport::OnEvent(Ref<Events::Event> event)
@@ -99,15 +101,17 @@ namespace fe
 			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
 				new_viewport_size = { 1, 1 };
 
-			m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
+			FE_CORE_ASSERT(false, "not implemented");
+			//m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			m_ViewportSize = new_viewport_size;
 			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
 		}
 
 		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
-		auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
-		GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
-		ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		FE_CORE_ASSERT(false, "not implemented");
+		//auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
+		//GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
+		//ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		RenderGuizmos();
 
@@ -165,7 +169,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		auto scene_observer = m_Scene.Observe();
-		auto gameplay_world = scene_observer.GetCoreComponent().GameplayWorld.get();
+		auto gameplay_world = scene_observer.Get<Scene::Core>().GameplayWorld.get();
 
 		Entity selected_entity(m_SelectedEntityID, gameplay_world);
 
@@ -231,12 +235,13 @@ namespace fe
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
 			String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
-			int attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
-			Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
+			FE_CORE_ASSERT(false, "not implemented");
+			//int attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
+			//Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
 			Splice<Byte> entityID_memReg;
 			entityID_memReg.Elements = (Byte*) & entityID;
 			entityID_memReg.Count = sizeof(EntityID);
-			m_Framebuffer->ReadPixel(attachment_index, mouseX, mouseY, entityID_memReg);
+			//m_Framebuffer->ReadPixel(attachment_index, mouseX, mouseY, entityID_memReg);
 		}
 
 		return entityID;

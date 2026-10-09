@@ -14,15 +14,6 @@
 #include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
 #include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
-#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
-#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
 #include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
 #include "FoolsEngine/Renderer/6 - Render/GeometryRenderer.h"
 
@@ -34,7 +25,7 @@ namespace fe
 {
 	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
-	GAPIType Renderer::s_ActiveGAPI = GAPIType::None;
+	Render::GAPI::Platform Renderer::s_ActiveGAPI = Render::GAPI::Platform::None;
 
 	void Renderer::Startup()
 	{
@@ -89,27 +80,27 @@ namespace fe
 		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DCutout.glsl", BaseAssets.Shaders.Base3DCutout.Use());
 		//ShaderLoader::LoadShader("../FoolsEngine/base_assets/shaders/Base3DBlend.glsl",  BaseAssets.Shaders.Base3DBlend.Use());
 
-		bool succes_1 = BaseAssets.ShadingModels.Base2DBatchFlat.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base2DFlat.fesm");
-		bool succes_2 = BaseAssets.ShadingModels.Base3DOpaque.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
-		bool succes_3 = BaseAssets.ShadingModels.Base3DCutout.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
-		bool succes_4 = BaseAssets.ShadingModels.Base3DBlend.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
+		//bool succes_1 = BaseAssets.ShadingModels.Base2DBatchFlat.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base2DFlat.fesm");
+		//bool succes_2 = BaseAssets.ShadingModels.Base3DOpaque.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DOpaque.fesm");
+		//bool succes_3 = BaseAssets.ShadingModels.Base3DCutout.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DCutout.fesm");
+		//bool succes_4 = BaseAssets.ShadingModels.Base3DBlend.Use().LoadBaseAssetMetadata("../FoolsEngine/base_assets/shading_models/Base3DBlend.fesm");
 
-		FE_CORE_ASSERT(succes_1, "Failed to load Base2DFlat shading model");
-		FE_CORE_ASSERT(succes_2, "Failed to load Base3DOpaque shading model");
-		FE_CORE_ASSERT(succes_3, "Failed to load Base3DCutout shading model");
-		FE_CORE_ASSERT(succes_4, "Failed to load Base3DBlend shading model");
+		//FE_CORE_ASSERT(succes_1, "Failed to load Base2DFlat shading model");
+		//FE_CORE_ASSERT(succes_2, "Failed to load Base3DOpaque shading model");
+		//FE_CORE_ASSERT(succes_3, "Failed to load Base3DCutout shading model");
+		//FE_CORE_ASSERT(succes_4, "Failed to load Base3DBlend shading model");
 
 		//BaseAssets.Materials.Default2DBatchFlat.Use().MakeMaterial(BaseAssets.ShadingModels.Base2DBatchFlat.Observe());
-		BaseAssets.Materials.DefaultOpaque.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DOpaque.Observe());
-		BaseAssets.Materials.DefaultCutout.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DCutout.Observe());
-		BaseAssets.Materials.DefaultTranslucent.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DBlend.Observe());
+		//BaseAssets.Materials.DefaultOpaque.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DOpaque.Observe());
+		//BaseAssets.Materials.DefaultCutout.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DCutout.Observe());
+		//BaseAssets.Materials.DefaultTranslucent.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DBlend.Observe());
 
-		UploadBaseAssetsToGPU(GetActiveGAPIType());
+		UploadBaseAssetsToGPU(GetActivePlatform());
 
 		FE_LOG_CORE_INFO("Base Assets acquired");
 	}
 
-	void Renderer::UploadBaseAssetsToGPU(GAPIType GAPI)
+	void Renderer::UploadBaseAssetsToGPU(Render::GAPI::Platform GAPI)
 	{
 		FE_PROFILER_FUNC();
 
@@ -126,9 +117,10 @@ namespace fe
 		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DBlend.Use());
 	}
 
-	void Renderer::SetAPI(GAPIType GAPI)
+	void Renderer::SetAPI(Render::GAPI::Platform GAPI)
 	{
 		FE_PROFILER_FUNC();
+		FE_CORE_ASSERT(false, "Not implemented");
 		
 		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
 		
@@ -142,18 +134,22 @@ namespace fe
 		GeometryRenderer::Init();
 	}
 
-	void Renderer::CreateAPI(GAPIType GAPI)
+	void Renderer::CreateAPI(Render::GAPI::Platform GAPI)
 	{
 		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(false, "Not implemented");
 
 		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) == s_DeviceAPIs.end(), "API already created!");
 
 		//s_DeviceAPIs[GAPI] = RenderCommands::CreateAPI(GAPI);
 	}
 
-	void Renderer::InitAPI(GAPIType GAPI)
+	void Renderer::InitAPI(Render::GAPI::Platform GAPI)
 	{
 		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(false, "Not implemented");
 
 		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
 
@@ -164,33 +160,35 @@ namespace fe
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		Command::PipelineState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
+		FE_CORE_ASSERT(false, "Not implemented");
+
+		//Command::PipelineState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
 	}
 
-	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer)
+	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, Render::GAPI::GID framebuffer)
 	{
-		Command::PipelineState::BindFramebuffer<GAPIType::OpenGL>(*(Resource::RFramebuffer_OpenGL*)&framebuffer);
+		FE_CORE_ASSERT(false, "Not implemented");
 
 		String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
-		auto attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
+		//auto attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
 
 		U32 clearing_val = NullEntityID;
 		Splice<U32> clearing_val_splice;
 		clearing_val_splice.Elements = &clearing_val;
 		clearing_val_splice.Count = 1;
-		framebuffer.ClearAttachment(attachment_index, clearing_val_splice);
+		//framebuffer.ClearAttachment(attachment_index, clearing_val_splice);
 
 		RenderScene(scene, camera, cameraTransform);
 	}
 
-	void Renderer::RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform)
+	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform)
 	{
 		FE_PROFILER_FUNC();
 
 		SceneData.Scene = scene.GetID();
 		SceneData.MainCamera = &camera;
 		SceneData.CameraTransform = cameraTransform;
-		auto& gameplay_world = scene.GetCoreComponent().GameplayWorld;
+		auto& gameplay_world = scene.Get<Scene::Core>().GameplayWorld;
 		auto main_light_enity = gameplay_world->GetEntityWithPrimaryDirectionalLight();
 		SceneData.MainLight = & main_light_enity.Get<CDirectionalLight>().DirectionalLight;
 
@@ -206,11 +204,13 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		Command::ResourceState::Clear_OpenGL();
+		FE_CORE_ASSERT(false, "Not implemented");
+
+		//Command::ResourceState::Clear_OpenGL();
 		
 		switch (s_ActiveGAPI.Value)
 		{
-		case GAPIType::OpenGL:
+		case Render::GAPI::Platform::OpenGL:
 			SceneData.VPMatrix = projection * glm::inverse(view);
 			break;
 		default:

@@ -6,6 +6,7 @@
 
 #include "FoolsEngine/Application/Project.h"
 
+#include "FoolsEngine/Scene/Scene.h"
 #include "FoolsEngine/Scene/Component.h"
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/Actor.h"
@@ -17,7 +18,7 @@
 
 namespace fe
 {
-	void SceneSerializerYAML::SerializeToFile(const AssetObserver<Scene>& scene)
+	void SceneSerializerYAML::SerializeToFile(const AssetObserver& scene)
 	{
 		YAML::Emitter emitter;
 
@@ -30,7 +31,7 @@ namespace fe
 		fout << emitter.c_str();
 	}
 
-	bool SceneSerializerYAML::DeserializeFromFile(const AssetUser<Scene>& scene)
+	bool SceneSerializerYAML::DeserializeFromFile(const AssetUser& scene)
 	{
 #ifdef FE_INTERNAL_BUILD
 		FE_PROFILER_SESSION_START("SceneLoading", "Logs/ProfileData_SceneLoading.json");
@@ -51,7 +52,7 @@ namespace fe
 		return true;
 	}
 
-	std::string SceneSerializerYAML::SerializeToString(const AssetObserver<Scene>& scene)
+	std::string SceneSerializerYAML::SerializeToString(const AssetObserver& scene)
 	{
 		YAML::Emitter emitter;
 
@@ -63,13 +64,13 @@ namespace fe
 		return out;
 	}
 
-	bool SceneSerializerYAML::DeserializeFromString(const AssetUser<Scene>& scene, const std::string& buffer)
+	bool SceneSerializerYAML::DeserializeFromString(const AssetUser& scene, const std::string& buffer)
 	{
 		YAML::Node node = YAML::Load(buffer);
 		return Deserialize(scene, node);
 	}
 	
-	void SceneSerializerYAML::Serialize(const AssetObserver<Scene>& scene, YAML::Emitter& emitter)
+	void SceneSerializerYAML::Serialize(const AssetObserver& scene, YAML::Emitter& emitter)
 	{
 		//Scene Properties
 		{
@@ -84,7 +85,7 @@ namespace fe
 
 			// Gameplay World
 			{
-				auto gameplay_world = scene.GetCoreComponent().GameplayWorld.get();
+				auto gameplay_world = scene.Get<Scene::Core>().GameplayWorld.get();
 				emitter << YAML::Key << "GameplayWorld" << YAML::Value << YAML::BeginMap;
 
 				{
@@ -291,7 +292,7 @@ namespace fe
 		emitter << YAML::Key << "FirstChild"      << YAML::Value << Entity(node.FirstChild, world);
 	}
 
-	bool SceneSerializerYAML::Deserialize(const AssetUser<Scene>& scene, YAML::Node& node)
+	bool SceneSerializerYAML::Deserialize(const AssetUser& scene, YAML::Node& node)
 	{
 		FE_PROFILER_FUNC();
 
@@ -326,7 +327,7 @@ namespace fe
 
 			auto gameplay_world_node = worlds["GameplayWorld"];
 			if (!gameplay_world_node) return false;
-			auto gameplay_world = scene.GetCoreComponent().GameplayWorld.get();
+			auto gameplay_world = scene.Get<Scene::Core>().GameplayWorld.get();
 			CEntityNode* root_entity_node_component;
 
 			// GameplayWorld Properties

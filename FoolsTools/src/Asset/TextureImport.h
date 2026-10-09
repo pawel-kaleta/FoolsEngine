@@ -8,8 +8,6 @@ namespace fe
 {
 	struct ImportData;
 
-	namespace Description::Texture { struct Archetype; }
-
 	namespace TextureImport
 	{
 		void RenderWindow(ImportData* importData);
@@ -18,8 +16,9 @@ namespace fe
 
 		struct Data
 		{
-			Description::Texture::Archetype Archetype;
-			uint32_t ArchetypeID;
+			Render::GAPI::Descriptors::TextureSpec Spec;
+			//Description::Texture::Archetype Archetype;
+			//uint32_t ArchetypeID;
 		};
 	};
 }

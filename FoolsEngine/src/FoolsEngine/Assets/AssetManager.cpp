@@ -9,7 +9,7 @@
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 namespace fe
@@ -147,16 +147,15 @@ namespace fe
 	template <typename tnAsset>
 	void Unload(AssetID id)
 	{
-		AssetUser<tnAsset> asset_user(id);
-		asset_user.Release();
-		asset_user.UnloadFromCPU();
+		FE_CORE_ASSERT(false, "Not implemented");
+		AssetUser asset_user(id);
 	}
 
 	void AssetManager::EvaluateAndReload()
 	{
 		FE_PROFILER_FUNC();
 
-		auto GAPI = Renderer::GetActiveGAPIType();
+		auto GAPI = Renderer::GetActivePlatform();
 		auto& reg = s_Instance->m_Registry;
 
 		auto& groups = s_Instance->m_LoadingGroups;
@@ -202,14 +201,14 @@ namespace fe
 			{
 			case AssetType::Texture2D:
 			{
-				auto texture_user = AssetUser<Texture2D>(id);
+				auto texture_user = AssetUser(id);
 				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);
 					FE_CORE_ASSERT(false, "not implemented");
 					//auto& texture = texture_user.CreateResource<GAPIType::OpenGL>().Texture;
 					//texture_user.SendDataToGPU(GAPI);
-					texture_user.UnloadFromCPU();
+					//texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}
 				else
@@ -220,32 +219,35 @@ namespace fe
 			}
 			case AssetType::Mesh:
 			{
-				auto mesh_user = AssetUser<Mesh>(id);
-				if (!mesh_user.GetBuffer())
-				{
-					GeometryLoader::LoadMesh(mesh_user);
-					mesh_user.SendDataToGPU(GAPI);
-					mesh_user.UnloadFromCPU();
-					mesh_user.FlagLoaded();
-				}
-				else
-				{
-					FE_LOG_CORE_WARN("Mesh allready loaded");
-				}
+				auto mesh_user = AssetUser(id);
+				FE_CORE_ASSERT(false, "not implemented");
+				//if (!mesh_user.GetBuffer())
+				//{
+				//	GeometryLoader::LoadMesh(mesh_user);
+				//	mesh_user.SendDataToGPU(GAPI);
+				//	mesh_user.UnloadFromCPU();
+				//	mesh_user.FlagLoaded();
+				//}
+				//else
+				//{
+				//	FE_LOG_CORE_WARN("Mesh allready loaded");
+				//}
 				break;
 			}
 			case AssetType::Material:
 			{
-				auto material_user = AssetUser<Material>(id);
-				material_user.SendDataToGPU(GAPI);
+				FE_CORE_ASSERT(false, "not implemented");
+				auto material_user = AssetUser(id);
+				//material_user.SendDataToGPU(GAPI);
 				material_user.FlagLoaded();
 				break;
 			}
 			case AssetType::Model:
 			{
-				auto model_user = AssetUser<Model>(id);
+				FE_CORE_ASSERT(false, "not implemented");
+				auto model_user = AssetUser(id);
 				GeometryLoader::LoadModel(model_user);
-				model_user.SendDataToGPU(GAPI);
+				//model_user.SendDataToGPU(GAPI);
 				model_user.FlagLoaded();
 				break;
 			}

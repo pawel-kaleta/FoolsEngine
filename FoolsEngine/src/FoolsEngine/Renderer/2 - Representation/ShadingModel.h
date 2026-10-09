@@ -9,13 +9,13 @@
 
 namespace YAML { class Emitter; }
 
-namespace fe::Render::Representation
+namespace fe
 {
 	struct ACMaterial_Core;
 
 	struct ACShadingModel_Core final : public AssetComponent
 	{
-		GAPI::Raster::Specification mRasterSpec;
+		Render::GAPI::Raster::Specification mRasterSpec;
 		Splice<Byte> mDefaultParamsData;
 		Splice<Byte> mConstantsData;
 		Splice<AssetID> mShaders;
@@ -43,27 +43,10 @@ namespace fe::Render::Representation
 		}
 	};
 
-	template <GAPI::Platform::ValueType tPlatform>
+	template <Render::GAPI::Platform::ValueType tPlatform>
 	struct ACShadingModel_GID final : public AssetComponent
 	{
-		GAPI::GID mPipelineGID;
-	};
-
-	class ShadingModelObserver : public AssetInterface
-	{
-	public:
-		const ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
-	protected:
-		ShadingModelObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
-	};
-
-	class ShadingModelUser : public ShadingModelObserver
-	{
-	public:
-		ACShadingModel_Core& GetCore() const { return Get<ACShadingModel_Core>(); }
-
-	protected:
-		ShadingModelUser(ECS_AssetHandle ECS_handle) : ShadingModelObserver(ECS_handle) {}
+		Render::GAPI::GID mPipelineGID;
 	};
 
 	class ShadingModel : public Asset
@@ -74,8 +57,6 @@ namespace fe::Render::Representation
 
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShadingModel_Core>(assetID).Init(); }
 
-		using User = ShadingModelUser;
-		using Observer = ShadingModelObserver;
 		using Core = ACShadingModel_Core;
 	};
 }

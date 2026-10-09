@@ -23,10 +23,11 @@ namespace fe
 
 			auto assetID = AssetManager::AssetCreation::ProjectAsset<Material>(new_asset_relative_path);
 
-			AssetUser<Material>(assetID).MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
+			FE_CORE_ASSERT(false, "Not implemented");
+			//AssetUser<Material>(assetID).MakeMaterial(Renderer::BaseAssets.ShadingModels.Base3DOpaque.Observe());
 			YAML::Emitter emitter;
-			Material::SaveMetadata(emitter, assetID);
-			std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver<Material>(assetID).GetFilepath());
+			//Material::SaveMetadata(emitter, assetID);
+			std::ofstream fout(Project::Get()->m_AssetsPath / AssetObserver(assetID).GetFilepath());
 			fout << emitter.c_str();
 		}
 	}

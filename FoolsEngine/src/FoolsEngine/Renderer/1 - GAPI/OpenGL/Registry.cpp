@@ -12,7 +12,6 @@ namespace fe::Render::GAPI::OpenGL
 	Registry<TextureView> TextureViewRegistry;
 	Registry<Shader> ShaderRegistry;
 	Registry<Region> RegionRegistry;
-	Registry<Region> RegionRegistry;
 	Registry<DownStream> DownStreamRegistry;
 
 	void CreateRegistries()

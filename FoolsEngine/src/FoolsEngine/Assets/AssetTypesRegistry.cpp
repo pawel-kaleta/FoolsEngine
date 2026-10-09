@@ -31,11 +31,13 @@ namespace fe
 	template <typename tnAsset>
 	void AssetTypesRegistry::RegisterAssetType()
 	{
+		FE_CORE_ASSERT(false, "Not implemented");
+
 		m_Items.push_back(
 			Item{
 				&tnAsset::EmplaceCore,
-				&tnAsset::LoadMetadata,
-				&tnAsset::SaveMetadata,
+				nullptr,//&tnAsset::LoadMetadata,
+				nullptr,//&tnAsset::SaveMetadata,
 				tnAsset::GetMetaFileExtension(),
 				tnAsset::GetTypeStatic().ToConstCharPtr(),
 				tnAsset::GetTypeStatic()

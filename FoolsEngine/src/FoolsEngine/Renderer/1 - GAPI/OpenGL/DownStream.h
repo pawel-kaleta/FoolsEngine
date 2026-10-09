@@ -2,7 +2,6 @@
 
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
-
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "Buffer.h"
 
@@ -12,7 +11,7 @@
 
 namespace fe::Render::GAPI::OpenGL
 {
-	struct DownStream : Stream
+	struct DownStream : public Stream
 	{
 		constexpr static ObjType Type = ObjType::DownStream;
 
@@ -213,7 +212,7 @@ namespace fe::Render::GAPI::OpenGL
 					chunks_arena.Buffer = new_arena_buffer;
 				}
 
-				auto& chunk_ptr = * mBackFences->mFencesChunks.PushBack();
+				auto& chunk_ptr = * mBackFences->mFencesChunks.EmplaceBack();
 				chunk_ptr = Context::Allocators::Default->Allocate<Fence, 64>();
 			}
 

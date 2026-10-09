@@ -2,6 +2,8 @@
 
 #include "Context.h"
 
+#include <numeric>
+
 namespace fe::Render::GAPI
 {
 	GID		CreateDownStream();

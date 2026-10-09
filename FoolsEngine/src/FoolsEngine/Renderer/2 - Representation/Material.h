@@ -10,7 +10,7 @@
 
 namespace YAML { class Emitter; class Node; }
 
-namespace fe::Render::Representation
+namespace fe
 {
 	FE_DECLARE_ENUM(AlphaMode, Opaque, Cutout, Blend);
 
@@ -33,24 +33,6 @@ namespace fe::Render::Representation
 		}
 	};
 
-	class MaterialObserver : public AssetInterface
-	{
-	public:
-		const ACMaterial_Core& GetCore() const { return Get<ACMaterial_Core>(); }
-
-	protected:
-		MaterialObserver(ECS_AssetHandle ECS_handle) : AssetInterface(ECS_handle) {}
-	};
-	
-	class MaterialUser : public MaterialObserver
-	{
-	public:
-		ACMaterial_Core& GetCore() const { return Get<ACMaterial_Core>(); }
-
-	protected:
-		MaterialUser(ECS_AssetHandle ECS_handle) : MaterialObserver(ECS_handle) {}
-	};
-
 	class Material : public Asset
 	{
 	public:
@@ -59,8 +41,6 @@ namespace fe::Render::Representation
 
 		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMaterial_Core>(assetID).Init(); }
 
-		using User = MaterialUser;
-		using Observer = MaterialObserver;
 		using Core = ACMaterial_Core;
 	};
 }

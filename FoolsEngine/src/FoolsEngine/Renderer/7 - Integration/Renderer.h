@@ -4,44 +4,36 @@
 
 #include "FoolsEngine/Assets/AssetHandle.h"
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/5 - Representation/Mesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/5 - Representation/Lights.h"
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Representation/RenderMesh.h"
-#include "FoolsEngine/Renderer/5 - Representation/ShadingModel.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/2 - Representation/Lights.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
+#include "FoolsEngine/Renderer/2 - Representation/RenderMesh.h"
+#include "FoolsEngine/Renderer/2 - Representation/ShadingModel.h"
 
 namespace fe
 {
-	namespace Resource { struct FramebufferBase; }
-	class Scene;
-	class Camera;
-
-	template <class tAssetType>
-	class AssetHandle;
-
-	template <class tAssetType>
-	class AssetObserver;
+	namespace Render::Representation { class Camera; }
 
 	class Renderer
 	{
 	public:
-		const static GAPIType GetActiveGAPIType() { return s_ActiveGAPI; }
+		const static Render::GAPI::Platform GetActivePlatform() { return s_ActiveGAPI; }
 
 		static void Startup();
 		static void AcquireBaseAssets();
-		static void UploadBaseAssetsToGPU(GAPIType GAPI);
+		static void UploadBaseAssetsToGPU(Render::GAPI::Platform GAPI);
 		static void Shutdown();
-		static void SetAPI(GAPIType GAPI);
-		static void CreateAPI(GAPIType GAPI);
-		static void InitAPI(GAPIType GAPI);
+		static void SetAPI(Render::GAPI::Platform GAPI);
+		static void CreateAPI(Render::GAPI::Platform GAPI);
+		static void InitAPI(Render::GAPI::Platform GAPI);
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
-		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform);
-		static void RenderScene(const AssetObserver<Scene>& scene, const Camera& camera, const Transform& cameraTransform, Resource::FramebufferBase& framebuffer);
+		static void RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform);
+		static void RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, Render::GAPI::GID framebuffer);
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();
@@ -72,15 +64,15 @@ namespace fe
 		static struct SceneData
 		{
 			glm::mat4 VPMatrix;
-			DirectionalLight* MainLight;
+			Render::Representation::DirectionalLight* MainLight;
 			glm::vec3 AmbientLight;
 			float AmbientLightIntensity;
-			const Camera* MainCamera;
+			const Render::Representation::Camera* MainCamera;
 			Transform CameraTransform;
 			AssetID Scene;
 		} SceneData;
 
 	private:
-		static GAPIType s_ActiveGAPI;
+		static Render::GAPI::Platform s_ActiveGAPI;
 	};
 }

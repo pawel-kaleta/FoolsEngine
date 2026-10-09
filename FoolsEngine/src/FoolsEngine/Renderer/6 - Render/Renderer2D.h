@@ -6,16 +6,12 @@
 
 #include "FoolsEngine/Assets/AssetHandle.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/RMeshBindings.h"
-#include "FoolsEngine/Renderer/2 - Resource/RStaticBuffer.h"
-#include "FoolsEngine/Renderer/5 - Representation/Shader.h"
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Shader.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 
 namespace fe
 {
-	class Scene;
 	class Entity;
-	namespace Resource { struct FramebufferBase; }
 	class Camera;
 
 	using AssetID = uint32_t;
@@ -40,7 +36,7 @@ namespace fe
 			AssetHandle<Texture2D> Texture; // FlatWhite
 		};
 
-		static void RenderScene(const AssetObserver<Scene>& scene);
+		static void RenderScene(const AssetObserver& scene);
 
 	private:
 		friend class Renderer;
@@ -78,16 +74,16 @@ namespace fe
 			uint32_t TexturesCount = 1;
 		};
 
-		Ref<Resource::StaticBufferBase> m_QuadVertexBuffer;
-		Ref<Resource::StaticBufferBase> m_QuadIndexBuffer;
-		Ref<Resource::MeshBindingsBase> m_VertexArray;
+		//Ref<Resource::StaticBufferBase> m_QuadVertexBuffer;
+		//Ref<Resource::StaticBufferBase> m_QuadIndexBuffer;
+		//Ref<Resource::MeshBindingsBase> m_VertexArray;
 		//Ref<VertexBuffer> m_QuadVertexBuffer;
 
 		BatchData m_Batch;
 
 		AssetHandle<Shader> m_BaseShader;
 		//ShaderTextureSlot m_BaseShaderTextureSlot;
-		RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
+		//RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 
 		static Renderer2D* s_Instance;
 

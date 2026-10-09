@@ -27,8 +27,8 @@ namespace fe
 		ToolbarButton m_ClickedButton = ToolbarButton::None;
 		EditorState m_EditorState;
 
-		EditorAssetHandle<Texture2D> m_IconPlay;
-		EditorAssetHandle<Texture2D> m_IconPause;
-		EditorAssetHandle<Texture2D> m_IconStop;
+		EditorAssetHandle m_IconPlay;
+		EditorAssetHandle m_IconPause;
+		EditorAssetHandle m_IconStop;
 	};
 }

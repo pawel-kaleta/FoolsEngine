@@ -8,7 +8,7 @@
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 
-namespace fe::Render::Representation
+namespace fe::Render
 {
 	class TextureAllocator
 	{

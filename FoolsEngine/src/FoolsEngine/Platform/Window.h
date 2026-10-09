@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
 namespace fe
 {
@@ -16,12 +16,12 @@ namespace fe
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
-		GAPIType GAPI;
+		Render::GAPI::Platform GAPI;
 
 		WindowAttributes(const std::string& title = "FoolsEngine",
 		                 uint32_t width = 1600,
 		                 uint32_t height = 900,
-			             GAPIType GAPI = GAPIType::OpenGL)
+						 Render::GAPI::Platform GAPI = Render::GAPI::Platform::OpenGL)
 			: Title(title), Width(width), Height(height), GAPI(GAPI)
 		{ }
 	};
@@ -43,6 +43,6 @@ namespace fe
 
 		virtual void* GetNativeWindow() const = 0;
 
-		GAPIType m_GAPI = GAPIType::None;
+		Render::GAPI::Platform m_GAPI = Render::GAPI::Platform::None;
 	};
 }

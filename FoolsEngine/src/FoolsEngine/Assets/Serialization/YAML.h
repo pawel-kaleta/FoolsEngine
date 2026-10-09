@@ -106,7 +106,7 @@ namespace YAML
 		static Node encode(const glm::vec<count, tType>& rhs)
 		{
 			Node node;
-			for (UInt i=0; i<count; i++)
+			for (fe::UInt i=0; i<count; i++)
 				node.push_back(rhs[i]);
 			node.SetStyle(EmitterStyle::Flow);
 			return node;

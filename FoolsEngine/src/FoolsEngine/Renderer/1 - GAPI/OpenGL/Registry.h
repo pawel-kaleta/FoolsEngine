@@ -13,32 +13,12 @@
 #include "Texture.h"
 #include "DownStream.h"
 #include "Buffer.h"
-
-#include <cstring>
+#include "InternalID.h"
 
 #include <glad/gl.h>
 
 namespace fe::Render::GAPI::OpenGL
 {
-	union InternalID
-	{
-		InternalID() : mGID() {};
-		InternalID(GID gid) : mGID(gid) {}
-		operator GID() { return mGID; }
-		GID mGID;
-		struct
-		{
-			U08 Type;
-			U08 Generation;
-			U16 RegIndex;
-		} mComps;
-	};
-
-	ObjType GetObjType(GID obj)
-	{
-		return (ObjType::ValueType)(InternalID(obj).mComps.Type);
-	}
-
 	template <typename tObj>
 	struct Registry
 	{
@@ -114,7 +94,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 
 			// allocate new chunk arrays for objs and generations
-			auto new_chunk = mChunks.PushBack();
+			auto new_chunk = mChunks.EmplaceBack();
 			new_chunk->Objs = mAllocMain->Allocate<tObj, 64>();
 			new_chunk->Generations = mAllocMain->Allocate<U08, 64>();
 			
@@ -168,8 +148,7 @@ namespace fe::Render::GAPI::OpenGL
 	extern Registry<TextureView> TextureViewRegistry;
 	extern Registry<Shader> ShaderRegistry;
 	extern Registry<Region> RegionRegistry;
-	extern Registry<Region> RegionRegistry;
 	extern Registry<DownStream> DownStreamRegistry;
 
-	void CreateRegistries();
+	extern void CreateRegistries();
 }

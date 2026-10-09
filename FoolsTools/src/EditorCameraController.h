@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Platform/Events/Event.h"
-#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/2 - Representation/Camera.h"
 #include "FoolsEngine/Foundation/Math/Transform.h"
 
 namespace fe
@@ -18,8 +18,8 @@ namespace fe
 		float SetZoomLevel(float lvl) { m_Camera.SetOrthographicZoom(lvl); }
 		void Resize(float width, float hight);
 		
-		      Camera&    GetCamera()          { return m_Camera; }
-		const Camera&    GetCamera()    const { return m_Camera; }
+		      Render::Representation::Camera&    GetCamera()          { return m_Camera; }
+		const Render::Representation::Camera&    GetCamera()    const { return m_Camera; }
 		      Transform& GetTransform()       { return m_Transform; }
 		const Transform& GetTransform() const { return m_Transform; }
 
@@ -31,7 +31,7 @@ namespace fe
 		void RenderWidget();
 
 	private:
-		Camera m_Camera;
+		Render::Representation::Camera m_Camera;
 		Transform m_Transform;
 
 		float m_RotationSpeed = 30.0f;

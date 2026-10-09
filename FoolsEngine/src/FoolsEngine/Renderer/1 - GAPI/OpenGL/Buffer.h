@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "InternalID.h"
 
 #include <glad/gl.h>
 

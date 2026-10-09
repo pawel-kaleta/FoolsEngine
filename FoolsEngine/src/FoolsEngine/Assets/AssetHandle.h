@@ -92,8 +92,8 @@ namespace fe
 			Init();
 		}
 
-		AssetObserver<tnAsset> Observe() const { return AssetObserver<tnAsset>(GetECSHandle()); }
-		AssetUser    <tnAsset> Use()     const { return AssetUser    <tnAsset>(GetECSHandle()); }
+		AssetObserver Observe() const { return AssetObserver(GetECSHandle()); }
+		AssetUser     Use()     const { return AssetUser    (GetECSHandle()); }
 
 	private:
 		ECS_AssetHandle GetECSHandle() const { return ECS_AssetHandle(AssetManager::Get().m_Registry, m_ID); };

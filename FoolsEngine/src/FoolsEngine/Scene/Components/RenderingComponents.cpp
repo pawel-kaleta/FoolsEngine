@@ -36,7 +36,7 @@ namespace fe
 				if (ImGui::Selectable(projection_type_strings[i], isSelected))
 				{
 					current_projection_type_string = projection_type_strings[i];
-					Camera::ProjectionType type;
+					Render::Representation::Camera::ProjectionType type;
 					type.FromInt(i);
 					Camera.SetProjectionType(type);
 				}
@@ -48,7 +48,7 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		if (Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
+		if (Camera.m_ProjectionType == Render::Representation::Camera::ProjectionType::Perspective)
 		{
 			const auto& data = Camera.m_PerspectiveData;
 			float fov = glm::degrees(data.m_FOV);
@@ -113,7 +113,7 @@ namespace fe
 		data_orto.m_FarClip = data["OrthographicFar"].as<float>();
 		data_orto.m_Zoom = data["OrthographicZoom"].as<float>();
 
-		Camera::ProjectionType projection;
+		Render::Representation::Camera::ProjectionType projection;
 		projection.FromString(data["ProjectionType"].as<std::string>());
 		Camera.SetProjectionType(projection);
 	}

@@ -8,16 +8,12 @@
 #include "FoolsEngine/Scene/Components/RenderingComponents.h"
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
-#include "FoolsEngine/Renderer/1 - Description/Library.h"
-#include "FoolsEngine/Renderer/1 - Description/GAPIType.h"
-#include "FoolsEngine/Renderer/2 - Resource/RFramebuffer.h"
-#include "FoolsEngine/Renderer/3 - Command/Render.h"
-#include "FoolsEngine/Renderer/3 - Command/PipelineState.h"
-#include "FoolsEngine/Renderer/3 - Command/ResourceState.h"
-#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
-#include "FoolsEngine/Renderer/5 - Representation/Texture.h"
-#include "FoolsEngine/Renderer/5 - Representation/Material.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/2 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
 #include <glad/gl.h>
@@ -39,15 +35,15 @@ namespace fe
 
 		Scratchpad sp;
 
-		s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
-		s_Instance->m_QuadVertexBuffer->Create();
-
-		uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.Count;
-		auto& layout = *Description::Library::Get().BufferLayouts.PushBack();
-
-		layout.Type = Description::Buffer::LayoutType::Vertex;
 		FE_CORE_ASSERT(false, "not implemented");
+		//s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
+		//s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
+		//s_Instance->m_QuadVertexBuffer->Create();
+		//
+		//uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.Count;
+		//auto& layout = *Description::Library::Get().BufferLayouts.PushBack();
+		//
+		//layout.Type = Description::Buffer::LayoutType::Vertex;
 		//layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");
 		//layout.Elements.emplace_back(Description::Data::Type::Float4, "a_Color");
 		//layout.Elements.emplace_back(Description::Data::Type::Float2, "a_TexCoord");
@@ -55,7 +51,7 @@ namespace fe
 		//layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_TextureSampler");
 		//layout.Elements.emplace_back(Description::Data::Type::UInt,   "a_EntityID");
 
-		layout.CalculateOffsetsAndStride();
+		//layout.CalculateOffsetsAndStride();
 
 		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
@@ -76,25 +72,25 @@ namespace fe
 			}
 		}
 
-		s_Instance->m_QuadIndexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
-		s_Instance->m_QuadIndexBuffer->Create();
+		//s_Instance->m_QuadIndexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
+		//s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
+		//s_Instance->m_QuadIndexBuffer->Create();
 		FE_CORE_ASSERT(false, "not implemented");
 		//s_Instance->m_QuadIndexBuffer->Replace(ConstLimits::MaxIndices, quad_indices->data());
 
-		s_Instance->m_VertexArray.reset(new Resource::RMeshBindings_OpenGL());
-		s_Instance->m_VertexArray->LayoutID = layoutID;
-		s_Instance->m_VertexArray->Create();
-		s_Instance->m_VertexArray->BindIndexData(*s_Instance->m_QuadIndexBuffer, 0, 0);
-		s_Instance->m_VertexArray->BindVertexData(*s_Instance->m_QuadVertexBuffer, 0);
+		//s_Instance->m_VertexArray.reset(new Resource::RMeshBindings_OpenGL());
+		//s_Instance->m_VertexArray->LayoutID = layoutID;
+		//s_Instance->m_VertexArray->Create();
+		//s_Instance->m_VertexArray->BindIndexData(*s_Instance->m_QuadIndexBuffer, 0, 0);
+		//s_Instance->m_VertexArray->BindVertexData(*s_Instance->m_QuadVertexBuffer, 0);
 
 		//s_Instance.m_BaseShader = Renderer::BaseAssets.Shaders.Base2D;
 		// moved to Renderer::AcquireBaseAssets()
 		// to do: fix this bad architecture
 
 		//s_Instance->m_BaseShaderTextureSlot = ShaderTextureSlot("u_Texture", Description::Texture::Type::Texture2D, 32);
-		for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
-			s_Instance->m_BaseShaderSamplers[i] = i;
+		//for (unsigned int i = 0; i < ConstLimits::RendererTextureSlotsCount; i++)
+		//	s_Instance->m_BaseShaderSamplers[i] = i;
 
 		//s_Instance.m_Batch.Textures[0] = Renderer::BaseAssets.Textures.FlatWhite.GetID();
 		// moved to Renderer::AcquireBaseAssets()
@@ -111,9 +107,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Command::PipelineState::SetDepthTest<GAPIType::OpenGL>(true);
+		//Command::PipelineState::SetDepthTest<GAPIType::OpenGL>(true);
 
-		auto GAPI = Renderer::GetActiveGAPIType();
+		auto GAPI = Renderer::GetActivePlatform();
 
 		ClearBatch();
 
@@ -146,13 +142,13 @@ namespace fe
 		m_Batch.QuadVeriticesIt = m_Batch.QuadVertices->begin();
 	}
 
-	void Renderer2D::RenderScene(const AssetObserver<Scene>& scene)
+	void Renderer2D::RenderScene(const AssetObserver& scene)
 	{
 		FE_PROFILER_FUNC();
 
 		s_Instance->BeginScene();
 
-		auto& registry = scene.GetCoreComponent().GameplayWorld->m_Registry;
+		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
 		auto view_tiles = registry.view<CTile, CTransformGlobal>();
 
@@ -239,8 +235,8 @@ namespace fe
 		float aspect_ratio;
 		{
 			auto texture_observer = quad.Texture.Observe();
-			auto& spec = texture_observer.GetCore().Specification;
-			aspect_ratio = (float)spec.Height / (float)spec.Width;
+			auto& spec = texture_observer.Get<Texture2D::Core>().mSpecification;
+			aspect_ratio = (float)spec.mDimentions.x / (float)spec.mDimentions.y;
 		}
 
 		constexpr glm::vec4 quad_vertex_positions[] = {
@@ -288,20 +284,21 @@ namespace fe
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_QuadVertexBuffer->Update(data_size, m_Batch.QuadVertices->data());
 
-		auto GAPI = Renderer::GetActiveGAPIType();
+		auto GAPI = Renderer::GetActivePlatform();
 
 		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{
-			auto user = AssetUser<Texture2D>(m_Batch.Textures[i]);
+			auto user = AssetUser(m_Batch.Textures[i]);
 			FE_CORE_ASSERT(false, "not implemented");
 			//auto texture_resource = user.GetResource<GAPIType::OpenGL>().Texture;
 			//Command::PipelineState::BindTextureToRendererTextureSlot<GAPIType::OpenGL>(i, texture_resource);
 		}
 
-		m_VertexArray->IndexCount = m_Batch.QuadIndexCount;
-		Command::PipelineState::BindMeshBindings_OpenGL(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
-
-		Command::Render::DrawIndexed(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
+		FE_CORE_ASSERT(false, "not implemented");
+		//m_VertexArray->IndexCount = m_Batch.QuadIndexCount;
+		//Command::PipelineState::BindMeshBindings_OpenGL(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
+		//
+		//Command::Render::DrawIndexed(*(Resource::RMeshBindings_OpenGL*)&*m_VertexArray);
 
 		m_Stats.Quads += m_Batch.QuadIndexCount / 3 / 2;
 		m_Stats.DrawCalls++;

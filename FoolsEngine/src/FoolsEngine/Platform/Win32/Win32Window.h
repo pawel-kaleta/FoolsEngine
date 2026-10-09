@@ -2,8 +2,6 @@
 
 #include "FoolsEngine/Platform/Window.h"
 
-#include "FoolsEngine/Renderer/2 - Resource/RFrameBuffer.h"
-
 struct GLFWwindow;
 
 namespace fe

@@ -5,53 +5,49 @@
 
 namespace fe
 {
-
-	template <typename tnAsset>
-	class EditorAssetHandle : public tnAsset::User
+	class EditorAssetHandle : public AssetInterface
 	{
 	public:
-		static_assert(std::is_base_of_v<Asset, tnAsset>, "This is not an asset!");
-
 		EditorAssetHandle() :
-			tnAsset::User(ECS_AssetHandle())
+			AssetInterface(ECS_AssetHandle())
 		{ };
 		~EditorAssetHandle() {}
 
 		EditorAssetHandle(ECS_AssetHandle assetHandle) :
-			tnAsset::User(assetHandle)
+			AssetInterface(assetHandle)
 		{ };
 		EditorAssetHandle(AssetID assetID) :
-			tnAsset::User(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
+			AssetInterface(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
 		{ };
 
 		EditorAssetHandle(const EditorAssetHandle& other) :
-			tnAsset::User(other.m_ECSHandle)
+			AssetInterface(other.m_ECSHandle)
 		{ };
 		EditorAssetHandle(EditorAssetHandle&& other) noexcept :
-			tnAsset::User(other.m_ECSHandle)
+			AssetInterface(other.m_ECSHandle)
 		{
 			other.m_ECSHandle = ECS_AssetHandle();
 		};
 
 		EditorAssetHandle& operator=(const EditorAssetHandle& other)
 		{
-			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
+			AssetInterface::m_ECSHandle = other.m_ECSHandle;
 			return *this;
 		}
 		EditorAssetHandle& operator=(EditorAssetHandle&& other) noexcept
 		{
-			tnAsset::User::m_ECSHandle = other.m_ECSHandle;
+			AssetInterface::m_ECSHandle = other.m_ECSHandle;
 			other.m_ECSHandle = ECS_AssetHandle();
 
 			return *this;
 		}
 
-		static AssetType GetTypeStatic() { return tnAsset::GetTypeStatic(); }
+		static AssetType GetTypeStatic() { return GetTypeStatic(); }
 
-		// this is castable to AssetObserver<tnAsset>& and AssetUser<tnAsset>&, as all 3 are empty wrappers around AssetInterface
+		// this is castable to AssetObserver& and AssetUser&, as all 3 are empty wrappers around AssetInterface
 		// note the refs!
 		// don't let it die as one of those (automated reference casting)
-		operator const AssetUser<tnAsset>& ()     { return *reinterpret_cast<AssetUser<tnAsset>*>(this); }
-		operator const AssetObserver<tnAsset>& () { return *reinterpret_cast<AssetObserver<tnAsset>*>(this); }
+		operator const AssetUser& ()     { return *reinterpret_cast<AssetUser*>(this); }
+		operator const AssetObserver& () { return *reinterpret_cast<AssetObserver*>(this); }
 	};
 }

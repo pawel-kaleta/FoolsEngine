@@ -3,7 +3,9 @@
 
 #include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine/Renderer/1 - Description/Buffer.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
+
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -83,31 +85,31 @@ namespace fe
 		return scene;
 	}
 	
-	void GeometryLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser<Mesh>& meshUser)
+	void GeometryLoader::LoadMesh(const std::filesystem::path& sourceFilePath, AssetUser& meshUser)
 	{
 		FE_PROFILER_FUNC();
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile((Project::Get()->m_AssetsPath / sourceFilePath).string().c_str(), s_assimp_load_flags);
 
-		auto& mesh_core_component = meshUser.GetCore();
+		auto& mesh_core_component = meshUser.Get<Mesh::Core>();
 
-		auto& data_location = mesh_core_component.Data;
-		if (data_location.Elements)
-		{
-			FE_LOG_CORE_WARN("Reloading mesh");
-			delete data_location.Elements;
-		}
-
-		auto& spec = mesh_core_component.Specification;
-		
 		FE_CORE_ASSERT(false, "Not implemented");
+		//auto& data_location = mesh_core_component.Data;
+		//if (data_location.Elements)
+		//{
+		//	FE_LOG_CORE_WARN("Reloading mesh");
+		//	delete data_location.Elements;
+		//}
+
+		//auto& spec = mesh_core_component.Specification;
+		
 		//data_location = (void*) new float[mesh_core_component.DataSize() / sizeof(float)];
 		//auto last = (float*)data_location + (mesh_core_component.DataSize() / sizeof(float));
 		//uint32_t* first_index = (uint32_t*)data_location;
 		uint32_t* index_ptr;// = (uint32_t*)data_location;
-		Description::Buffer::Vertex* first_vertex_ptr;// = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
-		Description::Buffer::Vertex* vertex_ptr;// = first_vertex_ptr;
+		Render::Representation::Vertex* first_vertex_ptr;// = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
+		Render::Representation::Vertex* vertex_ptr;// = first_vertex_ptr;
 
 		uint32_t index_offset = 0;
 
@@ -120,30 +122,29 @@ namespace fe
 			{
 				auto& vertex = *vertex_ptr;
 
-				vertex.Position.x = assimp_mesh->mVertices[i].x;
-				vertex.Position.y = assimp_mesh->mVertices[i].y;
-				vertex.Position.z = assimp_mesh->mVertices[i].z;
+				vertex.Position_x = assimp_mesh->mVertices[i].x;
+				vertex.Position_y = assimp_mesh->mVertices[i].y;
+				vertex.Position_z = assimp_mesh->mVertices[i].z;
 
-				vertex.Normal.x = assimp_mesh->mNormals[i].x;
-				vertex.Normal.y = assimp_mesh->mNormals[i].y;
-				vertex.Normal.z = assimp_mesh->mNormals[i].z;
+				vertex.Normal_x = assimp_mesh->mNormals[i].x;
+				vertex.Normal_y = assimp_mesh->mNormals[i].y;
+				vertex.Normal_z = assimp_mesh->mNormals[i].z;
 
-				vertex.Tangent.x = assimp_mesh->mTangents[i].x;
-				vertex.Tangent.y = assimp_mesh->mTangents[i].y;
-				vertex.Tangent.z = assimp_mesh->mTangents[i].z;
+				vertex.Tangent_x = assimp_mesh->mTangents[i].x;
+				vertex.Tangent_y = assimp_mesh->mTangents[i].y;
+				vertex.Tangent_z = assimp_mesh->mTangents[i].z;
 
-				vertex.UV0.x = assimp_mesh->mTextureCoords[0][i].x;
-				vertex.UV0.y = assimp_mesh->mTextureCoords[0][i].y;
+				vertex.UV_x = assimp_mesh->mTextureCoords[0][i].x;
+				vertex.UV_y = assimp_mesh->mTextureCoords[0][i].y;
 
 				if (sndUV)
 				{
-					vertex.UV1.x = assimp_mesh->mTextureCoords[1][i].x;
-					vertex.UV1.y = assimp_mesh->mTextureCoords[1][i].y;
+					//vertex.UV1.x = assimp_mesh->mTextureCoords[1][i].x;
+					//vertex.UV1.y = assimp_mesh->mTextureCoords[1][i].y;
 				}
 				else
 				{
-					vertex.UV1.x = assimp_mesh->mTextureCoords[0][i].x;
-					vertex.UV1.y = assimp_mesh->mTextureCoords[0][i].y;
+					
 				}
 
 				vertex_ptr++;
@@ -165,7 +166,7 @@ namespace fe
 		return;
 	}
 
-	void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser<Model>& modelUser)
+	void GeometryLoader::LoadModel(const std::filesystem::path& sourceFilePath, AssetUser& modelUser)
 	{
 		FE_PROFILER_FUNC();
 
@@ -175,28 +176,27 @@ namespace fe
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(direct_path.string().c_str(), s_assimp_load_flags);
 
-		const auto& render_meshes = modelUser.GetCore().RenderMeshIDs;
+		const auto& render_meshes = modelUser.Get<Model::Core>().mRenderMeshIDs;
 
-		for (size_t i = 0; i < render_meshes.size(); i++)
+		for (size_t i = 0; i < render_meshes.Count; i++)
 		{
-			auto mesh_id = AssetObserver<RenderMesh>(render_meshes[i]).GetCore().MeshID;
-			AssetUser<Mesh> mesh_user(mesh_id);
+			auto mesh_id = AssetObserver(render_meshes[i]).Get<RenderMesh::Core>().mMeshID;
+			AssetUser mesh_user(mesh_id);
 
-			auto& core = mesh_user.GetCore();
+			auto& core = mesh_user.Get<Mesh::Core>();
 
-			auto& data_location = core.Data;
-			if (data_location.Elements)
-			{
-				FE_LOG_CORE_WARN("Reloading mesh");
-				delete[] data_location.Elements;
-			}
-
-			auto& spec = core.Specification;
+			FE_CORE_ASSERT(false, "Not implemented");
+			//auto& data_location = core.Data;
+			//if (data_location.Elements)
+			//{
+			//	FE_LOG_CORE_WARN("Reloading mesh");
+			//	delete[] data_location.Elements;
+			//}
 
 			//data_location = (void*) new float[core.DataSize() / sizeof(float)];
 
 			uint32_t* index_ptr;// = (uint32_t*)data_location;
-			Description::Buffer::Vertex* vertex_ptr = (Description::Buffer::Vertex*)(index_ptr + spec.IndexCount);
+			Render::Representation::Vertex* vertex_ptr = (Render::Representation::Vertex*)(index_ptr + core.mIndexCount);
 
 			auto& assimp_mesh = scene->mMeshes[i];
 			bool sndUV = assimp_mesh->GetNumUVChannels() > 1;
@@ -205,30 +205,28 @@ namespace fe
 			{
 				auto& vertex = *vertex_ptr;
 
-				vertex.Position.x = assimp_mesh->mVertices[j].x;
-				vertex.Position.y = assimp_mesh->mVertices[j].y;
-				vertex.Position.z = assimp_mesh->mVertices[j].z;
+				vertex.Position_x = assimp_mesh->mVertices[j].x;
+				vertex.Position_y = assimp_mesh->mVertices[j].y;
+				vertex.Position_z = assimp_mesh->mVertices[j].z;
 
-				vertex.Normal.x = assimp_mesh->mNormals[j].x;
-				vertex.Normal.y = assimp_mesh->mNormals[j].y;
-				vertex.Normal.z = assimp_mesh->mNormals[j].z;
+				vertex.Normal_x = assimp_mesh->mNormals[j].x;
+				vertex.Normal_y = assimp_mesh->mNormals[j].y;
+				vertex.Normal_z = assimp_mesh->mNormals[j].z;
 
-				vertex.Tangent.x = assimp_mesh->mTangents[j].x;
-				vertex.Tangent.y = assimp_mesh->mTangents[j].y;
-				vertex.Tangent.z = assimp_mesh->mTangents[j].z;
+				vertex.Tangent_x = assimp_mesh->mTangents[j].x;
+				vertex.Tangent_y = assimp_mesh->mTangents[j].y;
+				vertex.Tangent_z = assimp_mesh->mTangents[j].z;
 
-				vertex.UV0.x = assimp_mesh->mTextureCoords[0][j].x;
-				vertex.UV0.y = assimp_mesh->mTextureCoords[0][j].y;
+				vertex.UV_x = assimp_mesh->mTextureCoords[0][j].x;
+				vertex.UV_y = assimp_mesh->mTextureCoords[0][j].y;
 
 				if (sndUV)
 				{
-					vertex.UV1.x = assimp_mesh->mTextureCoords[1][j].x;
-					vertex.UV1.y = assimp_mesh->mTextureCoords[1][j].y;
+
 				}
 				else
 				{
-					vertex.UV1.x = assimp_mesh->mTextureCoords[0][j].x;
-					vertex.UV1.y = assimp_mesh->mTextureCoords[0][j].y;
+
 				}
 
 				vertex_ptr++;

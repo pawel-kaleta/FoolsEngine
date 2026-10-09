@@ -33,7 +33,7 @@ namespace fe::Render::GAPI
 	template <typename T, UInt count>
 	struct std140_Array
 	{
-		struct __declspec(align((sizeof(T) + 15) & ~15) ElementType : T {};
+		struct alignas((sizeof(T) + 15) & ~15) ElementType : T {};
 		Array<ElementType, count> Data;
 	};
 

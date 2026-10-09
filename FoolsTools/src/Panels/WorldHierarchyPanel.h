@@ -21,6 +21,6 @@ namespace fe
 		EntityID   m_SelectedEntityID = NullEntityID;
 		EntityID   m_EntityIDSelectionRequest = NullEntityID;
 		
-		bool DrawEntity(const AssetObserver<Scene>& sceneObserver, EntityID entityID);
+		bool DrawEntity(const AssetObserver& sceneObserver, EntityID entityID);
 	};
 }

@@ -2,13 +2,13 @@
 
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Lights.h"
+#include "FoolsEngine/Renderer/2 - Representation/Lights.h"
 
 namespace fe
 {
 	struct CDirectionalLight final : DataComponent
 	{
-		DirectionalLight DirectionalLight;
+		Render::Representation::DirectionalLight DirectionalLight;
 		bool IsPrimary;
 
 		FE_COMPONENT_SETUP(CDirectionalLight, "Directional Light");

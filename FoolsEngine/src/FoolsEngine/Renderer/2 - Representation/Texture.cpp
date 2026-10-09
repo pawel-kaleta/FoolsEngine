@@ -12,31 +12,31 @@
 
 #include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
 
-namespace fe::Render::Representation
+namespace fe
 {
-	void Texture2DObserver::SaveMetadata(YAML::Emitter& emitter)
+	void SaveMetadata(AssetObserver& textureObserver, YAML::Emitter& emitter)
 	{
 		FE_PROFILER_FUNC();
 		
 		Scratchpad sp;
-		auto& spec = GetCore().mSpecification;
+		auto& spec = textureObserver.Get<Texture2D::Core>().mSpecification;
 
 		emitter << YAML::BeginMap;
-		emitter << YAML::Key << "UUID" << YAML::Value << GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
-		emitter << YAML::Key << "Usage" << YAML::Value << spec.Usage.ToConstCharPtr();
-		emitter << YAML::Key << "Archetype" << YAML::Value << archetype.UUID;
-		emitter << YAML::Key << "Width" << YAML::Value << spec.mDimentions;
-		emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
+		emitter << YAML::Key << "UUID" << YAML::Value << textureObserver.GetUUID();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << textureObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
+		//emitter << YAML::Key << "Usage" << YAML::Value << spec.mUsage.ToConstCharPtr();
+		//emitter << YAML::Key << "Archetype" << YAML::Value << archetype.UUID;
+		emitter << YAML::Key << "Dimentions" << YAML::Value << spec.mDimentions;
+		//emitter << YAML::Key << "Height" << YAML::Value << spec.Height;
 		emitter << YAML::EndMap;
 	}
 
-	bool Texture2DUser::LoadMetadata()
+	bool LoadMetadata(AssetUser& textureUser)
 	{
 		FE_PROFILER_FUNC();
 
 		auto filepath = Project::Get()->m_AssetsPath;
-		const auto& relative_path = Get<ACFilepath>().Filepath;
+		const auto& relative_path = textureUser.Get<ACFilepath>().Filepath;
 		filepath /= relative_path;
 		
 		YAML::Node node;
@@ -71,19 +71,20 @@ namespace fe::Render::Representation
 			return false;
 		}
 
-		auto& spec = GetCore().Specification;
+		auto& spec = textureUser.Get<Texture2D::Core>().mSpecification;
 		
-		spec.Usage.FromString(node["Usage"].as<std::string>());
+		FE_CORE_ASSERT(false, "Not implemented");
+		//spec.Usage.FromString(node["Usage"].as<std::string>());
 
-		auto& lib = Description::Library::Get();
-		auto spec_uuid = node["Archetype"].as<UUID>();
-		spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+		//auto& lib = Description::Library::Get();
+		//auto spec_uuid = node["Archetype"].as<UUID>();
+		//spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
 
-		spec.Width = node["Width"].as<uint32_t>();
-		spec.Height = node["Height"].as<uint32_t>();
+		//spec.Width = node["Width"].as<uint32_t>();
+		//spec.Height = node["Height"].as<uint32_t>();
 
 		std::filesystem::path source_path = node["Source Filepath"].as<std::string>();
-		AssetManager::SetSourcePath(GetID(), source_path);
+		AssetManager::SetSourcePath(textureUser.GetID(), source_path);
 
 		return true;
 	}
@@ -127,16 +128,17 @@ namespace fe::Render::Representation
 		auto& core = reg.emplace<Texture2D::Core>(asset_id);
 		core.Init();
 
-		auto& spec = core.Specification;
+		auto& spec = core.mSpecification;
 
-		spec.Usage.FromString(node["Usage"].as<std::string>());
+		FE_CORE_ASSERT(false, "Not implemented");
+		//spec.Usage.FromString(node["Usage"].as<std::string>());
 
-		auto& lib = Description::Library::Get();
+		//auto& lib = Description::Library::Get();
 		auto spec_uuid = node["Archetype"].as<UUID>();
-		spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
+		//spec.ArchetypeID = lib.CreateOrGetDescriptorWithUUID<Description::ShaderInterface::Specification>(spec_uuid);
 		
-		spec.Width = node["Width"].as<uint32_t>();
-		spec.Height = node["Height"].as<uint32_t>();
+		//spec.Width = node["Width"].as<uint32_t>();
+		//spec.Height = node["Height"].as<uint32_t>();
 
 		std::filesystem::path source_path = parentpath;
 		source_path /= node["Source Filepath"].as<std::string>();

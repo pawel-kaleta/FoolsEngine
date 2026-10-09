@@ -127,7 +127,7 @@ namespace fe::Render::GAPI::OpenGL
 			Pile p;
 
 			// framebuffer setup for state based compilation
-			bool depth_present = spec.mDepthStencilFormat != Resource::Descriptors::TextureFormat::None;
+			bool depth_present = spec.mDepthStencilFormat != Descriptors::TextureFormat::None;
 			UInt attachment_count = spec.mColorAttachments.Count;
 			auto tmp_textures = p.Allocate<GLuint>(attachment_count + depth_present);
 			auto attachment_enums = p.Allocate<GLenum>(attachment_count);
@@ -136,7 +136,7 @@ namespace fe::Render::GAPI::OpenGL
 
 			for (UInt i = 0; i < attachment_count; i++)
 			{
-				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mColorAttachments[i].Format);
+				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mColorAttachments[i].mFormat);
 				glTextureStorage2D(tmp_textures[i], 1, internal_format, 4, 4);
 				attachment_enums[i] = GL_COLOR_ATTACHMENT0 + i;
 				glNamedFramebufferTexture(mFramebufferOpenGLID, attachment_enums[i], GL_RENDERBUFFER, tmp_textures[i]);
@@ -220,14 +220,14 @@ namespace fe::Render::GAPI::OpenGL
 
 		void SetColorAttachment(const Texture& texture, UInt index)
 		{
-			FE_CORE_ASSERT(texture.Spec.mFormat == mRaster.mColorAttachments[index].Format, "Wrong texture format!");		
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.OpenGLID, 1);
+			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mColorAttachments[index].mFormat, "Wrong texture format!");		
+			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.mOpenGLID, 1);
 		}
 
 		void SetDepthStencilAttachment(const Texture& texture)
 		{
-			FE_CORE_ASSERT(texture.Spec.mFormat == mRaster.mDepthStencilFormat, "Wrong texture format!");
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, texture.OpenGLID, 1);
+			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mDepthStencilFormat, "Wrong texture format!");
+			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, texture.mOpenGLID, 1);
 		}
 
 		void SetDepthStencilSpec(const DepthStencil::Specification& depthStencil)
@@ -327,12 +327,12 @@ namespace fe::Render::GAPI::OpenGL
 
 		void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount)
 		{
-			glMultiDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(Data::DrawParams));
+			glMultiDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(DrawParams));
 		}
 
 		void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount)
 		{
-			glMultiDrawElementsIndirectCount(mMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(Data::DrawParams));
+			glMultiDrawElementsIndirectCount(mMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(DrawParams));
 		}
 		
 		void DestroyCmd()

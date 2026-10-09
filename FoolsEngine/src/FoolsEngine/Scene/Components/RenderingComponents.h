@@ -2,13 +2,13 @@
 
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine/Renderer/5 - Representation/Camera.h"
+#include "FoolsEngine/Renderer/2 - Representation/Camera.h"
 
 namespace fe
 {
 	struct CCamera final : SpatialComponent
 	{
-		Camera Camera;
+		Render::Representation::Camera Camera;
 		bool IsPrimary = false;
 
 		FE_COMPONENT_SETUP(CCamera, "Camera");

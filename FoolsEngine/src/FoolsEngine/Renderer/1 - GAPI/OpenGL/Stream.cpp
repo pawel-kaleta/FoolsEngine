@@ -4,6 +4,7 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 
+#include "InternalID.h"
 #include "Registry.h"
 #include "DownStream.h"
 
@@ -33,7 +34,7 @@ namespace fe::Render::GAPI
 		stream->ReleaseCmd();
 	}
 
-	GID CreateRegion(GID stream, U32 size, U32 offsetAlignment = 16)
+	GID CreateRegion(GID stream, U32 size, U32 offsetAlignment)
 	{
 		OpenGL::InternalID id = stream;
 		if (id.mComps.Type == ObjType::DownStream)

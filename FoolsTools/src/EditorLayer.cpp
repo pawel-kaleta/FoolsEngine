@@ -26,7 +26,8 @@ namespace fe
 		m_Scene = AssetHandle<Scene>(sceneID, AssetLoadingPriority::Critical);
 		{
 			auto scene_user = m_Scene.Use();
-			scene_user.Initialize();
+			FE_LOG_WARN("Fix this!");
+			(*(Scene::User*)&scene_user).Initialize();
 			auto success = SceneSerializerYAML::DeserializeFromFile(scene_user);
 			FE_CORE_ASSERT(success, "scene loading failed");
 		}
@@ -42,7 +43,8 @@ namespace fe
 		FE_LOG_TRACE("EditorLayer::OnUpdate()");
 
 		{
-			auto scene_user = m_Scene.Use();
+			auto user = m_Scene.Use();
+			auto& scene_user = * (Scene::User*) & user;
 			switch (m_EditorState)
 			{
 			case EditorState::Edit: 
@@ -206,7 +208,8 @@ namespace fe
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 
 		m_Scene = AssetHandle<Scene>(AssetManager::AssetCreation::ProjectAsset<Scene>(filepath), AssetLoadingPriority::Critical);
-		m_Scene.Use().InitializeNew();
+		auto user = m_Scene.Use();
+		(*(Scene::User*)& user).InitializeNew();
 
 		SetSceneContext(m_Scene);
 	}
@@ -228,7 +231,7 @@ namespace fe
 		if (new_scene_handle.IsValid())
 		{
 			auto newScene_user = new_scene_handle.Use();
-			newScene_user.Initialize();
+			(*(Scene::User*)&newScene_user).Initialize();
 
 			new_scene_opened = SceneSerializerYAML::DeserializeFromFile(newScene_user);
 		}
@@ -294,7 +297,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		{
-			if (!m_Scene.Use().GetCoreComponent().GameplayWorld->m_Registry.valid(m_SelectedEntityID))
+			if (!m_Scene.Use().Get<Scene::Core>().GameplayWorld->m_Registry.valid(m_SelectedEntityID))
 				m_SelectedEntityID = NullEntityID;
 		}
 
@@ -343,7 +346,7 @@ namespace fe
 
 		auto scene_observer = m_Scene.Observe();
 
-		if (!scene_observer.GetCoreComponent().GameplayWorld->GetEntityWithPrimaryCamera())
+		if (!scene_observer.Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera())
 			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
 
 		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_observer);
@@ -368,8 +371,8 @@ namespace fe
 
 		{
 			auto scene_user = m_Scene.Use();
-			scene_user.Release();
-			scene_user.Initialize();
+			(*(Scene::User*)&scene_user).Release();
+			(*(Scene::User*)&scene_user).Initialize();
 			bool deserialization_result = SceneSerializerYAML::DeserializeFromString(scene_user, m_SceneBackup);
 			FE_CORE_ASSERT(deserialization_result, "Scene recovery after play stop failed.");
 		}

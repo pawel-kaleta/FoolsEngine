@@ -34,7 +34,7 @@ namespace fe
 			Rotate(input_axis_DA, input_axis_WS, input_axis_EQ);
 		else
 		{
-			if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
+			if (m_Camera.m_ProjectionType == Render::Representation::Camera::ProjectionType::Perspective)
 				Move(input_axis_DA, input_axis_EQ, input_axis_WS);
 			else
 				Move(input_axis_DA, input_axis_WS, input_axis_EQ);
@@ -101,7 +101,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
+		if (m_Camera.m_ProjectionType == Render::Representation::Camera::ProjectionType::Perspective)
 		{
 			auto FOV = m_Camera.m_PerspectiveData.m_FOV;
 			FOV -= delta * 0.05f;
@@ -160,7 +160,7 @@ namespace fe
 				if (ImGui::Selectable(projection_type_strings[i], is_selected))
 				{
 					current_projection_type_string = projection_type_strings[i];
-					Camera::ProjectionType projection;
+					Render::Representation::Camera::ProjectionType projection;
 					projection.FromInt(i);
 					m_Camera.SetProjectionType(projection);
 				}
@@ -172,7 +172,7 @@ namespace fe
 			ImGui::EndCombo();
 		}
 
-		if (m_Camera.m_ProjectionType == Camera::ProjectionType::Perspective)
+		if (m_Camera.m_ProjectionType == Render::Representation::Camera::ProjectionType::Perspective)
 		{
 			const auto& data = m_Camera.m_PerspectiveData;
 			float fov = glm::degrees(data.m_FOV);
