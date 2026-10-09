@@ -151,17 +151,19 @@ namespace fe::Render::GAPI::OpenGL
 			}
 
 			auto status = glCheckNamedFramebufferStatus(mFramebufferOpenGLID, GL_FRAMEBUFFER);
-			if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-				FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
-			if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-				FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
-			if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
-				FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
-			if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
-				FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
-			if (status == GL_FRAMEBUFFER_UNSUPPORTED)
-				FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_UNSUPPORTED");
-			
+			if (status != GL_FRAMEBUFFER_COMPLETE)
+			{
+				if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+				if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+				if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+				if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
+					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+				if (status == GL_FRAMEBUFFER_UNSUPPORTED)
+					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_UNSUPPORTED");
+			}
 
 			// facecull setup for state based compilation
 			switch (spec.mFaceCullTest.Value)
@@ -177,7 +179,6 @@ namespace fe::Render::GAPI::OpenGL
 				glEnable(GL_CULL_FACE);
 				glCullFace(mFaceCull);
 			}
-
 
 			// compilation
 			glAttachShader(mOpenGLID, vertexShader.mOpenGLID);
@@ -220,7 +221,7 @@ namespace fe::Render::GAPI::OpenGL
 
 		void SetColorAttachment(const Texture& texture, UInt index)
 		{
-			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mColorAttachments[index].mFormat, "Wrong texture format!");		
+			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mColorAttachments[index].mFormat, "Wrong texture format!");
 			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.mOpenGLID, 1);
 		}
 

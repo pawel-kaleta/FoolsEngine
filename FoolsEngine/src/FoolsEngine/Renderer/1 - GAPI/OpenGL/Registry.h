@@ -142,13 +142,13 @@ namespace fe::Render::GAPI::OpenGL
 		}
 	};
 
-	extern Registry<GraphicsPipeline> GraphicsPipelineRegistry;
-	extern Registry<Buffer> BufferRegistry;
-	extern Registry<Texture> TextureRegistry;
-	extern Registry<TextureView> TextureViewRegistry;
-	extern Registry<Shader> ShaderRegistry;
-	extern Registry<Region> RegionRegistry;
-	extern Registry<DownStream> DownStreamRegistry;
+	extern Registry<GraphicsPipeline>	GraphicsPipelineRegistry;
+	extern Registry<Buffer>				BufferRegistry;
+	extern Registry<Texture>			TextureRegistry;
+	extern Registry<TextureView>		TextureViewRegistry;
+	extern Registry<Shader>				ShaderRegistry;
+	extern Registry<Region>				RegionRegistry;
+	extern Registry<DownStream>			DownStreamRegistry;
 
 	extern void CreateRegistries();
 }

@@ -42,9 +42,9 @@ namespace fe::Render
 			mAlloc = alloc;
 		}
 
-		bool CreateTexture(AssetUser<Texture2D>& textureUser)
+		bool CreateTexture(AssetUser& textureUser)
 		{
-			auto& core = textureUser.GetCore();
+			auto& core = textureUser.Get<Texture2D::Core();
 			UInt footprint_estimate = core.GetSourceSize();
 
 			if (mTexturesCount + 1 > mTexturesCountBudget)
@@ -62,7 +62,7 @@ namespace fe::Render
 			GAPI::GID texture_id = GAPI::CreateTexture(core.mSpecification);
 			GAPI::AllocateTexture(texture_id);
 
-			auto& texture_component = textureUser.Emplace_GPU<GAPI::Platform::OpenGL>();
+			auto& texture_component = textureUser.Emplace<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 			texture_component.mTextureGID = texture_id;
 			
 			texture_component.mTextureViewsGIDs.Init(mAlloc);
@@ -70,9 +70,9 @@ namespace fe::Render
 			return true;
 		}
 
-		GAPI::GID CreateTextureView(AssetUser<Texture2D>& textureUser, const GAPI::Descriptors::TextureViewSpec& viewSpec)
+		GAPI::GID CreateTextureView(AssetUser& textureUser, const GAPI::Descriptors::TextureViewSpec& viewSpec)
 		{
-			auto texture_component = textureUser.Get_GPU<GAPI::Platform::OpenGL>();
+			auto texture_component = textureUser.GetIfExist<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 
 			if (!texture_component)
 			{
@@ -94,9 +94,9 @@ namespace fe::Render
 			return view_id;
 		}
 
-		void FreeTextureView(AssetUser<Texture2D>& textureUser, GAPI::GID textureViewGID)
+		void FreeTextureView(AssetUser& textureUser, GAPI::GID textureViewGID)
 		{
-			auto texture_component = textureUser.Get_GPU<GAPI::Platform::OpenGL>();
+			auto texture_component = textureUser.GetIfExist<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 
 			if (!texture_component)
 			{
@@ -125,10 +125,10 @@ namespace fe::Render
 			--mViewsCount;
 		}
 
-		void FreeTexture(AssetUser<Texture2D>& textureUser)
+		void FreeTexture(AssetUser& textureUser)
 		{
-			auto& core = textureUser.GetCore();
-			auto texture_component = textureUser.Get_GPU<GAPI::Platform::OpenGL>();
+			auto& core = textureUser.Get<Texture2D::Core>();
+			auto texture_component = textureUser.GetIfExist<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 			UInt footprint_estimate = core.GetSourceSize();
 
 			FE_CORE_ASSERT(mTexturesCount, "Trying to free texture while there are no textures allocated on gpu");
@@ -144,7 +144,7 @@ namespace fe::Render
 			texture_id = GAPI::GID();
 
 			texture_component->mTextureViewsGIDs.Release();
-			textureUser.Remove_GPU<GAPI::Platform::OpenGL>();
+			textureUser.Erase<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 
 			return;
 		}
