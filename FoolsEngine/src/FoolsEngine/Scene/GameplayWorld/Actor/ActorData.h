@@ -6,6 +6,8 @@
 #include "FoolsEngine/Scene/Component.h"
 #include "FoolsEngine/Scene/SimulationStage.h"
 
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 namespace fe
 {
 	struct CActorData : ProtectedComponent
@@ -15,21 +17,21 @@ namespace fe
 		CActorData(EntityID entityID)
 			: m_ID(entityID)
 		{ };
-		CActorData& operator=(CActorData&& other) noexcept
-		{
-			m_Behaviors = std::move(other.m_Behaviors);
-			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
-			m_ID = other.m_ID;
-			other.m_ID = NullEntityID;
-			return *this;
-		};
-		CActorData(CActorData&& other) noexcept
-		{
-			m_Behaviors = std::move(other.m_Behaviors);
-			m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
-			m_ID = other.m_ID;
-			other.m_ID = NullEntityID;
-		};
+		CActorData& operator=(CActorData&& other) noexcept = default;
+		//{
+		//	m_Behaviors = std::move(other.m_Behaviors);
+		//	m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
+		//	m_ID = other.m_ID;
+		//	other.m_ID = NullEntityID;
+		//	return *this;
+		//};
+		CActorData(CActorData&& other) noexcept = default;
+		//{
+		//	m_Behaviors = std::move(other.m_Behaviors);
+		//	m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
+		//	m_ID = other.m_ID;
+		//	other.m_ID = NullEntityID;
+		//};
 		CActorData& operator=(CActorData& other) = delete;
 		CActorData(CActorData& other) = delete;
 		~CActorData()
@@ -41,10 +43,10 @@ namespace fe
 
 				for (size_t i = 0; i < SimulationStage::Count; i++)
 				{
-					m_UpdateEnrolls[i].clear();
+					m_UpdateEnrolls[i].Release();
 				}
 
-				m_Behaviors.clear();
+				m_Behaviors.Release();
 			}
 		};
 
@@ -55,18 +57,16 @@ namespace fe
 		friend class ActorInspector;
 		friend class SceneSerializerYAML;
 		
-		using Behaviors = std::vector<std::unique_ptr<Behavior>>;
-		
 		struct UpdateEnroll
 		{
 			Behavior* Behavior;
 			void (Behavior::* OnUpdateFuncPtr)();
 			uint32_t Priority;
 		};
-		using UpdateEnrolls = std::array<std::vector<UpdateEnroll>, SimulationStage::Count>;
 
-		Behaviors		m_Behaviors;
-		UpdateEnrolls	m_UpdateEnrolls;
-		EntityID		m_ID;
+
+		Array<DynamicArena<UpdateEnroll>, SimulationStage::Count> m_UpdateEnrolls;
+		DynamicArena<Behavior*> m_Behaviors;
+		EntityID m_ID;
 	};
 }

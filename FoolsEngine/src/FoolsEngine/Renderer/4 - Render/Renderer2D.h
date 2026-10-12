@@ -12,8 +12,6 @@
 
 #include <glm/glm.hpp>
 
-#include <array>
-
 namespace fe
 {
 	class Entity;
@@ -67,15 +65,15 @@ namespace fe
 			EntityID EntityID;
 		};
 
-		using QuadVerticesBatch = std::array<QuadVertex, ConstLimits::MaxVeritices>;
+		using QuadVerticesBatch = Array<QuadVertex, ConstLimits::MaxVeritices>;
 
 		struct BatchData
 		{
 			Ref<QuadVerticesBatch> QuadVertices = CreateRef<QuadVerticesBatch>();
-			QuadVerticesBatch::iterator QuadVeriticesIt;
+			QuadVertex* QuadVeriticesIt;
 			uint32_t QuadIndexCount = 0;
 
-			std::array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
+			Array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
 			uint32_t TexturesCount = 1;
 		};
 

@@ -54,13 +54,13 @@ namespace fe
 
 		//layout.CalculateOffsetsAndStride();
 
-		using QuadsIndexBufferData = std::array<uint32_t, ConstLimits::MaxIndices>;
+		using QuadsIndexBufferData = Array<uint32_t, ConstLimits::MaxIndices>;
 		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
 
 		{
 			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");
 						
-			size_t quad_count = quad_indices->size() / 6;
+			size_t quad_count = quad_indices->Count / 6;
 			for (size_t i = 0; i < quad_count; i++)
 			{
 				(*quad_indices)[i * 6 + 0] = (uint32_t)(i * 4 + 0);
@@ -200,7 +200,8 @@ namespace fe
 	{
 		auto& VIt = m_Batch.QuadVeriticesIt;
 
-		if (&*VIt > &m_Batch.QuadVertices->back())
+		// nasty legacy frankenshtine
+		if (&*VIt > &m_Batch.QuadVertices->operator[](m_Batch.QuadVertices->Count-1))
 		{
 			Flush();
 		}
@@ -280,7 +281,7 @@ namespace fe
 			return;
 
 		// propably C-style array would look cleaner here then std::array
-		uint32_t data_size = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt._Unwrapped() - (uint8_t*)m_Batch.QuadVertices.get());
+		uint32_t data_size = (uint32_t)((uint8_t*)m_Batch.QuadVeriticesIt - (uint8_t*)m_Batch.QuadVertices.get());
 
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_QuadVertexBuffer->Update(data_size, m_Batch.QuadVertices->data());
