@@ -3,6 +3,7 @@
 #include "Splice.h"
 #include "Pile.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 #include <cstring>
 
@@ -13,6 +14,8 @@ namespace fe
 	{
 		UInt Count;
 		Array<T, N> Buffer;
+
+		FE_TYPE_SETUP(ArrayArena<T, N>)
 
 		const	T* begin()	const	{ return Buffer.Elements; }
 				T* begin()			{ return Buffer.Elements; }
@@ -159,6 +162,8 @@ namespace fe
 	{
 		UInt Count;
 		Splice<T> Buffer;
+
+		FE_TYPE_SETUP(SpliceArena<T>)
 
 		const	T* begin()	const	{ return Buffer.Elements; }
 				T* begin()			{ return Buffer.Elements; }
@@ -332,6 +337,8 @@ namespace fe
 		PMAlloc* Alloc;
 		UInt Count;
 		Splice<T> Buffer;
+
+		FE_TYPE_SETUP(DynamicArena<T>)
 
 		const	T* begin() const { return Buffer.Elements; }
 				T* begin()       { return Buffer.Elements; }

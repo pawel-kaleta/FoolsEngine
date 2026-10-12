@@ -1,7 +1,3 @@
-#pragma once
-
-#include "FE_pch.h"
-
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "Buffer.h"
@@ -168,6 +164,7 @@ namespace fe::Render::GAPI
 	std140_uvec2 GetTextureViewHandle(GID textureView)
 	{
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
+
 		return *(std140_uvec2*)&(textureview_obj->mTextureSamplerHandleGL);
 	}
 }

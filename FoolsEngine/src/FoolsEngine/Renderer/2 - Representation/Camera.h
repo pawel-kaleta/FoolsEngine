@@ -9,7 +9,7 @@ namespace fe::Render::Representation
 	class Camera
 	{
 	public:
-		FE_DECLARE_ENUM(ProjectionType, Orthographic, Perspective);
+		FE_DECLARE_ENUM(ProjectionType, Orthographic, Perspective)
 
 		Camera() { CalculateProjectionPerspective(); }
 		~Camera() = default;

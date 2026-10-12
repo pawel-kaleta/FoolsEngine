@@ -1,7 +1,3 @@
-#pragma once
-
-#include "FE_pch.h"
-
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"

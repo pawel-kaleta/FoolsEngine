@@ -59,17 +59,17 @@ namespace fe::Render
 			AssetID prev = region.mPrevious;
 			AssetID next = region.mNext;
 
-			if (bool(prev) && bool(next))
+			if (prev != NullAssetID && next != NullAssetID)
 			{
 				AssetUser(prev).Get<ACRegion>().mNext = next;
 				AssetUser(next).Get<ACRegion>().mPrevious = prev;
 			}
-			else if (!bool(prev) && bool(next))
+			else if (prev == NullAssetID && next != NullAssetID)
 			{
 				mFirstAsset = next;
 				AssetUser(next).Get<ACRegion>().mPrevious = prev;
 			}
-			else if (bool(prev) && !bool(next))
+			else if (prev != NullAssetID && next == NullAssetID)
 			{
 				AssetUser user(prev);
 				auto& prev_region = user.Get<ACRegion>();
@@ -77,7 +77,7 @@ namespace fe::Render
 				mLastAsset = prev;
 				mFreeOffset = prev_region.mOffset + prev_region.mSize;
 			}
-			else if (!bool(prev) && !bool(next))
+			else if (prev == NullAssetID && next == NullAssetID)
 			{
 				mFirstAsset = NullAssetID;
 				mLastAsset = NullAssetID;
@@ -137,6 +137,8 @@ namespace fe::Render
 			region.mAlignment = alignment;
 			region.mNext = NullAssetID;
 			region.mPrevious = mLastAsset;
+
+			AssetUser(mLastAsset).Get<ACRegion>().mNext = assetUser.GetID();
 
 			mLastAsset = assetUser.GetID();
 			mFreeOffset = alloc_offset + size;

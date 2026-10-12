@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FE_pch.h"
-
 #include "Registry.h"
 
 namespace fe::Render::GAPI::OpenGL

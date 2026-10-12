@@ -1,22 +1,8 @@
-07:39:34:852887 | FE  | info     | Logging innitialized!
-07:39:34:853673 | App | info     | Logging innitialized!
-07:39:34:853772 | FE  | info     | /////////////////////////////////////////////////////
-07:39:34:853850 | FE  | info     | ////////////////////// STARTUP //////////////////////
-07:39:34:853923 | FE  | info     | /////////////////////////////////////////////////////
-07:39:34:854231 | FE  | info     | Profiler session 'Startup' started.
-07:39:35:082042 | FE  | info     | Rendering platform info:
-07:39:35:082758 | FE  | info     | 	Vendor:		ATI Technologies Inc.
-07:39:35:082873 | FE  | info     | 	Renderer:	AMD Radeon RX 7900 XT
-07:39:35:082962 | FE  | info     | 	Version:	4.6.0 Compatibility Profile Context 24.12.1.241127
-07:39:35:083160 | FE  | info     | OpenGL Rendering Context created
-07:39:35:132931 | FE  | info     | Setting events callbacks:
-07:39:35:133074 | FE  | info     | 	WindowResizeEvent
-07:39:35:133187 | FE  | info     | 	WindowCloseEvent
-07:39:35:133278 | FE  | info     | 	WindowFocusChangeEvents
-07:39:35:133362 | FE  | info     | 	KeyEvents
-07:39:35:133450 | FE  | info     | 	KeyTypedEvent
-07:39:35:133546 | FE  | info     | 	MouseButtonEvents
-07:39:35:133632 | FE  | info     | 	MouseScrolledEvent
-07:39:35:133713 | FE  | info     | 	MouseMovedEvent
-07:39:35:134222 | FE  | error    | CORE ASSERTION FAILED: in file Renderer2D.cpp in function void __cdecl fe::Renderer2D::Init(void) at line 51.
-07:39:35:135576 | FE  | error    | Assertion Message: not implemented
+02:44:10:283672 | FE  | info     | Logging innitialized!
+02:44:10:284497 | App | info     | Logging innitialized!
+02:44:10:284619 | FE  | info     | /////////////////////////////////////////////////////
+02:44:10:284721 | FE  | info     | ////////////////////// STARTUP //////////////////////
+02:44:10:284818 | FE  | info     | /////////////////////////////////////////////////////
+02:44:10:285149 | FE  | info     | Profiler session 'Startup' started.
+02:44:10:333839 | FE  | error    | CORE ASSERTION FAILED: in file Application.cpp in function void __cdecl fe::Application::Startup(void) at line 99.
+02:44:10:334525 | FE  | error    | Assertion Message: Not implemented

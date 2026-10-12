@@ -3,6 +3,8 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
+
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 
 #include <filesystem>
@@ -21,7 +23,7 @@ namespace fe
 			LoadShader(path, shaderUser);
 		}
 
-		static bool IsKnownExtension(const std::pmr::string& extension);
+		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
 
 		static const char* GetExtensionAlias() { return "Shader Source"; }

@@ -1,7 +1,7 @@
-#include "FE_pch.h"
 #include "TextureLoader.h"
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Application/Project.h"
 
@@ -97,22 +97,22 @@ namespace fe
 		return spec;
 	}
 
-	bool TextureLoader::IsKnownExtension(const std::pmr::string& extension)
+	bool TextureLoader::IsKnownExtension(String extension)
 	{
-		static const char* s_known_extensions[] = {
-			".jpg",
-			".jpeg",
-			".png",
-			".bmp",
-			".tga",
-			".gif",
-			".ppm",
-			".pgm"
+		static const String s_known_extensions[] = {
+			String(".jpg",5),
+			String(".jpeg",6),
+			String(".png",5),
+			String(".bmp",5),
+			String(".tga",5),
+			String(".gif",5),
+			String(".ppm",5),
+			String(".pgm",5)
 		};
 
 		for (const auto& known_extension : s_known_extensions)
 		{
-			if (extension == known_extension)
+			if (CompareStringsEqual(known_extension, extension))
 			{
 				return true;
 			}

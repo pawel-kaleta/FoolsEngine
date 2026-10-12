@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "Buffer.h"
@@ -15,35 +16,40 @@ namespace fe::Render::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::DownStream;
 
-		Byte* mCurrentPosition = nullptr;
+		DynamicArena<Array<Fence, 64>*> mFencesA;
+		DynamicArena<Array<Fence, 64>*> mFencesB;
 
-		struct Fences
-		{
-			SpliceArena<Array<Fence, 64>*> mFencesChunks;
-			UInt mCount = 0;
-			void Init()
-			{
-				mFencesChunks.Init();
-				mCount = 0;
-			}
-		};
-
+		Byte* mCurrentPosition;
+		
 		UInt mNextFrontFenceIndex;
-		Fences* mFrontFences;
-		Fences* mBackFences;
+		DynamicArena<Array<Fence, 64>*> * mFrontFences;
+		DynamicArena<Array<Fence, 64>*> * mBackFences;
+		UInt mFrontFencesCount;
+		UInt mBackFencesCount;
+
+		PMAlloc* mMainAlloc;
+
+		FE_TYPE_SETUP(DownStream)
 
 		void Init(InternalID id)
 		{
 			mID = id;
 			mCurrentPosition = nullptr;
 			mNextFrontFenceIndex = 0;
+			mFrontFencesCount = 0;
+			mBackFencesCount = 0;
 
 			mOpenGLBuffer = 0;
 			mCapacity = 0;
 			mDMABegin = nullptr;
+
+			mFrontFences = mFencesA.P();
+			mBackFences = mFencesB.P();
+
+			mMainAlloc = Context::Allocators::Default;
 		}
 
-		void Create(U32 size)
+		void Create(U32 size, PMAlloc* mainAlloc = Context::Allocators::Default, PMAlloc* auxAlloc = Context::Allocators::Auxiliary)
 		{
 			FE_CORE_ASSERT(size, "Size is 0.");
 
@@ -56,47 +62,46 @@ namespace fe::Render::GAPI::OpenGL
 			mDMABegin = (Byte*)glMapNamedBufferRange(mOpenGLBuffer, 0, size, map_flags);
 			mCapacity = size;
 
-			mFrontFences = Context::Allocators::Default->Allocate<Fences>();
-			mBackFences = Context::Allocators::Default->Allocate<Fences>();
+			mFrontFences = mFencesA.P();
+			mBackFences = mFencesB.P();
 
-			mFrontFences->Init();
-			mBackFences->Init();
+			mFencesA.Init(auxAlloc);
+			mFencesB.Init(auxAlloc);
+
+			mMainAlloc = mainAlloc;
 		}
 
 		void ReleaseCmd()
 		{
-			while (mNextFrontFenceIndex < mFrontFences->mCount)
+			while (mNextFrontFenceIndex < mFrontFencesCount)
 			{
-				auto& opengl_fence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+				auto& opengl_fence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64).OpenGLFence;
 				if (opengl_fence)
 					glDeleteSync(opengl_fence);
 				mNextFrontFenceIndex++;
 			}
 
-			UInt mNextBackFenceIndex = 0;
-			while (mNextBackFenceIndex < mBackFences->mCount)
+			UInt nextBackFenceIndex = 0;
+			while (nextBackFenceIndex < mBackFencesCount)
 			{
-				auto& opengl_fence = mBackFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+				auto& opengl_fence = mBackFences->At(nextBackFenceIndex / 64)->At(nextBackFenceIndex % 64).OpenGLFence;
 				if (opengl_fence)
 					glDeleteSync(opengl_fence);
-				mNextBackFenceIndex++;
+				nextBackFenceIndex++;
 			}
 
 			glDeleteBuffers(1, &mOpenGLBuffer);
 
-			for (auto& fencechunk : mFrontFences->mFencesChunks)
+			for (auto& fencechunk : mFencesA)
 			{
-				Context::Allocators::Default->Deallocate(fencechunk);
+				mMainAlloc->Deallocate(fencechunk);
 			}
-			for (auto& fencechunk : mBackFences->mFencesChunks)
+			for (auto& fencechunk : mFencesB)
 			{
-				Context::Allocators::Default->Deallocate(fencechunk);
+				mMainAlloc->Deallocate(fencechunk);
 			}
-			mFrontFences->mFencesChunks.Release();
-			mBackFences->mFencesChunks.Release();
-
-			mFrontFences = Context::Allocators::Default->Allocate<Fences>();
-			mBackFences = Context::Allocators::Default->Allocate<Fences>();
+			mFencesA.Release();
+			mFencesB.Release();
 
 			mOpenGLBuffer = 0;
 			mCapacity = 0;
@@ -110,9 +115,9 @@ namespace fe::Render::GAPI::OpenGL
 			Byte* position_candidate = mDMABegin + alligned_offset;
 			Byte* region_end_candidate = position_candidate + size;
 
-			while (mNextFrontFenceIndex < mFrontFences->mCount)
+			while (mNextFrontFenceIndex < mFrontFencesCount)
 			{
-				auto& OpenGLFence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+				auto& OpenGLFence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64).OpenGLFence;
 				
 				if (!OpenGLFence) // false means region not even retired yet and opengl fence not placed
 					break;
@@ -129,9 +134,9 @@ namespace fe::Render::GAPI::OpenGL
 				mNextFrontFenceIndex++;
 			}
 
-			if (mNextFrontFenceIndex < mFrontFences->mCount)
+			if (mNextFrontFenceIndex < mFrontFencesCount)
 			{
-				auto& fence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64);
+				auto& fence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64);
 				if (fence.Location < position_candidate)
 				{
 					FE_LOG_CORE_WARN("Not enough space in DownStream");
@@ -152,9 +157,9 @@ namespace fe::Render::GAPI::OpenGL
 
 				// test how many fences can be passed (dont remove them, we are not commit yet to wraping if we have not enough space)
 				UInt next_back_fence_index = 0;
-				while (next_back_fence_index < mBackFences->mCount)
+				while (next_back_fence_index < mBackFencesCount)
 				{
-					auto& fence = mFrontFences->mFencesChunks[next_back_fence_index / 64]->operator[](next_back_fence_index % 64);
+					auto& fence = mFrontFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
 					if (fence.OpenGLFence) // false means region not even retired yet and opengl fence not placed
 						break;
 
@@ -168,9 +173,9 @@ namespace fe::Render::GAPI::OpenGL
 				}
 
 				// any fances left after potencial wrap?
-				if (next_back_fence_index < mBackFences->mCount)
+				if (next_back_fence_index < mBackFencesCount)
 				{
-					auto& fence = mFrontFences->mFencesChunks[next_back_fence_index / 64]->operator[](next_back_fence_index % 64);
+					auto& fence = mFrontFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
 					if (fence.Location < position_candidate) // can we fit?
 					{
 						FE_LOG_CORE_WARN("Not enough space in DownStream");
@@ -179,14 +184,16 @@ namespace fe::Render::GAPI::OpenGL
 				}
 
 				// we now know we can fit after wrapping, so lets wrap
-				mFrontFences->mCount = 0;
+				mFrontFences->Clear();
 				mNextFrontFenceIndex = 0;
+				mFrontFencesCount = mBackFencesCount;
+				mBackFencesCount = 0;
 				std::swap(mBackFences, mFrontFences);
 
 				// delete all fences we checked before wrapping
 				while (mNextFrontFenceIndex < next_back_fence_index)
 				{
-					auto& OpenGLFence = mFrontFences->mFencesChunks[mNextFrontFenceIndex / 64]->operator[](mNextFrontFenceIndex % 64).OpenGLFence;
+					auto& OpenGLFence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64).OpenGLFence;
 
 					glDeleteSync(OpenGLFence);
 					OpenGLFence = nullptr;
@@ -197,27 +204,14 @@ namespace fe::Render::GAPI::OpenGL
 
 			mCurrentPosition = region_end_candidate;
 
-			auto& chunks_arena = mBackFences->mFencesChunks;
-			if (chunks_arena.Count * 64 >= mBackFences->mCount)
+
+			if (mBackFences->Count * 64 <= mBackFencesCount)
 			{
-				if (chunks_arena.IsFull())
-				{
-					bool arena_any_capacity = chunks_arena.Count > 1;
-					UInt arena_new_capacity = arena_any_capacity ? chunks_arena.Count + (chunks_arena.Count >> 1) : chunks_arena.Count + 1;
-					auto new_arena_buffer = Context::Allocators::Auxiliary->Allocate<Array<Fence, 64>*>(arena_new_capacity);
-
-					std::memcpy(new_arena_buffer.Elements, chunks_arena.Buffer.Elements, sizeof(Array<Fence, 64>*) * chunks_arena.Count);
-					Context::Allocators::Auxiliary->Deallocate(chunks_arena.Buffer);
-
-					chunks_arena.Buffer = new_arena_buffer;
-				}
-
-				auto& chunk_ptr = * mBackFences->mFencesChunks.EmplaceBack();
-				chunk_ptr = Context::Allocators::Default->Allocate<Fence, 64>();
+				mBackFences->Append(mMainAlloc->Allocate<Fence, 64>());
 			}
 
-			auto& new_fence = mBackFences->mFencesChunks[mBackFences->mCount / 64]->operator[](mBackFences->mCount % 64);
-			mBackFences->mCount++;
+			auto& new_fence = mBackFences->At(mBackFencesCount / 64)->At(mBackFencesCount % 64);
+			mBackFencesCount++;
 
 			new_fence.Location = position_candidate;
 			new_fence.OpenGLFence = nullptr;

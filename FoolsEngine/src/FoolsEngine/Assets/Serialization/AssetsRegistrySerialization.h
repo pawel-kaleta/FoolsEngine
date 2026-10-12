@@ -2,8 +2,6 @@
 
 #include "FoolsEngine/Assets/AssetAccessors.h"
 
-#include <filesystem>
-
 namespace fe
 {
 	namespace AssetSerializer

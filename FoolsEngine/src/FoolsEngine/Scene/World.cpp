@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "World.h"
 
 #include "Component.h"

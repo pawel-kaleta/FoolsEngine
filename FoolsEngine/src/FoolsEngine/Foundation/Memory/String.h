@@ -7,6 +7,10 @@
 
 namespace fe
 {
+	// do we need owning string?
+
+	struct String;
+
 	struct CString
 	{
 		char* Data = nullptr;
@@ -20,6 +24,8 @@ namespace fe
 			Data = (char*)string;
 			CountWithNull = lengthWithNull;
 		}
+
+		inline String GetString();
 	};
 
 	struct String
@@ -47,13 +53,21 @@ namespace fe
 		CString GetCString(Allocator* alloc) const
 		{
 			CString output;
-			output.Data = alloc->Allocate<char8_t>(Count + 1).Elements;
+			output.Data = alloc->Allocate<char>(Count + 1).Elements;
 			output.CountWithNull = Count + 1;
 			std::memcpy(output.Data, Data, Count);
 			output.Data[Count + 1] = u8'\0';
 			return output;
 		}
 	};
+
+	inline String CString::GetString()
+	{
+		String result;
+		result.Data = (char8_t*)Data;
+		result.Count = CountWithNull - 1;
+		return result;
+	}
 
 	inline bool CompareStringsEqual(String a, String b)
 	{

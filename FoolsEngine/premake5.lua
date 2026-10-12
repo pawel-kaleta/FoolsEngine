@@ -10,8 +10,8 @@ project "FoolsEngine"
 	targetdir ("../bin/"     .. outputdir .. "/%{prj.name}")
 	objdir    ("../bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "FE_pch.h"
-	pchsource "src/FE_pch.cpp"
+	--pchheader "FE_pch.h"
+	--pchsource "src/FE_pch.cpp"
 
 	files {
 		"src/**.h",

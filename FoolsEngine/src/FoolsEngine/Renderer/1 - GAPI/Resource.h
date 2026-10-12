@@ -13,11 +13,11 @@ namespace fe::Render::GAPI
 	namespace Descriptors
 	{
 		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment, Compute);
+
+		FE_DECLARE_ENUM(TextureType, None, Texture1D, Texture2D, Texture3D, Texture2DArray)
+
+		FE_DECLARE_ENUM(TextureFormat, None, R_8, RG_8, RGB_8, RGBA_8, R_UINT_32, DEPTH24STENCIL8)
 		
-		FE_DECLARE_ENUM(TextureType, None, Texture1D, Texture2D, Texture3D, Texture2DArray);
-
-		FE_DECLARE_ENUM(TextureFormat, None, R_8, RG_8, RGB_8, RGBA_8, R_UINT_32, DEPTH24STENCIL8);
-
 		struct TextureSpec
 		{
 			TextureType mType = TextureType::None;
@@ -43,14 +43,14 @@ namespace fe::Render::GAPI
 			}
 		};
 
-		FE_DECLARE_ENUM(Wrapping, None, Repeat, MirrorRepeat, Clamp, Border);
+		FE_DECLARE_ENUM(Wrapping, None, Repeat, MirrorRepeat, Clamp, Border)
 
-		FE_DECLARE_ENUM(Filtering, None, Nearest, Bilinear);
+		FE_DECLARE_ENUM(Filtering, None, Nearest, Bilinear)
 
-		FE_DECLARE_ENUM(Mipmapping, None, Nearest, Liniear);
+		FE_DECLARE_ENUM(Mipmapping, None, Nearest, Liniear)
 
-		FE_DECLARE_ENUM(ASFiltering, None, x2, x4, x8, x16);
-
+		FE_DECLARE_ENUM(ASFiltering, None, x2, x4, x8, x16)
+			
 		struct TextureViewSpec
 		{
 			Wrapping	mWrapping = Wrapping::None;
@@ -61,7 +61,7 @@ namespace fe::Render::GAPI
 		};
 	}
 
-
+	
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
 	void	AllocateCommitBuffer(GID buffer, U32 size);

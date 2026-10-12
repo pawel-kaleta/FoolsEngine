@@ -23,7 +23,7 @@ namespace fe::Render::GAPI
 		return std::lcm(16, std::lcm(alignof(T), sizeof(T)));
 	}
 
-	UInt GetOffsetAlignmentFor(UInt size)
+	inline UInt GetOffsetAlignment(UInt size)
 	{
 		return std::lcm(16, sizeof(size));
 	}

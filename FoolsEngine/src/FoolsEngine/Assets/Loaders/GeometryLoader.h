@@ -5,6 +5,10 @@
 #include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
 #include "FoolsEngine/Renderer/2 - Representation/Model.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
+
+#include <filesystem>
+
 struct aiScene;
 
 namespace fe
@@ -30,7 +34,7 @@ namespace fe
 		}
 		//static void UnloadModel(void* data);
 
-		static bool IsKnownExtension(const std::pmr::string& extension);
+		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
 		static const char* GetExtensionAlias() { return "Geometry Source"; }
 		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath);

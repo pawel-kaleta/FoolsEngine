@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "LightComponents.h"
 
 #include "FoolsEngine/Scene/BaseEntity.h"

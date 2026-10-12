@@ -1,16 +1,17 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Debug/Profiler.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Platform/Events/Event.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+
 namespace fe
 {
-	namespace Events
-	{
-		class Event;
-	}
-
 	class Layer
 	{
 	public:
-		Layer(const std::string& name = "Layer")
+		Layer(String name = String("Layer", 6))
 			: m_Name(name)
 		{
 			FE_PROFILER_FUNC();
@@ -23,9 +24,13 @@ namespace fe
 		virtual void OnImGuiRender() { }
 		virtual void OnEvent(Ref<Events::Event> event) { }
 
-		const std::string& ToString() const { return m_Name; }
+		const std::string& ToString() const
+		{
+			Pile p;
+			return m_Name.GetCString(&p).Data;
+		}
 
-		std::string m_Name;
+		String m_Name;
 	};
 
 }

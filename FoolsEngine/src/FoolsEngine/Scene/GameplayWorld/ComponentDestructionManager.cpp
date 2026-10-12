@@ -1,5 +1,7 @@
-#include "FE_pch.h"
 #include "ComponentDestructionManager.h"
+
+#include "FoolsEngine/Foundation/Debug/Profiler.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 namespace fe
 {

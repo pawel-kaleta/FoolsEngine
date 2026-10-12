@@ -3,6 +3,8 @@
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
@@ -14,7 +16,7 @@ namespace fe::Render::GAPI::OpenGL
 
 	namespace Utils
 	{
-		GLenum ShaderTypeToGLEnum(ShaderType type)
+		inline GLenum ShaderTypeToGLEnum(ShaderType type)
 		{
 			switch (type)
 			{
@@ -37,6 +39,8 @@ namespace fe::Render::GAPI::OpenGL
 
 		GLuint mOpenGLID = 0;
 		ShaderType mType = ShaderType::None;
+
+		FE_TYPE_SETUP(Shader)
 
 		void Init()
 		{

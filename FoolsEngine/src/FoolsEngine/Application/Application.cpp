@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "Application.h"
 
 #include "Time.h"
@@ -13,7 +12,7 @@
 #include "FoolsEngine/Platform/Events/Event.h"
 #include "FoolsEngine/Platform/Win32/Win32Window.h"
 					 
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 					 
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
@@ -28,7 +27,7 @@ namespace fe
 {
 	namespace Context
 	{
-		extern void InitAllocators(UInt mainLoopArenaSize);
+		void InitAllocators(UInt mainLoopArenaSize);
 	}
 
 	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
@@ -48,7 +47,7 @@ namespace fe
 	{
 	public:
 		ApplicationLayer(std::function<void(Ref<Events::Event>)> EventCallback)
-			: Layer("ApplicationLayer"), m_Callback(EventCallback) {
+			: Layer(String("ApplicationLayer",17)), m_Callback(EventCallback) {
 			FE_PROFILER_FUNC();
 		}
 

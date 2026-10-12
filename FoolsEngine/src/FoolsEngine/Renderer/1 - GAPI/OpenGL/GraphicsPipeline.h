@@ -2,6 +2,7 @@
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Data.h"
 #include "Texture.h"
@@ -14,7 +15,7 @@ namespace fe::Render::GAPI::OpenGL
 {
 	namespace Utils
 	{
-		GLenum PrimitiveTypeToGLmode(Raster::PrimitiveType primitive)
+		inline GLenum PrimitiveTypeToGLmode(Raster::PrimitiveType primitive)
 		{
 			// TO DO: make this a static lookup table?
 
@@ -32,7 +33,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		GLenum DepthTestTypeToGLenum(DepthStencil::DepthTestType test)
+		inline GLenum DepthTestTypeToGLenum(DepthStencil::DepthTestType test)
 		{
 			switch (test)
 			{
@@ -53,7 +54,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		GLenum BlendFunctionToGLEnum(Blend::BlendFunction func)
+		inline GLenum BlendFunctionToGLEnum(Blend::BlendFunction func)
 		{
 			switch (func)
 			{
@@ -87,6 +88,8 @@ namespace fe::Render::GAPI::OpenGL
 		GLenum mMode = GL_TRIANGLES;
 		GLenum mDepthFunk = GL_ALWAYS;
 		GLenum mFaceCull = GL_BACK;
+
+		FE_TYPE_SETUP(GraphicsPipeline)
 
 		void Init()
 		{

@@ -3,6 +3,7 @@
 #include "LoaderType.h"
 
 #include "FoolsEngine/Assets/AssetTypes.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
 
 namespace fe
 {
@@ -11,7 +12,7 @@ namespace fe
 	public:
 		struct Item
 		{
-			bool (* const IsKnownExtensionFunkPtr)(const std::pmr::string&);
+			bool (* const IsKnownExtensionFunkPtr)(String);
 			bool (* const IsKnownAssetType)(AssetType assetType);
 			const char* SourceExtensionAlias;
 			const LoaderType Type;
@@ -21,7 +22,7 @@ namespace fe
 
 		std::vector<Item> m_Items;
 
-		static const Item* GetItem(const std::pmr::string& extension);
+		static const Item* GetItem(String extension);
 		static const Item* GetItem(AssetType assetType);
 	private:
 		static LoadersRegistry* s_Instance;

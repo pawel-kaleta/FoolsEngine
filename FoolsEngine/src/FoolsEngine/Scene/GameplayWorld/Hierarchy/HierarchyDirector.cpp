@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "HierarchyDirector.h"
 
 #include "FoolsEngine/Scene/Scene.h"

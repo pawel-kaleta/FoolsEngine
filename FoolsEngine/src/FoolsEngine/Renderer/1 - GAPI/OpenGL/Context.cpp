@@ -1,7 +1,3 @@
-#pragma once
-
-#include "FE_pch.h"
-
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "Registry.h"
 
@@ -10,7 +6,7 @@
 
 namespace fe::Context
 {
-	extern void InitGPU(U32 scrachBufferSize);
+	void InitGPU(U32 scrachBufferSize);
 }
 
 namespace fe::Render::GAPI
@@ -69,8 +65,8 @@ namespace fe::Render::GAPI
 		case GL_DEBUG_SEVERITY_NOTIFICATION: FE_LOG_CORE_DEBUG("OpenGL:"); break;
 		}
 
-		FE_LOG_CORE_DEBUG("	Source:		{0}", Sources.at(source));
-		FE_LOG_CORE_DEBUG("	Type:		{0}", Types.at(type));
+		FE_LOG_CORE_DEBUG("	Source:	{0}", Sources.at(source));
+		FE_LOG_CORE_DEBUG("	Type:	{0}", Types.at(type));
 		FE_LOG_CORE_DEBUG("	ID:		{0}", id);
 
 		std::string logMessage = "	Message:	";

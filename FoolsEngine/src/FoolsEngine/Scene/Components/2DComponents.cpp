@@ -1,11 +1,10 @@
-#include "FE_pch.h"
 #include "2DComponents.h"
 
 #include "FoolsEngine/Scene/BaseEntity.h"
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

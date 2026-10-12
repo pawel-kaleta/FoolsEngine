@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "LoadersRegistry.h"
 
 #include "ShaderLoader.h"
@@ -9,7 +8,7 @@ namespace fe
 {
 	LoadersRegistry* LoadersRegistry::s_Instance;
 
-	const LoadersRegistry::Item* LoadersRegistry::GetItem(const std::pmr::string& extension)
+	const LoadersRegistry::Item* LoadersRegistry::GetItem(String extension)
 	{
 		for (const auto& item : s_Instance->m_Items)
 		{

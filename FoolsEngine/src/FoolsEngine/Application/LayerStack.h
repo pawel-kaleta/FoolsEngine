@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Application/Layer.h"
 
+#include <vector>
+
 namespace fe
 {
 	class LayerStack

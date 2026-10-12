@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "ImGuiLayer.h"
 
 #include "FoolsEngine/Foundation/Memory/Pile.h"
@@ -15,7 +14,7 @@
 namespace fe {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer")
+		: Layer(String("ImGuiLayer", 11))
 	{
 		FE_PROFILER_FUNC();
 	}

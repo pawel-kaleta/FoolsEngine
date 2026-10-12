@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "ComponentTypesRegistry.h"
 
 #include "Component.h"

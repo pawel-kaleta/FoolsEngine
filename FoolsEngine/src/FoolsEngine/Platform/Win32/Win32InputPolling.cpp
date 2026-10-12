@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "FoolsEngine/Platform/InputPolling.h"
 
 #include "FoolsEngine/Application/Application.h"

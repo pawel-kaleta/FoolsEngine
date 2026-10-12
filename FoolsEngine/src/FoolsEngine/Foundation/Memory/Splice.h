@@ -2,8 +2,7 @@
 
 #include "DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
-
-#include <cstring>
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 namespace fe
 {
@@ -14,6 +13,8 @@ namespace fe
 	struct Array
 	{
 		T Elements[N];
+
+		FE_TYPE_SETUP(Array<T, N>);
 
 		inline constexpr static UInt Count = N;
 
@@ -61,6 +62,8 @@ namespace fe
 	{
 		T* Elements;
 		UInt Count;
+
+		FE_TYPE_SETUP(Splice<T>);
 
 		void Init()
 		{

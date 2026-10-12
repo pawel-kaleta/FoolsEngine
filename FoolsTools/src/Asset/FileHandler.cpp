@@ -19,7 +19,8 @@ namespace fe
             if (!loaderItemPtr)
             {
                 Scratchpad sp;
-                const auto item = LoadersRegistry::GetItem(filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
+                auto std_string = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+                const auto item = LoadersRegistry::GetItem(String(std_string.data(), std_string.size()+1));
 				AssetImportModal::OpenWindow(filepath, item);
 				return;
             }

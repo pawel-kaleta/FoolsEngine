@@ -171,7 +171,7 @@ namespace fe
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		auto loader_registry_item_ptr = LoadersRegistry::GetItem(extension);
+		auto loader_registry_item_ptr = LoadersRegistry::GetItem(String(extension.data(), extension.size()+1));
 		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(extension);
 
 		const std::pmr::string file_name(stem + extension, &sp);

@@ -153,7 +153,7 @@ namespace fe
 		ApplicationSpecification app_spec;
 
 		app_spec.CommandLineArgs = args;
-		app_spec.Name = "FoolsTools";
+		app_spec.Name = String("FoolsTools", 11);
 		app_spec.WindowAttributes = { "FoolsTools", 1900, 1000, Render::GAPI::Platform::OpenGL };
 
 		return new EditorApp(app_spec);

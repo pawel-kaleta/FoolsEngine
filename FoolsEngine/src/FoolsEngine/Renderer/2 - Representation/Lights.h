@@ -9,7 +9,7 @@ namespace fe::Render::Representation
 {
 	struct Light
 	{
-		FE_DECLARE_ENUM(Type, Directional, Spot, Point);
+		FE_DECLARE_ENUM(Type, Directional, Spot, Point)
 
 		virtual Type GetType() = 0;
 	};

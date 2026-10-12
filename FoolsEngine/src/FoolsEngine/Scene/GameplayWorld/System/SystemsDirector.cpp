@@ -1,9 +1,10 @@
-#include "FE_pch.h"
 #include "SystemsDirector.h"
 
 #include "SystemsRegistry.h"
 
 #include "FoolsEngine/Application/UUID.h"
+
+#include <algorithm>
 
 namespace fe
 {

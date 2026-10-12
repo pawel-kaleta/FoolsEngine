@@ -1,6 +1,8 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
 
@@ -15,7 +17,7 @@ namespace fe::Render::GAPI::OpenGL
 
 	namespace Utils
 	{
-		GLenum FormatToGLFormat(TextureFormat format)
+		inline GLenum FormatToGLFormat(TextureFormat format)
 		{
 			// TO DO: make this a static lookup table?
 
@@ -36,7 +38,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		GLenum FormatToGLInternalFormat(TextureFormat format)
+		inline GLenum FormatToGLInternalFormat(TextureFormat format)
 		{
 			// TO DO: make this a static lookup table?
 
@@ -57,7 +59,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		GLenum FormatToGLType(TextureFormat format)
+		inline GLenum FormatToGLType(TextureFormat format)
 		{
 			switch (format.Value)
 			{
@@ -80,6 +82,8 @@ namespace fe::Render::GAPI::OpenGL
 	struct Texture
 	{
 		constexpr static ObjType Type = ObjType::Texture;
+
+		FE_TYPE_SETUP(Texture)
 
 		GLuint mOpenGLID = 0;
 		TextureSpec mSpec;
@@ -168,6 +172,8 @@ namespace fe::Render::GAPI::OpenGL
 		Texture* mTexture = nullptr;
 		GLuint mSamplerID = 0;
 		GLuint64 mTextureSamplerHandleGL = -1;
+
+		FE_TYPE_SETUP(TextureView)
 
 		void Init()
 		{

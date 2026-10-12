@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Math/Transform.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Application/Time.h"
 
@@ -8,6 +9,10 @@
 
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+
+#include <glm/glm.hpp>
+
+#include <array>
 
 namespace fe
 {

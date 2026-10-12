@@ -55,7 +55,7 @@
 #include "FoolsEngine/Assets/Serialization/SceneSerializer.h"
 #include "FoolsEngine/Assets/Serialization/AssetsRegistrySerialization.h"
 
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -69,7 +69,6 @@
 
 
 // TO DO:
-// - standarize asset loading/unloading to CPU/GPU ("sendtogpu(), Release(), unloadfromcpu(), releasedependencyload() etc.)
 // - cleanup of rendering architecture (acces to scene data)
-// - asset import is most likely totally broken after low-lever renderer redesing (descriptors global allocation)
-// - what about unused descriptors left after removed assets?
+// - asset import is most likely totally broken after low-lever renderer redesing
+// - get rid of this file and provide some dedicated domain specific includes

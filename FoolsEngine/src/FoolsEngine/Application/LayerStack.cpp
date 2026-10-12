@@ -1,5 +1,7 @@
-#include "FE_pch.h"
 #include "LayerStack.h"
+
+#include "FoolsEngine/Foundation/Debug/Log.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 namespace fe
 {

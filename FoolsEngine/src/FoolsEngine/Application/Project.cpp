@@ -1,5 +1,6 @@
-#include "FE_pch.h"
 #include "Project.h"
+
+#include "FoolsEngine/Assets/Asset.h"
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
@@ -129,7 +130,7 @@ namespace fe
 		inst.BaseAssets.Textures.FlatBlack	= textures_node["FlatBlack"	].as<UUID>();
 
 		inst.BaseAssets.Shaders.Base2DBatchVertex		= shaders_node["Base2DVertex"			].as<UUID>();
-		inst.BaseAssets.Shaders.Base2DBatchFragment		= shaders_node["Base2DFragment"		].as<UUID>();
+		inst.BaseAssets.Shaders.Base2DBatchFragment		= shaders_node["Base2DFragment"			].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DVertex			= shaders_node["Base3DVertex"			].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DFragmentOpaque	= shaders_node["Base3DFragmentOpaque"	].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DFragmentCutout	= shaders_node["Base3DFragmentCutout"	].as<UUID>();

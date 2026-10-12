@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Assets/Asset.h"
+#include "UUID.h"
 
 #include <filesystem>
 

@@ -1,7 +1,7 @@
-#include "FE_pch.h"
 #include "ShaderLoader.h"
 
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
@@ -36,15 +36,15 @@ namespace fe
 		return;
 	}
 
-	bool ShaderLoader::IsKnownExtension(const std::pmr::string& extension)
+	bool ShaderLoader::IsKnownExtension(String extension)
 	{
-		static const char* s_known_extensions[] = {
-			".glsl"
+		static const String s_known_extensions[] = {
+			String(".glsl", 6)
 		};
 
 		for (auto& known_extension : s_known_extensions)
 		{
-			if (extension == known_extension)
+			if (CompareStringsEqual(known_extension, extension))
 			{
 				return true;
 			}

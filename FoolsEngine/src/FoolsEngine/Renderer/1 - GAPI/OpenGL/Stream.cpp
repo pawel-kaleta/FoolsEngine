@@ -1,7 +1,3 @@
-#pragma once
-
-#include "FE_pch.h"
-
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 
 #include "InternalID.h"
@@ -56,7 +52,7 @@ namespace fe::Render::GAPI
 		}
 		if (id.mComps.Type == ObjType::UpStream)
 		{
-			//OpenGL::UpStream* stream_ptr = OpenGL::DownStreamRegistry.GetObj(id);
+			//OpenGL::UpStream* stream_ptr = OpenGL::UpStreamRegistry.GetObj(id);
 			FE_CORE_ASSERT(false, "Not implemented!!");
 			return GID();
 		}
@@ -71,7 +67,7 @@ namespace fe::Render::GAPI
 		OpenGL::Stream* stream_obj = region_obj->mStream;
 		if (stream_obj->mID.mComps.Type == ObjType::DownStream)
 		{
-			((OpenGL::DownStream * )stream_obj)->CommitRegion(region_obj);
+			stream_obj->ToDown()->CommitRegion(region_obj);
 			return;
 		}
 		if (stream_obj->mID.mComps.Type == ObjType::UpStream)
@@ -89,7 +85,7 @@ namespace fe::Render::GAPI
 		OpenGL::Stream* stream_obj = region_obj->mStream;
 		if (stream_obj->mID.mComps.Type == ObjType::DownStream)
 		{
-			((OpenGL::DownStream*)stream_obj)->RetireRegionCmd(region_obj);
+			stream_obj->ToDown()->RetireRegionCmd(region_obj);
 			OpenGL::RegionRegistry.FreeObj(region);
 
 			return;

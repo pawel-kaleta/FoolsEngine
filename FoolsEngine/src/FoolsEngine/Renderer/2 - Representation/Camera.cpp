@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "Camera.h"
 
 #include <glm/gtc/matrix_transform.hpp>

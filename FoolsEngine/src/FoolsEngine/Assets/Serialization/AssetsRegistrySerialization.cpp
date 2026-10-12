@@ -1,9 +1,10 @@
-#include "FE_pch.h"
 #include "AssetsRegistrySerialization.h"
 
 #include "YAML.h"
 
 #include "FoolsEngine/Foundation/Memory/Xar.h"
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+
 
 #include "FoolsEngine/Application/Project.h"
 

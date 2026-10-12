@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "SceneSerializer.h"
 
 #include "YAML.h"

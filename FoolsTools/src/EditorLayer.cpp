@@ -10,7 +10,7 @@
 namespace fe
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer")
+		: Layer(String("EditorLayer", 12))
 	{
 		FE_PROFILER_FUNC();
 

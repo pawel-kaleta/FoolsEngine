@@ -2,7 +2,7 @@
 
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
+#include "FoolsEngine/Renderer/4 - Render/Renderer2D.h"
 
 namespace fe
 {

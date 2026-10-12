@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "GeometryLoader.h"
 
 #include "FoolsEngine/Application/Project.h"
@@ -18,18 +17,18 @@ namespace fe
 	//	FE_CORE_ASSERT(false, "Not implemented");
 	//}
 
-	bool GeometryLoader::IsKnownExtension(const std::pmr::string& extension)
+	bool GeometryLoader::IsKnownExtension(String extension)
 	{
-		constexpr static const char * s_known_extensions[] = {
-			".obj",
-			".fbx",
-			".glb",
-			".gltf"
+		static const fe::String s_known_extensions[] = {
+			String(".obj", 5),
+			String(".fbx", 5),
+			String(".glb", 5),
+			String(".gltf", 6)
 		};
 
 		for (auto& known_extension : s_known_extensions)
 		{
-			if (extension == known_extension)
+			if (CompareStringsEqual(extension, known_extension))
 			{
 				return true;
 			}

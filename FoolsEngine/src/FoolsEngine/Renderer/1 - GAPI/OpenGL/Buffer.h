@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 #include "InternalID.h"
 
 #include <glad/gl.h>
@@ -14,6 +15,8 @@ namespace fe::Render::GAPI::OpenGL
 		U32 mSize = 0;
 		bool mCommited = false;
 		bool mReleased = false;
+
+		FE_TYPE_SETUP(Buffer)
 
 		void Init()
 		{
@@ -61,12 +64,20 @@ namespace fe::Render::GAPI::OpenGL
 		}
 	};
 
+	struct DownStream;
+	struct UpStream;
+
 	struct Stream
 	{
 		InternalID mID;
 		GLuint mOpenGLBuffer = 0;
 		U32 mCapacity = 0;
 		Byte* mDMABegin = nullptr;
+
+		FE_TYPE_SETUP(Stream)
+
+		DownStream* ToDown() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::DownStream); return (DownStream*)this; }
+		UpStream* ToUp() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::UpStream); return (UpStream*)this; }
 
 		struct Fence
 		{
@@ -82,6 +93,8 @@ namespace fe::Render::GAPI::OpenGL
 		Byte* mData;
 		Stream::Fence* mFence;
 		UInt mSize;
+
+		FE_TYPE_SETUP(Region)
 
 		U32 GetOffset() const
 		{

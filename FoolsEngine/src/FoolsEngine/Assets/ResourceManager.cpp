@@ -1,5 +1,3 @@
-#include "FE_pch.h"
-
 #include "FoolsEngine/Assets/AssetManager.h"
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"

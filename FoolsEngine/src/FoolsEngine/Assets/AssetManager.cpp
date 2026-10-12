@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "AssetManager.h"
 
 #include "AssetHandle.h"
@@ -10,7 +9,7 @@
 #include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 namespace fe
 {

@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "Log.h"
 
 // https://github.com/gabime/spdlog/wiki

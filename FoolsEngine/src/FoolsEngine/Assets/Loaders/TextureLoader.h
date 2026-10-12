@@ -2,12 +2,14 @@
 
 #include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine/Assets/AssetHandle.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
+
+#include "FoolsEngine/Assets/AssetAccessors.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 
-#include <string>
+#include <filesystem>
 
 namespace fe
 {
@@ -34,7 +36,7 @@ namespace fe
 		}
 		static void UnloadTexture(void* data);
 		static Render::GAPI::Descriptors::TextureSpec InspectTexture(const std::filesystem::path& filePath);
-		static bool IsKnownExtension(const std::pmr::string& extension);
+		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
 		static const char* GetExtensionAlias() { return "Texture Source"; }
 	};

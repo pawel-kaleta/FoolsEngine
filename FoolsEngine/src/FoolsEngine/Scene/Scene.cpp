@@ -1,7 +1,8 @@
-#include "FE_pch.h"
 #include "Scene.h"
 
 #include "ECS.h"
+
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include "FoolsEngine/Scene/SimulationStage.h"
 #include "FoolsEngine/Scene/GameplayWorld/Hierarchy/HierarchyDirector.h"

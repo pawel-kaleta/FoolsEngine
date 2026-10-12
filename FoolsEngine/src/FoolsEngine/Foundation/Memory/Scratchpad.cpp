@@ -1,5 +1,3 @@
-#include "FE_pch.h"
-
 #include "Scratchpad.h"
 
 namespace fe

@@ -19,7 +19,7 @@ namespace fe::Render::GAPI::OpenGL
 		} mComps;
 	};
 
-	ObjType GetObjType(GID obj)
+	inline ObjType GetObjType(GID obj)
 	{
 		return (ObjType::ValueType)(InternalID(obj).mComps.Type);
 	}

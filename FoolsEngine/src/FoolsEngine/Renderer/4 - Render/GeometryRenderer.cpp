@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "GeometryRenderer.h"
 
 #include "FoolsEngine/Scene/Scene.h"
@@ -7,7 +6,7 @@
 #include "FoolsEngine/Assets/AssetAccessors.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Model.h"
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

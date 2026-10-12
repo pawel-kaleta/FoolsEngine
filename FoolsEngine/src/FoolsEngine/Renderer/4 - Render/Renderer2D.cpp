@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "Renderer2D.h"
 
 #include "FoolsEngine/Scene/ECS.h"
@@ -8,13 +7,15 @@
 #include "FoolsEngine/Scene/Components/RenderingComponents.h"
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
+#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/2 - Representation/Camera.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
-#include "FoolsEngine/Renderer/7 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <glad/gl.h>
 

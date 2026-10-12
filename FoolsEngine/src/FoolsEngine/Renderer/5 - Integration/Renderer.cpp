@@ -1,4 +1,3 @@
-#include "FE_pch.h"
 #include "Renderer.h"
 
 #include "FoolsEngine/Application/Project.h"
@@ -14,8 +13,8 @@
 #include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
 #include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 
-#include "FoolsEngine/Renderer/6 - Render/Renderer2D.h"
-#include "FoolsEngine/Renderer/6 - Render/GeometryRenderer.h"
+#include "FoolsEngine/Renderer/4 - Render/Renderer2D.h"
+#include "FoolsEngine/Renderer/4 - Render/GeometryRenderer.h"
 
 #include <glad/gl.h>
 

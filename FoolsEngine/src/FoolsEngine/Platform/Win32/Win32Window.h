@@ -1,6 +1,12 @@
 #pragma once
 
 #include "FoolsEngine/Platform/Window.h"
+#include "FoolsEngine/Platform/Events/Event.h"
+
+#include "FoolsEngine/Foundation/Utils/Core.h"
+
+#include <functional>
+#include <string>
 
 struct GLFWwindow;
 

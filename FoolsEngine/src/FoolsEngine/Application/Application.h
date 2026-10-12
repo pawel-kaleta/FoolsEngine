@@ -5,6 +5,7 @@
 #include "ImGui/ImGuiLayer.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
 
 #include "FoolsEngine/Platform/Window.h"
 #include "FoolsEngine/Platform/PlatformBase.h"
@@ -37,7 +38,7 @@ namespace fe
 
 	struct ApplicationSpecification
 	{
-		std::string Name = "FoolsEngine Application";
+		String Name = String("FoolsEngine Application", 24);
 		WindowAttributes WindowAttributes;
 		ApplicationCommandLineArgs CommandLineArgs;
 	};
@@ -60,7 +61,7 @@ namespace fe
 		static Application& Get() { return *s_Instance; }
 		static void Close() { s_Instance->m_Running = false; }
 
-		std::string			m_Name;
+		String				m_Name;
 		MainEventDispacher	m_MainEventDispacher;
 		LayerStack*			m_LayerStack;
 
@@ -78,9 +79,9 @@ namespace fe
 
 		AssetManager* m_AssetManager;
 
-		uint32_t	m_FrameCount	= 1;
-		bool		m_Running		= true;
-		bool		m_Minimized		= false;
+		UInt	m_FrameCount	= 1;
+		bool	m_Running		= true;
+		bool	m_Minimized		= false;
 		
 	protected:
 		virtual void ClientAppStartup() {};
