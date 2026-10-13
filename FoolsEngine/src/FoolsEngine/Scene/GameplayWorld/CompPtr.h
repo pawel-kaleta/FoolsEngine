@@ -47,7 +47,8 @@ namespace fe
 			}
 			else
 			{
-				FE_LOG_CORE_ERROR("This entity ({0}) does not have this component ({1})", entity.Get<CEntityName>().EntityName, tnComponent::GetNameStatic());;
+				Pile p;
+				FE_LOG_CORE_ERROR("This entity ({0}) does not have this component ({1})", entity.Get<CEntityName>().EntityName.GetCString(&p).Data, tnComponent::GetNameStatic().GetCString(&p).Data);;
 			}
 		}
 

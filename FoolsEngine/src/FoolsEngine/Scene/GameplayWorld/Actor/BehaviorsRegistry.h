@@ -3,6 +3,8 @@
 #include "Actor.h"
 #include "Behavior.h"
 
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 namespace fe
 {
 	class BehaviorsRegistry
@@ -12,14 +14,14 @@ namespace fe
 
 		struct Item
 		{
-			Behavior*   (Actor::* Create)();
-			std::string (* GetName)();
+			Behavior*	(Actor::* Create)();
+			String		(* GetName)();
 		};
 
 		template <typename tnBehavior>
 		static void RegisterBehavior()
 		{
-			s_Instance->m_Items.push_back(
+			s_Instance->m_Items.Append(
 				Item{
 					&Actor::CreateBehaviorAsBase<tnBehavior>,
 					&tnBehavior::GetNameStatic
@@ -27,9 +29,9 @@ namespace fe
 			);
 		}
 
-		static const Item* GetItemFromName(const std::string& name);
+		static const Item* GetItemFromName(String name);
 		
-		std::vector<Item> m_Items;
+		DynamicArena<Item> m_Items;
 	
 	private:
 		static BehaviorsRegistry* s_Instance;

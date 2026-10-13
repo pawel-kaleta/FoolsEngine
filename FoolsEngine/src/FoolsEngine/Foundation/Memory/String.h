@@ -19,6 +19,12 @@ namespace fe
 		CString() = default;
 		CString(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
 
+		void Init()
+		{
+			Data = nullptr;
+			CountWithNull = 0;
+		}
+
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
 		{
 			Data = (char*)string;
@@ -35,6 +41,23 @@ namespace fe
 
 		String() = default;
 		String(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
+		String(const char* string)
+		{
+			Data = (char8_t*)string;
+			auto current = string;
+
+			while (*current != '\0')
+			{
+				++Count;
+				++current;
+			}
+		}
+
+		void Init()
+		{
+			Data = nullptr;
+			Count = 0;
+		}
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
 		{
@@ -49,8 +72,8 @@ namespace fe
 			Count = splice.Count * sizeof(T);
 		}
 
-		template <typename Allocator>
-		CString GetCString(Allocator* alloc) const
+		template <typename tAlloc>
+		CString GetCString(tAlloc* alloc) const
 		{
 			CString output;
 			output.Data = alloc->Allocate<char>(Count + 1).Elements;
@@ -79,15 +102,29 @@ namespace fe
 
 	struct StringBuilder
 	{
-		Splice<char8_t> Buffer;
+		PMAlloc* Alloc;
 		UInt Count = 0;
+		Splice<char8_t> Buffer;
+
+		FE_TYPE_SETUP(StringBuilder)
+
+		const	char8_t * begin()	const	{ return Buffer.Elements; }
+				char8_t * begin()			{ return Buffer.Elements; }
+		const	char8_t * end()		const	{ return Buffer.Elements + Count; }
+				char8_t * end()				{ return Buffer.Elements + Count; }
+
+		void Init(Allocator* allocator = Context::Allocators::Default)
+		{
+			Alloc = (PMAlloc*) allocator;
+			Count = 0;
+			Buffer.Init();
+		}
 
 		void Release()
 		{
-			Context::Allocators::Default->Deallocate(Buffer);
-			Buffer.Elements = nullptr;
-			Buffer.Count = 0;
+			Alloc->Deallocate(Buffer);
 			Count = 0;
+			Buffer.Init();
 		}
 
 		void Append(String string)
@@ -129,52 +166,65 @@ namespace fe
 			Count += size;
 		}
 
-		String GetString() const
+		template <typename tAlloc>
+		String GetString(tAlloc* allocator = Context::Allocators::Output)
 		{
-			Splice<char> mem_reg = Context::Allocators::Output->Allocate<char>(Count);
-			std::memcpy(mem_reg.begin(), Buffer.begin(), Count);
-			return String(mem_reg.Elements, mem_reg.Count);
-		}
-
-		CString GetCString() const
-		{
-			CString output;
-			output.Data = Context::Allocators::Output->Allocate<char>(Count+1).Elements;
-			output.CountWithNull = Count + 1;
+			String output;
+			output.Data = ((TypedAlloc<tAlloc>*)allocator)->Allocate<char>(Count).Elements;
+			output.Count = Count;
 			std::memcpy(output.Data, Buffer.begin(), Count);
-			output.Data[Count + 1] = u8'\0';
 			return output;
 		}
 
-		void ReserveExact(UInt capacityWithoutNull)
+		template <typename tAlloc>
+		CString GetCString(tAlloc* allocator = Context::Allocators::Output)
 		{
-			FE_CORE_ASSERT(capacityWithoutNull+1 > Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
-			RelocateToNewCapacity(capacityWithoutNull+1);
+			CString output;
+			output.Data = ((TypedAlloc<tAlloc>*)allocator)->Allocate<char>(Count+1).Elements;
+			output.CountWithNull = Count + 1;
+			std::memcpy(output.Data, Buffer.begin(), Count);
+			output.Data[Count] = u8'\0';
+			return output;
 		}
 
-		void ReserveAtLeast(UInt capacityWithoutNull)
+		void ReserveExact(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacityWithoutNull > Buffer.Count, "Attempt to reserve StringBuilder capacity to no more then it already have!");
+			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
+
+			AllocateAndMove(capacity);
+		}
+
+		void ReserveAtLeast(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
 
 			bool any_capacity = Buffer.Count;
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = any_capacity ? new_capacity : 8;
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
-			bool default_better = new_capacity > capacityWithoutNull+1;
-			new_capacity = default_better ? new_capacity : capacityWithoutNull+1;
+			bool default_better = capacity < new_capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
 
-			RelocateToNewCapacity(new_capacity);
+			AllocateAndMove(new_capacity);
 		}
-	private:
-		void RelocateToNewCapacity(UInt newCapacity)
+
+		void ExpandDefault()
 		{
-			auto alloc = Context::Allocators::Default;
-			Splice<char8_t> new_buffer = alloc->Allocate<char8_t>(newCapacity);
+			bool any_capacity = Buffer.Count;
+			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+
+			AllocateAndMove(new_capacity);
+		}
+
+		void AllocateAndMove(UInt capacity)
+		{
+			Splice<char8_t> new_buffer = Alloc->Allocate<char8_t>(capacity);
 
 			if (Buffer.Elements)
 			{
 				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(char8_t));
-				alloc->Deallocate(Buffer);
+				Alloc->Deallocate(Buffer);
 			}
 
 			Buffer = new_buffer;

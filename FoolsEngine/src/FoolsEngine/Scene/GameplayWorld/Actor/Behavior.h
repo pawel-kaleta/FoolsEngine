@@ -4,6 +4,10 @@
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 #include "FoolsEngine/Scene/GameplayWorld/CompPtr.h"
 
+#include "FoolsEngine/Foundation/Memory/String.h"
+
+#include <string>
+
 namespace YAML
 {
 	class Emitter;
@@ -26,11 +30,11 @@ namespace fe
 
 		virtual EntityID DrawInspectorWidget() { return NullEntityID; }
 
-		virtual std::string GetBehaviorName() const { return "Unnamed Behavior"; }
-		static std::string GetName() { return "Base Behavior"; }
+		virtual String GetBehaviorName() const { return String("Unnamed Behavior", 17); }
+		static String GetName() { return String("Base Behavior", 14); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetBehaviorName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetBehaviorName()); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetBehaviorName().GetCString(&p).Data); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetBehaviorName().GetCString(&p).Data); }
 
 
 		template<SimulationStage::ValueType stage>
@@ -59,25 +63,34 @@ namespace fe
 		virtual void OnDeactivate() {};
 		virtual void OnShutdown() {};
 
-		static bool DrawEntity(Entity& entity, const std::string& name);
+		static bool DrawEntity(Entity& entity, String name);
 		
 		template<typename tnComponent>
-		static bool DrawCompPtr(CompPtr<tnComponent>& compPtr, const std::string& name)
+		static bool DrawCompPtr(CompPtr<tnComponent>& compPtr, String name)
 		{
-			auto entity = compPtr.GetEntity();
-			std::string entity_ID_and_name; 
+			Pile p;
+
+			StringBuilder entity_ID_and_name;
+			entity_ID_and_name.Init(&p);
+
+			CString name_c = name.GetCString(&p);
+
+			Entity entity = compPtr.GetEntity();
 			bool missingComponent = true;
 			if (entity)
 			{
-				entity_ID_and_name = std::to_string(entity.ID()) + " " + entity.Get<CEntityName>().EntityName;
+				entity_ID_and_name.Append(std::to_string(entity.ID()).c_str());
+				entity_ID_and_name.Append(" ", 2);
+				entity_ID_and_name.Append(entity.Get<CEntityName>().EntityName);
+
 				missingComponent = !entity.AllOf<tnComponent>();
 			}
 			if (missingComponent)
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, {0.25f,0.25f,0.25f,1.0f});
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 2.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-			ImGui::PushID(name.c_str());
-			bool selected = ImGui::Button(entity_ID_and_name.c_str(), { ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing() });
+			ImGui::PushID(name_c.Data);
+			bool selected = ImGui::Button(entity_ID_and_name.GetCString(&p).Data, {ImGui::GetContentRegionAvail().x / 2, ImGui::GetTextLineHeightWithSpacing()});
 			ImGui::PopID();
 			
 			if (ImGui::BeginDragDropTarget())
@@ -94,7 +107,7 @@ namespace fe
 			}
 
 			ImGui::SameLine();
-			ImGui::Text(name.c_str());
+			ImGui::Text(name_c.Data);
 			ImGui::PopStyleVar();
 			ImGui::PopStyleVar();
 			if (missingComponent)
@@ -106,7 +119,7 @@ namespace fe
 
 
 #define FE_BEHAVIOR_SETUP(type, name) \
-	virtual std::string GetBehaviorName() const override { return name; } \
-	static std::string GetNameStatic() { return name; }
+	virtual String GetBehaviorName() const override { return name; } \
+	static String GetNameStatic() { return name; }
 
 }

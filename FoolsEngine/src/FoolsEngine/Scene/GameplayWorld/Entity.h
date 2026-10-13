@@ -25,7 +25,7 @@ namespace fe
 
 		TransformHandle	GetTransformHandle() { return TransformHandle(ID(), m_Handle.registry()); }
 		TagsHandle		GetTagsHandle() { return TagsHandle(ID(), m_Handle.registry()); }
-		std::vector<EntityID> GetChildrenList() { return ChildrenList(ID(), *m_Handle.registry()); }
+		Splice<EntityID> GetChildrenList(Allocator* alloc = Context::Allocators::Output) { return ChildrenList(ID(), *m_Handle.registry(), alloc); }
 
 		// destruction is scheduled 
 		void Destroy();
@@ -46,15 +46,22 @@ namespace fe
 
 		std::string GetNameSignature() const
 		{
+			Pile p;
 			std::string ID_and_name = std::to_string(ID());
 
+			ID_and_name += " [";
 			if (IsHead())
-				ID_and_name += " [" + Get<CEntityName>().EntityName + "]";
+			{
+				ID_and_name += Get<CEntityName>().EntityName.GetCString(&p).Data;
+				ID_and_name += "]";
+			}
 			else
 			{
 				auto& headID = Get<CHeadEntity>().HeadEntity;
 				auto& headName = m_World->m_Registry.get<CEntityName>(headID).EntityName;
-				ID_and_name += " [" + headName + "] " + Get<CEntityName>().EntityName;
+				ID_and_name += headName.GetCString(&p).Data;
+				ID_and_name += "] ";
+				ID_and_name += Get<CEntityName>().EntityName.GetCString(&p).Data;
 			}
 
 			return ID_and_name;

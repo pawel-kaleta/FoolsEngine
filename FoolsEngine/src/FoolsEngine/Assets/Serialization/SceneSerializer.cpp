@@ -149,8 +149,9 @@ namespace fe
 
 					for (const auto&& [actorID, actorData] : actor_storage->each())
 					{
+						Pile p;
 						emitter << YAML::BeginMap;
-						emitter << YAML::Key << "Actor" << YAML::Value << name_storage->get(actorID).EntityName.c_str();
+						emitter << YAML::Key << "Actor" << YAML::Value << name_storage->get(actorID).EntityName.GetCString(&p).Data;
 						emitter << YAML::Key << "UUID" << YAML::Value << UUID_storage->get(actorID).UUID;
 
 						// Behaviors
@@ -160,7 +161,7 @@ namespace fe
 								for (auto& behavior : actorData.m_Behaviors)
 								{
 									emitter << YAML::BeginMap;
-									emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName();
+									emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName().GetCString(&p).Data;
 									emitter << YAML::Key << "UUID" << YAML::Value << behavior->m_UUID;
 									emitter << YAML::Key << "Active" << YAML::Value << behavior->m_Active;
 									behavior->Serialize(emitter);
@@ -236,9 +237,11 @@ namespace fe
 
 	void SceneSerializerYAML::SerializeEntity(Entity entity, YAML::Emitter& emitter)
 	{
+		Pile p;
+
 		emitter << YAML::BeginMap;
 
-		emitter << YAML::Key << "Entity" << YAML::Value << entity.Get<CEntityName>().EntityName.c_str();
+		emitter << YAML::Key << "Entity" << YAML::Value << entity.Get<CEntityName>().EntityName.GetCString(&p).Data;
 		emitter << YAML::Key << "UUID"   << YAML::Value << entity.Get<CUUID>().UUID;
 		emitter << YAML::Key << "Head"   << YAML::Value << Entity(entity.Get<CHeadEntity>().HeadEntity, entity.GetWorld());
 		emitter << YAML::Key << "Tags"   << YAML::Value << entity.GetTagsHandle().GetLocal();
@@ -268,7 +271,7 @@ namespace fe
 				auto* component = (entity.*get_ptr)();
 				if (component)
 				{
-					emitter << YAML::Key << component->GetName() << YAML::BeginMap;
+					emitter << YAML::Key << component->GetName().GetCString(&p).Data << YAML::BeginMap;
 					component->SerializeBase(emitter);
 					emitter << YAML::EndMap;
 				}
@@ -337,7 +340,7 @@ namespace fe
 				UUID root_UUID = properties_node["RootID"].as<UUID>();
 				auto root_entity = gameplay_world->CreateOrGetEntityWithUUID(root_UUID);
 
-				root_entity.Emplace<CEntityName>("WorldRoot");
+				root_entity.Emplace<CEntityName>().EntityName.FromConstCharPtr("WorldRoot", 10);
 				root_entity.Emplace<CTransformLocal>();
 				root_entity.Emplace<CTransformGlobal>();
 				root_entity.Emplace<CTags>();
@@ -394,7 +397,8 @@ namespace fe
 
 							// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
 							BaseEntity new_entity = gameplay_world->CreateOrGetEntityWithUUID(uuid);
-							new_entity.Emplace<CEntityName>(name);
+							FE_CORE_ASSERT(false, "Not implemented"); // string allocation for name
+							new_entity.Emplace<CEntityName>().EntityName = String(name.c_str());
 
 							auto head = gameplay_world->CreateOrGetEntityWithUUID(head_UUID);
 							new_entity.Emplace<CHeadEntity>().HeadEntity = head.ID();
@@ -418,12 +422,13 @@ namespace fe
 								if (transform_node["Scale"   ]) transform.Scale    = transform_node["Scale"   ].as<glm::vec3>(); else return false;
 							}
 
+							Pile p;
 							for (auto& item : ComponentTypesRegistry::Get().m_DataItems)
 							{
 								auto& name_funk_ptr = item.GetName;
 								auto component_name = (*name_funk_ptr)();
 
-								auto component_data = entity[component_name];
+								auto component_data = entity[std::string(component_name.GetCString(&p).Data)];
 								if (component_data)
 								{
 									auto& create_funk_ptr = item.Emplacer;
@@ -448,7 +453,8 @@ namespace fe
 								return false;
 
 							auto behavior_type_name = behavior_node["Behavior"].as<std::string>();
-							auto* item = BehaviorsRegistry::GetItemFromName(behavior_type_name);
+							String my_behavior_type_name(behavior_type_name.c_str());
+							auto* item = BehaviorsRegistry::GetItemFromName(my_behavior_type_name);
 							if (!item)
 							{
 								FE_LOG_CORE_ERROR("Deserialization of {0} failed", behavior_type_name);

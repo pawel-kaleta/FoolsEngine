@@ -18,10 +18,10 @@ namespace fe
 
 		struct DataComponentRegistryItem
 		{
-			DataComponent* (BaseEntity::* Getter)() const;
-			void           (BaseEntity::* Emplacer)() const;
-			void           (Entity::* DestructionScheduler)();
-			std::string    (*GetName)();
+			DataComponent *	(BaseEntity::* Getter)() const;
+			void			(BaseEntity::* Emplacer)() const;
+			void			(Entity::* DestructionScheduler)();
+			String			(*GetName)();
 		};
 
 		struct FlagComponentRegistryItem

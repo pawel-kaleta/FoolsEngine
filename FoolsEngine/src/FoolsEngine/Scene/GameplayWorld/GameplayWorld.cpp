@@ -30,7 +30,7 @@ namespace fe
 
 		m_PersistentToTransientIDsMap[handle.emplace<CUUID>().UUID] = root;
 
-		handle.emplace<CEntityName>("WorldRoot");
+		handle.emplace<CEntityName>().EntityName.FromConstCharPtr("WorldRoot", 10);
 		handle.emplace<CTransformLocal>();
 		handle.emplace<CTransformGlobal>();
 		handle.emplace<CTags>();
@@ -47,7 +47,8 @@ namespace fe
 
 		Entity entity = World::CreateEntity();
 
-		entity.Emplace<CEntityName>(name);
+		FE_LOG_CORE_ERROR("this is dengerous, we do not know the liftime and original allocator");
+		entity.Emplace<CEntityName>().EntityName = String(name.c_str());
 
 		entity.Emplace<CHeadEntity>().HeadEntity = m_Registry.get<CHeadEntity>(parentEntity).HeadEntity;
 
@@ -64,7 +65,8 @@ namespace fe
 		FE_CORE_ASSERT(attachmentEntityID != NullEntityID, "Cannot create a loose actor");
 
 		Entity entity = World::CreateEntity();
-		entity.Emplace<CEntityName>(name);
+		FE_LOG_CORE_ERROR("this is dengerous, we do not know the liftime and original allocator");
+		entity.Emplace<CEntityName>().EntityName = String(name.c_str());
 		m_Hierarchy->CreateNode(entity, attachmentEntityID);
 		entity.Emplace<CHeadEntity>().HeadEntity = entity.ID();
 		m_Registry.emplace<CActorData>(entity.ID(), entity.ID());

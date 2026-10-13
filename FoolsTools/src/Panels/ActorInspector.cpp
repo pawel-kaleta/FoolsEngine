@@ -31,8 +31,10 @@ namespace fe
 
         auto name = behavior->GetBehaviorName();
 
+        Pile p;
+
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
+        bool widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
 
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -128,7 +130,7 @@ namespace fe
                 for (const auto& behavior : behaviors)
                 {
                     ImGui::PushID(++unique_ImGui_ID_wrap);
-                    DrawBehaviorWidget(behavior.get(), actor);
+                    DrawBehaviorWidget(behavior, actor);
                     ImGui::PopID();
                 }
 
@@ -142,7 +144,7 @@ namespace fe
                     if (ImGui::CollapsingHeader(stage.ToConstCharPtr(), ImGuiTreeNodeFlags_None))
                     {
                         auto& update_enrolls = actor.m_Data.Get()->m_UpdateEnrolls[i];
-                        if (update_enrolls.size() == 0)
+                        if (update_enrolls.Count == 0)
                         {
                             ImGui::Text("None");
                             continue;
@@ -150,13 +152,14 @@ namespace fe
 
                         ImGui::PushItemWidth(75.0f);
 
+                        Pile p;
                         int unique_ImGui_ID_wrap = 0;
                         for (auto& update_enroll : update_enrolls)
                         {
                             ImGui::PushID(++unique_ImGui_ID_wrap);
                             auto& beh = update_enroll.Behavior;
 
-                            if (ImGui::InputInt(beh->GetBehaviorName().c_str(), (int*)&update_enroll.Priority))
+                            if (ImGui::InputInt(beh->GetBehaviorName().GetCString(&p).Data, (int*)&update_enroll.Priority))
                             {
                                 actor.SortUpdateEnrolls(stage);
                             }
@@ -184,11 +187,12 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddBehavior"))
         {
+            Pile p;
             for (const auto& item : BehaviorsRegistry::Get().m_Items)
             {
                 auto& get_name_funk_ptr = item.GetName;
-                std::string name = (*get_name_funk_ptr)();
-                if (ImGui::MenuItem(name.c_str()))
+                String name = (*get_name_funk_ptr)();
+                if (ImGui::MenuItem(name.GetCString(&p).Data))
                 {
                     auto& create = item.Create;
                     Behavior* behavior = (actor.*create)();
@@ -205,13 +209,26 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
+        Pile p;
+
         auto& name = actor.Get<CEntityName>();
-        static char buffer[256];
+        static char buffer[256]; // does it have to be static?
         memset(buffer, 0, sizeof(buffer));
-        strncpy_s(buffer, name.EntityName.c_str(), sizeof(buffer));
+        strncpy_s(buffer, name.EntityName.GetCString(&p).Data, sizeof(buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", buffer, sizeof(buffer)))
         {
-            name.EntityName = std::string(buffer);
+            FE_LOG_CORE_ERROR("to do: get proper allocator for entities names");
+
+            Splice<char8_t> name_splice;
+            name_splice.Elements = name.EntityName.Data;
+            name_splice.Count = name.EntityName.Count;
+            Context::Allocators::Default->Deallocate(name_splice);
+
+            String name_string(buffer);
+            name.EntityName.Data = Context::Allocators::Default->Allocate<char8_t>(name_string.Count).Elements;
+            name.EntityName.Count = name_string.Count;
+
+            std::memcpy(name.EntityName.Data, buffer, name_string.Count);
         }
     }
 }

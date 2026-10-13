@@ -24,7 +24,7 @@ namespace fe
 			static_assert(std::is_base_of_v<Behavior, tnBehavior>, "This is not a behavior!");
 
 			tnBehavior* behavior = new tnBehavior();
-			m_Data.Get()->m_Behaviors.emplace_back((Behavior*)behavior);
+			m_Data.Get()->m_Behaviors.Append((Behavior*)behavior);
 
 			behavior->m_HeadEntity = Entity(*this);
 			behavior->Initialize();

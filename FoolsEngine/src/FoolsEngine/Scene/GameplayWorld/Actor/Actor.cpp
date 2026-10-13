@@ -7,9 +7,9 @@ namespace fe
 		bool found = false;
 		int position = -1;
 		auto& behaviors = m_Data.Get()->m_Behaviors;
-		for (int i = 0; i < behaviors.size(); ++i)
+		for (int i = 0; i < behaviors.Count; ++i)
 		{
-			if (behaviors[i].get() == behavior)
+			if (behaviors[i] == behavior)
 			{
 				found = true;
 				position = i;
@@ -24,11 +24,11 @@ namespace fe
 #define _ACTOR_REMOVE_UPDATE_ENROLL_CALL(x) RemoveUpdateEnroll<SimulationStage::x>(behavior);
 			FE_FOR_EACH(_ACTOR_REMOVE_UPDATE_ENROLL_CALL, FE_SIMULATION_STAGES);
 
-			std::swap(behaviors[position], behaviors.back());
+			std::swap(behaviors[position], behaviors[behaviors.Count - 1]);
 			if (behavior->m_Active)
 				behavior->Deactivate();
 			behavior->Shutdown();
-			behaviors.pop_back();
+			behaviors.PopBack();
 		}
 
 		return;
@@ -54,7 +54,7 @@ namespace fe
 		{
 			if (behavior->m_UUID == uuid)
 			{
-				return behavior.get();
+				return behavior;
 			}
 		}
 		return nullptr;
@@ -64,11 +64,11 @@ namespace fe
 	void Actor::EnrollForUpdate(Behavior* behavior, void (Behavior::* onUpdateFuncPtr)(), uint32_t priority)
 	{
 		auto& update_enrolls = m_Data.Get()->m_UpdateEnrolls[stage];
-		if (update_enrolls.size() == 0)
+		if (update_enrolls.Count == 0)
 		{
 			Flag<CUpdateEnrollFlag<stage>>();
 		}
-		update_enrolls.push_back(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
+		update_enrolls.Append(CActorData::UpdateEnroll{ behavior, onUpdateFuncPtr, priority });
 		SortUpdateEnrolls(stage);
 	}
 
@@ -80,32 +80,32 @@ namespace fe
 	{
 		auto& enrolls = m_Data.Get()->m_UpdateEnrolls[stage];
 
-		int found = false;
-		int enroll_position;
-		for (int j = 0; j < enrolls.size(); ++j)
+		for (auto& enroll : enrolls)
 		{
-			if (enrolls[j].Behavior == behavior)
+			if (enroll.Behavior != behavior)
+				continue;
+
+			UInt enroll_position = enroll.P() - enrolls.begin();
+			UInt move_size = ((Byte*)enrolls.end() - (Byte*)enroll.P()) - sizeof(enroll);
+
+			if (move_size)
 			{
-				found = true;
-				enroll_position = j;
-				break;
+				Pile p;
+				auto tmp = p.Allocate<CActorData::UpdateEnroll>(move_size);
+				std::memcpy(tmp.Elements, enrolls[enroll_position].P(), move_size);
+				std::memcpy(enrolls[enroll_position - 1].P(), tmp.Elements, move_size);
 			}
-		}
+			enrolls.PopBack();
 
-		if (found)
-		{
-			for (size_t last = enrolls.size() - 1; enroll_position < last; ++enroll_position)
-			{
-				std::swap(enrolls[enroll_position], enrolls[enroll_position + 1]);
-			}
-
-			enrolls.pop_back();
-
-			if (enrolls.size() == 0)
+			if (enrolls.Count == 0)
 			{
 				UnFlag<CUpdateEnrollFlag<stage>>();
 			}
+
+			return;
 		}
+
+		FE_ASSERT(false, "Behavior cannot be unenrolled for update as it is not enrolled");
 	}
 
 #define _ACTOR_REMOVE_UPDATE_ENROLL_DEF(x) template void Actor::RemoveUpdateEnroll<SimulationStage::x>(Behavior* behavior);

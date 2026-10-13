@@ -184,10 +184,10 @@ namespace fe
 			Count = count;
 		}
 
-		void InitAllocate(UInt capacity)
+		void InitAllocate(UInt capacity, Allocator* alloc = Context::Allocators::Default)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released SpliceArena - memory leak!");
-			Buffer = Context::Allocators::Default->Allocate<T>(capacity);
+			((PMAlloc*)alloc)->Allocate<T>(capacity);
 			Count = 0;
 		}
 
@@ -196,9 +196,9 @@ namespace fe
 			Count = 0;
 		}
 
-		void Release()
+		void Release(Allocator* alloc = Context::Allocators::Default)
 		{
-			Context::Allocators::Default->Deallocate(Buffer);
+			((PMAlloc*)alloc)->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
 			Count = 0;
 		}
@@ -347,9 +347,9 @@ namespace fe
 
 		bool IsFull() const { return Count == Buffer.Count; }
 
-		void Init(PMAlloc* allocator = Context::Allocators::Default)
+		void Init(Allocator* allocator = Context::Allocators::Default)
 		{
-			Alloc = allocator;
+			Alloc = (PMAlloc*) allocator;
 			Count = 0;
 			Buffer.Init();
 		}

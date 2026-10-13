@@ -19,6 +19,8 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
+        Pile p;
+
         auto& getter = item.Getter;
         DataComponent* component = (entity.*getter)();
 
@@ -29,7 +31,7 @@ namespace fe
         auto name = component->GetName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool is_widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
+        bool is_widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
 
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -187,6 +189,7 @@ namespace fe
     {
         if (!ImGui::BeginPopup("AddComponent")) return;
 
+        Pile p;
         for (const auto& item : ComponentTypesRegistry::Get().m_DataItems)
         {
             auto& getter_funk_ptr = item.Getter;
@@ -195,8 +198,8 @@ namespace fe
             if (!component)
             {
                 auto& get_name_funk_ptr = item.GetName;
-                std::string name = (*get_name_funk_ptr)();
-                if (ImGui::MenuItem(name.c_str()))
+                String name = (*get_name_funk_ptr)();
+                if (ImGui::MenuItem(name.GetCString(&p).Data))
                 {
                     auto& emplace_funk_ptr = item.Emplacer;
                     (entity.*emplace_funk_ptr)();
@@ -211,13 +214,26 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
+        Pile p;
+
         auto& name = entity.Get<CEntityName>();
         static char s_buffer[256];
         memset(s_buffer, 0, sizeof(s_buffer));
-        strncpy_s(s_buffer, name.EntityName.c_str(), sizeof(s_buffer));
+        strncpy_s(s_buffer, name.EntityName.GetCString(&p).Data, sizeof(s_buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", s_buffer, sizeof(s_buffer)))
         {
-            name.EntityName = std::string(s_buffer);
+            FE_LOG_CORE_ERROR("to do: get proper allocator for entities names");
+
+            Splice<char8_t> name_splice;
+            name_splice.Elements = name.EntityName.Data;
+            name_splice.Count = name.EntityName.Count;
+            Context::Allocators::Default->Deallocate(name_splice);
+
+            String name_string(s_buffer);
+            name.EntityName.Data = Context::Allocators::Default->Allocate<char8_t>(name_string.Count).Elements;
+            name.EntityName.Count = name_string.Count;
+
+            std::memcpy(name.EntityName.Data, s_buffer, name_string.Count);
         }
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
         {

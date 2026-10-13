@@ -35,10 +35,10 @@ namespace fe
 			Buffer[splice.Count - 1].NextFree = nullptr;
 		}
 
-		void InitAllocate(UInt capacity)
+		void InitAllocate(UInt capacity, Allocator* alloc = Context::Allocators::Default)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released Pool - memory leak!");
-			Buffer = Context::Allocators::Default->Allocate<PoolElement>(capacity);
+			Buffer = ((PMAlloc*)alloc)->Allocate<PoolElement>(capacity);
 			FreeList = Buffer.Elements;
 
 			for (auto& element : Buffer)
@@ -49,9 +49,9 @@ namespace fe
 			Buffer[capacity - 1].NextFree = nullptr;
 		}
 
-		void Release()
+		void Release(Allocator* alloc = Context::Allocators::Default)
 		{
-			Context::Allocators::Default->Deallocate(Buffer);
+			((PMAlloc*)alloc)->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
 			FreeList = nullptr;
 		}
@@ -88,9 +88,9 @@ namespace fe
 
 		bool IsFull() const { return !FreeList; }
 
-		void Init(PMAlloc* mainAlloc = Context::Allocators::Default, PMAlloc* auxAlloc = Context::Allocators::Auxiliary)
+		void Init(Allocator* mainAlloc = Context::Allocators::Default, Allocator* auxAlloc = Context::Allocators::Auxiliary)
 		{
-			MainAlloc = mainAlloc;
+			MainAlloc = (PMAlloc*) mainAlloc;
 			Chunks.Init(auxAlloc);
 			FreeList = nullptr;
 		}
@@ -138,7 +138,8 @@ namespace fe
 		{
 			if (!FreeList)
 			{
-				Array<PoolElement, chunkCapacity>& new_chunk = * Chunks.EmplaceBack();
+				auto new_chunk = MainAlloc->Allocate<PoolElement, chunkCapacity>();
+				Chunks.Append(new_chunk);
 				for (UInt i = 1; i < chunkCapacity - 1; i++)
 				{
 					PoolElement* elem = & new_chunk[i];

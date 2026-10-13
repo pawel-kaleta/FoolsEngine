@@ -128,11 +128,13 @@ namespace fe
 
 		if (node_opened && node.ChildrenCount)
 		{
-			auto children = ChildrenList(entityID, gameplay_world->m_Registry);
+			Pile p;
+			auto children = ChildrenList(entityID, gameplay_world->m_Registry, &p);
 
-			auto child = children.begin();
-			while (child != children.end())
-				node_clicked |= DrawEntity(sceneObserver, *child++);
+			for (auto& child : children)
+			{
+				node_clicked |= DrawEntity(sceneObserver, child);
+			}
 
 			ImGui::TreePop();
 		}

@@ -7,6 +7,7 @@
 #include "FoolsEngine/Scene/SimulationStage.h"
 
 #include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 namespace fe
 {
@@ -59,6 +60,8 @@ namespace fe
 		
 		struct UpdateEnroll
 		{
+			FE_TYPE_SETUP(UpdateEnroll)
+
 			Behavior* Behavior;
 			void (Behavior::* OnUpdateFuncPtr)();
 			uint32_t Priority;

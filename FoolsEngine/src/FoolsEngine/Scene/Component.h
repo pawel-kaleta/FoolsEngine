@@ -21,11 +21,10 @@ namespace YAML
 namespace fe
 {
 	class BaseEntity;
-	
 
 #define FE_COMPONENT_SETUP(type, name) \
-	virtual std::string GetName() const override final { return name; } \
-	static std::string GetNameStatic() { return name; }
+	virtual String GetName() const override final { return String(name); } \
+	static String GetNameStatic() { return String(name); }
 
 	struct Component {};
 
@@ -33,8 +32,8 @@ namespace fe
 
 	struct DataComponent : Component
 	{
-		virtual std::string GetName() const = 0;
-		static std::string GetNameStatic() { return "Uknown DataComponent"; }
+		virtual String GetName() const { return String("Unnamed DataComponent", 22); };
+		static String GetNameStatic() { return String("Base DataComponent", 21); }
 		virtual bool IsSpatial() const { return false; }
 
 		virtual void SerializeBase(YAML::Emitter& emitter) { Serialize(emitter); } // SpatialComponent overrides
@@ -76,13 +75,7 @@ namespace fe
 
 	struct CEntityName final : ProtectedComponent
 	{
-		CEntityName(const std::string& name)
-			: EntityName(name) {}
-
-		std::string EntityName;
-
-		operator       std::string& () { return EntityName; }
-		operator const std::string& () { return EntityName; }
+		String EntityName;
 
 		FE_COMPONENT_SETUP(CEntityName, "EntityName");
 	};
