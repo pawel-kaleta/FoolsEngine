@@ -123,11 +123,16 @@ namespace fe
 
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-			std::pmr::string asset_name(&sp);
-			asset_name = handle_valid ? AssetObserver(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp) : "<empty>";
+			Pile p;
+			StringBuilder asset_name;
+			asset_name.Init(&p);
+			if (handle_valid)
+				asset_name.Append(AssetObserver(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+			else
+				asset_name.Append("<empty>");
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-			ImGui::Button(asset_name.c_str(), { button_width__handle, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::Button(asset_name.GetCString(&p).Data, {button_width__handle, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 			ImGui::PopStyleVar();
 
 			// Editor Drag Drop handling
@@ -205,15 +210,17 @@ namespace fe
 
 		// asset handle
 		{
+			Pile p;
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-			std::pmr::string asset_name(&sp); {
-				if (!handle_valid)	asset_name = "<empty>";
-				else				asset_name = assetHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-			}
+			StringBuilder asset_name;
+			asset_name.Init(&p);
+			if (handle_valid)	asset_name.Append(assetHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+			else				asset_name.Append("<empty>");
+			
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-			ImGui::Button(asset_name.c_str(), { button_width__handle, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::Button(asset_name.GetCString(&p).Data, {button_width__handle, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 			ImGui::PopStyleVar();
 
 			// Editor Drag Drop handling
@@ -253,16 +260,18 @@ namespace fe
 
 		// loading priority
 		{
+			Pile p;
 			auto loading_priority = assetHandle.GetLoadingPriority();
 			
-			std::pmr::string loading_priority_string(&sp); {
-				loading_priority_string += std::to_string(loading_priority.ToInt());
-				loading_priority_string += " - ";
-				loading_priority_string += loading_priority.ToConstCharPtr();
+			StringBuilder loading_priority_string; {
+				loading_priority_string.Init(&p);
+				loading_priority_string.Append(std::to_string(loading_priority.ToInt()).c_str());
+				loading_priority_string.Append(" - ");
+				loading_priority_string.Append(loading_priority.ToConstCharPtr());
 			}
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-			ImGui::Button(loading_priority_string.c_str(), { button_width__loading_priority, 0 }); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::Button(loading_priority_string.GetCString(&p).Data, {button_width__loading_priority, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 			ImGui::PopStyleVar();
 
 			// dicrease priority

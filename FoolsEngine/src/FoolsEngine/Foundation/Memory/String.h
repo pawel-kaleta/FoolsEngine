@@ -170,7 +170,7 @@ namespace fe
 		String GetString(tAlloc* allocator = Context::Allocators::Output)
 		{
 			String output;
-			output.Data = ((TypedAlloc<tAlloc>*)allocator)->Allocate<char>(Count).Elements;
+			output.Data = ((TypedAlloc<tAlloc>*)allocator)->Allocate<char8_t>(Count).Elements;
 			output.Count = Count;
 			std::memcpy(output.Data, Buffer.begin(), Count);
 			return output;

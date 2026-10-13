@@ -191,16 +191,15 @@ namespace fe
 
 						// Actor's Entities
 						{
-							std::stack<EntityID> entities_to_serialize;
-							entities_to_serialize.push(actorID);
+							DynamicArena<EntityID> entities_to_serialize;
+							entities_to_serialize.Append(actorID);
 							
 							emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
 							EntityID entity_to_serialize;
-							while (entities_to_serialize.size())
+							while (entities_to_serialize.Count)
 							{
-								entity_to_serialize = entities_to_serialize.top();
-								entities_to_serialize.pop();
+								entity_to_serialize = entities_to_serialize.PopBack();
 
 								if (actor_storage->contains(entity_to_serialize))
 									continue;
@@ -214,7 +213,7 @@ namespace fe
 									do
 									{
 										if (! actor_storage->contains(current))
-											entities_to_serialize.push(current);
+											entities_to_serialize.Append(current);
 
 										current = node_storage.get(current).NextSibling;
 									} while (current != first_sibling && current != NullEntityID);

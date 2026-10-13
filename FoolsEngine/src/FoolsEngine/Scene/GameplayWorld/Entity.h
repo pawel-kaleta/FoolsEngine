@@ -44,27 +44,31 @@ namespace fe
 			return NullEntityID;
 		}
 
-		std::string GetNameSignature() const
+		template <typename tAlloc>
+		String GetNameSignature(tAlloc* alloc = Context::Allocators::Output) const
 		{
 			Pile p;
-			std::string ID_and_name = std::to_string(ID());
+			StringBuilder ID_and_name;
+			ID_and_name.Init(&p);
 
-			ID_and_name += " [";
+			ID_and_name.Append(std::to_string(ID()).c_str());
+
+			ID_and_name.Append(" [");
 			if (IsHead())
 			{
-				ID_and_name += Get<CEntityName>().EntityName.GetCString(&p).Data;
-				ID_and_name += "]";
+				ID_and_name.Append(Get<CEntityName>().EntityName);
+				ID_and_name.Append("]");
 			}
 			else
 			{
 				auto& headID = Get<CHeadEntity>().HeadEntity;
 				auto& headName = m_World->m_Registry.get<CEntityName>(headID).EntityName;
-				ID_and_name += headName.GetCString(&p).Data;
-				ID_and_name += "] ";
-				ID_and_name += Get<CEntityName>().EntityName.GetCString(&p).Data;
+				ID_and_name.Append(headName);
+				ID_and_name.Append("] ");
+				ID_and_name.Append(Get<CEntityName>().EntityName);
 			}
 
-			return ID_and_name;
+			return ID_and_name.GetString(alloc);
 		}
 
 		// In default storage pool only!

@@ -108,7 +108,7 @@ namespace fe
 		// should use CActorNode, but CActorNode is not yet mantained
 		// because of updateEnrollCheck it is safe to use all entities for traversal
 
-		std::stack<EntityID> actors_to_update;
+		DynamicArena<EntityID> actors_to_update;
 		// some data about entites in underlying hierarchy of just updated actor
 		// is going to be already cashed as a result of Actor update (Transform and Tags propagation)
 		// so we use stack for tempral locality
@@ -121,7 +121,7 @@ namespace fe
 			if (current_actor != NullEntityID)
 				do
 				{
-					actors_to_update.push(current_actor);
+					actors_to_update.Append(current_actor);
 					current_actor = node_storage.get(current_actor).NextSibling;
 				} while (current_actor != first_actor && current_actor != NullEntityID);
 		}
@@ -129,10 +129,9 @@ namespace fe
 		EntityID current_actorID;
 
 		// this can be parallelised
-		while (actors_to_update.size())
+		while (actors_to_update.Count)
 		{
-			current_actorID = actors_to_update.top();
-			actors_to_update.pop();
+			current_actorID = actors_to_update.PopBack();
 
 			// UpdateBehaviors() would access ActorData polluting cashe, even if there are no behaviors to run
 			// CUpdateEnrollFlag<> has empty component optimisation
@@ -147,7 +146,7 @@ namespace fe
 				if (current != NullEntityID)
 					do
 					{
-						actors_to_update.push(current);
+						actors_to_update.Append(current);
 						current = node_storage.get(current).NextSibling;
 					} while (current != first_sibling && current != NullEntityID);
 			}

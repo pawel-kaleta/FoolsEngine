@@ -34,7 +34,7 @@ namespace fe
 		template <typename tnComponent>
 		static void RegisterDataComponent()
 		{
-			s_Instance->m_DataItems.push_back(
+			s_Instance->m_DataItems.Append(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
 					&BaseEntity::DefaultEmplace<tnComponent>,
@@ -47,7 +47,7 @@ namespace fe
 		template <typename tnFlagComponent>
 		static void RegisterFlagComponent()
 		{
-			s_Instance->m_FlagItems.push_back(
+			s_Instance->m_FlagItems.Append(
 				FlagComponentRegistryItem{
 					&BaseEntity::AllOf<tnFlagComponent>,
 					&BaseEntity::Flag<tnFlagComponent>,
@@ -56,8 +56,8 @@ namespace fe
 			);
 		}
 		
-		std::vector<DataComponentRegistryItem> m_DataItems;
-		std::vector<FlagComponentRegistryItem> m_FlagItems;
+		DynamicArena<DataComponentRegistryItem> m_DataItems;
+		DynamicArena<FlagComponentRegistryItem> m_FlagItems;
 
 	private:
 		static ComponentTypesRegistry* s_Instance;

@@ -80,8 +80,10 @@ namespace fe
 		bool selected = (m_SelectedEntityID == entityID);
 		flags |= selected ? ImGuiTreeNodeFlags_Selected : 0;
 
-		std::string name = entity.GetNameSignature();
-		bool node_opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, name.c_str());
+		Pile p;
+		String name = entity.GetNameSignature(&p);
+		CString c_name = name.GetCString(&p);
+		bool node_opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, c_name.Data);
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
@@ -90,7 +92,7 @@ namespace fe
 
 			// Display preview (could be anything, e.g. when dragging an image we could decide to display
 			// the filename and a small preview of the image, etc.)
-			ImGui::Text(name.c_str());
+			ImGui::Text(c_name.Data);
 
 			ImGui::EndDragDropSource();
 		}
@@ -106,12 +108,12 @@ namespace fe
 		{
 			node_clicked = true;	
 
-			ImGui::OpenPopup(name.c_str());
+			ImGui::OpenPopup(c_name.Data);
 		}
 
 		bool create_child_owned_entity	= false;
 		bool create_child_actor			= false;
-		if (ImGui::BeginPopup(name.c_str()))
+		if (ImGui::BeginPopup(c_name.Data))
 		{
 			// creating children before drawing all existing children is unsafe
 			create_child_owned_entity = ImGui::MenuItem("Create Entity");

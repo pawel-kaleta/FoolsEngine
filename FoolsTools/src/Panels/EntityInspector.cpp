@@ -243,7 +243,8 @@ namespace fe
             // Display preview (could be anything, e.g. when dragging an image we could decide to display
             // the filename and a small preview of the image, etc.)
             
-            ImGui::Text(entity.GetNameSignature().c_str());
+            Pile p;
+            ImGui::Text(entity.GetNameSignature(&p).GetCString(&p).Data);
 
             ImGui::EndDragDropSource();
         }
