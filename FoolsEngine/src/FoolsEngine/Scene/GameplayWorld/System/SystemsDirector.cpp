@@ -1,10 +1,8 @@
 #include "SystemsDirector.h"
 
-#include "SystemsRegistry.h"
+#include "SystemTypesRegistry.h"
 
 #include "FoolsEngine/Application/UUID.h"
-
-#include <algorithm>
 
 namespace fe
 {
@@ -22,9 +20,32 @@ namespace fe
 	void SystemsDirector::EnrollForUpdate(System* system, void(System::* onUpdateFuncPtr)(), uint32_t priority)
 	{
 		FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
+		
+		auto& enrolls = m_SystemUpdateEnrolls[stage];
+		
+		UInt position = 0;
+		for (auto& enroll : enrolls)
+		{
+			if (enroll.Priority > priority)
+			{
+				position += 1;
+				continue;
+			}
 
-		m_SystemUpdateEnrolls[stage].push_back(SystemUpdateEnroll{ system, onUpdateFuncPtr, priority });
-		SortSystemUpdateEnrolls(stage);
+			auto new_enroll = enrolls.Emplace(position);
+
+			new_enroll->System = system;
+			new_enroll->OnUpdateFuncPtr = onUpdateFuncPtr;
+			new_enroll->Priority = priority;
+
+			return;
+		}
+
+		auto new_enroll = enrolls.EmplaceBack();
+
+		new_enroll->System = system;
+		new_enroll->OnUpdateFuncPtr = onUpdateFuncPtr;
+		new_enroll->Priority = priority;
 	}
 
 #define _SYSTEMS_DIRECTOR_ENROLL_FOR_UPDATE_DEF(x) template void SystemsDirector::EnrollForUpdate<SimulationStage::x>(System*, void(System::*)(), uint32_t);
@@ -35,35 +56,38 @@ namespace fe
 	{
 		auto& enrolls = m_SystemUpdateEnrolls[stage];
 
-		int found = false;
-		int enroll_position;
-		for (int j = 0; j < enrolls.size(); ++j)
+		SystemUpdateEnroll* enroll_to_remove = nullptr;
+		for (auto& enroll : enrolls)
 		{
-			if (enrolls[j].System == system)
-			{
-				found = true;
-				enroll_position = j;
-				break;
-			}
+			if (enroll.System != system)
+				continue;
+
+			enroll_to_remove = &enroll;
 		}
 
-		if (found)
+		if (!enroll_to_remove)
 		{
-			for (size_t last = enrolls.size() - 1; enroll_position < last; ++enroll_position)
-			{
-				std::swap(enrolls[enroll_position], enrolls[enroll_position + 1]);
-			}
-
-			enrolls.pop_back();
+			FE_CORE_ASSERT(false, "System update enroll for update not found for removal");
+			return;
 		}
+
+		SystemUpdateEnroll* first_to_move = enroll_to_remove + 1;
+		UInt move_size = (enrolls[enrolls.Count].P() - first_to_move) * sizeof(SystemUpdateEnroll);
+
+		Pile p;
+		auto tmp = p.Allocate< SystemUpdateEnroll>(move_size);
+		std::memcpy(tmp.Elements, first_to_move, move_size);
+		std::memcpy(enroll_to_remove, tmp.Elements, move_size);
+
+		enrolls.PopBack();
 	}
 
 #define _SYSTEMS_DIRECTOR_REMOVE_UPDATE_ENROLL(x) template void SystemsDirector::RemoveUpdateEnroll<SimulationStage::x>(System*);
 	FE_FOR_EACH(_SYSTEMS_DIRECTOR_REMOVE_UPDATE_ENROLL, FE_SIMULATION_STAGES);
 
-	System* SystemsDirector::CreateSystemFromName(const std::string& systemTypeName)
+	System* SystemsDirector::CreateSystemFromName(String systemTypeName)
 	{
-		auto* item = SystemsRegistry::GetItem(systemTypeName);
+		auto* item = SystemTypesRegistry::GetItem(systemTypeName);
 		if (item)
 		{
 			auto& create_funk_ptr = item->Create;
@@ -72,13 +96,13 @@ namespace fe
 		return nullptr;
 	}
 
-	System* SystemsDirector::GetSystemFromName(const std::string& name) const
+	System* SystemsDirector::GetSystemFromName(String name) const
 	{
 		for (auto& system : m_Systems)
 		{
-			if (CompareStringsEqual(system->GetName(), String(name.c_str())))
+			if (CompareStringsEqual(system->GetName(), name))
 			{
-				return system.get();
+				return system;
 			}
 		}
 		return nullptr;
@@ -90,69 +114,58 @@ namespace fe
 		{
 			if (uuid == system->m_UUID)
 			{
-				return system.get();
+				return system;
 			}
 		}
 		return nullptr;
 	}
 
-	void SystemsDirector::SortSystemUpdateEnrolls(SimulationStage stage)
-	{
-		FE_PROFILER_FUNC();
-
-		auto& enrolls = m_SystemUpdateEnrolls[stage.ToInt()];
-		std::sort(
-			enrolls.begin(),
-			enrolls.end(),
-			[](SystemUpdateEnroll& a, SystemUpdateEnroll& b) { return a.Priority < b.Priority; }
-		);
-	}
-
 	void SystemsDirector::RemoveSystem(System* system)
 	{
 		bool found = false;
-		int position = -1;
-		for (int i = 0; i < m_Systems.size(); ++i)
+		for (auto& current_system : m_Systems)
 		{
-			if (m_Systems[i].get() == system)
+			if (current_system != system)
+				continue;
+			
+			UInt position = (& current_system - & m_Systems[0]);
+			m_Systems.SwapWithBackAndPop(position);
+			found = true;
+		}
+
+		if (!found)
+		{
+			FE_CORE_ASSERT(false, "System not found");
+			return;
+		}
+
+		auto& enrolls = m_SystemUpdateEnrolls;
+
+		for (auto& stage_enrolls : enrolls)
+		{
+			for (auto& enroll : stage_enrolls)
 			{
+				if (enroll.System != system)
+					continue;
+
 				found = true;
-				position = i;
+				UInt enrollPos = (enroll.P() - stage_enrolls[0].P());
+
+				SystemUpdateEnroll* first_to_move = enroll.P() + 1;
+				UInt move_size = (stage_enrolls[stage_enrolls.Count].P() - first_to_move) * sizeof(SystemUpdateEnroll);
+
+				Pile p;
+				auto tmp = p.Allocate<SystemUpdateEnroll>(move_size);
+				std::memcpy(tmp.Elements, first_to_move, move_size);
+				std::memcpy(enroll.P(), tmp.Elements, move_size);
+
+				stage_enrolls.PopBack();
+
 				break;
 			}
 		}
 
-		FE_CORE_ASSERT(found, "System not found");
-
-		auto& enrolls = m_SystemUpdateEnrolls;
-
-		for (int i = 0; i < enrolls.size(); ++i)
-		{
-			found = false; //reusing foud
-			int enrollPos;
-			for (int j = 0; j < enrolls[i].size(); ++j)
-			{
-				if (enrolls[i][j].System == system)
-				{
-					found = true;
-					enrollPos = j;
-					break;
-				}
-			}
-
-			if (found)
-			{
-				for (size_t last = enrolls[i].size() - 1; enrollPos < last; ++enrollPos)
-				{
-					std::swap(enrolls[i][enrollPos], enrolls[i][enrollPos + 1]);
-				}
-
-				enrolls[i].pop_back();
-			}
-		}
-
-		std::swap(m_Systems[position], m_Systems.back());
 		system->OnShutdown();
-		m_Systems.pop_back();
+		FE_CORE_ASSERT(false, "Not implemented"); // deallocate system ?
 	}
 }

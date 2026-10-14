@@ -38,7 +38,7 @@
 #include "FoolsEngine/Scene/GameplayWorld/Actor/Behavior.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/ActorData.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
-#include "FoolsEngine/Scene/GameplayWorld/System/SystemsRegistry.h"
+#include "FoolsEngine/Scene/GameplayWorld/System/SystemTypesRegistry.h"
 #include "FoolsEngine/Scene/GameplayWorld/Hierarchy/TagsHandle.h"
 #include "FoolsEngine/Scene/GameplayWorld/Hierarchy/ChildrenList.h"
 #include "FoolsEngine/Scene/GameplayWorld/Hierarchy/TransformHandle.h"

@@ -46,7 +46,7 @@ namespace fe
                 for (const auto& system : systems)
                 {
                     ImGui::PushID(++unique_ImGui_ID_wrap);
-                    DrawSystemWidget(system.get());
+                    DrawSystemWidget(system);
                     ImGui::PopID();
                 }
 
@@ -60,7 +60,7 @@ namespace fe
                     if (ImGui::CollapsingHeader(stage.ToCString().Data, ImGuiTreeNodeFlags_None))
                     {
                         auto& update_enrolls = systems_director.m_SystemUpdateEnrolls[i];
-                        if (update_enrolls.size() == 0)
+                        if (update_enrolls.Count == 0)
                         {
                             ImGui::Text("None");
                             continue;
@@ -77,7 +77,8 @@ namespace fe
 
                             if (ImGui::InputInt(sys->GetName().GetCString(&p).Data, (int*)&update_enroll.Priority))
                             {
-                                systems_director.SortSystemUpdateEnrolls(stage);
+                                FE_CORE_ASSERT(false, "Not implemented"); // no more sorting, remove, memmove and add back
+                                //systems_director.SortSystemUpdateEnrolls(stage);
                             }
                             ImGui::PopID();
                         }
@@ -169,7 +170,7 @@ namespace fe
         {
             Pile p;
 
-            auto& behReg = SystemsRegistry::Get();
+            auto& behReg = SystemTypesRegistry::Get();
             for (const auto& item : behReg.m_Items)
             {
                 auto& getName = item.GetName;

@@ -1,8 +1,8 @@
-02:15:18:296724 | FE  | info     | Logging innitialized!
-02:15:18:297568 | App | info     | Logging innitialized!
-02:15:18:297687 | FE  | info     | /////////////////////////////////////////////////////
-02:15:18:297779 | FE  | info     | ////////////////////// STARTUP //////////////////////
-02:15:18:297861 | FE  | info     | /////////////////////////////////////////////////////
-02:15:18:298176 | FE  | info     | Profiler session 'Startup' started.
-02:15:18:336472 | FE  | error    | CORE ASSERTION FAILED: in file Application.cpp in function void __cdecl fe::Application::Startup(void) at line 99.
-02:15:18:336976 | FE  | error    | Assertion Message: Not implemented
+18:01:35:481145 | FE  | info     | Logging innitialized!
+18:01:35:481659 | App | info     | Logging innitialized!
+18:01:35:482220 | FE  | info     | /////////////////////////////////////////////////////
+18:01:35:483924 | FE  | info     | ////////////////////// STARTUP //////////////////////
+18:01:35:484179 | FE  | info     | /////////////////////////////////////////////////////
+18:01:35:485032 | FE  | info     | Profiler session 'Startup' started.
+18:01:35:506776 | FE  | error    | CORE ASSERTION FAILED: in file Application.cpp in function void __cdecl fe::Application::Startup(void) at line 99.
+18:01:35:515428 | FE  | error    | Assertion Message: Not implemented

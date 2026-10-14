@@ -6,10 +6,10 @@
 
 namespace fe
 {
-	class SystemsRegistry
+	class SystemTypesRegistry
 	{
 	public:
-		static SystemsRegistry& Get() { return *s_Instance; }
+		static SystemTypesRegistry& Get() { return *s_Instance; }
 
 		struct Item
 		{
@@ -28,16 +28,16 @@ namespace fe
 			);
 		}
 
-		static const Item* GetItem(const std::string& name);
+		static const Item* GetItem(String name);
 
 		DynamicArena<Item> m_Items;
 
 	private:
-		static SystemsRegistry* s_Instance;
+		static SystemTypesRegistry* s_Instance;
 
 		friend class SystemsDirector;
 		friend class Application;
-		SystemsRegistry() { s_Instance = this; }
+		SystemTypesRegistry() { s_Instance = this; }
 		void RegisterSystems();
 		void Shutdown() {};
 	};

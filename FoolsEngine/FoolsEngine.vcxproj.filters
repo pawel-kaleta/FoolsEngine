@@ -425,7 +425,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
@@ -613,7 +613,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">

@@ -45,7 +45,7 @@ namespace fe
 
 	class ComponentTypesRegistry;
 	class BehaviorsRegistry;
-	class SystemsRegistry;
+	class SystemTypesRegistry;
 	class AssetTypesRegistry;
 	class LoadersRegistry;
 	class AssetManager;
@@ -73,7 +73,7 @@ namespace fe
 
 		ComponentTypesRegistry*	m_ComponentTypesRegistry;
 		BehaviorsRegistry*		m_BehaviorsRegistry;
-		SystemsRegistry*		m_SystemsRegistry;
+		SystemTypesRegistry*		m_SystemsRegistry;
 		AssetTypesRegistry*		m_AssetTypesRegistry;
 		LoadersRegistry*		m_LoadersRegistry;
 

@@ -190,8 +190,8 @@ namespace fe
 		BehaviorsRegistry::RegisterBehavior<TestBehavior>();
 		BehaviorsRegistry::RegisterBehavior<TestBehavior2>();
 		ComponentTypesRegistry::RegisterDataComponent<CMovement>();
-		SystemsRegistry::RegisterSystem<TestSystem>();
-		SystemsRegistry::RegisterSystem<TestSystem2>();
+		SystemTypesRegistry::RegisterSystem<TestSystem>();
+		SystemTypesRegistry::RegisterSystem<TestSystem2>();
 
 		once = true;
 	}

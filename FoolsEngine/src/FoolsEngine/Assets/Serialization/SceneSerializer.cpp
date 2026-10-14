@@ -494,7 +494,7 @@ namespace fe
 				{
 					auto system_type_name = system_node["System"].as<std::string>();
 
-					System* new_system = director->CreateSystemFromName(system_type_name);
+					System* new_system = director->CreateSystemFromName(String(system_type_name.c_str(), system_type_name.size()+1));
 
 					if (!new_system)
 					{

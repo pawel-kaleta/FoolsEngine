@@ -22,7 +22,7 @@ namespace fe
 			(registry.*func_ptr)(entityID);
 		}
 
-		m_Erasures.clear();
+		m_Erasures.Clear();
 
 		for (auto& enroll : m_Removals)
 		{
@@ -31,6 +31,6 @@ namespace fe
 			(registry.*func_ptr)(entityID);
 		}
 
-		m_Removals.clear();
+		m_Removals.Clear();
 	}
 }

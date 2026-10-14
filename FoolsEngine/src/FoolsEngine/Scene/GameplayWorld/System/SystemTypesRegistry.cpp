@@ -1,24 +1,24 @@
-#include "SystemsRegistry.h"
+#include "SystemTypesRegistry.h"
 
 namespace fe
 {
-	SystemsRegistry* SystemsRegistry::s_Instance;
+	SystemTypesRegistry* SystemTypesRegistry::s_Instance;
 
-	void SystemsRegistry::RegisterSystems()
+	void SystemTypesRegistry::RegisterSystems()
 	{
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(false, "Not implemented");
 	}
 
-	const SystemsRegistry::Item* SystemsRegistry::GetItem(const std::string& name)
+	const SystemTypesRegistry::Item* SystemTypesRegistry::GetItem(String name)
 	{
 		FE_PROFILER_FUNC();
 
 		for (auto& item : s_Instance->m_Items)
 		{
 			auto name_form_item = (*item.GetName)();
-			if (CompareStringsEqual(name_form_item, String(name.c_str())))
+			if (CompareStringsEqual(name_form_item, name))
 			{
 				return &item;
 			}

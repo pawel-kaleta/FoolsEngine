@@ -16,7 +16,7 @@
 					 
 #include "FoolsEngine/Scene/ComponentTypesRegistry.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
-#include "FoolsEngine/Scene/GameplayWorld/System/SystemsRegistry.h"
+#include "FoolsEngine/Scene/GameplayWorld/System/SystemTypesRegistry.h"
 					 
 #include "FoolsEngine/Assets/AssetManager.h"
 #include "FoolsEngine/Assets/AssetTypesRegistry.h"
@@ -131,7 +131,7 @@ namespace fe
 			m_BehaviorsRegistry = new BehaviorsRegistry();
 			m_BehaviorsRegistry->RegisterBehaviors();
 		
-			m_SystemsRegistry = new SystemsRegistry();
+			m_SystemsRegistry = new SystemTypesRegistry();
 			m_SystemsRegistry->RegisterSystems();
 
 			m_AssetTypesRegistry = new AssetTypesRegistry();
