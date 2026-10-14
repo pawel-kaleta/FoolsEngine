@@ -20,8 +20,8 @@ namespace fe
 		static void SerializeToFile(const AssetObserver& scene);
 		static bool DeserializeFromFile(const AssetUser& scene);
 
-		static std::string SerializeToString(const AssetObserver& scene);
-		static bool DeserializeFromString(const AssetUser& scene, const std::string& buffer);
+		static CString SerializeToString(const AssetObserver& scene, PMAlloc* allocator = Context::Allocators::Output);
+		static bool DeserializeFromString(const AssetUser& scene, CString buffer);
 	private:
 		static void Serialize(const AssetObserver& scene, YAML::Emitter& emitter);
 		static bool Deserialize(const AssetUser& scene, YAML::Node& node);

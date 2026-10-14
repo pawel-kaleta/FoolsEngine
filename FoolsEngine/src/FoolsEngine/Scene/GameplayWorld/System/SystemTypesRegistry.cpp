@@ -24,8 +24,6 @@ namespace fe
 			}
 		}
 
-		//FE_CORE_ASSERT(false, "System not found in registry");
-
 		return nullptr;
 	}
 }

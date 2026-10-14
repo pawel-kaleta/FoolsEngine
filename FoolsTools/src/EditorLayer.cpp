@@ -270,7 +270,7 @@ namespace fe
 		
 		if (filepath.empty()) return;
 	
-		AssetHandle<Scene>(AssetManager::AssetCreation::ProjectAsset<Scene>(filepath));
+		AssetHandle<Scene> scene(AssetManager::AssetCreation::ProjectAsset<Scene>(filepath));
 
 		FE_CORE_ASSERT(false, "Not implemented");
 		
@@ -376,7 +376,8 @@ namespace fe
 			bool deserialization_result = SceneSerializerYAML::DeserializeFromString(scene_user, m_SceneBackup);
 			FE_CORE_ASSERT(deserialization_result, "Scene recovery after play stop failed.");
 		}
-		m_SceneBackup.clear();
+		FE_CORE_ASSERT(false, "Not implemented"); // dealloc backup
+		//m_SceneBackup.clear();
 
 		m_Viewports.PlayViewport.OnScenePlayStop();
 	}

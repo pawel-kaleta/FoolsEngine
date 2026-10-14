@@ -11,8 +11,6 @@
 
 namespace fe
 {
-	class UUID;
-
 	class SystemsDirector
 	{
 	public:

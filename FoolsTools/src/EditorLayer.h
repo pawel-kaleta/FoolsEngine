@@ -34,7 +34,7 @@ namespace fe
 	private:
 		friend class EditorApp;
 		AssetHandle<Scene> m_Scene;
-		std::string m_SceneBackup;
+		CString m_SceneBackup;
 
 		EditorState m_EditorState = EditorState::Edit;
 

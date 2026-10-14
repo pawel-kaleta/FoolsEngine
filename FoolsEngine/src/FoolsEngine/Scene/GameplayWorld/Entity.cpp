@@ -27,12 +27,12 @@ namespace fe
 			*this = Entity();
 	}
 
-	Entity Entity::CreateChildEntity(const std::string& name)
+	Entity Entity::CreateChildEntity(String name)
 	{
 		return ((GameplayWorld*)m_World)->CreateEntity(ID(), name);
 	}
 
-	Actor Entity::CreateAttachedActor(const std::string& name)
+	Actor Entity::CreateAttachedActor(String name)
 	{
 		FE_CORE_ASSERT(m_World->m_IsGameplayWorld, "Only Gamplay Worlds have actors!");
 

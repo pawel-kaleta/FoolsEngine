@@ -38,7 +38,7 @@ namespace fe
 		handle.emplace<CHeadEntity>().HeadEntity = NullEntityID;
 	}
 
-	Entity GameplayWorld::CreateEntity(EntityID parentEntity, const std::string& name)
+	Entity GameplayWorld::CreateEntity(EntityID parentEntity, String name)
 	{
 		FE_PROFILER_FUNC();
 
@@ -48,7 +48,7 @@ namespace fe
 		Entity entity = World::CreateEntity();
 
 		FE_LOG_CORE_ERROR("this is dengerous, we do not know the liftime and original allocator");
-		entity.Emplace<CEntityName>().EntityName = String(name.c_str());
+		entity.Emplace<CEntityName>().EntityName = name;
 
 		entity.Emplace<CHeadEntity>().HeadEntity = m_Registry.get<CHeadEntity>(parentEntity).HeadEntity;
 
@@ -57,7 +57,7 @@ namespace fe
 		return entity;
 	}
 
-	Actor GameplayWorld::CreateActor(EntityID attachmentEntityID, const std::string& name)
+	Actor GameplayWorld::CreateActor(EntityID attachmentEntityID, String name)
 	{
 		FE_PROFILER_FUNC();
 		FE_LOG_CORE_DEBUG("Actor Creation");
@@ -66,16 +66,26 @@ namespace fe
 
 		Entity entity = World::CreateEntity();
 		FE_LOG_CORE_ERROR("this is dengerous, we do not know the liftime and original allocator");
-		entity.Emplace<CEntityName>().EntityName = String(name.c_str());
+		entity.Emplace<CEntityName>().EntityName = name;
 		m_Hierarchy->CreateNode(entity, attachmentEntityID);
 		entity.Emplace<CHeadEntity>().HeadEntity = entity.ID();
 		m_Registry.emplace<CActorData>(entity.ID(), entity.ID());
 		return Actor(entity);
 	}
 
-	Actor GameplayWorld::CreateActor(const std::string& name)
+	Actor GameplayWorld::CreateActor(String name)
 	{
 		return CreateActor(RootID, name);
+	}
+
+	Actor GameplayWorld::CreateActor(EntityID attachmentEntityID)
+	{
+		return CreateActor(attachmentEntityID, String("Actor", 6));
+	}
+
+	Actor GameplayWorld::CreateActor()
+	{
+		return CreateActor(RootID, String("Actor", 6));
 	}
 
 	Actor GameplayWorld::CreateActorWithUUID(UUID uuid)
@@ -104,11 +114,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Pile p;
+
 		auto& node_storage = m_Registry.storage<CEntityNode>();
 		// should use CActorNode, but CActorNode is not yet mantained
 		// because of updateEnrollCheck it is safe to use all entities for traversal
 
 		DynamicArena<EntityID> actors_to_update;
+		actors_to_update.Init(&p);
 		// some data about entites in underlying hierarchy of just updated actor
 		// is going to be already cashed as a result of Actor update (Transform and Tags propagation)
 		// so we use stack for tempral locality
@@ -139,17 +152,17 @@ namespace fe
 				Actor(current_actorID, this).UpdateBehaviors(stage);
 
 			// scheduling of children
-			{
-				EntityID first_sibling = node_storage.get(current_actorID).FirstChild;
-				EntityID current = first_sibling;
+			EntityID first_sibling = node_storage.get(current_actorID).FirstChild;
+			EntityID current = first_sibling;
 
-				if (current != NullEntityID)
-					do
-					{
-						actors_to_update.Append(current);
-						current = node_storage.get(current).NextSibling;
-					} while (current != first_sibling && current != NullEntityID);
-			}
+			if (current == NullEntityID)
+				continue;
+
+			do
+			{
+				actors_to_update.Append(current);
+				current = node_storage.get(current).NextSibling;
+			} while (current != first_sibling && current != NullEntityID);
 		}
 	}
 

@@ -20,11 +20,8 @@ namespace fe
 	void SceneSerializerYAML::SerializeToFile(const AssetObserver& scene)
 	{
 		YAML::Emitter emitter;
-
-		emitter << YAML::BeginMap;
 		
 		Serialize(scene, emitter);
-		emitter << YAML::EndMap;
 
 		std::ofstream fout(Project::Get()->m_AssetsPath / scene.GetFilepath());
 		fout << emitter.c_str();
@@ -51,26 +48,33 @@ namespace fe
 		return true;
 	}
 
-	std::string SceneSerializerYAML::SerializeToString(const AssetObserver& scene)
+	CString SceneSerializerYAML::SerializeToString(const AssetObserver& scene, PMAlloc* allocator)
 	{
 		YAML::Emitter emitter;
 
-		emitter << YAML::BeginMap;
 		Serialize(scene, emitter);
-		emitter << YAML::EndMap;
 
-		std::string out = emitter.c_str();
-		return out;
+		UInt char_count = emitter.size() + 1;
+
+		CString result;
+		result.Data = allocator->Allocate<char>(char_count).Elements;
+		result.CountWithNull = char_count;
+
+		std::memcpy(result.Data, emitter.c_str(), char_count);
+
+		return result;
 	}
 
-	bool SceneSerializerYAML::DeserializeFromString(const AssetUser& scene, const std::string& buffer)
+	bool SceneSerializerYAML::DeserializeFromString(const AssetUser& scene, CString buffer)
 	{
-		YAML::Node node = YAML::Load(buffer);
+		YAML::Node node = YAML::Load(buffer.Data);
 		return Deserialize(scene, node);
 	}
 	
 	void SceneSerializerYAML::Serialize(const AssetObserver& scene, YAML::Emitter& emitter)
 	{
+		emitter << YAML::BeginMap;
+
 		//Scene Properties
 		{
 			emitter << YAML::Key << "Scene Properties" << YAML::Value << YAML::BeginMap;
@@ -233,6 +237,8 @@ namespace fe
 
 			emitter << YAML::EndMap; //Worlds
 		}
+
+		emitter << YAML::EndMap;
 	}
 
 	void SceneSerializerYAML::SerializeEntity(Entity entity, YAML::Emitter& emitter)

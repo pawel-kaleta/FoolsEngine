@@ -139,6 +139,11 @@ namespace fe
 			Buffer.Init();
 		}
 
+		void Clear()
+		{
+			Count = 0;
+		}
+
 		void Append(String string)
 		{
 			UInt required_capacity = Count + string.Count;

@@ -34,8 +34,8 @@ namespace fe
 
 		GameplayWorld* GetWorld() const { return (GameplayWorld*)m_World; }
 
-		Entity	CreateChildEntity(const std::string& name = "Entity");
-		Actor	CreateAttachedActor(const std::string& name = "Actor");
+		Entity	CreateChildEntity(String name = String("Entity",7));
+		Actor	CreateAttachedActor(String name = String("Actor",6));
 
 		EntityID GetHeadID()
 		{
