@@ -198,7 +198,7 @@ namespace fe
 
 		ImGui::BeginChild("AssetHandleWindow", ImVec2(0, 0), flags);
 
-		ImGui::Text(tnAsset::GetTypeStatic().ToConstCharPtr());
+		ImGui::Text(tnAsset::GetTypeStatic().ToCString().Data);
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		const float square_button_size = ImGui::GetFrameHeight();
@@ -267,7 +267,7 @@ namespace fe
 				loading_priority_string.Init(&p);
 				loading_priority_string.Append(std::to_string(loading_priority.ToInt()).c_str());
 				loading_priority_string.Append(" - ");
-				loading_priority_string.Append(loading_priority.ToConstCharPtr());
+				loading_priority_string.Append(loading_priority.ToCString().Data);
 			}
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });

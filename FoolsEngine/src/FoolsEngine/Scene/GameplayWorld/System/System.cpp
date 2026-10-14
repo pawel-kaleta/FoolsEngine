@@ -12,7 +12,10 @@ namespace fe
 	void System::Activate()
 	{
 		if (m_Active)
-			FE_LOG_CORE_WARN("{0} already active", GetName());
+		{
+			Pile p;
+			FE_LOG_CORE_WARN("{0} already active", GetName().GetCString(&p).Data);
+		}
 
 		m_Active = true;
 		OnActivate();
@@ -54,7 +57,10 @@ namespace fe
 	void System::Deactivate()
 	{
 		if (!m_Active)
-			FE_LOG_CORE_WARN("{0} already deactivated", GetName());
+		{
+			Pile p;
+			FE_LOG_CORE_WARN("{0} already deactivated", GetName().GetCString(&p).Data);
+		}
 
 		m_Active = false;
 		OnDeactivate();

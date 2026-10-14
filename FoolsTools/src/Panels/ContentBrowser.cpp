@@ -214,20 +214,20 @@ namespace fe
 			ImGui::TextWrapped(stem.c_str());
 			ImGui::TableNextColumn();
 
-			std::pmr::string alias(&sp);
+			CString alias;
 
 			if (loader_registry_item_ptr)
 			{
 				alias = loader_registry_item_ptr->SourceExtensionAlias;
 				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&LoaderColors[loader_registry_item_ptr->Type.ToInt()]);
-				ImGui::TextWrapped(alias.c_str());
+				ImGui::TextWrapped(alias.Data);
 				ImGui::PopStyleColor();
 			}
 			else if (asset_types_registry_item_ptr)
 			{
-				alias = asset_types_registry_item_ptr->TypeConstCharPtr;
+				alias = asset_types_registry_item_ptr->TypeCString;
 				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&AssetTypeColors[asset_types_registry_item_ptr->Type.ToInt()]);
-				ImGui::TextWrapped(alias.c_str());
+				ImGui::TextWrapped(alias.Data);
 				ImGui::PopStyleColor();
 			}
 			else

@@ -38,6 +38,6 @@ namespace fe
 		static Render::GAPI::Descriptors::TextureSpec InspectTexture(const std::filesystem::path& filePath);
 		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
-		static const char* GetExtensionAlias() { return "Texture Source"; }
+		static CString GetExtensionAlias() { return CString("Texture Source",15); }
 	};
 }

@@ -32,13 +32,13 @@ namespace fe
 	{
 		FE_CORE_ASSERT(false, "Not implemented");
 
-		m_Items.push_back(
+		m_Items.Append(
 			Item{
 				&tnAsset::EmplaceCore,
 				nullptr,//&tnAsset::LoadMetadata,
 				nullptr,//&tnAsset::SaveMetadata,
 				tnAsset::GetMetaFileExtension(),
-				tnAsset::GetTypeStatic().ToConstCharPtr(),
+				tnAsset::GetTypeStatic().ToCString(),
 				tnAsset::GetTypeStatic()
 			}
 		);

@@ -12,15 +12,15 @@ namespace fe
 	public:
 		struct Item
 		{
-			bool (* const IsKnownExtensionFunkPtr)(String);
-			bool (* const IsKnownAssetType)(AssetType assetType);
-			const char* SourceExtensionAlias;
-			const LoaderType Type;
+			bool (* IsKnownExtensionFunkPtr)(String);
+			bool (* IsKnownAssetType)(AssetType assetType);
+			CString SourceExtensionAlias;
+			LoaderType Type;
 			// AssetType::None means multiple types? 
-			const AssetType AssetType;
+			AssetType AssetType;
 		};
 
-		std::vector<Item> m_Items;
+		DynamicArena<Item> m_Items;
 
 		static const Item* GetItem(String extension);
 		static const Item* GetItem(AssetType assetType);

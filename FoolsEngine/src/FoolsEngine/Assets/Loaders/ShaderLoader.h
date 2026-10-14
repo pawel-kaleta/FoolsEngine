@@ -26,6 +26,6 @@ namespace fe
 		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
 
-		static const char* GetExtensionAlias() { return "Shader Source"; }
+		static CString GetExtensionAlias() { return CString("Shader Source", 14); }
 	};
 }

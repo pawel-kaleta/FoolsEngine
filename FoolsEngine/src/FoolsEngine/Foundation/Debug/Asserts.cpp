@@ -2,6 +2,6 @@
 
 namespace fe
 {
-	bool Asserts::EnableAssertionBreak = true;
-	bool Asserts::EnableCoreAssertionBreak = true;
+	bool EnableAssertionBreak = true;
+	bool EnableCoreAssertionBreak = true;
 }

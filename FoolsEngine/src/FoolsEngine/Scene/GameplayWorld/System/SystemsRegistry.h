@@ -2,6 +2,7 @@
 
 #include "System.h"
 #include "SystemsDirector.h"
+#include "FoolsEngine/Foundation/Memory/Arena.h"
 
 namespace fe
 {
@@ -12,14 +13,14 @@ namespace fe
 
 		struct Item
 		{
-			System*     (SystemsDirector::* Create)();
-			std::string (*GetName)();
+			System*	(SystemsDirector::* Create)();
+			String	(*GetName)();
 		};
 
 		template <typename tnSystem>
 		static void RegisterSystem()
 		{
-			s_Instance->m_Items.push_back(
+			s_Instance->m_Items.Append(
 				Item{
 					&SystemsDirector::CreateSystemAsBase<tnSystem>,
 					&tnSystem::GetNameStatic
@@ -29,7 +30,7 @@ namespace fe
 
 		static const Item* GetItem(const std::string& name);
 
-		std::vector<Item> m_Items;
+		DynamicArena<Item> m_Items;
 
 	private:
 		static SystemsRegistry* s_Instance;

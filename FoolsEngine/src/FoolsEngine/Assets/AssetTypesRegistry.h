@@ -2,6 +2,9 @@
 
 #include "Asset.h"
 #include "Loaders/LoaderType.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/Arena.h"
+
 
 namespace YAML { class Emitter; }
 
@@ -17,7 +20,7 @@ namespace fe
 			void (* SaveMetadata)(YAML::Emitter&, AssetID);
 			const char* MetaFileExtension;
 			// load data too? (for AssetManager::EvaluateAndReload)
-			const char* TypeConstCharPtr;
+			CString TypeCString;
 			AssetType Type;
 		};
 
@@ -26,7 +29,7 @@ namespace fe
 		static const Item* GetItem(AssetType assetType);
 		static const Item* GetItem(const std::pmr::string& extension);
 		
-		std::vector<Item> m_Items;
+		DynamicArena<Item> m_Items;
 	private:
 		static AssetTypesRegistry* s_Instance;
 

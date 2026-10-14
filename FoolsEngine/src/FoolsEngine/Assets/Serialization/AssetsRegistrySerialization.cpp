@@ -32,7 +32,7 @@ namespace fe::AssetSerializer
 			auto& type = reg.get<ACAssetType>(id).Type;
 
 			emitter << YAML::BeginMap;
-			emitter << YAML::Key << "Type" << YAML::Value << type.ToConstCharPtr();
+			emitter << YAML::Key << "Type" << YAML::Value << type.ToCString().Data;
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
 			emitter << YAML::Key << "Filepath" << YAML::Value << ac_path.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
 			emitter << YAML::EndMap;
@@ -72,7 +72,7 @@ namespace fe::AssetSerializer
 
 				AssetID assetID = AssetManager::GetOrCreateAssetWithUUID(asset["UUID"].as<UUID>());
 				AssetManager::SetFilepath(assetID, asset["Filepath"].as<std::string>());
-				reg.emplace<ACAssetType>(assetID).Type.FromString(asset["Type"].as<std::string>());
+				reg.emplace<ACAssetType>(assetID).Type.FromString(String(asset["Type"].as<std::string>().c_str()));
 				reg.emplace<ACRefsCounters>(assetID);
 			}
 		}

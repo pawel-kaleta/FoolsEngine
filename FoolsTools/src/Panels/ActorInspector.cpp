@@ -141,7 +141,7 @@ namespace fe
                 for (int i = 0; i < SimulationStage::Count; i++)
                 {
                     SimulationStage stage; stage.FromInt(i);
-                    if (ImGui::CollapsingHeader(stage.ToConstCharPtr(), ImGuiTreeNodeFlags_None))
+                    if (ImGui::CollapsingHeader(stage.ToCString().Data, ImGuiTreeNodeFlags_None))
                     {
                         auto& update_enrolls = actor.m_Data.Get()->m_UpdateEnrolls[i];
                         if (update_enrolls.Count == 0)

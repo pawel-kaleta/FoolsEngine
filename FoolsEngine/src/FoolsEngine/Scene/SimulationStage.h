@@ -10,5 +10,4 @@ namespace fe
 		FE_SIMULATION_STAGES,
 		Count
 	);
-
 }

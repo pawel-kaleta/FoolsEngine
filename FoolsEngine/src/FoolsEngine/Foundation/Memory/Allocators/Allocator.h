@@ -51,24 +51,24 @@ namespace fe
 		void DeallocateRaw(Byte* ptr) { FE_CORE_ASSERT(!ptr, "NullAllocator should not be used for deallocation"); }
 	};
 
-	template <typename alloc>
-	class TypedAlloc : public alloc
+	template <typename tAlloc>
+	class TypedAlloc : public tAlloc
 	{
 	public:
 		template <typename T, UInt Count>
 		Array<T, Count>* Allocate()
 		{
-			auto result = this->alloc::AllocateRaw<Count * sizeof(T), alignof(T)>();
+			auto result = this->tAlloc::AllocateRaw<Count * sizeof(T), alignof(T)>();
 			return (Array<T, Count>*)result;
 		}
 		
 		template <typename T>
-		T* Allocate() { return (T*)(this->alloc::AllocateRaw<sizeof(T), alignof(T)>()); }
+		T* Allocate() { return (T*)(this->tAlloc::AllocateRaw<sizeof(T), alignof(T)>()); }
 		
 		template <typename T>
 		Splice<T> Allocate(UInt Count)
 		{
-			Splice<Byte> result = this->alloc::AllocateRaw<alignof(T)>(sizeof(T) * Count);
+			Splice<Byte> result = this->tAlloc::AllocateRaw<alignof(T)>(sizeof(T) * Count);
 			result.Count = Count;
 			return *(Splice<T>*) & result;
 		}
@@ -77,26 +77,29 @@ namespace fe
 		template <typename T>
 		Splice<T> Allocate(Splice<T> splice, UInt count)
 		{
-			Splice<Byte> result = this->alloc::AllocateRaw<alignof(T)>(sizeof(T) * count);
+			Splice<Byte> result = this->tAlloc::AllocateRaw<alignof(T)>(sizeof(T) * count);
 			result.Count = count;
 			return *(Splice<T>*) & result;
 		}
 
 		template <typename T>
-		void Deallocate(T* ptr) { this->alloc::DeallocateRaw<sizeof(T)>((Byte*)ptr); }
+		void Deallocate(T* ptr) { this->tAlloc::DeallocateRaw<sizeof(T)>((Byte*)ptr); }
 		
 		template <typename T, UInt Count>
-		void Deallocate(Array<T, Count>* ptr) { this->alloc::DeallocateRaw<sizeof(T) * Count>((Byte*)ptr); }
+		void Deallocate(Array<T, Count>* ptr) { this->tAlloc::DeallocateRaw<sizeof(T) * Count>((Byte*)ptr); }
 		
 		template <typename T>
 		void Deallocate(Splice<T> splice)
 		{
-			if (splice.Count == 0) return;
+			if (splice.Count == 0 || splice.Elements == nullptr) return;
 
-			splice.Count *= sizeof(T);
-			//this->alloc::DeallocateRaw(*(Splice<Byte>*) & splice);
+			Splice<Byte> splice_byte;
+			splice_byte.Elements = (Byte*)splice.Elements;
+			splice_byte.Count = splice.Count * sizeof(T);
+			
+			//this->tAlloc::DeallocateRaw(splice_byte);
 			Allocator* nasty_fix = (Allocator*)this;
-			nasty_fix->DeallocateRaw(*(Splice<Byte>*) & splice);
+			nasty_fix->DeallocateRaw(splice_byte);
 		}
 	};
 

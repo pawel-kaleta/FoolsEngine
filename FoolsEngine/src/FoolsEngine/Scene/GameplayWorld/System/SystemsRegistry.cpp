@@ -7,6 +7,8 @@ namespace fe
 	void SystemsRegistry::RegisterSystems()
 	{
 		FE_PROFILER_FUNC();
+
+		FE_CORE_ASSERT(false, "Not implemented");
 	}
 
 	const SystemsRegistry::Item* SystemsRegistry::GetItem(const std::string& name)
@@ -15,8 +17,8 @@ namespace fe
 
 		for (auto& item : s_Instance->m_Items)
 		{
-			auto& get_name_funk_ptr = item.GetName;
-			if ((*get_name_funk_ptr)() == name)
+			auto name_form_item = (*item.GetName)();
+			if (CompareStringsEqual(name_form_item, String(name.c_str())))
 			{
 				return &item;
 			}

@@ -28,7 +28,7 @@ namespace fe
 			std::pmr::string alias(&sp);
 			std::pmr::string extension(&sp);
 
-			alias = AssetType(tnAsset::GetTypeStatic()).ToConstCharPtr();
+			alias = AssetType(tnAsset::GetTypeStatic()).ToCString().Data;
 			extension = tnAsset::GetMetaFileExtension();
 
 			outFilter = alias + " (" + extension + ")" + std::pmr::string(1, '\0', &sp) + "*" + extension + std::pmr::string(1, '\0', &sp);

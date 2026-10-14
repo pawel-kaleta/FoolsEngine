@@ -37,7 +37,7 @@ namespace fe
 	template <typename tnLoader>
 	void LoadersRegistry::RegisterLoader()
 	{
-		m_Items.push_back(
+		m_Items.Append(
 			Item{
 				&tnLoader::IsKnownExtension,
 				&tnLoader::IsKnownAssetType,

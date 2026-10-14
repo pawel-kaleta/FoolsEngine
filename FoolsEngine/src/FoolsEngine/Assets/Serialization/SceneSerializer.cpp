@@ -104,11 +104,12 @@ namespace fe
 				{
 					emitter << YAML::Key << "Systems" << YAML::Value << YAML::BeginSeq;
 					{
+						Pile p;
 						for (const auto& system : gameplay_world->GetSystems().m_Systems)
 						{
 							emitter << YAML::BeginMap;
 
-							emitter << YAML::Key << "System" << YAML::Value << system->GetName();
+							emitter << YAML::Key << "System" << YAML::Value << system->GetName().GetCString(&p).Data;
 							emitter << YAML::Key << "UUID" << YAML::Value << system->m_UUID;
 							emitter << YAML::Key << "Active" << YAML::Value << system->m_Active;
 
@@ -123,7 +124,7 @@ namespace fe
 						for (int i = 0; i < SimulationStage::Count; i++)
 						{
 							SimulationStage stage; stage.FromInt(i);
-							emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
+							emitter << YAML::Key << stage.ToCString().Data << YAML::Value << YAML::BeginSeq;
 							for (auto& update_enroll : gameplay_world->GetSystems().m_SystemUpdateEnrolls[i])
 							{
 								emitter << YAML::BeginMap;
@@ -175,7 +176,7 @@ namespace fe
 								for (int i = 0; i < SimulationStage::Count; i++)
 								{
 									SimulationStage stage; stage.FromInt(i);
-									emitter << YAML::Key << stage.ToConstCharPtr() << YAML::Value << YAML::BeginSeq;
+									emitter << YAML::Key << stage.ToCString().Data << YAML::Value << YAML::BeginSeq;
 									for (auto& update_enroll : actorData.m_UpdateEnrolls[i])
 									{
 										emitter << YAML::BeginMap;

@@ -1,5 +1,7 @@
 #include "Log.h"
 
+#include "Asserts.h"
+
 // https://github.com/gabime/spdlog/wiki
 
 namespace fe

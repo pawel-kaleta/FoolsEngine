@@ -84,7 +84,7 @@ namespace fe
 	{
 		emitter << YAML::Key << "IsPrimary" << YAML::Value << IsPrimary;
 
-		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.m_ProjectionType.ToConstCharPtr();
+		emitter << YAML::Key << "ProjectionType" << YAML::Value << Camera.m_ProjectionType.ToCString().Data;
 
 		const auto& data_pers = Camera.m_PerspectiveData;
 		emitter << YAML::Key << "PerspectiveNear" << YAML::Value << data_pers.m_NearClip;
@@ -113,7 +113,7 @@ namespace fe
 		data_orto.m_Zoom = data["OrthographicZoom"].as<float>();
 
 		Render::Representation::Camera::ProjectionType projection;
-		projection.FromString(data["ProjectionType"].as<std::string>());
+		projection.FromString(String(data["ProjectionType"].as<std::string>().c_str()));
 		Camera.SetProjectionType(projection);
 	}
 }

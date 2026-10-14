@@ -2,11 +2,12 @@
 
 #include "ForEach.h"
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
-#define _FROM_STRING(x) if (string == #x) { Value = x; return; }
-#define _TO_STRING(x) case x: return #x;
+#define _FROM_STRING(x) if (CompareStringsEqual(string, String(#x, sizeof(#x)))) { Value = x; return; }
+#define _TO_STRING(x) case x: return CString(#x, sizeof(#x));
 
 #define FE_DECLARE_ENUM(name, ...)                                                                    \
 struct name                                                                                           \
@@ -35,20 +36,20 @@ struct name                                                                     
     constexpr name(const ValueType& other) : Value(other) { }                                         \
     constexpr name(ValueType&& other) : Value(other) { }                                              \
                                                                                                       \
-    void FromString(const std::string& string)                                                        \
+    void FromString(String string)                                                                    \
     {                                                                                                 \
         FE_FOR_EACH(_FROM_STRING, __VA_ARGS__)                                                        \
         FE_CORE_ASSERT(false, "Unrecognised string representation of enum");                          \
     }                                                                                                 \
                                                                                                       \
-    constexpr const char* ToConstCharPtr() const                                                      \
+    CString ToCString() const                                                                         \
     {                                                                                                 \
         switch (Value)                                                                                \
         {                                                                                             \
         FE_FOR_EACH(_TO_STRING, __VA_ARGS__)                                                          \
         default:                                                                                      \
             FE_CORE_ASSERT(false, "Unrecognised value of enum");                                      \
-            return "";                                                                                \
+            return CString();                                                                                \
         }                                                                                             \
     }                                                                                                 \
                                                                                                       \

@@ -5,19 +5,16 @@
 
 #include <filesystem>
 
-namespace fe {
-	class Asserts
-	{
-	public:
-		static bool EnableAssertionBreak;
-		static bool EnableCoreAssertionBreak;
-	};
+namespace fe
+{
+	extern bool EnableAssertionBreak;
+	extern bool EnableCoreAssertionBreak;
 }
 
 
 #ifdef FE_INTERNAL_BUILD
-	#define FE_ASSERTION_BREAK()      if (fe::Asserts::EnableAssertionBreak) __debugbreak();
-	#define FE_CORE_ASSERTION_BREAK() if (fe::Asserts::EnableCoreAssertionBreak) __debugbreak();
+	#define FE_ASSERTION_BREAK()      if (fe::EnableAssertionBreak) __debugbreak();
+	#define FE_CORE_ASSERTION_BREAK() if (fe::EnableCoreAssertionBreak) __debugbreak();
 
 	#define FE_ASSERT(x, ...)      if (!(x)) { FE_LOG_ERROR("ASSERTION FAILED: in file {0} in function {1} at line {2}.", std::filesystem::path(__FILE__).filename().string(), FE_FUNC_SIG, __LINE__);\
 											   FE_LOG_ERROR("Assertion Message: " __VA_ARGS__);\

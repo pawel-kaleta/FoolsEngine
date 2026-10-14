@@ -4,6 +4,8 @@
 
 #include "FoolsEngine/Scene/SimulationStage.h"
 
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+
 namespace YAML
 {
 	class Emitter;
@@ -28,11 +30,11 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		virtual std::string GetName() const { return "BaseSystem"; }
+		virtual String GetName() const { return String("BaseSystem", 11); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetName()); }
-		static std::string GetNameStatic() { return "BaseSystem"; }
+		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetName().GetCString(&p).Data); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetName().GetCString(&p).Data); }
+		static String GetNameStatic() { return String("BaseSystem", 11); }
 
 
 		template<SimulationStage::ValueType stage>
@@ -60,6 +62,6 @@ namespace fe
 	};
 
 #define FE_SYSTEM_SETUP(type, name) \
-	static std::string GetNameStatic() { return name; } \
-	virtual std::string GetName() const override { return name; }
+	static String GetNameStatic() { return String(name, sizeof(name)); } \
+	virtual String GetName() const override { return String(name, sizeof(name)); }
 }

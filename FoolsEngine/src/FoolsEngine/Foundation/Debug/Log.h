@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
-
 // https://github.com/gabime/spdlog/wiki
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>

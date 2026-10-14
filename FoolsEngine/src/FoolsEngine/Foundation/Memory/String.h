@@ -2,11 +2,19 @@
 
 #include "DataTypes.h"
 #include "Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Utils/Context.h"
 #include "Splice.h"
 
 namespace fe
 {
+	namespace Context
+	{
+		namespace Allocators
+		{
+			extern PMAlloc* Default;
+			extern PMAlloc* Output;
+		}
+	}
+
 	// do we need owning string?
 
 	struct String;
@@ -18,6 +26,10 @@ namespace fe
 
 		CString() = default;
 		CString(const char* string, UInt lengthWithNull) { FromConstCharPtr(string, lengthWithNull); }
+		CString& operator=(const CString& other) = default;
+		CString& operator=(CString&& other) = default;
+		CString(const CString& other) = default;
+		CString(CString&& other) = default;
 
 		void Init()
 		{

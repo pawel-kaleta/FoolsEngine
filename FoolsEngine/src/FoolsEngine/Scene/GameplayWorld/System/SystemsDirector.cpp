@@ -76,7 +76,7 @@ namespace fe
 	{
 		for (auto& system : m_Systems)
 		{
-			if (system->GetName() == name)
+			if (CompareStringsEqual(system->GetName(), String(name.c_str())))
 			{
 				return system.get();
 			}

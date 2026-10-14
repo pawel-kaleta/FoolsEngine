@@ -39,13 +39,13 @@ namespace fe
 		{
 			out << YAML::Key << "UUID" << YAML::Value << assetHandle.GetUUID();
 			out << YAML::Key << "Name" << YAML::Value << assetHandle.Observe().GetFilepath().filename().string().c_str();
-			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToConstCharPtr();
+			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToCString().Data;
 		}
 		else
 		{
 			out << YAML::Key << "UUID" << YAML::Value << UUID(0);
 			out << YAML::Key << "Name" << YAML::Value << "empty handle";
-			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToConstCharPtr();
+			out << YAML::Key << "Loading Priority" << YAML::Value << assetHandle.GetLoadingPriority().ToCString().Data;
 		}
 		out << YAML::EndMap;
 		return out;
@@ -214,7 +214,7 @@ namespace YAML
 
 			fe::UUID uuid = node["UUID"].as<fe::UUID>();
 
-			fe::AssetLoadingPriority loading_priority; loading_priority.FromString(node["Loading Priority"].as<std::string>());
+			fe::AssetLoadingPriority loading_priority; loading_priority.FromString(fe::String(node["Loading Priority"].as<std::string>().c_str()));
 
 			fe::AssetID id;
 			

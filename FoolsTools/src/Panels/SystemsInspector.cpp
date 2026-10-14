@@ -57,7 +57,7 @@ namespace fe
                 for (int i = 0; i < SimulationStage::Count; i++)
                 {
                     SimulationStage stage; stage.FromInt(i);
-                    if (ImGui::CollapsingHeader(stage.ToConstCharPtr(), ImGuiTreeNodeFlags_None))
+                    if (ImGui::CollapsingHeader(stage.ToCString().Data, ImGuiTreeNodeFlags_None))
                     {
                         auto& update_enrolls = systems_director.m_SystemUpdateEnrolls[i];
                         if (update_enrolls.size() == 0)
@@ -68,13 +68,14 @@ namespace fe
 
                         ImGui::PushItemWidth(75.0f);
 
+                        Pile p;
                         int unique_ImGui_ID_wrap = 0;
                         for (auto& update_enroll : update_enrolls)
                         {
                             ImGui::PushID(++unique_ImGui_ID_wrap);
                             auto& sys = update_enroll.System;
 
-                            if (ImGui::InputInt(sys->GetName().c_str(), (int*)&update_enroll.Priority))
+                            if (ImGui::InputInt(sys->GetName().GetCString(&p).Data, (int*)&update_enroll.Priority))
                             {
                                 systems_director.SortSystemUpdateEnrolls(stage);
                             }
@@ -102,11 +103,13 @@ namespace fe
     {
         FE_PROFILER_FUNC();
 
+        Pile p;
+
         auto name = system->GetName();
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.c_str(), header_flags);
+        bool widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
 
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - line_height + 12.0f); // 12 may be windowPadding + framePadding ?
 
@@ -164,19 +167,21 @@ namespace fe
     {
         if (ImGui::BeginPopup("AddSystem"))
         {
-            FE_LOG_CORE_WARN("Not implemented");
+            Pile p;
 
-            //auto& behReg = BehaviorsRegistry::s_Instance;
-            //for (const auto& item : behReg.Items)
-            //{
-            //    auto& getName = item.Name;
-            //    std::string name = (behReg.*getName)();
-            //    if (ImGui::MenuItem(name.c_str()))
-            //    {
-            //        auto& create = item.Create;
-            //        (actor.*create)();
-            //    }
-            //}
+            auto& behReg = SystemsRegistry::Get();
+            for (const auto& item : behReg.m_Items)
+            {
+                auto& getName = item.GetName;
+                String name = (*getName)();
+                if (ImGui::MenuItem(name.GetCString(&p).Data))
+                {
+                    auto& create = item.Create;
+                    FE_CORE_ASSERT(false, "Not implemented");
+                    //SystemsDirector::
+                    //(actor.*create)();
+                }
+            }
 
             ImGui::EndPopup();
         }
