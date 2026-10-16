@@ -299,15 +299,13 @@ namespace fe::GeometryImport
 			AssetUser model_user(assetID);
 			auto& model_core = model_user.Get<Model::Core>();
 
-			Scratchpad sp;
-			std::pmr::vector<AssetID> material_IDs(&sp);
-
-			material_IDs.reserve(scene->mNumMaterials);
+			Pile p;
+			auto material_IDs = p.Allocate<AssetID>(scene->mNumMaterials);
 
 			for (size_t i = 0; i < scene->mNumMaterials; i++)
 			{
 				AssetID material_ID = AssetManager::AssetCreation::InternalAsset<Material>(assetID);
-				material_IDs.push_back(material_ID);
+				material_IDs[i] = material_ID;
 
 				auto& material_data = importData->GeometryData.MaterialsData->operator[](i);
 
@@ -492,7 +490,7 @@ namespace fe::GeometryImport
 		}
 	}
 
-	static void RenderMeshList(std::pmr::vector<uint32_t>& meshCountPerMaterial, const aiScene* const scene)
+	static void RenderMeshList(Splice<uint32_t> meshCountPerMaterial, const aiScene* const scene)
 	{
 		constexpr ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 
@@ -505,13 +503,14 @@ namespace fe::GeometryImport
 			ImGui::TableSetupColumn("Tri Count", ImGuiTableColumnFlags_NoHide);
 			ImGui::TableHeadersRow();
 
-			Scratchpad sp;
+			Pile p;
 			for (size_t i = 0; i < scene->mNumMeshes; i++)
 			{
 				ImGui::PushID((int)i);
 
 				auto& mesh = scene->mMeshes[i];
 				auto material_index = mesh->mMaterialIndex;
+				FE_CORE_ASSERT(false, " What is this ++ below?");
 				meshCountPerMaterial[material_index]++;
 
 				ImGui::TableNextRow();
@@ -521,23 +520,30 @@ namespace fe::GeometryImport
 				ImGui::TextWrapped(mesh->mName.C_Str());
 				ImGui::TableNextColumn();
 				const auto name = scene->mMaterials[material_index]->GetName();
-				std::pmr::string nameLabel(std::to_string(material_index), &sp);
-				nameLabel += ". ";
-				nameLabel += name.C_Str();
-				ImGui::Text(nameLabel.c_str());
+
+				StringBuilder name_label;
+				name_label.Init(&p);
+
+				name_label.Append(std::to_string(material_index).c_str());
+				name_label.Append(". ");
+				name_label.Append(name.C_Str());
+
+				ImGui::Text(name_label.GetCString(&p).Data);
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", mesh->mNumVertices);
 				ImGui::TableNextColumn();
 				ImGui::Text("%i", mesh->mNumFaces);
 
 				ImGui::PopID();
+
+				p.Clear();
 			}
 
 			ImGui::EndTable();
 		}
 	}
 
-	static void RenderMaterialList(const std::pmr::vector<uint32_t>& meshCountPerMaterial, const aiScene* const scene)
+	static void RenderMaterialList(Splice<uint32_t> meshCountPerMaterial, const aiScene* const scene)
 	{
 		constexpr ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 
@@ -694,15 +700,19 @@ namespace fe::GeometryImport
 
 		auto& data = importData->GeometryData;
 		auto& scene = data.Scene;
-		Scratchpad sp;
 
 		static size_t selected_material_index = 0;
 		const auto selected_material_name = scene->mMaterials[selected_material_index]->GetName();
 
-		std::pmr::string preview(std::to_string(selected_material_index), &sp);
-		preview += ". " + std::pmr::string(selected_material_name.C_Str(), &sp);
+		Pile p;
 
-		if (ImGui::BeginCombo("Material Selection", preview.c_str()))
+		StringBuilder preview;
+		preview.Init(&p);
+		preview.Append(std::to_string(selected_material_index).c_str());
+		preview.Append(". ");
+		preview.Append(selected_material_name.C_Str());
+
+		if (ImGui::BeginCombo("Material Selection", preview.GetCString(&p).Data))
 		{
 			for (size_t n = 0; n < scene->mNumMaterials; n++)
 			{
@@ -710,10 +720,14 @@ namespace fe::GeometryImport
 				const bool is_selected = (selected_material_index == n);
 				auto name = scene->mMaterials[n]->GetName();
 
-				std::pmr::string label(std::to_string(n), &sp);
-				label += ". " + std::pmr::string(name.C_Str());
+				StringBuilder label;
+				label.Init(&p);
 
-				if (ImGui::Selectable(label.c_str(), is_selected))
+				label.Append(std::to_string(n).c_str());
+				label.Append(". ");
+				label.Append(name.C_Str());
+
+				if (ImGui::Selectable(label.GetCString(&p).Data, is_selected))
 					selected_material_index = n;
 
 				if (is_selected)
@@ -816,8 +830,9 @@ namespace fe::GeometryImport
 			RenderHierarchy(scene);
 
 		{
-			Scratchpad sp;
-			std::pmr::vector<uint32_t> meshes_counts_per_material(scene->mNumMaterials, 0, &sp);
+			Pile p;
+			auto meshes_counts_per_material = p.Allocate<U32>(scene->mNumMaterials);
+			std::memset(meshes_counts_per_material.Elements, 0, sizeof(U32) * scene->mNumMaterials);
 
 			if (ImGui::CollapsingHeader("Meshes", 0))
 				RenderMeshList(meshes_counts_per_material, scene);
@@ -857,7 +872,7 @@ namespace fe::GeometryImport
 				switch (variant)
 				{
 				case ImportVariant::Model:		default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Model		>(importData->FilepathToImport, filter);	break;
-				case ImportVariant::RenderMesh:	default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh	>(importData->FilepathToImport, filter);	break;
+				case ImportVariant::RenderMesh:	default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<RenderMesh>(importData->FilepathToImport, filter);	break;
 				case ImportVariant::Mesh:		default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->FilepathToImport, filter);	break;
 				}
 

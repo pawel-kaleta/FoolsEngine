@@ -101,7 +101,10 @@ namespace fe
 					RenderUPFolder();
 
 				Scratchpad sp;
-				auto file_names = sp.NewObject<std::pmr::vector<std::pmr::string>>(&sp);
+				Pile p;
+				//auto file_names = sp.NewObject<std::pmr::vector<std::pmr::string>>(&sp);
+				DynamicArena<std::pmr::string> file_names;
+				file_names.Init(&p);
 
 				// RenderFolders iterates over directory rendering folders and creating list of filenames
 				// RenderFiles iterates over filenames in a list
@@ -109,7 +112,7 @@ namespace fe
 
 				RenderFolders(&sp, file_names);
 
-				for (const auto& file : *file_names)
+				for (const auto& file : file_names)
 				{
 					Scratchpad sp2;
 
@@ -292,7 +295,7 @@ namespace fe
 			ImGui::SameLine();
 	}
 
-	void ContentBrowser::RenderFolders(Scratchpad* sp, std::pmr::vector<std::pmr::string>* file_names)
+	void ContentBrowser::RenderFolders(Scratchpad* sp, DynamicArena<std::pmr::string>& file_names)
 	{
 		FE_PROFILER_FUNC();
 
@@ -333,7 +336,8 @@ namespace fe
 			}
 			else
 			{
-				file_names->push_back(std::move(entry_name));
+				auto emplace_slot = file_names.EmplaceBack();
+				*emplace_slot = std::move(entry_name);
 			}
 		}
 	}

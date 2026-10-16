@@ -38,7 +38,7 @@ namespace fe
 			void* FolderID = nullptr;
 		} m_Icons;
 
-		void RenderFolders(Scratchpad* sp, std::pmr::vector<std::pmr::string>* file_names);
+		void RenderFolders(Scratchpad* sp, DynamicArena<std::pmr::string>& file_names);
 		void RenderFile(const std::pmr::string& stem, const std::pmr::string& extension);
 		void RenderUPFolder();
 		void RenderFolderNode(const std::filesystem::directory_entry& dir);
