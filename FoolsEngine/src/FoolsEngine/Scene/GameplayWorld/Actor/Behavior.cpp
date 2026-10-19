@@ -13,8 +13,7 @@ namespace fe
     {
         if (m_Active)
         {
-            Pile p;
-            FE_LOG_CORE_WARN("{0} already active", GetCString(GetBehaviorName(), &p).Data);
+            Context::Log::Core.Warn("{0} already active"_FE, GetBehaviorName());
         }
 
         m_Active = true;
@@ -25,8 +24,7 @@ namespace fe
     {
         if (!m_Active)
         {
-            Pile p;
-            FE_LOG_CORE_WARN("{0} already deactivated", GetCString(GetBehaviorName(), &p).Data);
+            Context::Log::Core.Warn("{0} already deactivated"_FE, GetBehaviorName());
         }
 
         m_Active = false;

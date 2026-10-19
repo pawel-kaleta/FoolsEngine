@@ -65,7 +65,7 @@ namespace fe::Render::GAPI::OpenGL
 			case Blend::BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
 
 			default:
-				FE_LOG_CORE_ERROR("Unrecognized BlendFunction");
+				Context::Log::Core.Error("Unrecognized BlendFunction"_FE);
 				return GL_NONE;
 			}
 		}
@@ -157,15 +157,15 @@ namespace fe::Render::GAPI::OpenGL
 			if (status != GL_FRAMEBUFFER_COMPLETE)
 			{
 				if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"_FE);
 				if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"_FE);
 				if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
-					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"_FE);
 				if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
-					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"_FE);
 				if (status == GL_FRAMEBUFFER_UNSUPPORTED)
-					FE_LOG_CORE_ERROR("GL_FRAMEBUFFER_UNSUPPORTED");
+					Context::Log::Core.Error("GL_FRAMEBUFFER_UNSUPPORTED"_FE);
 			}
 
 			// facecull setup for state based compilation
@@ -206,7 +206,7 @@ namespace fe::Render::GAPI::OpenGL
 				glDeleteProgram(mOpenGLID);
 				mOpenGLID = 0;
 
-				FE_LOG_CORE_ERROR("{0}", info_log.Elements); // is this null terminated?
+				Context::Log::Core.Error("{0}"_FE, info_log.Elements); // is this null terminated?
 				FE_CORE_ASSERT(false, "OpenGL shader program linking failed!");
 				return;
 			}

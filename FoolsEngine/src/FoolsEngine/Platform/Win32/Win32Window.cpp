@@ -27,12 +27,12 @@ namespace fe
 	void Win32Window::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_TRACE("Win10Window::OnUpdate()");
+		Context::Log::Core.Trace("Win10Window::OnUpdate()"_FE);
 
 		// events polling
 		{
 			FE_PROFILER_SCOPE("GLFW events polling");
-			FE_LOG_CORE_TRACE("GLFW events polling");
+			Context::Log::Core.Trace("GLFW events polling"_FE);
 			glfwPollEvents();
 		}
 	}
@@ -64,7 +64,7 @@ namespace fe
 	void Win32Window::ShutDown()
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Closing Window.");
+		Context::Log::Core.Info("Closing Window."_FE);
 
 		{
 			FE_PROFILER_SCOPE("glfwDestroyWindow()");
@@ -87,12 +87,12 @@ namespace fe
 		if (enabled)
 		{
 			glfwSwapInterval(1);
-			FE_LOG_CORE_INFO("VSync enabled.");
+			Context::Log::Core.Info("VSync enabled."_FE);
 		}
 		else
 		{
 			glfwSwapInterval(0);
-			FE_LOG_CORE_INFO("VSync disabled.");
+			Context::Log::Core.Info("VSync disabled."_FE);
 		}
 		m_Data.VSync = enabled;
 

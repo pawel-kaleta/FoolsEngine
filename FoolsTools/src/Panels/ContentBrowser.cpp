@@ -155,7 +155,7 @@ namespace fe
 				{
 					//CreateAsset::OpenWindow(m_CurrentPath, AssetType::Material);
 					//CreateAsset::CreateMaterial(m_CurrentPath);
-					FE_LOG_ERROR("Unimplemented Material Import");
+					Context::Log::Core.Error("Unimplemented Material Import"_FE);
 				}
 
 				ImGui::EndPopup();

@@ -6,14 +6,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_TRACE("NEW EVENT: {0}", event->ToString());
+		Context::Log::Core.Trace("NEW EVENT: {0}"_FE, event->ToString());
 		m_InputBuffer.push_back(event);
 	}
 
 	void MainEventDispacher::DispachEvents(LayerStack& layerStack)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_TRACE("Dispaching events");
+		Context::Log::Core.Trace("Dispaching events"_FE);
 
 		m_OutputBuffer.swap(m_InputBuffer);
 

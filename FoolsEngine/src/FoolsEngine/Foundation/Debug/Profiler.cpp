@@ -1,6 +1,6 @@
 #include "Profiler.h"
 
-#include "Log.h"
+#include "FoolsEngine/Foundation/Utils/Context.h"
 
 #ifdef FE_INTERNAL_BUILD
 namespace fe
@@ -31,8 +31,7 @@ namespace fe
 	{
 		if (m_ActiveSession)
 		{
-			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
-				FE_LOG_CORE_ERROR("Profiler::StartSession('{0}') with already active session: '{1}'.", name, m_ActiveSession);
+			Context::Log::Core.Error("Profiler::StartSession('{0}') with already active session: '{1}'."_FE, name, m_ActiveSession);
 
 			EndSession(); // Simultaneous profileing with more then 1 session may cause strange behaviours
 		}
@@ -47,13 +46,11 @@ namespace fe
 			m_SessionName = name;
 			WriteHeader();
 
-			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
-				FE_LOG_CORE_INFO("Profiler session '{0}' started.", name);
+			Context::Log::Core.Info("Profiler session '{0}' started."_FE, name);
 		}
 		else
 		{
-			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
-				FE_LOG_CORE_ERROR("Profiler failed to open a results stream to file '{0}'.", filepath);
+			Context::Log::Core.Error("Profiler failed to open a results stream to file '{0}'."_FE, filepath);
 		}
 	}
 
@@ -66,15 +63,13 @@ namespace fe
 			m_OutputStream.close();
 			m_ActiveSession = false;
 
-			if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
-				FE_LOG_CORE_INFO("Profiler session '{0}' closed.", m_SessionName);
+			Context::Log::Core.Info("Profiler session '{0}' closed."_FE, m_SessionName);
 
 			m_SessionName = nullptr;
 			return;
 		}
 
-		if (Log::GetCoreLogger()) // if some fool deside to evoke this function before Log::Init()
-			FE_LOG_CORE_WARN("Attempt to close profiler session with no active session.");
+		Context::Log::Core.Warn("Attempt to close profiler session with no active session."_FE);
 	}
 
 	void Profiler::WriteHeader()

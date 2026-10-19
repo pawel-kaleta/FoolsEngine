@@ -91,13 +91,13 @@ namespace fe
 	}
 }
 
-//#include <spdlog/spdlog.h>
+#include <spdlog/spdlog.h>
 
-//template<>
-//struct fmt::formatter<fe::String> : fmt::formatter<std::string>
-//{
-//	auto format(fe::String my, format_context& ctx) const -> decltype(ctx.out())
-//	{
-//		return fmt::format_to(ctx.out(), "[my_type i={}]", std::basic_string_view<char>((char*)my.Buffer.Elements, my.Buffer.Count));
-//	}
-//};
+template<>
+struct fmt::formatter<fe::String> : fmt::formatter<std::string>
+{
+	auto format(fe::String my, format_context& ctx) const -> decltype(ctx.out())
+	{
+		return fmt::format_to(ctx.out(), "[my_type i={}]", std::basic_string_view<char>((char*)my.Data, my.Count));
+	}
+};

@@ -1,6 +1,5 @@
 #include "LayerStack.h"
 
-#include "FoolsEngine/Foundation/Debug/Log.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 namespace fe
@@ -23,7 +22,7 @@ namespace fe
 		m_Layers.insert(m_Layers.begin() + m_InnerLayerInsertIndex, layer);
 		m_InnerLayerInsertIndex++;
 
-		FE_LOG_CORE_INFO("New inner layer \"{0}\" added to LayerStack", layer->ToString());
+		Context::Log::Core.Info("New inner layer \"{0}\" added to LayerStack"_FE, layer->ToString());
 
 		layer->OnAttach();
 	}
@@ -34,7 +33,7 @@ namespace fe
 
 		m_Layers.push_back(layer);
 
-		FE_LOG_CORE_INFO("New outer layer \"{0}\" added to LayerStack", layer->ToString());
+		Context::Log::Core.Info("New outer layer \"{0}\" added to LayerStack"_FE, layer->ToString());
 
 		layer->OnAttach();
 	}
@@ -50,11 +49,11 @@ namespace fe
 			m_Layers.erase(layer_it);
 			m_InnerLayerInsertIndex--;
 
-			FE_LOG_CORE_INFO("Inner layer \"{0}\" removed from LayerStack", layer->ToString());
+			Context::Log::Core.Info("Inner layer \"{0}\" removed from LayerStack"_FE, layer->ToString());
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Attempt to remove inner layer \"{0}\" from the LayerStack without pushing it first!", layer->ToString());
+			Context::Log::Core.Warn("Attempt to remove inner layer \"{0}\" from the LayerStack without pushing it first!"_FE, layer->ToString());
 		}
 	}
 
@@ -68,11 +67,11 @@ namespace fe
 			layer->OnDetach();
 			m_Layers.erase(layer_it);
 
-			FE_LOG_CORE_INFO("Outer layer \"{0}\" removed from LayerStack", layer->ToString());
+			Context::Log::Core.Info("Outer layer \"{0}\" removed from LayerStack"_FE, layer->ToString());
 		}
 		else
 		{
-			FE_LOG_CORE_WARN("Attempt to remove outer layer \"{0}\" from the LayerStack without pushing it first!", layer->ToString());
+			Context::Log::Core.Warn("Attempt to remove outer layer \"{0}\" from the LayerStack without pushing it first!"_FE, layer->ToString());
 		}
 	}
 }

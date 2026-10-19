@@ -24,11 +24,6 @@
 
 namespace fe
 {
-	namespace Context
-	{
-		void InitAlloc(UInt mainLoopArenaSize);
-	}
-
 	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
 
 	namespace Time
@@ -46,7 +41,7 @@ namespace fe
 	{
 	public:
 		ApplicationLayer(std::function<void(Ref<Events::Event>)> EventCallback)
-			: Layer(String("ApplicationLayer",17)), m_Callback(EventCallback) {
+			: Layer(String("ApplicationLayer"_FE)), m_Callback(EventCallback) {
 			FE_PROFILER_FUNC();
 		}
 
@@ -75,12 +70,6 @@ namespace fe
 	void Application::Startup()
 	{
 		FE_PROFILER_FUNC();
-
-		// Allocators
-		{
-			FE_PROFILER_SCOPE("Allocators");
-			Context::InitAlloc(24 * 1024);
-		}
 
 		// Rendering, Window and Platform Layer
 		{
@@ -206,8 +195,8 @@ namespace fe
 			Time::s_LastFrameTimeStep = Time::TimeStep(Time::s_LastFrameTimePoint, now);
 			Time::s_LastFrameTimePoint = now;
 
-			FE_LOG_CORE_TRACE("m_LastFrameTimeStep:  {0}", Time::s_LastFrameTimeStep.GetSeconds());
-			FE_LOG_CORE_TRACE("m_LastFrameTimePoint: {0}", Time::s_LastFrameTimePoint.GetTime());
+			Context::Log::Core.Trace("m_LastFrameTimeStep:  {0}"_FE, Time::s_LastFrameTimeStep.GetSeconds());
+			Context::Log::Core.Trace("m_LastFrameTimePoint: {0}"_FE, Time::s_LastFrameTimePoint.GetTime());
 
 			m_FrameCount++;
 
@@ -375,8 +364,8 @@ namespace fe
 	void Application::OnEvent(Ref<Events::Event> event)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_TRACE("Application::OnEvent");
-		FE_LOG_CORE_TRACE(event->GetName());
+		Context::Log::Core.Trace("Application::OnEvent"_FE);
+		Context::Log::Core.Trace(event->GetName());
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
@@ -390,7 +379,7 @@ namespace fe
 
 		m_Running = false;
 		event->Owned = true;
-		FE_LOG_CORE_INFO("Window Close Event");
+		Context::Log::Core.Info("Window Close Event"_FE);
 	}
 
 	void Application::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
@@ -424,6 +413,6 @@ namespace fe
 		m_Minimized = false;
 		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
 
-		FE_LOG_CORE_INFO("Window resize (width: {0}, height: {1})", event->GetWidth(), event->GetHeight());
+		Context::Log::Core.Info("Window resize (width: {0}, height: {1})"_FE, event->GetWidth(), event->GetHeight());
 	}
 }

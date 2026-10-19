@@ -4,7 +4,6 @@
 #include "Pile.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
 
 #include <cstring>
 
@@ -395,7 +394,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(Count > index);
 
-			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (Count == Buffer.Count)
 			{
@@ -420,7 +419,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(Count > index);
 
-			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (Count == Buffer.Count)
 			{
@@ -546,7 +545,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
 
-			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
 			{
@@ -571,7 +570,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
 
-			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
 			{

@@ -11,7 +11,7 @@ namespace fe
 	class Layer
 	{
 	public:
-		Layer(String name = String("Layer", 6))
+		Layer(String name = String("Layer"_FE))
 			: m_Name(name)
 		{
 			FE_PROFILER_FUNC();

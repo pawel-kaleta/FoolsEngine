@@ -1,10 +1,11 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Debug/Log.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 #include <iterator>
+#include <string>
+#include <functional>
 
 namespace fe
 {
@@ -100,11 +101,16 @@ namespace fe
 
 }
 
-inline std::ostream& operator<<(std::ostream& os, const fe::Events::Event& e)
+#include <spdlog/spdlog.h>
+
+template<>
+struct fmt::formatter<fe::Events::Event> : fmt::formatter<std::string>
 {
-	return os << e.ToString();
-}
-template <> struct fmt::formatter<fe::Events::Event> : fmt::ostream_formatter {};
+	auto format(fe::Events::Event my, format_context& ctx) const -> decltype(ctx.out())
+	{
+		return fmt::format_to(ctx.out(), "{}", std::basic_string_view<char>(my.ToString()));
+	}
+};
 
 #define FE_NEW_EVENT(callback, localName, type, ...) fe::Ref<type> localName = fe::CreateRef<type>(__VA_ARGS__);\
                                                      callback(localName);

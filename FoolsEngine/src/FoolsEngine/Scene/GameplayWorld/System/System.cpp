@@ -13,8 +13,7 @@ namespace fe
 	{
 		if (m_Active)
 		{
-			Pile p;
-			FE_LOG_CORE_WARN("{0} already active", GetCString(GetName(), &p).Data);
+			Context::Log::Core.Warn("{0} already active"_FE, GetName());
 		}
 
 		m_Active = true;
@@ -26,7 +25,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_DEBUG("System Update Register");
+		Context::Log::Core.Debug("System Update Register"_FE);
 
 		void (System:: * on_update_func_ptr)() = nullptr;
 
@@ -46,7 +45,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_DEBUG("Behavior Update Unregister");
+		Context::Log::Core.Debug("Behavior Update Unregister"_FE);
 
 		m_SystemsDirector->RemoveUpdateEnroll<stage>(this);
 	}
@@ -58,8 +57,7 @@ namespace fe
 	{
 		if (!m_Active)
 		{
-			Pile p;
-			FE_LOG_CORE_WARN("{0} already deactivated", GetCString(GetName(), &p).Data);
+			Context::Log::Core.Warn("{0} already deactivated"_FE, GetName());
 		}
 
 		m_Active = false;

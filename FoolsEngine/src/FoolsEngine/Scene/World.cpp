@@ -9,13 +9,13 @@ namespace fe
 		: m_IsGameplayWorld(isGameplayWorld)
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("World Creation");
+		Context::Log::Core.Info("World Creation"_FE);
 	}
 
 	BaseEntity World::CreateEntity()
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_DEBUG("Entity Creation");
+		Context::Log::Core.Debug("Entity Creation"_FE);
 
 		BaseEntity entity(m_Registry.create(), this);
 

@@ -174,7 +174,6 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Logger.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\LoggingLevel.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h" />
@@ -291,11 +290,12 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\SceneSerializer.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Allocators\AllocatorsImplementation.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Utils\Init.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\PlatformBase.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\Win32FileDialogs.cpp" />

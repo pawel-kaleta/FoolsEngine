@@ -19,7 +19,7 @@ namespace fe
 	template<SimulationStage::ValueType stage>
 	void SystemsDirector::EnrollForUpdate(System* system, void(System::* onUpdateFuncPtr)(), uint32_t priority)
 	{
-		FE_LOG_CORE_DEBUG("GameplayWorld: system EnrollForUpdate");
+		Context::Log::Core.Debug("GameplayWorld: system EnrollForUpdate"_FE);
 		
 		auto& enrolls = m_SystemUpdateEnrolls[stage];
 		

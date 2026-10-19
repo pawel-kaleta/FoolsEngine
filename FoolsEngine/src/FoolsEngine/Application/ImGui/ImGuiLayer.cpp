@@ -14,7 +14,7 @@
 namespace fe {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer(String("ImGuiLayer", 11))
+		: Layer(String("ImGuiLayer"_FE))
 	{
 		FE_PROFILER_FUNC();
 	}
@@ -117,10 +117,7 @@ namespace fe {
 
 		ImGui::Render();
 
-		auto logging_level = Log::GetCoreLoggingLevel();
-		Log::SetCoreLoggingLevel(Log::LoggingLevel::Warn);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		Log::SetCoreLoggingLevel(logging_level);
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{

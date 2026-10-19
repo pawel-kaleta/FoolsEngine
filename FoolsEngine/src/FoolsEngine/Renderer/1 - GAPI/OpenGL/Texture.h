@@ -2,7 +2,6 @@
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
@@ -215,7 +214,7 @@ namespace fe::Render::GAPI::OpenGL
 					glSamplerParameterfv(mSamplerID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(sampler.mBorderColor));
 					break;
 				default:
-					FE_LOG_CORE_ERROR("Unrecognized texture wrapping mode, defaulted to repeat");
+					Context::Log::Core.Error("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
 				}
 			}
 
@@ -230,7 +229,7 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); break;
 					case Mipmapping::Nearest:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); break;
 					case Mipmapping::Liniear:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); break;
-					default: FE_LOG_CORE_ERROR("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
+					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 					}
 					break;
 				case Filtering::Bilinear:
@@ -240,11 +239,11 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); break;
 					case Mipmapping::Nearest:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); break;
 					case Mipmapping::Liniear:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); break;
-					default: FE_LOG_CORE_ERROR("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
+					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 					}
 					break;
 				default:
-					FE_LOG_CORE_ERROR("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR");
+					Context::Log::Core.Info("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 				}
 			}
 		}

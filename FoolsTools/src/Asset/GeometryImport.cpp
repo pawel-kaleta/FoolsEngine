@@ -118,7 +118,7 @@ namespace fe::GeometryImport
 			{
 				aiTextureType& texture_type = (aiTextureType&)j;
 				if (mat->GetTextureCount(texture_type) > 1)
-					FE_LOG_CORE_WARN("No support for layered materials!");
+					Context::Log::Core.Warn("No support for layered materials!"_FE);
 
 				aiString new_texture;
 				if (AI_SUCCESS != mat->GetTexture(texture_type, 0, &new_texture))

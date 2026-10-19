@@ -27,6 +27,7 @@ namespace fe::Context
 	namespace Log
 	{
 		Logger Core;
+		Logger App;
 	}
 
 	namespace GPU
@@ -36,27 +37,6 @@ namespace fe::Context
 		U32 ScrachBufferSize;
 	}
 
-	void InitAlloc(UInt mainLoopArenaSize)
-	{
-		Alloc::Permanent.Init();
-		Alloc::MainLoopArena.Buffer = Alloc::Permanent.AllocateRaw(mainLoopArenaSize);
-		Alloc::MainLoopArena.Clear();
-	}
-
-	void InitGPU(U32 scrachBufferSize)
-	{
-		GPU::ScrachBufferSize = scrachBufferSize;
-		GPU::ScrachBuffer = Render::GAPI::CreateBuffer();
-		Render::GAPI::AllocateCommitBuffer(GPU::ScrachBuffer, scrachBufferSize);
-	}
-
-	void InitLog()
-	{
-		Log::Core.Init();
-	}
+	
 }
 
-void InitLog::Init()
-{
-	fe::Context::InitLog();
-}

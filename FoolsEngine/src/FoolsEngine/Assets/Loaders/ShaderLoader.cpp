@@ -24,7 +24,7 @@ namespace fe
 			Pile p;
 			STD_PMR_Allocator pmr(&p);
 			
-			FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
+			Context::Log::Core.Error("Could not load shader file: \"{0}\""_FE, filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
 			return;
 		}
 
@@ -44,7 +44,7 @@ namespace fe
 	bool ShaderLoader::IsKnownExtension(String extension)
 	{
 		static const String s_known_extensions[] = {
-			String(".glsl", 6)
+			String(".glsl"_FE)
 		};
 
 		for (auto& known_extension : s_known_extensions)

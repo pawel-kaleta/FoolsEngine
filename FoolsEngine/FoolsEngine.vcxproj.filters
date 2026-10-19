@@ -161,9 +161,6 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h">
-      <Filter>FoolsEngine\Foundation\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
@@ -498,9 +495,6 @@
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Debug\Log.cpp">
-      <Filter>FoolsEngine\Foundation\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
@@ -621,5 +615,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Utils\Init.cpp" />
+    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Allocators\AllocatorsImplementation.cpp" />
   </ItemGroup>
 </Project>

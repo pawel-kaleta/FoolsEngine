@@ -34,8 +34,8 @@ namespace fe
 
 		GameplayWorld* GetWorld() const { return (GameplayWorld*)m_World; }
 
-		Entity	CreateChildEntity(String name = String("Entity",7));
-		Actor	CreateAttachedActor(String name = String("Actor",6));
+		Entity	CreateChildEntity(String name = String("Entity"_FE));
+		Actor	CreateAttachedActor(String name = String("Actor"_FE));
 
 		EntityID GetHeadID()
 		{

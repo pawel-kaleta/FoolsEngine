@@ -20,13 +20,13 @@ namespace fe
 	void EditorLayer::OnAttach()
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_INFO("EditorLayer::OnAttach()");
+		Context::Log::App.Info("EditorLayer::OnAttach()"_FE);
 
 		auto sceneID = AssetManager::GetOrCreateAssetWithUUID(Project::Get()->StartScene);
 		m_Scene = AssetHandle<Scene>(sceneID, AssetLoadingPriority::Critical);
 		{
 			auto scene_user = m_Scene.Use();
-			FE_LOG_WARN("Fix this!");
+			Context::Log::App.Warn("Fix this!");
 			(*(Scene::User*)&scene_user).Initialize();
 			auto success = SceneSerializerYAML::DeserializeFromFile(scene_user);
 			FE_CORE_ASSERT(success, "scene loading failed");
@@ -40,7 +40,7 @@ namespace fe
 	void EditorLayer::OnUpdate()
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_TRACE("EditorLayer::OnUpdate()");
+		Context::Log::App.Trace("EditorLayer::OnUpdate()"_FE);
 
 		{
 			auto user = m_Scene.Use();
@@ -237,7 +237,7 @@ namespace fe
 		}
 		else
 		{
-			FE_LOG_CORE_ERROR("Adding scenes to project not implemented");
+			Context::Log::Core.Error("Adding scenes to project not implemented"_FE);
 		}
 
 		if (new_scene_opened)
@@ -249,7 +249,7 @@ namespace fe
 		}
 		else
 		{
-			FE_LOG_CORE_ERROR("Deserialization of a scene failed: {0}", filepath.string());
+			Context::Log::Core.Error("Deserialization of a scene failed: {0}"_FE, filepath.string());
 		}
 	}
 
@@ -264,7 +264,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_CORE_ERROR("Adding scenes to project not implemented");
+		Context::Log::Core.Error("Adding scenes to project not implemented"_FE);
 
 		std::filesystem::path filepath = FileDialogs::SaveFile(".\\assets\\scenes\\scene.fescene", "FoolsEngine Scene (*.fescene)\0 * .fescene\0");
 		
@@ -347,7 +347,7 @@ namespace fe
 		auto scene_observer = m_Scene.Observe();
 
 		if (!scene_observer.Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera())
-			FE_LOG_CORE_ERROR("No primary camera in the scene, rendering editors view");
+			Context::Log::Core.Error("No primary camera in the scene, rendering editors view"_FE);
 
 		m_SceneBackup = SceneSerializerYAML::SerializeToString(scene_observer);
 		m_EditorState = EditorState::Play;
@@ -386,7 +386,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_LOG_TRACE("{0}", *event.get());
+		Context::Log::App.Trace("{0}"_FE, *event.get());
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::KeyPressedEvent>(FE_BIND_EVENT_HANDLER(EditorLayer::OnKeyPressedEvent));

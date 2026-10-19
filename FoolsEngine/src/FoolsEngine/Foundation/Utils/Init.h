@@ -1,7 +1,8 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Memory/DataTypes.h"
 
 struct InitLog
 {
-	void Init();
+	void Init(fe::UInt mainLoopArenaSize);
 };

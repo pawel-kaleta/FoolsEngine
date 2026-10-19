@@ -96,7 +96,7 @@ namespace fe
 
 		UploadBaseAssetsToGPU(GetActivePlatform());
 
-		FE_LOG_CORE_INFO("Base Assets acquired");
+		Context::Log::Core.Info("Base Assets acquired"_FE);
 	}
 
 	void Renderer::UploadBaseAssetsToGPU(Render::GAPI::Platform GAPI)
@@ -228,6 +228,6 @@ namespace fe
 		GLenum error = glGetError();
 
 		if (error)
-			FE_LOG_CORE_INFO("{0}", error);
+			Context::Log::Core.Info("{0}"_FE, error);
 	}
 } 

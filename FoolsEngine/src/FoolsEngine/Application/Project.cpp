@@ -147,7 +147,7 @@ namespace fe
 		inst.BaseAssets.Materials.DefaultCutout			= materials_node["DefaultCutout"		].as<UUID>();
 		inst.BaseAssets.Materials.DefaultTranslucent	= materials_node["DefaultTranslucent"	].as<UUID>();
 
-		FE_LOG_CORE_INFO("Project deserialized");
+		Context::Log::Core.Info("Project deserialized"_FE);
 
 		return true;
 	}

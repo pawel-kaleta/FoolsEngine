@@ -7,7 +7,6 @@
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 #include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
 
 
 namespace fe
@@ -40,7 +39,7 @@ namespace fe
 		tnSystem* CreateSystem()
 		{
 			FE_PROFILER_FUNC();
-			FE_LOG_CORE_DEBUG("System creation");
+			Context::Log::Core.Debug("System creation"_FE);
 			static_assert(std::is_base_of_v<System, tnSystem>, "This is not a system!");
 
 			tnSystem* system = new tnSystem();

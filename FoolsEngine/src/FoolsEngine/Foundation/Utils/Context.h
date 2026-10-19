@@ -79,6 +79,11 @@ namespace fe::Context
 		};
 	}
 
+	namespace Profile
+	{
+
+	}
+
 	namespace Debug
 	{
 		// assertion failure handler

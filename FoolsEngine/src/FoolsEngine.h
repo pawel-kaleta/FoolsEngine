@@ -7,7 +7,6 @@
 #include "FoolsEngine/Foundation/Utils/Colors.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Memory/Xar.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 
 #ifdef FE_INTERNAL_BUILD

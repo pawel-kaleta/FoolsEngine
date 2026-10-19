@@ -24,17 +24,17 @@ namespace fe
 
 	#define FE_ASSERT(x, ...) if (!(x)) {\
 		fe::Context::Log::Core.Error("CORE ASSERTION FAILED:");\
-		fe::Context::Log::Core.Error("	File:     {}", std::filesystem::path(__FILE__).filename().string());\
-		fe::Context::Log::Core.Error("	Function: {}", FE_FUNC_SIG);\
-		fe::Context::Log::Core.Error("	Line:     {}", __LINE__);\
-		fe::Context::Log::Core.Error("	Message:  {}", __VA_ARGS__);\
+		fe::Context::Log::Core.Error("    File:     {}", std::filesystem::path(__FILE__).filename().string());\
+		fe::Context::Log::Core.Error("    Function: {}", FE_FUNC_SIG);\
+		fe::Context::Log::Core.Error("    Line:     {}", __LINE__);\
+		fe::Context::Log::Core.Error("    Message:  {}", __VA_ARGS__);\
 		FE_ASSERTION_BREAK(); }
 	#define FE_CORE_ASSERT(x, ...) if (!(x)) {\
 		fe::Context::Log::Core.Error("CORE ASSERTION FAILED:");\
-		fe::Context::Log::Core.Error("	File:     {}", std::filesystem::path(__FILE__).filename().string());\
-		fe::Context::Log::Core.Error("	Function: {}", FE_FUNC_SIG);\
-		fe::Context::Log::Core.Error("	Line:     {}", __LINE__);\
-		fe::Context::Log::Core.Error("	Message:  {}", __VA_ARGS__);\
+		fe::Context::Log::Core.Error("    File:     {}", std::filesystem::path(__FILE__).filename().string());\
+		fe::Context::Log::Core.Error("    Function: {}", FE_FUNC_SIG);\
+		fe::Context::Log::Core.Error("    Line:     {}", __LINE__);\
+		fe::Context::Log::Core.Error("    Message:  {}", __VA_ARGS__);\
 		FE_CORE_ASSERTION_BREAK(); }
 #else
 	#define FE_ASSERTION_BREAK()

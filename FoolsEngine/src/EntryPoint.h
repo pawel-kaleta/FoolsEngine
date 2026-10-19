@@ -20,58 +20,34 @@ int main(int argc, char** argv)
 {
 	using namespace fe;
 
-	InitLog().Init();
+	InitLog().Init(24 * 1024);
 
-	fe::Context::Log::Core.Trace("TEST"_FE);
+	//fe::Log::Init();
+
+	fe::Application* app;
 	{
-		fe::Context::Log::ScopeCore aaa("Prefix"_FE);
-		fe::Context::Log::ScopeCore ccc(""_FE);
-
-		fe::Context::Log::Core.Trace("TEST 2 {}"_FE, "ty");
-
-		{
-			fe::Context::Log::ScopeCore  bbb("asd"_FE, fe::LoggingLevel::Debug);
-
-			fe::Context::Log::Core.Trace("TEST 3 {}"_FE, "sdf");
-			fe::Context::Log::Core.Debug("TEST 4 {} {}"_FE, "ererer", 67);
-			fe::Context::Log::Core.Trace("TEST 3 xxxm"_FE);
-		}
+		Context::Log::ScopeCore startup("STARTUP"_FE, LoggingLevel::Trace);
+	
+		FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
+		app = fe::CreateApplication({ argc, argv });
+		app->Startup();
+		FE_PROFILER_SESSION_END();
 	}
 
-	fe::Log::Init();
-	
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-	FE_LOG_CORE_INFO("////////////////////// STARTUP //////////////////////");
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
+	{
+		Context::Log::ScopeCore startup("RUN"_FE, LoggingLevel::Debug);
 
-	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Trace);
-	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Trace);
+		app->Run();
+	}
 
-	FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
-	auto app = fe::CreateApplication({ argc, argv });
-	app->Startup();
-	FE_PROFILER_SESSION_END();
+	{
+		Context::Log::ScopeCore startup("SHUTDOWN"_FE, LoggingLevel::Trace);
 
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-	FE_LOG_CORE_INFO("////////////////////// RUNTIME //////////////////////");
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-
-	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Debug);
-	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Debug);
-
-	app->Run();
-
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-	FE_LOG_CORE_INFO("///////////////////// SHUTDOWN //////////////////////");
-	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");
-
-	fe::Log::SetClientLoggingLevel(fe::Log::LoggingLevel::Trace);
-	fe::Log::SetCoreLoggingLevel(fe::Log::LoggingLevel::Trace);
-
-	FE_PROFILER_SESSION_START("Shutdown", "Logs/ProfileData_Shutdown.json");
-	app->ShutDown();
-	delete app;
-	FE_PROFILER_SESSION_END();
+		FE_PROFILER_SESSION_START("Shutdown", "Logs/ProfileData_Shutdown.json");
+		app->ShutDown();
+		delete app;
+		FE_PROFILER_SESSION_END();
+	}
 }
 
 #endif

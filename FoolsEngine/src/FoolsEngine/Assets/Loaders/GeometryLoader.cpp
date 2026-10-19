@@ -5,9 +5,6 @@
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 
-#include "FoolsEngine/Foundation/Debug/Log.h"
-
-
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -22,10 +19,10 @@ namespace fe
 	bool GeometryLoader::IsKnownExtension(String extension)
 	{
 		static const fe::String s_known_extensions[] = {
-			String(".obj", 5),
-			String(".fbx", 5),
-			String(".glb", 5),
-			String(".gltf", 6)
+			String(".obj"_FE),
+			String(".fbx"_FE),
+			String(".glb"_FE),
+			String(".gltf"_FE)
 		};
 
 		for (auto& known_extension : s_known_extensions)
@@ -79,7 +76,7 @@ namespace fe
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			FE_LOG_CORE_ERROR("ERROR::ASSIMP::{0}", s_Inspector.GetErrorString());
+			Context::Log::Core.Error("ERROR::ASSIMP::{0}"_FE, s_Inspector.GetErrorString());
 			return nullptr;
 		}
 

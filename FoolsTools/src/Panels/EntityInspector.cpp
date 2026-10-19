@@ -222,7 +222,7 @@ namespace fe
         strncpy_s(s_buffer, GetCString(name.EntityName, &p).Data, sizeof(s_buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", s_buffer, sizeof(s_buffer)))
         {
-            FE_LOG_CORE_ERROR("to do: get proper allocator for entities names");
+            Context::Log::Core.Error("to do: get proper allocator for entities names"_FE);
             
             Splice<char8_t> dealloc_splice;
             dealloc_splice.Elements = name.EntityName.Data;

@@ -139,7 +139,7 @@ namespace fe::Render::GAPI::OpenGL
 				auto& fence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64);
 				if (fence.Location < position_candidate)
 				{
-					FE_LOG_CORE_WARN("Not enough space in DownStream");
+					Context::Log::Core.Warn("Not enough space in DownStream"_FE);
 					return false;
 				}
 			}
@@ -151,7 +151,7 @@ namespace fe::Render::GAPI::OpenGL
 
 				if (region_end_candidate > mDMABegin + mCapacity) // region most likely bigger then whole stream
 				{
-					FE_LOG_CORE_WARN("Not enough space in DownStream");
+					Context::Log::Core.Warn("Not enough space in DownStream"_FE);
 					return false;
 				}
 
@@ -178,7 +178,7 @@ namespace fe::Render::GAPI::OpenGL
 					auto& fence = mFrontFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
 					if (fence.Location < position_candidate) // can we fit?
 					{
-						FE_LOG_CORE_WARN("Not enough space in DownStream");
+						Context::Log::Core.Warn("Not enough space in DownStream"_FE);
 						return false;
 					}
 				}

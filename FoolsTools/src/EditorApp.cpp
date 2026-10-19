@@ -88,7 +88,7 @@ namespace fe
 			}
 			else
 			{
-				FE_LOG_CORE_FATAL("Failed to display launch modal window");
+				Context::Log::Core.Fatal("Failed to display launch modal window"_FE);
 				Application::Close();
 			}
 		}
@@ -140,7 +140,7 @@ namespace fe
 			}
 			else
 			{
-				FE_LOG_CORE_FATAL("Failed to display launch modal window");
+				Context::Log::Core.Fatal("Failed to display launch modal window"_FE);
 				Application::Close();
 			}
 		}

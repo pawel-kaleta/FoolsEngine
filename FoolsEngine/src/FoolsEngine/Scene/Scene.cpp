@@ -14,7 +14,7 @@ namespace fe
 	void SceneUser::Initialize() const
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Scene initialization");
+		Context::Log::Core.Info("Scene initialization"_FE);
 
 		auto& gameplay_world = GetCoreComponent().GameplayWorld;
 		gameplay_world = CreateScope<GameplayWorld>();
@@ -23,7 +23,7 @@ namespace fe
 	void SceneUser::InitializeNew() const
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Scene initialization");
+		Context::Log::Core.Info("Scene initialization"_FE);
 
 		auto& gameplay_world = GetCoreComponent().GameplayWorld;
 		gameplay_world = CreateScope<GameplayWorld>();
@@ -65,7 +65,7 @@ namespace fe
 	void SceneUser::Release() const
 	{
 		FE_PROFILER_FUNC();
-		FE_LOG_CORE_INFO("Scene release");
+		Context::Log::Core.Info("Scene release"_FE);
 		GetCoreComponent().GameplayWorld.release();
 	}
 }

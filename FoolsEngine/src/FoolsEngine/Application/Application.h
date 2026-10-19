@@ -38,7 +38,7 @@ namespace fe
 
 	struct ApplicationSpecification
 	{
-		String Name = String("FoolsEngine Application", 24);
+		String Name = String("FoolsEngine Application"_FE);
 		WindowAttributes WindowAttributes;
 		ApplicationCommandLineArgs CommandLineArgs;
 	};

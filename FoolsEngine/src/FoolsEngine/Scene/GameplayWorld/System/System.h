@@ -6,7 +6,6 @@
 
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 #include "FoolsEngine/Foundation/Memory/StringBuilder.h"
-#include "FoolsEngine/Foundation/Debug/Log.h"
 
 
 namespace YAML
@@ -33,11 +32,11 @@ namespace fe
 
 		virtual void DrawInspectorWidget() {};
 
-		virtual String GetName() const { return String("BaseSystem", 11); }
+		virtual String GetName() const { return String("BaseSystem"_FE); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetCString(GetName(), &p).Data); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetCString(GetName(), &p).Data); }
-		static String GetNameStatic() { return String("BaseSystem", 11); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Context::Log::Core.Error("{0} serialization not implemented!"_FE, GetName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context::Log::Core.Error("{0} deserialization not implemented!"_FE, GetName()); }
+		static String GetNameStatic() { return String("BaseSystem"_FE); }
 
 
 		template<SimulationStage::ValueType stage>

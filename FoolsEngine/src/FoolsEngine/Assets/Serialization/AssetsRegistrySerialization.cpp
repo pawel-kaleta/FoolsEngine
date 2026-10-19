@@ -75,7 +75,7 @@ namespace fe::AssetSerializer
 			}
 		}
 
-		FE_LOG_CORE_INFO("Asset Registry deserialized");
+		Context::Log::Core.Info("Asset Registry deserialized"_FE);
 
 		return true;
 	}
@@ -120,6 +120,6 @@ namespace fe::AssetSerializer
 		LoadMetaData<Model>();
 		LoadMetaData<Scene>();
 
-		FE_LOG_CORE_INFO("Assets' meta data loaded");
+		Context::Log::Core.Info("Assets' meta data loaded"_FE);
 	}
 }

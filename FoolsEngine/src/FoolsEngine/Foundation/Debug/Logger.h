@@ -97,7 +97,7 @@ namespace fe
 		template <typename... Args>
 		void Info(String msg, Args &&...args) {
 #ifdef FE_INTERNAL_BUILD
-			if (mLoggingLevel > LoggingLevel::Debug)
+			if (mLoggingLevel > LoggingLevel::Info)
 				return;
 
 			UInt msg_begin = mSuffixesCount + 1;
@@ -113,7 +113,7 @@ namespace fe
 		template <typename... Args>
 		void Warn(String msg, Args &&...args) {
 #ifdef FE_INTERNAL_BUILD
-			if (mLoggingLevel > LoggingLevel::Debug)
+			if (mLoggingLevel > LoggingLevel::Warn)
 				return;
 
 			UInt msg_begin = mSuffixesCount + 1;
@@ -129,7 +129,7 @@ namespace fe
 		template <typename... Args>
 		void Error(String msg, Args &&...args) {
 #ifdef FE_INTERNAL_BUILD
-			if (mLoggingLevel > LoggingLevel::Debug)
+			if (mLoggingLevel > LoggingLevel::Error)
 				return;
 
 			UInt msg_begin = mSuffixesCount + 1;
@@ -143,9 +143,9 @@ namespace fe
 		}
 
 		template <typename... Args>
-		void Critical(String msg, Args &&...args) {
+		void Fatal(String msg, Args &&...args) {
 #ifdef FE_INTERNAL_BUILD
-			if (mLoggingLevel > LoggingLevel::Debug)
+			if (mLoggingLevel > LoggingLevel::Fatal)
 				return;
 
 			UInt msg_begin = mSuffixesCount + 1;

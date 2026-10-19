@@ -32,8 +32,8 @@ namespace fe
 
 	struct DataComponent : Component
 	{
-		virtual String GetName() const { return String("Unnamed DataComponent", 22); };
-		static String GetNameStatic() { return String("Base DataComponent", 21); }
+		virtual String GetName() const { return String("Unnamed DataComponent"_FE); };
+		static String GetNameStatic() { return String("Base DataComponent"_FE); }
 		virtual bool IsSpatial() const { return false; }
 
 		virtual void SerializeBase(YAML::Emitter& emitter) { Serialize(emitter); } // SpatialComponent overrides

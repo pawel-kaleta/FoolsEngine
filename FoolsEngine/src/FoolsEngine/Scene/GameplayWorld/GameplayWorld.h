@@ -18,7 +18,7 @@ namespace fe
 		HierarchyDirector& GetHierarchy() const { return *m_Hierarchy.get(); }
 		SystemsDirector& GetSystems()     const { return *m_SystemsDirector.get(); }
 
-		Entity CreateEntity(EntityID parentEntity, String name = String("Entity",7));
+		Entity CreateEntity(EntityID parentEntity, String name = String("Entity"_FE));
 		Actor CreateActor(EntityID attachmentEntityID, String name);
 		Actor CreateActor(String name);
 		Actor CreateActor(EntityID attachmentEntityID);

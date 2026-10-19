@@ -30,11 +30,11 @@ namespace fe
 
 		virtual EntityID DrawInspectorWidget() { return NullEntityID; }
 
-		virtual String GetBehaviorName() const { return String("Unnamed Behavior", 17); }
-		static String GetName() { return String("Base Behavior", 14); }
+		virtual String GetBehaviorName() const { return String("Unnamed Behavior"_FE); }
+		static String GetName() { return String("Base Behavior"_FE); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetCString(this->GetBehaviorName(), &p).Data); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetCString(this->GetBehaviorName(), &p).Data); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Context::Log::Core.Error("{0} serialization not implemented!"_FE, this->GetBehaviorName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context::Log::Core.Error("{0} deserialization not implemented!"_FE, this->GetBehaviorName()); }
 
 
 		template<SimulationStage::ValueType stage>

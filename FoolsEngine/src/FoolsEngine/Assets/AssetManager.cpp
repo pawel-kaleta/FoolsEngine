@@ -216,7 +216,7 @@ namespace fe
 				}
 				else
 				{
-					FE_LOG_CORE_WARN("Texture allready loaded");
+					Context::Log::Core.Warn("Texture allready loaded"_FE);
 				}
 				break;
 			}

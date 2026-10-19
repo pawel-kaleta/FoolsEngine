@@ -105,14 +105,14 @@ namespace fe
 	bool TextureLoader::IsKnownExtension(String extension)
 	{
 		static const String s_known_extensions[] = {
-			String(".jpg",5),
-			String(".jpeg",6),
-			String(".png",5),
-			String(".bmp",5),
-			String(".tga",5),
-			String(".gif",5),
-			String(".ppm",5),
-			String(".pgm",5)
+			String(".jpg"_FE),
+			String(".jpeg"_FE),
+			String(".png"_FE),
+			String(".bmp"_FE),
+			String(".tga"_FE),
+			String(".gif"_FE),
+			String(".ppm"_FE),
+			String(".pgm"_FE)
 		};
 
 		for (const auto& known_extension : s_known_extensions)
