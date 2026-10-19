@@ -1,7 +1,10 @@
 #include "ShaderLoader.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
+
+#include "FoolsEngine/Foundation/Debug/Log.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
@@ -18,8 +21,10 @@ namespace fe
 
 		if (!in.good())
 		{
-			Scratchpad sp;
-			FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp));
+			Pile p;
+			STD_PMR_Allocator pmr(&p);
+			
+			FE_LOG_CORE_ERROR("Could not load shader file: \"{0}\"", filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
 			return;
 		}
 

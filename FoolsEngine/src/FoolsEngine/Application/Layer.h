@@ -3,7 +3,7 @@
 #include "FoolsEngine/Foundation/Debug/Profiler.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Platform/Events/Event.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
 #include "FoolsEngine/Foundation/Memory/Pile.h"
 
 namespace fe
@@ -27,7 +27,7 @@ namespace fe
 		const std::string& ToString() const
 		{
 			Pile p;
-			return m_Name.GetCString(&p).Data;
+			return GetCString(m_Name , &p).Data;
 		}
 
 		String m_Name;

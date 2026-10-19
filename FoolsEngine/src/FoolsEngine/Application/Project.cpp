@@ -4,6 +4,8 @@
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
+#include "FoolsEngine/Foundation/Debug/Log.h"
+
 namespace fe
 {
 	Project* Project::s_Instance = nullptr;

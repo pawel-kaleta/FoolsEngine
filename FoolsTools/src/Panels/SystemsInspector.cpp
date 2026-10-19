@@ -75,7 +75,7 @@ namespace fe
                             ImGui::PushID(++unique_ImGui_ID_wrap);
                             auto& sys = update_enroll.System;
 
-                            if (ImGui::InputInt(sys->GetName().GetCString(&p).Data, (int*)&update_enroll.Priority))
+                            if (ImGui::InputInt(GetCString(sys->GetName(), &p).Data, (int*)&update_enroll.Priority))
                             {
                                 FE_CORE_ASSERT(false, "Not implemented"); // no more sorting, remove, memmove and add back
                                 //systems_director.SortSystemUpdateEnrolls(stage);
@@ -110,7 +110,7 @@ namespace fe
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
+        bool widget_open = ImGui::CollapsingHeader(GetCString(name, &p).Data, header_flags);
 
         ImGui::SameLine(ImGui::GetContentRegionAvail().x - line_height + 12.0f); // 12 may be windowPadding + framePadding ?
 
@@ -175,7 +175,7 @@ namespace fe
             {
                 auto& getName = item.GetName;
                 String name = (*getName)();
-                if (ImGui::MenuItem(name.GetCString(&p).Data))
+                if (ImGui::MenuItem(GetCString(name, &p).Data))
                 {
                     auto& create = item.Create;
                     FE_CORE_ASSERT(false, "Not implemented");

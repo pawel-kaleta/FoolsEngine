@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Allocator.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 namespace fe
 {
@@ -32,6 +33,118 @@ namespace fe
 			else
 				m_BigAllocator.Deallocate(memReg);
 		}
+
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) override final
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			if constexpr (newSize <= threshold && allocation.Count <= threshold)
+				return m_SmallAllocator.Reallocate(allocation, moveRegion, newSize, alignment);
+			else if (newSize <= threshold)
+			{
+				Splice<Byte> result = m_SmallAllocator.Allocate(newSize, alignment);
+
+				if (result.Elements && result.Count)
+				{
+					UInt move_offset = moveRegion.begin() - allocation.begin();
+					std::memcpy(result.begin() + move_offset, allocation.begin(), min(allocation.Count, newSize));
+				}
+
+				m_BigAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+			else
+			{
+				Splice<Byte> result = m_BigAllocator.Allocate(newSize, alignment);
+
+				if (result.Elements && result.Count)
+				{
+					UInt move_offset = moveRegion.begin() - allocation.begin();
+					std::memcpy(result.begin() + move_offset, allocation.begin(), min(allocation.Count, newSize));
+				}
+
+				m_SmallAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize)
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			if constexpr (newSize <= threshold && allocation.Count <= threshold)
+				return m_SmallAllocator.Reallocate<Alignment>(allocation, moveRegion, newSize);
+			else if (newSize <= threshold)
+			{
+				Splice<Byte> result = m_SmallAllocator.Allocate<Alignment>(newSize);
+
+				if (result.Elements && result.Count)
+				{
+					UInt move_offset = moveRegion.begin() - allocation.begin();
+					std::memcpy(result.begin() + move_offset, allocation.begin(), min(allocation.Count, newSize));
+				}
+
+				m_BigAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+			else if (allocation.Count <= threshold)
+			{
+				Splice<Byte> result = m_BigAllocator.Allocate<Alignment>(newSize);
+
+				if (result.Elements && result.Count)
+				{
+					UInt move_offset = moveRegion.begin() - allocation.begin();
+					std::memcpy(result.begin() + move_offset, allocation.begin(), min(allocation.Count, newSize));
+				}
+
+				m_SmallAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+			else
+			{
+				return m_BigAllocator.Reallocate<Alignment>(allocation, moveRegion, newSize);
+			}
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize)
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			if constexpr (newSize <= threshold && allocation.Count <= threshold)
+				return m_SmallAllocator.Reallocate<Alignment>(allocation, allocation, newSize);
+			else if (newSize <= threshold)
+			{
+				Splice<Byte> result = m_SmallAllocator.Allocate<Alignment>(newSize);
+
+				if (result.Elements && result.Count)
+					std::memcpy(result.begin(), allocation.begin(), allocation.Count);
+
+				m_BigAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+			else  if (allocation.Count <= threshold)
+			{
+				Splice<Byte> result = m_BigAllocator.Allocate<Alignment>(newSize);
+
+				if (result.Elements && result.Count)
+					std::memcpy(result.begin(), allocation.begin(), allocation.Count);
+
+				m_SmallAllocator.Deallocate(allocation);;
+
+				return result;
+			}
+			else
+			{
+				return m_BigAllocator.Reallocate<Alignment>(allocation, allocation, newSize);
+			}
+		};
 
 		template <UInt Size, UInt Alignment = 8>
 		Array<Byte, Size>* AllocateRaw()

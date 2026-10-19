@@ -1,7 +1,5 @@
 #ifdef FE_PLATFORM_WINDOWS
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
-
 #include "FoolsEngine/Platform/FileDialogs.h"
 
 #include "FoolsEngine/Application/Application.h"
@@ -41,7 +39,8 @@ namespace fe
 	//defaultpath should be absolute
 	std::filesystem::path FileDialogs::SaveFile(const char* defaultpath, const char* filter)
 	{
-		Scratchpad sp;
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
 
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
@@ -52,7 +51,7 @@ namespace fe
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		CHAR currentDir[256] = { 0 };
-		auto def_path = std::filesystem::path(defaultpath).parent_path().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+		auto def_path = std::filesystem::path(defaultpath).parent_path().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 		strncpy_s(currentDir, def_path.c_str(), sizeof(currentDir));
 		ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrFilter = filter;

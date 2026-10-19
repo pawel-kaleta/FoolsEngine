@@ -34,7 +34,7 @@ namespace fe
         Pile p;
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
+        bool widget_open = ImGui::CollapsingHeader(GetCString(name, &p).Data, header_flags);
 
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -159,7 +159,7 @@ namespace fe
                             ImGui::PushID(++unique_ImGui_ID_wrap);
                             auto& beh = update_enroll.Behavior;
 
-                            if (ImGui::InputInt(beh->GetBehaviorName().GetCString(&p).Data, (int*)&update_enroll.Priority))
+                            if (ImGui::InputInt(GetCString(beh->GetBehaviorName(), &p).Data, (int*)&update_enroll.Priority))
                             {
                                 actor.SortUpdateEnrolls(stage);
                             }
@@ -192,7 +192,7 @@ namespace fe
             {
                 auto& get_name_funk_ptr = item.GetName;
                 String name = (*get_name_funk_ptr)();
-                if (ImGui::MenuItem(name.GetCString(&p).Data))
+                if (ImGui::MenuItem(GetCString(name, &p).Data))
                 {
                     auto& create = item.Create;
                     Behavior* behavior = (actor.*create)();
@@ -214,7 +214,7 @@ namespace fe
         auto& name = actor.Get<CEntityName>();
         static char buffer[256]; // does it have to be static?
         memset(buffer, 0, sizeof(buffer));
-        strncpy_s(buffer, name.EntityName.GetCString(&p).Data, sizeof(buffer)); // to do: 2 copies (getCString and strncpy_s)
+        strncpy_s(buffer, GetCString(name.EntityName, &p).Data, sizeof(buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", buffer, sizeof(buffer)))
         {
             FE_LOG_CORE_ERROR("to do: get proper allocator for entities names");
@@ -222,10 +222,10 @@ namespace fe
             Splice<char8_t> name_splice;
             name_splice.Elements = name.EntityName.Data;
             name_splice.Count = name.EntityName.Count;
-            Context::Allocators::Default->Deallocate(name_splice);
+            Context::Alloc::Default->Deallocate(name_splice);
 
             String name_string(buffer);
-            name.EntityName.Data = Context::Allocators::Default->Allocate<char8_t>(name_string.Count).Elements;
+            name.EntityName.Data = Context::Alloc::Default->Allocate<char8_t>(name_string.Count).Elements;
             name.EntityName.Count = name_string.Count;
 
             std::memcpy(name.EntityName.Data, buffer, name_string.Count);

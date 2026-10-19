@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Debug/Asserts.h"
-#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 
@@ -13,9 +11,19 @@ namespace fe
 	class Allocator
 	{
 	public:
+		FE_TYPE_SETUP(Allocator)
+
 		virtual Splice<Byte> AllocateRaw(UInt bytes) = 0;
 		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) = 0;
 		virtual void DeallocateRaw(Splice<Byte> memReg) = 0;
+
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) = 0;
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize) { return ReallocateRaw(allocation, moveRegion, newSize, Alignment); };
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize) { return ReallocateRaw(allocation, allocation, newSize, Alignment); };
 
 		template <UInt Size, UInt Alignment>
 		Array<Byte, Size>* AllocateRaw() { return (Array<Byte, Size>*)AllocateRaw(Size, Alignment).Elements; }
@@ -33,28 +41,12 @@ namespace fe
 		}
 	};
 
-	// example simple allocator
-	class NullAlloc : public Allocator
-	{
-	public:
-		virtual Splice<Byte> AllocateRaw(UInt bytes) override final { return Splice<Byte>(); }
-		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final { return Splice<Byte>(); }
-		virtual void DeallocateRaw(Splice<Byte> memReg) override final { FE_CORE_ASSERT(!memReg.Elements, "NullAllocator should not be used for deallocation"); }
-
-		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* AllocateRaw() { return nullptr; }
-
-		template <UInt Alignment>
-		Splice<Byte> AllocateRaw(UInt bytes) { return Splice<Byte>(); }
-
-		template <UInt Size>
-		void DeallocateRaw(Byte* ptr) { FE_CORE_ASSERT(!ptr, "NullAllocator should not be used for deallocation"); }
-	};
-
 	template <typename tAlloc>
 	class TypedAlloc : public tAlloc
 	{
 	public:
+		FE_TYPE_SETUP(TypedAlloc<tAlloc>)
+
 		template <typename T, UInt Count>
 		Array<T, Count>* Allocate()
 		{
@@ -70,7 +62,7 @@ namespace fe
 		{
 			Splice<Byte> result = this->tAlloc::AllocateRaw<alignof(T)>(sizeof(T) * Count);
 			result.Count = Count;
-			return *(Splice<T>*) & result;
+			return result.Cast<Splice<T>>();
 		}
 		
 		//splice argument for type detection, e.g. my_splice = alloc->Allocate(my_splice, 5);
@@ -79,7 +71,34 @@ namespace fe
 		{
 			Splice<Byte> result = this->tAlloc::AllocateRaw<alignof(T)>(sizeof(T) * count);
 			result.Count = count;
-			return *(Splice<T>*) & result;
+			return result.Cast<Splice<T>>();
+		}
+
+		template <typename T>
+		Splice<T> Reallocate(Splice<T> allocation, Splice<T> moveRegion, UInt newCount)
+		{
+			if (allocation.Count == 0 || allocation.Elements == nullptr)
+				return Splice<T>().Init();
+
+			allocation.Count = allocation.Count * sizeof(T);
+			moveRegion.Count = moveRegion.Count * sizeof(T);
+
+			Splice<Byte> result = this->tAlloc::ReallocateRaw<alignof(T)>(allocation.Cast<Splice<Byte>>(), moveRegion.Cast<Splice<Byte>>(), newCount * sizeof(T));
+			result.Count = newCount;
+			return result.Cast<Splice<T>>();
+		}
+
+		template <typename T>
+		Splice<T> Reallocate(Splice<T> allocation, UInt newCount)
+		{
+			if (allocation.Count == 0 || allocation.Elements == nullptr)
+				return Splice<T>().Init();
+
+			allocation.Count = allocation.Count * sizeof(T);
+
+			Splice<Byte> result = this->tAlloc::ReallocateRaw<alignof(T)>(allocation.Cast<Splice<Byte>>(), newCount * sizeof(T));
+			result.Count = newCount;
+			return result.Cast<Splice<T>>();
 		}
 
 		template <typename T>

@@ -1,7 +1,5 @@
 #include "MeshComponents.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
-
 #include "FoolsEngine/Scene/BaseEntity.h"
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"

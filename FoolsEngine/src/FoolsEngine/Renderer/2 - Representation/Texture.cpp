@@ -1,6 +1,7 @@
 #include "Texture.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 
 #include "FoolsEngine/Application/Project.h"
 
@@ -17,12 +18,14 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 		
-		Scratchpad sp;
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+
 		auto& spec = textureObserver.Get<Texture2D::Core>().mSpecification;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "UUID" << YAML::Value << textureObserver.GetUUID();
-		emitter << YAML::Key << "Source Filepath" << YAML::Value << textureObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str();
+		emitter << YAML::Key << "Source Filepath" << YAML::Value << textureObserver.GetSourceFilepath()->Filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str();
 		//emitter << YAML::Key << "Usage" << YAML::Value << spec.mUsage.ToConstCharPtr();
 		//emitter << YAML::Key << "Archetype" << YAML::Value << archetype.UUID;
 		emitter << YAML::Key << "Dimentions" << YAML::Value << spec.mDimentions;

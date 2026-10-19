@@ -212,9 +212,6 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Queue.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClInclude>
@@ -437,6 +434,11 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\LoggingLevel.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Logger.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Init.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\NullAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -506,9 +508,6 @@
       <Filter>FoolsEngine\Foundation\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp">
       <Filter>FoolsEngine\Foundation\Memory</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp">

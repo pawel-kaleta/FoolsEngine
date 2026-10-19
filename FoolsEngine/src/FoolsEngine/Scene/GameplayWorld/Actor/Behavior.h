@@ -4,7 +4,7 @@
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 #include "FoolsEngine/Scene/GameplayWorld/CompPtr.h"
 
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
 
 #include <string>
 
@@ -33,8 +33,8 @@ namespace fe
 		virtual String GetBehaviorName() const { return String("Unnamed Behavior", 17); }
 		static String GetName() { return String("Base Behavior", 14); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetBehaviorName().GetCString(&p).Data); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetBehaviorName().GetCString(&p).Data); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Pile p; FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetCString(this->GetBehaviorName(), &p).Data); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Pile p; FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetCString(this->GetBehaviorName(), &p).Data); }
 
 
 		template<SimulationStage::ValueType stage>
@@ -70,10 +70,10 @@ namespace fe
 		{
 			Pile p;
 
-			StringBuilder entity_ID_and_name;
+			StringBuilderSA<Pile> entity_ID_and_name;
 			entity_ID_and_name.Init(&p);
 
-			CString name_c = name.GetCString(&p);
+			CString name_c = GetCString(name, &p);
 
 			Entity entity = compPtr.GetEntity();
 			bool missingComponent = true;

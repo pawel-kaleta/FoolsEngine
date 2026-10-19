@@ -4,6 +4,7 @@
 #include "Pile.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+#include "FoolsEngine/Foundation/Debug/Log.h"
 
 #include <cstring>
 
@@ -184,7 +185,7 @@ namespace fe
 			Count = count;
 		}
 
-		void InitAllocate(UInt capacity, Allocator* alloc = Context::Allocators::Default)
+		void InitAllocate(UInt capacity, Allocator* alloc = Context::Alloc::Default)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released SpliceArena - memory leak!");
 			((PMAlloc*)alloc)->Allocate<T>(capacity);
@@ -196,7 +197,7 @@ namespace fe
 			Count = 0;
 		}
 
-		void Release(Allocator* alloc = Context::Allocators::Default)
+		void Release(Allocator* alloc = Context::Alloc::Default)
 		{
 			((PMAlloc*)alloc)->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
@@ -347,7 +348,7 @@ namespace fe
 
 		bool IsFull() const { return Count == Buffer.Count; }
 
-		void Init(Allocator* allocator = Context::Allocators::Default)
+		void Init(Allocator* allocator = Context::Alloc::Default)
 		{
 			Alloc = (PMAlloc*) allocator;
 			Count = 0;
@@ -518,15 +519,142 @@ namespace fe
 
 		void AllocateAndMove(UInt capacity)
 		{
-			Splice<T> new_buffer = Alloc->Allocate<T>(capacity);
+			Splice<T> move_splice = Buffer;
+			move_splice.Count = Count;
 
-			if (Buffer.Elements)
-			{
-				std::memcpy(new_buffer.Elements, Buffer.Elements, Buffer.Count * sizeof(T));
-				Alloc->Deallocate(Buffer);
-			}
+			Splice<T> new_buffer = Alloc->Reallocate<T>(Buffer, move_splice, capacity);
+
+			FE_CORE_ASSERT(new_buffer.Elements && new_buffer.Count, "DynamicArena realloc failed");
 
 			Buffer = new_buffer;
+		}
+	};
+
+	template <typename T, typename tnAlloc>
+	struct DynamicArenaSA : public DynamicArena<T>
+	{
+		FE_TYPE_SETUP(DynamicArenaSA<T, tnAlloc>)
+
+		void Release()
+		{
+			DynamicArena<T>::Alloc->Cast<TypedAlloc<tnAlloc>>().Deallocate(DynamicArena<T>::Buffer);
+			DynamicArena<T>::Count = 0;
+			DynamicArena<T>::Buffer.Init();
+		}
+
+		void Insert(const T& data, UInt index)
+		{
+			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
+
+			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+
+			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
+			{
+				ExpandDefault();
+			}
+
+			Pile p;
+
+			UInt move_count = DynamicArena<T>::Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, &(DynamicArena<T>::Buffer[index]), move_size);
+			DynamicArena<T>::Buffer[index] = data;
+			std::memcpy(&(DynamicArena<T>::Buffer[index + 1]), tmp.Elements, move_size);
+
+			++DynamicArena<T>::Count;
+		}
+
+		T* Emplace(UInt index)
+		{
+			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
+
+			FE_LOG_CORE_WARN("Could be optimized!"); // by combining ExpandDefault() and move to make place for new element
+
+			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
+			{
+				ExpandDefault();
+			}
+
+			Pile p;
+
+			UInt move_count = DynamicArena<T>::Count - index;
+			UInt move_size = move_count * sizeof(T);
+
+			Splice<T> tmp = p.Allocate<T>(move_count);
+
+			std::memcpy(tmp.Elements, &(DynamicArena<T>::Buffer[index]), move_size);
+			std::memcpy(&(DynamicArena<T>::Buffer[index + 1]), tmp.Elements, move_size);
+
+			++DynamicArena<T>::Count;
+			return &(DynamicArena<T>::Buffer[index]);
+		}
+
+		void Append(const T& data)
+		{
+			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
+			{
+				ExpandDefault();
+			}
+
+			DynamicArena<T>::Buffer[DynamicArena<T>::Count] = data;
+			DynamicArena<T>::Count++;
+		}
+
+		T* EmplaceBack()
+		{
+			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
+			{
+				ExpandDefault();
+			}
+
+			T* result = DynamicArena<T>::Buffer.Elements + DynamicArena<T>::Count;
+			DynamicArena<T>::Count++;
+			return result;
+		}
+
+		void ReserveExact(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity > DynamicArena<T>::Buffer.Count, "DynamicArenaSA allready bigger");
+
+			AllocateAndMove(capacity);
+		}
+
+		void ReserveAtLeast(UInt capacity)
+		{
+			FE_CORE_ASSERT(capacity > DynamicArena<T>::Buffer.Count, "DynamicArenaSA allready bigger");
+
+			bool any_capacity = DynamicArena<T>::Buffer.Count;
+			UInt new_capacity = DynamicArena<T>::Buffer.Count + (DynamicArena<T>::Buffer.Count >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+
+			bool default_better = capacity < new_capacity;
+			new_capacity = new_capacity * default_better + capacity * !default_better;
+
+			AllocateAndMove(new_capacity);
+		}
+
+		void ExpandDefault()
+		{
+			bool any_capacity = DynamicArena<T>::Buffer.Count;
+			UInt new_capacity = DynamicArena<T>::Buffer.Count + (DynamicArena<T>::Buffer.Count >> 1); // *1.5
+			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+
+			AllocateAndMove(new_capacity);
+		}
+
+		void AllocateAndMove(UInt capacity)
+		{
+			Splice<T> move_splice = DynamicArena<T>::Buffer;
+			move_splice.Count = DynamicArena<T>::Count;
+
+			Splice<T> new_buffer = DynamicArena<T>::Alloc->Cast<TypedAlloc<tnAlloc>>().Reallocate<T>(DynamicArena<T>::Buffer, move_splice, capacity);
+
+			FE_CORE_ASSERT(new_buffer.Elements && new_buffer.Count, "DynamicArena realloc failed");
+
+			DynamicArena<T>::Buffer = new_buffer;
 		}
 	};
 }

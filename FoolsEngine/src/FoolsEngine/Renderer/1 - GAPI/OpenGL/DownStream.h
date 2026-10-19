@@ -46,10 +46,10 @@ namespace fe::Render::GAPI::OpenGL
 			mFrontFences = mFencesA.P();
 			mBackFences = mFencesB.P();
 
-			mMainAlloc = Context::Allocators::Default;
+			mMainAlloc = Context::Alloc::Default;
 		}
 
-		void Create(U32 size, PMAlloc* mainAlloc = Context::Allocators::Default, PMAlloc* auxAlloc = Context::Allocators::Auxiliary)
+		void Create(U32 size, PMAlloc* mainAlloc = Context::Alloc::Default, PMAlloc* auxAlloc = Context::Alloc::Auxiliary)
 		{
 			FE_CORE_ASSERT(size, "Size is 0.");
 

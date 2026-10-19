@@ -5,6 +5,8 @@
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 
+#include "FoolsEngine/Foundation/Debug/Log.h"
+
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

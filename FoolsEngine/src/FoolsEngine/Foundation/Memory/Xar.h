@@ -162,11 +162,11 @@ namespace fe
 					Splice<T> region;
 					region.Elements = Chunks[i];
 					region.Count = size;
-					Context::Allocators::Default->Deallocate(region);
+					Context::Alloc::Default->Deallocate(region);
 					size = size << 1;
 				}
 
-				Context::Allocators::Auxiliary->Deallocate(Chunks.Buffer);
+				Context::Alloc::Auxiliary->Deallocate(Chunks.Buffer);
 			}
 
 			Count = 0;
@@ -289,7 +289,7 @@ namespace fe
 				UInt chunks_new_capacity = Chunks.Buffer.Count + (Chunks.Buffer.Count >> 1); // *1.5
 				chunks_new_capacity = chunks_new_capacity * any_capacity + (UInt)2 * !any_capacity;
 
-				auto& alloc = Context::Allocators::Auxiliary;
+				auto& alloc = Context::Alloc::Auxiliary;
 				Splice<T*> new_buffer = alloc->Allocate<T*>(chunks_new_capacity);
 
 				UInt old_size = Chunks.Buffer.Count * sizeof(T*);
@@ -300,7 +300,7 @@ namespace fe
 			}
 
 			UInt new_chunk_capacity = UInt(1) << Chunks.Count;
-			Splice<T> chunk = Context::Allocators::Default->Allocate<T>(new_chunk_capacity);
+			Splice<T> chunk = Context::Alloc::Default->Allocate<T>(new_chunk_capacity);
 			Chunks.Append(chunk.Elements);
 		}
 

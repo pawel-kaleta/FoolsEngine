@@ -10,7 +10,7 @@
 namespace fe
 {
 	template <typename tAlloc>
-	Splice<EntityID> ChildrenList(EntityID parentID, Registry& registry, tAlloc* alloc = Context::Allocators::Output)
+	Splice<EntityID> ChildrenList(EntityID parentID, Registry& registry, tAlloc* alloc = Context::Alloc::Output)
 	{
 		auto& nodeStorage = registry.storage<CEntityNode>();
 		auto& parentNode = nodeStorage.get(parentID);

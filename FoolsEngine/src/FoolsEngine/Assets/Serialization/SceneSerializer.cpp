@@ -113,7 +113,7 @@ namespace fe
 						{
 							emitter << YAML::BeginMap;
 
-							emitter << YAML::Key << "System" << YAML::Value << system->GetName().GetCString(&p).Data;
+							emitter << YAML::Key << "System" << YAML::Value << GetCString(system->GetName(), &p).Data;
 							emitter << YAML::Key << "UUID" << YAML::Value << system->m_UUID;
 							emitter << YAML::Key << "Active" << YAML::Value << system->m_Active;
 
@@ -156,7 +156,7 @@ namespace fe
 					{
 						Pile p;
 						emitter << YAML::BeginMap;
-						emitter << YAML::Key << "Actor" << YAML::Value << name_storage->get(actorID).EntityName.GetCString(&p).Data;
+						emitter << YAML::Key << "Actor" << YAML::Value << GetCString(name_storage->get(actorID).EntityName, &p).Data;
 						emitter << YAML::Key << "UUID" << YAML::Value << UUID_storage->get(actorID).UUID;
 
 						// Behaviors
@@ -166,7 +166,7 @@ namespace fe
 								for (auto& behavior : actorData.m_Behaviors)
 								{
 									emitter << YAML::BeginMap;
-									emitter << YAML::Key << "Behavior" << YAML::Value << behavior->GetBehaviorName().GetCString(&p).Data;
+									emitter << YAML::Key << "Behavior" << YAML::Value << GetCString(behavior->GetBehaviorName(), &p).Data;
 									emitter << YAML::Key << "UUID" << YAML::Value << behavior->m_UUID;
 									emitter << YAML::Key << "Active" << YAML::Value << behavior->m_Active;
 									behavior->Serialize(emitter);
@@ -196,7 +196,8 @@ namespace fe
 
 						// Actor's Entities
 						{
-							DynamicArena<EntityID> entities_to_serialize;
+							Pile pp;
+							DynamicArenaSA<EntityID, Pile> entities_to_serialize; entities_to_serialize.Init(&p);
 							entities_to_serialize.Append(actorID);
 							
 							emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
@@ -247,7 +248,7 @@ namespace fe
 
 		emitter << YAML::BeginMap;
 
-		emitter << YAML::Key << "Entity" << YAML::Value << entity.Get<CEntityName>().EntityName.GetCString(&p).Data;
+		emitter << YAML::Key << "Entity" << YAML::Value << GetCString(entity.Get<CEntityName>().EntityName, &p).Data;
 		emitter << YAML::Key << "UUID"   << YAML::Value << entity.Get<CUUID>().UUID;
 		emitter << YAML::Key << "Head"   << YAML::Value << Entity(entity.Get<CHeadEntity>().HeadEntity, entity.GetWorld());
 		emitter << YAML::Key << "Tags"   << YAML::Value << entity.GetTagsHandle().GetLocal();
@@ -277,7 +278,7 @@ namespace fe
 				auto* component = (entity.*get_ptr)();
 				if (component)
 				{
-					emitter << YAML::Key << component->GetName().GetCString(&p).Data << YAML::BeginMap;
+					emitter << YAML::Key << GetCString(component->GetName(), &p).Data << YAML::BeginMap;
 					component->SerializeBase(emitter);
 					emitter << YAML::EndMap;
 				}
@@ -434,7 +435,7 @@ namespace fe
 								auto& name_funk_ptr = item.GetName;
 								auto component_name = (*name_funk_ptr)();
 
-								auto component_data = entity[std::string(component_name.GetCString(&p).Data)];
+								auto component_data = entity[std::string(GetCString(component_name, &p).Data)];
 								if (component_data)
 								{
 									auto& create_funk_ptr = item.Emplacer;

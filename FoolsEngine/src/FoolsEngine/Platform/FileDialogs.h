@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 namespace fe
 {
 	class FileDialogs

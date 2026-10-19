@@ -3,6 +3,8 @@
 #include "DataTypes.h"
 #include "Splice.h"
 #include "Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 namespace fe
 {
@@ -90,11 +92,93 @@ namespace fe
 			s_Free = (Byte*)((UInt)memReg.Elements * is_at_front + (UInt)s_Free * !is_at_front);
 		}
 
-		template <UInt Size, UInt Alignment>
-		Splice<Byte> AllocateRaw()
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) override final
 		{
-			Splice<Byte> result;
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), alignment) == allocation.begin(), "Cannot realloc to a different alignment");
 
+			if (s_Free == allocation.end())
+			{
+				s_Free += (newSize - allocation.Count);
+				allocation.Count = newSize;
+
+				FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
+
+#ifdef FE_INTERNAL_BUILD
+				bool new_max = s_Free > s_MaxFree;
+				s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+#endif // FE_INTERNAL_BUILD
+
+				return allocation;
+			}
+
+			auto result = AllocateRaw(newSize, alignment);
+
+			UInt move_offset = moveRegion.begin() - allocation.begin();
+
+			if (result.Elements && result.Count)
+				std::memcpy(result.begin() + move_offset, moveRegion.begin(), min(moveRegion.Count, newSize));
+			return result;
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize)
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			if (s_Free == allocation.end())
+			{
+				s_Free += (newSize - allocation.Count);
+				allocation.Count = newSize;
+
+				FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
+
+#ifdef FE_INTERNAL_BUILD
+				bool new_max = s_Free > s_MaxFree;
+				s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+#endif // FE_INTERNAL_BUILD
+
+				return allocation;
+			}
+
+			auto result = AllocateRaw<Alignment>(newSize);
+
+			UInt move_offset = moveRegion.begin() - allocation.begin();
+
+			if (result.Elements && result.Count)
+				std::memcpy(result.begin() + move_offset, moveRegion.begin(), min(moveRegion.Count, newSize));
+			return result;
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize)
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			if (s_Free == allocation.end())
+			{
+				s_Free += (newSize - allocation.Count);
+				allocation.Count = newSize;
+
+				FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
+
+#ifdef FE_INTERNAL_BUILD
+				bool new_max = s_Free > s_MaxFree;
+				s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
+#endif // FE_INTERNAL_BUILD
+
+				return allocation;
+			}
+
+			auto result = AllocateRaw<Alignment>(newSize);
+
+			if (result.Elements && result.Count)
+				std::memcpy(result.begin(), allocation.begin(), min(allocation.Count, newSize));
+			return result;
+		};
+
+		template <UInt Size, UInt Alignment>
+		Array<Byte, Size>* AllocateRaw()
+		{
 			const bool at_front = m_End == s_Free;
 			const bool rollback_flag = s_RollbackFlags & m_FlagMask;
 			const bool reset_begin = !at_front && !rollback_flag;
@@ -104,10 +188,9 @@ namespace fe
 			s_RollbackFlags &= m_FrontFlagsAntiMask;
 			s_RollbackFlags |= m_FlagMask;
 
-			result.Elements = AlignTo<Alignment>(s_Free);
-			result.Count = Size;
+			Byte* result = AlignTo<Alignment>(s_Free);
 
-			s_Free = result.Elements + Size;
+			s_Free = result + Size;
 			m_End = s_Free;
 
 			FE_CORE_ASSERT(s_Free < (s_Buffer + s_BufferSize), "Out of memory in scrachpad!");
@@ -117,7 +200,7 @@ namespace fe
 			s_MaxFree = (Byte*)(((UInt)s_Free * new_max) + ((UInt)s_MaxFree * !new_max));
 #endif // FE_INTERNAL_BUILD
 
-			return result;
+			return (Array<Byte, Size>*)result;
 		}
 
 		template <UInt Alignment>
@@ -156,7 +239,6 @@ namespace fe
 			bool is_at_front = s_Free == ptr + Size;
 			s_Free = (Byte*)((UInt)ptr * is_at_front + (UInt)s_Free * !is_at_front);
 		}
-
 
 		PileBase() :
 			m_Begin(s_Free),

@@ -42,8 +42,8 @@ namespace fe
 		{
 			Splice<Byte> result;
 
-			FE_CORE_ASSERT(alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator");
-			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+			FE_CORE_ASSERT(alignment > memRegAlignment, "Overalignment in BitmappedPoolAllocator")
+			FE_CORE_ASSERT(bytes > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!")
 
 			if (!m_BitMapping)
 				// out of free MemRegs
@@ -67,6 +67,41 @@ namespace fe
 			U64 flag_mask = (U64)1 << (63 - index);
 			m_BitMapping &= flag_mask;
 		}
+
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) override final
+		{
+			FE_CORE_ASSERT(DoesOwn(allocation.begin()), "ArenaAllocator does not own this memory");
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+			FE_CORE_ASSERT(newSize > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
+			allocation.Count = newSize;
+
+			return allocation;
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize)
+		{
+			FE_CORE_ASSERT(DoesOwn(allocation.begin()), "ArenaAllocator does not own this memory");
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+			FE_CORE_ASSERT(newSize > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
+			allocation.Count = newSize;
+
+			return allocation;
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize)
+		{
+			FE_CORE_ASSERT(DoesOwn(allocation.begin()), "ArenaAllocator does not own this memory");
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), Alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+			FE_CORE_ASSERT(newSize > memRegSize, "This BitmappedPoolAllocator cannot accomdate allocation of this size!");
+
+			allocation.Count = newSize;
+
+			return allocation;
+		};
 
 		template <UInt Size, UInt Alignment>
 		Array<Byte, Size>* AllocateRaw()

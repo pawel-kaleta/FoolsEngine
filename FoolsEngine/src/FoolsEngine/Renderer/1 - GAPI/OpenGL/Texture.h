@@ -2,6 +2,7 @@
 
 #include "FoolsEngine/Foundation/Memory/DataTypes.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+#include "FoolsEngine/Foundation/Debug/Log.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 

@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+
 #include "FoolsEngine/Application/Application.h"
 
 namespace fe
@@ -48,7 +50,7 @@ namespace fe
 			else
 			{
 				Pile p;
-				FE_LOG_CORE_ERROR("This entity ({0}) does not have this component ({1})", entity.Get<CEntityName>().EntityName.GetCString(&p).Data, tnComponent::GetNameStatic().GetCString(&p).Data);;
+				FE_LOG_CORE_ERROR("This entity ({0}) does not have this component ({1})", GetCString(entity.Get<CEntityName>().EntityName, &p).Data, GetCString(tnComponent::GetNameStatic(), &p).Data);
 			}
 		}
 

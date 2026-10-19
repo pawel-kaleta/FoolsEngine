@@ -35,6 +35,47 @@ namespace fe
 				m_Fallback.Deallocate(memReg);
 		}
 
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) override final
+		{
+			if (m_Primary.DoesOwn(allocation))
+			{
+				Splice<Byte> result = m_Primary.ReallocateRaw(allocation, moveRegion, newSize, alignment);
+				if (!(result.Elements && result.Count))
+					return m_Fallback.ReallocateRaw(allocation, moveRegion, newSize, alignment);
+				return result;
+			}
+			else
+				return m_Fallback.ReallocateRaw(allocation, moveRegion, newSize, alignment);
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize)
+		{
+			if (m_Primary.DoesOwn(allocation))
+			{
+				Splice<Byte> result = m_Primary.ReallocateRaw<Alignment>(allocation, moveRegion, newSize);
+				if (!(result.Elements && result.Count))
+					return m_Fallback.ReallocateRaw<Alignment>(allocation, moveRegion, newSize);
+				return result;
+			}
+			else
+				return m_Fallback.ReallocateRaw<Alignment>(allocation, moveRegion, newSize);
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize)
+		{
+			if (m_Primary.DoesOwn(allocation))
+			{
+				Splice<Byte> result = m_Primary.ReallocateRaw<Alignment>(allocation, newSize);
+				if (!(result.Elements && result.Count))
+					return m_Fallback.ReallocateRaw<Alignment>(allocation, newSize);
+				return result;
+			}
+			else
+				return m_Fallback.ReallocateRaw<Alignment>(allocation, newSize);
+		};
+
 		template <UInt Size, UInt Alignment>
 		Array<Byte, Size>* AllocateRaw()
 		{

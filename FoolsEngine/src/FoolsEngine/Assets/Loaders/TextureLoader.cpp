@@ -1,10 +1,10 @@
 #include "TextureLoader.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
 
 #include "FoolsEngine/Application/Project.h"
-
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -29,10 +29,13 @@ namespace fe
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data;
 		
-		Scratchpad sp;
-		std::pmr::string filename("stbi_load - " + sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(), &sp);
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+
+		std::pmr::string filename("stbi_load - ", &pmr);
+		filename += sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 		FE_PROFILER_SCOPE(filename.c_str());
-		std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>();
+		std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 		data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
 		
 		{
@@ -76,10 +79,12 @@ namespace fe
 		result = stbi_info(sourceFilePath.string().c_str(), &width, &height, &channels);
 
 		{
-			Scratchpad sp;
-			std::pmr::string filename("stbi_load - " + sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(), &sp);
+			Pile p;
+			STD_PMR_Allocator pmr(&p);
+			std::pmr::string filename("stbi_load - ", &pmr);
+			filename += sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 			FE_PROFILER_SCOPE(filename.c_str());
-			std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>();
+			std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 			result = stbi_info(file_path.c_str(), &width, &height, &channels);
 		}
 		

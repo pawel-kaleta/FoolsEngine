@@ -3,13 +3,16 @@
 #include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
 
+#include "FoolsEngine/Foundation/Debug/Logger.h"
+
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 
+#include "Init.h"
 
 namespace fe::Context
 {
-	namespace Allocators
+	namespace Alloc
 	{
 		//PageAllocator					Page;
 		//VirtualAllocator				Virtual;
@@ -21,6 +24,11 @@ namespace fe::Context
 		PMAlloc						*	Output		= (PMAlloc*) & GeneralPurpose;
 	}
 
+	namespace Log
+	{
+		Logger Core;
+	}
+
 	namespace GPU
 	{
 		using namespace Render;
@@ -28,11 +36,11 @@ namespace fe::Context
 		U32 ScrachBufferSize;
 	}
 
-	void InitAllocators(UInt mainLoopArenaSize)
+	void InitAlloc(UInt mainLoopArenaSize)
 	{
-		Allocators::Permanent.Init();
-		Allocators::MainLoopArena.Buffer = Allocators::Permanent.AllocateRaw(mainLoopArenaSize);
-		Allocators::MainLoopArena.Clear();
+		Alloc::Permanent.Init();
+		Alloc::MainLoopArena.Buffer = Alloc::Permanent.AllocateRaw(mainLoopArenaSize);
+		Alloc::MainLoopArena.Clear();
 	}
 
 	void InitGPU(U32 scrachBufferSize)
@@ -41,4 +49,14 @@ namespace fe::Context
 		GPU::ScrachBuffer = Render::GAPI::CreateBuffer();
 		Render::GAPI::AllocateCommitBuffer(GPU::ScrachBuffer, scrachBufferSize);
 	}
+
+	void InitLog()
+	{
+		Log::Core.Init();
+	}
+}
+
+void InitLog::Init()
+{
+	fe::Context::InitLog();
 }

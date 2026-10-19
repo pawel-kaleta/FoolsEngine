@@ -14,7 +14,7 @@ namespace fe
         if (m_Active)
         {
             Pile p;
-            FE_LOG_CORE_WARN("{0} already active", GetBehaviorName().GetCString(&p).Data);
+            FE_LOG_CORE_WARN("{0} already active", GetCString(GetBehaviorName(), &p).Data);
         }
 
         m_Active = true;
@@ -26,7 +26,7 @@ namespace fe
         if (!m_Active)
         {
             Pile p;
-            FE_LOG_CORE_WARN("{0} already deactivated", GetBehaviorName().GetCString(&p).Data);
+            FE_LOG_CORE_WARN("{0} already deactivated", GetCString(GetBehaviorName(), &p).Data);
         }
 
         m_Active = false;
@@ -63,10 +63,10 @@ namespace fe
     {
         Pile p;
 
-        StringBuilder entity_ID_and_name;
+        StringBuilderSA<Pile> entity_ID_and_name;
         entity_ID_and_name.Init(&p);
 
-        CString name_c = name.GetCString(&p);
+        CString name_c = GetCString(name, &p);
 
         bool was_entity_null = false;
         if (entity)

@@ -120,7 +120,7 @@ namespace fe
 		// should use CActorNode, but CActorNode is not yet mantained
 		// because of updateEnrollCheck it is safe to use all entities for traversal
 
-		DynamicArena<EntityID> actors_to_update;
+		DynamicArenaSA<EntityID, Pile> actors_to_update;
 		actors_to_update.Init(&p);
 		// some data about entites in underlying hierarchy of just updated actor
 		// is going to be already cashed as a result of Actor update (Transform and Tags propagation)

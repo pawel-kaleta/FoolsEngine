@@ -4,6 +4,11 @@
 
 #include "FoolsEngine/Application/Application.h"
 
+#include "FoolsEngine/Foundation/Utils/Context.h"
+#include "FoolsEngine/Foundation/Memory/String.h"
+
+#include "FoolsEngine/Foundation/Utils/Init.h"
+
 #ifdef FE_PLATFORM_WINDOWS
 
 namespace fe
@@ -13,6 +18,26 @@ namespace fe
 
 int main(int argc, char** argv)
 {
+	using namespace fe;
+
+	InitLog().Init();
+
+	fe::Context::Log::Core.Trace("TEST"_FE);
+	{
+		fe::Context::Log::ScopeCore aaa("Prefix"_FE);
+		fe::Context::Log::ScopeCore ccc(""_FE);
+
+		fe::Context::Log::Core.Trace("TEST 2 {}"_FE, "ty");
+
+		{
+			fe::Context::Log::ScopeCore  bbb("asd"_FE, fe::LoggingLevel::Debug);
+
+			fe::Context::Log::Core.Trace("TEST 3 {}"_FE, "sdf");
+			fe::Context::Log::Core.Debug("TEST 4 {} {}"_FE, "ererer", 67);
+			fe::Context::Log::Core.Trace("TEST 3 xxxm"_FE);
+		}
+	}
+
 	fe::Log::Init();
 	
 	FE_LOG_CORE_INFO("/////////////////////////////////////////////////////");

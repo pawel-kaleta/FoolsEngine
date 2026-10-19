@@ -82,7 +82,7 @@ namespace fe
 
 		Pile p;
 		String name = entity.GetNameSignature(&p);
-		CString c_name = name.GetCString(&p);
+		CString c_name = GetCString(name, &p);
 		bool node_opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, c_name.Data);
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))

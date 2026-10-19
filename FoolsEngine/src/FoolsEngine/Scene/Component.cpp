@@ -3,7 +3,9 @@
 #include "BaseEntity.h"
 #include "GameplayWorld/Entity.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+
 
 #include "FoolsEngine/Application/Project.h"
 
@@ -23,20 +25,20 @@ namespace fe
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
 		Pile p;
-		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", this->GetName().GetCString(&p).Data);
+		FE_LOG_CORE_ERROR("UI widget drawing of {0} not implemented!", GetCString(this->GetName(), &p).Data);
 		ImGui::TextWrapped("UI widget drawing not implemented");
 	}
 
 	void DataComponent::Serialize(YAML::Emitter& emitter)
 	{
 		Pile p;
-		FE_LOG_CORE_ERROR("{0} serialization not implemented!", this->GetName().GetCString(&p).Data);
+		FE_LOG_CORE_ERROR("{0} serialization not implemented!", GetCString(this->GetName(), &p).Data);
 	}
 
 	void DataComponent::Deserialize(YAML::Node& data)
 	{
 		Pile p;
-		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", this->GetName().GetCString(&p).Data);
+		FE_LOG_CORE_ERROR("{0} deserialization not implemented!", GetCString(this->GetName(), &p).Data);
 	}
 
 	void SpatialComponent::SerializeOffset(YAML::Emitter& emitter) const
@@ -60,25 +62,27 @@ namespace fe
 
 	static bool EditMaterial(const AssetUser& materialUser)
 	{
-		Scratchpad sp;
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
 
 		bool modified = false;
 
 		auto& shading_model_current = materialUser.Get<Material::Core>().mShadingModelID;
-		if (ImGui::BeginCombo("Shading Model", AssetObserver(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str()))
+		if (ImGui::BeginCombo("Shading Model", AssetObserver(shading_model_current).GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str()))
 		{
 			bool is_selected;
 
 			auto shading_models = AssetManager::Get().m_Registry.view<ShadingModel::Core>();
 
-			Scratchpad sp2;
+			Pile p2;
+			STD_PMR_Allocator pmr2(&p2);
 
 			for (auto id : shading_models)
 			{
 				auto shading_model_observer = AssetObserver(id);
 				is_selected = (shading_model_current == id);
 
-				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp2).c_str(), is_selected))
+				if (ImGui::Selectable(shading_model_observer.GetFilepath().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2).c_str(), is_selected))
 				{
 					FE_CORE_ASSERT(false, "Not implemented");
 					//materialUser.MakeMaterial(shading_model_observer);
@@ -108,10 +112,8 @@ namespace fe
 		//		modified = true;
 		//}
 
-		for (size_t i=0; i<material_core_component.mTextureIDs.Count; i++)
-		{
-			auto& textureID = material_core_component.mTextureIDs[i];
-			
+		for (auto& textureID : material_core_component.mTextureIDs)
+		{		
 			ImGui::PushID((const void*)&textureID);
 			
 			ImGuiStyle& style = ImGui::GetStyle();
@@ -123,16 +125,19 @@ namespace fe
 
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-			Pile p;
-			StringBuilder asset_name;
-			asset_name.Init(&p);
+			Pile p2;
+			STD_PMR_Allocator pmr2(&p2);
+
+			StringBuilderSA<Pile> asset_name;
+			asset_name.Init(&p2);
+
 			if (handle_valid)
-				asset_name.Append(AssetObserver(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+				asset_name.Append(AssetObserver(textureID).GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2).c_str());
 			else
 				asset_name.Append("<empty>");
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
-			ImGui::Button(asset_name.GetCString(&p).Data, {button_width__handle, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);
+			ImGui::Button(asset_name.GetCString(&p2).Data, {button_width__handle, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 			ImGui::PopStyleVar();
 
 			// Editor Drag Drop handling
@@ -146,7 +151,7 @@ namespace fe
 						const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
 						if (!filepath.empty())
 						{
-							std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+							std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2);
 
 							if (Texture2D::GetMetaFileExtension() == extension)
 							{
@@ -189,7 +194,6 @@ namespace fe
 	template<typename tnAsset>
 	void DataComponent::DrawAssetHandle(AssetHandle<tnAsset>& assetHandle)
 	{
-		Scratchpad sp;
 		ImGui::PushID((const void *) & assetHandle);
 		
 		auto flags =
@@ -197,6 +201,7 @@ namespace fe
 			ImGuiChildFlags_AutoResizeY;
 
 		ImGui::BeginChild("AssetHandleWindow", ImVec2(0, 0), flags);
+
 
 		ImGui::Text(tnAsset::GetTypeStatic().ToCString().Data);
 
@@ -211,11 +216,14 @@ namespace fe
 		// asset handle
 		{
 			Pile p;
+			STD_PMR_Allocator pmr(&p);
+
 			reset_handle = ImGui::Button("x", square_button_dimentions); ImGui::SameLine(0, style.ItemInnerSpacing.x);
 
-			StringBuilder asset_name;
+			StringBuilderSA<Pile> asset_name;
 			asset_name.Init(&p);
-			if (handle_valid)	asset_name.Append(assetHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+
+			if (handle_valid)	asset_name.Append(assetHandle.Observe().GetFilepath().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str());
 			else				asset_name.Append("<empty>");
 			
 
@@ -234,7 +242,7 @@ namespace fe
 						const std::filesystem::path& filepath = *(const std::filesystem::path*)payload->Data;
 						if (!filepath.empty())
 						{
-							std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+							std::pmr::string extension = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 
 							if (tnAsset::GetMetaFileExtension() == extension)
 							{
@@ -262,13 +270,13 @@ namespace fe
 		{
 			Pile p;
 			auto loading_priority = assetHandle.GetLoadingPriority();
+
+			StringBuilderSA<Pile> loading_priority_string;
+			loading_priority_string.Init(&p);
+			loading_priority_string.Append(std::to_string(loading_priority.ToInt()).c_str());
+			loading_priority_string.Append(" - ");
+			loading_priority_string.Append(loading_priority.ToCString().Data);
 			
-			StringBuilder loading_priority_string; {
-				loading_priority_string.Init(&p);
-				loading_priority_string.Append(std::to_string(loading_priority.ToInt()).c_str());
-				loading_priority_string.Append(" - ");
-				loading_priority_string.Append(loading_priority.ToCString().Data);
-			}
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ButtonTextAlign, { 0.0f, 0.5f });
 			ImGui::Button(loading_priority_string.GetCString(&p).Data, {button_width__loading_priority, 0}); ImGui::SameLine(0, style.ItemInnerSpacing.x);

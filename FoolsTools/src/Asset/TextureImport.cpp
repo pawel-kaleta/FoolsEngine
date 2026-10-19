@@ -39,8 +39,11 @@ namespace fe
     {
         FE_CORE_ASSERT(false, "Not implemented");
         auto& spec = importData->Description.Spec;
-        Scratchpad sp;
-        ImGui::Text("m_File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str());
+
+        Pile p;
+        STD_PMR_Allocator pmr(&p);
+        
+        ImGui::Text("m_File: %s", importData->FilepathToImport.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str());
         //ImGui::Text("Components: %d", spec.Components);
         ImGui::Text("Format: %d", spec.mFormat);
         //ImGui::Text("Width: %d", spec.Width);
@@ -59,10 +62,10 @@ namespace fe
         {
             //spec.Usage.FromInt(usage_current);
 
-            std::pmr::string filter(&sp);
+            std::pmr::string filter(&pmr);
             std::filesystem::path default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Texture2D>(importData->FilepathToImport, filter);
 
-            std::filesystem::path new_asset_filepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+            std::filesystem::path new_asset_filepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str(), filter.c_str());
 
             if (!new_asset_filepath.empty())
             {

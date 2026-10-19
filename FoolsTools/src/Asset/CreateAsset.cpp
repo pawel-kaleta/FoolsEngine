@@ -7,15 +7,16 @@ namespace fe
 	{
 		void CreateMaterial(const std::filesystem::path& filepath)
 		{
-			Scratchpad sp;
+			Pile p;
+			STD_PMR_Allocator pmr(&p);
 
-			std::pmr::string filter(&sp);
-			filter = std::pmr::string("Material (", &sp) + Material::GetMetaFileExtension() + ")" + std::pmr::string(1, '\0', &sp) + "*" + Material::GetMetaFileExtension() + std::pmr::string(1, '\0', &sp);
+			std::pmr::string filter(&pmr);
+			filter = std::pmr::string("Material (", &pmr) + Material::GetMetaFileExtension() + ")" + std::pmr::string(1, '\0', &pmr) + "*" + Material::GetMetaFileExtension() + std::pmr::string(1, '\0', &pmr);
 
 			std::filesystem::path default_filepath = filepath;
-			default_filepath = std::filesystem::absolute(default_filepath / (std::pmr::string("Material", &sp) + Material::GetMetaFileExtension()));
+			default_filepath = std::filesystem::absolute(default_filepath / (std::pmr::string("Material", &pmr) + Material::GetMetaFileExtension()));
 
-			std::filesystem::path new_asset_filepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+			std::filesystem::path new_asset_filepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str(), filter.c_str());
 
 			auto assets_folder = std::filesystem::absolute(std::filesystem::current_path() / Project::Get()->m_AssetsPath);
 

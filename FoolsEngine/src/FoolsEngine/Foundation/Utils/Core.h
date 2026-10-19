@@ -32,6 +32,7 @@ namespace fe
 	template<class T>
 	const T& min(const T& a, const T& b)
 	{
-		return (b < a) ? b : a;
+		bool condition = b < a;
+		return condition * b + !condition * a;
 	}
 }

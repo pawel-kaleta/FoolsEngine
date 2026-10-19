@@ -24,14 +24,16 @@ namespace fe
 		template <typename tnAsset>
 		std::filesystem::path GetDefaultFilepathAndFilterForImport(const std::filesystem::path& originalPath, std::pmr::string& outFilter)
 		{
-			Scratchpad sp;
-			std::pmr::string alias(&sp);
-			std::pmr::string extension(&sp);
+			Pile p;
+			STD_PMR_Allocator pmr(&p);
+
+			std::pmr::string alias(&pmr);
+			std::pmr::string extension(&pmr);
 
 			alias = AssetType(tnAsset::GetTypeStatic()).ToCString().Data;
 			extension = tnAsset::GetMetaFileExtension();
 
-			outFilter = alias + " (" + extension + ")" + std::pmr::string(1, '\0', &sp) + "*" + extension + std::pmr::string(1, '\0', &sp);
+			outFilter = alias + " (" + extension + ")" + std::pmr::string(1, '\0', &pmr) + "*" + extension + std::pmr::string(1, '\0', &pmr);
 
 			std::filesystem::path default_filepath = originalPath;
 			default_filepath = std::filesystem::absolute(default_filepath.replace_extension(std::filesystem::path(extension)));

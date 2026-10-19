@@ -40,8 +40,8 @@ namespace fe::Render::GAPI::OpenGL
 
 		void Create()
 		{
-			mAllocMain = Context::Allocators::Default;
-			mChunks.Init(Context::Allocators::Auxiliary);
+			mAllocMain = Context::Alloc::Default;
+			mChunks.Init(Context::Alloc::Auxiliary);
 		}
 
 		InternalID GetNewID()

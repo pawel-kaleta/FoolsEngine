@@ -3,8 +3,6 @@
 #include "YAML.h"
 
 #include "FoolsEngine/Foundation/Memory/Xar.h"
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
-
 
 #include "FoolsEngine/Application/Project.h"
 
@@ -19,7 +17,9 @@ namespace fe::AssetSerializer
 {
 	void SerializeRegistry()
 	{
-		Scratchpad sp;
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+
 		YAML::Emitter emitter;
 		auto& reg = AssetManager::Get().m_Registry;
 
@@ -34,7 +34,7 @@ namespace fe::AssetSerializer
 			emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Type" << YAML::Value << type.ToCString().Data;
 			emitter << YAML::Key << "UUID" << YAML::Value << reg.get<ACUUID>(id).UUID;
-			emitter << YAML::Key << "Filepath" << YAML::Value << ac_path.string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+			emitter << YAML::Key << "Filepath" << YAML::Value << ac_path.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 			emitter << YAML::EndMap;
 		}
 		emitter << YAML::EndSeq;
@@ -47,8 +47,6 @@ namespace fe::AssetSerializer
 	bool DeserializeRegistry()
 	{
 		FE_PROFILER_FUNC();
-
-		Scratchpad sp;
 
 		YAML::Node node;
 		
@@ -86,8 +84,6 @@ namespace fe::AssetSerializer
 	static void LoadMetaData()
 	{
 		FE_PROFILER_FUNC();
-
-		Scratchpad sp;
 
 		auto& reg = AssetManager::Get().m_Registry;
 		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();

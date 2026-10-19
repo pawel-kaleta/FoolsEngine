@@ -7,8 +7,6 @@
 #include "FoolsEngine/Scene/Components/RenderingComponents.h"
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
-
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
@@ -34,7 +32,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Scratchpad sp;
+		Pile p;
 
 		FE_CORE_ASSERT(false, "not implemented");
 		//s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
@@ -55,7 +53,7 @@ namespace fe
 		//layout.CalculateOffsetsAndStride();
 
 		using QuadsIndexBufferData = Array<uint32_t, ConstLimits::MaxIndices>;
-		QuadsIndexBufferData* quad_indices = sp.NewObject<QuadsIndexBufferData>();
+		QuadsIndexBufferData* quad_indices = p.Allocate<uint32_t, ConstLimits::MaxIndices>();
 
 		{
 			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");

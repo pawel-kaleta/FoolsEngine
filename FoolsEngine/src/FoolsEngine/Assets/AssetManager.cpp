@@ -6,7 +6,8 @@
 #include "Loaders/GeometryLoader.h"
 #include "Serialization/YAML.h"
 
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
+#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Memory/Arena.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
@@ -159,19 +160,21 @@ namespace fe
 
 		auto& groups = s_Instance->m_LoadingGroups;
 
-		Scratchpad sp;
+		Pile p;
 
-		std::pmr::vector<AssetID> entities_to_unload(&sp);
+		DynamicArenaSA<AssetID, Pile> assets_to_unload;
+		assets_to_unload.Init(&p);
 
-		entities_to_unload.reserve(groups.Unload.size());
+		assets_to_unload.ReserveExact(groups.Unload.size());
 		for (auto id : groups.Unload)
 		{
-			entities_to_unload.emplace_back(id);
-			reg.storage<ACLoaded>().erase(id);
+			assets_to_unload.Append(id);
 		}
 
-		for (auto id : entities_to_unload)
+		for (auto id : assets_to_unload)
 		{
+			reg.storage<ACLoaded>().erase(id);
+
 			switch (reg.get<ACAssetType>(id).Type)
 			{
 			case AssetType::Texture2D:	Unload<Texture2D>(id);	break;
@@ -182,16 +185,17 @@ namespace fe
 			}
 		}
 
-		std::pmr::vector<AssetID> assets_to_load(&sp);
+		DynamicArenaSA<AssetID, Pile> assets_to_load;
+		assets_to_load.Init(&p);
 
 		// this will be separated in future
-		for (auto id : groups.Critical	) assets_to_load.emplace_back(id);
-		for (auto id : groups.VeryHigh	) assets_to_load.emplace_back(id);
-		for (auto id : groups.High		) assets_to_load.emplace_back(id);
-		for (auto id : groups.Standard	) assets_to_load.emplace_back(id);
-		for (auto id : groups.Low		) assets_to_load.emplace_back(id);
-		for (auto id : groups.VeryLow	) assets_to_load.emplace_back(id);
-		for (auto id : groups.Minimal	) assets_to_load.emplace_back(id);
+		for (auto id : groups.Critical	) assets_to_load.Append(id);
+		for (auto id : groups.VeryHigh	) assets_to_load.Append(id);
+		for (auto id : groups.High		) assets_to_load.Append(id);
+		for (auto id : groups.Standard	) assets_to_load.Append(id);
+		for (auto id : groups.Low		) assets_to_load.Append(id);
+		for (auto id : groups.VeryLow	) assets_to_load.Append(id);
+		for (auto id : groups.Minimal	) assets_to_load.Append(id);
 
 		for (auto id : assets_to_load)
 		{

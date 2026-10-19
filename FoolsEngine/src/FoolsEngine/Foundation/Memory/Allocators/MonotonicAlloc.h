@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Allocator.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Debug/Log.h"
 
 namespace fe
 {
@@ -41,6 +43,32 @@ namespace fe
 			return mem_reg;
 		}
 		virtual void DeallocateRaw(Splice<Byte> memReg) final override { FE_LOG_CORE_WARN("Deallocation in MonotonicAllocator"); }
+
+		virtual Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment) override final
+		{
+			FE_CORE_ASSERT(AlignTo(allocation.begin(), alignment) == allocation.begin(), "Cannot realloc to a different alignment");
+
+			Splice<Byte> result;
+			result.Elements = (Byte*)MBR.allocate(newSize, alignment);
+			result.Count = newSize;
+
+			if (result.Elements && result.Count)
+				std::memcpy(result.begin(), allocation.begin(), min(moveRegion.Count, newSize));
+
+			return result;
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize)
+		{
+			return ReallocateRaw(allocation, allocation, newSize, Alignment);
+		};
+
+		template <UInt Alignment>
+		Splice<Byte> ReallocateRaw(Splice<Byte> allocation, UInt newSize)
+		{
+			return ReallocateRaw(allocation, allocation, newSize, Alignment);
+		};
 
 		template <UInt Size, UInt Alignment>
 		Array<Byte, Size>* AllocateRaw() { return (Array<Byte, Size>*)MBR.allocate(Size, Alignment); }

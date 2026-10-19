@@ -521,7 +521,7 @@ namespace fe::GeometryImport
 				ImGui::TableNextColumn();
 				const auto name = scene->mMaterials[material_index]->GetName();
 
-				StringBuilder name_label;
+				StringBuilderSA<Pile> name_label;
 				name_label.Init(&p);
 
 				name_label.Append(std::to_string(material_index).c_str());
@@ -706,8 +706,9 @@ namespace fe::GeometryImport
 
 		Pile p;
 
-		StringBuilder preview;
+		StringBuilderSA<Pile> preview;
 		preview.Init(&p);
+
 		preview.Append(std::to_string(selected_material_index).c_str());
 		preview.Append(". ");
 		preview.Append(selected_material_name.C_Str());
@@ -720,7 +721,7 @@ namespace fe::GeometryImport
 				const bool is_selected = (selected_material_index == n);
 				auto name = scene->mMaterials[n]->GetName();
 
-				StringBuilder label;
+				StringBuilderSA<Pile> label;
 				label.Init(&p);
 
 				label.Append(std::to_string(n).c_str());
@@ -865,9 +866,11 @@ namespace fe::GeometryImport
 			ImGui::SeparatorText("##1");
 			if (ImGui::Button("Import As..."))
 			{
-				Scratchpad sp;
+				Pile p;
+				STD_PMR_Allocator pmr(&p);
+
 				std::filesystem::path default_filepath;
-				std::pmr::string filter(&sp);
+				std::pmr::string filter(&pmr);
 
 				switch (variant)
 				{
@@ -876,7 +879,7 @@ namespace fe::GeometryImport
 				case ImportVariant::Mesh:		default_filepath = AssetImportModal::GetDefaultFilepathAndFilterForImport<Mesh		>(importData->FilepathToImport, filter);	break;
 				}
 
-				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&sp).c_str(), filter.c_str());
+				std::filesystem::path newAssetFilepath = FileDialogs::SaveFile(default_filepath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr).c_str(), filter.c_str());
 
 				if (!newAssetFilepath.empty())
 				{

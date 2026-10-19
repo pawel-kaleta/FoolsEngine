@@ -65,10 +65,11 @@ namespace fe
 
 		FE_TYPE_SETUP(Splice<T>);
 
-		void Init()
+		Splice<T> Init()
 		{
 			Elements = nullptr;
 			Count = 0;
+			return *this;
 		}
 
 		const	T* begin()	const	{ return Elements; }

@@ -100,9 +100,9 @@ namespace fe
 				if (m_CurrentPath.compare(m_AssetsPath)) // skip if most outer folder
 					RenderUPFolder();
 
-				Scratchpad sp;
 				Pile p;
-				//auto file_names = sp.NewObject<std::pmr::vector<std::pmr::string>>(&sp);
+				STD_PMR_Allocator pmr(&p);
+
 				DynamicArena<std::pmr::string> file_names;
 				file_names.Init(&p);
 
@@ -110,30 +110,32 @@ namespace fe
 				// RenderFiles iterates over filenames in a list
 				// this avoids iterating directory twice - expensive (OSI)
 
-				RenderFolders(&sp, file_names);
+				RenderFolders(&pmr, file_names);
 
 				for (const auto& file : file_names)
 				{
-					Scratchpad sp2;
+					Pile p2;
+					STD_PMR_Allocator pmr2(&p2);
 
 					const auto dot_pos = file.rfind(".");
-					const std::pmr::string stem(file.c_str(), dot_pos, &sp2);
-					const std::pmr::string extension(file.c_str() + dot_pos, file.length() - dot_pos, &sp2);
+					const std::pmr::string stem(file.c_str(), dot_pos, &pmr2);
+					const std::pmr::string extension(file.c_str() + dot_pos, file.length() - dot_pos, &pmr2);
 
 					RenderFile(stem, extension);
 				}
 			}
 			else
 			{
-				Scratchpad sp;
+				Pile p2;
+				STD_PMR_Allocator pmr2(&p2);
 
 				for (auto& dir_entry : std::filesystem::directory_iterator(m_CurrentPath))
 				{
 					if (dir_entry.is_directory())
 						continue;
 
-					const auto stem = dir_entry.path().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
-					const auto extension = dir_entry.path().extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+					const auto stem = dir_entry.path().stem().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2);
+					const auto extension = dir_entry.path().extension().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2);
 
 					RenderFile(stem, extension);
 				}
@@ -168,7 +170,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Scratchpad sp;
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+
 		auto& tnSize = m_Settings.ThumbnailSize;
 		ImVec2 thumbnail_size_ImGui((float)tnSize, (float)tnSize);
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
@@ -177,7 +181,7 @@ namespace fe
 		auto loader_registry_item_ptr = LoadersRegistry::GetItem(String(extension.data(), extension.size()+1));
 		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(extension);
 
-		const std::pmr::string file_name(stem + extension, &sp);
+		const std::pmr::string file_name(stem + extension, &pmr);
 		const std::filesystem::path file_path = m_CurrentPath / file_name;
 
 		if (loader_registry_item_ptr || asset_types_registry_item_ptr)
@@ -295,7 +299,7 @@ namespace fe
 			ImGui::SameLine();
 	}
 
-	void ContentBrowser::RenderFolders(Scratchpad* sp, DynamicArena<std::pmr::string>& file_names)
+	void ContentBrowser::RenderFolders(STD_PMR_Allocator<Pile>* pmr, DynamicArena<std::pmr::string>& file_names)
 	{
 		FE_PROFILER_FUNC();
 
@@ -308,7 +312,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Dir Entry");
 
-			auto entry_name = dir_entry.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(sp);
+			auto entry_name = dir_entry.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(pmr);
 
 			if (dir_entry.is_directory())
 			{
@@ -364,8 +368,10 @@ namespace fe
 		bool selected = (m_CurrentPath == dir);
 		flags |= selected ? ImGuiTreeNodeFlags_Selected : 0;
 
-		Scratchpad sp;
-		auto node_name = dir.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+
+		auto node_name = dir.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 		bool open = ImGui::TreeNodeEx(node_name.c_str(), flags, node_name.c_str());
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_::ImGuiMouseButton_Left) && !ImGui::IsItemToggledOpen())
@@ -374,19 +380,22 @@ namespace fe
 		if (!open)
 			return;
 
-		for (auto& p : std::filesystem::directory_iterator(dir))
+		for (auto& dir_it : std::filesystem::directory_iterator(dir))
 		{
-			if (!p.is_directory())
+			if (!dir_it.is_directory())
 				continue;
 
-			RenderFolderNode(p);
+			RenderFolderNode(dir_it);
 		}
 
 		if (m_Settings.DisplayFiles)
 		{
-			for (auto& p : std::filesystem::directory_iterator(dir))
+			Pile p2;
+			STD_PMR_Allocator pmr2(&p2);
+
+			for (auto& dir_it : std::filesystem::directory_iterator(dir))
 			{
-				if (p.is_directory())
+				if (dir_it.is_directory())
 					continue;
 
 				// Render File Node
@@ -396,8 +405,7 @@ namespace fe
 					ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 					flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;// | ImGuiTreeNodeFlags_Bullet;
 
-					Scratchpad sp2;
-					auto node_name = p.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&sp2);
+					auto node_name = dir_it.path().filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr2);
 					ImGui::TreeNodeEx(node_name.c_str(), flags, node_name.c_str());
 				}
 			}

@@ -7,9 +7,11 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
+#include "FoolsEngine/Foundation/Debug/Logger.h"
+
 namespace fe::Context
 {
-	namespace Allocators
+	namespace Alloc
 	{
 		//extern PageAllocator					Page;
 		//extern VirtualAllocator					Virtual;
@@ -19,11 +21,62 @@ namespace fe::Context
 		extern PMAlloc						*	Default;
 		extern PMAlloc						*	Auxiliary;
 		extern PMAlloc						*	Output;
+
+		class ScopeDefault
+		{
+		public:
+			ScopeDefault(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
+			~ScopeDefault() { Default = mBackup; }
+		private:
+			PMAlloc* mBackup;
+		};
+
+		class ScopeAuxiliary
+		{
+		public:
+			ScopeAuxiliary(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
+			~ScopeAuxiliary() { Default = mBackup; }
+		private:
+			PMAlloc* mBackup;
+		};
+
+		class ScopeOutput
+		{
+		public:
+			ScopeOutput(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
+			~ScopeOutput() { Default = mBackup; }
+		private:
+			PMAlloc* mBackup;
+		};
 	}
 
-	namespace Logging
+	namespace Log
 	{
+		extern Logger Core;
+		extern Logger App;
 
+		class ScopeCore
+		{
+		public:
+			ScopeCore(String prefix, LoggingLevel lvl = Core.mLoggingLevel) :
+				mPrefixCount(prefix.Count),
+				mLvlBackup(Core.mLoggingLevel)
+			{
+				Core.mSuffixes[Core.mSuffixesCount] = '[';
+				std::memcpy(&Core.mSuffixes[Core.mSuffixesCount + 1], prefix.Data, prefix.Count);
+				Core.mSuffixes[Core.mSuffixesCount + 1 + prefix.Count] = ']';
+				Core.mSuffixesCount += prefix.Count + 2;
+				Core.mLoggingLevel = lvl;
+			}
+			~ScopeCore()
+			{
+				Core.mSuffixesCount -= mPrefixCount + 2;
+				Core.mLoggingLevel = mLvlBackup;
+			}
+		private:
+			UInt mPrefixCount;
+			LoggingLevel mLvlBackup;
+		};
 	}
 
 	namespace Debug
@@ -43,14 +96,4 @@ namespace fe::Context
 		extern U32 ScrachBufferSize;
 	}
 
-	template <typename T>
-	class ValueBackup
-	{
-	public:
-		ValueBackup(T* original, T replacer) : Backup(*original), Location(original) { *original = replacer; }
-		~ValueBackup() { *Location = Backup; }
-	private:
-		T Backup;
-		T* Location;
-	};
 }

@@ -73,7 +73,7 @@ namespace fe
 
 		ComponentTypesRegistry*	m_ComponentTypesRegistry;
 		BehaviorsRegistry*		m_BehaviorsRegistry;
-		SystemTypesRegistry*		m_SystemsRegistry;
+		SystemTypesRegistry*	m_SystemsRegistry;
 		AssetTypesRegistry*		m_AssetTypesRegistry;
 		LoadersRegistry*		m_LoadersRegistry;
 

@@ -14,7 +14,7 @@ namespace fe
 		if (m_Active)
 		{
 			Pile p;
-			FE_LOG_CORE_WARN("{0} already active", GetName().GetCString(&p).Data);
+			FE_LOG_CORE_WARN("{0} already active", GetCString(GetName(), &p).Data);
 		}
 
 		m_Active = true;
@@ -59,7 +59,7 @@ namespace fe
 		if (!m_Active)
 		{
 			Pile p;
-			FE_LOG_CORE_WARN("{0} already deactivated", GetName().GetCString(&p).Data);
+			FE_LOG_CORE_WARN("{0} already deactivated", GetCString(GetName(), &p).Data);
 		}
 
 		m_Active = false;

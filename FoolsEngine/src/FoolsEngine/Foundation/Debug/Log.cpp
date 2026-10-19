@@ -4,6 +4,9 @@
 
 // https://github.com/gabime/spdlog/wiki
 
+#include "spdlog/async.h"
+
+
 namespace fe
 {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
@@ -12,6 +15,8 @@ namespace fe
 	void Log::Init()
 	{
 		std::vector<spdlog::sink_ptr> loggingTargets;
+
+		
 
 #ifdef FE_DEBUG
 		loggingTargets.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());

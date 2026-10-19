@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Log.h"
+//#include "Log.h"
 #include "Profiler.h"
+
+#include "FoolsEngine/Foundation/Debug/Logger.h"
 
 #include <filesystem>
 
@@ -9,19 +11,31 @@ namespace fe
 {
 	extern bool EnableAssertionBreak;
 	extern bool EnableCoreAssertionBreak;
-}
 
+	namespace Context::Log
+	{
+		extern Logger Core;
+	}
+}
 
 #ifdef FE_INTERNAL_BUILD
 	#define FE_ASSERTION_BREAK()      if (fe::EnableAssertionBreak) __debugbreak();
 	#define FE_CORE_ASSERTION_BREAK() if (fe::EnableCoreAssertionBreak) __debugbreak();
 
-	#define FE_ASSERT(x, ...)      if (!(x)) { FE_LOG_ERROR("ASSERTION FAILED: in file {0} in function {1} at line {2}.", std::filesystem::path(__FILE__).filename().string(), FE_FUNC_SIG, __LINE__);\
-											   FE_LOG_ERROR("Assertion Message: " __VA_ARGS__);\
-											   FE_ASSERTION_BREAK(); }
-	#define FE_CORE_ASSERT(x, ...) if (!(x)) { FE_LOG_CORE_ERROR("CORE ASSERTION FAILED: in file {0} in function {1} at line {2}.", std::filesystem::path(__FILE__).filename().string(), FE_FUNC_SIG, __LINE__);\
-											   FE_LOG_CORE_ERROR("Assertion Message: " __VA_ARGS__);\
-											   FE_CORE_ASSERTION_BREAK(); }
+	#define FE_ASSERT(x, ...) if (!(x)) {\
+		fe::Context::Log::Core.Error("CORE ASSERTION FAILED:");\
+		fe::Context::Log::Core.Error("	File:     {}", std::filesystem::path(__FILE__).filename().string());\
+		fe::Context::Log::Core.Error("	Function: {}", FE_FUNC_SIG);\
+		fe::Context::Log::Core.Error("	Line:     {}", __LINE__);\
+		fe::Context::Log::Core.Error("	Message:  {}", __VA_ARGS__);\
+		FE_ASSERTION_BREAK(); }
+	#define FE_CORE_ASSERT(x, ...) if (!(x)) {\
+		fe::Context::Log::Core.Error("CORE ASSERTION FAILED:");\
+		fe::Context::Log::Core.Error("	File:     {}", std::filesystem::path(__FILE__).filename().string());\
+		fe::Context::Log::Core.Error("	Function: {}", FE_FUNC_SIG);\
+		fe::Context::Log::Core.Error("	Line:     {}", __LINE__);\
+		fe::Context::Log::Core.Error("	Message:  {}", __VA_ARGS__);\
+		FE_CORE_ASSERTION_BREAK(); }
 #else
 	#define FE_ASSERTION_BREAK()
 	#define FE_CORE_ASSERTION_BREAK()

@@ -7,6 +7,7 @@
 #include "FoolsEngine/Foundation/Memory/Splice.h"
 #include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+#include "FoolsEngine/Foundation/Debug/Log.h"
 
 
 namespace fe

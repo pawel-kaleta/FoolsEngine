@@ -18,8 +18,9 @@ namespace fe
 
             if (!loaderItemPtr)
             {
-                Scratchpad sp;
-                auto std_string = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&sp);
+                Pile p;
+                STD_PMR_Allocator pmr(&p);
+                auto std_string = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
                 const auto item = LoadersRegistry::GetItem(String(std_string.data(), std_string.size()+1));
 				AssetImportModal::OpenWindow(filepath, item);
 				return;

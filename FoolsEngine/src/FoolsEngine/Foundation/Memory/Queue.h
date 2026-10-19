@@ -27,14 +27,14 @@ namespace fe
 		void InitAllocate(UInt capacity)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released Queue - memory leak!");
-			Buffer = Context::Allocators::Default->Allocate<T>(capacity);
+			Buffer = Context::Alloc::Default->Allocate<T>(capacity);
 			Count = 0;
 			Front = 0;
 		}
 
 		void Release()
 		{
-			Context::Allocators::Default->Deallocate(Buffer);
+			Context::Alloc::Default->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
 		}
 

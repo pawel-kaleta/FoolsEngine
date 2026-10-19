@@ -175,6 +175,8 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Log.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Logger.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\LoggingLevel.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\FallbackAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MallocAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\MonotonicAlloc.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\NullAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Allocators\SegregatorAlloc.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Arena.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Bitset.h" />
@@ -191,9 +194,9 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pile.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Pool.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Queue.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Memory\Scratchpad.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Splice.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\String.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Memory\StringBuilder.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Memory\Xar.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h" />
@@ -201,6 +204,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\DeclareEnum.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\ForEach.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Utils\Init.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\TypeSetup.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\ApplicationEvent.h" />
     <ClInclude Include="src\FoolsEngine\Platform\Events\Event.h" />
@@ -291,7 +295,6 @@
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Memory\Memory.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Memory\Scratchpad.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Utils\Context.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp" />
     <ClCompile Include="src\FoolsEngine\Platform\Win32\PlatformBase.cpp" />

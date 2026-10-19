@@ -31,7 +31,7 @@ namespace fe
         auto name = component->GetName();
 
         ImGuiTreeNodeFlags header_flags = ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_ClipLabelForTrailingButton;
-        bool is_widget_open = ImGui::CollapsingHeader(name.GetCString(&p).Data, header_flags);
+        bool is_widget_open = ImGui::CollapsingHeader(GetCString(name, &p).Data, header_flags);
 
         float line_height = ImGui::GetFontSize() + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -199,7 +199,7 @@ namespace fe
             {
                 auto& get_name_funk_ptr = item.GetName;
                 String name = (*get_name_funk_ptr)();
-                if (ImGui::MenuItem(name.GetCString(&p).Data))
+                if (ImGui::MenuItem(GetCString(name, &p).Data))
                 {
                     auto& emplace_funk_ptr = item.Emplacer;
                     (entity.*emplace_funk_ptr)();
@@ -219,18 +219,19 @@ namespace fe
         auto& name = entity.Get<CEntityName>();
         static char s_buffer[256];
         memset(s_buffer, 0, sizeof(s_buffer));
-        strncpy_s(s_buffer, name.EntityName.GetCString(&p).Data, sizeof(s_buffer)); // to do: 2 copies (getCString and strncpy_s)
+        strncpy_s(s_buffer, GetCString(name.EntityName, &p).Data, sizeof(s_buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", s_buffer, sizeof(s_buffer)))
         {
             FE_LOG_CORE_ERROR("to do: get proper allocator for entities names");
+            
+            Splice<char8_t> dealloc_splice;
+            dealloc_splice.Elements = name.EntityName.Data;
+            dealloc_splice.Count = name.EntityName.Count;
 
-            Splice<char8_t> name_splice;
-            name_splice.Elements = name.EntityName.Data;
-            name_splice.Count = name.EntityName.Count;
-            Context::Allocators::Default->Deallocate(name_splice);
+            Context::Alloc::Default->Deallocate(dealloc_splice);
 
             String name_string(s_buffer);
-            name.EntityName.Data = Context::Allocators::Default->Allocate<char8_t>(name_string.Count).Elements;
+            name.EntityName.Data = Context::Alloc::Default->Allocate<char8_t>(name_string.Count).Elements;
             name.EntityName.Count = name_string.Count;
 
             std::memcpy(name.EntityName.Data, s_buffer, name_string.Count);
@@ -244,7 +245,7 @@ namespace fe
             // the filename and a small preview of the image, etc.)
             
             Pile p;
-            ImGui::Text(entity.GetNameSignature(&p).GetCString(&p).Data);
+            ImGui::Text(GetCString(entity.GetNameSignature(&p), &p).Data);
 
             ImGui::EndDragDropSource();
         }

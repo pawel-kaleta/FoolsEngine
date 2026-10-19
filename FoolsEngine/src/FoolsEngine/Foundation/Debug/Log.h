@@ -17,6 +17,10 @@ namespace fe {
 		static void Init();
 
         //FE_DECLARE_ENUM expanded in place, due to circular dependency log-enum
+
+        //FE_DECLARE_ENUM(LoggingLevel, Trace, Debug, Info, Warn, Error, Fatal, None);
+
+
         struct LoggingLevel {
             enum ValueType {
                 Trace, Debug, Info, Warn, Error, Fatal, None
@@ -93,7 +97,7 @@ namespace fe {
 	};
 }
 
-// Macros for logging core engine issues
+//// Macros for logging core engine issues
 #define FE_LOG_CORE_FATAL(...) fe::Log::GetCoreLogger()->critical(__VA_ARGS__)
 #define FE_LOG_CORE_ERROR(...) fe::Log::GetCoreLogger()->error   (__VA_ARGS__)
 #define FE_LOG_CORE_WARN(...)  fe::Log::GetCoreLogger()->warn    (__VA_ARGS__)

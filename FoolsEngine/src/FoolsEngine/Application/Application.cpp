@@ -5,7 +5,6 @@
 
 #include "FoolsEngine/Foundation/Memory/Xar.h"
 #include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Memory/Scratchpad.h"
 #include "FoolsEngine/Foundation/Utils/Context.h"
 
 #include "FoolsEngine/Platform/FileDialogs.h"
@@ -27,7 +26,7 @@ namespace fe
 {
 	namespace Context
 	{
-		void InitAllocators(UInt mainLoopArenaSize);
+		void InitAlloc(UInt mainLoopArenaSize);
 	}
 
 	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
@@ -80,8 +79,7 @@ namespace fe
 		// Allocators
 		{
 			FE_PROFILER_SCOPE("Allocators");
-			Context::InitAllocators(24 * 1024);
-			Scratchpad::Init();
+			Context::InitAlloc(24 * 1024);
 		}
 
 		// Rendering, Window and Platform Layer
@@ -90,20 +88,20 @@ namespace fe
 
 			{
 				FE_PROFILER_SCOPE("PlatformBase");
-				m_PlatformBase = Context::Allocators::Permanent.Allocate<PlatformBase>();
+				m_PlatformBase = Context::Alloc::Permanent.Allocate<PlatformBase>();
 				m_PlatformBase->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("RenderContext");
 				FE_CORE_ASSERT(false, "Not implemented");
-				//m_RenderContext = Context::Allocators::Permanent.Allocate<RenderContext_OpenGL>();
+				//m_RenderContext = Context::Alloc::Permanent.Allocate<RenderContext_OpenGL>();
 				//m_RenderContext->Create();
 			}
 
 			{
 				FE_PROFILER_SCOPE("Window");
-				Win32Window* window = Context::Allocators::Permanent.Allocate<Win32Window>();
+				Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
 				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, Render::GAPI::BaseWindow);
 				m_PlatformBase->SetEventCallbacks(window);
 				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
@@ -328,7 +326,6 @@ namespace fe
 		// Allocators
 		{
 			FE_PROFILER_SCOPE("Allocators");
-			Scratchpad::Shutdown();
 		}
 	}
 
