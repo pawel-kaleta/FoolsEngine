@@ -108,8 +108,8 @@ namespace fe::Render
 					{
 						copy_budget += region.mSize * 2;
 
-						GAPI::CopyRegionCmd(mBuffer, region.mOffset, region.mSize, Context::GPU::ScrachBuffer, 0);
-						GAPI::CopyRegionCmd(Context::GPU::ScrachBuffer, 0, region.mSize, mBuffer, available_offset);
+						GAPI::CopyRegionCmd(mBuffer, region.mOffset, region.mSize, Context::GPU::ScratchBuffer, 0);
+						GAPI::CopyRegionCmd(Context::GPU::ScratchBuffer, 0, region.mSize, mBuffer, available_offset);
 					}
 					else
 					{

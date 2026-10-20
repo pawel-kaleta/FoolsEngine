@@ -1,12 +1,11 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Utils/Context.h"
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
-#include "FoolsEngine/Foundation/Memory/Arena.h"
-#include "FoolsEngine/Foundation/Memory/Splice.h"
-#include "FoolsEngine/Foundation/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
-
+#include "FoolsEngine/Foundation/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 

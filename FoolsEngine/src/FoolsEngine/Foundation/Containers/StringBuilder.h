@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DataTypes.h"
-#include "Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
 #include "Splice.h"
 #include "String.h"
 
@@ -131,6 +131,13 @@ namespace fe
 		{
 			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
 
+			if (!Buffer.Elements)
+			{
+				Buffer.Elements = Alloc->Allocate<char8_t>(capacity).Elements;
+				Buffer.Count = capacity;
+				return;
+			}
+
 			AllocateAndMove(capacity);
 		}
 
@@ -138,9 +145,14 @@ namespace fe
 		{
 			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
 
-			bool any_capacity = Buffer.Count;
+			if (!Buffer.Elements)
+			{
+				Buffer.Elements = Alloc->Allocate<char8_t>(capacity).Elements;
+				Buffer.Count = capacity;
+				return;
+			}
+
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			bool default_better = capacity < new_capacity;
 			new_capacity = new_capacity * default_better + capacity * !default_better;
@@ -150,9 +162,14 @@ namespace fe
 
 		void ExpandDefault()
 		{
-			bool any_capacity = Buffer.Count;
+			if (!Buffer.Elements)
+			{
+				Buffer.Elements = Alloc->Allocate<char8_t>(2).Elements;
+				Buffer.Count = 2;
+				return;
+			}
+
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			AllocateAndMove(new_capacity);
 		}
@@ -175,7 +192,7 @@ namespace fe
 	{
 		FE_TYPE_SETUP(StringBuilderSA<tnAlloc>)
 
-			void Release()
+		void Release()
 		{
 			StringBuilder::Alloc->Cast<TypedAlloc<tnAlloc>>().Deallocate(Buffer);
 			StringBuilder::Count = 0;
@@ -184,23 +201,23 @@ namespace fe
 
 		void Append(String string)
 		{
-			UInt required_capacity = Count + string.Count;
-			if (Buffer.Count < required_capacity)
+			UInt required_capacity = StringBuilder::Count + string.Count;
+			if (StringBuilder::Buffer.Count < required_capacity)
 				ReserveAtLeast(required_capacity);
 
-			std::memcpy(&Buffer[Count], string.Data, string.Count);
-			Count += string.Count;
+			std::memcpy(&StringBuilder::Buffer[StringBuilder::Count], string.Data, string.Count);
+			StringBuilder::Count += string.Count;
 		}
 
 		void Append(const char* ptr, UInt lengthWithNull)
 		{
 			UInt append_count = lengthWithNull - 1;
-			UInt required_capacity = Count + append_count;
+			UInt required_capacity = StringBuilder::Count + append_count;
 			if (Buffer.Count < required_capacity)
 				ReserveAtLeast(required_capacity);
 
-			std::memcpy(&Buffer[Count], ptr, append_count);
-			Count += append_count;
+			std::memcpy(&StringBuilder::Buffer[StringBuilder::Count], ptr, append_count);
+			StringBuilder::Count += append_count;
 		}
 
 		void Append(const char* ptr)
@@ -214,27 +231,37 @@ namespace fe
 				current++;
 			}
 
-			if (Buffer.Count < Count + size)
-				ReserveAtLeast(Count + size);
+			if (StringBuilder::Buffer.Count < StringBuilder::Count + size)
+				ReserveAtLeast(StringBuilder::Count + size);
 
-			std::memcpy(&Buffer[Count], ptr, size);
-			Count += size;
+			std::memcpy(&StringBuilder::Buffer[StringBuilder::Count], ptr, size);
+			StringBuilder::Count += size;
 		}
 
 		void ReserveExact(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
+			FE_CORE_ASSERT(capacity > StringBuilder::Buffer.Count, "StringBuilder allready bigger");
+
+			if (!StringBuilder::Buffer.Elements)
+			{
+				StringBuilder::Buffer = StringBuilder::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<char8_t>(capacity);
+				return;
+			}
 
 			AllocateAndMove(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
-			FE_CORE_ASSERT(capacity > Buffer.Count, "StringBuilder allready bigger");
+			FE_CORE_ASSERT(capacity > StringBuilder::Buffer.Count, "StringBuilder allready bigger");
 
-			bool any_capacity = Buffer.Count;
-			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+			if (!StringBuilder::Buffer.Elements)
+			{
+				StringBuilder::Buffer = StringBuilder::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<char8_t>(capacity);
+				return;
+			}
+
+			UInt new_capacity = StringBuilder::Buffer.Count + (StringBuilder::Buffer.Count >> 1); // *1.5
 
 			bool default_better = capacity < new_capacity;
 			new_capacity = new_capacity * default_better + capacity * !default_better;
@@ -244,23 +271,27 @@ namespace fe
 
 		void ExpandDefault()
 		{
-			bool any_capacity = Buffer.Count;
-			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
+			if (!StringBuilder::Buffer.Elements)
+			{
+				StringBuilder::Buffer = StringBuilder::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<char8_t>(2);
+				return;
+			}
+
+			UInt new_capacity = StringBuilder::Buffer.Count + (StringBuilder::Buffer.Count >> 1); // *1.5
 
 			AllocateAndMove(new_capacity);
 		}
 
 		void AllocateAndMove(UInt capacity)
 		{
-			Splice<char8_t> move_splice = Buffer;
-			move_splice.Count = Count;
+			Splice<char8_t> move_splice = StringBuilder::Buffer;
+			move_splice.Count = StringBuilder::Count;
 
-			Splice<char8_t> new_buffer = Alloc->Cast<TypedAlloc<tnAlloc>>().Reallocate<char8_t>(Buffer, move_splice, capacity);
+			Splice<char8_t> new_buffer = Alloc->Cast<TypedAlloc<tnAlloc>>().Reallocate<char8_t>(StringBuilder::Buffer, move_splice, capacity);
 
 			FE_CORE_ASSERT(new_buffer.Elements && new_buffer.Count, "Failed to reallocate StringBuilder");
 
-			Buffer = new_buffer;
+			StringBuilder::Buffer = new_buffer;
 		}
 	};
 }

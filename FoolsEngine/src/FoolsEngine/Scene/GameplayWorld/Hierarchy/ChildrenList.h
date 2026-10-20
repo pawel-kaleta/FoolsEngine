@@ -3,8 +3,8 @@
 #include "FoolsEngine/Scene/ECS.h"
 #include "FoolsEngine/Scene/Component.h"
 
-#include "FoolsEngine/Foundation/Memory/Arena.h"
-#include "FoolsEngine/Foundation/Utils/Context.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 
 namespace fe

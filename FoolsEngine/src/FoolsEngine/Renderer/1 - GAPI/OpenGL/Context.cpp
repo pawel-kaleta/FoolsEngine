@@ -83,33 +83,8 @@ namespace fe::Render::GAPI
 			FE_ASSERTION_BREAK();
 	}
 
-	GLFWwindow* BaseWindow = nullptr;
-
-	bool Create()
+	void Create()
 	{
-		// window creation
-		{
-			FE_PROFILER_SCOPE("GLFW_Create_BaseWindowInvisible");
-
-#ifdef FE_INTERNAL_BUILD
-			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
-#endif // FE_INTERNAL_BUILD
-
-			glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-
-			BaseWindow = glfwCreateWindow(32, 32, "", NULL, NULL); // arbytrary unimportant resolution - invisible placeholder window
-
-			if (!BaseWindow)
-			{
-				FE_CORE_ASSERT(false, "GLFW BaseWindowInvisible creation failed!");
-				return false;
-			}
-
-			glfwMakeContextCurrent(BaseWindow);
-
-			glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE); // restore default
-		}
-
 		{
 			FE_PROFILER_SCOPE("gladLoadGLLoader");
 			int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
@@ -136,11 +111,9 @@ namespace fe::Render::GAPI
 		}
 #endif // FE_INTERNAL_BUILD
 
-		Context::InitGPU(1024 * 64);
-
-		Context::Log::Core.Info("OpenGL Rendering Context created"_FE);
-
 		OpenGL::CreateRegistries();
+
+		Context::Log::Core.Info("GAPI Registries created"_FE);
 	}
 
 	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height)

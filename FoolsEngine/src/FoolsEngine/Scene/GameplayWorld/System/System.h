@@ -4,8 +4,8 @@
 
 #include "FoolsEngine/Scene/SimulationStage.h"
 
-#include "FoolsEngine/Foundation/Memory/Pile.h"
-#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 
 namespace YAML

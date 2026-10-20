@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 #include "FoolsEngine/Application/Application.h"
 

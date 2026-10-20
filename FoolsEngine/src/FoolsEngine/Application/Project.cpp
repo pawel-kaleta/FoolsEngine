@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine/Foundation/Debug/Log.h"
+#include "FoolsEngine/Foundation/Debug/Logger.h"
 
 namespace fe
 {

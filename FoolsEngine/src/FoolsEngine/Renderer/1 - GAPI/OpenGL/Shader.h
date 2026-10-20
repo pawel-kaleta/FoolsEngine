@@ -1,8 +1,8 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
-#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 

@@ -3,7 +3,7 @@
 #include "Actor.h"
 #include "Behavior.h"
 
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 namespace fe
 {

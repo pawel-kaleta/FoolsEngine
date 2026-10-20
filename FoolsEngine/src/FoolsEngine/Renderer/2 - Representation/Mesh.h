@@ -2,7 +2,7 @@
 
 #include "Material.h"
 
-#include "FoolsEngine/Foundation/Memory/Splice.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"

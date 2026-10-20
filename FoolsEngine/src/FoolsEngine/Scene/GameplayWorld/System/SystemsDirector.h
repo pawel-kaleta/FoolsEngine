@@ -3,10 +3,10 @@
 #include "System.h"
 
 #include "FoolsEngine/Scene/SimulationStage.h"
-#include "FoolsEngine/Foundation/Memory/Arena.h"
-#include "FoolsEngine/Foundation/Memory/Splice.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 
 namespace fe

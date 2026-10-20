@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
 namespace fe::Render::GAPI::OpenGL

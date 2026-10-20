@@ -1,0 +1,33 @@
+{"otherdata": {}, "traceEvents": [ {},{
+"cat": "function",
+"dur": 195,
+"name": "Allocators",
+"ph": "X",
+"pid": 0,
+"tid": 20412,
+"ts": 969547307745.700,
+"args":{}},{
+"cat": "function",
+"dur": 45011,
+"name": "GLFW_Initialization",
+"ph": "X",
+"pid": 0,
+"tid": 20412,
+"ts": 969547308299.000,
+"args":{}},{
+"cat": "function",
+"dur": 45072,
+"name": "bool fe::PlatformBaseWindows::Create(void)",
+"ph": "X",
+"pid": 0,
+"tid": 20412,
+"ts": 969547308298.900,
+"args":{}},{
+"cat": "function",
+"dur": 45121,
+"name": "Platform",
+"ph": "X",
+"pid": 0,
+"tid": 20412,
+"ts": 969547308293.100,
+"args":{}}]}

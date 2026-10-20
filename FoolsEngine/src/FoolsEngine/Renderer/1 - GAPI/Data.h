@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/Utils/DeclareEnum.h"
-#include "FoolsEngine/Foundation/Memory/Splice.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
 
 namespace fe::Render::GAPI
 {

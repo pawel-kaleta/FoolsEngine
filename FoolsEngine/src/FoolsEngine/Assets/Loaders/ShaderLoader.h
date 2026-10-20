@@ -3,7 +3,7 @@
 #include "FoolsEngine/Assets/AssetHandle.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 

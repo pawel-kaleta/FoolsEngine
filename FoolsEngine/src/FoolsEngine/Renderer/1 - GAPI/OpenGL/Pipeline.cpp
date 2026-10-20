@@ -1,4 +1,4 @@
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"
 

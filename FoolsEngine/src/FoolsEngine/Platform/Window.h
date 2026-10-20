@@ -9,8 +9,6 @@ namespace fe
 		class Event;
 	}
 
-	class RenderContext;
-
 	struct WindowAttributes
 	{
 		std::string Title;

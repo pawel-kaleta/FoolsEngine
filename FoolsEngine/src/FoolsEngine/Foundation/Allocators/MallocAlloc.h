@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Allocator.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 
 #include <cstdlib>
@@ -20,7 +21,7 @@ namespace fe
 		
 		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) override final
 		{
-			FE_CORE_ASSERT(alignment > 8, "MallocAllocator does not align to anything more then 8");
+			FE_CORE_ASSERT(alignment <= 8, "MallocAllocator does not align to anything more then 8");
 			return AllocateRaw(bytes); //we dont allign, because delete() takes alignment and we dont require it in our interface
 		}
 		virtual void DeallocateRaw(Splice<Byte> memReg) override final { std::free(memReg.Elements); }

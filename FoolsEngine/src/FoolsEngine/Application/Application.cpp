@@ -3,9 +3,10 @@
 #include "Time.h"
 #include "Project.h"
 
-#include "FoolsEngine/Foundation/Memory/Xar.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Utils/Context.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
+#include "FoolsEngine/Foundation/Context/GlobalContext.h"
+#include "FoolsEngine/Foundation/Containers/Xar.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
 
 #include "FoolsEngine/Platform/FileDialogs.h"
 #include "FoolsEngine/Platform/Events/Event.h"
@@ -71,33 +72,31 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		// Rendering, Window and Platform Layer
 		{
-			FE_PROFILER_SCOPE("Platform Layer, Render Context, Window");
+			FE_PROFILER_SCOPE("Window");
+			Context::Log::ScopeCore scope("Window"_FE);
 
-			{
-				FE_PROFILER_SCOPE("PlatformBase");
-				m_PlatformBase = Context::Alloc::Permanent.Allocate<PlatformBase>();
-				m_PlatformBase->Create();
-			}
+			Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
+			new (window) Win32Window(s_ApplicationSpecification->WindowAttributes);
 
-			{
-				FE_PROFILER_SCOPE("RenderContext");
-				FE_CORE_ASSERT(false, "Not implemented");
-				//m_RenderContext = Context::Alloc::Permanent.Allocate<RenderContext_OpenGL>();
-				//m_RenderContext->Create();
-			}
-
-			{
-				FE_PROFILER_SCOPE("Window");
-				Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
-				new (window) Win32Window(s_ApplicationSpecification->WindowAttributes, Render::GAPI::BaseWindow);
-				m_PlatformBase->SetEventCallbacks(window);
-				window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
-				m_Window = window;
-			}
+			GlobalContext::Platform::Base.SetEventCallbacks(window);
+			window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
+			GlobalContext::Window::Base = window;
 		}
 
+		{
+			FE_PROFILER_SCOPE("RenderContext");
+			Context::Log::ScopeCore scope("RenderContext"_FE);
+
+			Render::GAPI::Create();
+			Context::Log::Core.Info("Context created"_FE);
+
+			Context::GPU::ScratchBufferSize = 1024 * 64;
+			Context::GPU::ScratchBuffer = Render::GAPI::CreateBuffer();
+			Render::GAPI::AllocateCommitBuffer(Context::GPU::ScratchBuffer, 1024 * 64);
+			Context::Log::Core.Info("MainLoopArena initialized"_FE);
+		}
+		
 		{
 			FE_PROFILER_SCOPE("Renderer");
 
@@ -306,10 +305,16 @@ namespace fe
 
 		// Rendering, Window and Platform Layer
 		{
-			FE_PROFILER_SCOPE("Rendering, Window and Platform Layer");
+			FE_PROFILER_SCOPE("Window");
 			Renderer::Shutdown();
 			
-			delete m_Window; // abstraction, safer to destroy
+			delete GlobalContext::Window::Base; // abstraction, safer to destroy
+		}
+
+		{
+			FE_PROFILER_SCOPE("PlatformBase");
+
+			GlobalContext::Platform::Base.Terminate();
 		}
 
 		// Allocators

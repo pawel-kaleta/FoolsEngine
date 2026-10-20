@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataTypes.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 
 #include <cstring>
 

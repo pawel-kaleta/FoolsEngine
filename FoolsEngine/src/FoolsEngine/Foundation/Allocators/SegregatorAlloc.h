@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Allocator.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 namespace fe

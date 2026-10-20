@@ -1,10 +1,10 @@
 #include "ShaderLoader.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
-#include "FoolsEngine/Foundation/Memory/Pile.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
 
-#include "FoolsEngine/Foundation/Debug/Log.h"
+#include "FoolsEngine/Foundation/Debug/Logger.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"

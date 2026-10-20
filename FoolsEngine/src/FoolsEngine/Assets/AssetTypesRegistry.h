@@ -2,8 +2,8 @@
 
 #include "Asset.h"
 #include "Loaders/LoaderType.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 
 namespace YAML { class Emitter; }

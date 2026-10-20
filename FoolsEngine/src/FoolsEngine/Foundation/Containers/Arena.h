@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Splice.h"
-#include "Pile.h"
-#include "FoolsEngine/Foundation/Utils/Context.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
 
 #include <cstring>
 
@@ -490,16 +490,26 @@ namespace fe
 		{
 			FE_CORE_ASSERT(capacity > Buffer.Count, "DynamicArena allready bigger");
 
-			AllocateAndMove(capacity);
+			if (!Buffer.Elements)
+			{
+				Buffer = Alloc->Allocate<T>(capacity);
+				return;
+			}
+			
+			return AllocateAndMove(capacity);
 		}
 
 		void ReserveAtLeast(UInt capacity)
 		{
 			FE_CORE_ASSERT(capacity > Buffer.Count, "DynamicArena allready bigger");
 
-			bool any_capacity = Buffer.Count;
+			if (!Buffer.Elements)
+			{
+				Buffer = Alloc->Allocate<T>(capacity);
+				return;
+			}
+
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			bool default_better = capacity < new_capacity;
 			new_capacity = new_capacity * default_better + capacity * !default_better;
@@ -509,9 +519,13 @@ namespace fe
 
 		void ExpandDefault()
 		{
-			bool any_capacity = Buffer.Count;
+			if (!Buffer.Elements)
+			{
+				Buffer = Alloc->Allocate<T>(2);
+				return;
+			}
+
 			UInt new_capacity = Buffer.Count + (Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			AllocateAndMove(new_capacity);
 		}
@@ -618,6 +632,12 @@ namespace fe
 		{
 			FE_CORE_ASSERT(capacity > DynamicArena<T>::Buffer.Count, "DynamicArenaSA allready bigger");
 
+			if (!DynamicArena<T>::Buffer.Elements)
+			{
+				DynamicArena<T>::Buffer = DynamicArena<T>::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<T>(capacity);
+				return;
+			}
+
 			AllocateAndMove(capacity);
 		}
 
@@ -625,9 +645,13 @@ namespace fe
 		{
 			FE_CORE_ASSERT(capacity > DynamicArena<T>::Buffer.Count, "DynamicArenaSA allready bigger");
 
-			bool any_capacity = DynamicArena<T>::Buffer.Count;
+			if (!DynamicArena<T>::Buffer.Elements)
+			{
+				DynamicArena<T>::Buffer = DynamicArena<T>::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<T>(capacity);
+				return;
+			}
+
 			UInt new_capacity = DynamicArena<T>::Buffer.Count + (DynamicArena<T>::Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			bool default_better = capacity < new_capacity;
 			new_capacity = new_capacity * default_better + capacity * !default_better;
@@ -637,9 +661,13 @@ namespace fe
 
 		void ExpandDefault()
 		{
-			bool any_capacity = DynamicArena<T>::Buffer.Count;
+			if (!DynamicArena<T>::Buffer.Elements)
+			{
+				DynamicArena<T>::Buffer = DynamicArena<T>::Alloc->Cast<TypedAlloc<tnAlloc>>().Allocate<T>(2);
+				return;
+			}
+
 			UInt new_capacity = DynamicArena<T>::Buffer.Count + (DynamicArena<T>::Buffer.Count >> 1); // *1.5
-			new_capacity = new_capacity * any_capacity + 2 * !any_capacity;
 
 			AllocateAndMove(new_capacity);
 		}

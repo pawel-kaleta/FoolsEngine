@@ -3,7 +3,7 @@
 #include "LoaderType.h"
 
 #include "FoolsEngine/Assets/AssetTypes.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 namespace fe
 {

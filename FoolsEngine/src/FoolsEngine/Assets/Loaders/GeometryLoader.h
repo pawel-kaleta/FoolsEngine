@@ -5,7 +5,7 @@
 #include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
 #include "FoolsEngine/Renderer/2 - Representation/Model.h"
 
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #include <filesystem>
 

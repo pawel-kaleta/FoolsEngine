@@ -6,7 +6,7 @@
 #include "FoolsEngine/Scene/Component.h"
 #include "FoolsEngine/Scene/SimulationStage.h"
 
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
 namespace fe

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DataTypes.h"
-#include "Splice.h"
-#include "Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
 
 namespace fe
 {

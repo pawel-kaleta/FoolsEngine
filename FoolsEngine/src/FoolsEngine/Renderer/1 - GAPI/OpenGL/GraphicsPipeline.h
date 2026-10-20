@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
-#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Data.h"

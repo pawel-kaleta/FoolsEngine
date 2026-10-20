@@ -4,10 +4,10 @@
 
 #include "FoolsEngine/Application/Application.h"
 
-#include "FoolsEngine/Foundation/Utils/Context.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
-#include "FoolsEngine/Foundation/Utils/Init.h"
+#include "FoolsEngine/Foundation/Init.h"
 
 #ifdef FE_PLATFORM_WINDOWS
 
@@ -20,9 +20,7 @@ int main(int argc, char** argv)
 {
 	using namespace fe;
 
-	InitLog().Init(24 * 1024);
-
-	//fe::Log::Init();
+	InitContext().InitGlobal();
 
 	fe::Application* app;
 	{

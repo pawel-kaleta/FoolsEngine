@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #include "Context.h"
 #include "Data.h"

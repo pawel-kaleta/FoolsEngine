@@ -17,7 +17,7 @@ namespace fe
 	class Win32Window : public Window
 	{
 	public:
-		Win32Window(const WindowAttributes& attr, GLFWwindow* nativeWindow);
+		Win32Window(const WindowAttributes& attr);
 		~Win32Window() override;
 
 		virtual void OnUpdate() override;
@@ -45,7 +45,7 @@ namespace fe
 
 		WinData m_Data;
 
-		void Init(const WindowAttributes& attr, GLFWwindow* nativeWindow);
+		void Init(const WindowAttributes& attr);
 		void ShutDown();
 	};
 }

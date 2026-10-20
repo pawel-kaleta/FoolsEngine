@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 #include "FoolsEngine/Assets/Asset.h"
 #include "FoolsEngine/Assets/AssetInterface.h"

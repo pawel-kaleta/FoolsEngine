@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 #include "InternalID.h"
 

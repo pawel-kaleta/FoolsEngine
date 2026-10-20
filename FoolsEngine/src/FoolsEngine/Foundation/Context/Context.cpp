@@ -1,21 +1,19 @@
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/ArenaAlloc.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
-
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Logger.h"
-
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Allocators/ArenaAlloc.h"
+#include "FoolsEngine/Foundation/Allocators/MallocAlloc.h"
+#include "FoolsEngine/Foundation/Allocators/MonotonicAlloc.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+#include "FoolsEngine/Platform/PlatformBase.h"
 
-#include "Init.h"
+// TO BE THREAD LOCAL
 
 namespace fe::Context
 {
 	namespace Alloc
 	{
-		//PageAllocator					Page;
-		//VirtualAllocator				Virtual;
 		TypedAlloc<MonotonicAlloc>		Permanent;
 		TypedAlloc<MallocAlloc>			GeneralPurpose;
 		TypedAlloc<ArenaAlloc>			MainLoopArena;
@@ -32,11 +30,13 @@ namespace fe::Context
 
 	namespace GPU
 	{
-		using namespace Render;
-		GAPI::GID ScrachBuffer;
-		U32 ScrachBufferSize;
+		Render::GAPI::GID ScratchBuffer;
+		U32 ScratchBufferSize;
 	}
 
-	
+	namespace Platform
+	{
+		PlatformBase Base;
+	}
 }
 

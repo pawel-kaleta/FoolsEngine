@@ -1,7 +1,7 @@
 #include "Texture.h"
 
-#include "FoolsEngine/Foundation/Memory/Pile.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
 
 #include "FoolsEngine/Application/Project.h"
 

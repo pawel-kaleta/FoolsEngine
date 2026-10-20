@@ -18,7 +18,7 @@ namespace fe::Render::GAPI
 	ObjType GetObjType(GID obj);
 
 
-	bool Create();
+	void Create();
 
 	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height);
 }

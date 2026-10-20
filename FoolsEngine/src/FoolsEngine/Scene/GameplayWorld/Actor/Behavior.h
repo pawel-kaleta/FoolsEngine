@@ -4,7 +4,7 @@
 #include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 #include "FoolsEngine/Scene/GameplayWorld/CompPtr.h"
 
-#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 #include <string>
 

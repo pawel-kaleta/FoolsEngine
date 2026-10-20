@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Allocator.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
+
+#include <memory_resource>
 
 namespace fe
 {

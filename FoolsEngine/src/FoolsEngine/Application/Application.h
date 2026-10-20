@@ -5,7 +5,7 @@
 #include "ImGui/ImGuiLayer.h"
 
 #include "FoolsEngine/Foundation/Utils/Core.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #include "FoolsEngine/Platform/Window.h"
 #include "FoolsEngine/Platform/PlatformBase.h"

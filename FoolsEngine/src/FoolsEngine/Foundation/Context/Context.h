@@ -1,13 +1,15 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/ArenaAlloc.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/MallocAlloc.h"
-#include "FoolsEngine/Foundation/Memory/Allocators/MonotonicAlloc.h"
+#include "FoolsEngine/Foundation/Debug/Logger.h"
+
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Allocators/ArenaAlloc.h"
+#include "FoolsEngine/Foundation/Allocators/MallocAlloc.h"
+#include "FoolsEngine/Foundation/Allocators/MonotonicAlloc.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 
-#include "FoolsEngine/Foundation/Debug/Logger.h"
+#include "FoolsEngine/Platform/PlatformBase.h"
 
 namespace fe::Context
 {
@@ -79,11 +81,6 @@ namespace fe::Context
 		};
 	}
 
-	namespace Profile
-	{
-
-	}
-
 	namespace Debug
 	{
 		// assertion failure handler
@@ -97,8 +94,8 @@ namespace fe::Context
 	namespace GPU
 	{
 		using namespace Render;
-		extern GAPI::GID ScrachBuffer;
-		extern U32 ScrachBufferSize;
+		extern GAPI::GID ScratchBuffer;
+		extern U32 ScratchBufferSize;
 	}
 
 }

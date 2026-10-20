@@ -4,10 +4,10 @@
 // To do: create a nice include folder with include batches based on areas/namespaces
 
 #include "FoolsEngine/Foundation/Math/Math.h"
+#include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/Colors.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
-#include "FoolsEngine/Foundation/Memory/Xar.h"
-#include "FoolsEngine/Foundation/Debug/Asserts.h"
+#include "FoolsEngine/Foundation/Containers/Xar.h"
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine/Foundation/Debug/Profiler.h"

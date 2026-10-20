@@ -6,8 +6,8 @@
 #include "Loaders/GeometryLoader.h"
 #include "Serialization/YAML.h"
 
-#include "FoolsEngine/Foundation/Memory/Pile.h"
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/5 - Integration/Renderer.h"

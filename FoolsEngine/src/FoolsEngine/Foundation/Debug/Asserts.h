@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "Log.h"
 #include "Profiler.h"
 
 #include "FoolsEngine/Foundation/Debug/Logger.h"

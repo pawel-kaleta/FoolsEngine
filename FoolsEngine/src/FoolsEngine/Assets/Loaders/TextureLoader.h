@@ -2,7 +2,7 @@
 
 #include "FoolsEngine/Application/Project.h"
 
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #include "FoolsEngine/Assets/AssetAccessors.h"
 #include "FoolsEngine/Assets/Loaders/LoaderType.h"

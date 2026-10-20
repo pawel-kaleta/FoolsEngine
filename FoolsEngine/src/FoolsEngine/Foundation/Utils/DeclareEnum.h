@@ -2,9 +2,9 @@
 
 #include "ForEach.h"
 
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
-#include "FoolsEngine/Foundation/Memory/String.h"
-#include "FoolsEngine/Foundation/Memory/DataTypes.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 
 #define _FROM_STRING(x) if (CompareStringsEqual(string, String(#x, sizeof(#x)))) { Value = x; return; }
 #define _TO_STRING(x) case x: return CString(#x, sizeof(#x));

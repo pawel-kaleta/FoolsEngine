@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Debug/Profiler.h"
-#include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Platform/Events/Event.h"
-#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
-#include "FoolsEngine/Foundation/Memory/Pile.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
+#include "FoolsEngine/Foundation/Debug/Profiler.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 namespace fe
 {

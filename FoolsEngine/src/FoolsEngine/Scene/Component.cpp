@@ -3,8 +3,8 @@
 #include "BaseEntity.h"
 #include "GameplayWorld/Entity.h"
 
-#include "FoolsEngine/Foundation/Memory/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Memory/StringBuilder.h"
+#include "FoolsEngine/Foundation/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 
 #include "FoolsEngine/Application/Project.h"

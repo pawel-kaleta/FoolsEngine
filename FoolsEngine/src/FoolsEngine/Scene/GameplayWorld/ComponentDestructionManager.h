@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Scene/ECS.h"
-#include "FoolsEngine/Foundation/Memory/Arena.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 
 namespace fe
 {

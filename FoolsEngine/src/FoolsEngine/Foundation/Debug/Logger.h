@@ -2,7 +2,7 @@
 
 #include "LoggingLevel.h"
 
-#include "FoolsEngine/Foundation/Memory/String.h"
+#include "FoolsEngine/Foundation/Containers/String.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include <spdlog/spdlog.h>
@@ -54,7 +54,7 @@ namespace fe
 			mSuffixesCount = 0;
 
 			auto loggingTarget = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-			loggingTarget->set_pattern("%^%M:%S:%f | %-3n | %v%$");
+			loggingTarget->set_pattern("%^%M:%S:%f | %-2n | %v%$");
 
 			mLogger = std::make_shared<spdlog::logger>("FE");
 			mLogger->sinks().push_back(loggingTarget);

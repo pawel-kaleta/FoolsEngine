@@ -9,12 +9,12 @@
 
 namespace fe
 {
-	Win32Window::Win32Window(const WindowAttributes& attr, GLFWwindow* nativeWindow)
+	Win32Window::Win32Window(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
 		
 		m_GAPI = attr.GAPI;
-		Init(attr, nativeWindow);
+		Init(attr);
 	}
 
 	Win32Window::~Win32Window()
@@ -37,7 +37,7 @@ namespace fe
 		}
 	}
 
-	void Win32Window::Init(const WindowAttributes& attr, GLFWwindow* nativeWindow)
+	void Win32Window::Init(const WindowAttributes& attr)
 	{
 		FE_PROFILER_FUNC();
 
@@ -46,19 +46,27 @@ namespace fe
 		m_Data.Height = attr.Height;
 
 		// window creation
-		//{
-		//	FE_PROFILER_SCOPE("GLFW_CreateWindow");
-		//	FE_LOG_CORE_INFO("Creating Window {0} ({1}, {2})", attr.Title, attr.Width, attr.Height);
-		//
-		//	#ifdef FE_INTERNAL_BUILD
-		//	glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
-		//	#endif // FE_INTERNAL_BUILD
-		//
-		//	m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr);
-		//}		
-		m_Window = nativeWindow;
-		glfwShowWindow(nativeWindow);
-		glfwSetWindowUserPointer(nativeWindow, &m_Data);
+		{
+			FE_PROFILER_SCOPE("GLFW_Create_Window");
+
+#ifdef FE_INTERNAL_BUILD
+			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
+#endif // FE_INTERNAL_BUILD
+
+			//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE); // no need
+
+			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr); // arbytrary unimportant resolution - invisible placeholder window
+
+			if (!m_Window)
+			{
+				FE_CORE_ASSERT(false, "GLFW Window creation failed!");
+			}
+
+			glfwMakeContextCurrent(m_Window);
+		}
+	
+		glfwShowWindow(m_Window);
+		glfwSetWindowUserPointer(m_Window, &m_Data);
 	}
 
 	void Win32Window::ShutDown()
