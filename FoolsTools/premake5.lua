@@ -28,12 +28,18 @@ project "FoolsTools"
 		"FoolsEngine"
 	}
 
-	defines "YAML_CPP_STATIC_DEFINE"
+	defines {
+		common_defines
+	}
 
 	filter "system:windows"
 		systemversion "latest"
 		defines	{
 			"FE_PLATFORM_WINDOWS",
+			"FE_PARAMS_PILE_SIZE=20*1024",
+			"FE_PARAMS_HEADLESS=false",
+			"FE_PARAMS_asd",
+			"FE_PARAMS_sss",
 			"GLFW_INCLUDE_NONE"
 		}
 

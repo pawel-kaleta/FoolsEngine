@@ -22,17 +22,20 @@
     <Filter Include="FoolsEngine\Foundation">
       <UniqueIdentifier>{A45E3A38-9058-638A-79C5-F99A655EC9F6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FoolsEngine\Foundation\Allocators">
+      <UniqueIdentifier>{E7E5B0B9-5354-0639-9C3D-C13808EBFBD4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Foundation\Containers">
+      <UniqueIdentifier>{A9328574-15A1-DAF3-5E8A-95F3CA37D08F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FoolsEngine\Foundation\Context">
+      <UniqueIdentifier>{383DF9B3-2463-C31A-0DA9-48E6F96DE8E6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="FoolsEngine\Foundation\Debug">
       <UniqueIdentifier>{1AD401A1-068F-F14C-AF46-6A979BE03BDD}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Foundation\Math">
       <UniqueIdentifier>{FD897133-6997-9F19-F27D-9B045E8A6BD0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FoolsEngine\Foundation\Memory">
-      <UniqueIdentifier>{8CB540D6-F8CD-2700-C17A-B7992D52BC99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FoolsEngine\Foundation\Memory\Allocators">
-      <UniqueIdentifier>{CF1BE2E5-BB98-D528-E415-D63CD0F171BC}</UniqueIdentifier>
     </Filter>
     <Filter Include="FoolsEngine\Foundation\Utils">
       <UniqueIdentifier>{04CB3DA2-F085-2D4E-993D-A69885D777DE}</UniqueIdentifier>
@@ -158,11 +161,83 @@
     <ClInclude Include="src\FoolsEngine\Assets\Serialization\YAML.h">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\Allocator.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\ArenaAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\BitmappedPoolAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\FallbackAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\MallocAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\MonotonicAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\NullAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\SegregatorAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\StaticArenaAlloc.h">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Arena.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Bitset.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Pool.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Queue.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Splice.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\String.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\StringBuilder.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Xar.h">
+      <Filter>FoolsEngine\Foundation\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\Context.h">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContext.h">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\Pile.h">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\DataTypes.h">
+      <Filter>FoolsEngine\Foundation</Filter>
+    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h">
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Logger.h">
+      <Filter>FoolsEngine\Foundation\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Debug\LoggingLevel.h">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Profiler.h">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Foundation\Init.h">
+      <Filter>FoolsEngine\Foundation</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Math.h">
       <Filter>FoolsEngine\Foundation\Math</Filter>
@@ -170,61 +245,10 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Math\Transform.h">
       <Filter>FoolsEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\Allocator.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\ArenaAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\BitmappedPoolAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\FallbackAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\MallocAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\MonotonicAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\SegregatorAlloc.h">
-      <Filter>FoolsEngine\Foundation\Memory\Allocators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Arena.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Bitset.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\DataTypes.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Context\Pile.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Pool.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Queue.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Splice.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\String.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\Xar.h">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\BitOperations.h">
       <Filter>FoolsEngine\Foundation\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Colors.h">
-      <Filter>FoolsEngine\Foundation\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Context\Context.h">
       <Filter>FoolsEngine\Foundation\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Utils\Core.h">
@@ -416,10 +440,10 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\System.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.h">
+    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\Scene.h">
@@ -431,12 +455,6 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Debug\LoggingLevel.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Debug\Logger.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Init.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Allocators\NullAlloc.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Containers\StringBuilder.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -493,20 +511,29 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp">
       <Filter>FoolsEngine\Assets\Serialization</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Allocators\AllocatorsImplementation.cpp">
+      <Filter>FoolsEngine\Foundation\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Context\Context.cpp">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Context\GlobalContext.cpp">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Context\Pile.cpp">
+      <Filter>FoolsEngine\Foundation\Context</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp">
       <Filter>FoolsEngine\Foundation\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Foundation\Init.cpp">
+      <Filter>FoolsEngine\Foundation</Filter>
+    </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Math\Math.cpp">
       <Filter>FoolsEngine\Foundation\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Context\Pile.cpp">
-      <Filter>FoolsEngine\Foundation\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Context\Context.cpp">
-      <Filter>FoolsEngine\Foundation\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Platform\Events\MainEventDispacher.cpp">
       <Filter>FoolsEngine\Platform\Events</Filter>
@@ -604,10 +631,10 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Scene.cpp">
@@ -616,8 +643,5 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Init.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Allocators\AllocatorsImplementation.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Context\GlobalContext.cpp" />
   </ItemGroup>
 </Project>

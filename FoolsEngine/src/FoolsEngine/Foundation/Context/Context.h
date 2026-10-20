@@ -3,7 +3,7 @@
 #include "FoolsEngine/Foundation/Debug/Logger.h"
 
 #include "FoolsEngine/Foundation/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Allocators/ArenaAlloc.h"
+#include "FoolsEngine/Foundation/Allocators/StaticArenaAlloc.h"
 #include "FoolsEngine/Foundation/Allocators/MallocAlloc.h"
 #include "FoolsEngine/Foundation/Allocators/MonotonicAlloc.h"
 
@@ -19,7 +19,9 @@ namespace fe::Context
 		//extern VirtualAllocator					Virtual;
 		extern TypedAlloc<MonotonicAlloc>		Permanent;
 		extern TypedAlloc<MallocAlloc>			GeneralPurpose;
-		extern TypedAlloc<ArenaAlloc>			MainLoopArena;
+		extern TypedAlloc<StaticArenaAlloc
+				<FE_PARAMS_MAIN_ARENA_SIZE>>	MainLoopArena;
+
 		extern PMAlloc						*	Default;
 		extern PMAlloc						*	Auxiliary;
 		extern PMAlloc						*	Output;

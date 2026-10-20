@@ -33,6 +33,6 @@ namespace fe
 	const T& min(const T& a, const T& b)
 	{
 		bool condition = b < a;
-		return condition * b + !condition * a;
+		return *(T*)((uintptr_t)&b * condition + (uintptr_t)&a * !condition);
 	}
 }

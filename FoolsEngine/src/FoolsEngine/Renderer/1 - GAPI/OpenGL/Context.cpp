@@ -89,6 +89,7 @@ namespace fe::Render::GAPI
 			FE_PROFILER_SCOPE("gladLoadGLLoader");
 			int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
 			FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
+			Context::Log::Core.Info("GAPI Loaded - OpenGL"_FE);
 		}
 
 		{
@@ -111,7 +112,10 @@ namespace fe::Render::GAPI
 		}
 #endif // FE_INTERNAL_BUILD
 
-		OpenGL::CreateRegistries();
+		{
+			FE_PROFILER_SCOPE("Registries creation");
+			OpenGL::CreateRegistries();
+		}
 
 		Context::Log::Core.Info("GAPI Registries created"_FE);
 	}

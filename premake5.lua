@@ -29,6 +29,17 @@ common_includedirs = {
 	"../FoolsEngine/externals/_projects_of_externals/assimp/include"
 }
 
+common_defines = {
+	"YAML_CPP_STATIC_DEFINE",
+	"FE_EDITOR",
+	"FE_PARAMS_PILE_SIZE=20*1024",
+	"FE_PARAMS_HEADLESS=false",
+	"FE_PARAMS_MAIN_ARENA_SIZE=32*1024",
+	"FE_PARAMS_GAPI=OpenGL",
+	"FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE=32*1024",
+	"FE_PARAMS_NAME=\"FoolsEngine\""
+}
+
 group "Dependencies"
 	include "FoolsEngine/externals"
 group ""

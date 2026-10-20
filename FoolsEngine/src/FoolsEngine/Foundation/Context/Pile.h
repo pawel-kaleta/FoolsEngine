@@ -260,7 +260,7 @@ namespace fe
 		}
 
 	private:
-		static constexpr UInt s_BufferSize = 20 * 1024; // 20KB
+		static constexpr UInt s_BufferSize = FE_PARAMS_PILE_SIZE; // 20KB
 		static Byte s_Buffer[s_BufferSize];
 		static Byte* s_Free;
 		static U64 s_RollbackFlags;

@@ -9,7 +9,7 @@ namespace fe
 	class EditorApp : public Application
 	{
 	public:
-		EditorApp(const ApplicationSpecification& spec);
+		EditorApp();
 		virtual ~EditorApp() = default;
 
 		virtual void ClientAppStartup() override;

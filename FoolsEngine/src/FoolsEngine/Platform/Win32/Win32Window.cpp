@@ -2,7 +2,6 @@
 
 #include "FoolsEngine/Platform/Events/Event.h"
 
-#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 // fe::InputCodes are compatibile with GLFW so no keycode conversion is needed
@@ -47,7 +46,7 @@ namespace fe
 
 		// window creation
 		{
-			FE_PROFILER_SCOPE("GLFW_Create_Window");
+			FE_PROFILER_SCOPE("GLFW_Create_Window_and_OpenGL_Context");
 
 #ifdef FE_INTERNAL_BUILD
 			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
@@ -55,7 +54,7 @@ namespace fe
 
 			//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE); // no need
 
-			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title.c_str(), nullptr, nullptr); // arbytrary unimportant resolution - invisible placeholder window
+			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title, nullptr, nullptr); // arbytrary unimportant resolution - invisible placeholder window
 
 			if (!m_Window)
 			{
@@ -65,7 +64,6 @@ namespace fe
 			glfwMakeContextCurrent(m_Window);
 		}
 	
-		glfwShowWindow(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 	}
 

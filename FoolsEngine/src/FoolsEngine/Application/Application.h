@@ -14,8 +14,6 @@
 int main(int argc, char** argv);
 namespace fe
 {
-	struct RenderContext_OpenGL;
-
 	namespace Events
 	{
 		class Event;
@@ -23,25 +21,6 @@ namespace fe
 		class KeyPressedEvent;
 		class WindowResizeEvent;
 	}
-
-	struct ApplicationCommandLineArgs
-	{
-		int Count = 0;
-		char** Args = nullptr;
-
-		const char* operator[](int index) const
-		{
-			FE_CORE_ASSERT(index < Count, "ApplicationCommandLineArgs index out of scope");
-			return Args[index];
-		}
-	};
-
-	struct ApplicationSpecification
-	{
-		String Name = String("FoolsEngine Application"_FE);
-		WindowAttributes WindowAttributes;
-		ApplicationCommandLineArgs CommandLineArgs;
-	};
 
 	class ComponentTypesRegistry;
 	class BehaviorsRegistry;
@@ -55,7 +34,7 @@ namespace fe
 	class Application
 	{
 	public:
-				 Application(const ApplicationSpecification& appSpecification);
+				 Application();
 		virtual ~Application();
 
 		static Application& Get() { return *s_Instance; }
@@ -65,9 +44,6 @@ namespace fe
 		MainEventDispacher	m_MainEventDispacher;
 		LayerStack*			m_LayerStack;
 
-		Window*					m_Window;
-		RenderContext_OpenGL*	m_RenderContext;
-		PlatformBase*			m_PlatformBase;
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
 
@@ -119,5 +95,5 @@ namespace fe
 	};
 
 	// To be defined in FoolsEngine application (game)
-	Application* CreateApplication(const ApplicationCommandLineArgs& args);
+	Application* CreateApplication();
 }

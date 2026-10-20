@@ -38,8 +38,7 @@ project "FoolsEngine"
 	}
 
 	defines {
-		"YAML_CPP_STATIC_DEFINE",
-		"FE_EDITOR"
+		common_defines
 	}
 
 	filter "system:windows"

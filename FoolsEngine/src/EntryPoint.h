@@ -13,7 +13,7 @@
 
 namespace fe
 {
-	extern Application* CreateApplication(const ApplicationCommandLineArgs& args);
+	extern Application* CreateApplication();
 }
 
 int main(int argc, char** argv)
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 		Context::Log::ScopeCore startup("STARTUP"_FE, LoggingLevel::Trace);
 	
 		FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
-		app = fe::CreateApplication({ argc, argv });
+		app = fe::CreateApplication();
 		app->Startup();
 		FE_PROFILER_SESSION_END();
 	}

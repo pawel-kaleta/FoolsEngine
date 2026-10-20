@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PARAMS_MAIN_ARENA_SIZE=32*1024;FE_PARAMS_GAPI=OpenGL;FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE=32*1024;FE_PARAMS_NAME="FoolsEngine";FE_PLATFORM_WINDOWS;FE_PARAMS_PILE_SIZE=20*1024;FE_PARAMS_HEADLESS=false;FE_PARAMS_asd;FE_PARAMS_sss;GLFW_INCLUDE_NONE;FE_DEBUG;FE_INTERNAL_BUILD;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;..\FoolsEngine\externals\assimp\include;..\FoolsEngine\externals\_projects_of_externals\assimp\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -100,7 +100,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PARAMS_MAIN_ARENA_SIZE=32*1024;FE_PARAMS_GAPI=OpenGL;FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE=32*1024;FE_PARAMS_NAME="FoolsEngine";FE_PLATFORM_WINDOWS;FE_PARAMS_PILE_SIZE=20*1024;FE_PARAMS_HEADLESS=false;FE_PARAMS_asd;FE_PARAMS_sss;GLFW_INCLUDE_NONE;FE_RELEASE;FE_INTERNAL_BUILD;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;..\FoolsEngine\externals\assimp\include;..\FoolsEngine\externals\_projects_of_externals\assimp\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
@@ -127,7 +127,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;FE_PUBLISH;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;FE_PARAMS_MAIN_ARENA_SIZE=32*1024;FE_PARAMS_GAPI=OpenGL;FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE=32*1024;FE_PARAMS_NAME="FoolsEngine";FE_PLATFORM_WINDOWS;FE_PARAMS_PILE_SIZE=20*1024;FE_PARAMS_HEADLESS=false;FE_PARAMS_asd;FE_PARAMS_sss;GLFW_INCLUDE_NONE;FE_PUBLISH;FE_EDITOR;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\FoolsEngine\src;..\FoolsEngine\externals\spdlog\include;..\FoolsEngine\externals\glfw\include;..\FoolsEngine\externals\glad\include;..\FoolsEngine\externals\imgui;..\FoolsEngine\externals\glm;..\FoolsEngine\externals\stb;..\FoolsEngine\externals\EnTT\src;..\FoolsEngine\externals\yaml-cpp\include;..\FoolsEngine\externals\ImGuizmo;..\FoolsEngine\externals\assimp\include;..\FoolsEngine\externals\_projects_of_externals\assimp\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>

@@ -23,19 +23,14 @@
 #include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
 #include "FoolsEngine/Assets/Serialization/AssetsRegistrySerialization.h"
 
+
+
 namespace fe
 {
-	ApplicationSpecification* s_ApplicationSpecification = nullptr; //TO DO: get rid of this
-
 	namespace Time
 	{
 		extern TimePoint s_LastFrameTimePoint;
 		extern TimeStep	s_LastFrameTimeStep;
-	}
-
-	namespace Render::GAPI
-	{
-		extern GLFWwindow* BaseWindow;
 	}
 
 	class ApplicationLayer : public Layer
@@ -55,16 +50,12 @@ namespace fe
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const ApplicationSpecification& appSpecification)
-		: m_Name(appSpecification.Name)
+	Application::Application()
 	{
 		FE_PROFILER_FUNC();
 
 		FE_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
-
-		s_ApplicationSpecification = new ApplicationSpecification;
-		*s_ApplicationSpecification = appSpecification;
 	}
 
 
@@ -72,31 +63,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Context::Log::ScopeCore scope_log("App"_FE);
+
 		{
 			FE_PROFILER_SCOPE("Window");
 			Context::Log::ScopeCore scope("Window"_FE);
 
-			Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
-			new (window) Win32Window(s_ApplicationSpecification->WindowAttributes);
-
-			GlobalContext::Platform::Base.SetEventCallbacks(window);
-			window->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
-			GlobalContext::Window::Base = window;
+			GlobalContext::Window::Base->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
 		}
 
-		{
-			FE_PROFILER_SCOPE("RenderContext");
-			Context::Log::ScopeCore scope("RenderContext"_FE);
-
-			Render::GAPI::Create();
-			Context::Log::Core.Info("Context created"_FE);
-
-			Context::GPU::ScratchBufferSize = 1024 * 64;
-			Context::GPU::ScratchBuffer = Render::GAPI::CreateBuffer();
-			Render::GAPI::AllocateCommitBuffer(Context::GPU::ScratchBuffer, 1024 * 64);
-			Context::Log::Core.Info("MainLoopArena initialized"_FE);
-		}
-		
 		{
 			FE_PROFILER_SCOPE("Renderer");
 
@@ -164,7 +139,7 @@ namespace fe
 		{
 			m_ImGuiLayer->End();
 			m_MainEventDispacher.DispachEvents(*m_LayerStack);
-			m_Window->OnUpdate();
+			GlobalContext::Window::Base->OnUpdate();
 			m_ImGuiLayer->Begin();
 		}
 		m_ImGuiLayer->End();
@@ -226,7 +201,7 @@ namespace fe
 					m_ImGuiLayer->End();
 				}
 			}
-			m_Window->OnUpdate();
+			GlobalContext::Window::Base->OnUpdate();
 		}
 
 #ifdef FE_INTERNAL_BUILD
@@ -303,24 +278,9 @@ namespace fe
 			*/
 		}
 
-		// Rendering, Window and Platform Layer
-		{
-			FE_PROFILER_SCOPE("Window");
-			Renderer::Shutdown();
-			
-			delete GlobalContext::Window::Base; // abstraction, safer to destroy
-		}
+		Renderer::Shutdown();
 
-		{
-			FE_PROFILER_SCOPE("PlatformBase");
-
-			GlobalContext::Platform::Base.Terminate();
-		}
-
-		// Allocators
-		{
-			FE_PROFILER_SCOPE("Allocators");
-		}
+		
 	}
 
 	Application::~Application()

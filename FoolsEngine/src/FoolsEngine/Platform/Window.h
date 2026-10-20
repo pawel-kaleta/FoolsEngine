@@ -11,12 +11,12 @@ namespace fe
 
 	struct WindowAttributes
 	{
-		std::string Title;
+		const char* Title;
 		uint32_t Width;
 		uint32_t Height;
 		Render::GAPI::Platform GAPI;
 
-		WindowAttributes(const std::string& title = "FoolsEngine",
+		WindowAttributes(const char* title = "FoolsEngine",
 		                 uint32_t width = 1600,
 		                 uint32_t height = 900,
 						 Render::GAPI::Platform GAPI = Render::GAPI::Platform::OpenGL)

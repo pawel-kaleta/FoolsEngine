@@ -2,6 +2,8 @@
 
 #include "FoolsEngine/Application/Application.h"
 
+#include "FoolsEngine/Foundation/Context/GlobalContext.h"
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -11,21 +13,21 @@ namespace fe
 {
     bool InputPolling::IsKeyPressed(int keycode)
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().m_Window->GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(GlobalContext::Window::Base->GetNativeWindow());
         auto state = glfwGetKey(window, keycode);
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
     bool InputPolling::IsMouseButtonPressed(int button)
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().m_Window->GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(GlobalContext::Window::Base->GetNativeWindow());
         auto state = glfwGetMouseButton(window, button);
         return state == GLFW_PRESS;
     }
 
     glm::vec2 InputPolling::GetMousePosition()
     {
-        GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().m_Window->GetNativeWindow());
+        GLFWwindow* window = static_cast<GLFWwindow*>(GlobalContext::Window::Base->GetNativeWindow());
         double x, y;
         glfwGetCursorPos(window, &x, &y);
         return { (float)x, (float)y };
