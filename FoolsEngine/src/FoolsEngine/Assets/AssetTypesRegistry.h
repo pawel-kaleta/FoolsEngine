@@ -35,7 +35,11 @@ namespace fe
 
 		friend class Application;
 		
-		AssetTypesRegistry() { s_Instance = this; };
+		AssetTypesRegistry()
+		{
+			s_Instance = this;
+			m_Items.Init();
+		};
 		
 		template <typename tnAsset>
 		void RegisterAssetType();

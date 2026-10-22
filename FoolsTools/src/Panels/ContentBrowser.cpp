@@ -40,7 +40,6 @@ namespace fe
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
-		auto GAPI = Renderer::GetActivePlatform();
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_Icons.File.SendDataToGPU(GAPI);
 		//m_Icons.Folder.SendDataToGPU(GAPI);

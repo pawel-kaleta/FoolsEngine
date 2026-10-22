@@ -63,7 +63,12 @@ namespace fe
 		static ComponentTypesRegistry* s_Instance;
 
 		friend class Application;
-		ComponentTypesRegistry() { s_Instance = this; };
+		ComponentTypesRegistry()
+		{
+			s_Instance = this;
+			m_DataItems.Init();
+			m_FlagItems.Init();
+		};
 		void RegisterComponents();
 		void Shutdown() {};
 	};

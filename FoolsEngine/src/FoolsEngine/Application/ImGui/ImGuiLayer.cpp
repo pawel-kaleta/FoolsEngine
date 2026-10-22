@@ -114,8 +114,8 @@ namespace fe {
 		FE_PROFILER_FUNC();
 
 		ImGuiIO& io = ImGui::GetIO();
-		Window& window = *(Window*)GlobalContext::Window::Base->GetNativeWindow();
-		io.DisplaySize = ImVec2((float)window.GetWidth(), (float)window.GetHeight());
+		Window::Attributes& win_attr = GlobalContext::Window::Base->mAttributes;
+		io.DisplaySize = ImVec2((float)win_attr.Width, (float)win_attr.Height);
 
 		ImGui::Render();
 

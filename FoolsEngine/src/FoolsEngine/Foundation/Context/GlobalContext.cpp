@@ -17,6 +17,11 @@ namespace fe::GlobalContext
 		Sink App;
 	}
 
+	namespace Platform
+	{
+		PlatformBase Base;
+	}
+
 	namespace Window
 	{
 		fe::Window* Base;
@@ -24,12 +29,7 @@ namespace fe::GlobalContext
 
 	namespace GPU
 	{
-		
-	}
-
-	namespace Platform
-	{
-		PlatformBase Base;
+		Render::GAPI::Platform GAPI;
 	}
 }
 

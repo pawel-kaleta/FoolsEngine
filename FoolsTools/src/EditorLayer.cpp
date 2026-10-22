@@ -140,7 +140,7 @@ namespace fe
 			auto& ambient_light_intensity = Renderer::SceneData.AmbientLightIntensity;
 			ImGui::DragFloat("Ambient Light Intensity", &ambient_light_intensity, 0.01f, 0.0f, 1.0f);
 
-			const auto& stats = Renderer2D::Get().m_Stats;
+			const auto& stats = Renderer2D::m_Stats;
 			ImGui::Text("Renderer2D Stats:");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.Quads);

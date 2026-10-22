@@ -15,8 +15,6 @@ namespace fe::Context
 {
 	namespace Alloc
 	{
-		//extern PageAllocator					Page;
-		//extern VirtualAllocator					Virtual;
 		extern TypedAlloc<MonotonicAlloc>		Permanent;
 		extern TypedAlloc<MallocAlloc>			GeneralPurpose;
 		extern TypedAlloc<StaticArenaAlloc

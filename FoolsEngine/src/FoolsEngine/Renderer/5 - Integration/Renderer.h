@@ -20,15 +20,10 @@ namespace fe
 	class Renderer
 	{
 	public:
-		const static Render::GAPI::Platform GetActivePlatform() { return s_ActiveGAPI; }
-
 		static void Startup();
 		static void AcquireBaseAssets();
-		static void UploadBaseAssetsToGPU(Render::GAPI::Platform GAPI);
+		static void UploadBaseAssetsToGPU();
 		static void Shutdown();
-		static void SetAPI(Render::GAPI::Platform GAPI);
-		static void CreateAPI(Render::GAPI::Platform GAPI);
-		static void InitAPI(Render::GAPI::Platform GAPI);
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
@@ -71,8 +66,5 @@ namespace fe
 			Transform CameraTransform;
 			AssetID Scene;
 		} SceneData;
-
-	private:
-		static Render::GAPI::Platform s_ActiveGAPI;
 	};
 }

@@ -13,8 +13,6 @@
 #include <GLFW/glfw3.h>
 
 
-static fe::WindowAttributes sWindowAttributes = { FE_PARAMS_NAME, 1900, 1000, fe::Render::GAPI::Platform::FE_PARAMS_GAPI};
-
 void InitContext::InitGlobal()
 {
 	using namespace fe;
@@ -23,7 +21,7 @@ void InitContext::InitGlobal()
 
 	Context::Log::ScopeCore init_scope("Global Init"_FE, LoggingLevel::Trace);
 	FE_PROFILER_SESSION_START("INIT", "Logs/ProfileData_Init.json");
-	
+
 	{
 		Context::Log::ScopeCore log_scope("Logging"_FE);
 		Context::Log::Core.Info("Logging initialized");
@@ -38,6 +36,9 @@ void InitContext::InitGlobal()
 		Context::Log::Core.Info("Permanent initialized");
 		Context::Alloc::MainLoopArena.Clear();
 		Context::Log::Core.Info("MainLoopArena initialized");
+		Context::Alloc::Default = (PMAlloc*) & Context::Alloc::GeneralPurpose;
+		Context::Alloc::Auxiliary = (PMAlloc*)&Context::Alloc::GeneralPurpose;
+		Context::Alloc::Output = (PMAlloc*)&Context::Alloc::GeneralPurpose;
 	}
 
 	{
@@ -61,7 +62,8 @@ void InitContext::InitGlobal()
 			}
 
 			Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
-			new (window) Win32Window(sWindowAttributes);
+			window->Init({ FE_PARAMS_NAME, 1900, 1000, fe::Render::GAPI::Platform::FE_PARAMS_GAPI });
+			window->Create();
 			Context::Log::Core.Info("Window created"_FE);
 
 			GlobalContext::Platform::Base.SetEventCallbacks(window);
@@ -71,6 +73,8 @@ void InitContext::InitGlobal()
 		{
 			FE_PROFILER_SCOPE("GAPI");
 			Context::Log::ScopeCore scope("GAPI"_FE);
+
+			GlobalContext::GPU::GAPI = Render::GAPI::Platform::FE_PARAMS_GAPI;
 
 			Render::GAPI::Create();
 

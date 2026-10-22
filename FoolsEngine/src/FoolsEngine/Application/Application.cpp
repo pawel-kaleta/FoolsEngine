@@ -69,66 +69,88 @@ namespace fe
 			FE_PROFILER_SCOPE("Window");
 			Context::Log::ScopeCore scope("Window"_FE);
 
-			GlobalContext::Window::Base->SetEventCallback(std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1));
+			GlobalContext::Window::Base->mEventCallback = std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1);
 		}
 
 		{
 			FE_PROFILER_SCOPE("Renderer");
+			Context::Log::ScopeCore scope("Renderer"_FE);
 
-			Render::GAPI::Platform GAPI;// = m_RenderContext->GAPIType;
 			Renderer::Startup();
-			Renderer::CreateAPI(GAPI);
-			Renderer::InitAPI(GAPI);
-			Renderer::SetAPI(GAPI);
+			Context::Log::Core.Info("Renderer initialized"_FE);
 		}
 		
 		// Types Registries
 		{
 			FE_PROFILER_SCOPE("Types Registries");
+			Context::Log::ScopeCore scope("Types Registries"_FE);
 
 			m_ComponentTypesRegistry = new ComponentTypesRegistry();
 			m_ComponentTypesRegistry->RegisterComponents();
+			Context::Log::Core.Info("Componets registry created"_FE);
 
 			m_BehaviorsRegistry = new BehaviorsRegistry();
 			m_BehaviorsRegistry->RegisterBehaviors();
+			Context::Log::Core.Info("Behaviors registry created"_FE);
 		
 			m_SystemsRegistry = new SystemTypesRegistry();
 			m_SystemsRegistry->RegisterSystems();
+			Context::Log::Core.Info("Systems registry created"_FE);
 
 			m_AssetTypesRegistry = new AssetTypesRegistry();
 			m_AssetTypesRegistry->RegisterAssetTypes();
+			Context::Log::Core.Info("AssetTypes registry created"_FE);
 
 			m_LoadersRegistry = new LoadersRegistry();
 			m_LoadersRegistry->RegisterLoaders();
+			Context::Log::Core.Info("Loaders registry created"_FE);
+
+			Context::Log::Core.Info("Types Registries created"_FE);
 		}
 
 		// Asset manager
 		{
 			FE_PROFILER_SCOPE("Asset manager");
+			Context::Log::ScopeCore scope("Asset manager"_FE);
+
 			m_AssetManager = new AssetManager();
+
+			Context::Log::Core.Info("Asset manager created"_FE);
 		}
 
 		// Layers Stack
 		{
 			FE_PROFILER_SCOPE("Layer Stack");
+			Context::Log::ScopeCore scope("Layer Stack"_FE);
+
 			m_LayerStack = new LayerStack();
+
+			Context::Log::Core.Info("Layer Stack created"_FE);
 		}
 
 		// Core layers
 		{
 			FE_PROFILER_SCOPE("Core layers");
+			Context::Log::ScopeCore scope("Core layers"_FE);
+
 			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 			m_LayerStack->PushOuterLayer(m_AppLayer);
 
 			m_ImGuiLayer = CreateRef<ImGuiLayer>();
 			m_ImGuiLayer->Startup();
 			m_LayerStack->PushOuterLayer(m_ImGuiLayer);
+
+			Context::Log::Core.Info("Core layers created"_FE);
 		}
 
 		// Client Application
 		{
 			FE_PROFILER_SCOPE("Client app startup");
+			Context::Log::ScopeCore scope("Client app"_FE);
+
 			ClientAppStartup();
+
+			Context::Log::Core.Info("Client app created"_FE);
 		}
 	}
 

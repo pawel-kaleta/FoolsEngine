@@ -24,7 +24,6 @@ namespace fe
 {
 	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
-	Render::GAPI::Platform Renderer::s_ActiveGAPI = Render::GAPI::Platform::None;
 
 	void Renderer::Startup()
 	{
@@ -94,12 +93,12 @@ namespace fe
 		//BaseAssets.Materials.DefaultCutout.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DCutout.Observe());
 		//BaseAssets.Materials.DefaultTranslucent.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DBlend.Observe());
 
-		UploadBaseAssetsToGPU(GetActivePlatform());
+		UploadBaseAssetsToGPU();
 
 		Context::Log::Core.Info("Base Assets acquired"_FE);
 	}
 
-	void Renderer::UploadBaseAssetsToGPU(Render::GAPI::Platform GAPI)
+	void Renderer::UploadBaseAssetsToGPU()
 	{
 		FE_PROFILER_FUNC();
 
@@ -114,47 +113,6 @@ namespace fe
 		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DOpaque.Use());
 		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DCutout.Use());
 		//ShaderLoader::CompileShader(GAPI, BaseAssets.Shaders.Base3DBlend.Use());
-	}
-
-	void Renderer::SetAPI(Render::GAPI::Platform GAPI)
-	{
-		FE_PROFILER_FUNC();
-		FE_CORE_ASSERT(false, "Not implemented");
-		
-		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
-		
-		s_ActiveGAPI = GAPI;
-
-		//auto& device_API = s_DeviceAPIs.at(GAPI);
-
-		//RenderCommands::SetAPI(device_API.get());
-
-		Renderer2D::Init();
-		GeometryRenderer::Init();
-	}
-
-	void Renderer::CreateAPI(Render::GAPI::Platform GAPI)
-	{
-		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(false, "Not implemented");
-
-		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) == s_DeviceAPIs.end(), "API already created!");
-
-		//s_DeviceAPIs[GAPI] = RenderCommands::CreateAPI(GAPI);
-	}
-
-	void Renderer::InitAPI(Render::GAPI::Platform GAPI)
-	{
-		FE_PROFILER_FUNC();
-
-		FE_CORE_ASSERT(false, "Not implemented");
-
-		//FE_CORE_ASSERT(s_DeviceAPIs.find(GAPI) != s_DeviceAPIs.end(), "API not created!");
-
-		//auto& deviceAPI = s_DeviceAPIs.at(GAPI);
-
-		//deviceAPI->Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -207,7 +165,7 @@ namespace fe
 
 		//Command::ResourceState::Clear_OpenGL();
 		
-		switch (s_ActiveGAPI.Value)
+		switch (Render::GAPI::Platform::FE_PARAMS_GAPI)
 		{
 		case Render::GAPI::Platform::OpenGL:
 			SceneData.VPMatrix = projection * glm::inverse(view);

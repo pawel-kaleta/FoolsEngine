@@ -9,38 +9,36 @@ namespace fe
 		class Event;
 	}
 
-	struct WindowAttributes
-	{
-		const char* Title;
-		uint32_t Width;
-		uint32_t Height;
-		Render::GAPI::Platform GAPI;
-
-		WindowAttributes(const char* title = "FoolsEngine",
-		                 uint32_t width = 1600,
-		                 uint32_t height = 900,
-						 Render::GAPI::Platform GAPI = Render::GAPI::Platform::OpenGL)
-			: Title(title), Width(width), Height(height), GAPI(GAPI)
-		{ }
-	};
 
 	class Window
 	{
 	public:
-		virtual ~Window() = default;
+		struct Attributes
+		{
+			String Title;
+			UInt Width;
+			UInt Height;
+			Render::GAPI::Platform GAPI;
+
+			void Init()
+			{
+				Title.Init();
+				Width = -1;
+				Height = -1;
+				GAPI = Render::GAPI::Platform::None;
+			}
+		};
+
+		virtual void Init(const Attributes& attr) = 0;
+		virtual void Create() = 0;
+		virtual void Destroy() = 0;
 
 		virtual void OnUpdate() = 0;
-
-		virtual uint32_t GetWidth() const = 0;
-		virtual uint32_t GetHeight() const = 0;
-		virtual std::string GetTitle() const = 0;
-
-		virtual void SetEventCallback(const std::function<void(std::shared_ptr<Events::Event>)>& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
-		virtual bool IsVSync() const = 0;
-
 		virtual void* GetNativeWindow() const = 0;
 
-		Render::GAPI::Platform m_GAPI = Render::GAPI::Platform::None;
+		Attributes mAttributes;
+		bool mVSync;
+		std::function<void(Ref<Events::Event>)> mEventCallback;
 	};
 }

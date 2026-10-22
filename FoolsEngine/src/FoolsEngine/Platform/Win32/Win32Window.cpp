@@ -1,6 +1,8 @@
 #include "Win32Window.h"
 
 #include "FoolsEngine/Platform/Events/Event.h"
+#include "FoolsEngine/Foundation/Context/Pile.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 #include <GLFW/glfw3.h>
 
@@ -8,19 +10,25 @@
 
 namespace fe
 {
-	Win32Window::Win32Window(const WindowAttributes& attr)
+	void Win32Window::Init(const Attributes& attr)
 	{
 		FE_PROFILER_FUNC();
 		
-		m_GAPI = attr.GAPI;
-		Init(attr);
+		new (this) Win32Window();
+
+		mAttributes = attr;
 	}
 
-	Win32Window::~Win32Window()
+	void Win32Window::Destroy()
 	{
 		FE_PROFILER_FUNC();
 
-		ShutDown();
+		Context::Log::Core.Info("Closing Window."_FE);
+
+		{
+			FE_PROFILER_SCOPE("glfwDestroyWindow()");
+			glfwDestroyWindow(m_Window);
+		}
 	}
 
 	void Win32Window::OnUpdate()
@@ -36,15 +44,10 @@ namespace fe
 		}
 	}
 
-	void Win32Window::Init(const WindowAttributes& attr)
+	void Win32Window::Create()
 	{
 		FE_PROFILER_FUNC();
 
-		m_Data.Title = attr.Title;
-		m_Data.Width = attr.Width;
-		m_Data.Height = attr.Height;
-
-		// window creation
 		{
 			FE_PROFILER_SCOPE("GLFW_Create_Window_and_OpenGL_Context");
 
@@ -52,9 +55,9 @@ namespace fe
 			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
 #endif // FE_INTERNAL_BUILD
 
-			//glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE); // no need
-
-			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, attr.Title, nullptr, nullptr); // arbytrary unimportant resolution - invisible placeholder window
+			const auto& attr = mAttributes;
+			Pile p;
+			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, GetCString(attr.Title, &p).Data, nullptr, nullptr);
 
 			if (!m_Window)
 			{
@@ -64,25 +67,14 @@ namespace fe
 			glfwMakeContextCurrent(m_Window);
 		}
 	
-		glfwSetWindowUserPointer(m_Window, &m_Data);
-	}
-
-	void Win32Window::ShutDown()
-	{
-		FE_PROFILER_FUNC();
-		Context::Log::Core.Info("Closing Window."_FE);
-
-		{
-			FE_PROFILER_SCOPE("glfwDestroyWindow()");
-			glfwDestroyWindow(m_Window);
-		}
+		glfwSetWindowUserPointer(m_Window, this);
 	}
 
 	void Win32Window::SetVSync(bool enabled)
 	{
 		FE_PROFILER_FUNC();
 
-		if (m_Data.VSync == enabled)
+		if (mVSync == enabled)
 			return;
 
 		GLFWwindow* backup_current_context = glfwGetCurrentContext();
@@ -100,7 +92,7 @@ namespace fe
 			glfwSwapInterval(0);
 			Context::Log::Core.Info("VSync disabled."_FE);
 		}
-		m_Data.VSync = enabled;
+		mVSync = enabled;
 
 		if (backup_current_context != m_Window)
 			glfwMakeContextCurrent(backup_current_context);

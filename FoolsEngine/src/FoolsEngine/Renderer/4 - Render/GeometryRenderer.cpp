@@ -22,7 +22,6 @@ namespace fe
 
 	void GeometryRenderer::RenderCRenderMeshView(const AssetObserver& scene)
 	{
-		auto GAPI = Renderer::GetActivePlatform();
 		void* VP_matrix_ptr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
@@ -94,7 +93,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto GAPI = Renderer::GetActivePlatform();
 		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
 		void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
 		void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);

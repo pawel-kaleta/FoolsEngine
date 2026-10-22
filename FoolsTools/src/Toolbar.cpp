@@ -16,7 +16,6 @@ namespace fe
 		TextureLoader::LoadTexture("resources/StopButton.png" , m_IconStop);
 		TextureLoader::LoadTexture("resources/PauseButton.png", m_IconPause);
 
-		auto GAPI = Renderer::GetActivePlatform();
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_IconPlay.SendDataToGPU(GAPI);
 		//m_IconStop.SendDataToGPU(GAPI);
@@ -42,7 +41,6 @@ namespace fe
 
 		float size = ImGui::GetContentRegionAvail().y - 6.0f; // padding bottom and top
 
-		auto GAPI = Renderer::GetActivePlatform();
 
 		FE_CORE_ASSERT(false, "not implemented");
 		switch (m_EditorState)

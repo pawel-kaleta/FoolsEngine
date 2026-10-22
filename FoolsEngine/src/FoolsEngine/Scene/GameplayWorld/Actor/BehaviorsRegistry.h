@@ -37,7 +37,11 @@ namespace fe
 		static BehaviorsRegistry* s_Instance;
 
 		friend class Application;
-		BehaviorsRegistry() { s_Instance = this;}
+		BehaviorsRegistry()
+		{
+			s_Instance = this;
+			m_Items.Init();
+		}
 		void RegisterBehaviors();
 		void Shutdown() {};
 	};

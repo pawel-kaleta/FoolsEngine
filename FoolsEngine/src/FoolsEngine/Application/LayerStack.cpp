@@ -33,7 +33,7 @@ namespace fe
 
 		m_Layers.push_back(layer);
 
-		Context::Log::Core.Info("New outer layer \"{0}\" added to LayerStack"_FE, layer->ToString());
+		Context::Log::Core.Info("New outer layer {0} added to LayerStack"_FE, layer->ToString());
 
 		layer->OnAttach();
 	}

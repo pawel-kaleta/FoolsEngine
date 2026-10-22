@@ -31,7 +31,7 @@ namespace fe::GlobalContext
 
 	namespace GPU
 	{
-		
+		extern Render::GAPI::Platform GAPI;
 	}
 
 }

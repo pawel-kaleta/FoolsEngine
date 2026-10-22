@@ -21,26 +21,44 @@
 
 namespace fe
 {
-	Renderer2D* Renderer2D::s_Instance;
+	static Render::GAPI::GID sIndexBuffer;
+	static Render::GAPI::GID sVertexDownStream;
+
+	Renderer2D::RenderStats Renderer2D::m_Stats;
+
+	static Renderer2D::BatchData m_Batch;
+	static Time::TimePoint m_RenderStartTimePoint;
+	static AssetHandle<Shader> m_BaseShader;
 
 	void Renderer2D::Startup()
-	{
-		s_Instance = new Renderer2D;
-	}
-
-	void Renderer2D::Init()
 	{
 		FE_PROFILER_FUNC();
 
 		Pile p;
 
-		FE_CORE_ASSERT(false, "not implemented");
-		//s_Instance->m_QuadVertexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		//s_Instance->m_QuadVertexBuffer->Size = ConstLimits::QuadsInBatch * 4 * sizeof(QuadVertex);
-		//s_Instance->m_QuadVertexBuffer->Create();
-		//
-		//uint32_t layoutID = (uint32_t)Description::Library::Get().BufferLayouts.Count;
-		//auto& layout = *Description::Library::Get().BufferLayouts.PushBack();
+		{
+			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");
+
+			sIndexBuffer = Render::GAPI::CreateBuffer();
+			U32* indices = (U32*)Render::GAPI::AllocateBuffer(sIndexBuffer, ConstLimits::MaxIndices * sizeof(U32));
+
+			for (UInt i = 0; i < ConstLimits::QuadsInBatch; i++)
+			{
+				indices[i * 6 + 0] = i * 4 + 0;
+				indices[i * 6 + 1] = i * 4 + 1;
+				indices[i * 6 + 2] = i * 4 + 2;
+				
+				indices[i * 6 + 3] = i * 4 + 2;
+				indices[i * 6 + 4] = i * 4 + 3;
+				indices[i * 6 + 5] = i * 4 + 0;
+			}
+
+			Render::GAPI::CommitBuffer(sIndexBuffer);
+		}
+
+
+		Context::Log::Core.Error("Renderer2D startup not implemented"_FE);
+
 		//
 		//layout.Type = Description::Buffer::LayoutType::Vertex;
 		//layout.Elements.emplace_back(Description::Data::Type::Float3, "a_Position");
@@ -52,30 +70,6 @@ namespace fe
 
 		//layout.CalculateOffsetsAndStride();
 
-		using QuadsIndexBufferData = Array<uint32_t, ConstLimits::MaxIndices>;
-		QuadsIndexBufferData* quad_indices = p.Allocate<uint32_t, ConstLimits::MaxIndices>();
-
-		{
-			FE_PROFILER_SCOPE("QuadsIndexBufferData generation");
-						
-			size_t quad_count = quad_indices->Count / 6;
-			for (size_t i = 0; i < quad_count; i++)
-			{
-				(*quad_indices)[i * 6 + 0] = (uint32_t)(i * 4 + 0);
-				(*quad_indices)[i * 6 + 1] = (uint32_t)(i * 4 + 1);
-				(*quad_indices)[i * 6 + 2] = (uint32_t)(i * 4 + 2);
-			
-				(*quad_indices)[i * 6 + 3] = (uint32_t)(i * 4 + 2);
-				(*quad_indices)[i * 6 + 4] = (uint32_t)(i * 4 + 3);
-				(*quad_indices)[i * 6 + 5] = (uint32_t)(i * 4 + 0);
-			}
-		}
-
-		//s_Instance->m_QuadIndexBuffer.reset(new Resource::RStaticBuffer_OpenGL());
-		//s_Instance->m_QuadIndexBuffer->Size = ConstLimits::MaxIndices;
-		//s_Instance->m_QuadIndexBuffer->Create();
-		FE_CORE_ASSERT(false, "not implemented");
-		//s_Instance->m_QuadIndexBuffer->Replace(ConstLimits::MaxIndices, quad_indices->data());
 
 		//s_Instance->m_VertexArray.reset(new Resource::RMeshBindings_OpenGL());
 		//s_Instance->m_VertexArray->LayoutID = layoutID;
@@ -99,16 +93,18 @@ namespace fe
 	void Renderer2D::Shutdown()
 	{
 		FE_PROFILER_FUNC();
-		delete s_Instance;
+		
+		FE_CORE_ASSERT(false, "Not implemented");
 	}
 
 	void Renderer2D::BeginScene()
 	{
 		FE_PROFILER_FUNC();
 
+
+		FE_CORE_ASSERT(false, "Not implemented");
 		//Command::PipelineState::SetDepthTest<GAPIType::OpenGL>(true);
 
-		auto GAPI = Renderer::GetActivePlatform();
 
 		ClearBatch();
 
@@ -145,7 +141,10 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		s_Instance->BeginScene();
+		Context::Log::Core.Error("Renderer2::RenderScene not implemented"_FE);
+		return;
+
+		BeginScene();
 
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
@@ -157,10 +156,10 @@ namespace fe
 			if (!tile_comp.Tile.Texture.IsValid()) continue;
 			if (tile_comp.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entity_transform_comp.GetRef() + tile_comp.Offset;
-			s_Instance->BatchQuadDrawCall(tile_comp.Tile, transform, ID);
+			BatchQuadDrawCall(tile_comp.Tile, transform, ID);
 		}
 
-		s_Instance->Flush();
+		Flush();
 
 		registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
 			const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
@@ -180,11 +179,11 @@ namespace fe
 			if (!sprite_comp.Sprite.Texture.IsValid()) continue;
 			if (sprite_comp.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entity_transform_comp.GetRef() + sprite_comp.Offset;
-			s_Instance->BatchQuadDrawCall(sprite_comp.Sprite, transform, ID);
-			s_Instance->Flush();
+			BatchQuadDrawCall(sprite_comp.Sprite, transform, ID);
+			Flush();
 		}
 
-		s_Instance->EndScene();
+		EndScene();
 	}
 
 	void Renderer2D::EndScene()
@@ -283,8 +282,6 @@ namespace fe
 
 		FE_CORE_ASSERT(false, "not implemented");
 		//m_QuadVertexBuffer->Update(data_size, m_Batch.QuadVertices->data());
-
-		auto GAPI = Renderer::GetActivePlatform();
 
 		for (unsigned int i = 0; i < m_Batch.TexturesCount; i++)
 		{

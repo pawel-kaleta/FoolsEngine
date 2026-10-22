@@ -37,7 +37,11 @@ namespace fe
 
 		friend class SystemsDirector;
 		friend class Application;
-		SystemTypesRegistry() { s_Instance = this; }
+		SystemTypesRegistry()
+		{
+			s_Instance = this;
+			m_Items.Init();
+		}
 		void RegisterSystems();
 		void Shutdown() {};
 	};

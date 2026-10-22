@@ -24,7 +24,7 @@ namespace fe
 		virtual void OnImGuiRender() { }
 		virtual void OnEvent(Ref<Events::Event> event) { }
 
-		const std::string& ToString() const
+		std::string ToString() const
 		{
 			Pile p;
 			return GetCString(m_Name , &p).Data;

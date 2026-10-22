@@ -155,7 +155,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto GAPI = Renderer::GetActivePlatform();
 		auto& reg = s_Instance->m_Registry;
 
 		auto& groups = s_Instance->m_LoadingGroups;

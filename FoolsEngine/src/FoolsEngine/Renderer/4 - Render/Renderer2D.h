@@ -22,15 +22,13 @@ namespace fe
 	class Renderer2D
 	{
 	public:
-		static Renderer2D& Get() { return *s_Instance; }
-
 		struct RenderStats
 		{
 			uint32_t Quads;
 			uint32_t DrawCalls;
 			Time::TimeStep RenderTime;
 		};
-		RenderStats m_Stats;
+		static RenderStats m_Stats;
 
 		struct Quad
 		{
@@ -41,18 +39,17 @@ namespace fe
 
 		static void RenderScene(const AssetObserver& scene);
 
-	private:
 		friend class Renderer;
 		static void Startup();
 		static void Init();
 		static void Shutdown();
 
 		struct ConstLimits {
-			constexpr static uint32_t QuadsInBatch = 1000;
-			constexpr static uint32_t MaxVeritices = QuadsInBatch * 4;
-			constexpr static uint32_t MaxIndices = QuadsInBatch * 6;
-			constexpr static uint32_t RendererTextureSlotsCount = 32;
-			constexpr static uint32_t LayersCount = 19;
+			constexpr static U32 QuadsInBatch = 1000;
+			constexpr static U32 MaxVeritices = QuadsInBatch * 4;
+			constexpr static U32 MaxIndices = QuadsInBatch * 6;
+			constexpr static U32 RendererTextureSlotsCount = 32;
+			constexpr static U32 LayersCount = 19;
 		};
 
 		struct QuadVertex
@@ -76,26 +73,18 @@ namespace fe
 			Array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
 			uint32_t TexturesCount = 1;
 		};
+		
 
-		//Ref<Resource::StaticBufferBase> m_QuadVertexBuffer;
-		//Ref<Resource::StaticBufferBase> m_QuadIndexBuffer;
-		//Ref<Resource::MeshBindingsBase> m_VertexArray;
-		//Ref<VertexBuffer> m_QuadVertexBuffer;
-
-		BatchData m_Batch;
-
-		AssetHandle<Shader> m_BaseShader;
+		
 		//ShaderTextureSlot m_BaseShaderTextureSlot;
 		//RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 
-		static Renderer2D* s_Instance;
+		static void BeginScene();
+		static void ClearBatch();
+		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
+		static void Flush();
+		static void EndScene();
 
-		void BeginScene();
-		void ClearBatch();
-		void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
-		void Flush();
-		void EndScene();
-
-		Time::TimePoint m_RenderStartTimePoint;
+		
 	};
 }

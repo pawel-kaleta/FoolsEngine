@@ -47,54 +47,54 @@ namespace fe
 		Context::Log::Core.Info("    WindowResizeEvent"_FE);
 		glfwSetWindowSizeCallback(window->m_Window, [](GLFWwindow* window, int width, int height)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				data.Width = width;
-				data.Height = height;
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
+				win32_window.mAttributes.Width = width;
+				win32_window.mAttributes.Height = height;
 
-				FE_NEW_EVENT(data.EventCallback, event, Events::WindowResizeEvent, width, height);
+				FE_NEW_EVENT(win32_window.mEventCallback, event, Events::WindowResizeEvent, width, height);
 			});
 
 		Context::Log::Core.Info("    WindowCloseEvent"_FE);
 		glfwSetWindowCloseCallback(window->m_Window, [](GLFWwindow* window)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::WindowCloseEvent);
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
+				FE_NEW_EVENT(win32_window.mEventCallback, event, Events::WindowCloseEvent);
 			});
 
 		Context::Log::Core.Info("    WindowFocusChangeEvents"_FE);
 		glfwSetWindowFocusCallback(window->m_Window, [](GLFWwindow* window, int focus)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
 				if (focus)
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::WindowGainedFocusEvent);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::WindowGainedFocusEvent);
 				}
 				else
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::WindowLostFocusEvent);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::WindowLostFocusEvent);
 				}
 			});
 
 		Context::Log::Core.Info("    KeyEvents"_FE);
 		glfwSetKeyCallback(window->m_Window, [](GLFWwindow* window, int key, int scancode, int action, int modes)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
 				case GLFW_PRESS:
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 0);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::KeyPressedEvent, key, 0);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::KeyReleasedEvent, key);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::KeyReleasedEvent, key);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::KeyPressedEvent, key, 1);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::KeyPressedEvent, key, 1);
 					break;
 				}
 				}
@@ -103,25 +103,25 @@ namespace fe
 		Context::Log::Core.Info("    KeyTypedEvent"_FE);
 		glfwSetCharCallback(window->m_Window, [](GLFWwindow* window, unsigned int keycode)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::KeyTypedEvent, keycode);
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
+				FE_NEW_EVENT(win32_window.mEventCallback, event, Events::KeyTypedEvent, keycode);
 			});
 
 		Context::Log::Core.Info("    MouseButtonEvents"_FE);
 		glfwSetMouseButtonCallback(window->m_Window, [](GLFWwindow* window, int button, int action, int mods)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
 				case GLFW_PRESS:
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonPressedEvent, button);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::MouseButtonPressedEvent, button);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					FE_NEW_EVENT(data.EventCallback, event, Events::MouseButtonReleasedEvent, button);
+					FE_NEW_EVENT(win32_window.mEventCallback, event, Events::MouseButtonReleasedEvent, button);
 					break;
 				}
 				}
@@ -130,15 +130,15 @@ namespace fe
 		Context::Log::Core.Info("    MouseScrolledEvent"_FE);
 		glfwSetScrollCallback(window->m_Window, [](GLFWwindow* window, double x_offset, double y_offset)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::MouseScrolledEvent, (float)x_offset, (float)y_offset);
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
+				FE_NEW_EVENT(win32_window.mEventCallback, event, Events::MouseScrolledEvent, (float)x_offset, (float)y_offset);
 			});
 
 		Context::Log::Core.Info("    MouseMovedEvent"_FE);
 		glfwSetCursorPosCallback(window->m_Window, [](GLFWwindow* window, double x_position, double y_position)
 			{
-				Win32Window::WinData& data = *(Win32Window::WinData*)glfwGetWindowUserPointer(window); // data = m_Data
-				FE_NEW_EVENT(data.EventCallback, event, Events::MouseMovedEvent, (float)x_position, (float)y_position);
+				Win32Window& win32_window = *(Win32Window*)glfwGetWindowUserPointer(window);
+				FE_NEW_EVENT(win32_window.mEventCallback, event, Events::MouseMovedEvent, (float)x_position, (float)y_position);
 			});
 	}
 }

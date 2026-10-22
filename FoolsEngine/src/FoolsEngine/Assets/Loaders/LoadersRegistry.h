@@ -28,7 +28,11 @@ namespace fe
 		static LoadersRegistry* s_Instance;
 
 		friend class Application;
-		LoadersRegistry() { s_Instance = this; };
+		LoadersRegistry()
+		{
+			s_Instance = this;
+			m_Items.Init();
+		};
 		void RegisterLoaders();
 		void Shutdown() {};
 

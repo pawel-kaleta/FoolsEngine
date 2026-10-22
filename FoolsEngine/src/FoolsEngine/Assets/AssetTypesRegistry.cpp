@@ -30,8 +30,6 @@ namespace fe
 	template <typename tnAsset>
 	void AssetTypesRegistry::RegisterAssetType()
 	{
-		FE_CORE_ASSERT(false, "Not implemented");
-
 		m_Items.Append(
 			Item{
 				&tnAsset::EmplaceCore,

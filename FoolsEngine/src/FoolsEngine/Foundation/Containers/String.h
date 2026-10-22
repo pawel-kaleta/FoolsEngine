@@ -70,7 +70,6 @@ namespace fe
 
 	inline String operator""_FE(const char* str, std::size_t size)
 	{
-		UInt as = 5;
 		return String(str, size+1);
 	}
 

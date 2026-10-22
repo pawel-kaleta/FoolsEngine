@@ -8,7 +8,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(false, "Not implemented");
+		Context::Log::Core.Warn("Register systems not implemented");
 	}
 
 	const SystemTypesRegistry::Item* SystemTypesRegistry::GetItem(String name)

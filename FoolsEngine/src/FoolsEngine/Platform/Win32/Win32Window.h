@@ -6,46 +6,23 @@
 #include "FoolsEngine/Foundation/Utils/Core.h"
 
 #include <functional>
-#include <string>
 
 struct GLFWwindow;
 
 namespace fe
 {
-	struct RenderContext;
-
-	class Win32Window : public Window
+	class Win32Window final : public Window
 	{
 	public:
-		Win32Window(const WindowAttributes& attr);
-		~Win32Window() override;
+		void Init(const Attributes& attr) final override;
+		void Create() final override;
+		void Destroy() final override;
 
-		virtual void OnUpdate() override;
+		virtual void OnUpdate() final override;
+		virtual void SetVSync(bool enabled) final override;
 
-		unsigned int GetWidth() const override { return m_Data.Width; };
-		unsigned int GetHeight() const override { return m_Data.Height; };
-		std::string GetTitle() const override { return m_Data.Title; };
-
-		virtual void SetEventCallback(const std::function<void(Ref<Events::Event>)>& callback) override { m_Data.EventCallback = callback; }
-		void SetVSync(bool enabled) override;
-		bool IsVSync() const override { return m_Data.VSync; };
-
-		void* GetNativeWindow() const override { return m_Window; };
-
+		virtual void* GetNativeWindow() const final override { return m_Window; };
+		
 		GLFWwindow* m_Window;
-
-		struct WinData
-		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
-
-			std::function<void(Ref<Events::Event>)> EventCallback;
-		};
-
-		WinData m_Data;
-
-		void Init(const WindowAttributes& attr);
-		void ShutDown();
 	};
 }
