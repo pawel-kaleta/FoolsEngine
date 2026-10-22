@@ -22,7 +22,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Model; }
 		static constexpr const char* GetMetaFileExtension() { return ".femodel"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACModel_Core>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACModel_Core>(assetID).Init(); }
 
 		using Core = ACModel_Core;
 	};

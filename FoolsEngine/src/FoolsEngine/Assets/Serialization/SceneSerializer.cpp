@@ -270,7 +270,7 @@ namespace fe
 
 		// Data Components
 		{
-			auto& reg_items = ComponentTypesRegistry::Get().m_DataItems;
+			auto& reg_items = ComponentTypesRegistry::sDataItems;
 
 			for (auto& item : reg_items)
 			{
@@ -278,7 +278,7 @@ namespace fe
 				auto* component = (entity.*get_ptr)();
 				if (component)
 				{
-					emitter << YAML::Key << GetCString(component->GetName(), &p).Data << YAML::BeginMap;
+					emitter << YAML::Key << GetCString(item.Name, &p).Data << YAML::BeginMap;
 					component->SerializeBase(emitter);
 					emitter << YAML::EndMap;
 				}
@@ -430,12 +430,9 @@ namespace fe
 							}
 
 							Pile p;
-							for (auto& item : ComponentTypesRegistry::Get().m_DataItems)
+							for (auto& item : ComponentTypesRegistry::sDataItems)
 							{
-								auto& name_funk_ptr = item.GetName;
-								auto component_name = (*name_funk_ptr)();
-
-								auto component_data = entity[std::string(GetCString(component_name, &p).Data)];
+								auto component_data = entity[std::string(GetCString(item.Name, &p).Data)];
 								if (component_data)
 								{
 									auto& create_funk_ptr = item.Emplacer;

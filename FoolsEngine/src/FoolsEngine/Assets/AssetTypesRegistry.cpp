@@ -4,11 +4,11 @@
 
 namespace fe
 {
-	AssetTypesRegistry* AssetTypesRegistry::s_Instance;
+	DynamicArena<AssetTypesRegistry::Item> AssetTypesRegistry::sItems;
 
 	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(AssetType assetType)
 	{
-		for (const auto& item : s_Instance->m_Items)
+		for (const auto& item : sItems)
 		{
 			if (item.Type == assetType)
 				return &item;
@@ -16,27 +16,31 @@ namespace fe
 		return nullptr;
 	}
 
-	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(const std::pmr::string& extension)
+	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(String extension)
 	{
-		for (const auto& item : s_Instance->m_Items)
+		for (const auto& item : sItems)
 		{
-			if (item.MetaFileExtension == extension)
+			if (CompareStringsEqual(extension, item.MetaFileExtension))
 				return &item;
 		}
 
 		return nullptr;
 	}
 
+	void AssetTypesRegistry::Init()
+	{
+		sItems.Init();
+	}
+
 	template <typename tnAsset>
 	void AssetTypesRegistry::RegisterAssetType()
 	{
-		m_Items.Append(
+		sItems.Append(
 			Item{
 				&tnAsset::EmplaceCore,
-				nullptr,//&tnAsset::LoadMetadata,
-				nullptr,//&tnAsset::SaveMetadata,
+				nullptr,
+				nullptr,
 				tnAsset::GetMetaFileExtension(),
-				tnAsset::GetTypeStatic().ToCString(),
 				tnAsset::GetTypeStatic()
 			}
 		);

@@ -12,6 +12,8 @@ namespace fe::Render
 {
 	class TextureAllocator
 	{
+	public:
+
 		UInt mTexturesCount;
 		UInt mTexturesCountBudget;
 		UInt mTexturesSize;
@@ -42,9 +44,9 @@ namespace fe::Render
 			mAlloc = alloc;
 		}
 
-		bool CreateTexture(AssetUser& textureUser)
+		bool CreateTexture(const AssetUser& textureUser)
 		{
-			auto& core = textureUser.Get<Texture2D::Core();
+			auto& core = textureUser.Get<Texture2D::Core>();
 			UInt footprint_estimate = core.GetSourceSize();
 
 			if (mTexturesCount + 1 > mTexturesCountBudget)

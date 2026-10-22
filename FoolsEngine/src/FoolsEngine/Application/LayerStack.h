@@ -9,7 +9,7 @@ namespace fe
 	class LayerStack
 	{
 	public:
-		LayerStack() { FE_PROFILER_FUNC(); }
+		LayerStack() { FE_PROFILER_FUNC(); sInstance = this; }
 		~LayerStack();
 
 		void PushInnerLayer(Ref<Layer> layer);
@@ -24,6 +24,8 @@ namespace fe
 
 		std::vector< Ref<Layer> > m_Layers;
 		unsigned int m_InnerLayerInsertIndex = 0;
+
+		static LayerStack* sInstance;
 	};
 }
 

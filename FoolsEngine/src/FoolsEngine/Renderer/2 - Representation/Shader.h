@@ -31,7 +31,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Shader; }
 		static constexpr const char* GetMetaFileExtension() { return ""; }
 
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACShader_Core>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACShader_Core>(assetID).Init(); }
 
 		using Core = ACShader_Core;
 	};

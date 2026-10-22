@@ -34,10 +34,9 @@ namespace fe
 				LoadTexture(filepath, textureUser);
 			}
 		}
-		static void UnloadTexture(void* data);
 		static Render::GAPI::Descriptors::TextureSpec InspectTexture(const std::filesystem::path& filePath);
 		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
-		static CString GetExtensionAlias() { return CString("Texture Source",15); }
+		static String GetExtensionAlias() { return String("Texture Source"_FE); }
 	};
 }

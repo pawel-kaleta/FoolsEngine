@@ -8,7 +8,14 @@
 
 namespace fe
 {
-	ComponentTypesRegistry* ComponentTypesRegistry::s_Instance;
+	DynamicArena<ComponentTypesRegistry::DataComponentRegistryItem> ComponentTypesRegistry::sDataItems;
+	DynamicArena<ComponentTypesRegistry::FlagComponentRegistryItem> ComponentTypesRegistry::sFlagItems;
+
+	void ComponentTypesRegistry::Init()
+	{
+		sDataItems.Init();
+		sFlagItems.Init();
+	}
 
 	void ComponentTypesRegistry::RegisterComponents()
 	{

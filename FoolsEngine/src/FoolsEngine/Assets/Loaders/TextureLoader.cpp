@@ -6,6 +6,9 @@
 
 #include "FoolsEngine/Application/Project.h"
 
+#include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
+#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -15,20 +18,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(false, "Not implemented!");
-
-		//auto& data_location = textureUser.Get<Texture2D::Core>().Data;
-		//if (data_location.Elements)
-		//	return;
-
-		//TO DO: dont override specification, use import settings
-		auto& spec = textureUser.Get<Texture2D::Core>().mSpecification;
-		int width, height, channels;
-
-		// TO DO: flipping should be happennig when uploding to gpu, not when loading from disk
-		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data;
-		
 		Pile p;
 		STD_PMR_Allocator pmr(&p);
 
@@ -36,39 +25,47 @@ namespace fe
 		filename += sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 		FE_PROFILER_SCOPE(filename.c_str());
 		std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
-		data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
-		
-		{
-			FE_PROFILER_SCOPE("Archetype Init");
 
-			//data_location.Elements = (Byte*)data;
-			//data_location.Count = -1; // ?!
 
-			FE_CORE_ASSERT(data, "Failed to load image!");
-			spec.mDimentions.x = width;
-			spec.mDimentions.y = height;
-			//auto& archetype = Description::Library::Get().TextureArchetypes[spec.ArchetypeID];
+		bool should_flip = Render::GAPI::Platform::FE_PARAMS_GAPI == Render::GAPI::Platform::OpenGL;
+		stbi_set_flip_vertically_on_load(should_flip);
 
-			switch (channels)
-			{
-			case 1:
-				//archetype.Format = Description::Texture::Format::R_8;
-				return;
-			case 3:
-				//archetype.Format = Description::Texture::Format::RGB_8;
-				return;
-			case 4:
-				//archetype.Format = Description::Texture::Format::RGBA_8;
-				return;
-			default:
-				FE_CORE_ASSERT(false, "Unimplemented texture format");
-			}
-		}
-	}
+		int width, height, channels;
+		stbi_uc* data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
 
-	void TextureLoader::UnloadTexture(void* data)
-	{
+		UInt data_size = width * height * channels;
+		Render::GAPI::GID region = Render::GAPI::CreateRegion(Renderer::sTextureDownStream, data_size);
+		Byte* region_location = Render::GAPI::GetRegionLocation(region);
+		std::memcpy(region_location, data, data_size);
 		stbi_image_free(data);
+
+		auto& spec = textureUser.Get<Texture2D::Core>().mSpecification;
+		spec.Init();
+		spec.mType = Render::GAPI::Descriptors::TextureType::Texture2D;
+		spec.mDimentions = { width, height, 0};
+		spec.mMipCount = 1;
+		spec.mLayerCount = 1;
+
+		switch (channels)
+		{
+		case 1: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::R_8; break;
+		case 3: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::RGB_8; break;
+		case 4: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::RGBA_8; break;
+		default:
+			FE_CORE_ASSERT(false, "Unimplemented texture format");
+		}
+
+
+		Renderer::sTextureAllocator.CreateTexture(textureUser);
+		Renderer::sTextureAllocator.CreateTexture(textureUser);
+
+		auto GPU_component = textureUser.GetIfExist<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
+		FE_CORE_ASSERT(GPU_component, "AAAAAA!");
+		Render::GAPI::CommitRegion(region);
+
+		Render::GAPI::CopyToTextureCmd(GPU_component->mTextureGID, region);
+
+		Render::GAPI::RetireRegionCmd(region);
 	}
 
 	Render::GAPI::Descriptors::TextureSpec TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)

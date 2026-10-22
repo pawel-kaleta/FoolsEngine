@@ -2,7 +2,12 @@
 
 namespace fe
 {
-	SystemTypesRegistry* SystemTypesRegistry::s_Instance;
+	DynamicArena<SystemTypesRegistry::Item> SystemTypesRegistry::sItems;
+
+	void SystemTypesRegistry::Init()
+	{
+		sItems.Init();
+	}
 
 	void SystemTypesRegistry::RegisterSystems()
 	{
@@ -15,10 +20,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& item : s_Instance->m_Items)
+		for (auto& item : sItems)
 		{
-			auto name_form_item = (*item.GetName)();
-			if (CompareStringsEqual(name_form_item, name))
+			if (CompareStringsEqual(item.Name, name))
 			{
 				return &item;
 			}

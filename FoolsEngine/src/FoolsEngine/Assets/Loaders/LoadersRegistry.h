@@ -14,29 +14,23 @@ namespace fe
 		{
 			bool (* IsKnownExtensionFunkPtr)(String);
 			bool (* IsKnownAssetType)(AssetType assetType);
-			CString SourceExtensionAlias;
+			String SourceExtensionAlias;
 			LoaderType Type;
 			// AssetType::None means multiple types? 
 			AssetType AssetType;
 		};
 
-		DynamicArena<Item> m_Items;
+		static DynamicArena<Item> sItems;
 
 		static const Item* GetItem(String extension);
 		static const Item* GetItem(AssetType assetType);
-	private:
-		static LoadersRegistry* s_Instance;
 
-		friend class Application;
-		LoadersRegistry()
-		{
-			s_Instance = this;
-			m_Items.Init();
-		};
-		void RegisterLoaders();
-		void Shutdown() {};
+
+		static void Init();
+		static void RegisterLoaders();
+		static void Shutdown() {};
 
 		template <typename tnLoader>
-		void RegisterLoader();
+		static void RegisterLoader();
 	};
 }

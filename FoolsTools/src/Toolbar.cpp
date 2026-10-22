@@ -8,6 +8,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Context::Log::Core.Info("Toolbar()"_FE);
+
 		m_IconPlay  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconStop  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconPause = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
@@ -15,11 +17,6 @@ namespace fe
 		TextureLoader::LoadTexture("resources/PlayButton.png" , m_IconPlay);
 		TextureLoader::LoadTexture("resources/StopButton.png" , m_IconStop);
 		TextureLoader::LoadTexture("resources/PauseButton.png", m_IconPause);
-
-		FE_CORE_ASSERT(false, "not implemented");
-		//m_IconPlay.SendDataToGPU(GAPI);
-		//m_IconStop.SendDataToGPU(GAPI);
-		//m_IconPause.SendDataToGPU(GAPI);
 	}
 
 	void Toolbar::OnImGuiRender()

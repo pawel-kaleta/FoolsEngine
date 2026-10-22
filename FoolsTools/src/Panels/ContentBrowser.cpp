@@ -34,19 +34,19 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Context::Log::Core.Info("ContentBrowser()"_FE);
+
 		m_Icons.File = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_Icons.Folder = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
-		FE_CORE_ASSERT(false, "not implemented");
-		//m_Icons.File.SendDataToGPU(GAPI);
-		//m_Icons.Folder.SendDataToGPU(GAPI);
-
-		FE_CORE_ASSERT(false, "not implemented");
-		//m_Icons.FileID = (void*)(uint64_t)m_Icons.File.GetGAPIResourceID(GAPI);
-		//m_Icons.FolderID = (void*)(uint64_t)m_Icons.Folder.GetGAPIResourceID(GAPI);
+		auto& gpu_texture_component_file = m_Icons.File.Get< ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
+		auto& gpu_texture_component_folder = m_Icons.Folder.Get< ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
+		
+		m_Icons.FileID = (void*)Render::GAPI::GetTextureNativeID(gpu_texture_component_file.mTextureGID);
+		m_Icons.FolderID = (void*)Render::GAPI::GetTextureNativeID(gpu_texture_component_folder.mTextureGID);
 
 		InitColors();
 	}
@@ -177,8 +177,9 @@ namespace fe
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		auto loader_registry_item_ptr = LoadersRegistry::GetItem(String(extension.data(), extension.size()+1));
-		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(extension);
+		String ext(extension.data(), extension.size() + 1);
+		auto loader_registry_item_ptr = LoadersRegistry::GetItem(ext);
+		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(ext);
 
 		const std::pmr::string file_name(stem + extension, &pmr);
 		const std::filesystem::path file_path = m_CurrentPath / file_name;
@@ -220,20 +221,16 @@ namespace fe
 			ImGui::TextWrapped(stem.c_str());
 			ImGui::TableNextColumn();
 
-			CString alias;
-
 			if (loader_registry_item_ptr)
 			{
-				alias = loader_registry_item_ptr->SourceExtensionAlias;
 				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&LoaderColors[loader_registry_item_ptr->Type.ToInt()]);
-				ImGui::TextWrapped(alias.Data);
+				ImGui::TextWrapped(GetCString(loader_registry_item_ptr->SourceExtensionAlias, &p).Data);
 				ImGui::PopStyleColor();
 			}
 			else if (asset_types_registry_item_ptr)
 			{
-				alias = asset_types_registry_item_ptr->TypeCString;
 				ImGui::PushStyleColor(ImGuiCol_Text, *(ImVec4*)&AssetTypeColors[asset_types_registry_item_ptr->Type.ToInt()]);
-				ImGui::TextWrapped(alias.Data);
+				ImGui::TextWrapped(asset_types_registry_item_ptr->Type.ToCString().Data);
 				ImGui::PopStyleColor();
 			}
 			else

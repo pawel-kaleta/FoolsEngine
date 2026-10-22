@@ -66,7 +66,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Texture2D; }
 		static constexpr const char* GetMetaFileExtension() { return ".fetex2d"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACTexture2D_Core>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACTexture2D_Core>(assetID).Init(); }
 		
 		static AssetID LoadMetadataInternal(const YAML::Node& node, AssetID master, const std::filesystem::path& parentPath);
 

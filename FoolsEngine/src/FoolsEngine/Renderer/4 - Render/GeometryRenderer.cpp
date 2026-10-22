@@ -102,7 +102,7 @@ namespace fe
 		void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 		auto view_of_CModelView_components = registry.view<CModel, CTransformGlobal>();
-		auto& asset_registry = AssetManager::Get().m_Registry;
+		auto& asset_registry = AssetManager::s_Instance->m_Registry;
 
 		{
 			FE_PROFILER_SCOPE("Cutout geometry");

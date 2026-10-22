@@ -21,7 +21,7 @@ namespace fe::AssetSerializer
 		STD_PMR_Allocator pmr(&p);
 
 		YAML::Emitter emitter;
-		auto& reg = AssetManager::Get().m_Registry;
+		auto& reg = AssetManager::s_Instance->m_Registry;
 
 		emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Masters" << YAML::Value << YAML::BeginSeq;
@@ -57,7 +57,7 @@ namespace fe::AssetSerializer
 
 		if (!node["Masters"])   return false;
 
-		auto& reg = AssetManager::Get().m_Registry;
+		auto& reg = AssetManager::s_Instance->m_Registry;
 
 		{
 			FE_PROFILER_SCOPE("Masters");
@@ -85,7 +85,7 @@ namespace fe::AssetSerializer
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::Get().m_Registry;
+		auto& reg = AssetManager::s_Instance->m_Registry;
 		auto paths_view = reg.view<ACFilepath, ACRefsCounters>();
 		
 		for (const auto asset_id : paths_view)

@@ -14,14 +14,12 @@ namespace fe
 	class ComponentTypesRegistry
 	{
 	public:
-		static ComponentTypesRegistry& Get() { return *s_Instance; }
-
 		struct DataComponentRegistryItem
 		{
 			DataComponent *	(BaseEntity::* Getter)() const;
 			void			(BaseEntity::* Emplacer)() const;
 			void			(Entity::* DestructionScheduler)();
-			String			(*GetName)();
+			String			Name;
 		};
 
 		struct FlagComponentRegistryItem
@@ -34,12 +32,12 @@ namespace fe
 		template <typename tnComponent>
 		static void RegisterDataComponent()
 		{
-			s_Instance->m_DataItems.Append(
+			sDataItems.Append(
 				DataComponentRegistryItem{
 					&BaseEntity::GetAsDataComponentIfExist<tnComponent>,
 					&BaseEntity::DefaultEmplace<tnComponent>,
 					&Entity::RemoveIfExist<tnComponent>,
-					&tnComponent::GetNameStatic
+					tnComponent::GetNameStatic()
 				}
 			);
 		}
@@ -47,7 +45,7 @@ namespace fe
 		template <typename tnFlagComponent>
 		static void RegisterFlagComponent()
 		{
-			s_Instance->m_FlagItems.Append(
+			sFlagItems.Append(
 				FlagComponentRegistryItem{
 					&BaseEntity::AllOf<tnFlagComponent>,
 					&BaseEntity::Flag<tnFlagComponent>,
@@ -56,20 +54,12 @@ namespace fe
 			);
 		}
 		
-		DynamicArena<DataComponentRegistryItem> m_DataItems;
-		DynamicArena<FlagComponentRegistryItem> m_FlagItems;
+		static DynamicArena<DataComponentRegistryItem> sDataItems;
+		static DynamicArena<FlagComponentRegistryItem> sFlagItems;
 
-	private:
-		static ComponentTypesRegistry* s_Instance;
+		static void Init();
+		static void RegisterComponents();
 
-		friend class Application;
-		ComponentTypesRegistry()
-		{
-			s_Instance = this;
-			m_DataItems.Init();
-			m_FlagItems.Init();
-		};
-		void RegisterComponents();
-		void Shutdown() {};
+		static void Shutdown() {};
 	};
 }

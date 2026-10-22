@@ -69,7 +69,7 @@ namespace fe
 		{
 			bool is_selected;
 
-			auto shading_models = AssetManager::Get().m_Registry.view<ShadingModel::Core>();
+			auto shading_models = AssetManager::s_Instance->m_Registry.view<ShadingModel::Core>();
 
 			Pile p2;
 			STD_PMR_Allocator pmr2(&p2);

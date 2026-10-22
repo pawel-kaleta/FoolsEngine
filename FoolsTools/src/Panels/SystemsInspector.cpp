@@ -170,12 +170,10 @@ namespace fe
         {
             Pile p;
 
-            auto& behReg = SystemTypesRegistry::Get();
-            for (const auto& item : behReg.m_Items)
+            auto& items = SystemTypesRegistry::sItems;
+            for (const auto& item : items)
             {
-                auto& getName = item.GetName;
-                String name = (*getName)();
-                if (ImGui::MenuItem(GetCString(name, &p).Data))
+                if (ImGui::MenuItem(GetCString(item.Name, &p).Data))
                 {
                     auto& create = item.Create;
                     FE_CORE_ASSERT(false, "Not implemented");

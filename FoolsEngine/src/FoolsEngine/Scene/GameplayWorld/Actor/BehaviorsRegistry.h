@@ -10,39 +10,29 @@ namespace fe
 	class BehaviorsRegistry
 	{
 	public:
-		static BehaviorsRegistry& Get() { return *s_Instance; }
-
 		struct Item
 		{
 			Behavior*	(Actor::* Create)();
-			String		(* GetName)();
+			String		Name;
 		};
 
 		template <typename tnBehavior>
 		static void RegisterBehavior()
 		{
-			s_Instance->m_Items.Append(
+			sItems.Append(
 				Item{
 					&Actor::CreateBehaviorAsBase<tnBehavior>,
-					&tnBehavior::GetNameStatic
+					tnBehavior::GetNameStatic()
 				}
 			);
 		}
 
 		static const Item* GetItemFromName(String name);
 		
-		DynamicArena<Item> m_Items;
-	
-	private:
-		static BehaviorsRegistry* s_Instance;
+		static DynamicArena<Item> sItems;
 
-		friend class Application;
-		BehaviorsRegistry()
-		{
-			s_Instance = this;
-			m_Items.Init();
-		}
-		void RegisterBehaviors();
-		void Shutdown() {};
+		static void Init();
+		static void RegisterBehaviors();
+		static void Shutdown() {};
 	};
 }

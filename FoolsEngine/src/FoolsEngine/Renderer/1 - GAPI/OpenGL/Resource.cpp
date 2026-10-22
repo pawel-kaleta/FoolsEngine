@@ -135,6 +135,12 @@ namespace fe::Render::GAPI
 		OpenGL::TextureRegistry.FreeObj(texture);
 	}
 
+	UInt GetTextureNativeID(GID texture)
+	{
+		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
+		return texture_obj->mOpenGLID;
+	}
+
 	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec)
 	{
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);

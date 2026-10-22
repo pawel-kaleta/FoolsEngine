@@ -12,6 +12,7 @@
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
 #include "FoolsEngine/Renderer/2 - Representation/RenderMesh.h"
 #include "FoolsEngine/Renderer/2 - Representation/ShadingModel.h"
+#include "FoolsEngine/Renderer/3 - Allocator/TextureAllocator.h"
 
 namespace fe
 {
@@ -66,5 +67,8 @@ namespace fe
 			Transform CameraTransform;
 			AssetID Scene;
 		} SceneData;
+
+		static Render::TextureAllocator sTextureAllocator;
+		static Render::GAPI::GID sTextureDownStream;
 	};
 }

@@ -39,7 +39,7 @@ namespace fe
 		static constexpr AssetType GetTypeStatic() { return AssetType::Material; }
 		static constexpr const char* GetMetaFileExtension() { return ".femat"; }
 
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMaterial_Core>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACMaterial_Core>(assetID).Init(); }
 
 		using Core = ACMaterial_Core;
 	};

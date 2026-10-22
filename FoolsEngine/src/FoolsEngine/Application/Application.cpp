@@ -24,7 +24,6 @@
 #include "FoolsEngine/Assets/Serialization/AssetsRegistrySerialization.h"
 
 
-
 namespace fe
 {
 	namespace Time
@@ -70,6 +69,7 @@ namespace fe
 			Context::Log::ScopeCore scope("Window"_FE);
 
 			GlobalContext::Window::Base->mEventCallback = std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1);
+			Context::Log::Core.Info("Callback set"_FE);
 		}
 
 		{
@@ -85,24 +85,24 @@ namespace fe
 			FE_PROFILER_SCOPE("Types Registries");
 			Context::Log::ScopeCore scope("Types Registries"_FE);
 
-			m_ComponentTypesRegistry = new ComponentTypesRegistry();
-			m_ComponentTypesRegistry->RegisterComponents();
+			ComponentTypesRegistry::Init();
+			ComponentTypesRegistry::RegisterComponents();
 			Context::Log::Core.Info("Componets registry created"_FE);
 
-			m_BehaviorsRegistry = new BehaviorsRegistry();
-			m_BehaviorsRegistry->RegisterBehaviors();
+			BehaviorsRegistry::Init();
+			BehaviorsRegistry::RegisterBehaviors();
 			Context::Log::Core.Info("Behaviors registry created"_FE);
 		
-			m_SystemsRegistry = new SystemTypesRegistry();
-			m_SystemsRegistry->RegisterSystems();
+			SystemTypesRegistry::Init();
+			SystemTypesRegistry::RegisterSystems();
 			Context::Log::Core.Info("Systems registry created"_FE);
 
-			m_AssetTypesRegistry = new AssetTypesRegistry();
-			m_AssetTypesRegistry->RegisterAssetTypes();
+			AssetTypesRegistry::Init();
+			AssetTypesRegistry::RegisterAssetTypes();
 			Context::Log::Core.Info("AssetTypes registry created"_FE);
 
-			m_LoadersRegistry = new LoadersRegistry();
-			m_LoadersRegistry->RegisterLoaders();
+			LoadersRegistry::Init();
+			LoadersRegistry::RegisterLoaders();
 			Context::Log::Core.Info("Loaders registry created"_FE);
 
 			Context::Log::Core.Info("Types Registries created"_FE);
@@ -113,7 +113,8 @@ namespace fe
 			FE_PROFILER_SCOPE("Asset manager");
 			Context::Log::ScopeCore scope("Asset manager"_FE);
 
-			m_AssetManager = new AssetManager();
+			auto asset_manager = Context::Alloc::Permanent.Allocate<AssetManager>();
+			new (asset_manager) AssetManager();
 
 			Context::Log::Core.Info("Asset manager created"_FE);
 		}
@@ -123,7 +124,8 @@ namespace fe
 			FE_PROFILER_SCOPE("Layer Stack");
 			Context::Log::ScopeCore scope("Layer Stack"_FE);
 
-			m_LayerStack = new LayerStack();
+			auto layer_stack = Context::Alloc::Permanent.Allocate<LayerStack>();
+			new (layer_stack) LayerStack();
 
 			Context::Log::Core.Info("Layer Stack created"_FE);
 		}
@@ -134,11 +136,14 @@ namespace fe
 			Context::Log::ScopeCore scope("Core layers"_FE);
 
 			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-			m_LayerStack->PushOuterLayer(m_AppLayer);
+			LayerStack::sInstance->PushOuterLayer(m_AppLayer);
+			Context::Log::Core.Info("Application layer created"_FE);
 
 			m_ImGuiLayer = CreateRef<ImGuiLayer>();
 			m_ImGuiLayer->Startup();
-			m_LayerStack->PushOuterLayer(m_ImGuiLayer);
+			LayerStack::sInstance->PushOuterLayer(m_ImGuiLayer);
+			Context::Log::Core.Info("ImGui layer created"_FE);
+
 
 			Context::Log::Core.Info("Core layers created"_FE);
 		}
@@ -160,7 +165,7 @@ namespace fe
 		while (ClientAppProjectInit() && m_Running)
 		{
 			m_ImGuiLayer->End();
-			m_MainEventDispacher.DispachEvents(*m_LayerStack);
+			m_MainEventDispacher.DispachEvents(*LayerStack::sInstance);
 			GlobalContext::Window::Base->OnUpdate();
 			m_ImGuiLayer->Begin();
 		}
@@ -196,7 +201,9 @@ namespace fe
 
 			m_FrameCount++;
 
-			m_MainEventDispacher.DispachEvents(*m_LayerStack);
+			auto& l_stack = *LayerStack::sInstance;
+
+			m_MainEventDispacher.DispachEvents(l_stack);
 
 			if (!m_Minimized)
 			{
@@ -204,7 +211,7 @@ namespace fe
 				{
 					FE_PROFILER_SCOPE("Layers Update");
 
-					for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+					for (auto layer_it = l_stack.begin(); layer_it != l_stack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 					{
 						(*layer_it)->OnUpdate();
 					}
@@ -217,7 +224,7 @@ namespace fe
 
 					m_ImGuiLayer->Begin();
 
-					for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++)
+					for (auto layer_it = l_stack.begin(); layer_it != l_stack.end(); layer_it++)
 						(*layer_it)->OnImGuiRender();
 
 					m_ImGuiLayer->End();
@@ -248,13 +255,15 @@ namespace fe
 		// Layers detaching
 		{
 			FE_PROFILER_SCOPE("layers detaching");
-			for (auto layer_it = m_LayerStack->begin(); layer_it != m_LayerStack->end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
+
+			auto& l_stack = *LayerStack::sInstance;
+			for (auto layer_it = l_stack.begin(); layer_it != l_stack.end(); layer_it++) // auto = std::vector< Ref< Layer > >::iterator
 			{
 				(*layer_it)->OnDetach();
 				(*layer_it).reset();
 			}
 
-			m_LayerStack->m_Layers.clear();
+			l_stack.m_Layers.clear();
 		}
 
 		// Core Layers
@@ -284,11 +293,11 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Types Registries");
 
-			m_LoadersRegistry->Shutdown();
-			m_AssetTypesRegistry->Shutdown();
-			m_ComponentTypesRegistry->Shutdown();
-			m_BehaviorsRegistry->Shutdown();
-			m_SystemsRegistry->Shutdown();
+			LoadersRegistry::Shutdown();
+			AssetTypesRegistry::Shutdown();
+			ComponentTypesRegistry::Shutdown();
+			BehaviorsRegistry::Shutdown();
+			SystemTypesRegistry::Shutdown();
 
 			/*
 			Just leting OS reclame memory

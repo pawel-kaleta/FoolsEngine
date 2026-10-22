@@ -4,6 +4,8 @@
 
 namespace fe
 {
+	LayerStack* LayerStack::sInstance;
+
 	LayerStack::~LayerStack()
 	{
 		FE_PROFILER_FUNC();

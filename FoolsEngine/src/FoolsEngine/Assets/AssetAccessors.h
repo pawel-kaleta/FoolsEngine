@@ -26,7 +26,7 @@ namespace fe
 		}
 
 		AssetObserver(AssetID assetID) :
-			AssetInterface(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
+			AssetInterface(ECS_AssetHandle(AssetManager::s_Instance->m_Registry, assetID))
 		{
 			Init();
 		}
@@ -74,7 +74,7 @@ namespace fe
 		//TODO: mutex
 
 		AssetUser(AssetID assetID) :
-			AssetInterface(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
+			AssetInterface(ECS_AssetHandle(AssetManager::s_Instance->m_Registry, assetID))
 		{
 			Init();
 		}

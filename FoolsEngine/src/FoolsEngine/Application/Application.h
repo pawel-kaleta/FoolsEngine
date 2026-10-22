@@ -42,18 +42,9 @@ namespace fe
 
 		String				m_Name;
 		MainEventDispacher	m_MainEventDispacher;
-		LayerStack*			m_LayerStack;
 
 		Ref<ApplicationLayer>	m_AppLayer;
 		Ref<ImGuiLayer>			m_ImGuiLayer;
-
-		ComponentTypesRegistry*	m_ComponentTypesRegistry;
-		BehaviorsRegistry*		m_BehaviorsRegistry;
-		SystemTypesRegistry*	m_SystemsRegistry;
-		AssetTypesRegistry*		m_AssetTypesRegistry;
-		LoadersRegistry*		m_LoadersRegistry;
-
-		AssetManager* m_AssetManager;
 
 		UInt	m_FrameCount	= 1;
 		bool	m_Running		= true;
@@ -64,10 +55,10 @@ namespace fe
 		virtual void ClientAppShutdown() {};
 		virtual bool ClientAppProjectInit() = 0;
 
-		void PushInnerLayer(Ref<Layer> layer) { m_LayerStack->PushInnerLayer(layer);	}
-		void PushOuterLayer(Ref<Layer> layer) { m_LayerStack->PushOuterLayer(layer); }
-		void PopInnerLayer(Ref<Layer> layer)  { m_LayerStack->PopInnerLayer(layer); }
-		void PopOuterLayer(Ref<Layer> layer)  { m_LayerStack->PopOuterLayer(layer); }
+		void PushInnerLayer(Ref<Layer> layer) { LayerStack::sInstance->PushInnerLayer(layer);	}
+		void PushOuterLayer(Ref<Layer> layer) { LayerStack::sInstance->PushOuterLayer(layer); }
+		void PopInnerLayer(Ref<Layer> layer)  { LayerStack::sInstance->PopInnerLayer(layer); }
+		void PopOuterLayer(Ref<Layer> layer)  { LayerStack::sInstance->PopOuterLayer(layer); }
 
 		void ProjectNew(const std::filesystem::path& filepath);
 		void ProjectLoad(const std::filesystem::path& filepath);

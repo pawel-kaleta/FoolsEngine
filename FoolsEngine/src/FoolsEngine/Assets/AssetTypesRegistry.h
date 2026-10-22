@@ -18,34 +18,23 @@ namespace fe
 			void (* EmplaceCore)(AssetID);
 			bool (* LoadMetadata)(AssetID);
 			void (* SaveMetadata)(YAML::Emitter&, AssetID);
-			const char* MetaFileExtension;
-			// load data too? (for AssetManager::EvaluateAndReload)
-			CString TypeCString;
+			String MetaFileExtension;
 			AssetType Type;
 		};
 
-		static AssetTypesRegistry& Get() { return *s_Instance; }
-
 		static const Item* GetItem(AssetType assetType);
-		static const Item* GetItem(const std::pmr::string& extension);
+		static const Item* GetItem(String extension);
 		
-		DynamicArena<Item> m_Items;
-	private:
-		static AssetTypesRegistry* s_Instance;
+		static DynamicArena<Item> sItems;
 
-		friend class Application;
 		
-		AssetTypesRegistry()
-		{
-			s_Instance = this;
-			m_Items.Init();
-		};
+		static void Init();
 		
 		template <typename tnAsset>
-		void RegisterAssetType();
+		static void RegisterAssetType();
 		
-		void RegisterAssetTypes();
+		static void RegisterAssetTypes();
 		
-		void Shutdown() {};
+		static void Shutdown() {};
 	};
 }

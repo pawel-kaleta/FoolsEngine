@@ -9,10 +9,13 @@
 namespace fe
 {
 	EditorApp::EditorApp()
-	{ }
+	{
+		Context::Log::Core.Info("EditorApp()"_FE);
+	}
 
 	void EditorApp::ClientAppStartup()
 	{
+		Context::Log::Core.Info("EditorApp::ClientAppStartup()"_FE);
 		AssetImportModal::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
 	}

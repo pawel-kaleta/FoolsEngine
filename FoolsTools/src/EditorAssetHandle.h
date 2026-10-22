@@ -17,7 +17,7 @@ namespace fe
 			AssetInterface(assetHandle)
 		{ };
 		EditorAssetHandle(AssetID assetID) :
-			AssetInterface(ECS_AssetHandle(AssetManager::Get().m_Registry, assetID))
+			AssetInterface(ECS_AssetHandle(AssetManager::s_Instance->m_Registry, assetID))
 		{ };
 
 		EditorAssetHandle(const EditorAssetHandle& other) :
@@ -47,7 +47,7 @@ namespace fe
 		// this is castable to AssetObserver& and AssetUser&, as all 3 are empty wrappers around AssetInterface
 		// note the refs!
 		// don't let it die as one of those (automated reference casting)
-		operator const AssetUser& ()     { return *reinterpret_cast<AssetUser*>(this); }
-		operator const AssetObserver& () { return *reinterpret_cast<AssetObserver*>(this); }
+		operator AssetUser& ()     { return *reinterpret_cast<AssetUser*>(this); }
+		operator AssetObserver& () { return *reinterpret_cast<AssetObserver*>(this); }
 	};
 }

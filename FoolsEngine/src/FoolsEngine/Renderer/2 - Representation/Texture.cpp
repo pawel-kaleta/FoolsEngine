@@ -95,7 +95,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		auto& reg = AssetManager::Get().m_Registry;
+		auto& reg = AssetManager::s_Instance->m_Registry;
 
 		const auto& UUID_node = node["UUID"];
 

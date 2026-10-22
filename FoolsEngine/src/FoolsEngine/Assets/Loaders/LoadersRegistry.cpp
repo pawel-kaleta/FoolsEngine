@@ -6,11 +6,11 @@
 
 namespace fe
 {
-	LoadersRegistry* LoadersRegistry::s_Instance;
+	DynamicArena<LoadersRegistry::Item> LoadersRegistry::sItems;
 
 	const LoadersRegistry::Item* LoadersRegistry::GetItem(String extension)
 	{
-		for (const auto& item : s_Instance->m_Items)
+		for (const auto& item : sItems)
 		{
 			if ((*item.IsKnownExtensionFunkPtr)(extension))
 				return &item;
@@ -22,7 +22,7 @@ namespace fe
 	{
 		if (assetType == AssetType::None) return nullptr;
 
-		for (const auto& item : s_Instance->m_Items)
+		for (const auto& item : sItems)
 		{
 			if (item.AssetType == AssetType::None)
 				if ((*item.IsKnownAssetType)(assetType))
@@ -37,7 +37,7 @@ namespace fe
 	template <typename tnLoader>
 	void LoadersRegistry::RegisterLoader()
 	{
-		m_Items.Append(
+		sItems.Append(
 			Item{
 				&tnLoader::IsKnownExtension,
 				&tnLoader::IsKnownAssetType,
@@ -46,6 +46,11 @@ namespace fe
 				tnLoader::GetAssetTypeStatic()
 			}
 		);
+	}
+
+	void LoadersRegistry::Init()
+	{
+		sItems.Init();
 	}
 
 	void LoadersRegistry::RegisterLoaders()

@@ -24,7 +24,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::RenderMesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".ferm"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACRenderMeshCore>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACRenderMeshCore>(assetID).Init(); }
 
 		using Core = ACRenderMeshCore;
 	};

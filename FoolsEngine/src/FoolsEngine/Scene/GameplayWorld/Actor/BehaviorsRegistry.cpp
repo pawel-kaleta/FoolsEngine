@@ -2,7 +2,12 @@
 
 namespace fe
 {
-	BehaviorsRegistry* BehaviorsRegistry::s_Instance;
+	DynamicArena<BehaviorsRegistry::Item> BehaviorsRegistry::sItems;
+
+	void BehaviorsRegistry::Init()
+	{
+		sItems.Init();
+	}
 
 	void BehaviorsRegistry::RegisterBehaviors()
 	{
@@ -13,12 +18,9 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		for (auto& item : s_Instance->m_Items)
+		for (auto& item : sItems)
 		{
-			auto& name_funk_ptr = item.GetName;
-			auto current_behavior_name = (*name_funk_ptr)();
-
-			if (CompareStringsEqual(current_behavior_name, name))
+			if (CompareStringsEqual(item.Name, name))
 			{
 				return &item;
 			}

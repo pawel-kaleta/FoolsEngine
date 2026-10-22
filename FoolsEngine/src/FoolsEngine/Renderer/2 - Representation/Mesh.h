@@ -70,7 +70,7 @@ namespace fe
 	public:
 		static constexpr AssetType GetTypeStatic() { return AssetType::Mesh; }
 		static constexpr const char* GetMetaFileExtension() { return ".femesh"; }
-		static void EmplaceCore(AssetID assetID) { AssetManager::Get().m_Registry.emplace<ACMesh_Core>(assetID).Init(); }
+		static void EmplaceCore(AssetID assetID) { AssetManager::s_Instance->m_Registry.emplace<ACMesh_Core>(assetID).Init(); }
 
 		using Core = ACMesh_Core;
 	};

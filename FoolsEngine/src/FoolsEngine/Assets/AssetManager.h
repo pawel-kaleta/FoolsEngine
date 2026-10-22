@@ -12,8 +12,6 @@ namespace fe
 	class AssetManager
 	{
 	public:
-		static AssetManager& Get() { return *s_Instance; }
-
 		static UUID GetUUID(AssetID assetID) { return s_Instance->m_Registry.get<ACUUID>(assetID).UUID; }
 
 		struct AssetCreation
@@ -100,8 +98,6 @@ namespace fe
 
 		} m_LoadingGroups;
 	
-	private:
-		friend class Application;
 		AssetManager();
 
 		static AssetManager* s_Instance;

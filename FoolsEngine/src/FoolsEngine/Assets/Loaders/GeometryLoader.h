@@ -36,7 +36,7 @@ namespace fe
 
 		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
-		static CString GetExtensionAlias() { return CString("Geometry Source", 16); }
+		static String GetExtensionAlias() { return String("Geometry Source"_FE); }
 		static const aiScene* InspectSourceFile(const std::filesystem::path& filePath);
 	};
 }

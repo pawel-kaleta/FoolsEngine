@@ -83,6 +83,7 @@ namespace fe::Render::GAPI
 	void	Clear(GID texture, Splice<U32> values);
 	void	Clear(GID texture, Splice<F32> values);
 	void	DestroyTextureCmd(GID texture);
+	UInt	GetTextureNativeID(GID texture);
 
 	GID		CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec);
 	void	CommitTextureViewCmd(GID textureView);

@@ -26,6 +26,6 @@ namespace fe
 		static bool IsKnownExtension(String extension);
 		static bool IsKnownAssetType(AssetType assetType);
 
-		static CString GetExtensionAlias() { return CString("Shader Source", 14); }
+		static String GetExtensionAlias() { return String("Shader Source"_FE); }
 	};
 }

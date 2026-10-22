@@ -13,6 +13,7 @@
 #include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
 #include "FoolsEngine/Assets/Loaders/TextureLoader.h"
 
+#include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 #include "FoolsEngine/Renderer/4 - Render/Renderer2D.h"
 #include "FoolsEngine/Renderer/4 - Render/GeometryRenderer.h"
 
@@ -24,10 +25,17 @@ namespace fe
 {
 	decltype(Renderer::SceneData) Renderer::SceneData;
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
+	Render::TextureAllocator Renderer::sTextureAllocator;
+	Render::GAPI::GID Renderer::sTextureDownStream;
 
 	void Renderer::Startup()
 	{
 		FE_PROFILER_FUNC();
+
+		sTextureAllocator.Init();
+		sTextureAllocator.Create(100, 100 * 1024 * 1024 * 4, 200);
+		sTextureDownStream = Render::GAPI::CreateDownStream();
+		Render::GAPI::AllocateDownStream(sTextureDownStream, 5 * 1024 * 1024 * 4);
 
 		Renderer2D::Startup();
 	}

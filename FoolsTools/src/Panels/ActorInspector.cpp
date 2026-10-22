@@ -188,11 +188,9 @@ namespace fe
         if (ImGui::BeginPopup("AddBehavior"))
         {
             Pile p;
-            for (const auto& item : BehaviorsRegistry::Get().m_Items)
+            for (const auto& item : BehaviorsRegistry::sItems)
             {
-                auto& get_name_funk_ptr = item.GetName;
-                String name = (*get_name_funk_ptr)();
-                if (ImGui::MenuItem(GetCString(name, &p).Data))
+                if (ImGui::MenuItem(GetCString(item.Name, &p).Data))
                 {
                     auto& create = item.Create;
                     Behavior* behavior = (actor.*create)();
