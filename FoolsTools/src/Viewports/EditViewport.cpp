@@ -6,7 +6,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		FE_CORE_ASSERT(false, "not implemented");
+		Context::Log::Core.Error("Edit Viewport not implemented"_FE);
+
 		//Description::Framebuffer::SpecificationBuilder spec_builder;
 		//spec_builder
 		//	.SetWidth(1280)
@@ -22,7 +23,7 @@ namespace fe
 		//framebuffer_spec.Width = 1280;
 		//framebuffer_spec.Height = 720;
 		//framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
-		FE_CORE_ASSERT(false, "not implemented");
+		
 		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
 		//framebuffer_spec.ColorAttachments.emplace_back("EntityID", Description::Texture::Format::R_UINT_32);
 

@@ -35,15 +35,16 @@ namespace fe
 		static char s_load_path_buffer[128] = "..\\Sandbox\\SandboxProject.feproj";
 		static char s_create_path_buffer[128] = "";
 
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+		ImGuiWindowFlags_ window_flags = (ImGuiWindowFlags_)(
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoResize);
+		
 		if (s_load_not_create)
 		{
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-			ImGuiWindowFlags_ window_flags = (ImGuiWindowFlags_)(
-				ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoResize);
 			if (ImGui::Begin("New/Open Project", nullptr, window_flags))
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.DisabledAlpha);
@@ -96,7 +97,7 @@ namespace fe
 		}
 		else
 		{
-			if (ImGui::Begin("New/Open Project"))
+			if (ImGui::Begin("New/Open Project", nullptr, window_flags))
 			{
 				ImGui::Button("New Project");
 

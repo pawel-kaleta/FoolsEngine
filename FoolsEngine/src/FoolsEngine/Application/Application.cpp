@@ -161,15 +161,20 @@ namespace fe
 
 	void Application::Run()
 	{
-		m_ImGuiLayer->Begin();
-		while (ClientAppProjectInit() && m_Running)
 		{
-			m_ImGuiLayer->End();
-			m_MainEventDispacher.DispachEvents(*LayerStack::sInstance);
-			GlobalContext::Window::Base->OnUpdate();
+			Context::Log::ScopeCore scope("Project loading"_FE, LoggingLevel::Info);
+			Context::Log::Core.Info("Project loading start"_FE);
+
 			m_ImGuiLayer->Begin();
+			while (ClientAppProjectInit() && m_Running)
+			{
+				m_ImGuiLayer->End();
+				m_MainEventDispacher.DispachEvents(*LayerStack::sInstance);
+				GlobalContext::Window::Base->OnUpdate();
+				m_ImGuiLayer->Begin();
+			}
+			m_ImGuiLayer->End();
 		}
-		m_ImGuiLayer->End();
 
 		while (m_Running)
 		{

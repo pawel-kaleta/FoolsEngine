@@ -125,8 +125,8 @@ namespace fe
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		FE_CORE_ASSERT(false, "Not implemented");
-
+		//FE_CORE_ASSERT(false, "Not implemented");
+		Context::Log::Core.Error("Renderer::OnWindowResize() not implemented"_FE);
 		//Command::PipelineState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
 	}
 

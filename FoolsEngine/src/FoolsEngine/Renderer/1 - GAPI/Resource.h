@@ -8,6 +8,8 @@
 
 #include <glm/glm.hpp>
 
+
+
 namespace fe::Render::GAPI
 {
 	namespace Descriptors
@@ -61,7 +63,7 @@ namespace fe::Render::GAPI
 		};
 	}
 
-	
+
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
 	void	AllocateCommitBuffer(GID buffer, U32 size);

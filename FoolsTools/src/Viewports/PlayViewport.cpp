@@ -6,6 +6,8 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Context::Log::Core.Error("Play Viewport not implemented"_FE);
+
 		//Description::Framebuffer::SpecificationBuilder spec_builder;
 		//spec_builder
 		//	.SetWidth(1)
@@ -15,7 +17,7 @@ namespace fe
 		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID"   , Description::Texture::Format::R_UINT_32));
 		//m_Framebuffer = Framebuffer::Create(spec_builder.Create());
 
-		FE_CORE_ASSERT(false, "Not implemented");
+		
 		//m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
 
 		//auto& lib = Description::Library::Get();
@@ -24,7 +26,7 @@ namespace fe
 		//framebuffer_spec.Width = 1;
 		//framebuffer_spec.Height = 1;
 		//framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
-		FE_CORE_ASSERT(false, "not implemented");
+		
 		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
 
 		//m_Framebuffer->Create();

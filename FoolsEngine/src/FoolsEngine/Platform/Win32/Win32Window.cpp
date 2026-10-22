@@ -42,6 +42,8 @@ namespace fe
 			Context::Log::Core.Trace("GLFW events polling"_FE);
 			glfwPollEvents();
 		}
+
+		glfwSwapBuffers(m_Window);
 	}
 
 	void Win32Window::Create()

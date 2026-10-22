@@ -57,7 +57,6 @@ namespace fe
 
 
 		Renderer::sTextureAllocator.CreateTexture(textureUser);
-		Renderer::sTextureAllocator.CreateTexture(textureUser);
 
 		auto GPU_component = textureUser.GetIfExist<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
 		FE_CORE_ASSERT(GPU_component, "AAAAAA!");

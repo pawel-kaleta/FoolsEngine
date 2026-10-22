@@ -42,7 +42,7 @@ namespace fe
 				texel_size = 0;
 			}
 
-			UInt texel_count = (UInt)mSpecification.mDimentions.x * mSpecification.mDimentions.y * mSpecification.mDimentions.z;
+			UInt texel_count = (UInt)mSpecification.mDimentions.x * max(mSpecification.mDimentions.y, U32(1)) * max(mSpecification.mDimentions.z, U32(1));
 
 			return texel_size * texel_count;
 		}

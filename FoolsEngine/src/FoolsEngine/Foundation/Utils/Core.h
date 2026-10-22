@@ -35,4 +35,11 @@ namespace fe
 		bool condition = b < a;
 		return *(T*)((uintptr_t)&b * condition + (uintptr_t)&a * !condition);
 	}
+
+	template<class T>
+	const T& max(const T& a, const T& b)
+	{
+		bool condition = b > a;
+		return *(T*)((uintptr_t)&b * condition + (uintptr_t)&a * !condition);
+	}
 }
