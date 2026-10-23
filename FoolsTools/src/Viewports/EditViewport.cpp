@@ -49,7 +49,7 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		FE_CORE_ASSERT(false, "Not implemented");
+		Context::Log::Core.Error("EditViewport::RenderScene() not implemented");
 		//Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
 	}
 
@@ -102,14 +102,16 @@ namespace fe
 			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
 				new_viewport_size = { 1, 1 };
 
-			FE_CORE_ASSERT(false, "not implemented");
+			Context::Log::Core.Error("PlayViewport resize not implemented");
 			//m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			m_ViewportSize = new_viewport_size;
 			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
 		}
 
 		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
-		FE_CORE_ASSERT(false, "not implemented");
+
+		Context::Log::Core.Error("PlayViewport rendering not implemented");
+
 		//auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 		//GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
 		//ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -236,7 +238,9 @@ namespace fe
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewport_size.x && mouseY < (int)viewport_size.y)
 		{
 			String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
-			FE_CORE_ASSERT(false, "not implemented");
+
+			Context::Log::Core.Error("EditViewport::ReadEntityIDfromBuffer() not implemented");
+
 			//int attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 			//Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);
 			Splice<Byte> entityID_memReg;

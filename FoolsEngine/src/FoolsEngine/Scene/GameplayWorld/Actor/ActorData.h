@@ -17,22 +17,13 @@ namespace fe
 		CActorData() = delete;
 		CActorData(EntityID entityID)
 			: m_ID(entityID)
-		{ };
+		{
+			m_Behaviors.Init();
+			for (auto& enrolls : m_UpdateEnrolls)
+				enrolls.Init();
+		};
 		CActorData& operator=(CActorData&& other) noexcept = default;
-		//{
-		//	m_Behaviors = std::move(other.m_Behaviors);
-		//	m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
-		//	m_ID = other.m_ID;
-		//	other.m_ID = NullEntityID;
-		//	return *this;
-		//};
 		CActorData(CActorData&& other) noexcept = default;
-		//{
-		//	m_Behaviors = std::move(other.m_Behaviors);
-		//	m_UpdateEnrolls = std::move(other.m_UpdateEnrolls);
-		//	m_ID = other.m_ID;
-		//	other.m_ID = NullEntityID;
-		//};
 		CActorData& operator=(CActorData& other) = delete;
 		CActorData(CActorData& other) = delete;
 		~CActorData()

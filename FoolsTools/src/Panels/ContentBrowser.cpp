@@ -337,6 +337,7 @@ namespace fe
 			else
 			{
 				auto emplace_slot = file_names.EmplaceBack();
+				new (emplace_slot) std::pmr::string(pmr);
 				*emplace_slot = std::move(entry_name);
 			}
 		}

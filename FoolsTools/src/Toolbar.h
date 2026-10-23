@@ -28,7 +28,10 @@ namespace fe
 		EditorState m_EditorState;
 
 		EditorAssetHandle m_IconPlay;
+		UInt mIconPlayID;
 		EditorAssetHandle m_IconPause;
+		UInt mIconPauseID;
 		EditorAssetHandle m_IconStop;
+		UInt mIconStopID;
 	};
 }

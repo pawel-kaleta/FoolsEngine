@@ -161,26 +161,29 @@ namespace fe
 
 		Pile p;
 
-		DynamicArenaSA<AssetID, Pile> assets_to_unload;
-		assets_to_unload.Init(&p);
 
-		assets_to_unload.ReserveExact(groups.Unload.size());
-		for (auto id : groups.Unload)
+		if (groups.Unload.size())
 		{
-			assets_to_unload.Append(id);
-		}
-
-		for (auto id : assets_to_unload)
-		{
-			reg.storage<ACLoaded>().erase(id);
-
-			switch (reg.get<ACAssetType>(id).Type)
+			DynamicArenaSA<AssetID, Pile> assets_to_unload;
+			assets_to_unload.Init(&p);
+			assets_to_unload.ReserveExact(groups.Unload.size());
+			for (auto id : groups.Unload)
 			{
-			case AssetType::Texture2D:	Unload<Texture2D>(id);	break;
-			case AssetType::Mesh:		Unload<Mesh>(id);		break;
-			case AssetType::Material:	Unload<Material>(id);	break;
-			case AssetType::Model:		Unload<Model>(id);		break;
-			//...
+				assets_to_unload.Append(id);
+			}
+
+			for (auto id : assets_to_unload)
+			{
+				reg.storage<ACLoaded>().erase(id);
+
+				switch (reg.get<ACAssetType>(id).Type)
+				{
+				case AssetType::Texture2D:	Unload<Texture2D>(id);	break;
+				case AssetType::Mesh:		Unload<Mesh>(id);		break;
+				case AssetType::Material:	Unload<Material>(id);	break;
+				case AssetType::Model:		Unload<Model>(id);		break;
+					//...
+				}
 			}
 		}
 
@@ -204,25 +207,25 @@ namespace fe
 			case AssetType::Texture2D:
 			{
 				auto texture_user = AssetUser(id);
+				Context::Log::Core.Error("Texture2D Loading not implemented"); // no filepath for LoadTexture to grab
+				break;
 				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);
-					FE_CORE_ASSERT(false, "not implemented");
-					//auto& texture = texture_user.CreateResource<GAPIType::OpenGL>().Texture;
-					//texture_user.SendDataToGPU(GAPI);
-					//texture_user.UnloadFromCPU();
 					texture_user.FlagLoaded();
 				}
 				else
 				{
 					Context::Log::Core.Warn("Texture allready loaded"_FE);
+					FE_CORE_ASSERT(false, "Shloudnt happen");
 				}
 				break;
 			}
 			case AssetType::Mesh:
 			{
 				auto mesh_user = AssetUser(id);
-				FE_CORE_ASSERT(false, "not implemented");
+				
+				Context::Log::Core.Error("Mesh Loading not implemented");
 				//if (!mesh_user.GetBuffer())
 				//{
 				//	GeometryLoader::LoadMesh(mesh_user);
@@ -238,19 +241,21 @@ namespace fe
 			}
 			case AssetType::Material:
 			{
-				FE_CORE_ASSERT(false, "not implemented");
-				auto material_user = AssetUser(id);
+				Context::Log::Core.Error("Material Loading not implemented");
+				
+				//auto material_user = AssetUser(id);
 				//material_user.SendDataToGPU(GAPI);
-				material_user.FlagLoaded();
+				//material_user.FlagLoaded();
 				break;
 			}
 			case AssetType::Model:
 			{
-				FE_CORE_ASSERT(false, "not implemented");
-				auto model_user = AssetUser(id);
-				GeometryLoader::LoadModel(model_user);
-				//model_user.SendDataToGPU(GAPI);
-				model_user.FlagLoaded();
+				Context::Log::Core.Error("Model Loading not implemented");
+
+				//auto model_user = AssetUser(id);
+				//GeometryLoader::LoadModel(model_user);
+				////model_user.SendDataToGPU(GAPI);
+				//model_user.FlagLoaded();
 				break;
 			}
 			}

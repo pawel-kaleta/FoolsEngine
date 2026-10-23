@@ -36,14 +36,14 @@ namespace fe
 			} Shaders;
 
 			struct {
-				UUID Base2DBatchFlat;
+				UUID Base2DFlat;
 				UUID Base3DOpaque;
 				UUID Base3DCutout;
 				UUID Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				//UUID Default2DFlat; //do I need this?
+				UUID Default2DFlat; //do I need this?
 				UUID DefaultOpaque;
 				UUID DefaultCutout;
 				UUID DefaultTranslucent;

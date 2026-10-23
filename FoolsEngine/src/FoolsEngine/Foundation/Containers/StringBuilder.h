@@ -17,13 +17,23 @@ namespace fe
 	}
 
 	template <typename tAlloc>
-	CString GetCString(String string, tAlloc* alloc)
+	CString GetCString(String string, tAlloc* alloc = Context::Alloc::Output)
 	{
 		CString output;
 		output.Data = alloc->Allocate<char>(string.Count + 1).Elements;
 		output.CountWithNull = string.Count + 1;
 		std::memcpy(output.Data, string.Data, string.Count);
 		output.Data[string.Count] = '\0';
+		return output;
+	}
+
+	template <typename tAlloc>
+	String CopyString(String string, tAlloc* alloc = Context::Alloc::Output)
+	{
+		String output;
+		output.Data = alloc->Allocate<char8_t>(string.Count).Elements;
+		output.Count = string.Count;
+		std::memcpy(output.Data, string.Data, string.Count);
 		return output;
 	}
 

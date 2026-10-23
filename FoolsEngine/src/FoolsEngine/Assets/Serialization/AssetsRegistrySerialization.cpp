@@ -98,10 +98,11 @@ namespace fe::AssetSerializer
 
 				tnAssetType::EmplaceCore(asset_id);
 
-				FE_CORE_ASSERT(false, "not implemented");
-				bool result;// = tnAssetType::LoadMetadata(asset_id);
+				Context::Log::Core.Error("tnAssetType::LoadMetadata() not implemented"_FE);
+				
+				//bool result = tnAssetType::LoadMetadata(asset_id);
 
-				FE_CORE_ASSERT(result, "Failed to load asset metadata");
+				//FE_CORE_ASSERT(result, "Failed to load asset metadata");
 			}
 		}
 	}

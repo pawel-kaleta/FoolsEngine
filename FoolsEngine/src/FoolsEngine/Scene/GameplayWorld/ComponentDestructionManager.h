@@ -8,6 +8,12 @@ namespace fe
 	class ComponentDestructionManager
 	{
 	public:
+		ComponentDestructionManager()
+		{
+			m_Removals.Init();
+			m_Erasures.Init();
+		}
+
 		template <typename tnComponent>
 		void ScheduleRemoval(EntityID entityID)
 		{

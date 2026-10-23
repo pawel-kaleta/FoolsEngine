@@ -1,0 +1,19 @@
+Shaders: 
+    Vertex Shader: ../FoolsEngine/base_assets/shaders/Base3DVertex.glsl
+    Tessellation Shader:
+    Geometry Shader:
+    Fragment Shader: ../FoolsEngine/base_assets/shaders/Base3DFragmentOpaque.glsl
+Uniforms Data Size: 4
+Uniforms:
+  - Name: u_ORMTexturePacking
+    Type: Bool
+    Count: 1
+    DefaultValue:
+      - true
+Shader Texture Slots:
+  - u_BaseColorMap
+  - u_ORMMap
+  - u_NormalMap
+  - u_RoughnessMap
+  - u_MetalnessMap
+  - u_AOMap

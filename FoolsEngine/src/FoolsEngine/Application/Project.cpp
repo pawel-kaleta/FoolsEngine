@@ -77,12 +77,13 @@ namespace fe
 				emitter << YAML::Key << "Base3DFragmentBlend"	<< YAML::Value << inst.BaseAssets.Shaders.Base3DFragmentBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "ShadingModels" << YAML::Value << YAML::BeginMap;
-				emitter << YAML::Key << "Base2DFlat"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DBatchFlat;
+				emitter << YAML::Key << "Base2DFlat"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DFlat;
 				emitter << YAML::Key << "Base3DOpaque"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DOpaque;
 				emitter << YAML::Key << "Base3DCutout"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DCutout;
 				emitter << YAML::Key << "Base3DBlend"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Materials" << YAML::Value << YAML::BeginMap;
+				emitter << YAML::Key << "Default2DFlat"			<< YAML::Value << inst.BaseAssets.Materials.Default2DFlat;
 				emitter << YAML::Key << "DefaultOpaque"			<< YAML::Value << inst.BaseAssets.Materials.DefaultOpaque;
 				emitter << YAML::Key << "DefaultCutout"			<< YAML::Value << inst.BaseAssets.Materials.DefaultCutout;
 				emitter << YAML::Key << "DefaultTranslucent"	<< YAML::Value << inst.BaseAssets.Materials.DefaultTranslucent;
@@ -138,11 +139,12 @@ namespace fe
 		inst.BaseAssets.Shaders.Base3DFragmentCutout	= shaders_node["Base3DFragmentCutout"	].as<UUID>();
 		inst.BaseAssets.Shaders.Base3DFragmentBlend		= shaders_node["Base3DFragmentBlend"	].as<UUID>();
 
-		inst.BaseAssets.ShadingModels.Base2DBatchFlat	= shading_models_node["Base2DFlat"	].as<UUID>();
-		inst.BaseAssets.ShadingModels.Base3DOpaque		= shading_models_node["Base3DOpaque"].as<UUID>();
-		inst.BaseAssets.ShadingModels.Base3DCutout		= shading_models_node["Base3DCutout"].as<UUID>();
-		inst.BaseAssets.ShadingModels.Base3DBlend		= shading_models_node["Base3DBlend"	].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base2DFlat	= shading_models_node["Base2DFlat"	].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base3DOpaque	= shading_models_node["Base3DOpaque"].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base3DCutout	= shading_models_node["Base3DCutout"].as<UUID>();
+		inst.BaseAssets.ShadingModels.Base3DBlend	= shading_models_node["Base3DBlend"	].as<UUID>();
 
+		inst.BaseAssets.Materials.Default2DFlat			= materials_node["Default2DFlat"		].as<UUID>();
 		inst.BaseAssets.Materials.DefaultOpaque			= materials_node["DefaultOpaque"		].as<UUID>();
 		inst.BaseAssets.Materials.DefaultCutout			= materials_node["DefaultCutout"		].as<UUID>();
 		inst.BaseAssets.Materials.DefaultTranslucent	= materials_node["DefaultTranslucent"	].as<UUID>();

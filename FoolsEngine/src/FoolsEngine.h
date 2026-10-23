@@ -53,6 +53,8 @@
 #include "FoolsEngine/Assets/Serialization/SceneSerializer.h"
 #include "FoolsEngine/Assets/Serialization/AssetsRegistrySerialization.h"
 
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <yaml-cpp/yaml.h>

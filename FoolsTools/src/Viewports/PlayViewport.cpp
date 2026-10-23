@@ -44,6 +44,10 @@ namespace fe
 
 		auto scene_observer = m_Scene.Observe();
 		Entity camera_entity = scene_observer.Get<Scene::Core>().GameplayWorld->GetEntityWithPrimaryCamera();
+
+		Context::Log::Core.Error("PlayViewport::RenderScene() not implemented");
+		return;
+
 		if (camera_entity)
 		{
 			auto& camera_component = camera_entity.Get<CCamera>();
@@ -92,7 +96,8 @@ namespace fe
 				auto& camera_component = camera_entity.Get<CCamera>();
 				camera_component.Camera.SetViewportSize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			}
-			FE_CORE_ASSERT(false, "not implemented");
+			
+			Context::Log::Core.Error("PlayViewport resize not implemented");
 			//m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
 			m_ViewportSize = new_viewport_size;
 		}
@@ -101,7 +106,8 @@ namespace fe
 		//auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 		//GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
 		//ImGui::Image((void*)(uint64_t)attachment_index, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
+		Context::Log::Core.Error("PlayViewport rendering not implemented");
+		
 		ImGui::End();
 	}
 

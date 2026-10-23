@@ -14,7 +14,11 @@ namespace fe
 	class SystemsDirector
 	{
 	public:
-		SystemsDirector() = default;
+		SystemsDirector()
+		{
+			m_Systems.Init();
+			for (auto& enrolls : m_SystemUpdateEnrolls) enrolls.Init();
+		};
 		SystemsDirector(const SystemsDirector& other) = delete;
 
 		struct SystemUpdateEnroll

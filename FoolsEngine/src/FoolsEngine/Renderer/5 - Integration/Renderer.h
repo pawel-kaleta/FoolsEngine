@@ -43,14 +43,23 @@ namespace fe
 			} Textures;
 
 			struct {
-				AssetHandle<ShadingModel> Base2DBatchFlat;
+				AssetHandle <Shader> Base2DVertex;
+				AssetHandle <Shader> Base2DFragment;
+				AssetHandle <Shader> Base3DVertex;
+				AssetHandle <Shader> Base3DFragmentOpaque;
+				AssetHandle <Shader> Base3DFragmentCutout;
+				AssetHandle <Shader> Base3DFragmentBlend;
+			} Shaders;
+
+			struct {
+				AssetHandle<ShadingModel> Base2DFlat;
 				AssetHandle<ShadingModel> Base3DOpaque;
 				AssetHandle<ShadingModel> Base3DCutout;
 				AssetHandle<ShadingModel> Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				//AssetHandle<Material> Default2DBatchFlat; // do I need this material?
+				AssetHandle<Material> Default2DFlat; // do I need this material?
 				AssetHandle<Material> DefaultOpaque;
 				AssetHandle<Material> DefaultCutout;
 				AssetHandle<Material> DefaultTranslucent;

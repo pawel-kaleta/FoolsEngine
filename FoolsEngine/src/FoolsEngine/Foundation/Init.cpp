@@ -18,6 +18,7 @@ void InitContext::InitGlobal()
 	using namespace fe;
 
 	Context::Log::Core.Init();
+	Context::Log::App.Init();
 
 	Context::Log::ScopeCore init_scope("Global Init"_FE, LoggingLevel::Trace);
 	FE_PROFILER_SESSION_START("INIT", "Logs/ProfileData_Init.json");

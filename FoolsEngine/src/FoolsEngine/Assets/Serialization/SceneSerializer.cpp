@@ -399,18 +399,16 @@ namespace fe
 								return false;
 
 							UUID uuid = entity["UUID"].as<UUID>();
-							std::string name = entity["Entity"].as<std::string>();
 							UUID head_UUID = entity["Head"].as<UUID>();
 
 							// TO DO: don't use BaseEntity for emplacing ProtectedComponents, as it's prohibited and will be made impossible in the future
 							BaseEntity new_entity = gameplay_world->CreateOrGetEntityWithUUID(uuid);
-							FE_CORE_ASSERT(false, "Not implemented"); // string allocation for name
-							new_entity.Emplace<CEntityName>().EntityName = String(name.c_str());
+							new_entity.Emplace<CEntityName>().EntityName = entity["Entity"].as<String>();
 
 							auto head = gameplay_world->CreateOrGetEntityWithUUID(head_UUID);
 							new_entity.Emplace<CHeadEntity>().HeadEntity = head.ID();
 
-							new_entity.Emplace<CTags>().Local = entity["Tags"].as<uint64_t>();
+							new_entity.Emplace<CTags>().Local = entity["Tags"].as<U64>();
 
 							auto& entity_node = new_entity.Emplace<CEntityNode>();
 							if (!DeserializeEntityNode(entity["Node"], entity_node, gameplay_world))
