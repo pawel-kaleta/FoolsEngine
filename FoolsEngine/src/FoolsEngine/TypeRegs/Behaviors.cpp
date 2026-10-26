@@ -1,20 +1,20 @@
-#include "BehaviorsRegistry.h"
+#include "Behaviors.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	DynamicArena<BehaviorsRegistry::Item> BehaviorsRegistry::sItems;
+	DynamicArena<Behaviors::Item> Behaviors::sItems;
 
-	void BehaviorsRegistry::Init()
+	void Behaviors::Init()
 	{
 		sItems.Init();
 	}
 
-	void BehaviorsRegistry::RegisterBehaviors()
+	void Behaviors::RegisterBehaviors()
 	{
 		FE_PROFILER_FUNC();
 	}
 
-	const BehaviorsRegistry::Item* BehaviorsRegistry::GetItemFromName(String name)
+	const Behaviors::Item* Behaviors::GetItemFromName(String name)
 	{
 		FE_PROFILER_FUNC();
 

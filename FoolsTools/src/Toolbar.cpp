@@ -14,9 +14,32 @@ namespace fe
 		m_IconStop  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconPause = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 
-		TextureLoader::LoadTexture("resources/PlayButton.png" , m_IconPlay);
-		TextureLoader::LoadTexture("resources/StopButton.png" , m_IconStop);
-		TextureLoader::LoadTexture("resources/PauseButton.png", m_IconPause);
+		m_IconPlay.Get<Texture2D::Core>().mViewSpecification = {
+			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
+			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
+			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
+			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
+		};
+		m_IconStop.Get<Texture2D::Core>().mViewSpecification = {
+			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
+			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
+			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
+			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
+		};
+		m_IconPause.Get<Texture2D::Core>().mViewSpecification = {
+			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
+			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
+			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
+			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
+		};
+
+		{
+			FE_PROFILER_SCOPE("Loadings");
+
+			TextureLoader::LoadTexture("resources/PlayButton.png", m_IconPlay);
+			TextureLoader::LoadTexture("resources/StopButton.png", m_IconStop);
+			TextureLoader::LoadTexture("resources/PauseButton.png", m_IconPause);
+		}
 
 		auto playGID = m_IconPlay.Get<ACTexture2D_GPU<fe::Render::GAPI::Platform::OpenGL>>().mTextureGID;
 		auto stopGID = m_IconStop.Get<ACTexture2D_GPU<fe::Render::GAPI::Platform::OpenGL>>().mTextureGID;

@@ -14,6 +14,8 @@ namespace fe::Render::GAPI::OpenGL
 
 	void CreateRegistries()
 	{
+		FE_PROFILER_FUNC();
+
 		GraphicsPipelineRegistry.Create();
 		BufferRegistry.Create();
 		TextureRegistry.Create();

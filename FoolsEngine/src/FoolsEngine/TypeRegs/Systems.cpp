@@ -1,22 +1,22 @@
-#include "SystemTypesRegistry.h"
+#include "Systems.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	DynamicArena<SystemTypesRegistry::Item> SystemTypesRegistry::sItems;
+	DynamicArena<Systems::Item> Systems::sItems;
 
-	void SystemTypesRegistry::Init()
+	void Systems::Init()
 	{
 		sItems.Init();
 	}
 
-	void SystemTypesRegistry::RegisterSystems()
+	void Systems::RegisterSystems()
 	{
 		FE_PROFILER_FUNC();
 
 		Context::Log::Core.Warn("Register systems not implemented");
 	}
 
-	const SystemTypesRegistry::Item* SystemTypesRegistry::GetItem(String name)
+	const Systems::Item* Systems::GetItem(String name)
 	{
 		FE_PROFILER_FUNC();
 

@@ -56,7 +56,7 @@ namespace fe::Render::GAPI::OpenGL
 			mOpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(type));
 
 			Context::Log::Core.Warn("Should this be  (GLchar**) & source.Data ?"_FE);
-			glShaderSource(mOpenGLID, 1, (GLchar**)source.Data, 0);
+			glShaderSource(mOpenGLID, 1, (GLchar**)&source.Data, 0);
 
 			GLint compilation_success;
 			{

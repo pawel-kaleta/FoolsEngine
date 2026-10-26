@@ -188,7 +188,7 @@ namespace fe
         if (ImGui::BeginPopup("AddBehavior"))
         {
             Pile p;
-            for (const auto& item : BehaviorsRegistry::sItems)
+            for (const auto& item : TypeRegs::Behaviors::sItems)
             {
                 if (ImGui::MenuItem(GetCString(item.Name, &p).Data))
                 {

@@ -14,6 +14,8 @@ namespace fe::Render::GAPI
 {
 	GID CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Raster::Specification& spec)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::InternalID id = OpenGL::GraphicsPipelineRegistry.GetNewID();
 		OpenGL::GraphicsPipeline* obj = OpenGL::GraphicsPipelineRegistry.GetObj(id);
 
@@ -28,6 +30,8 @@ namespace fe::Render::GAPI
 
 	void SetColorAttachment(GID pipeline, GID texture, UInt index)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		pipeline_obj->SetColorAttachment(*texture_obj, index);
@@ -35,6 +39,8 @@ namespace fe::Render::GAPI
 
 	void SetDepthStencilAttachment(GID pipeline, GID texture)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		pipeline_obj->SetDepthStencilAttachment(*texture_obj);
@@ -42,12 +48,16 @@ namespace fe::Render::GAPI
 
 	void SetDepthStencilSpec(GID pipeline, const DepthStencil::Specification& depthStencil)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->SetDepthStencilSpec(depthStencil);
 	}
 
 	void SetBlendSpec(GID pipeline, const Blend::Specification& blend)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->SetBlendSpec(blend);
 	}
@@ -55,6 +65,8 @@ namespace fe::Render::GAPI
 	// buffer or downstream
 	void SetUBO(GID pipeline, GID source, UInt bindingIndex)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		GLuint buffer;
 
@@ -73,6 +85,8 @@ namespace fe::Render::GAPI
 	// buffer, downstream or upstream
 	void SetSSBO(GID pipeline, GID target, UInt bindingIndex)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		GLuint buffer_gl;
 
@@ -92,6 +106,8 @@ namespace fe::Render::GAPI
 	// buffer or downstream
 	void SetIndexSource(GID pipeline, GID source)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		GLuint buffer_gl;
 
@@ -110,6 +126,8 @@ namespace fe::Render::GAPI
 	// buffer or downstream
 	void SetDrawParamsSource(GID pipeline, GID source)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		GLuint buffer_gl;
 
@@ -127,36 +145,48 @@ namespace fe::Render::GAPI
 
 	void ActivatePipelineCmd(GID pipeline)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->ActivateCmd();
 	}
 
 	void DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->DrawCmd(primitiveCount, indicesOffset);
 	}
 
 	void DrawIndirectCmd(GID pipeline, UInt paramsOffset)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->DrawIndirectCmd(paramsOffset);
 	}
 
 	void MultiDrawIndirectCmd(GID pipeline, UInt paramsOffset, UInt drawCount)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->MultiDrawIndirectCmd(paramsOffset, drawCount);
 	}
 
 	void MultiDrawIndirectCountCmd(GID pipeline, UInt paramsOffset, UInt maxDrawCount)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->MultiDrawIndirectCountCmd(paramsOffset, maxDrawCount);
 	}
 
 	void DestroyPipelineCmd(GID pipeline)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->DestroyCmd();
 		OpenGL::GraphicsPipelineRegistry.FreeObj(pipeline);

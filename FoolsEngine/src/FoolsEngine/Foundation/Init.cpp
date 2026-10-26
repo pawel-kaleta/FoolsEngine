@@ -79,9 +79,13 @@ void InitContext::InitGlobal()
 
 			Render::GAPI::Create();
 
-			Context::GPU::ScratchBuffer = Render::GAPI::CreateBuffer();
-			Render::GAPI::AllocateCommitBuffer(Context::GPU::ScratchBuffer, FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE);
-			Context::Log::Core.Info("GPU ScratchBuffer initialized"_FE);
+			{
+				FE_PROFILER_SCOPE("Screach Buffer creation");
+				Context::GPU::ScratchBuffer = Render::GAPI::CreateBuffer();
+				Render::GAPI::AllocateCommitBuffer(Context::GPU::ScratchBuffer, FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE);
+
+				Context::Log::Core.Info("GPU ScratchBuffer initialized"_FE);
+			}
 		}
 	}
 

@@ -170,7 +170,7 @@ namespace fe
         {
             Pile p;
 
-            auto& items = SystemTypesRegistry::sItems;
+            auto& items = TypeRegs::Systems::sItems;
             for (const auto& item : items)
             {
                 if (ImGui::MenuItem(GetCString(item.Name, &p).Data))

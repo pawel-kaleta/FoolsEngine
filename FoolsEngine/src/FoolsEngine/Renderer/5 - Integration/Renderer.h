@@ -23,7 +23,6 @@ namespace fe
 	public:
 		static void Startup();
 		static void AcquireBaseAssets();
-		static void UploadBaseAssetsToGPU();
 		static void Shutdown();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);

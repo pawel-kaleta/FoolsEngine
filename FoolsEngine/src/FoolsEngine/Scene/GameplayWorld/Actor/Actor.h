@@ -43,9 +43,6 @@ namespace fe
 		template<SimulationStage::ValueType stage>
 		void RemoveUpdateEnroll(Behavior* behavior);
 
-	private:
-		friend class ActorInspector;
-		friend class BehaviorsRegistry;
 
 		CompPtr<CActorData> m_Data;
 

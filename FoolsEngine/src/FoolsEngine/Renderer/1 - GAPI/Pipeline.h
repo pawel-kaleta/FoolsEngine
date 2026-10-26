@@ -31,7 +31,7 @@ namespace fe::Render::GAPI
 			PrimitiveType				mPrimitiveType = PrimitiveType::None;
 			FaceCullTest				mFaceCullTest = FaceCullTest::None;
 			ArrayArena<Attachment, 6>	mColorAttachments;
-			Descriptors::TextureFormat mDepthStencilFormat = Descriptors::TextureFormat::None;
+			Descriptors::TextureFormat	mDepthStencilFormat = Descriptors::TextureFormat::None;
 
 			void Init()
 			{

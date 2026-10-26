@@ -3,10 +3,11 @@
 #include "FoolsEngine/Foundation/Utils/Core.h"
 #include "FoolsEngine/Foundation/Context/Pile.h"
 #include "FoolsEngine/Foundation/Allocators/Allocator.h"
+#include "FoolsEngine/Foundation/Containers/StringBuilder.h"
 
 #include "FoolsEngine/Foundation/Debug/Logger.h"
 
-#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 
 #include <glad/gl.h>
@@ -17,26 +18,28 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		Pile p;
+		STD_PMR_Allocator pmr(&p);
+		
 		std::ifstream in(filePath, std::ios::in, std::ios::binary);
 
 		if (!in.good())
-		{
-			Pile p;
-			STD_PMR_Allocator pmr(&p);
-			
+		{	
 			Context::Log::Core.Error("Could not load shader file: \"{0}\""_FE, filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
 			return;
 		}
 
 		auto& shader_core = shaderUser.Get<Shader::Core>();
-		//auto& shader_source = shader_core.ShaderSource;
-		
-		FE_CORE_ASSERT(false, "not implemented");
-		//in.seekg(0, std::ios::end);
-		//shader_source.resize(in.tellg());
-		//in.seekg(0, std::ios::beg);
-		//in.read(&shader_source[0], shader_source.size());
-		//in.close();
+
+		in.seekg(0, std::ios::end);
+		CString shader_source = MakeCString(in.tellg(), &p);
+		std::memset(shader_source.Data, '\0', shader_source.CountWithNull);
+		in.seekg(0, std::ios::beg);
+		in.read(shader_source.Data, shader_source.CountWithNull);
+		in.close();
+
+		auto& shader_component = shaderUser.Emplace<ACShader_GID<Render::GAPI::Platform::OpenGL>>();
+		shader_component.mShaderGID = Render::GAPI::CreateShader(shader_core.mType, shader_source);
 
 		return;
 	}

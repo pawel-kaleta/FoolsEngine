@@ -14,13 +14,13 @@
 					 
 #include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 					 
-#include "FoolsEngine/Scene/ComponentTypesRegistry.h"
-#include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
-#include "FoolsEngine/Scene/GameplayWorld/System/SystemTypesRegistry.h"
+#include "FoolsEngine/TypeRegs/Components.h"
+#include "FoolsEngine/TypeRegs/Behaviors.h"
+#include "FoolsEngine/TypeRegs/Systems.h"
 					 
 #include "FoolsEngine/Assets/AssetManager.h"
-#include "FoolsEngine/Assets/AssetTypesRegistry.h"
-#include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
+#include "FoolsEngine/TypeRegs/Assets.h"
+#include "FoolsEngine/TypeRegs/Loaders.h"
 #include "FoolsEngine/Assets/Serialization/AssetsRegistrySerialization.h"
 
 
@@ -85,25 +85,40 @@ namespace fe
 			FE_PROFILER_SCOPE("Types Registries");
 			Context::Log::ScopeCore scope("Types Registries"_FE);
 
-			ComponentTypesRegistry::Init();
-			ComponentTypesRegistry::RegisterComponents();
-			Context::Log::Core.Info("Componets registry created"_FE);
+			{ 
+				FE_PROFILER_SCOPE("Components");
+				TypeRegs::Components::Init();
+				TypeRegs::Components::RegisterComponents();
+				Context::Log::Core.Info("Componets registry created"_FE);
+			}
 
-			BehaviorsRegistry::Init();
-			BehaviorsRegistry::RegisterBehaviors();
-			Context::Log::Core.Info("Behaviors registry created"_FE);
+			{
+				FE_PROFILER_SCOPE("Behaviors");
+				TypeRegs::Behaviors::Init();
+				TypeRegs::Behaviors::RegisterBehaviors();
+				Context::Log::Core.Info("Behaviors registry created"_FE);
+			}
 		
-			SystemTypesRegistry::Init();
-			SystemTypesRegistry::RegisterSystems();
-			Context::Log::Core.Info("Systems registry created"_FE);
+			{
+				FE_PROFILER_SCOPE("Systems");
+				TypeRegs::Systems::Init();
+				TypeRegs::Systems::RegisterSystems();
+				Context::Log::Core.Info("Systems registry created"_FE);
+			}
 
-			AssetTypesRegistry::Init();
-			AssetTypesRegistry::RegisterAssetTypes();
-			Context::Log::Core.Info("AssetTypes registry created"_FE);
+			{
+				FE_PROFILER_SCOPE("Assets");
+				TypeRegs::Assets::Init();
+				TypeRegs::Assets::RegisterAssetTypes();
+				Context::Log::Core.Info("AssetTypes registry created"_FE);
+			}
 
-			LoadersRegistry::Init();
-			LoadersRegistry::RegisterLoaders();
-			Context::Log::Core.Info("Loaders registry created"_FE);
+			{
+				FE_PROFILER_SCOPE("Loaders");
+				TypeRegs::Loaders::Init();
+				TypeRegs::Loaders::RegisterLoaders();
+				Context::Log::Core.Info("Loaders registry created"_FE);
+			}
 
 			Context::Log::Core.Info("Types Registries created"_FE);
 		}
@@ -135,14 +150,22 @@ namespace fe
 			FE_PROFILER_SCOPE("Core layers");
 			Context::Log::ScopeCore scope("Core layers"_FE);
 
-			m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-			LayerStack::sInstance->PushOuterLayer(m_AppLayer);
-			Context::Log::Core.Info("Application layer created"_FE);
+			{
+				FE_PROFILER_SCOPE("Application");
 
-			m_ImGuiLayer = CreateRef<ImGuiLayer>();
-			m_ImGuiLayer->Startup();
-			LayerStack::sInstance->PushOuterLayer(m_ImGuiLayer);
-			Context::Log::Core.Info("ImGui layer created"_FE);
+				m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+				LayerStack::sInstance->PushOuterLayer(m_AppLayer);
+				Context::Log::Core.Info("Application layer created"_FE);
+			}
+
+			{
+				FE_PROFILER_SCOPE("ImGui");
+
+				m_ImGuiLayer = CreateRef<ImGuiLayer>();
+				m_ImGuiLayer->Startup();
+				LayerStack::sInstance->PushOuterLayer(m_ImGuiLayer);
+				Context::Log::Core.Info("ImGui layer created"_FE);
+			}
 
 
 			Context::Log::Core.Info("Core layers created"_FE);
@@ -169,8 +192,9 @@ namespace fe
 			while (ClientAppProjectInit() && m_Running)
 			{
 				m_ImGuiLayer->End();
+				GlobalContext::Window::Base->PollEvents();
 				m_MainEventDispacher.DispachEvents(*LayerStack::sInstance);
-				GlobalContext::Window::Base->OnUpdate();
+				GlobalContext::Window::Base->SwapBuffers();
 				m_ImGuiLayer->Begin();
 			}
 			m_ImGuiLayer->End();
@@ -208,6 +232,7 @@ namespace fe
 
 			auto& l_stack = *LayerStack::sInstance;
 
+			GlobalContext::Window::Base->PollEvents();
 			m_MainEventDispacher.DispachEvents(l_stack);
 
 			if (!m_Minimized)
@@ -235,7 +260,8 @@ namespace fe
 					m_ImGuiLayer->End();
 				}
 			}
-			GlobalContext::Window::Base->OnUpdate();
+
+			GlobalContext::Window::Base->SwapBuffers();
 		}
 
 #ifdef FE_INTERNAL_BUILD
@@ -298,11 +324,11 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Types Registries");
 
-			LoadersRegistry::Shutdown();
-			AssetTypesRegistry::Shutdown();
-			ComponentTypesRegistry::Shutdown();
-			BehaviorsRegistry::Shutdown();
-			SystemTypesRegistry::Shutdown();
+			TypeRegs::Loaders::Shutdown();
+			TypeRegs::Assets::Shutdown();
+			TypeRegs::Components::Shutdown();
+			TypeRegs::Behaviors::Shutdown();
+			TypeRegs::Systems::Shutdown();
 
 			/*
 			Just leting OS reclame memory
@@ -343,6 +369,8 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 		FE_PROFILER_SESSION_START("ProjectLoading", "Logs/ProfileData_ProjectLoading.json");
 #endif // FE_INTERNAL_BUILD
+
+		FE_PROFILER_FUNC();
 
 		Project::Load(filepath);
 		Renderer::AcquireBaseAssets();

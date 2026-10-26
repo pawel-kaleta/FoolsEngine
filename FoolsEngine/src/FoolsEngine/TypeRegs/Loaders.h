@@ -1,13 +1,13 @@
 #pragma once
 
-#include "LoaderType.h"
+#include "FoolsEngine/Assets/Loaders/LoaderType.h"
 
-#include "FoolsEngine/Assets/AssetTypes.h"
+#include "FoolsEngine/Assets/AssetTypesList.h"
 #include "FoolsEngine/Foundation/Containers/String.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	class LoadersRegistry
+	class Loaders
 	{
 	public:
 		struct Item

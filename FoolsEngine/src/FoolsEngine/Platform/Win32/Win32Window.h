@@ -18,7 +18,9 @@ namespace fe
 		void Create() final override;
 		void Destroy() final override;
 
-		virtual void OnUpdate() final override;
+		void PollEvents() final override;
+		void SwapBuffers() final override;
+
 		virtual void SetVSync(bool enabled) final override;
 
 		virtual void* GetNativeWindow() const final override { return m_Window; };

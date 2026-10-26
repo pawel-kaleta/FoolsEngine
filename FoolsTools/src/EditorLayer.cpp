@@ -14,7 +14,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-
 		RegisterAndLoadStuff(); //SceneTesting.h
 	}
 

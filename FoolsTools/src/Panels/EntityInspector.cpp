@@ -15,7 +15,7 @@ namespace fe
         m_OpenedEntityID = entityID;
     }
 
-    void EntityInspector::DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity)
+    void EntityInspector::DrawComponentWidget(const TypeRegs::Components::DataComponentRegistryItem& item, BaseEntity entity)
     {
         FE_PROFILER_FUNC();
 
@@ -133,7 +133,7 @@ namespace fe
 
         DrawCTransformWidget(entity);
 
-        for (const auto& item : ComponentTypesRegistry::sDataItems)
+        for (const auto& item : TypeRegs::Components::sDataItems)
         {
             DrawComponentWidget(item, entity);
         }
@@ -190,7 +190,7 @@ namespace fe
         if (!ImGui::BeginPopup("AddComponent")) return;
 
         Pile p;
-        for (const auto& item : ComponentTypesRegistry::sDataItems)
+        for (const auto& item : TypeRegs::Components::sDataItems)
         {
             auto& getter_funk_ptr = item.Getter;
             DataComponent* component = (entity.*getter_funk_ptr)();

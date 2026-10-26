@@ -1,14 +1,14 @@
-#include "LoadersRegistry.h"
+#include "Loaders.h"
 
-#include "ShaderLoader.h"
-#include "TextureLoader.h"
-#include "GeometryLoader.h"
+#include "FoolsEngine/Assets/Loaders/ShaderLoader.h"
+#include "FoolsEngine/Assets/Loaders/TextureLoader.h"
+#include "FoolsEngine/Assets/Loaders/GeometryLoader.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	DynamicArena<LoadersRegistry::Item> LoadersRegistry::sItems;
+	DynamicArena<Loaders::Item> Loaders::sItems;
 
-	const LoadersRegistry::Item* LoadersRegistry::GetItem(String extension)
+	const Loaders::Item* Loaders::GetItem(String extension)
 	{
 		for (const auto& item : sItems)
 		{
@@ -18,7 +18,7 @@ namespace fe
 		return nullptr;
 	}
 
-	const LoadersRegistry::Item* LoadersRegistry::GetItem(AssetType assetType)
+	const Loaders::Item* Loaders::GetItem(AssetType assetType)
 	{
 		if (assetType == AssetType::None) return nullptr;
 
@@ -35,7 +35,7 @@ namespace fe
 	}
 
 	template <typename tnLoader>
-	void LoadersRegistry::RegisterLoader()
+	void Loaders::RegisterLoader()
 	{
 		sItems.Append(
 			Item{
@@ -48,12 +48,12 @@ namespace fe
 		);
 	}
 
-	void LoadersRegistry::Init()
+	void Loaders::Init()
 	{
 		sItems.Init();
 	}
 
-	void LoadersRegistry::RegisterLoaders()
+	void Loaders::RegisterLoaders()
 	{
 		RegisterLoader<TextureLoader>();
 		RegisterLoader<GeometryLoader>();

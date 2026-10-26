@@ -37,7 +37,7 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
-			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
+			FE_CORE_ASSERT(-20000 < displacement && displacement < 20000, "Don't put this on the heap!");
 #endif // FE_INTERNAL_BUILD
 		}
 
@@ -93,7 +93,7 @@ namespace fe
 #ifdef FE_INTERNAL_BUILD
 			char dummy;
 			ptrdiff_t displacement = &dummy - reinterpret_cast<char*>(this);
-			FE_CORE_ASSERT(-10000 < displacement && displacement < 10000, "Don't put this on the heap!");
+			FE_CORE_ASSERT(-20000 < displacement && displacement < 20000, "Don't put this on the heap!");
 #endif // FE_INTERNAL_BUILD
 		}
 

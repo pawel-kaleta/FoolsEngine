@@ -10,7 +10,7 @@
 #include "FoolsEngine/Application/Project.h"
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
-#include "FoolsEngine/Assets/Loaders/LoadersRegistry.h"
+#include "FoolsEngine/TypeRegs/Loaders.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Mesh.h"
 #include "FoolsEngine/Renderer/2 - Representation/Model.h"

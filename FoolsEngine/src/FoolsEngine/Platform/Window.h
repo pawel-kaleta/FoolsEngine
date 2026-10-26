@@ -33,7 +33,9 @@ namespace fe
 		virtual void Create() = 0;
 		virtual void Destroy() = 0;
 
-		virtual void OnUpdate() = 0;
+		virtual void PollEvents() = 0;
+		virtual void SwapBuffers() = 0;
+
 		virtual void SetVSync(bool enabled) = 0;
 		virtual void* GetNativeWindow() const = 0;
 

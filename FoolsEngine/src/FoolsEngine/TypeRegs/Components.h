@@ -1,17 +1,19 @@
 #pragma once
 
-#include "BaseEntity.h"
-#include "GameplayWorld/Entity.h"
-
-#include <vector>
+#include "FoolsEngine/Scene/BaseEntity.h"
+#include "FoolsEngine/Scene/GameplayWorld/Entity.h"
 
 namespace fe
 {
 	struct DataComponent;
+}
+
+namespace fe::TypeRegs
+{
 
 #define FE_COMPONENT_TYPES_LIST CCamera, CTile, CSprite, CRenderMesh, CRenderMeshView, CModel, CModelView, CModelView, CDirectionalLight
 
-	class ComponentTypesRegistry
+	class Components
 	{
 	public:
 		struct DataComponentRegistryItem

@@ -14,10 +14,12 @@ namespace fe
 	struct ACTexture2D_Core final : public AssetComponent
 	{
 		Render::GAPI::Descriptors::TextureSpec mSpecification;
+		Render::GAPI::Descriptors::TextureViewSpec mViewSpecification;
 
 		void Init()
 		{
 			mSpecification.Init();
+			mViewSpecification.Init();
 		}
 
 		UInt GetSourceSize() const

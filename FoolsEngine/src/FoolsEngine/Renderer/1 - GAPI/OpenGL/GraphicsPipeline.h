@@ -142,7 +142,7 @@ namespace fe::Render::GAPI::OpenGL
 				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mColorAttachments[i].mFormat);
 				glTextureStorage2D(tmp_textures[i], 1, internal_format, 4, 4);
 				attachment_enums[i] = GL_COLOR_ATTACHMENT0 + i;
-				glNamedFramebufferTexture(mFramebufferOpenGLID, attachment_enums[i], GL_RENDERBUFFER, tmp_textures[i]);
+				glNamedFramebufferTexture(mFramebufferOpenGLID, attachment_enums[i], tmp_textures[i], 0);
 			}
 			glNamedFramebufferDrawBuffers(mFramebufferOpenGLID, (GLsizei)attachment_count, attachment_enums.Elements);
 
@@ -150,7 +150,7 @@ namespace fe::Render::GAPI::OpenGL
 			{
 				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mDepthStencilFormat);
 				glTextureStorage2D(tmp_textures[attachment_count], 1, internal_format, 4, 4);
-				glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, tmp_textures[attachment_count]);
+				glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, tmp_textures[attachment_count], 0);
 			}
 
 			auto status = glCheckNamedFramebufferStatus(mFramebufferOpenGLID, GL_FRAMEBUFFER);
@@ -190,9 +190,17 @@ namespace fe::Render::GAPI::OpenGL
 			GLint linking_success = 0;
 			{
 				FE_PROFILER_SCOPE("OpenGL Shader linking");
+				
+				GLint drawFboId = 0, readFboId = 0;
+				glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
+				glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
+
 				glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferOpenGLID);
 				glLinkProgram(mOpenGLID);
 				glGetProgramiv(mOpenGLID, GL_LINK_STATUS, (int*)&linking_success);
+
+				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId);
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
 			}
 
 			if (linking_success == GL_FALSE)

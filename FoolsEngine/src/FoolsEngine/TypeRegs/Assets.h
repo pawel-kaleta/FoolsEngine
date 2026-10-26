@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Asset.h"
-#include "Loaders/LoaderType.h"
+#include "FoolsEngine/Assets/Asset.h"
+#include "FoolsEngine/Assets/Loaders/LoaderType.h"
 #include "FoolsEngine/Foundation/Containers/String.h"
 #include "FoolsEngine/Foundation/Containers/Arena.h"
 
 
 namespace YAML { class Emitter; }
 
-namespace fe
+namespace fe::TypeRegs
 {
-	class AssetTypesRegistry
+	class Assets
 	{
 	public:
 		struct Item

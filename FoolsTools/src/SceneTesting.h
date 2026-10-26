@@ -186,12 +186,12 @@ namespace fe
 		if (once)
 			return;
 
-		BehaviorsRegistry::RegisterBehavior<PlayerMovementBehavior>();
-		BehaviorsRegistry::RegisterBehavior<TestBehavior>();
-		BehaviorsRegistry::RegisterBehavior<TestBehavior2>();
-		ComponentTypesRegistry::RegisterDataComponent<CMovement>();
-		SystemTypesRegistry::RegisterSystem<TestSystem>();
-		SystemTypesRegistry::RegisterSystem<TestSystem2>();
+		TypeRegs::Components::RegisterDataComponent<CMovement>();
+		TypeRegs::Behaviors::RegisterBehavior<PlayerMovementBehavior>();
+		TypeRegs::Behaviors::RegisterBehavior<TestBehavior>();
+		TypeRegs::Behaviors::RegisterBehavior<TestBehavior2>();
+		TypeRegs::Systems::RegisterSystem<TestSystem>();
+		TypeRegs::Systems::RegisterSystem<TestSystem2>();
 
 		once = true;
 	}

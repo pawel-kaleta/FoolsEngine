@@ -1,12 +1,12 @@
 #pragma once
 
-#include "System.h"
-#include "SystemsDirector.h"
+#include "FoolsEngine/Scene/GameplayWorld/System/System.h"
+#include "FoolsEngine/Scene/GameplayWorld/System/SystemsDirector.h"
 #include "FoolsEngine/Foundation/Containers/Arena.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	class SystemTypesRegistry
+	class Systems
 	{
 	public:
 		struct Item

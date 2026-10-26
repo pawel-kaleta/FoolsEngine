@@ -1,12 +1,12 @@
-#include "AssetTypesRegistry.h"
+#include "Assets.h"
 
-#include "AssetTypes.h"
+#include "FoolsEngine/Assets/AssetTypesList.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	DynamicArena<AssetTypesRegistry::Item> AssetTypesRegistry::sItems;
+	DynamicArena<Assets::Item> Assets::sItems;
 
-	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(AssetType assetType)
+	const Assets::Item* Assets::GetItem(AssetType assetType)
 	{
 		for (const auto& item : sItems)
 		{
@@ -16,7 +16,7 @@ namespace fe
 		return nullptr;
 	}
 
-	const AssetTypesRegistry::Item* AssetTypesRegistry::GetItem(String extension)
+	const Assets::Item* Assets::GetItem(String extension)
 	{
 		for (const auto& item : sItems)
 		{
@@ -27,13 +27,13 @@ namespace fe
 		return nullptr;
 	}
 
-	void AssetTypesRegistry::Init()
+	void Assets::Init()
 	{
 		sItems.Init();
 	}
 
 	template <typename tnAsset>
-	void AssetTypesRegistry::RegisterAssetType()
+	void Assets::RegisterAssetType()
 	{
 		sItems.Append(
 			Item{
@@ -46,10 +46,10 @@ namespace fe
 		);
 	}
 
-#define _REGISTER_ASSET_DEF(x) template void AssetTypesRegistry::RegisterAssetType<x>();
+#define _REGISTER_ASSET_DEF(x) template void Assets::RegisterAssetType<x>();
 	FE_FOR_EACH(_REGISTER_ASSET_DEF, FE_ASSET_TYPES_LIST);
 
-	void AssetTypesRegistry::RegisterAssetTypes()
+	void Assets::RegisterAssetTypes()
 	{
 #define _REGISTER_ASSET_TYPE_CALL(x) RegisterAssetType<x>();
 		FE_FOR_EACH(_REGISTER_ASSET_TYPE_CALL, FE_ASSET_TYPES_LIST);

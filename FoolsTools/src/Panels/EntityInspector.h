@@ -28,6 +28,6 @@ namespace fe
 		static void DrawCTransformWidget(Entity entity);
 		static void DrawCTagsWidget(Entity entity);
 
-		static void DrawComponentWidget(const ComponentTypesRegistry::DataComponentRegistryItem& item, BaseEntity entity);
+		static void DrawComponentWidget(const TypeRegs::Components::DataComponentRegistryItem& item, BaseEntity entity);
 	};
 }

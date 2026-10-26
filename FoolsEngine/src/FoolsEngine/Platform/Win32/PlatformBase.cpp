@@ -19,17 +19,21 @@ namespace fe
 	bool PlatformBaseWindows::Create()
 	{
 		FE_PROFILER_FUNC();
+		
 		{
-			FE_PROFILER_SCOPE("GLFW_Initialization");
+			FE_PROFILER_SCOPE("glfwInit()");
 			if (!glfwInit())
 			{
 				FE_CORE_ASSERT(false, "GLFW initialization failed!");
 				return false;
 			}
 		}
-		return true;
+		{
+			FE_PROFILER_SCOPE("glfwSetErrorCallback()");
+			glfwSetErrorCallback(GLFWErrorCallback);
+		}
 
-		glfwSetErrorCallback(GLFWErrorCallback);
+		return true;
 	}
 
 	void PlatformBaseWindows::Terminate()

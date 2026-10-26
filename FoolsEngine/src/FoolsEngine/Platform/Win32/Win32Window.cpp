@@ -17,6 +17,7 @@ namespace fe
 		new (this) Win32Window();
 
 		mAttributes = attr;
+		m_Window = nullptr;
 	}
 
 	void Win32Window::Destroy()
@@ -31,18 +32,17 @@ namespace fe
 		}
 	}
 
-	void Win32Window::OnUpdate()
+	void Win32Window::PollEvents()
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Trace("Win10Window::OnUpdate()"_FE);
+		Context::Log::Core.Trace("Win10Window::PollEvents()"_FE);
+		glfwPollEvents();
+	}
 
-		// events polling
-		{
-			FE_PROFILER_SCOPE("GLFW events polling");
-			Context::Log::Core.Trace("GLFW events polling"_FE);
-			glfwPollEvents();
-		}
-
+	void Win32Window::SwapBuffers()
+	{
+		FE_PROFILER_FUNC();
+		Context::Log::Core.Trace("Win10Window::SwapBuffers()"_FE);
 		glfwSwapBuffers(m_Window);
 	}
 
@@ -50,24 +50,22 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		{
-			FE_PROFILER_SCOPE("GLFW_Create_Window_and_OpenGL_Context");
 
 #ifdef FE_INTERNAL_BUILD
 			glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
 #endif // FE_INTERNAL_BUILD
 
-			const auto& attr = mAttributes;
-			Pile p;
+		const auto& attr = mAttributes;
+		Pile p;
+		
+		{
+			FE_PROFILER_SCOPE("glfwCreateWindow()");
 			m_Window = glfwCreateWindow((int)attr.Width, (int)attr.Height, GetCString(attr.Title, &p).Data, nullptr, nullptr);
-
-			if (!m_Window)
-			{
-				FE_CORE_ASSERT(false, "GLFW Window creation failed!");
-			}
-
-			glfwMakeContextCurrent(m_Window);
 		}
+
+		FE_CORE_ASSERT(m_Window, "GLFW Window creation failed!");
+		
+		glfwMakeContextCurrent(m_Window);
 	
 		glfwSetWindowUserPointer(m_Window, this);
 	}

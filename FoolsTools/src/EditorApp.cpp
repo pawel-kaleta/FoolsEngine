@@ -15,6 +15,7 @@ namespace fe
 
 	void EditorApp::ClientAppStartup()
 	{
+		FE_PROFILER_FUNC();
 		Context::Log::Core.Info("EditorApp::ClientAppStartup()"_FE);
 		AssetImportModal::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
@@ -22,6 +23,8 @@ namespace fe
 
 	void EditorApp::ClientAppShutdown()
 	{
+		FE_PROFILER_FUNC();
+
 		if (m_LayerAttached)
 			PopOuterLayer(m_EditorLayer);
 		m_EditorLayer.reset();

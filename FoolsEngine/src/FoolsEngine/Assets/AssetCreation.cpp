@@ -1,6 +1,7 @@
 #include "AssetManager.h"
 
-#include "AssetTypes.h"
+#include "FoolsEngine/Assets/AssetTypesList.h"
+#include "FoolsEngine/TypeRegs/Assets.h"
 #include "Serialization/AssetsRegistrySerialization.h"
 
 #include "FoolsEngine/Application/Project.h"

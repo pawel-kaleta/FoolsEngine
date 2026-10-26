@@ -7,9 +7,9 @@
 
 #include "FoolsEngine/Scene/Scene.h"
 #include "FoolsEngine/Scene/Component.h"
-#include "FoolsEngine/Scene/ComponentTypesRegistry.h"
+#include "FoolsEngine/TypeRegs/Components.h"
 #include "FoolsEngine/Scene/GameplayWorld/Actor/Actor.h"
-#include "FoolsEngine/Scene/GameplayWorld/Actor/BehaviorsRegistry.h"
+#include "FoolsEngine/TypeRegs/Behaviors.h"
 
 #include <memory_resource>
 #include <fstream>
@@ -270,7 +270,7 @@ namespace fe
 
 		// Data Components
 		{
-			auto& reg_items = ComponentTypesRegistry::sDataItems;
+			auto& reg_items = TypeRegs::Components::sDataItems;
 
 			for (auto& item : reg_items)
 			{
@@ -428,7 +428,7 @@ namespace fe
 							}
 
 							Pile p;
-							for (auto& item : ComponentTypesRegistry::sDataItems)
+							for (auto& item : TypeRegs::Components::sDataItems)
 							{
 								auto component_data = entity[std::string(GetCString(item.Name, &p).Data)];
 								if (component_data)
@@ -456,7 +456,7 @@ namespace fe
 
 							auto behavior_type_name = behavior_node["Behavior"].as<std::string>();
 							String my_behavior_type_name(behavior_type_name.c_str());
-							auto* item = BehaviorsRegistry::GetItemFromName(my_behavior_type_name);
+							auto* item = TypeRegs::Behaviors::GetItemFromName(my_behavior_type_name);
 							if (!item)
 							{
 								Context::Log::Core.Error("Deserialization of {0} failed"_FE, behavior_type_name);

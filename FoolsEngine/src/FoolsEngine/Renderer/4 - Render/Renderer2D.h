@@ -9,6 +9,8 @@
 
 #include "FoolsEngine/Renderer/2 - Representation/Shader.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Framebuffer.h"
+
 
 #include <glm/glm.hpp>
 
@@ -24,8 +26,8 @@ namespace fe
 	public:
 		struct RenderStats
 		{
-			uint32_t Quads;
-			uint32_t DrawCalls;
+			U32 Quads;
+			U32 DrawCalls;
 			Time::TimeStep RenderTime;
 		};
 		static RenderStats m_Stats;
@@ -33,23 +35,21 @@ namespace fe
 		struct Quad
 		{
 			glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
-			float TextureTilingFactor = 1.0f;
+			F32 TextureTilingFactor = 1.0f;
 			AssetHandle<Texture2D> Texture; // FlatWhite
 		};
 
-		static void RenderScene(const AssetObserver& scene);
+		static void RenderScene(const AssetObserver& scene, const Render::Representation::Framebuffer& framebuffer);
 
 		friend class Renderer;
 		static void Startup();
-		static void Init();
+		static void AcquireBaseAssets();
 		static void Shutdown();
 
 		struct ConstLimits {
 			constexpr static U32 QuadsInBatch = 1000;
 			constexpr static U32 MaxVeritices = QuadsInBatch * 4;
 			constexpr static U32 MaxIndices = QuadsInBatch * 6;
-			constexpr static U32 RendererTextureSlotsCount = 32;
-			constexpr static U32 LayersCount = 19;
 		};
 
 		struct QuadVertex
@@ -57,27 +57,23 @@ namespace fe
 			glm::vec3 Shift;
 			glm::vec4 Color;
 			glm::vec2 TexCoord;
-			float TilingFactor;
-			uint32_t TextureSampler;
+			F32 TilingFactor;
+			U32 TextureSampler;
 			EntityID EntityID;
 		};
 
-		using QuadVerticesBatch = Array<QuadVertex, ConstLimits::MaxVeritices>;
+		//using QuadVerticesBatch = Array<QuadVertex, ConstLimits::MaxVeritices>;
 
 		struct BatchData
 		{
-			Ref<QuadVerticesBatch> QuadVertices = CreateRef<QuadVerticesBatch>();
-			QuadVertex* QuadVeriticesIt;
-			uint32_t QuadIndexCount = 0;
+			//Ref<QuadVerticesBatch> QuadVertices = CreateRef<QuadVerticesBatch>();
+			//QuadVertex* QuadVeriticesIt;
+			U32 QuadIndexCount = 0;
 
-			Array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
-			uint32_t TexturesCount = 1;
+			//Array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
+			//U32 TexturesCount = 1;
 		};
 		
-
-		
-		//ShaderTextureSlot m_BaseShaderTextureSlot;
-		//RenderTextureSlotID m_BaseShaderSamplers[ConstLimits::RendererTextureSlotsCount];
 
 		static void BeginScene();
 		static void ClearBatch();

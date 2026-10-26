@@ -7,13 +7,13 @@
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
+#include "FoolsEngine/Renderer/2 - Representation/Framebuffer.h"
 
 namespace fe::Render
 {
 	class TextureAllocator
 	{
 	public:
-
 		UInt mTexturesCount;
 		UInt mTexturesCountBudget;
 		UInt mTexturesSize;
@@ -61,7 +61,7 @@ namespace fe::Render
 			mTexturesCount += 1;
 			mTexturesSize += footprint_estimate;
 
-			GAPI::GID texture_id = GAPI::CreateTexture(core.mSpecification);
+			GAPI::GID texture_id = GAPI::CreateTexture(core.mSpecification, core.mViewSpecification);
 			GAPI::AllocateTexture(texture_id);
 
 			auto& texture_component = textureUser.Emplace<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
@@ -149,6 +149,61 @@ namespace fe::Render
 			textureUser.Erase<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 
 			return;
+		}
+
+		void CreateFramebuffer(Representation::Framebuffer& framebuffer)
+		{
+			for (UInt i = 0; i < framebuffer.mColorAttachments.Count; i++)
+			{
+				GAPI::Descriptors::TextureSpec spec;
+				spec.mType = GAPI::Descriptors::TextureType::Texture2D;
+				spec.mFormat = framebuffer.mColorAttachments[i].mFormat;
+				spec.mLayerCount = 1;
+				spec.mMipCount = 1;
+				spec.mDimentions = { framebuffer.mDimentions, 1 };
+
+				framebuffer.mColorAttachments[i].mGID = GAPI::CreateTexture(spec);
+			}
+
+			GAPI::Descriptors::TextureSpec spec;
+			spec.mType = GAPI::Descriptors::TextureType::Texture2D;
+			spec.mFormat = framebuffer.mDepthStencilAttachment.mFormat;
+			spec.mLayerCount = 1;
+			spec.mMipCount = 1;
+			spec.mDimentions = { framebuffer.mDimentions, 1 };
+
+			framebuffer.mDepthStencilAttachment.mGID = GAPI::CreateTexture(spec);
+		}
+
+		void ResizeFramebuffer(Representation::Framebuffer& framebuffer, UInt x, UInt y)
+		{
+			framebuffer.mDimentions.x = x;
+			framebuffer.mDimentions.y = y;
+
+			for (UInt i = 0; i < framebuffer.mColorAttachments.Count; i++)
+			{
+				GAPI::DestroyTextureCmd(framebuffer.mColorAttachments[i].mGID);
+
+				GAPI::Descriptors::TextureSpec spec;
+				spec.mType = GAPI::Descriptors::TextureType::Texture2D;
+				spec.mFormat = framebuffer.mColorAttachments[i].mFormat;
+				spec.mLayerCount = 1;
+				spec.mMipCount = 1;
+				spec.mDimentions = { x, y, 1 };
+
+				framebuffer.mColorAttachments[i].mGID = GAPI::CreateTexture(spec);
+			}
+
+			GAPI::DestroyTextureCmd(framebuffer.mDepthStencilAttachment.mGID);
+
+			GAPI::Descriptors::TextureSpec spec;
+			spec.mType = GAPI::Descriptors::TextureType::Texture2D;
+			spec.mFormat = framebuffer.mDepthStencilAttachment.mFormat;
+			spec.mLayerCount = 1;
+			spec.mMipCount = 1;
+			spec.mDimentions = { x, y, 1 };
+
+			framebuffer.mDepthStencilAttachment.mGID = GAPI::CreateTexture(spec);
 		}
 	};
 }

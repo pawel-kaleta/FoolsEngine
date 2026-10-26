@@ -60,10 +60,7 @@ namespace fe
 
 		DynamicArena<System*> m_Systems;
 		Array<DynamicArena<SystemUpdateEnroll>, SimulationStage::Count> m_SystemUpdateEnrolls;
-	private:
-		friend class SystemsInspector;
-		friend class SystemTypesRegistry;
-		friend class SceneSerializerYAML;
+
 
 		void RemoveSystem(System* system);
 

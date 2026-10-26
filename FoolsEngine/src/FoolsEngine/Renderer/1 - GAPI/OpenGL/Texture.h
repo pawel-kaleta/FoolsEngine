@@ -87,6 +87,7 @@ namespace fe::Render::GAPI::OpenGL
 
 		GLuint mOpenGLID = 0;
 		TextureSpec mSpec;
+		TextureViewSpec mViewSpec;
 		GLenum mGLType;
 		GLenum mGLFormat;
 		GLenum mGLInternalFormat;
@@ -123,8 +124,93 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
+		void Create(const TextureSpec& spec, const TextureViewSpec& viewSpec)
+		{
+			mSpec = spec;
+			mGLType = Utils::FormatToGLType(spec.mFormat);
+			mGLFormat = Utils::FormatToGLFormat(spec.mFormat);
+			mGLInternalFormat = Utils::FormatToGLInternalFormat(spec.mFormat);
+			mViewSpec = viewSpec;
+
+			switch (spec.mType.Value)
+			{
+			case TextureType::Texture1D:
+				FE_CORE_ASSERT(false, "Texture type not implemented");
+				break;
+			case TextureType::Texture2D:
+				glCreateTextures(GL_TEXTURE_2D, 1, &mOpenGLID);
+				break;
+			case TextureType::Texture3D:
+				FE_CORE_ASSERT(false, "Texture type not implemented");
+				break;
+			case TextureType::Texture2DArray:
+				FE_CORE_ASSERT(false, "Texture type not implemented");
+				break;
+			default:
+				FE_CORE_ASSERT(false, "Texture type not recognised");
+			}
+		}
+
 		void Allocate()
 		{
+			if (mViewSpec.mASFiltering != ASFiltering::None)
+			{
+				GLfloat anisotropy = 2 ^ mViewSpec.mASFiltering.Value;
+				glTextureParameterf(mOpenGLID, GL_TEXTURE_MAX_ANISOTROPY, anisotropy);
+			}
+
+			if (mViewSpec.mWrapping != Wrapping::Repeat) // default opengl
+			{
+				switch (mViewSpec.mWrapping.Value)
+				{
+				case Wrapping::MirrorRepeat:
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+				break;
+				case Wrapping::Clamp:
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				break;
+				case Wrapping::Border:
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTextureParameterfv(mOpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(mViewSpec.mBorderColor));
+				break;
+				default:
+					Context::Log::Core.Error("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
+				}
+			}
+
+			if (mViewSpec.mFiltering != Filtering::Nearest || mViewSpec.mMipmapping != Mipmapping::Liniear)
+			{
+				switch (mViewSpec.mFiltering.Value)
+				{
+				case Filtering::Nearest:
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					switch (mViewSpec.mMipmapping.Value)
+					{
+					case Mipmapping::None:		glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); mSpec.mMipCount = 1; break;
+					case Mipmapping::Nearest:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); mSpec.CalculateMipCount(); break;
+					case Mipmapping::Liniear:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); mSpec.CalculateMipCount(); break;
+					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
+					}
+				break;
+				case Filtering::Bilinear:
+					glTextureParameteri(mOpenGLID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					switch (mViewSpec.mMipmapping.Value)
+					{
+					case Mipmapping::None:		glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); mSpec.CalculateMipCount(); break;
+					case Mipmapping::Nearest:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); mSpec.CalculateMipCount(); break;
+					case Mipmapping::Liniear:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); mSpec.CalculateMipCount(); break;
+					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
+					}
+				break;
+				default:
+					Context::Log::Core.Info("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					mSpec.CalculateMipCount();
+				}
+			}
+
 			glTextureStorage2D(mOpenGLID, mSpec.mMipCount, mGLInternalFormat, mSpec.mDimentions.x, mSpec.mDimentions.y);
 		}
 
@@ -141,22 +227,6 @@ namespace fe::Render::GAPI::OpenGL
 			
 			glClearTexImage(mOpenGLID, 0, mGLFormat, GL_UNSIGNED_INT, values.Elements);
 		}
-
-		//void ReadPixel(UInt attachmentIndex, UInt x, UInt y, Splice<Byte> destination)
-		//{
-		//	FE_PROFILER_FUNC();
-		//
-		//	glNamedFramebufferReadBuffer(mOpenGLID, GL_COLOR_ATTACHMENT0 + attachmentIndex);
-		//
-		//	const auto& spec = Description::Library::Get().FramebufferSpecs[SpecificationID];
-		//	auto& format = spec.ColorAttachments[attachmentIndex].Format;
-		//
-		//	FE_CORE_ASSERT(Description::Texture::SizeOfFormat(format) == destination.Count, "Format size and destination capacity!");
-		//
-		//	GLenum glFormat = Resource::Utils::FormatToGLFormat(format);
-		//	GLenum glType = Resource::Utils::FormatToGLType(format);
-		//	glReadPixels((GLint)x, (GLint)y, 1, 1, glFormat, glType, destination.Elements);
-		//}
 
 		void DestroyCmd()
 		{

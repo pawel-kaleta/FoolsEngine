@@ -2,6 +2,8 @@
 
 #include "LoggingLevel.h"
 
+#include "Profiler.h"
+
 #include "FoolsEngine/Foundation/Containers/String.h"
 #include "FoolsEngine/Foundation/Utils/Core.h"
 

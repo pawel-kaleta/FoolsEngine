@@ -14,7 +14,7 @@ namespace fe::Render::GAPI
 {
 	namespace Descriptors
 	{
-		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment, Compute);
+		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment, Compute)
 
 		FE_DECLARE_ENUM(TextureType, None, Texture1D, Texture2D, Texture3D, Texture2DArray)
 
@@ -59,7 +59,9 @@ namespace fe::Render::GAPI
 			Filtering	mFiltering = Filtering::None;
 			Mipmapping	mMipmapping = Mipmapping::None;
 			ASFiltering	mASFiltering = ASFiltering::None;
-			glm::vec4	mBorderColor = { 0.0, 0.0, 0.0, 0.0 };
+			glm::vec4	mBorderColor = { 0.0, 0.0, 0.0, 1.0 };
+
+			void Init() { new (this) TextureViewSpec(); }
 		};
 	}
 
@@ -79,6 +81,7 @@ namespace fe::Render::GAPI
 
 
 	GID		CreateTexture(const Descriptors::TextureSpec& spec);
+	GID		CreateTexture(const Descriptors::TextureSpec& spec, const Descriptors::TextureViewSpec& viewSpec);
 	void	AllocateTexture(GID texture);
 	void	CopyToTextureCmd(GID texture, GID region);
 	void	CopyToTextureCmd(GID texture, GID buffer, U32 offset);

@@ -37,6 +37,25 @@ namespace fe
 		return output;
 	}
 
+	template <typename tAlloc>
+	String MakeString(UInt charCount, tAlloc* alloc = Context::Alloc::Output)
+	{
+		String output;
+		output.Data = alloc->Allocate<char8_t>(charCount).Elements;
+		output.Count = charCount;
+		return output;
+	}
+
+	template <typename tAlloc>
+	CString MakeCString(UInt charCountWithNull, tAlloc* alloc = Context::Alloc::Output)
+	{
+		CString output;
+		output.Data = alloc->Allocate<char>(charCountWithNull).Elements;
+		output.CountWithNull = charCountWithNull;
+		output.Data[charCountWithNull] = '\0';
+		return output;
+	}
+
 	struct StringBuilder
 	{
 		PMAlloc* Alloc;

@@ -1,6 +1,6 @@
 #include "SystemsDirector.h"
 
-#include "SystemTypesRegistry.h"
+#include "FoolsEngine/TypeRegs/Systems.h"
 
 #include "FoolsEngine/Application/UUID.h"
 
@@ -87,7 +87,7 @@ namespace fe
 
 	System* SystemsDirector::CreateSystemFromName(String systemTypeName)
 	{
-		auto* item = SystemTypesRegistry::GetItem(systemTypeName);
+		auto* item = TypeRegs::Systems::GetItem(systemTypeName);
 		if (item)
 		{
 			auto& create_funk_ptr = item->Create;

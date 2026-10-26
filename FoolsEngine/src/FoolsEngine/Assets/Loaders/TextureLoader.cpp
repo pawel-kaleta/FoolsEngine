@@ -23,7 +23,6 @@ namespace fe
 
 		std::pmr::string filename("stbi_load - ", &pmr);
 		filename += sourceFilePath.filename().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
-		FE_PROFILER_SCOPE(filename.c_str());
 		std::pmr::string file_path = sourceFilePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
 
 
@@ -31,7 +30,11 @@ namespace fe
 		stbi_set_flip_vertically_on_load(should_flip);
 
 		int width, height, channels;
-		stbi_uc* data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data;
+		{
+			FE_PROFILER_SCOPE(filename.c_str());
+			data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+		}
 
 		UInt data_size = width * height * channels;
 		Render::GAPI::GID region = Render::GAPI::CreateRegion(Renderer::sTextureDownStream, data_size);

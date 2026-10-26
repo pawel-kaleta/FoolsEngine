@@ -131,10 +131,10 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\AssetTypes.h">
+    <ClInclude Include="src\FoolsEngine\Assets\AssetTypesList.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\AssetTypesRegistry.h">
+    <ClInclude Include="src\FoolsEngine\TypeRegs\Assets.h">
       <Filter>FoolsEngine\Assets</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h">
@@ -143,7 +143,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.h">
+    <ClInclude Include="src\FoolsEngine\TypeRegs\Loaders.h">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.h">
@@ -380,7 +380,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\Component.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\ComponentTypesRegistry.h">
+    <ClInclude Include="src\FoolsEngine\TypeRegs\Components.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\Components\2DComponents.h">
@@ -407,7 +407,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.h">
+    <ClInclude Include="src\FoolsEngine\TypeRegs\Behaviors.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\CompPtr.h">
@@ -440,7 +440,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\System.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.h">
+    <ClInclude Include="src\FoolsEngine\TypeRegs\Systems.h">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.h">
@@ -455,6 +455,7 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -484,13 +485,13 @@
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\AssetTypesRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\TypeRegs\Assets.cpp">
       <Filter>FoolsEngine\Assets</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Assets\Loaders\LoadersRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\TypeRegs\Loaders.cpp">
       <Filter>FoolsEngine\Assets\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\ShaderLoader.cpp">
@@ -586,7 +587,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\ComponentTypesRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\TypeRegs\Components.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp">
@@ -607,7 +608,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\Behavior.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\Actor\BehaviorsRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\TypeRegs\Behaviors.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\Actor</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\ComponentDestructionManager.cpp">
@@ -631,7 +632,7 @@
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\System.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemTypesRegistry.cpp">
+    <ClCompile Include="src\FoolsEngine\TypeRegs\Systems.cpp">
       <Filter>FoolsEngine\Scene\GameplayWorld\System</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\GameplayWorld\System\SystemsDirector.cpp">

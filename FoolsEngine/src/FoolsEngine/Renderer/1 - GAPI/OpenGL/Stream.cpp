@@ -11,6 +11,8 @@ namespace fe::Render::GAPI
 {
 	GID CreateDownStream()
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::InternalID id = OpenGL::DownStreamRegistry.GetNewID();
 		OpenGL::DownStream* stream = OpenGL::DownStreamRegistry.GetObj(id);
 
@@ -20,18 +22,24 @@ namespace fe::Render::GAPI
 
 	void AllocateDownStream(GID downStream, U32 size)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::DownStream* stream = OpenGL::DownStreamRegistry.GetObj(downStream);
 		stream->Create(size);
 	}
 
 	void DestroyDownStreamCmd(GID downStream)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::DownStream* stream = OpenGL::DownStreamRegistry.GetObj(downStream);
 		stream->ReleaseCmd();
 	}
 
 	GID CreateRegion(GID stream, U32 size, U32 offsetAlignment)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::InternalID id = stream;
 		if (id.mComps.Type == ObjType::DownStream)
 		{
@@ -63,6 +71,8 @@ namespace fe::Render::GAPI
 
 	void CommitRegion(GID region)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
 		OpenGL::Stream* stream_obj = region_obj->mStream;
 		if (stream_obj->mID.mComps.Type == ObjType::DownStream)
@@ -81,6 +91,8 @@ namespace fe::Render::GAPI
 	
 	void RetireRegionCmd(GID region)
 	{
+		FE_PROFILER_FUNC();
+
 		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
 		OpenGL::Stream* stream_obj = region_obj->mStream;
 		if (stream_obj->mID.mComps.Type == ObjType::DownStream)

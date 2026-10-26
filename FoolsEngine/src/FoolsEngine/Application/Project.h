@@ -27,8 +27,8 @@ namespace fe
 			} Textures;
 
 			struct {
-				UUID Base2DBatchVertex;
-				UUID Base2DBatchFragment;
+				UUID Base2DVertex;
+				UUID Base2DFragment;
 				UUID Base3DVertex;
 				UUID Base3DFragmentBlend;
 				UUID Base3DFragmentCutout;

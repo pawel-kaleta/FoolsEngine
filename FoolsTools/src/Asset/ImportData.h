@@ -17,7 +17,7 @@ namespace fe
         //const std::vector<AssetID>* ImportedAssets = nullptr;
         //AssetHandleBase* HandleToOverride = nullptr;
         //AssetType Type = AssetType::None;
-        const LoadersRegistry::Item* LoaderItemPtr = nullptr;
+        const TypeRegs::Loaders::Item* LoaderItemPtr = nullptr;
         std::pmr::monotonic_buffer_resource Arena;
         bool Finished = false;
 

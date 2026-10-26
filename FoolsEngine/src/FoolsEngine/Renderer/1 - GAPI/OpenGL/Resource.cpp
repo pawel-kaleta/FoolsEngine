@@ -18,21 +18,25 @@ namespace fe::Render::GAPI
 
 	Byte* AllocateBuffer(GID buffer, U32 size)
 	{
+		FE_PROFILER_FUNC();
 		return OpenGL::BufferRegistry.GetObj(buffer)->Allocate(size);
 	}
 
 	void AllocateCommitBuffer(GID buffer, U32 size)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::BufferRegistry.GetObj(buffer)->AllocateCommit(size);
 	}
 
 	void CommitBuffer(GID buffer)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::BufferRegistry.GetObj(buffer)->Commit();
 	}
 
 	void DestroyBufferCmd(GID buffer)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Buffer* obj = OpenGL::BufferRegistry.GetObj(buffer);
 		obj->ReleaseCmd();
 		OpenGL::BufferRegistry.FreeObj(buffer);
@@ -40,6 +44,7 @@ namespace fe::Render::GAPI
 
 	void GAPI::CopyRegionCmd(GID sourceBuffer, U32 sourceOffset, U32 size, GID targetBuffer, U32 targetOffset)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Buffer* source_obj = OpenGL::BufferRegistry.GetObj(sourceBuffer);
 		OpenGL::Buffer* target_obj = OpenGL::BufferRegistry.GetObj(targetBuffer);
 
@@ -51,6 +56,7 @@ namespace fe::Render::GAPI
 
 	GID CreateShader(Descriptors::ShaderType type, CString source)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::InternalID id = OpenGL::ShaderRegistry.GetNewID();
 		OpenGL::Shader* shader = OpenGL::ShaderRegistry.GetObj(id);
 		shader->Create(source, type);
@@ -59,6 +65,7 @@ namespace fe::Render::GAPI
 
 	void DestroyShader(GID shader)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Shader* obj = OpenGL::ShaderRegistry.GetObj(shader);
 		obj->Destroy();
 		OpenGL::ShaderRegistry.FreeObj(shader);
@@ -66,20 +73,32 @@ namespace fe::Render::GAPI
 
 	GID CreateTexture(const Descriptors::TextureSpec& spec)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::InternalID id = OpenGL::TextureRegistry.GetNewID();
 		OpenGL::Texture* texture = OpenGL::TextureRegistry.GetObj(id);
 		texture->Create(spec);
 		return id;
 	}
 
+	GID CreateTexture(const Descriptors::TextureSpec& spec, const Descriptors::TextureViewSpec& viewSpec)
+	{
+		FE_PROFILER_FUNC();
+		OpenGL::InternalID id = OpenGL::TextureRegistry.GetNewID();
+		OpenGL::Texture* texture = OpenGL::TextureRegistry.GetObj(id);
+		texture->Create(spec, viewSpec);
+		return id;
+	}
+
 	void AllocateTexture(GID texture)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* obj = OpenGL::TextureRegistry.GetObj(texture);
 		obj->Allocate();
 	}
 
 	void CopyToTextureCmd(GID texture, GID region)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		OpenGL::Region* region_obj = OpenGL::RegionRegistry.GetObj(region);
 
@@ -98,6 +117,7 @@ namespace fe::Render::GAPI
 
 	void CopyToTextureCmd(GID texture, GID buffer, U32 offset)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		OpenGL::Buffer* buffer_obj = OpenGL::BufferRegistry.GetObj(buffer);
 
@@ -116,6 +136,7 @@ namespace fe::Render::GAPI
 
 	void Clear(GID texture, Splice<U32> values)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 
 		texture_obj->ClearCmd(values);
@@ -123,6 +144,7 @@ namespace fe::Render::GAPI
 
 	void Clear(GID texture, Splice<F32> values)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 
 		texture_obj->ClearCmd(values);
@@ -130,6 +152,7 @@ namespace fe::Render::GAPI
 
 	void DestroyTextureCmd(GID texture)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 		texture_obj->DestroyCmd();
 		OpenGL::TextureRegistry.FreeObj(texture);
@@ -143,6 +166,7 @@ namespace fe::Render::GAPI
 
 	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
 
 		OpenGL::InternalID textureview_id = OpenGL::TextureViewRegistry.GetNewID();
@@ -156,12 +180,14 @@ namespace fe::Render::GAPI
 
 	void CommitTextureViewCmd(GID textureView)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 		textureview_obj->CommitCmd();
 	}
 
 	void DestroyTextureViewCmd(GID textureView)
 	{
+		FE_PROFILER_FUNC();
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 		textureview_obj->DestroyCmd();
 		OpenGL::TextureViewRegistry.FreeObj(textureView);

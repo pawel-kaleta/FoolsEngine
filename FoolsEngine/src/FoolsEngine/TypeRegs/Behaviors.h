@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Actor.h"
-#include "Behavior.h"
+#include "FoolsEngine/Scene/GameplayWorld/Actor/Actor.h"
+#include "FoolsEngine/Scene/GameplayWorld/Actor/Behavior.h"
 
 #include "FoolsEngine/Foundation/Containers/Arena.h"
 
-namespace fe
+namespace fe::TypeRegs
 {
-	class BehaviorsRegistry
+	class Behaviors
 	{
 	public:
 		struct Item
@@ -19,12 +19,9 @@ namespace fe
 		template <typename tnBehavior>
 		static void RegisterBehavior()
 		{
-			sItems.Append(
-				Item{
-					&Actor::CreateBehaviorAsBase<tnBehavior>,
-					tnBehavior::GetNameStatic()
-				}
-			);
+			auto* item = sItems.EmplaceBack();
+			item->Create = &Actor::CreateBehaviorAsBase<tnBehavior>;
+			item->Name = tnBehavior::GetNameStatic();
 		}
 
 		static const Item* GetItemFromName(String name);

@@ -85,6 +85,8 @@ namespace fe::Render::GAPI
 
 	void Create()
 	{
+		FE_PROFILER_FUNC();
+
 		{
 			FE_PROFILER_SCOPE("gladLoadGLLoader");
 			int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
@@ -93,24 +95,22 @@ namespace fe::Render::GAPI
 		}
 
 		{
-			FE_PROFILER_SCOPE("OpenGL platform info");
+			FE_PROFILER_SCOPE("OpenGL debug");
 			Context::Log::Core.Info("Rendering platform info:"_FE);
 			Context::Log::Core.Info("    Vendor:   {0}"_FE, (const char*)glGetString(GL_VENDOR));
 			Context::Log::Core.Info("    Renderer: {0}"_FE, (const char*)glGetString(GL_RENDERER));
 			Context::Log::Core.Info("    Version:  {0}"_FE, (const char*)glGetString(GL_VERSION));
 
 			FE_CORE_ASSERT(GL_MAJOR_VERSION > 4 || (GL_MAJOR_VERSION == 4 && GL_MINOR_VERSION >= 5), "Minimal required OpenGL version is 4.5!");
-		}
 
 #ifdef FE_INTERNAL_BUILD
-		{
-			FE_PROFILER_SCOPE("OpenGL debug setup");
+
 			glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_TRUE);
-		}
 #endif // FE_INTERNAL_BUILD
+		}
 
 		{
 			FE_PROFILER_SCOPE("Registries creation");

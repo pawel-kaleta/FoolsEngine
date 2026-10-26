@@ -39,6 +39,19 @@ namespace fe
 		m_Icons.File = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_Icons.Folder = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 
+		m_Icons.File.Get<Texture2D::Core>().mViewSpecification = {
+			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
+			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
+			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
+			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
+		};
+		m_Icons.Folder.Get<Texture2D::Core>().mViewSpecification = {
+			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
+			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
+			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
+			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
+		};
+
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);
 
@@ -178,8 +191,8 @@ namespace fe
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		String ext(extension.data(), extension.size() + 1);
-		auto loader_registry_item_ptr = LoadersRegistry::GetItem(ext);
-		auto asset_types_registry_item_ptr = AssetTypesRegistry::GetItem(ext);
+		auto loader_registry_item_ptr = TypeRegs::Loaders::GetItem(ext);
+		auto asset_types_registry_item_ptr = TypeRegs::Assets::GetItem(ext);
 
 		const std::pmr::string file_name(stem + extension, &pmr);
 		const std::filesystem::path file_path = m_CurrentPath / file_name;

@@ -7,9 +7,9 @@
 #include "FoolsEngine/Application/Project.h"
 
 #include "FoolsEngine/Assets/Asset.h"
-#include "FoolsEngine/Assets/AssetTypes.h"
+#include "FoolsEngine/Assets/AssetTypesList.h"
 #include "FoolsEngine/Assets/AssetManager.h"
-#include "FoolsEngine/Assets/AssetTypesRegistry.h"
+#include "FoolsEngine/TypeRegs/Assets.h"
 
 #include <string>
 

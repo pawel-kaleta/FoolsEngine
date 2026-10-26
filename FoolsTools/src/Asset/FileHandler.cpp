@@ -8,7 +8,7 @@ namespace fe
 {
     namespace FileHandler
     {     
-	    void OpenFile(const std::filesystem::path& filepath, const LoadersRegistry::Item* loaderItemPtr)
+	    void OpenFile(const std::filesystem::path& filepath, const TypeRegs::Loaders::Item* loaderItemPtr)
 	    {
 		    if (filepath.empty())
 		    {
@@ -21,7 +21,7 @@ namespace fe
                 Pile p;
                 STD_PMR_Allocator pmr(&p);
                 auto std_string = filepath.extension().string<PMR_STRING_TEMPLATE_PARAMS>(&pmr);
-                const auto item = LoadersRegistry::GetItem(String(std_string.data(), std_string.size()+1));
+                const auto item = TypeRegs::Loaders::GetItem(String(std_string.data(), std_string.size()+1));
 				AssetImportModal::OpenWindow(filepath, item);
 				return;
             }
@@ -86,7 +86,7 @@ namespace fe
             }
         }
 
-        void OpenWindow(const std::filesystem::path& filepathToImport, const LoadersRegistry::Item* loaderItemPtr)
+        void OpenWindow(const std::filesystem::path& filepathToImport, const TypeRegs::Loaders::Item* loaderItemPtr)
         {
             if (s_ImportData)
             {
