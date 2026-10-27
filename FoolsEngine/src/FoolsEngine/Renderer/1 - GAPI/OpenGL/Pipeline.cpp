@@ -98,6 +98,7 @@ namespace fe::Render::GAPI
 		case ObjType::None:
 		default:
 			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
+			return;
 		}
 
 		pipeline_obj->SetShaderStorageBuffer(buffer_gl, bindingIndex);
@@ -149,6 +150,14 @@ namespace fe::Render::GAPI
 
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
 		pipeline_obj->ActivateCmd();
+	}
+
+	void SetRootDataOffset(GID pipeline, U32 offset)
+	{
+		FE_PROFILER_FUNC();
+
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		pipeline_obj->SetRootDataOffset(offset);
 	}
 
 	void DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset)

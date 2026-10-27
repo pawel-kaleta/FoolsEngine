@@ -62,21 +62,13 @@ namespace fe
 			EntityID EntityID;
 		};
 
-		//using QuadVerticesBatch = Array<QuadVertex, ConstLimits::MaxVeritices>;
-
 		struct BatchData
 		{
-			//Ref<QuadVerticesBatch> QuadVertices = CreateRef<QuadVerticesBatch>();
-			//QuadVertex* QuadVeriticesIt;
 			U32 QuadIndexCount = 0;
-
-			//Array<AssetID, ConstLimits::RendererTextureSlotsCount> Textures;
-			//U32 TexturesCount = 1;
 		};
 		
 
-		static void BeginScene();
-		static void ClearBatch();
+		static void BeginScene(const Render::Representation::Framebuffer& framebuffer);
 		static void BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID);
 		static void Flush();
 		static void EndScene();

@@ -81,8 +81,8 @@ namespace fe::Render::GAPI::OpenGL
 		GLuint mFramebufferOpenGLID = 0;
 		DepthStencil::Specification mDepthStencil;
 		Blend::Specification mBlend;
-		Array<GLuint, 8> mUniformBuffers = { 0,0,0,0,0,0,0,0 };
-		Array<GLuint, 8> mShaderStorageBuffers = { 0,0,0,0,0,0,0,0 };
+		Array<GLuint, 8> mUniformBuffers;
+		Array<GLuint, 8> mShaderStorageBuffers;
 		GLuint mInidicesBuffer = 0;
 		GLuint mDrawParamsBuffer = 0;
 		GLenum mMode = GL_TRIANGLES;
@@ -99,8 +99,8 @@ namespace fe::Render::GAPI::OpenGL
 			mFramebufferOpenGLID = 0;
 			mDepthStencil = DepthStencil::Specification();
 			mBlend = Blend::Specification();
-			mUniformBuffers = { 0,0,0,0,0,0,0,0 };
-			mShaderStorageBuffers = { 0,0,0,0,0,0,0,0 };
+			std::memset(mUniformBuffers.Elements, 0, sizeof(mUniformBuffers));
+			std::memset(mShaderStorageBuffers.Elements, 0, sizeof(mShaderStorageBuffers));
 			mInidicesBuffer = 0;
 			mDrawParamsBuffer = 0;
 			mMode = GL_TRIANGLES;
@@ -233,13 +233,13 @@ namespace fe::Render::GAPI::OpenGL
 		void SetColorAttachment(const Texture& texture, UInt index)
 		{
 			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mColorAttachments[index].mFormat, "Wrong texture format!");
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.mOpenGLID, 1);
+			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.mOpenGLID, 0);
 		}
 
 		void SetDepthStencilAttachment(const Texture& texture)
 		{
 			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mDepthStencilFormat, "Wrong texture format!");
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, texture.mOpenGLID, 1);
+			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, texture.mOpenGLID, 0);
 		}
 
 		void SetDepthStencilSpec(const DepthStencil::Specification& depthStencil)

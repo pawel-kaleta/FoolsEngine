@@ -90,7 +90,8 @@ namespace fe::Render::GAPI
 	// buffer or downstream
 	void	SetIndexSource(GID pipeline, GID source);
 	// buffer or downstream
-	void	SetDrawParamsSource(GID pipeline, GID source);
+	void	SetDrawParamsSource(GID pipeline, GID source); // should we standarize RootData being on DrawParamsSource?
+	void	SetRootDataOffset(GID pipeline, U32 offset);
 
 	void	ActivatePipelineCmd(GID pipeline);
 	void	DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset);

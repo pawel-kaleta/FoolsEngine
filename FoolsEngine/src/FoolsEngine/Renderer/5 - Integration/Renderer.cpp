@@ -27,6 +27,7 @@ namespace fe
 	decltype(Renderer::BaseAssets) Renderer::BaseAssets;
 	Render::TextureAllocator Renderer::sTextureAllocator;
 	Render::GAPI::GID Renderer::sTextureDownStream;
+	Render::GAPI::GID Renderer::sSceneDataStream;
 
 	void Renderer::Startup()
 	{
@@ -36,6 +37,10 @@ namespace fe
 		sTextureAllocator.Create(100, 100 * 1024 * 1024 * 4, 200);
 		sTextureDownStream = Render::GAPI::CreateDownStream();
 		Render::GAPI::AllocateDownStream(sTextureDownStream, 5 * 1024 * 1024 * 4);
+
+		sSceneDataStream = Render::GAPI::CreateDownStream();
+		Render::GAPI::AllocateDownStream(sSceneDataStream, sizeof(SceneDataGPU) * 4);
+		
 
 		Renderer2D::Startup();
 	}
@@ -202,8 +207,9 @@ namespace fe
 
 		BeginScene(camera, cameraTransform);
 
-		Renderer2D::RenderScene(scene);
-		GeometryRenderer::RenderScene(scene);	
+		FE_CORE_ASSERT(false, "Not implemented");
+		//Renderer2D::RenderScene(scene, framebuffer);
+		//GeometryRenderer::RenderScene(scene);	
 
 		EndScene();
 	}

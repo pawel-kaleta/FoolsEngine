@@ -23,26 +23,33 @@
 namespace fe
 {
 	static Render::GAPI::GID sIndexBuffer;
+	static Render::GAPI::GID sQuadsStream;
+	static Render::GAPI::GID sDrawParamsStream; // make this common for the whole rendering?
+	static Render::GAPI::GID sPipeline;
 
 	Renderer2D::RenderStats Renderer2D::m_Stats;
 
 	static Renderer2D::BatchData m_Batch;
 	static Time::TimePoint m_RenderStartTimePoint;
 
-	static Render::GAPI::GID sQuadsStream;
-
-	static Render::GAPI::GID sPipeline;
 
 	struct alignas(16) QuadGPU
 	{
-		Render::GAPI::std140_mat4x4 Transform;
-		Render::GAPI::std140_vec4 Color;
-		Render::GAPI::std140_vec2 AspecRatio;
-		Render::GAPI::std140_vec2 TextureView;
-		Render::GAPI::std140_float TextureTilingFactor = 1.0f;
-		Render::GAPI::std140_float Padding = 1.0f;
-		Render::GAPI::std140_float Padding2 = 1.0f;
-		Render::GAPI::std140_float Padding3 = 1.0f;
+		Render::GAPI::std140_mat4x4	Transform;
+		Render::GAPI::std140_vec4	Color;
+		Render::GAPI::std140_uvec2	TextureView;
+		Render::GAPI::std140_float	AspecRatio;
+		Render::GAPI::std140_float	TextureTilingFactor = 1.0f;
+		Render::GAPI::std140_uint	EntityID;
+		Render::GAPI::std140_float	Padding = 1.0f;
+		Render::GAPI::std140_float	Padding2 = 1.0f;
+		Render::GAPI::std140_float	Padding3 = 1.0f;
+		Render::GAPI::std140_float	Padding4 = 1.0f;
+	};
+
+	struct alignas(16) RootData
+	{
+		Render::GAPI::std140_uint SceneDataIndex;
 	};
 
 	void Renderer2D::Startup()
@@ -76,6 +83,14 @@ namespace fe
 
 			sQuadsStream = Render::GAPI::CreateDownStream();
 			Render::GAPI::AllocateDownStream(sQuadsStream, ConstLimits::QuadsInBatch * 2);
+		}
+
+		{
+			FE_PROFILER_SCOPE("DrawParamsStream creation");
+
+			sDrawParamsStream = Render::GAPI::CreateDownStream();
+			constinit static const U32 stream_size = (sizeof(Render::GAPI::DrawParams) + sizeof(RootData)) * 4;
+			Render::GAPI::AllocateDownStream(sQuadsStream, stream_size);
 		}
 	}
 
@@ -119,11 +134,11 @@ namespace fe
 				.mBlendFunction = Render::GAPI::Blend::BlendFunction::None
 			});
 			
-			Render::GAPI::SetUBO(sPipeline, sQuadsStream, 1);
+			Render::GAPI::SetUBO(sPipeline, sDrawParamsStream, 0); // root data
+			Render::GAPI::SetUBO(sPipeline, Renderer::sSceneDataStream, 1);
+			Render::GAPI::SetUBO(sPipeline, sQuadsStream, 2);
 			Render::GAPI::SetIndexSource(sPipeline, sIndexBuffer);
-
-			//SetColorAttachment(GID pipeline, GID texture, UInt index);
-			//SetDepthStencilAttachment(GID pipeline, GID texture);
+			Render::GAPI::SetDrawParamsSource(sPipeline, sDrawParamsStream);
 		}
 	}
 
@@ -134,45 +149,21 @@ namespace fe
 		
 	}
 
-	void Renderer2D::BeginScene()
+	void Renderer2D::BeginScene(const Render::Representation::Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
 
-
-		FE_CORE_ASSERT(false, "Not implemented");
-		//Command::PipelineState::SetDepthTest<GAPIType::OpenGL>(true);
-
-
-		ClearBatch();
+		Render::GAPI::SetColorAttachment(sPipeline, framebuffer.mColorAttachments[0].mGID, 0);
+		Render::GAPI::SetColorAttachment(sPipeline, framebuffer.mColorAttachments[1].mGID, 1);
+		Render::GAPI::SetDepthStencilAttachment(sPipeline, framebuffer.mDepthStencilAttachment.mGID);
 
 		m_Stats.Quads = 0;
 		m_Stats.DrawCalls = 0;
 		m_RenderStartTimePoint = Time::Now();
 
-		//auto base_shader = m_BaseShader.Use();
+		m_Batch.QuadIndexCount = 0;
 
-		// this needs to use a shading model, not a shader
-
-		//base_shader.Bind(GAPI);
-		//base_shader.UploadUniform(
-		//	GAPI,
-		//	Uniform("u_ViewProjection", Description::Data::Type::Mat4),
-		//	(void*)glm::value_ptr(Renderer::SceneData.VPMatrix)
-		//);
-		//base_shader.BindTextureSlot(
-		//	GAPI,
-		//	m_BaseShaderTextureSlot,
-		//	m_BaseShaderSamplers,
-		//	ConstLimits::RendererTextureSlotsCount
-		//);
-	}
-
-	void Renderer2D::ClearBatch()
-	{
-		FE_CORE_ASSERT(false, "Not implemented");
-		//m_Batch.TexturesCount = 1;
-		//m_Batch.QuadIndexCount = 0;
-		//m_Batch.QuadVeriticesIt = m_Batch.QuadVertices->begin();
+		Render::GAPI::ActivatePipelineCmd(sPipeline);
 	}
 
 	void Renderer2D::RenderScene(const AssetObserver& scene, const Render::Representation::Framebuffer& framebuffer)
@@ -180,24 +171,76 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		Context::Log::Core.Error("Renderer2::RenderScene not implemented"_FE);
-		return;
-
-		BeginScene();
+		
+		BeginScene(framebuffer);
 
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
 		auto view_tiles = registry.view<CTile, CTransformGlobal>();
 
+		UInt tiles_count = view_tiles.size_hint();
+		constinit const static U32 quad_offset_align = Render::GAPI::GetOffsetAlignmentFor<QuadGPU>();
+		 
+		Render::GAPI::GID region = Render::GAPI::CreateRegion(sQuadsStream, tiles_count * sizeof(QuadGPU), quad_offset_align);
+		QuadGPU* quad = (QuadGPU*) Render::GAPI::GetRegionLocation(region);
+
 		for (auto ID : view_tiles)
 		{
 			auto [tile_comp, entity_transform_comp] = view_tiles.get(ID);
-			if (!tile_comp.Tile.Texture.IsValid()) continue;
-			if (tile_comp.Tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
+
+			auto& tile = tile_comp.Tile;
+
+			if (!tile.Texture.IsValid()) continue;
+			if (tile.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
+
+			//to do: frustum culing
+
 			Transform transform = entity_transform_comp.GetRef() + tile_comp.Offset;
-			BatchQuadDrawCall(tile_comp.Tile, transform, ID);
+			auto transform_mat = transform.GetMatrix();
+
+			auto texture_observer = tile.Texture.Observe();
+			auto texture_view_id = texture_observer.Get<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>().mTextureViewsGIDs[0]; // 0 is dogy, put this on tile?
+			auto& spec = texture_observer.Get<Texture2D::Core>().mSpecification;
+			
+			quad->EntityID = ID;
+			quad->Transform = * (Render::GAPI::std140_mat4x4*) & transform_mat;
+			quad->Color = { tile.Color };
+			quad->TextureView = Render::GAPI::GetTextureViewHandle(texture_view_id);
+			quad->TextureTilingFactor = tile.TextureTilingFactor;
+			quad->AspecRatio = (float)spec.mDimentions.x, (float)spec.mDimentions.y; // do we need this?
+
+			m_Batch.QuadIndexCount += 6;
+
+			++quad;
 		}
 
-		Flush();
+		Render::GAPI::CommitRegion(region);
+
+		if (m_Batch.QuadIndexCount)
+		{
+			constinit static const U32 params_alignment = Render::GAPI::GetOffsetAlignmentFor<Render::GAPI::DrawParams>();
+			auto params_region = Render::GAPI::CreateRegion(sDrawParamsStream, sizeof(Render::GAPI::DrawParams), params_alignment);
+
+			Render::GAPI::DrawParams* params = (Render::GAPI::DrawParams*)Render::GAPI::GetRegionLocation(params_region);
+
+			params->Init();
+			params->mFirstIndex = 0;
+			params->mPrimitiveCount = m_Batch.QuadIndexCount / 3; // to do: use triangle count as counter
+
+			Render::GAPI::CommitRegion(params_region);
+
+			constinit static const U32 root_alignment = Render::GAPI::GetOffsetAlignmentFor<RootData>();
+			auto root_region = Render::GAPI::CreateRegion(sDrawParamsStream, sizeof(RootData), root_alignment);
+			RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
+			root->SceneDataIndex = Renderer::SceneData.IndexInStream;
+			Render::GAPI::CommitRegion(root_region);
+
+			Render::GAPI::SetRootDataOffset(sPipeline, Render::GAPI::GetRegionOffset(root_region));
+			Render::GAPI::DrawIndirectCmd(sPipeline, Render::GAPI::GetRegionOffset(params_region));
+		}
+
+
+		//Flush();
 
 		registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
 			const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
@@ -217,8 +260,8 @@ namespace fe
 			if (!sprite_comp.Sprite.Texture.IsValid()) continue;
 			if (sprite_comp.Sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
 			Transform transform = entity_transform_comp.GetRef() + sprite_comp.Offset;
-			BatchQuadDrawCall(sprite_comp.Sprite, transform, ID);
-			Flush();
+			//BatchQuadDrawCall(sprite_comp.Sprite, transform, ID);
+			//Flush();
 		}
 
 		EndScene();
@@ -342,7 +385,7 @@ namespace fe
 		m_Stats.Quads += m_Batch.QuadIndexCount / 3 / 2;
 		m_Stats.DrawCalls++;
 
-		ClearBatch();
+		//ClearBatch();
 	}
 
 }

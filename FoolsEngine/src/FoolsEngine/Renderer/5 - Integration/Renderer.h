@@ -74,9 +74,19 @@ namespace fe
 			const Render::Representation::Camera* MainCamera;
 			Transform CameraTransform;
 			AssetID Scene;
+			U32 IndexInStream;
 		} SceneData;
+
+		struct alignas(16) SceneDataGPU
+		{
+			Render::GAPI::std140_mat4x4 VPMatrix;
+			Render::Representation::DirectionalLight::GPUStruct MainLight;
+			Render::GAPI::std140_vec4 AmbientLight;
+			Render::GAPI::std140_vec3 CameraPosition;
+		};
 
 		static Render::TextureAllocator sTextureAllocator;
 		static Render::GAPI::GID sTextureDownStream;
+		static Render::GAPI::GID sSceneDataStream;
 	};
 }
