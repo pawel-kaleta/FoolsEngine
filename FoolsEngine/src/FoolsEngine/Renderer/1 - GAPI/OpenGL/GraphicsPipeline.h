@@ -76,13 +76,12 @@ namespace fe::Render::GAPI::OpenGL
 		constexpr static ObjType Type = ObjType::GraphicsPipeline;
 
 		GLuint mOpenGLID = 0;
-		GLuint mRootDataOffsetUniformLocation;
+		GLuint mRootDataIndexUniformLocation;
 		Raster::Specification mRaster;
-		GLuint mFramebufferOpenGLID = 0;
+		//GLuint mFramebufferOpenGLID = 0; // bad!!! remove
 		DepthStencil::Specification mDepthStencil;
 		Blend::Specification mBlend;
-		Array<GLuint, 8> mUniformBuffers;
-		Array<GLuint, 8> mShaderStorageBuffers;
+		Array<GLuint, 16> mBuffers;
 		GLuint mInidicesBuffer = 0;
 		GLuint mDrawParamsBuffer = 0;
 		GLenum mMode = GL_TRIANGLES;
@@ -94,13 +93,12 @@ namespace fe::Render::GAPI::OpenGL
 		void Init()
 		{
 			mOpenGLID = 0;
-			mRootDataOffsetUniformLocation = -1;
+			mRootDataIndexUniformLocation = -1;
 			mRaster = Raster::Specification();
-			mFramebufferOpenGLID = 0;
+			//mFramebufferOpenGLID = 0;
 			mDepthStencil = DepthStencil::Specification();
 			mBlend = Blend::Specification();
-			std::memset(mUniformBuffers.Elements, 0, sizeof(mUniformBuffers));
-			std::memset(mShaderStorageBuffers.Elements, 0, sizeof(mShaderStorageBuffers));
+			std::memset(mBuffers.Elements, 0, sizeof(mBuffers));
 			mInidicesBuffer = 0;
 			mDrawParamsBuffer = 0;
 			mMode = GL_TRIANGLES;
@@ -113,7 +111,8 @@ namespace fe::Render::GAPI::OpenGL
 			FE_PROFILER_FUNC();
 
 			mOpenGLID = glCreateProgram();
-			glCreateFramebuffers(1, &mFramebufferOpenGLID);
+			GLuint tmp_framebuffer;
+			glCreateFramebuffers(1, &tmp_framebuffer);
 			mRaster = spec;
 			mMode = Utils::PrimitiveTypeToGLmode(spec.mPrimitiveType);
 
@@ -142,18 +141,18 @@ namespace fe::Render::GAPI::OpenGL
 				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mColorAttachments[i].mFormat);
 				glTextureStorage2D(tmp_textures[i], 1, internal_format, 4, 4);
 				attachment_enums[i] = GL_COLOR_ATTACHMENT0 + i;
-				glNamedFramebufferTexture(mFramebufferOpenGLID, attachment_enums[i], tmp_textures[i], 0);
+				glNamedFramebufferTexture(tmp_framebuffer, attachment_enums[i], tmp_textures[i], 0);
 			}
-			glNamedFramebufferDrawBuffers(mFramebufferOpenGLID, (GLsizei)attachment_count, attachment_enums.Elements);
+			glNamedFramebufferDrawBuffers(tmp_framebuffer, (GLsizei)attachment_count, attachment_enums.Elements);
 
 			if (depth_present)
 			{
 				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mDepthStencilFormat);
 				glTextureStorage2D(tmp_textures[attachment_count], 1, internal_format, 4, 4);
-				glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, tmp_textures[attachment_count], 0);
+				glNamedFramebufferTexture(tmp_framebuffer, GL_DEPTH_STENCIL_ATTACHMENT, tmp_textures[attachment_count], 0);
 			}
 
-			auto status = glCheckNamedFramebufferStatus(mFramebufferOpenGLID, GL_FRAMEBUFFER);
+			auto status = glCheckNamedFramebufferStatus(tmp_framebuffer, GL_FRAMEBUFFER);
 			if (status != GL_FRAMEBUFFER_COMPLETE)
 			{
 				if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
@@ -195,7 +194,7 @@ namespace fe::Render::GAPI::OpenGL
 				glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
 				glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
 
-				glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferOpenGLID);
+				glBindFramebuffer(GL_FRAMEBUFFER, tmp_framebuffer);
 				glLinkProgram(mOpenGLID);
 				glGetProgramiv(mOpenGLID, GL_LINK_STATUS, (int*)&linking_success);
 
@@ -222,7 +221,7 @@ namespace fe::Render::GAPI::OpenGL
 			glDetachShader(mOpenGLID, vertexShader.mOpenGLID);
 			glDetachShader(mOpenGLID, fragmentShader.mOpenGLID);
 
-			mRootDataOffsetUniformLocation = glGetUniformLocation(mOpenGLID, "RootDataOffset");
+			mRootDataIndexUniformLocation = glGetUniformLocation(mOpenGLID, "RootDataIndex");
 
 			// framebuffer cleanup
 			glDeleteTextures(attachment_count + depth_present, tmp_textures.Elements);
@@ -253,14 +252,9 @@ namespace fe::Render::GAPI::OpenGL
 			mBlend = blend;
 		}
 
-		void SetUniformBuffer(GLuint buffer, UInt bindingIndex)
+		void SetBuffer(GLuint buffer, UInt bindingIndex)
 		{
-			mUniformBuffers[bindingIndex] = buffer;
-		}
-
-		void SetShaderStorageBuffer(GLuint buffer, UInt bindingIndex)
-		{
-			mShaderStorageBuffers[bindingIndex] = buffer;
+			mBuffers[bindingIndex] = buffer;
 		}
 
 		void SetIndicesBuffer(GLuint buffer)
@@ -275,14 +269,9 @@ namespace fe::Render::GAPI::OpenGL
 
 		void ActivateCmd()
 		{
-			for (GLuint i = 0; i < mUniformBuffers.Count; i++)
+			for (GLuint i = 0; i < mBuffers.Count; i++)
 			{
-				glBindBufferBase(GL_UNIFORM_BUFFER, i, mUniformBuffers[i]);
-			}
-
-			for (GLuint i = 0; i < mShaderStorageBuffers.Count; i++)
-			{
-				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i, mShaderStorageBuffers[i]);
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i, mBuffers[i]);
 			}
 
 			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, mDrawParamsBuffer);
@@ -322,9 +311,9 @@ namespace fe::Render::GAPI::OpenGL
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
-		void SetRootDataOffset(U32 offset)
+		void SetRootDataIndex(U32 index)
 		{
-			glUniform1ui(mRootDataOffsetUniformLocation, offset);
+			glUniform1ui(mRootDataIndexUniformLocation, index);
 		}
 
 		void DrawCmd(UInt primitiveCount, UInt indicesOffset)

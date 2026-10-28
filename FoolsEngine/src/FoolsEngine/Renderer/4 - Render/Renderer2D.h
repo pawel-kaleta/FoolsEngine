@@ -61,11 +61,6 @@ namespace fe
 			U32 TextureSampler;
 			EntityID EntityID;
 		};
-
-		struct BatchData
-		{
-			U32 QuadIndexCount = 0;
-		};
 		
 
 		static void BeginScene(const Render::Representation::Framebuffer& framebuffer);

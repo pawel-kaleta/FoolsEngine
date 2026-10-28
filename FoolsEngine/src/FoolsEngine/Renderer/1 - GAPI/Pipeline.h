@@ -77,21 +77,21 @@ namespace fe::Render::GAPI
 		};
 	}
 
+	GID		CreateFramebuffer();
+
 	GID		CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Raster::Specification& spec);
 
 	void	SetColorAttachment(GID pipeline, GID texture, UInt index);
 	void	SetDepthStencilAttachment(GID pipeline, GID texture);
 	void	SetDepthStencilSpec(GID pipeline, const DepthStencil::Specification& depthStencil);
 	void	SetBlendSpec(GID pipeline, const Blend::Specification& blend);
-	// buffer or downstream
-	void	SetUBO(GID pipeline, GID source, UInt bindingIndex);
 	// buffer, downstream or upstream
-	void	SetSSBO(GID pipeline, GID buffer, UInt bindingIndex);
+	void	SetBuffer(GID pipeline, GID buffer, UInt bindingIndex);
 	// buffer or downstream
 	void	SetIndexSource(GID pipeline, GID source);
 	// buffer or downstream
 	void	SetDrawParamsSource(GID pipeline, GID source); // should we standarize RootData being on DrawParamsSource?
-	void	SetRootDataOffset(GID pipeline, U32 offset);
+	void	SetRootDataIndex(GID pipeline, U32 offset);
 
 	void	ActivatePipelineCmd(GID pipeline);
 	void	DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset);

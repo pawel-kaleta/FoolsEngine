@@ -62,28 +62,8 @@ namespace fe::Render::GAPI
 		pipeline_obj->SetBlendSpec(blend);
 	}
 
-	// buffer or downstream
-	void SetUBO(GID pipeline, GID source, UInt bindingIndex)
-	{
-		FE_PROFILER_FUNC();
-
-		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		GLuint buffer;
-
-		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
-		{
-		case ObjType::Buffer:		buffer = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
-		case ObjType::DownStream:	buffer = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
-		case ObjType::None:
-		default:
-			FE_CORE_ASSERT(false, "Urecognised type of source for UBO binding");
-		}
-
-		pipeline_obj->SetUniformBuffer(buffer, bindingIndex);
-	}
-
 	// buffer, downstream or upstream
-	void SetSSBO(GID pipeline, GID target, UInt bindingIndex)
+	void SetBuffer(GID pipeline, GID target, UInt bindingIndex)
 	{
 		FE_PROFILER_FUNC();
 
@@ -101,7 +81,7 @@ namespace fe::Render::GAPI
 			return;
 		}
 
-		pipeline_obj->SetShaderStorageBuffer(buffer_gl, bindingIndex);
+		pipeline_obj->SetBuffer(buffer_gl, bindingIndex);
 	}
 
 	// buffer or downstream
@@ -152,12 +132,12 @@ namespace fe::Render::GAPI
 		pipeline_obj->ActivateCmd();
 	}
 
-	void SetRootDataOffset(GID pipeline, U32 offset)
+	void SetRootDataIndex(GID pipeline, U32 index)
 	{
 		FE_PROFILER_FUNC();
 
 		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		pipeline_obj->SetRootDataOffset(offset);
+		pipeline_obj->SetRootDataIndex(index);
 	}
 
 	void DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset)

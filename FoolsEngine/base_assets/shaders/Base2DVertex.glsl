@@ -1,26 +1,96 @@
 #version 450 core
+#extension GL_ARB_bindless_texture : require
 
-layout (location = 0) in vec3 a_Position;
-layout (location = 1) in vec4 a_Color;
-layout (location = 2) in vec2 a_TexCoord;
-layout (location = 3) in float a_TilingFactor;
-layout (location = 4) in uint a_TextureSampler;
-layout (location = 5) in uint a_EntityID;
+layout (location = 0) uniform uint RootDataIndex;
 
-uniform mat4 u_ViewProjection;
+struct RootData
+{
+	uint SceneDataIndex;
+};
 
-layout (location = 0) out vec4 v_Color;
-layout (location = 1) out vec2 v_TexCoord;
-layout (location = 2) out flat float v_TilingFactor;
-layout (location = 3) out flat uint v_TextureSampler;
-layout (location = 4) out flat uint v_EntityID;
+layout(std140, binding = 0) readonly buffer RootDataStream
+{
+    RootData RootDataBuffer[];
+};
+
+struct DirectionalLight
+{
+	float Direction_x;
+	float Direction_y;
+	float Direction_z;
+	float Intensity;
+	float Color_r;
+	float Color_g;
+	float Color_b;
+	float zPadding_1;
+};
+
+layout(std140) struct SceneData
+{
+	mat4x4 VPMatrix;
+	DirectionalLight MainLight;
+	vec4 AmbientLight;
+	vec3 CameraPosition;
+};
+
+layout(std140, binding = 1) readonly buffer SceneDataStream
+{
+    SceneData SceneDataBuffer[];
+};
+
+struct QuadGPU
+{
+	mat4x4	Transform;
+	vec4	Color;
+	uvec2	TextureView;
+	float	AspecRatio;
+	float	TextureTilingFactor;
+	uint	EntityID;
+	float	Padding;
+	float	Padding2;
+	float	Padding3;
+	float	Padding4;
+};
+
+layout(std140, binding = 2) readonly buffer QuadGPUStream
+{
+    QuadGPU QuadGPUBuffer[];
+};
+
+
+layout (location = 0) out flat uint QuadIndex;
+layout (location = 1) out vec2 TexCoord;
+
+
+const vec4 quad_vertex_positions[4] = {
+	{ -0.5f, -0.5f, 0.0f, 1.0f },
+	{  0.5f, -0.5f, 0.0f, 1.0f },
+	{  0.5f,  0.5f, 0.0f, 1.0f },
+	{ -0.5f,  0.5f, 0.0f, 1.0f }
+};
+
+const vec2 texture_coords[4] = {
+	{ 0.0f, 0.0f },
+	{ 1.0f, 0.0f },
+	{ 1.0f, 1.0f },
+	{ 0.0f, 1.0f }
+};
 
 void main()
 {
-	v_Color = a_Color;
-	v_TexCoord = a_TexCoord;
-	v_TilingFactor = a_TilingFactor;
-	v_TextureSampler = a_TextureSampler;
-	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-	v_EntityID = a_EntityID;
+	QuadIndex = gl_VertexID / 4;
+
+	QuadGPU quad = QuadGPUBuffer[QuadIndex];
+
+	vec4 vertex_position = quad_vertex_positions[gl_VertexID % 4];
+	vertex_position.y *= quad.AspecRatio;
+	vertex_position = quad.Transform * vertex_position;
+
+	RootData root_data = RootDataBuffer[RootDataIndex];
+	uint scene_data_index = root_data.SceneDataIndex;
+	SceneData scene_data = SceneDataBuffer[scene_data_index];
+
+	gl_Position = scene_data.VPMatrix * vertex_position;
+
+	TexCoord = texture_coords[gl_VertexID % 4];
 }

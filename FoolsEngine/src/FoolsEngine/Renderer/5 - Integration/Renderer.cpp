@@ -173,30 +173,13 @@ namespace fe
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		//FE_CORE_ASSERT(false, "Not implemented");
-		Context::Log::Core.Error("Renderer::OnWindowResize() not implemented"_FE);
-		//Command::PipelineState::SetViewport<GAPIType::OpenGL>(0, 0, width, height);
+		Render::GAPI::SetViewportCmd(0, 0, width, height);
 	}
 
-	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, Render::GAPI::GID framebuffer)
-	{
-		FE_CORE_ASSERT(false, "Not implemented");
-
-		String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
-		//auto attachment_index = framebuffer.GetColorAttachmentIndex(attachment_name);
-
-		U32 clearing_val = NullEntityID;
-		Splice<U32> clearing_val_splice;
-		clearing_val_splice.Elements = &clearing_val;
-		clearing_val_splice.Count = 1;
-		//framebuffer.ClearAttachment(attachment_index, clearing_val_splice);
-
-		RenderScene(scene, camera, cameraTransform);
-	}
-
-	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform)
+	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, const Render::Representation::Framebuffer& framebuffer)
 	{
 		FE_PROFILER_FUNC();
+		FE_CORE_ASSERT(false, "Not implemented");
 
 		SceneData.Scene = scene.GetID();
 		SceneData.MainCamera = &camera;
@@ -208,7 +191,7 @@ namespace fe
 		BeginScene(camera, cameraTransform);
 
 		FE_CORE_ASSERT(false, "Not implemented");
-		//Renderer2D::RenderScene(scene, framebuffer);
+		Renderer2D::RenderScene(scene, framebuffer);
 		//GeometryRenderer::RenderScene(scene);	
 
 		EndScene();

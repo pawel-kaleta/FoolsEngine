@@ -28,7 +28,7 @@ namespace fe
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		static void RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform);
-		static void RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, Render::GAPI::GID framebuffer);
+		static void RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, const Render::Representation::Framebuffer& framebuffer);
 
 		static void BeginScene(const glm::mat4& projection, const glm::mat4& view);
 		static void EndScene();

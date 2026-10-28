@@ -6,28 +6,18 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Context::Log::Core.Error("Edit Viewport not implemented"_FE);
-
-		//Description::Framebuffer::SpecificationBuilder spec_builder;
-		//spec_builder
-		//	.SetWidth(1280)
-		//	.SetHight(720)
-		//	.SetDepthStencilAttachmentFormat(Description::Texture::Format::DEPTH24STENCIL8)
-		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("Final Frame", Description::Texture::Format::RGBA_8))
-		//	.AddColorAttachmentSpecification(Description::Framebuffer::Attachment("EntityID", Description::Texture::Format::R_UINT_32));
-		//m_Framebuffer.reset(new Resource::RFramebuffer_OpenGL());
-
-		//auto& lib = Description::Library::Get();
-		//m_Framebuffer->SpecificationID = lib.FramebufferSpecs.Count;
-		//auto& framebuffer_spec = *lib.FramebufferSpecs.PushBack();
-		//framebuffer_spec.Width = 1280;
-		//framebuffer_spec.Height = 720;
-		//framebuffer_spec.DepthStencilFormat = Description::Texture::Format::DEPTH24STENCIL8;
+		mFramebuffer.Init();
 		
-		//framebuffer_spec.ColorAttachments.emplace_back("Final Frame", Description::Texture::Format::RGBA_8);
-		//framebuffer_spec.ColorAttachments.emplace_back("EntityID", Description::Texture::Format::R_UINT_32);
+		auto attachment_final = mFramebuffer.mColorAttachments.EmplaceBack();
+		attachment_final->mFormat = Render::GAPI::Descriptors::TextureFormat::RGB_8;
+		auto attachment_entity = mFramebuffer.mColorAttachments.EmplaceBack();
+		attachment_entity->mFormat = Render::GAPI::Descriptors::TextureFormat::R_UINT_32;
+		
+		mFramebuffer.mDepthStencilAttachment.mFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8;
 
-		//m_Framebuffer->Create();
+		mFramebuffer.mDimentions = { 1280, 720 };
+
+		Renderer::sTextureAllocator.CreateFramebuffer(mFramebuffer);
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 	}
@@ -49,8 +39,10 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-		Context::Log::Core.Error("EditViewport::RenderScene() not implemented");
-		//Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), *m_Framebuffer.get());
+
+		mFramebuffer.mColorAttachments[1].mGID;
+
+		Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), mFramebuffer);
 	}
 
 	void EditViewport::OnEvent(Ref<Events::Event> event)
