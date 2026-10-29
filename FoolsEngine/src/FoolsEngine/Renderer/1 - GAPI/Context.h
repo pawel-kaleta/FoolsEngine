@@ -13,7 +13,7 @@ namespace fe::Render::GAPI
 		U32 mID = -1;
 	};
 
-	FE_DECLARE_ENUM(ObjType, None, Buffer, DownStream, UpStream, Region, Texture, TextureView, Shader, GraphicsPipeline, ComputePipeline);
+	FE_DECLARE_ENUM(ObjType, None, Buffer, DownStream, UpStream, Region, Texture, TextureView, Framebuffer, Shader, GraphicsPipeline, ComputePipeline);
 
 	ObjType GetObjType(GID obj);
 

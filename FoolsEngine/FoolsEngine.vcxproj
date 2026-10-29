@@ -164,6 +164,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesList.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\TypeRegs\Assets.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h" />

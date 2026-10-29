@@ -63,6 +63,31 @@ namespace fe::Render::GAPI
 
 			void Init() { new (this) TextureViewSpec(); }
 		};
+
+		struct Attachment
+		{
+			Descriptors::TextureFormat mFormat = Descriptors::TextureFormat::None;
+			//U08 mWriteMask = 0b1111;
+
+			void Init()
+			{
+				mFormat = Descriptors::TextureFormat::None;
+				//mWriteMask = 0b1111;
+			}
+		};
+
+		struct FramebufferSpec
+		{
+			ArrayArena<Attachment, 6>	mColorAttachments;
+			Descriptors::TextureFormat	mDepthStencilFormat = Descriptors::TextureFormat::None;
+
+			FramebufferSpec& Init()
+			{
+				mColorAttachments.Init();
+				mDepthStencilFormat = Descriptors::TextureFormat::None;
+				return *this;
+			}
+		};
 	}
 
 
@@ -94,4 +119,9 @@ namespace fe::Render::GAPI
 	void	CommitTextureViewCmd(GID textureView);
 	std140_uvec2 GetTextureViewHandle(GID textureView);
 	void	DestroyTextureViewCmd(GID textureView);
+
+
+	GID		CreateFramebuffer(const Descriptors::FramebufferSpec& framebuffer, UInt width, UInt height);
+	void	ResizeFramebuffer(GID framebuffer, UInt width, UInt height);
+	void	DestroyFramebuffer(GID framebuffer);
 }

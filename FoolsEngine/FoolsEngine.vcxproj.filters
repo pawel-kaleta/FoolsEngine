@@ -456,6 +456,7 @@
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Framebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">

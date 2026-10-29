@@ -14,31 +14,20 @@ namespace fe::Render::GAPI
 
 		FE_DECLARE_ENUM(FaceCullTest, None, Never, Back, Front, Always);
 
-		struct Attachment
-		{
-			Descriptors::TextureFormat mFormat = Descriptors::TextureFormat::None;
-			U08 mWriteMask = 0b1111;
-
-			void Init()
-			{
-				mFormat = Descriptors::TextureFormat::None;
-				mWriteMask = 0b1111;
-			}
-		};
-
 		struct Specification
 		{
-			PrimitiveType				mPrimitiveType = PrimitiveType::None;
-			FaceCullTest				mFaceCullTest = FaceCullTest::None;
-			ArrayArena<Attachment, 6>	mColorAttachments;
-			Descriptors::TextureFormat	mDepthStencilFormat = Descriptors::TextureFormat::None;
+			PrimitiveType					mPrimitiveType = PrimitiveType::None;
+			FaceCullTest					mFaceCullTest = FaceCullTest::None;
+			Descriptors::FramebufferSpec	mFramebufferSpec;
+			ArrayArena<U08, 6>				mColorWriteMasks;
 
-			void Init()
+			Specification& Init()
 			{
 				mPrimitiveType = PrimitiveType::None;
 				mFaceCullTest = FaceCullTest::None;
-				mColorAttachments.Count = 0;
-				mDepthStencilFormat = Descriptors::TextureFormat::None;
+				mFramebufferSpec.Init();
+				std::memset(&mColorWriteMasks[0], 0b1111, 6);
+				return *this;
 			}
 		};
 	}
@@ -63,7 +52,7 @@ namespace fe::Render::GAPI
 			DepthTestType	mDepthTestType = DepthTestType::None;
 			StencilTestType	mStencilTestType = StencilTestType::None;
 			StencilCases	mStencilCases;
-			bool			mDepthTest = true;
+			bool			mDepthWrite = true;
 		};
 	}
 
@@ -77,27 +66,26 @@ namespace fe::Render::GAPI
 		};
 	}
 
-	GID		CreateFramebuffer();
-
 	GID		CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Raster::Specification& spec);
-
-	void	SetColorAttachment(GID pipeline, GID texture, UInt index);
-	void	SetDepthStencilAttachment(GID pipeline, GID texture);
-	void	SetDepthStencilSpec(GID pipeline, const DepthStencil::Specification& depthStencil);
-	void	SetBlendSpec(GID pipeline, const Blend::Specification& blend);
-	// buffer, downstream or upstream
-	void	SetBuffer(GID pipeline, GID buffer, UInt bindingIndex);
-	// buffer or downstream
-	void	SetIndexSource(GID pipeline, GID source);
-	// buffer or downstream
-	void	SetDrawParamsSource(GID pipeline, GID source); // should we standarize RootData being on DrawParamsSource?
-	void	SetRootDataIndex(GID pipeline, U32 offset);
-
-	void	ActivatePipelineCmd(GID pipeline);
-	void	DrawCmd(GID pipeline, UInt primitiveCount, UInt indicesOffset);
-	void	DrawIndirectCmd(GID pipeline, UInt paramsOffset);
-	void	MultiDrawIndirectCmd(GID pipeline, UInt paramsOffset, UInt drawCount);
-	void	MultiDrawIndirectCountCmd(GID pipeline, UInt paramsOffset, UInt maxDrawCount);
-
 	void	DestroyPipelineCmd(GID pipeline);
+
+	void	SetFramebuffer(GID framebuffer);
+	void	SetPipelineCmd(GID pipeline);
+	void	SetDepthStencilState(const DepthStencil::Specification& depthStencil);
+	void	SetBlendState(const Blend::Specification& blend);
+	void	SetBufferBinding(GID buffer, UInt bindingIndex);
+	void	SetIndexSource(GID source);
+	void	SetDrawParamsSource(GID source);
+
+	void	DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootDataIndex);
+	void	DrawIndirectCmd(UInt paramsOffset, U32 rootDataIndex);
+	void	MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootDataIndex);
+	void	MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootDataIndex);
+
+	void	ClearColor(UInt attachmentIndex, float value);
+	void	ClearColor(UInt attachmentIndex, SInt value);
+	void	ClearColor(UInt attachmentIndex, UInt value);
+	void	ClearDepth(float value);
+	void	ClearStencil(SInt value);
+	void	ClearDepthStencil(float depthValue, SInt stencilValue);
 }
