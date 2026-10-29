@@ -8,205 +8,95 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Buffer.h"
+#include "Framebuffer.h"
 
 #include <glad/gl.h>
 
 namespace fe::Render::GAPI::OpenGL
 {
-	namespace Utils
-	{
-		inline GLenum PrimitiveTypeToGLmode(Raster::PrimitiveType primitive)
-		{
-			// TO DO: make this a static lookup table?
-
-			switch (primitive.Value)
-			{
-			case Raster::PrimitiveType::None:
-				FE_CORE_ASSERT(false, "Not specified PrimitiveType");
-				return GL_TRIANGLES;
-			case Raster::PrimitiveType::Point:		return GL_POINTS;
-			case Raster::PrimitiveType::Line:		return GL_LINES;
-			case Raster::PrimitiveType::Triangle:	return GL_TRIANGLES;
-			default:
-				FE_CORE_ASSERT(false, "Uknown PrimitiveType");
-				return GL_TRIANGLES;
-			}
-		}
-
-		inline GLenum DepthTestTypeToGLenum(DepthStencil::DepthTestType test)
-		{
-			switch (test)
-			{
-			case DepthStencil::DepthTestType::None:
-				FE_CORE_ASSERT(false, "Not specified PrimitiveType");
-				return GL_GEQUAL;
-			case DepthStencil::DepthTestType::Never:		return GL_NEVER;
-			case DepthStencil::DepthTestType::Always:		return GL_ALWAYS;
-			case DepthStencil::DepthTestType::NotEqual:		return GL_NOTEQUAL;
-			case DepthStencil::DepthTestType::Less:			return GL_LESS;
-			case DepthStencil::DepthTestType::LessEqual:	return GL_LEQUAL;
-			case DepthStencil::DepthTestType::Equal:		return GL_EQUAL;
-			case DepthStencil::DepthTestType::GreaterEqual:	return GL_GEQUAL;
-			case DepthStencil::DepthTestType::Greater:		return GL_GREATER;
-			default:
-				FE_CORE_ASSERT(false, "Uknown DepthTestType");
-				return GL_GEQUAL;
-			}
-		}
-
-		inline GLenum BlendFunctionToGLEnum(Blend::BlendFunction func)
-		{
-			switch (func)
-			{
-			case Blend::BlendFunction::None:
-				FE_CORE_ASSERT(false, "Not specified BlendFunction");
-				return GL_NONE;
-			case Blend::BlendFunction::SourceAlpha:			return GL_SRC_ALPHA;
-			case Blend::BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
-
-			default:
-				Context::Log::Core.Error("Unrecognized BlendFunction"_FE);
-				return GL_NONE;
-			}
-		}
-	}
-
 	struct GraphicsPipeline
 	{
 		constexpr static ObjType Type = ObjType::GraphicsPipeline;
 
-		GLuint mOpenGLID = 0;
-		GLuint mRootDataIndexUniformLocation;
+		GLuint mOpenGLID;
 		Raster::Specification mRaster;
-		//GLuint mFramebufferOpenGLID = 0; // bad!!! remove
-		DepthStencil::Specification mDepthStencil;
-		Blend::Specification mBlend;
-		Array<GLuint, 16> mBuffers;
-		GLuint mInidicesBuffer = 0;
-		GLuint mDrawParamsBuffer = 0;
-		GLenum mMode = GL_TRIANGLES;
-		GLenum mDepthFunk = GL_ALWAYS;
-		GLenum mFaceCull = GL_BACK;
+		UInt mRootDataSize;
 
 		FE_TYPE_SETUP(GraphicsPipeline)
 
 		void Init()
 		{
 			mOpenGLID = 0;
-			mRootDataIndexUniformLocation = -1;
-			mRaster = Raster::Specification();
-			//mFramebufferOpenGLID = 0;
-			mDepthStencil = DepthStencil::Specification();
-			mBlend = Blend::Specification();
-			std::memset(mBuffers.Elements, 0, sizeof(mBuffers));
-			mInidicesBuffer = 0;
-			mDrawParamsBuffer = 0;
-			mMode = GL_TRIANGLES;
-			mDepthFunk = GL_ALWAYS;
-			mFaceCull = GL_BACK;
+			mRootDataSize = 0;
+			mRaster = Raster::Specification().Init();
 		}
 
-		void CreateCmd(const Shader& vertexShader, const Shader& fragmentShader, const Raster::Specification& spec)
+		void CreateCmd(const Shader& vertexShader, const Shader& fragmentShader, const Raster::Specification& spec, UInt rootDataSize)
 		{
 			FE_PROFILER_FUNC();
 
 			mOpenGLID = glCreateProgram();
-			GLuint tmp_framebuffer;
-			glCreateFramebuffers(1, &tmp_framebuffer);
 			mRaster = spec;
-			mMode = Utils::PrimitiveTypeToGLmode(spec.mPrimitiveType);
+			mRootDataSize = rootDataSize;
+				
+			bool	cull_face_backup =			glIsEnabled(GL_CULL_FACE);
+			GLint	cull_face_mode_backup = 0;	glGetIntegerv(GL_CULL_FACE_MODE, &cull_face_mode_backup);
 
-			if (mRaster.mFaceCullTest != Raster::FaceCullTest::Never)
-			{
-				if (mRaster.mFaceCullTest == Raster::FaceCullTest::Back)
-					mFaceCull = GL_BACK;
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Front)
-					mFaceCull = GL_FRONT;
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Always)
-					mFaceCull = GL_FRONT_AND_BACK;
-			}
 
-			Pile p;
-
-			// framebuffer setup for state based compilation
-			bool depth_present = spec.mDepthStencilFormat != Descriptors::TextureFormat::None;
-			UInt attachment_count = spec.mColorAttachments.Count;
-			auto tmp_textures = p.Allocate<GLuint>(attachment_count + depth_present);
-			auto attachment_enums = p.Allocate<GLenum>(attachment_count);
-
-			glCreateTextures(GL_TEXTURE_2D, attachment_count + depth_present, tmp_textures.Elements);
-
-			for (UInt i = 0; i < attachment_count; i++)
-			{
-				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mColorAttachments[i].mFormat);
-				glTextureStorage2D(tmp_textures[i], 1, internal_format, 4, 4);
-				attachment_enums[i] = GL_COLOR_ATTACHMENT0 + i;
-				glNamedFramebufferTexture(tmp_framebuffer, attachment_enums[i], tmp_textures[i], 0);
-			}
-			glNamedFramebufferDrawBuffers(tmp_framebuffer, (GLsizei)attachment_count, attachment_enums.Elements);
-
-			if (depth_present)
-			{
-				GLenum internal_format = Utils::FormatToGLInternalFormat(spec.mDepthStencilFormat);
-				glTextureStorage2D(tmp_textures[attachment_count], 1, internal_format, 4, 4);
-				glNamedFramebufferTexture(tmp_framebuffer, GL_DEPTH_STENCIL_ATTACHMENT, tmp_textures[attachment_count], 0);
-			}
-
-			auto status = glCheckNamedFramebufferStatus(tmp_framebuffer, GL_FRAMEBUFFER);
-			if (status != GL_FRAMEBUFFER_COMPLETE)
-			{
-				if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"_FE);
-				if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"_FE);
-				if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
-					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"_FE);
-				if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
-					Context::Log::Core.Error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"_FE);
-				if (status == GL_FRAMEBUFFER_UNSUPPORTED)
-					Context::Log::Core.Error("GL_FRAMEBUFFER_UNSUPPORTED"_FE);
-			}
-
-			// facecull setup for state based compilation
 			switch (spec.mFaceCullTest.Value)
 			{
 			case Raster::FaceCullTest::None:
 				FE_CORE_ASSERT(false, "Unset facecull test");
 				glDisable(GL_CULL_FACE);
-				break;
+			break;
 			case Raster::FaceCullTest::Never:
 				glDisable(GL_CULL_FACE);
-				break;
+			break;
 			default:
+				GLenum face_cull_mode;
+				if		(mRaster.mFaceCullTest == Raster::FaceCullTest::Back)	face_cull_mode = GL_BACK;
+				else if	(mRaster.mFaceCullTest == Raster::FaceCullTest::Front)	face_cull_mode = GL_FRONT;
+				else if	(mRaster.mFaceCullTest == Raster::FaceCullTest::Always)	face_cull_mode = GL_FRONT_AND_BACK;
 				glEnable(GL_CULL_FACE);
-				glCullFace(mFaceCull);
+				glCullFace(face_cull_mode);
 			}
 
-			// compilation
-			glAttachShader(mOpenGLID, vertexShader.mOpenGLID);
-			glAttachShader(mOpenGLID, fragmentShader.mOpenGLID);
 
-			GLint linking_success = 0;
+			GLint drawFboId_backup = 0; glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId_backup);
+			GLint readFboId_backup = 0; glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId_backup);
+
+			Framebuffer tmp_framebuffer;
+			tmp_framebuffer.Create(spec.mFramebufferSpec, 4, 4);
+			glBindFramebuffer(GL_FRAMEBUFFER, tmp_framebuffer.mOpenGLID);
+
+
 			{
 				FE_PROFILER_SCOPE("OpenGL Shader linking");
-				
-				GLint drawFboId = 0, readFboId = 0;
-				glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
-				glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
 
-				glBindFramebuffer(GL_FRAMEBUFFER, tmp_framebuffer);
+				glAttachShader(mOpenGLID, vertexShader.mOpenGLID);
+				glAttachShader(mOpenGLID, fragmentShader.mOpenGLID);
 				glLinkProgram(mOpenGLID);
-				glGetProgramiv(mOpenGLID, GL_LINK_STATUS, (int*)&linking_success);
-
-				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId);
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
 			}
 
+
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId_backup);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_backup);
+			tmp_framebuffer.Destroy();
+
+
+			if (cull_face_backup)	glEnable(GL_CULL_FACE);
+			else					glDisable(GL_CULL_FACE);
+			glCullFace(cull_face_mode_backup);
+
+
+			GLint linking_success = 0;
+			glGetProgramiv(mOpenGLID, GL_LINK_STATUS, (int*)&linking_success);
 			if (linking_success == GL_FALSE)
 			{
 				GLint log_length = 0;
 				glGetProgramiv(mOpenGLID, GL_INFO_LOG_LENGTH, &log_length);
 
+				Pile p;
 				auto info_log = p.Allocate<GLchar>(log_length);
 				glGetProgramInfoLog(mOpenGLID, log_length, &log_length, info_log.Elements);
 
@@ -218,73 +108,20 @@ namespace fe::Render::GAPI::OpenGL
 				return;
 			}
 			
+
 			glDetachShader(mOpenGLID, vertexShader.mOpenGLID);
 			glDetachShader(mOpenGLID, fragmentShader.mOpenGLID);
 
-			mRootDataIndexUniformLocation = glGetUniformLocation(mOpenGLID, "RootDataIndex");
-
-			// framebuffer cleanup
-			glDeleteTextures(attachment_count + depth_present, tmp_textures.Elements);
 
 			// to do: test to see if we need a fake draw call (shader compilation may be defferred by opengl)
-		}
-
-		void SetColorAttachment(const Texture& texture, UInt index)
-		{
-			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mColorAttachments[index].mFormat, "Wrong texture format!");
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_COLOR_ATTACHMENT0 + index, texture.mOpenGLID, 0);
-		}
-
-		void SetDepthStencilAttachment(const Texture& texture)
-		{
-			FE_CORE_ASSERT(texture.mSpec.mFormat == mRaster.mDepthStencilFormat, "Wrong texture format!");
-			glNamedFramebufferTexture(mFramebufferOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, texture.mOpenGLID, 0);
-		}
-
-		void SetDepthStencilSpec(const DepthStencil::Specification& depthStencil)
-		{
-			mDepthStencil = depthStencil;
-			mDepthFunk = Utils::DepthTestTypeToGLenum(depthStencil.mDepthTestType);
-		}
-
-		void SetBlendSpec(const Blend::Specification& blend)
-		{
-			mBlend = blend;
-		}
-
-		void SetBuffer(GLuint buffer, UInt bindingIndex)
-		{
-			mBuffers[bindingIndex] = buffer;
-		}
-
-		void SetIndicesBuffer(GLuint buffer)
-		{
-			mInidicesBuffer = buffer;
-		}
-
-		void SetDrawParamsBuffer(GLuint buffer)
-		{
-			mDrawParamsBuffer = buffer;
+			//auto mode = Utils::PrimitiveTypeToGLmode(spec.mPrimitiveType);
+			//fake draw call
+			
+			// to do: test if DepthStencilSpec and BlendSpec affect compilation
 		}
 
 		void ActivateCmd()
 		{
-			for (GLuint i = 0; i < mBuffers.Count; i++)
-			{
-				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i, mBuffers[i]);
-			}
-
-			glBindBuffer(GL_DRAW_INDIRECT_BUFFER, mDrawParamsBuffer);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mInidicesBuffer);
-
-			if (mDepthStencil.mDepthTest)
-			{
-				glEnable(GL_DEPTH_TEST);
-				glDepthFunc(mDepthFunk);
-			}
-			else
-				glDisable(GL_DEPTH_TEST);
-
 			if (mRaster.mFaceCullTest == Raster::FaceCullTest::Never)
 			{
 				glDisable(GL_CULL_FACE);
@@ -293,52 +130,16 @@ namespace fe::Render::GAPI::OpenGL
 			{
 				glEnable(GL_CULL_FACE);
 				
-				if (mRaster.mFaceCullTest == Raster::FaceCullTest::Back)
-					glCullFace(GL_BACK);
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Front)
-					glCullFace(GL_FRONT);
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Always)
-					glCullFace(GL_FRONT_AND_BACK);
+				if		(mRaster.mFaceCullTest == Raster::FaceCullTest::Back)	glCullFace(GL_BACK);
+				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Front)	glCullFace(GL_FRONT);
+				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Always)	glCullFace(GL_FRONT_AND_BACK);
 			}
 
 			glUseProgram(mOpenGLID);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferOpenGLID);
-		}
-
-		void ClearCmd()
-		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		}
-
-		void SetRootDataIndex(U32 index)
-		{
-			glUniform1ui(mRootDataIndexUniformLocation, index);
-		}
-
-		void DrawCmd(UInt primitiveCount, UInt indicesOffset)
-		{
-			glDrawElements(mMode, primitiveCount, GL_UNSIGNED_INT, (void*)indicesOffset);
-		}
-
-		void DrawIndirectCmd(UInt paramsOffset)
-		{
-			glDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset);
-		}
-
-		void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount)
-		{
-			glMultiDrawElementsIndirect(mMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(DrawParams));
-		}
-
-		void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount)
-		{
-			glMultiDrawElementsIndirectCount(mMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(DrawParams));
 		}
 		
 		void DestroyCmd()
 		{
-			glDeleteFramebuffers(1, &mFramebufferOpenGLID);
 			glDeleteProgram(mOpenGLID);
 		}
 	};

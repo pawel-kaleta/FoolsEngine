@@ -14,6 +14,7 @@
 #include "Texture.h"
 #include "DownStream.h"
 #include "Buffer.h"
+#include "Framebuffer.h"
 #include "InternalID.h"
 
 #include <glad/gl.h>
@@ -120,6 +121,8 @@ namespace fe::Render::GAPI::OpenGL
 	extern Registry<Shader>				ShaderRegistry;
 	extern Registry<Region>				RegionRegistry;
 	extern Registry<DownStream>			DownStreamRegistry;
+	extern Registry<Framebuffer>		FramebufferRegistry;
+
 
 	extern void CreateRegistries();
 }

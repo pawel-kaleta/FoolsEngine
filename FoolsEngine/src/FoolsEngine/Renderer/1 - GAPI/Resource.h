@@ -64,26 +64,14 @@ namespace fe::Render::GAPI
 			void Init() { new (this) TextureViewSpec(); }
 		};
 
-		struct Attachment
-		{
-			Descriptors::TextureFormat mFormat = Descriptors::TextureFormat::None;
-			//U08 mWriteMask = 0b1111;
-
-			void Init()
-			{
-				mFormat = Descriptors::TextureFormat::None;
-				//mWriteMask = 0b1111;
-			}
-		};
-
 		struct FramebufferSpec
 		{
-			ArrayArena<Attachment, 6>	mColorAttachments;
-			Descriptors::TextureFormat	mDepthStencilFormat = Descriptors::TextureFormat::None;
+			ArrayArena<TextureFormat, 6>	mColorFormats;
+			TextureFormat					mDepthStencilFormat = Descriptors::TextureFormat::None;
 
 			FramebufferSpec& Init()
 			{
-				mColorAttachments.Init();
+				mColorFormats.Init();
 				mDepthStencilFormat = Descriptors::TextureFormat::None;
 				return *this;
 			}

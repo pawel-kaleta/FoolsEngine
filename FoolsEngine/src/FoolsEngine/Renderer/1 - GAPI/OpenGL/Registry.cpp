@@ -4,13 +4,15 @@
 
 namespace fe::Render::GAPI::OpenGL
 {
-	Registry<GraphicsPipeline> GraphicsPipelineRegistry;
-	Registry<Buffer> BufferRegistry;
-	Registry<Texture> TextureRegistry;
-	Registry<TextureView> TextureViewRegistry;
-	Registry<Shader> ShaderRegistry;
-	Registry<Region> RegionRegistry;
-	Registry<DownStream> DownStreamRegistry;
+	Registry<GraphicsPipeline>	GraphicsPipelineRegistry;
+	Registry<Buffer>			BufferRegistry;
+	Registry<Texture>			TextureRegistry;
+	Registry<TextureView>		TextureViewRegistry;
+	Registry<Shader>			ShaderRegistry;
+	Registry<Region>			RegionRegistry;
+	Registry<DownStream>		DownStreamRegistry;
+	Registry<Framebuffer>		FramebufferRegistry;
+
 
 	void CreateRegistries()
 	{
@@ -24,5 +26,6 @@ namespace fe::Render::GAPI::OpenGL
 		RegionRegistry.Create();
 		RegionRegistry.Create();
 		DownStreamRegistry.Create();
+		FramebufferRegistry.Create();
 	}
 }

@@ -455,8 +455,8 @@
     <ClInclude Include="src\FoolsEngine\Scene\World.h">
       <Filter>FoolsEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Renderpass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -645,5 +645,6 @@
     <ClCompile Include="src\FoolsEngine\Scene\World.cpp">
       <Filter>FoolsEngine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Renderpass.cpp" />
   </ItemGroup>
 </Project>

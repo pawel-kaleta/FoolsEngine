@@ -165,7 +165,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesList.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\2 - Representation\Framebuffer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Renderpass.h" />
     <ClInclude Include="src\FoolsEngine\TypeRegs\Assets.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h" />
@@ -284,6 +284,7 @@
     <ClCompile Include="src\FoolsEngine\Application\UUID.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetCreation.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Renderpass.cpp" />
     <ClCompile Include="src\FoolsEngine\TypeRegs\Assets.cpp" />
     <ClCompile Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.cpp" />
     <ClCompile Include="src\FoolsEngine\TypeRegs\Loaders.cpp" />

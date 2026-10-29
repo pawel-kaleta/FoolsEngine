@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Registry.h"
+#include "Framebuffer.h"
+
 
 #include <glad/gl.h>
 
@@ -198,5 +200,20 @@ namespace fe::Render::GAPI
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
 
 		return *(std140_uvec2*)&(textureview_obj->mTextureSamplerHandleGL);
+	}
+
+	GID CreateFramebuffer(const Descriptors::FramebufferSpec& framebuffer, UInt width, UInt height)
+	{
+
+	}
+
+	void ResizeFramebuffer(GID framebuffer, UInt width, UInt height)
+	{
+
+	}
+
+	void DestroyFramebuffer(GID framebuffer)
+	{
+
 	}
 }
