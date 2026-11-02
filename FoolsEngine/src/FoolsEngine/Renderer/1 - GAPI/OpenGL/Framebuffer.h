@@ -61,7 +61,7 @@ namespace fe::Render::GAPI::OpenGL
 				glCreateTextures(GL_TEXTURE_2D, 1, &mDepthStencilAttachment);
 				GLenum internal_format = Utils::FormatToGLInternalFormat(specification.mDepthStencilFormat);
 				glTextureStorage2D(mDepthStencilAttachment, 1, internal_format, width, height);
-				glNamedFramebufferTexture(mOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, 1, 0);
+				glNamedFramebufferTexture(mOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, mDepthStencilAttachment, 0);
 			}
 
 			auto status = glCheckNamedFramebufferStatus(mOpenGLID, GL_FRAMEBUFFER);

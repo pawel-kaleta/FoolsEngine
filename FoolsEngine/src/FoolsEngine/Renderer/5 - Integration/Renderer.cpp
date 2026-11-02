@@ -210,6 +210,8 @@ namespace fe
 		Renderer2D::RenderScene(scene, framebuffer);
 		//GeometryRenderer::RenderScene(scene);	
 
+		Render::GAPI::RetireRegionCmd(scene_data_region);
+
 		EndScene();
 	}
 

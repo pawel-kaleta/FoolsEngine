@@ -97,6 +97,8 @@ namespace fe::Render::GAPI
 	Descriptors::FramebufferSpec sFramebufferSpec;
 
 	GLuint sFramebuffer;
+	GLint sDrawFboId_backup; 
+	GLint sReadFboId_backup; 
 	UInt sRootDataSize;
 	GLuint sRootDataSource;
 	GLenum sMode;
@@ -104,6 +106,9 @@ namespace fe::Render::GAPI
 
 	void BeginRenderpassCmd(GID framebuffer)
 	{
+		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &sDrawFboId_backup);
+		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &sReadFboId_backup);
+
 		OpenGL::Framebuffer* fb_obj = OpenGL::FramebufferRegistry.GetObj(framebuffer);
 		sFramebufferSpec = fb_obj->mSpec;
 
@@ -349,5 +354,11 @@ namespace fe::Render::GAPI
 	{
 		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
 		glMultiDrawElementsIndirectCount(sMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(DrawParams));
+	}
+
+	void EndRenderpass()
+	{
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sDrawFboId_backup);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, sReadFboId_backup);
 	}
 }

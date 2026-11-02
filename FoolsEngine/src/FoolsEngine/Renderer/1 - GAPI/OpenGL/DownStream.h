@@ -161,8 +161,8 @@ namespace fe::Render::GAPI::OpenGL
 				UInt next_back_fence_index = 0;
 				while (next_back_fence_index < mBackFencesCount)
 				{
-					auto& fence = mFrontFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
-					if (fence.OpenGLFence) // false means region not even retired yet and opengl fence not placed
+					auto& fence = mBackFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
+					if (!fence.OpenGLFence) // false means region not even retired yet and opengl fence not placed
 						break;
 
 					GLint sync_status;
@@ -177,7 +177,7 @@ namespace fe::Render::GAPI::OpenGL
 				// any fances left after potencial wrap?
 				if (next_back_fence_index < mBackFencesCount)
 				{
-					auto& fence = mFrontFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
+					auto& fence = mBackFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
 					if (fence.Location < position_candidate) // can we fit?
 					{
 						Context::Log::Core.Warn("Not enough space in DownStream"_FE);

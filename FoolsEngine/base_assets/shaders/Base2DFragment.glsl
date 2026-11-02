@@ -1,7 +1,7 @@
 #version 450 core
 #extension GL_ARB_bindless_texture : require
 
-layout (location = 0) out vec4 o_color;
+layout (location = 0) out vec3 o_color;
 layout (location = 1) out uint o_entityID;
 
 layout (location = 0) in flat uint QuadIndex;
@@ -31,11 +31,12 @@ void main()
 {
 	QuadGPU quad = QuadGPUBuffer[QuadIndex];
 
-	o_color = quad.Color;
-	o_color *= texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor);
-	
-	if (o_color.w < 0.25)
+	if (quad.Color.w < 0.25)
 		discard;
 
+	o_color = quad.Color.xyz;
+	o_color *= texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor);
+	o_color = vec3(256,0,0);
+	
 	o_entityID = quad.EntityID;
 }

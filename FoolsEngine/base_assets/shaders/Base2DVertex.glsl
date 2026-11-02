@@ -4,7 +4,7 @@
 
 layout(std140, binding = 0) uniform RootData
 {
-    uint dummy;
+    uint FirsQuadIndex;
 };
 
 struct DirectionalLight
@@ -69,7 +69,7 @@ void main()
 {
 	QuadIndex = gl_VertexID / 4;
 
-	QuadGPU quad = QuadGPUBuffer[QuadIndex];
+	QuadGPU quad = QuadGPUBuffer[FirsQuadIndex + QuadIndex];
 
 	vec4 vertex_position = quad_vertex_positions[gl_VertexID % 4];
 	vertex_position.y *= quad.AspecRatio;

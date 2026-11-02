@@ -49,7 +49,7 @@ namespace fe
 
 	struct alignas(16) RootData
 	{
-		Render::GAPI::std140_uint Dummy;
+		Render::GAPI::std140_uint FirstQuadIndex;
 	};
 
 	void Renderer2D::Startup()
@@ -87,7 +87,7 @@ namespace fe
 			FE_PROFILER_SCOPE("DrawParamsStream creation");
 
 			sRootDataStream = Render::GAPI::CreateDownStream();
-			Render::GAPI::AllocateDownStream(sRootDataStream, sizeof(RootData) * 4);
+			Render::GAPI::AllocateDownStream(sRootDataStream, sizeof(RootData) * 8);
 		}
 	}
 
@@ -207,6 +207,7 @@ namespace fe
 			{
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
+				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(tiles_region) / sizeof(QuadGPU);
 				Render::GAPI::CommitRegion(root_region);
 
 				//Render::GAPI::SetBlendStateCmd(
@@ -279,6 +280,7 @@ namespace fe
 			{
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
+				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(sprite_region) / sizeof(QuadGPU);
 				Render::GAPI::CommitRegion(root_region);
 
 				//Render::GAPI::SetBlendStateCmd(
@@ -292,8 +294,12 @@ namespace fe
 				m_Stats.Quads += triangles_count / 2;
 				m_Stats.DrawCalls++;
 			}
+
+			Render::GAPI::RetireRegionCmd(sprite_region);
 		}
 		
+		Render::GAPI::EndRenderpass();
+
 		m_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
 

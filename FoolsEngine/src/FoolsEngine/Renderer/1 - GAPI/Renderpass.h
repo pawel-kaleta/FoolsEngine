@@ -89,4 +89,6 @@ namespace fe::Render::GAPI
 	void	DrawIndirectCmd(UInt paramsOffset, U32 rootOffset);
 	void	MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootOffset);
 	void	MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootOffset);
+
+	void	EndRenderpass();
 }
