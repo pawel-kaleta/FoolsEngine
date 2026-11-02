@@ -21,7 +21,7 @@ struct QuadGPU
 	float	Padding4;
 };
 
-layout(std140, binding = 2) readonly buffer QuadGPUStream
+layout(std140, binding = 0) readonly buffer QuadGPUStream
 {
     QuadGPU QuadGPUBuffer[];
 };

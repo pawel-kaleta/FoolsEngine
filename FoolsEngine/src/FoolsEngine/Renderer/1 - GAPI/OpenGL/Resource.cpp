@@ -202,18 +202,34 @@ namespace fe::Render::GAPI
 		return *(std140_uvec2*)&(textureview_obj->mTextureSamplerHandleGL);
 	}
 
-	GID CreateFramebuffer(const Descriptors::FramebufferSpec& framebuffer, UInt width, UInt height)
+	GID CreateFramebufferCmd(const Descriptors::FramebufferSpec& spec, UInt width, UInt height)
 	{
+		FE_PROFILER_FUNC();
 
+		OpenGL::InternalID framebuffer_id = OpenGL::FramebufferRegistry.GetNewID();
+		OpenGL::Framebuffer* framebuffer_obj = OpenGL::FramebufferRegistry.GetObj(framebuffer_id);
+		framebuffer_obj->CreateCmd(spec, width, height);
+		return framebuffer_id;
 	}
 
-	void ResizeFramebuffer(GID framebuffer, UInt width, UInt height)
+	void ResizeFramebufferCmd(GID framebuffer, UInt width, UInt height)
 	{
+		FE_PROFILER_FUNC();
 
+		OpenGL::FramebufferRegistry.GetObj(framebuffer)->ResizeCmd(width, height);
 	}
 
-	void DestroyFramebuffer(GID framebuffer)
+	void DestroyFramebufferCmd(GID framebuffer)
 	{
+		FE_PROFILER_FUNC();
 
+		OpenGL::Framebuffer* framebuffer_obj = OpenGL::FramebufferRegistry.GetObj(framebuffer);
+		framebuffer_obj->DestroyCmd();
+		OpenGL::FramebufferRegistry.FreeObj(framebuffer);
+	}
+
+	UInt GetAttachmentNativeID(GID framebuffer, UInt index)
+	{
+		return OpenGL::FramebufferRegistry.GetObj(framebuffer)->mColorAttachments[index];
 	}
 }

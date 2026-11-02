@@ -20,10 +20,11 @@ namespace fe
 		CString(const CString& other) = default;
 		CString(CString&& other) = default;
 
-		void Init()
+		CString& Init()
 		{
 			Data = nullptr;
 			CountWithNull = 0;
+			return *this;
 		}
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)
@@ -55,10 +56,11 @@ namespace fe
 			}
 		}
 
-		void Init()
+		String& Init()
 		{
 			Data = nullptr;
 			Count = 0;
+			return *this;
 		}
 
 		void FromConstCharPtr(const char* string, UInt lengthWithNull)

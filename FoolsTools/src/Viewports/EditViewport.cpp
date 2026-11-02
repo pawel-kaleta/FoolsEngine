@@ -6,18 +6,17 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		mFramebuffer.Init();
-		
-		auto attachment_final = mFramebuffer.mColorAttachments.EmplaceBack();
-		attachment_final->mFormat = Render::GAPI::Descriptors::TextureFormat::RGB_8;
-		auto attachment_entity = mFramebuffer.mColorAttachments.EmplaceBack();
-		attachment_entity->mFormat = Render::GAPI::Descriptors::TextureFormat::R_UINT_32;
-		
-		mFramebuffer.mDepthStencilAttachment.mFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8;
 
-		mFramebuffer.mDimentions = { 1280, 720 };
+		mFramebuffer = Render::GAPI::CreateFramebufferCmd({
+			.mColorFormats =
+			{
+				Render::GAPI::Descriptors::TextureFormat::RGB_8, 
+				Render::GAPI::Descriptors::TextureFormat::R_UINT_32
+			},
+			.mDepthStencilFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8
+		}, 1280, 720);
 
-		Renderer::sTextureAllocator.CreateFramebuffer(mFramebuffer);
+		m_ViewportSize = { 1280, 720 };
 
 		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
 	}
@@ -39,8 +38,6 @@ namespace fe
 			return;
 
 		auto scene_observer = m_Scene.Observe();
-
-		mFramebuffer.mColorAttachments[1].mGID;
 
 		Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), mFramebuffer);
 	}
@@ -104,9 +101,8 @@ namespace fe
 
 		Context::Log::Core.Error("PlayViewport rendering not implemented");
 
-		//auto attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
-		//GLuint attachment_id = static_cast<Resource::RFramebuffer_OpenGL*>(m_Framebuffer.get())->ColorAttachmentOpenGLIDs[attachment_index];
-		//ImGui::Image((void*)(uint64_t)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 0);
+		ImGui::Image((void*)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		RenderGuizmos();
 

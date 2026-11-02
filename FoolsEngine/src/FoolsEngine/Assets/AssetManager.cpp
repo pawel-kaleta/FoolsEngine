@@ -208,7 +208,7 @@ namespace fe
 			{
 				auto texture_user = AssetUser(id);
 				Context::Log::Core.Error("Texture2D Loading not implemented"); // no filepath for LoadTexture to grab
-				break;
+				//break;
 				if (!texture_user.IsLoaded())
 				{
 					TextureLoader::LoadTexture(texture_user);

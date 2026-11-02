@@ -6,6 +6,7 @@
 #include "FoolsEngine/Foundation/Context/Context.h"
 
 #include <cstring>
+#include <initializer_list>
 
 namespace fe
 {
@@ -15,7 +16,7 @@ namespace fe
 		UInt Count;
 		Array<T, N> Buffer;
 
-		FE_TYPE_SETUP(ArrayArena<T, N>)
+		FE_TYPE_SETUP(ArrayArena)
 
 		const	T* begin()	const	{ return Buffer.Elements; }
 				T* begin()			{ return Buffer.Elements; }
@@ -24,9 +25,23 @@ namespace fe
 
 		bool IsFull() const { return Count >= Buffer.Count; }
 
-		void Init()
+		void operator=(std::initializer_list<T> list)
+		{
+			Count = list.size();
+			std::memcpy(begin(), list.begin(), Count * sizeof(T));
+		}
+
+		ArrayArena() = default;
+		ArrayArena(std::initializer_list<T> list)
+		{
+			Count = list.size();
+			std::memcpy(begin(), list.begin(), Count * sizeof(T));
+		}
+
+		ArrayArena& Init()
 		{
 			Count = 0;
+			return *this;
 		}
 
 		T& operator[](UInt i)
@@ -172,23 +187,26 @@ namespace fe
 
 		bool IsFull() const { return Count >= Buffer.Count; }
 
-		void Init()
+		SpliceArena& Init()
 		{
 			Buffer.Init();
 			Count = 0;
+			return *this;
 		}
 
-		void Init(Splice<T> splice, UInt count = 0)
+		SpliceArena& Init(Splice<T> splice, UInt count = 0)
 		{
 			Buffer = splice;
 			Count = count;
+			return *this;
 		}
 
-		void InitAllocate(UInt capacity, Allocator* alloc = Context::Alloc::Default)
+		SpliceArena& InitAllocate(UInt capacity, Allocator* alloc = Context::Alloc::Default)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released SpliceArena - memory leak!");
 			((PMAlloc*)alloc)->Allocate<T>(capacity);
 			Count = 0;
+			return *this;
 		}
 
 		void Clear()
@@ -347,11 +365,12 @@ namespace fe
 
 		bool IsFull() const { return Count == Buffer.Count; }
 
-		void Init(Allocator* allocator = Context::Alloc::Default)
+		DynamicArena& Init(Allocator* allocator = Context::Alloc::Default)
 		{
 			Alloc = (PMAlloc*) allocator;
 			Count = 0;
 			Buffer.Init();
+			return *this;
 		}
 
 		void Clear()

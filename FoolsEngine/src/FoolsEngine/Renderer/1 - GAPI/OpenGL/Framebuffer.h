@@ -13,6 +13,8 @@ namespace fe::Render::GAPI::OpenGL
 {
 	struct Framebuffer
 	{
+		constexpr static ObjType Type = ObjType::Framebuffer;
+
 		Descriptors::FramebufferSpec mSpec;
 		ArrayArena<GLuint, 6>	mColorAttachments;
 		GLuint					mDepthStencilAttachment;
@@ -31,7 +33,7 @@ namespace fe::Render::GAPI::OpenGL
 			return *this;
 		}
 
-		void Create(const Descriptors::FramebufferSpec& specification, UInt width, UInt height)
+		void CreateCmd(const Descriptors::FramebufferSpec& specification, UInt width, UInt height)
 		{
 			glCreateFramebuffers(1, &mOpenGLID);
 
@@ -78,7 +80,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		void Resize(UInt width, UInt height)
+		void ResizeCmd(UInt width, UInt height)
 		{
 			glDeleteTextures(mSpec.mColorFormats.Count, mColorAttachments.begin());
 			glCreateTextures(GL_TEXTURE_2D, mSpec.mColorFormats.Count, mColorAttachments.begin());
@@ -116,7 +118,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		void Destroy()
+		void DestroyCmd()
 		{
 			glDeleteTextures(mSpec.mColorFormats.Count, mColorAttachments.begin());
 

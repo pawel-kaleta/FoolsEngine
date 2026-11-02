@@ -4,11 +4,6 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-namespace fe::Context
-{
-	void InitGPU(U32 scrachBufferSize);
-}
-
 namespace fe::Render::GAPI
 {
 	// "cost" in order (may be driver internal cost of managing its own bookkeeping metadata and validation, not necesserily GPU state change)

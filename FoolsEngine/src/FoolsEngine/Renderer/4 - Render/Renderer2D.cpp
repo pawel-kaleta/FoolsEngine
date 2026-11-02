@@ -10,10 +10,11 @@
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Pipeline.h"
+#include "FoolsEngine/Renderer/1 - GAPI/Renderpass.h"
 #include "FoolsEngine/Renderer/2 - Representation/Camera.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
-#include "FoolsEngine/Renderer/2 - Representation/Framebuffer.h"
 #include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
 
 #include <glad/gl.h>
@@ -48,7 +49,7 @@ namespace fe
 
 	struct alignas(16) RootData
 	{
-		Render::GAPI::std140_uint SceneDataIndex;
+		Render::GAPI::std140_uint Dummy;
 	};
 
 	void Renderer2D::Startup()
@@ -86,8 +87,7 @@ namespace fe
 			FE_PROFILER_SCOPE("DrawParamsStream creation");
 
 			sRootDataStream = Render::GAPI::CreateDownStream();
-			constinit static const U32 stream_size = (sizeof(Render::GAPI::DrawParams) + sizeof(RootData)) * 4;
-			Render::GAPI::AllocateDownStream(sQuadsStream, stream_size);
+			Render::GAPI::AllocateDownStream(sRootDataStream, sizeof(RootData) * 4);
 		}
 	}
 
@@ -101,40 +101,28 @@ namespace fe
 			Render::GAPI::GID vertex_id = Renderer::BaseAssets.Shaders.Base2DVertex.Observe().Get<ACShader_GID<Render::GAPI::Platform::OpenGL>>().mShaderGID;
 			Render::GAPI::GID fragment_id = Renderer::BaseAssets.Shaders.Base2DFragment.Observe().Get<ACShader_GID<Render::GAPI::Platform::OpenGL>>().mShaderGID;
 
-			Render::GAPI::Raster::Specification specification
+			Render::GAPI::Descriptors::Raster::Specification specification
 			{
-				.mPrimitiveType = Render::GAPI::Raster::PrimitiveType::Triangle,
-				.mFaceCullTest = Render::GAPI::Raster::FaceCullTest::Always,
-				.mDepthStencilFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8
+				.mPrimitiveType = Render::GAPI::Descriptors::Raster::PrimitiveType::Triangle,
+				.mFaceCullTest = Render::GAPI::Descriptors::Raster::FaceCullTest::Always,
+				.mFramebufferSpec = 
+				{
+					.mColorFormats =
+					{
+						Render::GAPI::Descriptors::TextureFormat::RGB_8,
+						Render::GAPI::Descriptors::TextureFormat::R_UINT_32
+					},
+					.mDepthStencilFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8
+				},
+				.mColorWriteMasks =
+				{
+					Render::GAPI::Descriptors::Raster::ColorMask().Init(),
+					Render::GAPI::Descriptors::Raster::ColorMask().Init()
+				}
 			};
 
-			specification.mColorAttachments.Append(Render::GAPI::Raster::Attachment
-			{
-				.mFormat = Render::GAPI::Descriptors::TextureFormat::RGB_8
-			});
 
-			specification.mColorAttachments.Append(Render::GAPI::Raster::Attachment
-			{
-				.mFormat = Render::GAPI::Descriptors::TextureFormat::R_UINT_32
-			});
-
-			sPipeline = Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_id, specification);
-			
-			Render::GAPI::SetDepthStencilSpec(sPipeline, Render::GAPI::DepthStencil::Specification {
-				.mDepthTestType = Render::GAPI::DepthStencil::DepthTestType::Less,
-				.mStencilTestType = Render::GAPI::DepthStencil::StencilTestType::Always,
-				.mStencilCases = { },
-				.mDepthTest = true
-			});
-			
-			Render::GAPI::SetBlendSpec(sPipeline, Render::GAPI::Blend::Specification{
-				.mBlendFunction = Render::GAPI::Blend::BlendFunction::None
-			});
-			
-			Render::GAPI::SetBuffer(sPipeline, sRootDataStream, 0); // root data
-			Render::GAPI::SetBuffer(sPipeline, Renderer::sSceneDataStream, 1);
-			Render::GAPI::SetBuffer(sPipeline, sQuadsStream, 2);
-			Render::GAPI::SetIndexSource(sPipeline, sIndexBuffer);
+			sPipeline = Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_id, specification, sizeof(RootData));
 		}
 	}
 
@@ -145,22 +133,7 @@ namespace fe
 		
 	}
 
-	void Renderer2D::BeginScene(const Render::Representation::Framebuffer& framebuffer)
-	{
-		FE_PROFILER_FUNC();
-
-		Render::GAPI::SetColorAttachment(sPipeline, framebuffer.mColorAttachments[0].mGID, 0);
-		Render::GAPI::SetColorAttachment(sPipeline, framebuffer.mColorAttachments[1].mGID, 1);
-		Render::GAPI::SetDepthStencilAttachment(sPipeline, framebuffer.mDepthStencilAttachment.mGID);
-
-
-
-		m_Stats.Quads = 0;
-		m_Stats.DrawCalls = 0;
-		m_RenderStartTimePoint = Time::Now();
-	}
-
-	void Renderer2D::RenderScene(const AssetObserver& scene, const Render::Representation::Framebuffer& framebuffer)
+	void Renderer2D::RenderScene(const AssetObserver& scene, Render::GAPI::GID framebuffer)
 	{
 		FE_PROFILER_FUNC();
 
@@ -168,7 +141,22 @@ namespace fe
 		constinit static const U32 params_alignment = Render::GAPI::GetOffsetAlignmentFor<Render::GAPI::DrawParams>();
 		constinit static const U32 root_alignment = Render::GAPI::GetOffsetAlignmentFor<RootData>();
 		
-		BeginScene(framebuffer);
+		m_Stats.Quads = 0;
+		m_Stats.DrawCalls = 0;
+		m_RenderStartTimePoint = Time::Now();
+
+		Render::GAPI::BeginRenderpassCmd(framebuffer);
+		Render::GAPI::SetPipelineCmd(sPipeline);
+		Render::GAPI::SetDepthStencilStateCmd(
+		{
+			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::Less
+		});
+		
+		Render::GAPI::SetRootSourceCmd(sRootDataStream);
+		Render::GAPI::SetUniformSourceCmd(1, Renderer::sSceneDataStream, Renderer::SceneData.sStreamOffset, sizeof(Renderer::SceneDataGPU));
+		Render::GAPI::SetBufferSourceCmd(0, sQuadsStream);
+		Render::GAPI::SetIndexSourceCmd(sIndexBuffer);
+
 
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
@@ -219,13 +207,14 @@ namespace fe
 			{
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
-				root->SceneDataIndex = Renderer::SceneData.IndexInStream;
 				Render::GAPI::CommitRegion(root_region);
 
-				Render::GAPI::SetRootDataIndex(sPipeline, Render::GAPI::GetRegionOffset(root_region)/sizeof(RootData));
-				Render::GAPI::SetBlendSpec(sPipeline, { Render::GAPI::Blend::BlendFunction::None });
-				Render::GAPI::ActivatePipelineCmd(sPipeline);
-				Render::GAPI::DrawCmd(sPipeline, triangles_count, 0); // to do: use triangle count as counter
+				//Render::GAPI::SetBlendStateCmd(
+				//{
+				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::None
+				//});
+
+				Render::GAPI::DrawCmd(triangles_count, 0, Render::GAPI::GetRegionOffset(root_region));
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;
@@ -246,7 +235,7 @@ namespace fe
 				auto rDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, rPosition);
 
 				return lDistance > rDistance;
-				});
+			});
 
 			auto view_sprites = registry.view<CSprite, CTransformGlobal>();
 
@@ -290,29 +279,24 @@ namespace fe
 			{
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
-				root->SceneDataIndex = Renderer::SceneData.IndexInStream;
 				Render::GAPI::CommitRegion(root_region);
 
-				Render::GAPI::SetRootDataIndex(sPipeline, Render::GAPI::GetRegionOffset(root_region) / sizeof(RootData));
-				Render::GAPI::SetBlendSpec(sPipeline, { Render::GAPI::Blend::BlendFunction::OneMinusSourceAlpha });
-				Render::GAPI::ActivatePipelineCmd(sPipeline);
-				Render::GAPI::DrawCmd(sPipeline, triangles_count, 0); // to do: use triangle count as counter
+				//Render::GAPI::SetBlendStateCmd(
+				//{
+				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::OneMinusSourceAlpha
+				//});
+
+				Render::GAPI::DrawCmd(triangles_count, 0, Render::GAPI::GetRegionOffset(root_region));
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;
 				m_Stats.DrawCalls++;
 			}
 		}
-
-		EndScene();
-	}
-
-	void Renderer2D::EndScene()
-	{
-		FE_PROFILER_FUNC();
-
+		
 		m_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;
 	}
+
 
 	void Renderer2D::BatchQuadDrawCall(const Quad& quad, const Transform& transform, EntityID ID)
 	{
@@ -351,7 +335,5 @@ namespace fe
 		//	VIt->EntityID = ID;
 		//	VIt++;
 		//}
-
-		m_Batch.QuadIndexCount += 6;
 	}
 }

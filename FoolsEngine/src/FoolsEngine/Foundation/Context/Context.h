@@ -95,7 +95,7 @@ namespace fe::Context
 	{
 		using namespace Render;
 		extern GAPI::GID ScratchBuffer;
-		extern U32 ScratchBufferSize;
+		constexpr U32 ScratchBufferSize = FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE;
 	}
 
 }

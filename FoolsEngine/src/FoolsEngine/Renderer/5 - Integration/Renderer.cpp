@@ -36,7 +36,7 @@ namespace fe
 		sTextureAllocator.Init();
 		sTextureAllocator.Create(100, 100 * 1024 * 1024 * 4, 200);
 		sTextureDownStream = Render::GAPI::CreateDownStream();
-		Render::GAPI::AllocateDownStream(sTextureDownStream, 5 * 1024 * 1024 * 4);
+		Render::GAPI::AllocateDownStream(sTextureDownStream, 5 * 4024 * 4024 * 4);
 
 		sSceneDataStream = Render::GAPI::CreateDownStream();
 		Render::GAPI::AllocateDownStream(sSceneDataStream, sizeof(SceneDataGPU) * 4);
@@ -176,10 +176,14 @@ namespace fe
 		Render::GAPI::SetViewportCmd(0, 0, width, height);
 	}
 
-	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, const Render::Representation::Framebuffer& framebuffer)
+	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform)
+	{
+		FE_CORE_ASSERT(false, "Not implemented");
+	}
+
+	void Renderer::RenderScene(const AssetObserver& scene, const Render::Representation::Camera& camera, const Transform& cameraTransform, Render::GAPI::GID framebuffer)
 	{
 		FE_PROFILER_FUNC();
-		FE_CORE_ASSERT(false, "Not implemented");
 
 		SceneData.Scene = scene.GetID();
 		SceneData.MainCamera = &camera;
@@ -190,7 +194,19 @@ namespace fe
 
 		BeginScene(camera, cameraTransform);
 
-		FE_CORE_ASSERT(false, "Not implemented");
+		auto scene_data_region = Render::GAPI::CreateRegion(sSceneDataStream, sizeof(SceneDataGPU), Render::GAPI::GetOffsetAlignmentFor<SceneDataGPU>());
+		SceneDataGPU* scene_data_gpu = (SceneDataGPU*) Render::GAPI::GetRegionLocation(scene_data_region);
+
+		*(glm::mat4*)& scene_data_gpu->VPMatrix = SceneData.VPMatrix;
+		scene_data_gpu->MainLight = SceneData.MainLight->GetGPUStruct();
+		*(glm::vec3*)& scene_data_gpu->CameraPosition = cameraTransform.Shift;
+		*(glm::vec3*)& scene_data_gpu->AmbientLight = SceneData.AmbientLight;
+		scene_data_gpu->AmbientLight.w = SceneData.AmbientLightIntensity;
+
+		Render::GAPI::CommitRegion(scene_data_region);
+		SceneData.sStreamOffset = Render::GAPI::GetRegionOffset(scene_data_region);
+		
+
 		Renderer2D::RenderScene(scene, framebuffer);
 		//GeometryRenderer::RenderScene(scene);	
 
@@ -200,8 +216,6 @@ namespace fe
 	void Renderer::BeginScene(const glm::mat4& projection, const glm::mat4& view)
 	{
 		FE_PROFILER_FUNC();
-		
-		FE_CORE_ASSERT(false, "Not implemented");
 
 		//Command::ResourceState::Clear_OpenGL();
 		

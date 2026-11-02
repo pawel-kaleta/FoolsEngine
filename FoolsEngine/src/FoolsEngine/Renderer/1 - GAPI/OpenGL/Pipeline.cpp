@@ -12,7 +12,7 @@
 
 namespace fe::Render::GAPI
 {
-	GID CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Descriptors::Raster::Specification& spec)
+	GID CreateGraphicsPipelineCmd(GID vertexShader, GID fragmentShader, const Descriptors::Raster::Specification& spec, UInt rootDataSize)
 	{
 		FE_PROFILER_FUNC();
 
@@ -23,7 +23,7 @@ namespace fe::Render::GAPI
 		OpenGL::Shader* fragment_shader = OpenGL::ShaderRegistry.GetObj(fragmentShader);
 
 		obj->Init();
-		obj->CreateCmd(*vert_shader, *fragment_shader, spec);
+		obj->CreateCmd(*vert_shader, *fragment_shader, spec, rootDataSize);
 		
 		return id;
 	}

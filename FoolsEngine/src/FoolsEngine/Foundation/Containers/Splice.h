@@ -4,6 +4,8 @@
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/TypeSetup.h"
 
+#include <initializer_list>
+
 namespace fe
 {
 	template <typename T>
@@ -22,6 +24,17 @@ namespace fe
 				T* begin()			{ return Elements; }
 		const	T* end()	const	{ return Elements + Count; }
 				T* end()			{ return Elements + Count; }
+
+		Array() = default;
+		Array(std::initializer_list<T> list)
+		{
+			std::memcpy(begin(), list.begin(), Count * sizeof(T));
+		}
+		
+		void operator=(std::initializer_list<T> list)
+		{
+			std::memcpy(begin(), list.begin(), Count * sizeof(T));
+		}
 
 		T& operator[](UInt i)
 		{

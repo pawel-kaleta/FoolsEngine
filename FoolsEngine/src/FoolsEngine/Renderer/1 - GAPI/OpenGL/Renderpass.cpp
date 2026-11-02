@@ -30,9 +30,7 @@ namespace fe::Render::GAPI
 		{
 			switch (test)
 			{
-			case DepthStencil::DepthTestType::None:
-				FE_CORE_ASSERT(false, "Not specified PrimitiveType");
-				return GL_GEQUAL;
+			case DepthStencil::DepthTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
 			case DepthStencil::DepthTestType::Never:		return GL_NEVER;
 			case DepthStencil::DepthTestType::Always:		return GL_ALWAYS;
 			case DepthStencil::DepthTestType::NotEqual:		return GL_NOTEQUAL;
@@ -41,9 +39,41 @@ namespace fe::Render::GAPI
 			case DepthStencil::DepthTestType::Equal:		return GL_EQUAL;
 			case DepthStencil::DepthTestType::GreaterEqual:	return GL_GEQUAL;
 			case DepthStencil::DepthTestType::Greater:		return GL_GREATER;
-			default:
-				FE_CORE_ASSERT(false, "Uknown DepthTestType");
-				return GL_GEQUAL;
+			default: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
+			}
+		}
+
+		inline GLenum StencilTestTypeToGLenum(Descriptors::DepthStencil::StencilTestType test)
+		{
+			switch (test)
+			{
+			case DepthStencil::StencilTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
+			case DepthStencil::StencilTestType::Never:			return GL_NEVER;
+			case DepthStencil::StencilTestType::Always:			return GL_ALWAYS;
+			case DepthStencil::StencilTestType::NotEqual:		return GL_NOTEQUAL;
+			case DepthStencil::StencilTestType::Less:			return GL_LESS;
+			case DepthStencil::StencilTestType::LessEqual:		return GL_LEQUAL;
+			case DepthStencil::StencilTestType::Equal:			return GL_EQUAL;
+			case DepthStencil::StencilTestType::GreaterEqual:	return GL_GEQUAL;
+			case DepthStencil::StencilTestType::Greater:		return GL_GREATER;
+			default: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
+			}
+		}
+
+		inline GLenum StencilOperationToGLenum(Descriptors::DepthStencil::StencilOperation op)
+		{
+			switch (op.Value)
+			{
+			case Descriptors::DepthStencil::StencilOperation::None: FE_CORE_ASSERT(false, "AAAA"); return GL_KEEP;
+			case Descriptors::DepthStencil::StencilOperation::Keep:				return GL_KEEP;
+			case Descriptors::DepthStencil::StencilOperation::Zero:				return GL_ZERO;
+			case Descriptors::DepthStencil::StencilOperation::Replace:			return GL_REPLACE;
+			case Descriptors::DepthStencil::StencilOperation::IncrementCap:		return GL_INCR;
+			case Descriptors::DepthStencil::StencilOperation::IncrementWrap:	return GL_INCR_WRAP;
+			case Descriptors::DepthStencil::StencilOperation::DecrementCap:		return GL_DECR;
+			case Descriptors::DepthStencil::StencilOperation::DecrementWrap:	return GL_DECR_WRAP;
+			case Descriptors::DepthStencil::StencilOperation::Invert:			return GL_INVERT;
+			default: FE_CORE_ASSERT(false, "AAAA"); return GL_KEEP;
 			}
 		}
 
@@ -66,36 +96,146 @@ namespace fe::Render::GAPI
 
 	Descriptors::FramebufferSpec sFramebufferSpec;
 
+	GLuint sFramebuffer;
 	UInt sRootDataSize;
 	GLuint sRootDataSource;
 	GLenum sMode;
-	Descriptors::DepthStencil::Specification sDepthStencilState;
-	Descriptors::Blend::Specification sBlendState;
+	
 
-
-	void BeginRenderpass(GID framebuffer)
+	void BeginRenderpassCmd(GID framebuffer)
 	{
 		OpenGL::Framebuffer* fb_obj = OpenGL::FramebufferRegistry.GetObj(framebuffer);
 		sFramebufferSpec = fb_obj->mSpec;
 
 		sRootDataSize = 0;
 		sMode = GL_TRIANGLES;
-		sDepthStencilState.Init();
-		sBlendState.Init();
+		sFramebuffer = fb_obj->mOpenGLID;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, fb_obj->mOpenGLID);
 	}
 
-	void ClearColor(UInt attachmentIndex, float value);
-	void ClearColor(UInt attachmentIndex, SInt value);
-	void ClearColor(UInt attachmentIndex, UInt value);
-	void ClearDepth(float value);
-	void ClearStencil(SInt value);
-	void ClearDepthStencil(float depthValue, SInt stencilValue);
+	void SetPipelineCmd(GID pipeline)
+	{
+		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
+		glUseProgram(pipeline_obj->mOpenGLID);
+		sRootDataSize = pipeline_obj->mRootDataSize;
+		sMode = OpenGL::Utils::PrimitiveTypeToGLmode(pipeline_obj->mRaster.mPrimitiveType);
 
-	void SetPipelineCmd(GID pipeline);
-	void SetDepthStencilState(const Descriptors::DepthStencil::Specification& depthStencil);
-	void SetBlendState(const Descriptors::Blend::Specification& blend);
+		auto& raster = pipeline_obj->mRaster;
 
-	void SetRootSource(GID source)
+		switch (raster.mFaceCullTest.Value)
+		{
+		case Descriptors::Raster::FaceCullTest::None:
+			FE_CORE_ASSERT(false, "Unset facecull test");
+			glDisable(GL_CULL_FACE);
+			break;
+		case Descriptors::Raster::FaceCullTest::Never:
+			glDisable(GL_CULL_FACE);
+			break;
+		default:
+			GLenum face_cull_mode;
+			if		(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Back)	face_cull_mode = GL_BACK;
+			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Front)	face_cull_mode = GL_FRONT;
+			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Always)	face_cull_mode = GL_FRONT_AND_BACK;
+			glEnable(GL_CULL_FACE);
+			glCullFace(face_cull_mode);
+		}
+
+		for (UInt i = 0; i < pipeline_obj->mRaster.mColorWriteMasks.Count; i++)
+		{
+			auto& mask = pipeline_obj->mRaster.mColorWriteMasks[i];
+			glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+		}
+	}
+
+	void SetDepthStencilStateCmd(const Descriptors::DepthStencil::Specification& spec)
+	{
+		using namespace Descriptors::DepthStencil;
+
+		glDepthMask(spec.mDepthWrite);
+
+		if (spec.mDepthTestType == DepthTestType::None)
+		{
+			glDisable(GL_DEPTH_TEST);
+		}
+		else
+		{
+			glEnable(GL_DEPTH_TEST);
+
+			GLenum depth_test_type = OpenGL::Utils::DepthTestTypeToGLenum(spec.mDepthTestType);
+			glDepthFunc(depth_test_type);
+		}
+
+		if (spec.mStencilTestType.Value == StencilTestType::None)
+		{
+			glDisable(GL_STENCIL_TEST);
+		}
+		else
+		{
+			FE_CORE_ASSERT(spec.mDepthTestType != DepthTestType::None, "Stencil Test requires Depth Test (can be DepthTestType::Always)");
+
+			glEnable(GL_STENCIL_TEST);
+
+			GLenum stencil_test_type = OpenGL::Utils::StencilTestTypeToGLenum(spec.mStencilTestType);
+			glStencilFunc(stencil_test_type, spec.mStencilTestValue, spec.mStencilTestMask);
+
+			GLenum s_fail			= OpenGL::Utils::StencilOperationToGLenum(spec.mStencilCases.Fail);
+			GLenum s_pass__d_fail	= OpenGL::Utils::StencilOperationToGLenum(spec.mStencilCases.PassDepthFail);
+			GLenum s_pass__d_pass	= OpenGL::Utils::StencilOperationToGLenum(spec.mStencilCases.PassDepthPass);
+		
+			glStencilOp(s_fail, s_pass__d_pass, s_pass__d_pass);
+	
+			glStencilMask(spec.mStencilWriteMask);
+		}
+	}
+
+	void SetBlendStateCmd(const Descriptors::Blend::Specification& blend)
+	{
+		FE_CORE_ASSERT(false, "Not implemented!");
+	}
+
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<F32, 4>& value)
+	{
+		Descriptors::Raster::ColorMask  color_masks_backup;
+		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
+		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glClearNamedFramebufferfv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+	}
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<S32, 4>& value)
+	{
+		Descriptors::Raster::ColorMask  color_masks_backup;
+		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
+		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glClearNamedFramebufferiv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+	}
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<U32, 4>& value)
+	{
+		Descriptors::Raster::ColorMask  color_masks_backup;
+		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
+		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glClearNamedFramebufferuiv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+	}
+	void ClearDepthCmd(float value)
+	{
+		GLboolean depth_write_mask_backup;
+		glGetBooleanv(GL_DEPTH_WRITEMASK, &depth_write_mask_backup);
+		glDepthMask(true);
+		glClearDepthf(value);
+		glDepthMask(false);
+	}
+	void ClearStencilCmd(U08 mask, U08 value)
+	{
+		GLint stencil_write_mask_backup;
+		glGetIntegerv(GL_STENCIL_WRITEMASK, &stencil_write_mask_backup);
+		glStencilMask(0b11111111);
+		glClearStencil(value);
+		glStencilMask(stencil_write_mask_backup);
+	}
+
+	void SetRootSourceCmd(GID source)
 	{
 		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
 		{
@@ -109,7 +249,7 @@ namespace fe::Render::GAPI
 		}
 	}
 
-	void SetIndexSource(GID source)
+	void SetIndexSourceCmd(GID source)
 	{
 		GLuint buffer_gl;
 
@@ -125,7 +265,7 @@ namespace fe::Render::GAPI
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_gl);
 	}
 
-	void SetDrawParamsSource(GID source)
+	void SetDrawParamsSourceCmd(GID source)
 	{
 		GLuint buffer_gl;
 
@@ -141,7 +281,7 @@ namespace fe::Render::GAPI
 		glBindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer_gl);
 	}
 
-	void SetUniformSource(UInt bindingIndex, GID source, U32 offset, U32 size)
+	void SetUniformSourceCmd(UInt bindingIndex, GID source, U32 offset, U32 size)
 	{
 		GLuint buffer_gl;
 
@@ -157,98 +297,57 @@ namespace fe::Render::GAPI
 		glBindBufferRange(GL_UNIFORM_BUFFER, bindingIndex, buffer_gl, offset, size);
 	}
 
-	void SetBufferSource(UInt bindingIndex, GID source)
+	void SetBufferSourceCmd(UInt bindingIndex, GID source)
 	{
+		GLuint source_gl;
+		GLsizeiptr source_size;
 
+		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
+		{
+		case ObjType::Buffer:
+		{
+			auto buffer_obj = OpenGL::BufferRegistry.GetObj(source);
+			source_gl = buffer_obj->mGLID;
+			source_size = buffer_obj->mSize;
+		}
+		break;
+		case ObjType::DownStream:
+		{
+			auto downstream_obj = OpenGL::DownStreamRegistry.GetObj(source);
+			source_gl = downstream_obj->mOpenGLBuffer;
+			source_size = downstream_obj->mCapacity;
+		}
+		break;
+		case ObjType::None:
+		default:
+			FE_CORE_ASSERT(false, "Urecognised type of source buffer binding");
+		}
+
+		glBindBufferRange(GL_SHADER_STORAGE_BUFFER, bindingIndex, source_gl, 0, source_size);
 	}
 
 
 	void DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootOffset)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sUniformSources[0], rootOffset, sRootDataSize);
+		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
 		glDrawElements(sMode, primitiveCount, GL_UNSIGNED_INT, (void*)indicesOffset);
 	}
 
 	void DrawIndirectCmd(UInt paramsOffset, U32 rootOffset)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sUniformSources[0], rootOffset, sRootDataSize);
+		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
 		glDrawElementsIndirect(sMode, GL_UNSIGNED_INT, (void*)paramsOffset);
 	}
 
 	void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootOffset)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sUniformSources[0], rootOffset, sRootDataSize);
+		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
 		glMultiDrawElementsIndirect(sMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(DrawParams));
 	}
 
 	void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootOffset)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sUniformSources[0], rootOffset, sRootDataSize);
+		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
 		glMultiDrawElementsIndirectCount(sMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(DrawParams));
-	}
-
-
-	////////////////////////
-
-	// buffer, downstream or upstream
-	void SetBuffer(GID pipeline, GID target, UInt bindingIndex)
-	{
-		FE_PROFILER_FUNC();
-
-		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		GLuint buffer_gl;
-
-		switch ((ObjType::ValueType)((OpenGL::InternalID)target).mComps.Type)
-		{
-		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(target)->mGLID; break;
-		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(target)->mOpenGLBuffer; break;
-		case ObjType::UpStream:		FE_CORE_ASSERT(false, "Not implemented yet"); return;
-		case ObjType::None:
-		default:
-			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
-			return;
-		}
-
-		pipeline_obj->SetBuffer(buffer_gl, bindingIndex);
-	}
-
-	// buffer or downstream
-	void SetIndexSource(GID pipeline, GID source)
-	{
-		FE_PROFILER_FUNC();
-
-		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		GLuint buffer_gl;
-
-		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
-		{
-		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
-		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
-		case ObjType::None:
-		default:
-			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
-		}
-
-		pipeline_obj->SetIndicesBuffer(buffer_gl);
-	}
-
-	// buffer or downstream
-	void SetDrawParamsSource(GID pipeline, GID source)
-	{
-		FE_PROFILER_FUNC();
-
-		OpenGL::GraphicsPipeline* pipeline_obj = OpenGL::GraphicsPipelineRegistry.GetObj(pipeline);
-		GLuint buffer_gl;
-
-		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
-		{
-		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
-		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
-		case ObjType::None:
-		default:
-			FE_CORE_ASSERT(false, "Urecognised type of target for SSBO binding");
-		}
-
-		pipeline_obj->SetDrawParamsBuffer(buffer_gl);
 	}
 }

@@ -1,16 +1,10 @@
 #version 450 core
 #extension GL_ARB_bindless_texture : require
 
-layout (location = 0) uniform uint RootDataIndex;
 
-struct RootData
+layout(std140, binding = 0) uniform RootData
 {
-	uint SceneDataIndex;
-};
-
-layout(std140, binding = 0) readonly buffer RootDataStream
-{
-    RootData RootDataBuffer[];
+    uint dummy;
 };
 
 struct DirectionalLight
@@ -25,17 +19,12 @@ struct DirectionalLight
 	float zPadding_1;
 };
 
-layout(std140) struct SceneData
+layout(std140, binding = 1) uniform SceneData
 {
 	mat4x4 VPMatrix;
 	DirectionalLight MainLight;
 	vec4 AmbientLight;
 	vec3 CameraPosition;
-};
-
-layout(std140, binding = 1) readonly buffer SceneDataStream
-{
-    SceneData SceneDataBuffer[];
 };
 
 struct QuadGPU
@@ -52,7 +41,7 @@ struct QuadGPU
 	float	Padding4;
 };
 
-layout(std140, binding = 2) readonly buffer QuadGPUStream
+layout(std140, binding = 0) readonly buffer QuadGPUStream
 {
     QuadGPU QuadGPUBuffer[];
 };
@@ -86,11 +75,7 @@ void main()
 	vertex_position.y *= quad.AspecRatio;
 	vertex_position = quad.Transform * vertex_position;
 
-	RootData root_data = RootDataBuffer[RootDataIndex];
-	uint scene_data_index = root_data.SceneDataIndex;
-	SceneData scene_data = SceneDataBuffer[scene_data_index];
-
-	gl_Position = scene_data.VPMatrix * vertex_position;
+	gl_Position = VPMatrix * vertex_position;
 
 	TexCoord = texture_coords[gl_VertexID % 4];
 }

@@ -33,7 +33,6 @@ namespace fe::Context
 	namespace GPU
 	{
 		Render::GAPI::GID ScratchBuffer;
-		constexpr U32 ScratchBufferSize = FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE;
 	}
 
 	namespace Platform

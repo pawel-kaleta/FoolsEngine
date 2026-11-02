@@ -66,9 +66,18 @@ namespace fe::Render::GAPI::OpenGL
 			GLint readFboId_backup = 0; glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId_backup);
 
 			Framebuffer tmp_framebuffer;
-			tmp_framebuffer.Create(spec.mFramebufferSpec, 4, 4);
+			tmp_framebuffer.CreateCmd(spec.mFramebufferSpec, 4, 4);
 			glBindFramebuffer(GL_FRAMEBUFFER, tmp_framebuffer.mOpenGLID);
 
+			ArrayArena<Descriptors::Raster::ColorMask, 6> color_masks_backup;
+			color_masks_backup.Count = spec.mColorWriteMasks.Count;
+
+			for (UInt i=0; i<spec.mColorWriteMasks.Count; i++)
+			{
+				glGetBooleani_v(GL_COLOR_WRITEMASK, i, (GLboolean*) & (color_masks_backup[i]));
+				auto& mask = spec.mColorWriteMasks[i];
+				glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+			}
 
 			{
 				FE_PROFILER_SCOPE("OpenGL Shader linking");
@@ -78,10 +87,15 @@ namespace fe::Render::GAPI::OpenGL
 				glLinkProgram(mOpenGLID);
 			}
 
+			for (UInt i = 0; i < spec.mColorWriteMasks.Count; i++)
+			{
+				auto& mask = color_masks_backup[i];
+				glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+			}
 
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId_backup);
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_backup);
-			tmp_framebuffer.Destroy();
+			tmp_framebuffer.DestroyCmd();
 
 
 			if (cull_face_backup)	glEnable(GL_CULL_FACE);

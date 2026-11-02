@@ -90,13 +90,41 @@ namespace fe::AssetSerializer
 		
 		for (const auto asset_id : paths_view)
 		{
-
 			auto& type = reg.get<ACAssetType>(asset_id).Type;
 			if (tnAssetType::GetTypeStatic() == type)
 			{
 				FE_PROFILER_SCOPE("Asset");
 
 				tnAssetType::EmplaceCore(asset_id);
+
+
+
+
+				if constexpr (tnAssetType::GetTypeStatic() == AssetType::Texture2D)
+				{
+					Pile p;
+					STD_PMR_Allocator pmr(&p);
+
+					auto filepath = Project::Get()->m_AssetsPath;
+					auto source = paths_view.get<ACFilepath>(asset_id).Filepath;
+
+					filepath /= source;
+
+					YAML::Node node = YAML::LoadFile(filepath.string());
+
+					Render::GAPI::Descriptors::TextureSpec mSpecification;
+					auto& spec = reg.get<Texture2D::Core>(asset_id).mSpecification;
+					spec.mDimentions.x = node["Width"].as<UInt>();
+					spec.mDimentions.y = node["Height"].as<UInt>();
+					auto format = node["Format"].as<std::string>();
+					spec.mFormat.FromString(String(format.c_str(), format.size() + 1));
+					spec.mLayerCount = 1;
+					spec.mType = Render::GAPI::Descriptors::TextureType::Texture2D;
+					spec.CalculateMipCount();
+
+					auto& source_path = reg.emplace<ACSourceFilepath>(asset_id);
+					source_path.Filepath = node["Source Filepath"].as<std::string>();
+				}
 
 				Context::Log::Core.Error("tnAssetType::LoadMetadata() not implemented"_FE);
 				

@@ -36,6 +36,9 @@ namespace fe::Render::GAPI
 				DepthTestType	mDepthTestType = DepthTestType::None;
 				StencilTestType	mStencilTestType = StencilTestType::None;
 				StencilCases	mStencilCases;
+				U08				mStencilTestMask = 0b11111111;
+				U08				mStencilWriteMask = 0b11111111;
+				U08				mStencilTestValue = 0b11111111;
 				bool			mDepthWrite = true;
 
 				Specification& Init()
@@ -63,26 +66,24 @@ namespace fe::Render::GAPI
 		}
 	}
 
+	void	BeginRenderpassCmd(GID framebuffer);
 
-	void	BeginRenderpass(GID framebuffer);
-
-	void	ClearColor(UInt attachmentIndex, float value);
-	void	ClearColor(UInt attachmentIndex, SInt value);
-	void	ClearColor(UInt attachmentIndex, UInt value);
-	void	ClearDepth(float value);
-	void	ClearStencil(SInt value);
-	void	ClearDepthStencil(float depthValue, SInt stencilValue);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<F32, 4>& value);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<S32, 4>& value);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<U32, 4>& value);
+	void	ClearDepthCmd(float value);
+	void	ClearStencilCmd(U08 mask, U08 value);
 
 	void	SetPipelineCmd(GID pipeline);
-	void	SetDepthStencilState(const Descriptors::DepthStencil::Specification& depthStencil);
-	void	SetBlendState(const Descriptors::Blend::Specification& blend);
+	void	SetDepthStencilStateCmd(const Descriptors::DepthStencil::Specification& depthStencil);
+	void	SetBlendStateCmd(const Descriptors::Blend::Specification& blend);
 
-	void	SetRootSource(GID source);
-	void	SetIndexSource(GID source);
-	void	SetDrawParamsSource(GID source);
+	void	SetRootSourceCmd(GID source);
+	void	SetIndexSourceCmd(GID source);
+	void	SetDrawParamsSourceCmd(GID source);
 
-	void	SetUniformSource(UInt bindingIndex, GID source, U32 offset, U32 size);
-	void	SetBufferSource(UInt bindingIndex, GID source);
+	void	SetUniformSourceCmd(UInt bindingIndex, GID source, U32 offset, U32 size);
+	void	SetBufferSourceCmd(UInt bindingIndex, GID source);
 
 	void	DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootOffset);
 	void	DrawIndirectCmd(UInt paramsOffset, U32 rootOffset);

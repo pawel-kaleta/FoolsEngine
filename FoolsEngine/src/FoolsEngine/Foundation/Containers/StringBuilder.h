@@ -69,11 +69,12 @@ namespace fe
 		const	char8_t* end()		const	{ return Buffer.Elements + Count; }
 				char8_t* end()				{ return Buffer.Elements + Count; }
 
-		void Init(Allocator* allocator = Context::Alloc::Default)
+		StringBuilder& Init(Allocator* allocator = Context::Alloc::Default)
 		{
 			Alloc = allocator->Cast<PMAlloc>().P();
 			Count = 0;
 			Buffer.Init();
+			return *this;
 		}
 
 		void Release()

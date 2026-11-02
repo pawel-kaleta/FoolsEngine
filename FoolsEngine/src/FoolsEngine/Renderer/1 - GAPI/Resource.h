@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Foundation/DataTypes.h"
+#include "FoolsEngine/Foundation/Containers/Arena.h"
 #include "FoolsEngine/Foundation/Containers/String.h"
 
 #include "Context.h"
@@ -66,7 +67,7 @@ namespace fe::Render::GAPI
 
 		struct FramebufferSpec
 		{
-			ArrayArena<TextureFormat, 6>	mColorFormats;
+			ArrayArena<TextureFormat, 6>	mColorFormats = {};
 			TextureFormat					mDepthStencilFormat = Descriptors::TextureFormat::None;
 
 			FramebufferSpec& Init()
@@ -109,7 +110,8 @@ namespace fe::Render::GAPI
 	void	DestroyTextureViewCmd(GID textureView);
 
 
-	GID		CreateFramebuffer(const Descriptors::FramebufferSpec& framebuffer, UInt width, UInt height);
-	void	ResizeFramebuffer(GID framebuffer, UInt width, UInt height);
-	void	DestroyFramebuffer(GID framebuffer);
+	GID		CreateFramebufferCmd(const Descriptors::FramebufferSpec& spec, UInt width, UInt height);
+	void	ResizeFramebufferCmd(GID framebuffer, UInt width, UInt height);
+	void	DestroyFramebufferCmd(GID framebuffer);
+	UInt	GetAttachmentNativeID(GID framebuffer, UInt index);
 }
