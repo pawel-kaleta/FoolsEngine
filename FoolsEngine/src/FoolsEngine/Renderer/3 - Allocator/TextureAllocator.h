@@ -48,6 +48,7 @@ namespace fe::Render
 			auto& core = textureUser.Get<Texture2D::Core>();
 			UInt footprint_estimate = core.GetSourceSize();
 
+
 			if (mTexturesCount + 1 > mTexturesCountBudget)
 			{
 				return false;
@@ -57,10 +58,12 @@ namespace fe::Render
 				return false;
 			}
 
+
 			mTexturesCount += 1;
 			mTexturesSize += footprint_estimate;
 
 			GAPI::GID texture_id = GAPI::CreateTexture(core.mSpecification, core.mViewSpecification);
+
 			GAPI::AllocateTexture(texture_id);
 
 			auto& texture_component = textureUser.Emplace<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
@@ -94,7 +97,9 @@ namespace fe::Render
 			mViewsCount += 1;
 
 			GAPI::GID view_id = GAPI::CreateTextureView(texture_component->mTextureGID, viewSpec);
+
 			GAPI::CommitTextureViewCmd(view_id);
+
 			texture_component->mTextureViewsGIDs.Append(view_id);
 
 			return view_id;

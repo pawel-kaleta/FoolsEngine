@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DataTypes.h"
 #include "Splice.h"
+#include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Debug/Asserts.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 

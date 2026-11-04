@@ -30,13 +30,20 @@ namespace fe
 		stbi_set_flip_vertically_on_load(should_flip);
 
 		int width, height, channels;
-		stbi_uc* data;
+		stbi_uc* data = nullptr;
 		{
 			FE_PROFILER_SCOPE(filename.c_str());
 			data = stbi_load(file_path.c_str(), &width, &height, &channels, 0);
 		}
 
+		if (!data)
+		{
+			Context::Log::Core.Error("{0}"_FE, file_path.c_str());
+			FE_CORE_ASSERT(false, "Aaaa");
+		}
+
 		UInt data_size = width * height * channels;
+
 		Render::GAPI::GID region = Render::GAPI::CreateRegion(Renderer::sTextureDownStream, data_size);
 		Byte* region_location = Render::GAPI::GetRegionLocation(region);
 		std::memcpy(region_location, data, data_size);
@@ -58,12 +65,14 @@ namespace fe
 			FE_CORE_ASSERT(false, "Unimplemented texture format");
 		}
 
+		Render::GAPI::CommitRegion(region);
+
 
 		Renderer::sTextureAllocator.CreateTexture(textureUser);
 
 		auto GPU_component = textureUser.GetIfExist<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
+
 		FE_CORE_ASSERT(GPU_component, "AAAAAA!");
-		Render::GAPI::CommitRegion(region);
 
 		Render::GAPI::CopyToTextureCmd(GPU_component->mTextureGID, region);
 

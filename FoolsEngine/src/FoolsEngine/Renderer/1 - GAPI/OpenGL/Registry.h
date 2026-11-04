@@ -93,6 +93,9 @@ namespace fe::Render::GAPI::OpenGL
 
 			FE_CORE_ASSERT(generation == id.mComps.Generation, "Double free in GAPI registry");
 			
+			U64 flag_mask = (U64)1 << index_IN_chunk;
+			mChunks[index_OF_chunk].OccupancyFlags |= flag_mask;
+
 			generation++;
 		}
 

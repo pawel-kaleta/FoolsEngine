@@ -68,9 +68,9 @@ namespace fe::Render::GAPI
 
 	void	BeginRenderpassCmd(GID framebuffer);
 
-	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<F32, 4>& value);
-	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<S32, 4>& value);
-	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<U32, 4>& value);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<F32, 4>& value);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<S32, 4>& value);
+	void	ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<U32, 4>& value);
 	void	ClearDepthCmd(float value);
 	void	ClearStencilCmd(U08 mask, U08 value);
 

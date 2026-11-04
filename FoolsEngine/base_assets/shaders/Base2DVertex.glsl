@@ -67,9 +67,9 @@ const vec2 texture_coords[4] = {
 
 void main()
 {
-	QuadIndex = gl_VertexID / 4;
+	QuadIndex = FirsQuadIndex + gl_VertexID / 4;
 
-	QuadGPU quad = QuadGPUBuffer[FirsQuadIndex + QuadIndex];
+	QuadGPU quad = QuadGPUBuffer[QuadIndex];
 
 	vec4 vertex_position = quad_vertex_positions[gl_VertexID % 4];
 	vertex_position.y *= quad.AspecRatio;

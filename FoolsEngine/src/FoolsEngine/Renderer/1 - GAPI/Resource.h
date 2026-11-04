@@ -114,4 +114,6 @@ namespace fe::Render::GAPI
 	void	ResizeFramebufferCmd(GID framebuffer, UInt width, UInt height);
 	void	DestroyFramebufferCmd(GID framebuffer);
 	UInt	GetAttachmentNativeID(GID framebuffer, UInt index);
+	UInt	GetDepthAttachmentNativeID(GID framebuffer);
+
 }

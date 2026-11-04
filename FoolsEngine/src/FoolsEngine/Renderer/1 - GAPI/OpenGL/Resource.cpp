@@ -183,7 +183,9 @@ namespace fe::Render::GAPI
 	void CommitTextureViewCmd(GID textureView)
 	{
 		FE_PROFILER_FUNC();
+
 		OpenGL::TextureView* textureview_obj = OpenGL::TextureViewRegistry.GetObj(textureView);
+
 		textureview_obj->CommitCmd();
 	}
 
@@ -231,5 +233,10 @@ namespace fe::Render::GAPI
 	UInt GetAttachmentNativeID(GID framebuffer, UInt index)
 	{
 		return OpenGL::FramebufferRegistry.GetObj(framebuffer)->mColorAttachments[index];
+	}
+
+	UInt GetDepthAttachmentNativeID(GID framebuffer)
+	{
+		return OpenGL::FramebufferRegistry.GetObj(framebuffer)->mDepthStencilAttachment;
 	}
 }

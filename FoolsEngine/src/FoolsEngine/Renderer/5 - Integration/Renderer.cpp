@@ -32,6 +32,7 @@ namespace fe
 	void Renderer::Startup()
 	{
 		FE_PROFILER_FUNC();
+		Context::Log::ScopeCore("Renderer::Startup"_FE);
 
 		sTextureAllocator.Init();
 		sTextureAllocator.Create(100, 100 * 1024 * 1024 * 4, 200);
@@ -219,8 +220,6 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		//Command::ResourceState::Clear_OpenGL();
-		
 		switch (Render::GAPI::Platform::FE_PARAMS_GAPI)
 		{
 		case Render::GAPI::Platform::OpenGL:

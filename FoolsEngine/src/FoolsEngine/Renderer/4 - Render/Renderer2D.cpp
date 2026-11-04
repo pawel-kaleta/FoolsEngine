@@ -104,7 +104,7 @@ namespace fe
 			Render::GAPI::Descriptors::Raster::Specification specification
 			{
 				.mPrimitiveType = Render::GAPI::Descriptors::Raster::PrimitiveType::Triangle,
-				.mFaceCullTest = Render::GAPI::Descriptors::Raster::FaceCullTest::Always,
+				.mFaceCullTest = Render::GAPI::Descriptors::Raster::FaceCullTest::Never,
 				.mFramebufferSpec = 
 				{
 					.mColorFormats =
@@ -138,7 +138,6 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		constinit const static U32 quad_offset_align = Render::GAPI::GetOffsetAlignmentFor<QuadGPU>();
-		constinit static const U32 params_alignment = Render::GAPI::GetOffsetAlignmentFor<Render::GAPI::DrawParams>();
 		constinit static const U32 root_alignment = Render::GAPI::GetOffsetAlignmentFor<RootData>();
 		
 		m_Stats.Quads = 0;
@@ -146,10 +145,14 @@ namespace fe
 		m_RenderStartTimePoint = Time::Now();
 
 		Render::GAPI::BeginRenderpassCmd(framebuffer);
+		Render::GAPI::ClearColorCmd(UInt{ 0 }, Render::GAPI::Descriptors::Raster::ColorMask().Init(), std::initializer_list<F32>{1, 1, 1, 1});
+		Render::GAPI::ClearColorCmd(UInt{ 1 }, Render::GAPI::Descriptors::Raster::ColorMask().Init(), std::initializer_list<U32>{NullEntityID, 0, 0, 0});
+
+
 		Render::GAPI::SetPipelineCmd(sPipeline);
 		Render::GAPI::SetDepthStencilStateCmd(
 		{
-			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::Less
+			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::None
 		});
 		
 		Render::GAPI::SetRootSourceCmd(sRootDataStream);
@@ -157,9 +160,10 @@ namespace fe
 		Render::GAPI::SetBufferSourceCmd(0, sQuadsStream);
 		Render::GAPI::SetIndexSourceCmd(sIndexBuffer);
 
-
+		
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
+		//if (false)
 		{
 			FE_PROFILER_SCOPE("Tiles");
 
@@ -194,7 +198,7 @@ namespace fe
 				quad->Color = { tile.Color };
 				quad->TextureView = Render::GAPI::GetTextureViewHandle(texture_view_id);
 				quad->TextureTilingFactor = tile.TextureTilingFactor;
-				quad->AspecRatio = (float)spec.mDimentions.x, (float)spec.mDimentions.y; // do we need this?
+				quad->AspecRatio = (float)spec.mDimentions.x / (float)spec.mDimentions.y; // do we need this?
 
 				triangles_count += 2;
 
@@ -215,7 +219,7 @@ namespace fe
 				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::None
 				//});
 
-				Render::GAPI::DrawCmd(triangles_count, 0, Render::GAPI::GetRegionOffset(root_region));
+				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;
@@ -225,16 +229,17 @@ namespace fe
 			Render::GAPI::RetireRegionCmd(tiles_region);
 		}
 
+		//if (false)
 		{
 			FE_PROFILER_SCOPE("Sprites");
 
 			registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
 				const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
 				const auto& rPosition = registry.get<CTransformGlobal>(r).GetRef().Shift;
-
+			
 				auto lDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, lPosition);
 				auto rDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, rPosition);
-
+			
 				return lDistance > rDistance;
 			});
 
@@ -267,7 +272,7 @@ namespace fe
 				quad->Color = { sprite.Color };
 				quad->TextureView = Render::GAPI::GetTextureViewHandle(texture_view_id);
 				quad->TextureTilingFactor = sprite.TextureTilingFactor;
-				quad->AspecRatio = (float)spec.mDimentions.x, (float)spec.mDimentions.y; // do we need this?
+				quad->AspecRatio = (float)spec.mDimentions.x / (float)spec.mDimentions.y; // do we need this?
 
 				triangles_count += 2;
 
@@ -288,7 +293,7 @@ namespace fe
 				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::OneMinusSourceAlpha
 				//});
 
-				Render::GAPI::DrawCmd(triangles_count, 0, Render::GAPI::GetRegionOffset(root_region));
+				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;
@@ -297,7 +302,7 @@ namespace fe
 
 			Render::GAPI::RetireRegionCmd(sprite_region);
 		}
-		
+			
 		Render::GAPI::EndRenderpass();
 
 		m_Stats.RenderTime = Time::Now() - m_RenderStartTimePoint;

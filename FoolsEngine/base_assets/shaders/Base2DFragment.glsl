@@ -31,12 +31,11 @@ void main()
 {
 	QuadGPU quad = QuadGPUBuffer[QuadIndex];
 
-	if (quad.Color.w < 0.25)
-		discard;
+	//if (quad.Color.w < 0.25)
+		//discard;
 
 	o_color = quad.Color.xyz;
-	o_color *= texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor);
-	o_color = vec3(256,0,0);
+	o_color *= texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor).xyz;
 	
 	o_entityID = quad.EntityID;
 }

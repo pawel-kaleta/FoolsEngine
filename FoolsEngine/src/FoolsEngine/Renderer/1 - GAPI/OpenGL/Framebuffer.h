@@ -38,6 +38,7 @@ namespace fe::Render::GAPI::OpenGL
 			glCreateFramebuffers(1, &mOpenGLID);
 
 			mSpec = specification;
+			mDimentions = { width, height };
 
 			Pile p;
 

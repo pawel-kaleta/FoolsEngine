@@ -102,7 +102,11 @@ namespace fe
 		Context::Log::Core.Error("PlayViewport rendering not implemented");
 
 		auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 0);
-		ImGui::Image((void*)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		//auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 1);
+
+		//ImGui::Image((void*)attachment_id, vidget_size);
+		ImGui::Image((void*)attachment_id, { 1280, 720 });
+
 
 		RenderGuizmos();
 

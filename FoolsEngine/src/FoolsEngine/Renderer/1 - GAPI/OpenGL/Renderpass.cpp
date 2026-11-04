@@ -117,6 +117,7 @@ namespace fe::Render::GAPI
 		sFramebuffer = fb_obj->mOpenGLID;
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fb_obj->mOpenGLID);
+		glViewport(0, 0, fb_obj->mDimentions.x, fb_obj->mDimentions.y);
 	}
 
 	void SetPipelineCmd(GID pipeline)
@@ -199,28 +200,28 @@ namespace fe::Render::GAPI
 		FE_CORE_ASSERT(false, "Not implemented!");
 	}
 
-	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<F32, 4>& value)
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<F32, 4>& value)
 	{
 		Descriptors::Raster::ColorMask  color_masks_backup;
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
 		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
-		glClearNamedFramebufferfv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glClearNamedFramebufferfv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
 		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
 	}
-	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<S32, 4>& value)
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<S32, 4>& value)
 	{
 		Descriptors::Raster::ColorMask  color_masks_backup;
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
 		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
-		glClearNamedFramebufferiv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glClearNamedFramebufferiv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
 		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
 	}
-	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, Array<U32, 4>& value)
+	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<U32, 4>& value)
 	{
 		Descriptors::Raster::ColorMask  color_masks_backup;
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
 		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
-		glClearNamedFramebufferuiv(sFramebuffer, GL_COLOR, GL_DRAW_BUFFER0 + attachmentIndex, value.begin());
+		glClearNamedFramebufferuiv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
 		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
 	}
 	void ClearDepthCmd(float value)
