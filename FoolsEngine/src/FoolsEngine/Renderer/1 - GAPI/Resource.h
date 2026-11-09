@@ -6,80 +6,13 @@
 
 #include "Context.h"
 #include "Data.h"
+#include "Descriptors.h"
 
 #include <glm/glm.hpp>
 
 
-
 namespace fe::Render::GAPI
 {
-	namespace Descriptors
-	{
-		FE_DECLARE_ENUM(ShaderType, None, Vertex, Fragment, Compute)
-
-		FE_DECLARE_ENUM(TextureType, None, Texture1D, Texture2D, Texture3D, Texture2DArray)
-
-		FE_DECLARE_ENUM(TextureFormat, None, R_8, RG_8, RGB_8, RGBA_8, R_UINT_32, DEPTH24STENCIL8)
-		
-		struct TextureSpec
-		{
-			TextureType mType = TextureType::None;
-			TextureFormat mFormat = TextureFormat::None;
-			glm::vec<3, U32> mDimentions = { 0, 0, 0 };
-			U32 mMipCount = 1;
-			U32 mLayerCount = 1;
-
-			void CalculateMipCount()
-			{
-				mMipCount = glm::log2((float)glm::max(mDimentions.x, mDimentions.y));
-			}
-
-			// UsageFlags mUsageFlags = UsageFlags::None;  ?? Sampled, Storage, ColorAttachment, DepthStencilAttachment
-
-			void Init()
-			{
-				mType = TextureType::None;
-				mFormat = TextureFormat::None;
-				mDimentions = { 0, 0, 1 };
-				mMipCount = 1;
-				mLayerCount = 1;
-			}
-		};
-
-		FE_DECLARE_ENUM(Wrapping, None, Repeat, MirrorRepeat, Clamp, Border)
-
-		FE_DECLARE_ENUM(Filtering, None, Nearest, Bilinear)
-
-		FE_DECLARE_ENUM(Mipmapping, None, Nearest, Liniear)
-
-		FE_DECLARE_ENUM(ASFiltering, None, x2, x4, x8, x16)
-			
-		struct TextureViewSpec
-		{
-			Wrapping	mWrapping = Wrapping::None;
-			Filtering	mFiltering = Filtering::None;
-			Mipmapping	mMipmapping = Mipmapping::None;
-			ASFiltering	mASFiltering = ASFiltering::None;
-			glm::vec4	mBorderColor = { 0.0, 0.0, 0.0, 1.0 };
-
-			void Init() { new (this) TextureViewSpec(); }
-		};
-
-		struct FramebufferSpec
-		{
-			ArrayArena<TextureFormat, 6>	mColorFormats = {};
-			TextureFormat					mDepthStencilFormat = Descriptors::TextureFormat::None;
-
-			FramebufferSpec& Init()
-			{
-				mColorFormats.Init();
-				mDepthStencilFormat = Descriptors::TextureFormat::None;
-				return *this;
-			}
-		};
-	}
-
-
 	GID		CreateBuffer();
 	Byte*	AllocateBuffer(GID buffer, U32 size);
 	void	AllocateCommitBuffer(GID buffer, U32 size);
@@ -94,8 +27,8 @@ namespace fe::Render::GAPI
 	void	DestroyShader(GID shader);
 
 
-	GID		CreateTexture(const Descriptors::TextureSpec& spec);
-	GID		CreateTexture(const Descriptors::TextureSpec& spec, const Descriptors::TextureViewSpec& viewSpec);
+	GID		CreateTexture(const Descriptors::Texture::Spec& spec);
+	GID		CreateTexture(const Descriptors::Texture::Spec& spec, const Descriptors::Texture::Sampling::ViewSpec& viewSpec);
 	void	AllocateTexture(GID texture);
 	void	CopyToTextureCmd(GID texture, GID region);
 	void	CopyToTextureCmd(GID texture, GID buffer, U32 offset);
@@ -104,13 +37,13 @@ namespace fe::Render::GAPI
 	void	DestroyTextureCmd(GID texture);
 	UInt	GetTextureNativeID(GID texture);
 
-	GID		CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec);
+	GID		CreateTextureView(GID texture, const Descriptors::Texture::Sampling::ViewSpec& textureViewSpec);
 	void	CommitTextureViewCmd(GID textureView);
 	std140_uvec2 GetTextureViewHandle(GID textureView);
 	void	DestroyTextureViewCmd(GID textureView);
 
 
-	GID		CreateFramebufferCmd(const Descriptors::FramebufferSpec& spec, UInt width, UInt height);
+	GID		CreateFramebufferCmd(const Descriptors::Raster::FramebufferSpec& spec, UInt width, UInt height);
 	void	ResizeFramebufferCmd(GID framebuffer, UInt width, UInt height);
 	void	DestroyFramebufferCmd(GID framebuffer);
 	UInt	GetAttachmentNativeID(GID framebuffer, UInt index);

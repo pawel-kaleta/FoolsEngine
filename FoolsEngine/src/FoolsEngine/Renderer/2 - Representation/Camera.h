@@ -22,6 +22,7 @@ namespace fe::Render::Representation
 		void SetPerspective(float verticalFOV, float nearClip, float farClip);
 
 		void SetViewportSize(uint32_t width, uint32_t hight) { m_AspectRatio = (float)width / (float)hight; CalculateProjection(); }
+		//void SetViewportSize(uint32_t width, uint32_t hight) { m_AspectRatio = (float)hight / (float)width; CalculateProjection(); }
 
 		//radians
 		void SetPerspectiveFOV(float FOV) { m_PerspectiveData.m_FOV = FOV; CalculateProjectionPerspective(); }

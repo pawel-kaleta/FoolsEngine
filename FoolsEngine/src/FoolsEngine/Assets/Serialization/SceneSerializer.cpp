@@ -196,33 +196,44 @@ namespace fe
 
 						// Actor's Entities
 						{
-							Pile pp;
-							DynamicArenaSA<EntityID, Pile> entities_to_serialize; entities_to_serialize.Init(&p);
-							entities_to_serialize.Append(actorID);
-							
 							emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+							SerializeEntity(Entity(actorID, gameplay_world), emitter);
 
-							EntityID entity_to_serialize;
-							while (entities_to_serialize.Count)
+							auto first_child = node_storage.get(actorID).FirstChild;
+							if (first_child != NullEntityID)
 							{
-								entity_to_serialize = entities_to_serialize.PopBack();
-
-								if (actor_storage->contains(entity_to_serialize))
-									continue;
-
-								SerializeEntity(Entity(entity_to_serialize, gameplay_world), emitter);
-
-								EntityID first_sibling = node_storage.get(entity_to_serialize).FirstChild;
-								EntityID current = first_sibling;
-
-								if (current != NullEntityID)
+								Pile pp;
+								DynamicArenaSA<EntityID, Pile> entities_to_serialize; entities_to_serialize.Init(&pp);
+				
+								{
+									EntityID current = first_child;
 									do
 									{
-										if (! actor_storage->contains(current))
+										if (!actor_storage->contains(current))
 											entities_to_serialize.Append(current);
 
 										current = node_storage.get(current).NextSibling;
-									} while (current != first_sibling && current != NullEntityID);
+									} while (current != first_child && current != NullEntityID);
+								}
+							
+								while (entities_to_serialize.Count)
+								{
+									EntityID entity_to_serialize = entities_to_serialize.PopBack();
+
+									SerializeEntity(Entity(entity_to_serialize, gameplay_world), emitter);
+
+									EntityID first_sibling = node_storage.get(entity_to_serialize).FirstChild;
+									EntityID current = first_sibling;
+
+									if (current != NullEntityID)
+										do
+										{
+											if (! actor_storage->contains(current))
+												entities_to_serialize.Append(current);
+
+											current = node_storage.get(current).NextSibling;
+										} while (current != first_sibling && current != NullEntityID);
+								}
 							}
 
 							emitter << YAML::EndSeq; //Actor's Entities

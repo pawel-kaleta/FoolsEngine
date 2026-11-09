@@ -15,7 +15,7 @@ namespace fe::Render::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::Framebuffer;
 
-		Descriptors::FramebufferSpec mSpec;
+		Descriptors::Raster::FramebufferSpec mSpec;
 		ArrayArena<GLuint, 6>	mColorAttachments;
 		GLuint					mDepthStencilAttachment;
 		glm::vec<2, U32>		mDimentions;
@@ -33,7 +33,7 @@ namespace fe::Render::GAPI::OpenGL
 			return *this;
 		}
 
-		void CreateCmd(const Descriptors::FramebufferSpec& specification, UInt width, UInt height)
+		void CreateCmd(const Descriptors::Raster::FramebufferSpec& specification, UInt width, UInt height)
 		{
 			glCreateFramebuffers(1, &mOpenGLID);
 
@@ -56,7 +56,7 @@ namespace fe::Render::GAPI::OpenGL
 			}
 			glNamedFramebufferDrawBuffers(mOpenGLID, (GLsizei)specification.mColorFormats.Count, attachment_enums.Elements);
 
-			bool depth_present = specification.mDepthStencilFormat != Descriptors::TextureFormat::None;
+			bool depth_present = specification.mDepthStencilFormat != Descriptors::Texture::Format::None;
 			if (depth_present)
 			{
 				glCreateTextures(GL_TEXTURE_2D, 1, &mDepthStencilAttachment);
@@ -83,6 +83,8 @@ namespace fe::Render::GAPI::OpenGL
 
 		void ResizeCmd(UInt width, UInt height)
 		{
+			mDimentions = { width, height };
+
 			glDeleteTextures(mSpec.mColorFormats.Count, mColorAttachments.begin());
 			glCreateTextures(GL_TEXTURE_2D, mSpec.mColorFormats.Count, mColorAttachments.begin());
 
@@ -93,14 +95,14 @@ namespace fe::Render::GAPI::OpenGL
 				glNamedFramebufferTexture(mOpenGLID, GL_COLOR_ATTACHMENT0 + i, mColorAttachments[i], 0);
 			}
 
-			bool depth_present = mSpec.mDepthStencilFormat != Descriptors::TextureFormat::None;
+			bool depth_present = mSpec.mDepthStencilFormat != Descriptors::Texture::Format::None;
 			if (depth_present)
 			{
 				glDeleteTextures(1, &mDepthStencilAttachment);
 				glCreateTextures(GL_TEXTURE_2D, 1, &mDepthStencilAttachment);
 				GLenum internal_format = Utils::FormatToGLInternalFormat(mSpec.mDepthStencilFormat);
 				glTextureStorage2D(mDepthStencilAttachment, 1, internal_format, width, height);
-				glNamedFramebufferTexture(mOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, 1, 0);
+				glNamedFramebufferTexture(mOpenGLID, GL_DEPTH_STENCIL_ATTACHMENT, mDepthStencilAttachment, 0);
 			}
 
 			auto status = glCheckNamedFramebufferStatus(mOpenGLID, GL_FRAMEBUFFER);
@@ -123,7 +125,7 @@ namespace fe::Render::GAPI::OpenGL
 		{
 			glDeleteTextures(mSpec.mColorFormats.Count, mColorAttachments.begin());
 
-			bool depth_present = mSpec.mDepthStencilFormat != Descriptors::TextureFormat::None;
+			bool depth_present = mSpec.mDepthStencilFormat != Descriptors::Texture::Format::None;
 			if (depth_present) glDeleteTextures(1, &mDepthStencilAttachment);
 
 			Init();

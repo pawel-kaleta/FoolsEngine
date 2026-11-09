@@ -70,20 +70,26 @@ namespace fe
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Shaders" << YAML::Value << YAML::BeginMap;
 				emitter << YAML::Key << "Base2DVertex"			<< YAML::Value << inst.BaseAssets.Shaders.Base2DVertex;
-				emitter << YAML::Key << "Base2DFragment"		<< YAML::Value << inst.BaseAssets.Shaders.Base2DFragment;
+				emitter << YAML::Key << "Base2DFragmentOpaque"	<< YAML::Value << inst.BaseAssets.Shaders.Base2DFragmentOpaque;
+				emitter << YAML::Key << "Base2DFragmentCutout"	<< YAML::Value << inst.BaseAssets.Shaders.Base2DFragmentCutout;
+				emitter << YAML::Key << "Base2DFragmentBlend"	<< YAML::Value << inst.BaseAssets.Shaders.Base2DFragmentBlend;
 				emitter << YAML::Key << "Base3DVertex"			<< YAML::Value << inst.BaseAssets.Shaders.Base3DVertex;
 				emitter << YAML::Key << "Base3DFragmentOpaque"	<< YAML::Value << inst.BaseAssets.Shaders.Base3DFragmentOpaque;
 				emitter << YAML::Key << "Base3DFragmentCutout"	<< YAML::Value << inst.BaseAssets.Shaders.Base3DFragmentCutout;
 				emitter << YAML::Key << "Base3DFragmentBlend"	<< YAML::Value << inst.BaseAssets.Shaders.Base3DFragmentBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "ShadingModels" << YAML::Value << YAML::BeginMap;
-				emitter << YAML::Key << "Base2DFlat"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DFlat;
-				emitter << YAML::Key << "Base3DOpaque"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DOpaque;
-				emitter << YAML::Key << "Base3DCutout"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DCutout;
-				emitter << YAML::Key << "Base3DBlend"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DBlend;
+				emitter << YAML::Key << "Base2DFlatOpaque"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DFlatOpaque;
+				emitter << YAML::Key << "Base2DFlatCutout"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DFlatCutout;
+				emitter << YAML::Key << "Base2DFlatBlend"	<< YAML::Value << inst.BaseAssets.ShadingModels.Base2DFlatBlend;
+				emitter << YAML::Key << "Base3DOpaque"		<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DOpaque;
+				emitter << YAML::Key << "Base3DCutout"		<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DCutout;
+				emitter << YAML::Key << "Base3DBlend"		<< YAML::Value << inst.BaseAssets.ShadingModels.Base3DBlend;
 			emitter << YAML::EndMap;
 			emitter << YAML::Key << "Materials" << YAML::Value << YAML::BeginMap;
-				emitter << YAML::Key << "Default2DFlat"			<< YAML::Value << inst.BaseAssets.Materials.Default2DFlat;
+				emitter << YAML::Key << "Default2DFlatOpaque"	<< YAML::Value << inst.BaseAssets.Materials.Default2DFlatOpaque;
+				emitter << YAML::Key << "Default2DFlatCutout"	<< YAML::Value << inst.BaseAssets.Materials.Default2DFlatCutout;
+				emitter << YAML::Key << "Default2DFlatBlend"	<< YAML::Value << inst.BaseAssets.Materials.Default2DFlatBlend;
 				emitter << YAML::Key << "DefaultOpaque"			<< YAML::Value << inst.BaseAssets.Materials.DefaultOpaque;
 				emitter << YAML::Key << "DefaultCutout"			<< YAML::Value << inst.BaseAssets.Materials.DefaultCutout;
 				emitter << YAML::Key << "DefaultTranslucent"	<< YAML::Value << inst.BaseAssets.Materials.DefaultTranslucent;
@@ -131,26 +137,32 @@ namespace fe
 			if (!shading_models_node) return false;
 			if (!materials_node) return false;
 
-			inst.BaseAssets.Textures.Default = textures_node["Default"].as<UUID>();
-			inst.BaseAssets.Textures.FlatWhite = textures_node["FlatWhite"].as<UUID>();
-			inst.BaseAssets.Textures.FlatBlack = textures_node["FlatBlack"].as<UUID>();
+			inst.BaseAssets.Textures.Default	= textures_node["Default"].as<UUID>();
+			inst.BaseAssets.Textures.FlatWhite	= textures_node["FlatWhite"].as<UUID>();
+			inst.BaseAssets.Textures.FlatBlack	= textures_node["FlatBlack"].as<UUID>();
 
-			inst.BaseAssets.Shaders.Base2DVertex = shaders_node["Base2DVertex"].as<UUID>();
-			inst.BaseAssets.Shaders.Base2DFragment = shaders_node["Base2DFragment"].as<UUID>();
-			inst.BaseAssets.Shaders.Base3DVertex = shaders_node["Base3DVertex"].as<UUID>();
-			inst.BaseAssets.Shaders.Base3DFragmentOpaque = shaders_node["Base3DFragmentOpaque"].as<UUID>();
-			inst.BaseAssets.Shaders.Base3DFragmentCutout = shaders_node["Base3DFragmentCutout"].as<UUID>();
-			inst.BaseAssets.Shaders.Base3DFragmentBlend = shaders_node["Base3DFragmentBlend"].as<UUID>();
+			inst.BaseAssets.Shaders.Base2DVertex			= shaders_node["Base2DVertex"].as<UUID>();
+			inst.BaseAssets.Shaders.Base2DFragmentOpaque	= shaders_node["Base2DFragmentOpaque"].as<UUID>();
+			inst.BaseAssets.Shaders.Base2DFragmentCutout	= shaders_node["Base2DFragmentCutout"].as<UUID>();
+			inst.BaseAssets.Shaders.Base2DFragmentBlend		= shaders_node["Base2DFragmentBlend"].as<UUID>();
+			inst.BaseAssets.Shaders.Base3DVertex			= shaders_node["Base3DVertex"].as<UUID>();
+			inst.BaseAssets.Shaders.Base3DFragmentOpaque	= shaders_node["Base3DFragmentOpaque"].as<UUID>();
+			inst.BaseAssets.Shaders.Base3DFragmentCutout	= shaders_node["Base3DFragmentCutout"].as<UUID>();
+			inst.BaseAssets.Shaders.Base3DFragmentBlend		= shaders_node["Base3DFragmentBlend"].as<UUID>();
 
-			inst.BaseAssets.ShadingModels.Base2DFlat = shading_models_node["Base2DFlat"].as<UUID>();
-			inst.BaseAssets.ShadingModels.Base3DOpaque = shading_models_node["Base3DOpaque"].as<UUID>();
-			inst.BaseAssets.ShadingModels.Base3DCutout = shading_models_node["Base3DCutout"].as<UUID>();
-			inst.BaseAssets.ShadingModels.Base3DBlend = shading_models_node["Base3DBlend"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base2DFlatOpaque	= shading_models_node["Base2DFlatOpaque"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base2DFlatCutout	= shading_models_node["Base2DFlatCutout"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base2DFlatBlend	= shading_models_node["Base2DFlatBlend"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base3DOpaque		= shading_models_node["Base3DOpaque"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base3DCutout		= shading_models_node["Base3DCutout"].as<UUID>();
+			inst.BaseAssets.ShadingModels.Base3DBlend		= shading_models_node["Base3DBlend"].as<UUID>();
 
-			inst.BaseAssets.Materials.Default2DFlat = materials_node["Default2DFlat"].as<UUID>();
-			inst.BaseAssets.Materials.DefaultOpaque = materials_node["DefaultOpaque"].as<UUID>();
-			inst.BaseAssets.Materials.DefaultCutout = materials_node["DefaultCutout"].as<UUID>();
-			inst.BaseAssets.Materials.DefaultTranslucent = materials_node["DefaultTranslucent"].as<UUID>();
+			inst.BaseAssets.Materials.Default2DFlatOpaque	= materials_node["Default2DFlatOpaque"].as<UUID>();
+			inst.BaseAssets.Materials.Default2DFlatCutout	= materials_node["Default2DFlatCutout"].as<UUID>();
+			inst.BaseAssets.Materials.Default2DFlatBlend	= materials_node["Default2DFlatBlend"].as<UUID>();
+			inst.BaseAssets.Materials.DefaultOpaque			= materials_node["DefaultOpaque"].as<UUID>();
+			inst.BaseAssets.Materials.DefaultCutout			= materials_node["DefaultCutout"].as<UUID>();
+			inst.BaseAssets.Materials.DefaultTranslucent	= materials_node["DefaultTranslucent"].as<UUID>();
 		}
 
 		Context::Log::Core.Info("Project deserialized"_FE);

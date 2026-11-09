@@ -5,7 +5,6 @@
 namespace fe
 {
 	EditorCameraController::EditorCameraController(float width, float hight)
-		: m_ViewportSize({width, hight})
 	{
 		FE_PROFILER_FUNC();
 

@@ -4,8 +4,8 @@
 layout (location = 0) out vec3 o_color;
 layout (location = 1) out uint o_entityID;
 
-layout (location = 0) in flat uint QuadIndex;
-layout (location = 1) in vec2 TexCoord;
+layout (location = 0) in flat	uint QuadIndex;
+layout (location = 1) in		vec2 TexCoord;
 
 struct QuadGPU
 {
@@ -31,11 +31,9 @@ void main()
 {
 	QuadGPU quad = QuadGPUBuffer[QuadIndex];
 
-	//if (quad.Color.w < 0.25)
-		//discard;
-
-	o_color = quad.Color.xyz;
-	o_color *= texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor).xyz;
+	vec4 color = quad.Color * texture(sampler2D(quad.TextureView), TexCoord * quad.TextureTilingFactor);
+	
+	o_color = color.rgb;
 	
 	o_entityID = quad.EntityID;
 }

@@ -39,18 +39,22 @@ namespace fe
 		m_Icons.File = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_Icons.Folder = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 
-		m_Icons.File.Get<Texture2D::Core>().mViewSpecification = {
-			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
-			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
-			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
-		};
-		m_Icons.Folder.Get<Texture2D::Core>().mViewSpecification = {
-			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
-			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
-			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
-		};
+		{
+			using namespace Render::GAPI::Descriptors::Texture::Sampling;
+
+			m_Icons.File.Get<Texture2D::Core>().mViewSpecification = {
+				.mWrapping		= Wrapping::Repeat,
+				.mFiltering		= Filtering::Bilinear,
+				.mMipmapping	= Mipmapping::Liniear,
+				.mASFiltering	= ASFiltering::None
+			};
+			m_Icons.Folder.Get<Texture2D::Core>().mViewSpecification = {
+				.mWrapping		= Wrapping::Repeat,
+				.mFiltering		= Filtering::Bilinear,
+				.mMipmapping	= Mipmapping::Liniear,
+				.mASFiltering	= ASFiltering::None
+			};
+		}
 
 		TextureLoader::LoadTexture("resources/File.png", m_Icons.File);
 		TextureLoader::LoadTexture("resources/Folder.png", m_Icons.Folder);

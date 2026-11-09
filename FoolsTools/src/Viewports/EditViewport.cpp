@@ -6,19 +6,21 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
+		glm::vec<2, U32> init_size = { 200,200 };
 
 		mFramebuffer = Render::GAPI::CreateFramebufferCmd({
 			.mColorFormats =
 			{
-				Render::GAPI::Descriptors::TextureFormat::RGB_8, 
-				Render::GAPI::Descriptors::TextureFormat::R_UINT_32
+				Render::GAPI::Descriptors::Texture::Format::RGB_8, 
+				Render::GAPI::Descriptors::Texture::Format::R_UINT_32
 			},
-			.mDepthStencilFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8
-		}, 1280, 720);
+			.mDepthStencilFormat	= Render::GAPI::Descriptors::Texture::Format::DEPTH32F_STENCIL8,
+			.mDepthRange			= Render::GAPI::Descriptors::Raster::DepthRange::ZeroToOne
+		}, init_size.x, init_size.y);
 
-		m_ViewportSize = { 1280, 720 };
+		mFramebufferSize = init_size;
 
-		m_CameraController = CreateScope<EditorCameraController>(1280.0f, 720.0f);
+		m_CameraController = CreateScope<EditorCameraController>(init_size.x, init_size.y);
 	}
 
 	void EditViewport::OnUpdate()
@@ -37,9 +39,16 @@ namespace fe
 		if (!m_IsVisible)
 			return;
 
+		if (m_ResizeFramebuffer)
+		{
+			Render::GAPI::ResizeFramebufferCmd(mFramebuffer, (uint32_t)mFramebufferSize.x, (uint32_t)mFramebufferSize.y);
+			m_CameraController->Resize(mFramebufferSize.x, mFramebufferSize.y);
+			m_ResizeFramebuffer = false;
+		}
+
 		auto scene_observer = m_Scene.Observe();
 
-		Renderer::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), mFramebuffer);
+		Render::Integration::Director::RenderScene(scene_observer, m_CameraController->GetCamera(), m_CameraController->GetTransform(), mFramebuffer);
 	}
 
 	void EditViewport::OnEvent(Ref<Events::Event> event)
@@ -82,30 +91,25 @@ namespace fe
 		Application::Get().m_ImGuiLayer->BlockEvents = m_IsVisible && !(m_VieportFocus || m_VieportHover);
 
 		auto vidget_size = ImGui::GetContentRegionAvail();
-		glm::vec2 new_viewport_size = { vidget_size.x, vidget_size.y }; // most likely simple cast possible, but still different data types from different librarys
+		
+		auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 0);
+		//auto attachment_id = Render::GAPI::GetDepthAttachmentNativeID(mFramebuffer);
+		//auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 1);
 
-		if (m_ViewportSize != new_viewport_size)
+		ImGui::Image((void*)attachment_id, vidget_size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+
+		glm::vec2 new_framebuffer_size = { vidget_size.x, vidget_size.y };
+		if (mFramebufferSize != new_framebuffer_size)
 		{
 			// there is a bug in ImGui that is causing GetContentRegionAvail() to report wrong values in first frame
 			// this is a workaround that prevents creation of framebuffer with 0 hight or with
-			if (new_viewport_size.x == 0 || new_viewport_size.y == 0)
-				new_viewport_size = { 1, 1 };
+			if (new_framebuffer_size.x == 0 || new_framebuffer_size.y == 0)
+				new_framebuffer_size = { 1, 1 };
 
-			Context::Log::Core.Error("PlayViewport resize not implemented");
-			//m_Framebuffer->Resize((uint32_t)new_viewport_size.x, (uint32_t)new_viewport_size.y);
-			m_ViewportSize = new_viewport_size;
-			m_CameraController->Resize(new_viewport_size.x, new_viewport_size.y);
+			mFramebufferSize = new_framebuffer_size;
+			m_ResizeFramebuffer = true;
 		}
-
-		String attachment_name; attachment_name.FromConstCharPtr("Final Frame", 12);
-
-		Context::Log::Core.Error("PlayViewport rendering not implemented");
-
-		auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 0);
-		//auto attachment_id = Render::GAPI::GetAttachmentNativeID(mFramebuffer, 1);
-
-		//ImGui::Image((void*)attachment_id, vidget_size);
-		ImGui::Image((void*)attachment_id, { 1280, 720 });
 
 
 		RenderGuizmos();
@@ -179,8 +183,12 @@ namespace fe
 		// Camera
 		auto camera_entity = gameplay_world->GetEntityWithPrimaryCamera();
 		const auto& camera = m_CameraController->GetCamera();
-		const glm::mat4& camera_projection_matrix = camera.GetProjectionMatrix();
+
+		//const glm::mat4& camera_projection_matrix = camera.GetProjectionMatrix();
+		const glm::mat4& camera_projection_matrix = glm::perspective(camera.m_PerspectiveData.m_FOV, camera.m_AspectRatio, camera.m_PerspectiveData.m_NearClip, camera.m_PerspectiveData.m_FarClip);
+
 		glm::mat4 camera_view_matrix = glm::inverse(m_CameraController->GetTransform().GetMatrix());
+
 
 		// Entity transform
 		glm::mat4 selected_entity_transform_matrix = selected_entity.GetTransformHandle().GetGlobal().GetMatrix();

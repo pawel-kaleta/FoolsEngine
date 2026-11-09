@@ -47,8 +47,8 @@ layout(std140, binding = 0) readonly buffer QuadGPUStream
 };
 
 
-layout (location = 0) out flat uint QuadIndex;
-layout (location = 1) out vec2 TexCoord;
+layout (location = 0) out flat	uint QuadIndex;
+layout (location = 1) out		vec2 TexCoord;
 
 
 const vec4 quad_vertex_positions[4] = {
@@ -73,9 +73,12 @@ void main()
 
 	vec4 vertex_position = quad_vertex_positions[gl_VertexID % 4];
 	vertex_position.y *= quad.AspecRatio;
-	vertex_position = quad.Transform * vertex_position;
+	//vertex_position = vertex_position;
 
-	gl_Position = VPMatrix * vertex_position;
+	//gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
+	//vec3 shift = quad.Transform * vertex_position;
+
+	gl_Position = VPMatrix * quad.Transform * vertex_position;
 
 	TexCoord = texture_coords[gl_VertexID % 4];
 }

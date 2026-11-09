@@ -56,7 +56,7 @@
 
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 #include <yaml-cpp/yaml.h>
 

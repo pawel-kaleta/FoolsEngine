@@ -112,14 +112,14 @@ namespace fe::AssetSerializer
 
 					YAML::Node node = YAML::LoadFile(filepath.string());
 
-					Render::GAPI::Descriptors::TextureSpec mSpecification;
+					Render::GAPI::Descriptors::Texture::Spec mSpecification;
 					auto& spec = reg.get<Texture2D::Core>(asset_id).mSpecification;
 					spec.mDimentions.x = node["Width"].as<UInt>();
 					spec.mDimentions.y = node["Height"].as<UInt>();
 					auto format = node["Format"].as<std::string>();
 					spec.mFormat.FromString(String(format.c_str(), format.size() + 1));
 					spec.mLayerCount = 1;
-					spec.mType = Render::GAPI::Descriptors::TextureType::Texture2D;
+					spec.mType = Render::GAPI::Descriptors::Texture::Type::Texture2D;
 					spec.CalculateMipCount();
 
 					auto& source_path = reg.emplace<ACSourceFilepath>(asset_id);

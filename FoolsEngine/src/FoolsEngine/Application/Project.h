@@ -28,7 +28,9 @@ namespace fe
 
 			struct {
 				UUID Base2DVertex;
-				UUID Base2DFragment;
+				UUID Base2DFragmentOpaque;
+				UUID Base2DFragmentCutout;
+				UUID Base2DFragmentBlend;
 				UUID Base3DVertex;
 				UUID Base3DFragmentBlend;
 				UUID Base3DFragmentCutout;
@@ -36,14 +38,18 @@ namespace fe
 			} Shaders;
 
 			struct {
-				UUID Base2DFlat;
+				UUID Base2DFlatOpaque;
+				UUID Base2DFlatCutout;
+				UUID Base2DFlatBlend;
 				UUID Base3DOpaque;
 				UUID Base3DCutout;
 				UUID Base3DBlend;
 			} ShadingModels;
 
 			struct {
-				UUID Default2DFlat; //do I need this?
+				UUID Default2DFlatOpaque; //do I need this?
+				UUID Default2DFlatCutout; //do I need this?
+				UUID Default2DFlatBlend; //do I need this?
 				UUID DefaultOpaque;
 				UUID DefaultCutout;
 				UUID DefaultTranslucent;

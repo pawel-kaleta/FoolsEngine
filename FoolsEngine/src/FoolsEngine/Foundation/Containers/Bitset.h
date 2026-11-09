@@ -37,10 +37,8 @@ namespace fe
 
 			auto& word = Data[i / 64];
 			const auto bit = U64{ 1 } << i % 64;
-			if (val)
-				word |=  bit;
-			else
-				word &= ~bit;
+
+			word = val * (word | bit) + !val * (word & ~bit);
 		}
 
 		bool Any()

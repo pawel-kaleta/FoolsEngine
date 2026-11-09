@@ -22,14 +22,7 @@ namespace fe
 		class WindowResizeEvent;
 	}
 
-	class ComponentTypesRegistry;
-	class BehaviorsRegistry;
-	class SystemTypesRegistry;
-	class AssetTypesRegistry;
-	class LoadersRegistry;
-	class AssetManager;
 	class ApplicationLayer;
-	class Project;
 
 	class Application
 	{

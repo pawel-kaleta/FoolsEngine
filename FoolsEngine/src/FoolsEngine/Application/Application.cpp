@@ -12,7 +12,7 @@
 #include "FoolsEngine/Platform/Events/Event.h"
 #include "FoolsEngine/Platform/Win32/Win32Window.h"
 					 
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 					 
 #include "FoolsEngine/TypeRegs/Components.h"
 #include "FoolsEngine/TypeRegs/Behaviors.h"
@@ -76,7 +76,7 @@ namespace fe
 			FE_PROFILER_SCOPE("Renderer");
 			Context::Log::ScopeCore scope("Renderer"_FE);
 
-			Renderer::Startup();
+			Render::Integration::Director::Startup();
 			Context::Log::Core.Info("Renderer initialized"_FE);
 		}
 		
@@ -340,7 +340,7 @@ namespace fe
 			*/
 		}
 
-		Renderer::Shutdown();
+		Render::Integration::Director::Shutdown();
 
 		
 	}
@@ -357,7 +357,7 @@ namespace fe
 #endif // FE_INTERNAL_BUILD
 
 		Project::Create(filepath);
-		Renderer::AcquireBaseAssets();
+		Render::Integration::Director::AcquireBaseAssets();
 
 #ifdef FE_INTERNAL_BUILD
 		FE_PROFILER_SESSION_END();
@@ -373,7 +373,7 @@ namespace fe
 		FE_PROFILER_FUNC();
 
 		Project::Load(filepath);
-		Renderer::AcquireBaseAssets();
+		Render::Integration::Director::AcquireBaseAssets();
 
 		auto result = AssetSerializer::DeserializeRegistry();
 		if (result)   AssetSerializer::LoadMetaData();
@@ -440,7 +440,7 @@ namespace fe
 		}
 
 		m_Minimized = false;
-		Renderer::OnWindowResize(event->GetWidth(), event->GetHeight());
+		Render::Integration::Director::OnWindowResize(event->GetWidth(), event->GetHeight());
 
 		Context::Log::Core.Info("Window resize (width: {0}, height: {1})"_FE, event->GetWidth(), event->GetHeight());
 	}

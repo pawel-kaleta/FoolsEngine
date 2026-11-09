@@ -13,8 +13,8 @@ namespace fe
 {
 	struct ACTexture2D_Core final : public AssetComponent
 	{
-		Render::GAPI::Descriptors::TextureSpec mSpecification;
-		Render::GAPI::Descriptors::TextureViewSpec mViewSpecification;
+		Render::GAPI::Descriptors::Texture::Spec				mSpecification;
+		Render::GAPI::Descriptors::Texture::Sampling::ViewSpec	mViewSpecification;
 
 		void Init()
 		{
@@ -24,21 +24,22 @@ namespace fe
 
 		UInt GetSourceSize() const
 		{
-			using namespace Render::GAPI::Descriptors;
+			using namespace Render::GAPI::Descriptors::Texture;
 			UInt texel_size = 0;
 
 			switch (mSpecification.mFormat.Value)
 			{
-			case TextureFormat::None:
+			case Format::None:
 				FE_CORE_ASSERT(false, "Not specified texture data format");
 				texel_size = 0;
 				break;
-			case TextureFormat::R_8:				texel_size = 1; break;
-			case TextureFormat::RG_8:				texel_size = 2; break;
-			case TextureFormat::RGB_8:				texel_size = 3; break;
-			case TextureFormat::RGBA_8:				texel_size = 4; break;
-			case TextureFormat::R_UINT_32:			texel_size = 4; break;
-			case TextureFormat::DEPTH24STENCIL8:	texel_size = 4; break;
+			case Format::R_8:				texel_size = 1; break;
+			case Format::RG_8:				texel_size = 2; break;
+			case Format::RGB_8:				texel_size = 3; break;
+			case Format::RGBA_8:			texel_size = 4; break;
+			case Format::R_UINT_32:			texel_size = 4; break;
+			case Format::DEPTH24_STENCIL8:	texel_size = 4; break;
+			case Format::DEPTH32F_STENCIL8:	texel_size = 4; break;
 			default:
 				FE_CORE_ASSERT(false, "Uknown texture data format");
 				texel_size = 0;

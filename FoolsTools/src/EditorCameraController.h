@@ -38,7 +38,7 @@ namespace fe
 		float m_MoveSpeed = 1.0f;
 
 		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
-		glm::vec2 m_ViewportSize = { 1280.0f, 720.0f };
+		//glm::vec2 m_ViewportSize = { 1280.0f, 720.0f };
 
 		void OnMouseScrolled(Ref<Events::MouseScrolledEvent> event);
 

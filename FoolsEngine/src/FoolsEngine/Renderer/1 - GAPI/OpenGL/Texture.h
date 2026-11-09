@@ -13,65 +13,73 @@
 
 namespace fe::Render::GAPI::OpenGL
 {
-	using namespace Descriptors;
 
 	namespace Utils
 	{
-		inline GLenum FormatToGLFormat(TextureFormat format)
+		inline GLenum FormatToGLFormat(Descriptors::Texture::Format format)
 		{
 			// TO DO: make this a static lookup table?
+			using namespace Descriptors::Texture;
 
 			switch (format.Value)
 			{
-			case TextureFormat::None:
+			case Format::None:
 				FE_CORE_ASSERT(false, "Not specified texture data format");
 				return GL_NONE;
-			case TextureFormat::R_8:				return GL_RED;
-			case TextureFormat::RG_8:				return GL_RG;
-			case TextureFormat::RGB_8:				return GL_RGB;
-			case TextureFormat::RGBA_8:				return GL_RGBA;
-			case TextureFormat::R_UINT_32:			return GL_RED_INTEGER;
-			case TextureFormat::DEPTH24STENCIL8:	FE_CORE_ASSERT(false, "Does this work?"); return GL_DEPTH24_STENCIL8;
+			case Format::R_8:				return GL_RED;
+			case Format::RG_8:				return GL_RG;
+			case Format::RGB_8:				return GL_RGB;
+			case Format::RGBA_8:			return GL_RGBA;
+			case Format::R_UINT_32:			return GL_RED_INTEGER;
+			case Format::DEPTH24_STENCIL8:	FE_CORE_ASSERT(false, "What are you trying to do?"); return GL_DEPTH_COMPONENT;
+			case Format::DEPTH32F_STENCIL8:	FE_CORE_ASSERT(false, "What are you trying to do?"); return GL_DEPTH_COMPONENT;
 			default:
 				FE_CORE_ASSERT(false, "Uknown texture data format");
 				return GL_NONE;
 			}
 		}
 
-		inline GLenum FormatToGLInternalFormat(TextureFormat format)
+		inline GLenum FormatToGLInternalFormat(Descriptors::Texture::Format format)
 		{
 			// TO DO: make this a static lookup table?
+			using namespace Descriptors::Texture;
 
 			switch (format.Value)
 			{
-			case TextureFormat::None:
+			case Format::None:
 				FE_CORE_ASSERT(false, "Not specified texture data format");
 				return GL_NONE;
-			case TextureFormat::R_8:				return GL_R8;
-			case TextureFormat::RG_8:				return GL_RG8;
-			case TextureFormat::RGB_8:				return GL_RGB8;
-			case TextureFormat::RGBA_8:				return GL_RGBA8;
-			case TextureFormat::R_UINT_32:			return GL_R32UI;
-			case TextureFormat::DEPTH24STENCIL8:	return GL_DEPTH24_STENCIL8;
+			case Format::R_8:				return GL_R8;
+			case Format::RG_8:				return GL_RG8;
+			case Format::RGB_8:				return GL_RGB8;
+			case Format::RGBA_8:			return GL_RGBA8;
+			case Format::R_UINT_32:			return GL_R32UI;
+			case Format::DEPTH24_STENCIL8:	return GL_DEPTH24_STENCIL8;
+			case Format::DEPTH32F_STENCIL8:	return GL_DEPTH32F_STENCIL8;
+
 			default:
 				FE_CORE_ASSERT(false, "Uknown texture data format");
 				return GL_NONE;
 			}
 		}
 
-		inline GLenum FormatToGLType(TextureFormat format)
+		inline GLenum FormatToGLType(Descriptors::Texture::Format format)
 		{
+			// TO DO: make this a static lookup table?
+			using namespace Descriptors::Texture;
+
 			switch (format.Value)
 			{
-			case TextureFormat::None:
+			case Format::None:
 				FE_CORE_ASSERT(false, "Not specified texture data format");
 				return GL_NONE;
-			case TextureFormat::R_8:				return GL_UNSIGNED_BYTE;
-			case TextureFormat::RG_8:				return GL_UNSIGNED_BYTE;
-			case TextureFormat::RGB_8:				return GL_UNSIGNED_BYTE;
-			case TextureFormat::RGBA_8:				return GL_UNSIGNED_BYTE;
-			case TextureFormat::R_UINT_32:			return GL_UNSIGNED_INT;
-			case TextureFormat::DEPTH24STENCIL8:	FE_CORE_ASSERT(false, "Does this work?"); return GL_DEPTH24_STENCIL8; //this shouldnt be happening
+			case Format::R_8:				return GL_UNSIGNED_BYTE;
+			case Format::RG_8:				return GL_UNSIGNED_BYTE;
+			case Format::RGB_8:				return GL_UNSIGNED_BYTE;
+			case Format::RGBA_8:			return GL_UNSIGNED_BYTE;
+			case Format::R_UINT_32:			return GL_UNSIGNED_INT;
+			case Format::DEPTH24_STENCIL8:	FE_CORE_ASSERT(false, "what are you trying to do?"); return GL_UNSIGNED_INT; //this shouldnt be happening (why?)
+			case Format::DEPTH32F_STENCIL8:	FE_CORE_ASSERT(false, "what are you trying to do?"); return GL_UNSIGNED_INT; //this shouldnt be happening (why?)
 			default:
 				FE_CORE_ASSERT(false, "Uknown texture data format");
 				return GL_NONE;
@@ -83,11 +91,12 @@ namespace fe::Render::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::Texture;
 
+
 		FE_TYPE_SETUP(Texture)
 
 		GLuint mOpenGLID = 0;
-		TextureSpec mSpec;
-		TextureViewSpec mViewSpec;
+		Descriptors::Texture::Spec mSpec;
+		Descriptors::Texture::Sampling::ViewSpec mViewSpec;
 		GLenum mGLType;
 		GLenum mGLFormat;
 		GLenum mGLInternalFormat;
@@ -95,11 +104,12 @@ namespace fe::Render::GAPI::OpenGL
 		void Init()
 		{
 			mOpenGLID = 0;
-			mSpec = TextureSpec();
+			mSpec.Init();
 		}
 
-		void Create(const TextureSpec& spec)
+		void Create(const Descriptors::Texture::Spec& spec)
 		{
+			using namespace Descriptors::Texture;
 			mSpec = spec;
 			mGLType = Utils::FormatToGLType(spec.mFormat);
 			mGLFormat = Utils::FormatToGLFormat(spec.mFormat);
@@ -107,16 +117,16 @@ namespace fe::Render::GAPI::OpenGL
 
 			switch (spec.mType.Value)
 			{
-			case TextureType::Texture1D:
+			case Type::Texture1D:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
-			case TextureType::Texture2D:
+			case Type::Texture2D:
 				glCreateTextures(GL_TEXTURE_2D, 1, &mOpenGLID);			
 				break;
-			case TextureType::Texture3D:
+			case Type::Texture3D:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
-			case TextureType::Texture2DArray:
+			case Type::Texture2DArray:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
 			default:
@@ -124,8 +134,10 @@ namespace fe::Render::GAPI::OpenGL
 			}
 		}
 
-		void Create(const TextureSpec& spec, const TextureViewSpec& viewSpec)
+		void Create(const Descriptors::Texture::Spec& spec, const Descriptors::Texture::Sampling::ViewSpec& viewSpec)
 		{
+			using namespace Descriptors::Texture;
+
 			mSpec = spec;
 			mGLType = Utils::FormatToGLType(spec.mFormat);
 			mGLFormat = Utils::FormatToGLFormat(spec.mFormat);
@@ -134,16 +146,16 @@ namespace fe::Render::GAPI::OpenGL
 
 			switch (spec.mType.Value)
 			{
-			case TextureType::Texture1D:
+			case Type::Texture1D:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
-			case TextureType::Texture2D:
+			case Type::Texture2D:
 				glCreateTextures(GL_TEXTURE_2D, 1, &mOpenGLID);
 				break;
-			case TextureType::Texture3D:
+			case Type::Texture3D:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
-			case TextureType::Texture2DArray:
+			case Type::Texture2DArray:
 				FE_CORE_ASSERT(false, "Texture type not implemented");
 				break;
 			default:
@@ -153,6 +165,7 @@ namespace fe::Render::GAPI::OpenGL
 
 		void Allocate()
 		{
+			using namespace Descriptors::Texture::Sampling;
 			if (mViewSpec.mASFiltering != ASFiltering::None)
 			{
 				GLfloat anisotropy = 2 ^ mViewSpec.mASFiltering.Value;
@@ -216,15 +229,11 @@ namespace fe::Render::GAPI::OpenGL
 
 		void ClearCmd(Splice<U32> values)
 		{
-			FE_CORE_ASSERT(mSpec.mFormat != TextureFormat::DEPTH24STENCIL8, "This is a depth and/or stencil texture!");
-			
 			glClearTexImage(mOpenGLID, 0, mGLFormat, GL_UNSIGNED_INT, values.Elements);
 		}
 
 		void ClearCmd(Splice<F32> values)
-		{
-			FE_CORE_ASSERT(mSpec.mFormat != TextureFormat::DEPTH24STENCIL8, "This is a depth and/or stencil texture!");
-			
+		{		
 			glClearTexImage(mOpenGLID, 0, mGLFormat, GL_UNSIGNED_INT, values.Elements);
 		}
 
@@ -238,7 +247,7 @@ namespace fe::Render::GAPI::OpenGL
 	{
 		constexpr static ObjType Type = ObjType::TextureView;
 
-		TextureViewSpec mSampler;
+		Descriptors::Texture::Sampling::ViewSpec mSampler;
 		Texture* mTexture = nullptr;
 		GLuint mSamplerID = 0;
 		GLuint64 mTextureSamplerHandleGL = -1;
@@ -247,14 +256,15 @@ namespace fe::Render::GAPI::OpenGL
 
 		void Init()
 		{
-			mSampler = TextureViewSpec();
+			mSampler.Init();
 			mTexture = nullptr;
 			mSamplerID = 0;
 			mTextureSamplerHandleGL = -1;
 		}
 
-		void Create(const TextureViewSpec& sampler, Texture* texture)
+		void Create(const Descriptors::Texture::Sampling::ViewSpec& sampler, Texture* texture)
 		{
+			using namespace Descriptors::Texture::Sampling;
 			mSampler = sampler;
 			mTexture = texture;
 
@@ -284,7 +294,7 @@ namespace fe::Render::GAPI::OpenGL
 					glSamplerParameterfv(mSamplerID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(sampler.mBorderColor));
 					break;
 				default:
-					Context::Log::Core.Error("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
+					Context::Log::Core.Warn("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
 				}
 			}
 
@@ -313,7 +323,7 @@ namespace fe::Render::GAPI::OpenGL
 					}
 					break;
 				default:
-					Context::Log::Core.Info("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					Context::Log::Core.Warn("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 				}
 			}
 		}

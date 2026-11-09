@@ -239,7 +239,7 @@ Worlds:
               ChildrenCount: 0
               FirstChild: 0
             Transform:
-              Shift: [0.6448055, -0.08133033, -0.5082782]
+              Shift: [0.6448055, -0.021103889, -0.5082782]
               Rotation: [0, -0, 0]
               Scale: [1, 1, 1]
             Sprite:

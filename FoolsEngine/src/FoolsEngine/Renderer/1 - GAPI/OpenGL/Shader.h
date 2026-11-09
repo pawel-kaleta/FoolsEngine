@@ -12,12 +12,12 @@
 
 namespace fe::Render::GAPI::OpenGL
 {
-	using namespace Descriptors;
-
 	namespace Utils
 	{
-		inline GLenum ShaderTypeToGLEnum(ShaderType type)
+		inline GLenum ShaderTypeToGLEnum(Descriptors::ShaderType type)
 		{
+			using namespace Descriptors;
+	
 			switch (type)
 			{
 			case ShaderType::None:
@@ -38,17 +38,17 @@ namespace fe::Render::GAPI::OpenGL
 		constexpr static ObjType Type = ObjType::Shader;
 
 		GLuint mOpenGLID = 0;
-		ShaderType mType = ShaderType::None;
+		Descriptors::ShaderType mType = Descriptors::ShaderType::None;
 
 		FE_TYPE_SETUP(Shader)
 
 		void Init()
 		{
 			mOpenGLID = 0;
-			mType = ShaderType::None;
+			mType = Descriptors::ShaderType::None;
 		}
 
-		void Create(CString source, ShaderType type)
+		void Create(CString source, Descriptors::ShaderType type)
 		{
 			FE_PROFILER_FUNC();
 

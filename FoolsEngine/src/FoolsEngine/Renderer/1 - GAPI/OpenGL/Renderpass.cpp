@@ -8,18 +8,19 @@ namespace fe::Render::GAPI
 {
 	namespace OpenGL::Utils
 	{
-		inline GLenum PrimitiveTypeToGLmode(Raster::PrimitiveType primitive)
+		inline GLenum PrimitiveTypeToGLmode(Descriptors::Raster::PrimitiveType primitive)
 		{
 			// TO DO: make this a static lookup table?
+			using namespace Descriptors::Raster;
 
 			switch (primitive.Value)
 			{
-			case Raster::PrimitiveType::None:
+			case PrimitiveType::None:
 				FE_CORE_ASSERT(false, "Not specified PrimitiveType");
 				return GL_TRIANGLES;
-			case Raster::PrimitiveType::Point:		return GL_POINTS;
-			case Raster::PrimitiveType::Line:		return GL_LINES;
-			case Raster::PrimitiveType::Triangle:	return GL_TRIANGLES;
+			case PrimitiveType::Point:		return GL_POINTS;
+			case PrimitiveType::Line:		return GL_LINES;
+			case PrimitiveType::Triangle:	return GL_TRIANGLES;
 			default:
 				FE_CORE_ASSERT(false, "Uknown PrimitiveType");
 				return GL_TRIANGLES;
@@ -28,64 +29,72 @@ namespace fe::Render::GAPI
 
 		inline GLenum DepthTestTypeToGLenum(Descriptors::DepthStencil::DepthTestType test)
 		{
+			using namespace Descriptors::DepthStencil;
+
 			switch (test)
 			{
-			case DepthStencil::DepthTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
-			case DepthStencil::DepthTestType::Never:		return GL_NEVER;
-			case DepthStencil::DepthTestType::Always:		return GL_ALWAYS;
-			case DepthStencil::DepthTestType::NotEqual:		return GL_NOTEQUAL;
-			case DepthStencil::DepthTestType::Less:			return GL_LESS;
-			case DepthStencil::DepthTestType::LessEqual:	return GL_LEQUAL;
-			case DepthStencil::DepthTestType::Equal:		return GL_EQUAL;
-			case DepthStencil::DepthTestType::GreaterEqual:	return GL_GEQUAL;
-			case DepthStencil::DepthTestType::Greater:		return GL_GREATER;
+			case DepthTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
+			case DepthTestType::Never:			return GL_NEVER;
+			case DepthTestType::Always:			return GL_ALWAYS;
+			case DepthTestType::NotEqual:		return GL_NOTEQUAL;
+			case DepthTestType::Less:			return GL_LESS;
+			case DepthTestType::LessEqual:		return GL_LEQUAL;
+			case DepthTestType::Equal:			return GL_EQUAL;
+			case DepthTestType::GreaterEqual:	return GL_GEQUAL;
+			case DepthTestType::Greater:		return GL_GREATER;
 			default: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
 			}
 		}
 
 		inline GLenum StencilTestTypeToGLenum(Descriptors::DepthStencil::StencilTestType test)
 		{
+			using namespace Descriptors::DepthStencil;
+
 			switch (test)
 			{
-			case DepthStencil::StencilTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
-			case DepthStencil::StencilTestType::Never:			return GL_NEVER;
-			case DepthStencil::StencilTestType::Always:			return GL_ALWAYS;
-			case DepthStencil::StencilTestType::NotEqual:		return GL_NOTEQUAL;
-			case DepthStencil::StencilTestType::Less:			return GL_LESS;
-			case DepthStencil::StencilTestType::LessEqual:		return GL_LEQUAL;
-			case DepthStencil::StencilTestType::Equal:			return GL_EQUAL;
-			case DepthStencil::StencilTestType::GreaterEqual:	return GL_GEQUAL;
-			case DepthStencil::StencilTestType::Greater:		return GL_GREATER;
+			case StencilTestType::None: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
+			case StencilTestType::Never:		return GL_NEVER;
+			case StencilTestType::Always:		return GL_ALWAYS;
+			case StencilTestType::NotEqual:		return GL_NOTEQUAL;
+			case StencilTestType::Less:			return GL_LESS;
+			case StencilTestType::LessEqual:	return GL_LEQUAL;
+			case StencilTestType::Equal:		return GL_EQUAL;
+			case StencilTestType::GreaterEqual:	return GL_GEQUAL;
+			case StencilTestType::Greater:		return GL_GREATER;
 			default: FE_CORE_ASSERT(false, "AAA"); return GL_ALWAYS;
 			}
 		}
 
 		inline GLenum StencilOperationToGLenum(Descriptors::DepthStencil::StencilOperation op)
 		{
+			using namespace Descriptors::DepthStencil;
+
 			switch (op.Value)
 			{
-			case Descriptors::DepthStencil::StencilOperation::None: FE_CORE_ASSERT(false, "AAAA"); return GL_KEEP;
-			case Descriptors::DepthStencil::StencilOperation::Keep:				return GL_KEEP;
-			case Descriptors::DepthStencil::StencilOperation::Zero:				return GL_ZERO;
-			case Descriptors::DepthStencil::StencilOperation::Replace:			return GL_REPLACE;
-			case Descriptors::DepthStencil::StencilOperation::IncrementCap:		return GL_INCR;
-			case Descriptors::DepthStencil::StencilOperation::IncrementWrap:	return GL_INCR_WRAP;
-			case Descriptors::DepthStencil::StencilOperation::DecrementCap:		return GL_DECR;
-			case Descriptors::DepthStencil::StencilOperation::DecrementWrap:	return GL_DECR_WRAP;
-			case Descriptors::DepthStencil::StencilOperation::Invert:			return GL_INVERT;
+			case StencilOperation::None: FE_CORE_ASSERT(false, "AAAA"); return GL_KEEP;
+			case StencilOperation::Keep:			return GL_KEEP;
+			case StencilOperation::Zero:			return GL_ZERO;
+			case StencilOperation::Replace:			return GL_REPLACE;
+			case StencilOperation::IncrementCap:	return GL_INCR;
+			case StencilOperation::IncrementWrap:	return GL_INCR_WRAP;
+			case StencilOperation::DecrementCap:	return GL_DECR;
+			case StencilOperation::DecrementWrap:	return GL_DECR_WRAP;
+			case StencilOperation::Invert:			return GL_INVERT;
 			default: FE_CORE_ASSERT(false, "AAAA"); return GL_KEEP;
 			}
 		}
 
 		inline GLenum BlendFunctionToGLEnum(Descriptors::Blend::BlendFunction func)
 		{
+			using namespace Descriptors::Blend;
+
 			switch (func)
 			{
-			case Blend::BlendFunction::None:
+			case BlendFunction::None:
 				FE_CORE_ASSERT(false, "Not specified BlendFunction");
 				return GL_NONE;
-			case Blend::BlendFunction::SourceAlpha:			return GL_SRC_ALPHA;
-			case Blend::BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
+			case BlendFunction::SourceAlpha:			return GL_SRC_ALPHA;
+			case BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
 
 			default:
 				Context::Log::Core.Error("Unrecognized BlendFunction"_FE);
@@ -94,7 +103,7 @@ namespace fe::Render::GAPI
 		}
 	}
 
-	Descriptors::FramebufferSpec sFramebufferSpec;
+	Descriptors::Raster::FramebufferSpec sFramebufferSpec;
 
 	GLuint sFramebuffer;
 	GLint sDrawFboId_backup; 
@@ -118,6 +127,11 @@ namespace fe::Render::GAPI
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fb_obj->mOpenGLID);
 		glViewport(0, 0, fb_obj->mDimentions.x, fb_obj->mDimentions.y);
+		
+		if (fb_obj->mSpec.mDepthRange == Descriptors::Raster::DepthRange::ZeroToOne)
+			glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+		else if (fb_obj->mSpec.mDepthRange == Descriptors::Raster::DepthRange::MinusOneToOne)
+			glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
 	}
 
 	void SetPipelineCmd(GID pipeline)
@@ -131,18 +145,18 @@ namespace fe::Render::GAPI
 
 		switch (raster.mFaceCullTest.Value)
 		{
-		case Descriptors::Raster::FaceCullTest::None:
+		case Descriptors::Raster::FaceCulling::None:
 			FE_CORE_ASSERT(false, "Unset facecull test");
 			glDisable(GL_CULL_FACE);
 			break;
-		case Descriptors::Raster::FaceCullTest::Never:
+		case Descriptors::Raster::FaceCulling::Never:
 			glDisable(GL_CULL_FACE);
 			break;
 		default:
 			GLenum face_cull_mode;
-			if		(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Back)	face_cull_mode = GL_BACK;
-			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Front)	face_cull_mode = GL_FRONT;
-			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCullTest::Always)	face_cull_mode = GL_FRONT_AND_BACK;
+			if		(raster.mFaceCullTest == Descriptors::Raster::FaceCulling::Back)	face_cull_mode = GL_BACK;
+			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCulling::Front)	face_cull_mode = GL_FRONT;
+			else if	(raster.mFaceCullTest == Descriptors::Raster::FaceCulling::Always)	face_cull_mode = GL_FRONT_AND_BACK;
 			glEnable(GL_CULL_FACE);
 			glCullFace(face_cull_mode);
 		}
@@ -150,11 +164,11 @@ namespace fe::Render::GAPI
 		for (UInt i = 0; i < pipeline_obj->mRaster.mColorWriteMasks.Count; i++)
 		{
 			auto& mask = pipeline_obj->mRaster.mColorWriteMasks[i];
-			glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+			glColorMaski(i, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 		}
 	}
 
-	void SetDepthStencilStateCmd(const Descriptors::DepthStencil::Specification& spec)
+	void SetDepthStencilStateCmd(const Descriptors::DepthStencil::Spec& spec)
 	{
 		using namespace Descriptors::DepthStencil;
 
@@ -195,34 +209,34 @@ namespace fe::Render::GAPI
 		}
 	}
 
-	void SetBlendStateCmd(const Descriptors::Blend::Specification& blend)
+	void SetBlendStateCmd(const Descriptors::Blend::Spec& blend)
 	{
 		FE_CORE_ASSERT(false, "Not implemented!");
 	}
 
 	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<F32, 4>& value)
 	{
-		Descriptors::Raster::ColorMask  color_masks_backup;
+		GLboolean color_masks_backup[4];
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
-		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glColorMaski(attachmentIndex, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 		glClearNamedFramebufferfv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
-		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+		glColorMaski(attachmentIndex, color_masks_backup[0], color_masks_backup[1], color_masks_backup[2], color_masks_backup[3]);
 	}
 	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<S32, 4>& value)
 	{
-		Descriptors::Raster::ColorMask  color_masks_backup;
+		GLboolean color_masks_backup[4];
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
-		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glColorMaski(attachmentIndex, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 		glClearNamedFramebufferiv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
-		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+		glColorMaski(attachmentIndex, color_masks_backup[0], color_masks_backup[1], color_masks_backup[2], color_masks_backup[3]);
 	}
 	void ClearColorCmd(UInt attachmentIndex, Descriptors::Raster::ColorMask mask, const Array<U32, 4>& value)
 	{
-		Descriptors::Raster::ColorMask  color_masks_backup;
+		GLboolean color_masks_backup[4];
 		glGetBooleani_v(GL_COLOR_WRITEMASK, attachmentIndex, (GLboolean*)&(color_masks_backup));
-		glColorMaski(attachmentIndex, mask.red, mask.green, mask.blue, mask.alpha);
+		glColorMaski(attachmentIndex, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 		glClearNamedFramebufferuiv(sFramebuffer, GL_COLOR, attachmentIndex, value.begin());
-		glColorMaski(attachmentIndex, color_masks_backup.red, color_masks_backup.green, color_masks_backup.blue, color_masks_backup.alpha);
+		glColorMaski(attachmentIndex, color_masks_backup[0], color_masks_backup[1], color_masks_backup[2], color_masks_backup[3]);
 	}
 	void ClearDepthCmd(float value)
 	{
@@ -230,7 +244,8 @@ namespace fe::Render::GAPI
 		glGetBooleanv(GL_DEPTH_WRITEMASK, &depth_write_mask_backup);
 		glDepthMask(true);
 		glClearDepthf(value);
-		glDepthMask(false);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glDepthMask(depth_write_mask_backup);
 	}
 	void ClearStencilCmd(U08 mask, U08 value)
 	{
@@ -361,5 +376,7 @@ namespace fe::Render::GAPI
 	{
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sDrawFboId_backup);
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, sReadFboId_backup);
+
+		glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
 	}
 }

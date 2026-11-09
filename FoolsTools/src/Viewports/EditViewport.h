@@ -35,10 +35,12 @@ namespace fe
 		EntityID m_SelectedEntityID = NullEntityID;
 		EntityID m_EntityIDSelectionRequest = NullEntityID;
 
-		glm::vec2 m_ViewportSize = { 0, 0 };
+		glm::vec2 mFramebufferSize = { 0, 0 };
+
 		glm::vec2 m_ViewportBounds[2] = { { 0, 0 }, { 0, 0 } };
 		bool      m_VieportFocus = false;
 		bool      m_VieportHover = false;
+		bool m_ResizeFramebuffer = false;
 
 		ImGuizmo::OPERATION m_GuizmoType = ImGuizmo::OPERATION::UNIVERSAL;
 		Scope<EditorCameraController> m_CameraController;

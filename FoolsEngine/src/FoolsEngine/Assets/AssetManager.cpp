@@ -10,7 +10,7 @@
 #include "FoolsEngine/Foundation/Containers/Arena.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 namespace fe
 {

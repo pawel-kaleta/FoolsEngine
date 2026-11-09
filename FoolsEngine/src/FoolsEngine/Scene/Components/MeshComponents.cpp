@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Assets/Serialization/YAML.h"
 
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 namespace fe
 {

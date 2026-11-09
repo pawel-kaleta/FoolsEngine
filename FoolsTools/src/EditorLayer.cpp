@@ -135,9 +135,9 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("RenderStats");
 
-			auto& ambient_light = Renderer::SceneData.AmbientLight;
+			auto& ambient_light = Render::Integration::SceneData->AmbientLight;
 			ImGui::ColorEdit3("Ambient Light", glm::value_ptr(ambient_light));
-			auto& ambient_light_intensity = Renderer::SceneData.AmbientLightIntensity;
+			auto& ambient_light_intensity = Render::Integration::SceneData->AmbientLightIntensity;
 			ImGui::DragFloat("Ambient Light Intensity", &ambient_light_intensity, 0.01f, 0.0f, 1.0f);
 
 			const auto& stats = Renderer2D::m_Stats;

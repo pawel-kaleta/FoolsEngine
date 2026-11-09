@@ -164,8 +164,11 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesList.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Renderpass.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\BaseAssets.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\SceneData.h" />
     <ClInclude Include="src\FoolsEngine\TypeRegs\Assets.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\GeometryLoader.h" />
     <ClInclude Include="src\FoolsEngine\Assets\Loaders\LoaderType.h" />
@@ -245,7 +248,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\3 - Allocator\TextureAllocator.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render\GeometryRenderer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render\Renderer2D.h" />
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\Renderer.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\Director.h" />
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h" />
     <ClInclude Include="src\FoolsEngine\Scene\Component.h" />
     <ClInclude Include="src\FoolsEngine\TypeRegs\Components.h" />
@@ -319,7 +322,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\2 - Representation\Texture.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Render\GeometryRenderer.cpp" />
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Render\Renderer2D.cpp" />
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Integration\Renderer.cpp" />
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Integration\Director.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp" />
     <ClCompile Include="src\FoolsEngine\TypeRegs\Components.cpp" />
     <ClCompile Include="src\FoolsEngine\Scene\Components\2DComponents.cpp" />

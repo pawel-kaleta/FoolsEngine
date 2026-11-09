@@ -6,7 +6,7 @@
 #include "FoolsEngine/Assets/AssetAccessors.h"
 
 #include "FoolsEngine/Renderer/2 - Representation/Model.h"
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -22,16 +22,18 @@ namespace fe
 
 	void GeometryRenderer::RenderCRenderMeshView(const AssetObserver& scene)
 	{
-		void* VP_matrix_ptr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
+		auto scene_data = Render::Integration::SceneData;
+
+		void* VP_matrix_ptr = (void*)glm::value_ptr(scene_data->VPMatrix);
 
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 		
-		void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
-		void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);
-		void* main_light_intensity = &Renderer::SceneData.MainLight->Intensity;
-		void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
-		void* ambient_light_intensity = &Renderer::SceneData.AmbientLightIntensity;
-		void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
+		void* main_light_dir = glm::value_ptr(scene_data->MainLight->Direction);
+		void* main_light_color = glm::value_ptr(scene_data->MainLight->Color);
+		void* main_light_intensity = &scene_data->MainLight->Intensity;
+		void* ambient_light = glm::value_ptr(scene_data->AmbientLight);
+		void* ambient_light_intensity = &scene_data->AmbientLightIntensity;
+		void* camera_position = glm::value_ptr(scene_data->CameraTransform.Shift);
 
 		auto view_of_CRenderMeshView_components = registry.view<CRenderMeshView, CTransformGlobal>();
 		for (auto ID : view_of_CRenderMeshView_components) // intellisense is freaking out here, don't worry, be happy
@@ -93,13 +95,15 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		void* VPmatrixPtr = (void*)glm::value_ptr(Renderer::SceneData.VPMatrix);
-		void* main_light_dir = glm::value_ptr(Renderer::SceneData.MainLight->Direction);
-		void* main_light_color = glm::value_ptr(Renderer::SceneData.MainLight->Color);
-		void* main_light_intensity = &Renderer::SceneData.MainLight->Intensity;
-		void* ambient_light = glm::value_ptr(Renderer::SceneData.AmbientLight);
-		void* ambient_light_intensity = &Renderer::SceneData.AmbientLightIntensity;
-		void* camera_position = glm::value_ptr(Renderer::SceneData.CameraTransform.Shift);
+		auto scene_data = Render::Integration::SceneData;
+
+		void* VPmatrixPtr = (void*)glm::value_ptr(scene_data->VPMatrix);
+		void* main_light_dir = glm::value_ptr(scene_data->MainLight->Direction);
+		void* main_light_color = glm::value_ptr(scene_data->MainLight->Color);
+		void* main_light_intensity = &scene_data->MainLight->Intensity;
+		void* ambient_light = glm::value_ptr(scene_data->AmbientLight);
+		void* ambient_light_intensity = &scene_data->AmbientLightIntensity;
+		void* camera_position = glm::value_ptr(scene_data->CameraTransform.Shift);
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 		auto view_of_CModelView_components = registry.view<CModel, CTransformGlobal>();
 		auto& asset_registry = AssetManager::s_Instance->m_Registry;
@@ -107,7 +111,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Cutout geometry");
 
-			AssetObserver cutout_sm_observer(Renderer::BaseAssets.ShadingModels.Base3DCutout.GetID());
+			AssetObserver cutout_sm_observer(Render::Integration::BaseAssets->ShadingModels.Base3DCutout.GetID());
 
 			FE_CORE_ASSERT(false, "not implemented");
 			//auto& program = cutout_sm_observer.GetResource<GAPIType::OpenGL>().Program;
@@ -165,7 +169,7 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Opaque geometry");
 
-			AssetObserver opaque_sm_observer(Renderer::BaseAssets.ShadingModels.Base3DOpaque.GetID());
+			AssetObserver opaque_sm_observer(Render::Integration::BaseAssets->ShadingModels.Base3DOpaque.GetID());
 
 			FE_CORE_ASSERT(false, "not implemented");
 			//auto& program = opaque_sm_observer.GetResource<GAPIType::OpenGL>().Program;

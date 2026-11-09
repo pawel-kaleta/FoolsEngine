@@ -73,7 +73,7 @@ namespace fe::Render::GAPI
 		OpenGL::ShaderRegistry.FreeObj(shader);
 	}
 
-	GID CreateTexture(const Descriptors::TextureSpec& spec)
+	GID CreateTexture(const Descriptors::Texture::Spec& spec)
 	{
 		FE_PROFILER_FUNC();
 		OpenGL::InternalID id = OpenGL::TextureRegistry.GetNewID();
@@ -82,7 +82,7 @@ namespace fe::Render::GAPI
 		return id;
 	}
 
-	GID CreateTexture(const Descriptors::TextureSpec& spec, const Descriptors::TextureViewSpec& viewSpec)
+	GID CreateTexture(const Descriptors::Texture::Spec& spec, const Descriptors::Texture::Sampling::ViewSpec& viewSpec)
 	{
 		FE_PROFILER_FUNC();
 		OpenGL::InternalID id = OpenGL::TextureRegistry.GetNewID();
@@ -166,7 +166,7 @@ namespace fe::Render::GAPI
 		return texture_obj->mOpenGLID;
 	}
 
-	GID CreateTextureView(GID texture, const Descriptors::TextureViewSpec& textureViewSpec)
+	GID CreateTextureView(GID texture, const Descriptors::Texture::Sampling::ViewSpec& textureViewSpec)
 	{
 		FE_PROFILER_FUNC();
 		OpenGL::Texture* texture_obj = OpenGL::TextureRegistry.GetObj(texture);
@@ -204,7 +204,7 @@ namespace fe::Render::GAPI
 		return *(std140_uvec2*)&(textureview_obj->mTextureSamplerHandleGL);
 	}
 
-	GID CreateFramebufferCmd(const Descriptors::FramebufferSpec& spec, UInt width, UInt height)
+	GID CreateFramebufferCmd(const Descriptors::Raster::FramebufferSpec& spec, UInt width, UInt height)
 	{
 		FE_PROFILER_FUNC();
 

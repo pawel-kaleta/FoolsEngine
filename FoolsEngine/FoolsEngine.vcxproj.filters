@@ -371,7 +371,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\4 - Render\Renderer2D.h">
       <Filter>FoolsEngine\Renderer\4 - Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\Renderer.h">
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\Director.h">
       <Filter>FoolsEngine\Renderer\5 - Integration</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Scene\BaseEntity.h">
@@ -457,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Renderpass.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\BaseAssets.h" />
+    <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\SceneData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -582,7 +585,7 @@
     <ClCompile Include="src\FoolsEngine\Renderer\4 - Render\Renderer2D.cpp">
       <Filter>FoolsEngine\Renderer\4 - Render</Filter>
     </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Renderer\5 - Integration\Renderer.cpp">
+    <ClCompile Include="src\FoolsEngine\Renderer\5 - Integration\Director.cpp">
       <Filter>FoolsEngine\Renderer\5 - Integration</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Scene\Component.cpp">

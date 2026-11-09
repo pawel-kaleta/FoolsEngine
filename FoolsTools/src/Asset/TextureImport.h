@@ -16,8 +16,7 @@ namespace fe
 
 		struct Data
 		{
-			Render::GAPI::Descriptors::TextureSpec Spec;
-			//Description::Texture::Archetype Archetype;
+			Render::GAPI::Descriptors::Texture::Spec Spec;
 			//uint32_t ArchetypeID;
 		};
 	};

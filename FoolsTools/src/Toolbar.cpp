@@ -13,25 +13,29 @@ namespace fe
 		m_IconPlay  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconStop  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconPause = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
+		
+		{
+			using namespace Render::GAPI::Descriptors::Texture::Sampling;
 
-		m_IconPlay.Get<Texture2D::Core>().mViewSpecification = {
-			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
-			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
-			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
-		};
-		m_IconStop.Get<Texture2D::Core>().mViewSpecification = {
-			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
-			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
-			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
-		};
-		m_IconPause.Get<Texture2D::Core>().mViewSpecification = {
-			.mWrapping = Render::GAPI::Descriptors::Wrapping::Repeat,
-			.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-			.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear,
-			.mASFiltering = Render::GAPI::Descriptors::ASFiltering::None
-		};
+			m_IconPlay.Get<Texture2D::Core>().mViewSpecification = {
+				.mWrapping		= Wrapping::Repeat,
+				.mFiltering		= Filtering::Bilinear,
+				.mMipmapping	= Mipmapping::Liniear,
+				.mASFiltering	= ASFiltering::None
+			};
+			m_IconStop.Get<Texture2D::Core>().mViewSpecification = {
+				.mWrapping		= Wrapping::Repeat,
+				.mFiltering		= Filtering::Bilinear,
+				.mMipmapping	= Mipmapping::Liniear,
+				.mASFiltering	= ASFiltering::None
+			};
+			m_IconPause.Get<Texture2D::Core>().mViewSpecification = {
+				.mWrapping		= Wrapping::Repeat,
+				.mFiltering		= Filtering::Bilinear,
+				.mMipmapping	= Mipmapping::Liniear,
+				.mASFiltering	= ASFiltering::None
+			};
+		}
 
 		{
 			FE_PROFILER_SCOPE("Loadings");

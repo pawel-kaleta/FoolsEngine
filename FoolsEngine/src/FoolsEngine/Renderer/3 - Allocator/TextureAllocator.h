@@ -71,15 +71,17 @@ namespace fe::Render
 			
 			texture_component.mTextureViewsGIDs.Init(mAlloc);
 
-			texture_component.mTextureViewsGIDs.Append( CreateTextureView(textureUser, {
-				.mFiltering = Render::GAPI::Descriptors::Filtering::Bilinear,
-				.mMipmapping = Render::GAPI::Descriptors::Mipmapping::Liniear
-			}));
+			GAPI::GID new_texture_view = CreateTextureView(textureUser, {
+				.mFiltering		= GAPI::Descriptors::Texture::Sampling::Filtering::Bilinear,
+				.mMipmapping	= GAPI::Descriptors::Texture::Sampling::Mipmapping::Liniear
+			});
+
+			texture_component.mTextureViewsGIDs.Append(new_texture_view);
 
 			return true;
 		}
 
-		GAPI::GID CreateTextureView(const AssetUser& textureUser, const GAPI::Descriptors::TextureViewSpec& viewSpec)
+		GAPI::GID CreateTextureView(const AssetUser& textureUser, const GAPI::Descriptors::Texture::Sampling::ViewSpec& viewSpec)
 		{
 			auto texture_component = textureUser.GetIfExist<ACTexture2D_GPU<GAPI::Platform::OpenGL>>();
 

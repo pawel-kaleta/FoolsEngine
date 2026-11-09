@@ -1,9 +1,9 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Memory/Splice.h"
+#include "FoolsEngine/Foundation/Containers/Splice.h"
 
 #include "FoolsEngine/Assets/Asset.h"
-#include "FoolsEngine/Assets/AssetTypes.h"
+#include "FoolsEngine/Assets/AssetTypesList.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
 #include "FoolsEngine/Renderer/1 - GAPI/Resource.h"

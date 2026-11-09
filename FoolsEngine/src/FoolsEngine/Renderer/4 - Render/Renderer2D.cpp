@@ -15,7 +15,7 @@
 #include "FoolsEngine/Renderer/2 - Representation/Camera.h"
 #include "FoolsEngine/Renderer/2 - Representation/Texture.h"
 #include "FoolsEngine/Renderer/2 - Representation/Material.h"
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 #include <glad/gl.h>
 
@@ -26,12 +26,14 @@ namespace fe
 	static Render::GAPI::GID sIndexBuffer;
 	static Render::GAPI::GID sQuadsStream;
 	static Render::GAPI::GID sRootDataStream; // make this common for the whole rendering?
-	static Render::GAPI::GID sPipeline;
+	static Render::GAPI::GID sPipelineOpaque;
+	static Render::GAPI::GID sPipelineCutout;
+	static Render::GAPI::GID sPipelineBlend;
+
 
 	Renderer2D::RenderStats Renderer2D::m_Stats;
 
 	static Time::TimePoint m_RenderStartTimePoint;
-
 
 	struct alignas(16) QuadGPU
 	{
@@ -98,38 +100,45 @@ namespace fe
 		{
 			FE_PROFILER_SCOPE("Pipeline creation");
 
-			Render::GAPI::GID vertex_id = Renderer::BaseAssets.Shaders.Base2DVertex.Observe().Get<ACShader_GID<Render::GAPI::Platform::OpenGL>>().mShaderGID;
-			Render::GAPI::GID fragment_id = Renderer::BaseAssets.Shaders.Base2DFragment.Observe().Get<ACShader_GID<Render::GAPI::Platform::OpenGL>>().mShaderGID;
+			using namespace Render::GAPI;
 
-			Render::GAPI::Descriptors::Raster::Specification specification
+			GID vertex_id			= Render::Integration::BaseAssets->Shaders.Base2DVertex.Observe().Get<ACShader_GID<Platform::OpenGL>>().mShaderGID;
+			GID fragment_opaque_id	= Render::Integration::BaseAssets->Shaders.Base2DFragmentOpaque.Observe().Get<ACShader_GID<Platform::OpenGL>>().mShaderGID;
+			GID fragment_cutout_id	= Render::Integration::BaseAssets->Shaders.Base2DFragmentCutout.Observe().Get<ACShader_GID<Platform::OpenGL>>().mShaderGID;
+			GID fragment_blend_id	= Render::Integration::BaseAssets->Shaders.Base2DFragmentBlend.Observe().Get<ACShader_GID<Platform::OpenGL>>().mShaderGID;
+
+
+			Descriptors::Raster::Spec specification
 			{
-				.mPrimitiveType = Render::GAPI::Descriptors::Raster::PrimitiveType::Triangle,
-				.mFaceCullTest = Render::GAPI::Descriptors::Raster::FaceCullTest::Never,
+				.mPrimitiveType = Descriptors::Raster::PrimitiveType::Triangle,
+				.mFaceCullTest	= Descriptors::Raster::FaceCulling::Never,
 				.mFramebufferSpec = 
 				{
 					.mColorFormats =
 					{
-						Render::GAPI::Descriptors::TextureFormat::RGB_8,
-						Render::GAPI::Descriptors::TextureFormat::R_UINT_32
+						Descriptors::Texture::Format::RGB_8,
+						Descriptors::Texture::Format::R_UINT_32
 					},
-					.mDepthStencilFormat = Render::GAPI::Descriptors::TextureFormat::DEPTH24STENCIL8
+					.mDepthStencilFormat	= Descriptors::Texture::Format::DEPTH32F_STENCIL8,
+					.mDepthRange			= Render::GAPI::Descriptors::Raster::DepthRange::ZeroToOne
 				},
 				.mColorWriteMasks =
 				{
-					Render::GAPI::Descriptors::Raster::ColorMask().Init(),
-					Render::GAPI::Descriptors::Raster::ColorMask().Init()
+					Descriptors::Raster::ColorMask().Init(),
+					Descriptors::Raster::ColorMask().Init()
 				}
 			};
 
 
-			sPipeline = Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_id, specification, sizeof(RootData));
+			sPipelineOpaque	= Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_opaque_id, specification, sizeof(RootData));
+			sPipelineCutout	= Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_cutout_id, specification, sizeof(RootData));
+			sPipelineBlend	= Render::GAPI::CreateGraphicsPipelineCmd(vertex_id, fragment_blend_id, specification, sizeof(RootData));
 		}
 	}
 
 	void Renderer2D::Shutdown()
 	{
 		FE_PROFILER_FUNC();
-		
 		
 	}
 
@@ -145,25 +154,99 @@ namespace fe
 		m_RenderStartTimePoint = Time::Now();
 
 		Render::GAPI::BeginRenderpassCmd(framebuffer);
-		Render::GAPI::ClearColorCmd(UInt{ 0 }, Render::GAPI::Descriptors::Raster::ColorMask().Init(), std::initializer_list<F32>{1, 1, 1, 1});
+		Render::GAPI::ClearColorCmd(UInt{ 0 }, Render::GAPI::Descriptors::Raster::ColorMask().Init(), std::initializer_list<F32>{0.1, 0.1, 0.1, 1});
 		Render::GAPI::ClearColorCmd(UInt{ 1 }, Render::GAPI::Descriptors::Raster::ColorMask().Init(), std::initializer_list<U32>{NullEntityID, 0, 0, 0});
+		Render::GAPI::ClearDepthCmd(0);
 
 
-		Render::GAPI::SetPipelineCmd(sPipeline);
+		Render::GAPI::SetPipelineCmd(sPipelineCutout);
 		Render::GAPI::SetDepthStencilStateCmd(
 		{
-			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::None
+			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::Greater
 		});
 		
 		Render::GAPI::SetRootSourceCmd(sRootDataStream);
-		Render::GAPI::SetUniformSourceCmd(1, Renderer::sSceneDataStream, Renderer::SceneData.sStreamOffset, sizeof(Renderer::SceneDataGPU));
+		Render::GAPI::SetUniformSourceCmd(1, Render::Integration::sSceneDataStream, Render::Integration::SceneData->sStreamOffset, sizeof(Render::Integration::SceneDataGPU));
 		Render::GAPI::SetBufferSourceCmd(0, sQuadsStream);
 		Render::GAPI::SetIndexSourceCmd(sIndexBuffer);
 
 		
 		auto& registry = scene.Get<Scene::Core>().GameplayWorld->m_Registry;
 
-		//if (false)
+
+		{
+			FE_PROFILER_SCOPE("Sprites");
+
+			registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
+				const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
+				const auto& rPosition = registry.get<CTransformGlobal>(r).GetRef().Shift;
+			
+				auto lDistance = glm::distance(Render::Integration::SceneData->CameraTransform.Shift, lPosition);
+				auto rDistance = glm::distance(Render::Integration::SceneData->CameraTransform.Shift, rPosition);
+			
+				return lDistance > rDistance;
+			});
+
+			auto view_sprites = registry.view<CSprite, CTransformGlobal>();
+
+			UInt sprite_count = view_sprites.size_hint();
+			UInt triangles_count = 0;
+
+			Render::GAPI::GID sprite_region = Render::GAPI::CreateRegion(sQuadsStream, sprite_count * sizeof(QuadGPU), quad_offset_align);
+			QuadGPU* quad = (QuadGPU*)Render::GAPI::GetRegionLocation(sprite_region);
+
+			for (auto ID : view_sprites)
+			{
+				auto [sprite_comp, entity_transform_comp] = view_sprites.get(ID);
+
+				auto& sprite = sprite_comp.Sprite;
+
+				if (!sprite.Texture.IsValid()) continue;
+				if (sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
+
+				Transform transform = entity_transform_comp.GetRef() + sprite_comp.Offset;
+				auto transform_mat = transform.GetMatrix();
+
+				auto texture_observer = sprite.Texture.Observe();
+				auto texture_view_id = texture_observer.Get<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>().mTextureViewsGIDs[0]; // 0 is dogy, put this on tile?
+				auto& spec = texture_observer.Get<Texture2D::Core>().mSpecification;
+
+				quad->EntityID = ID;
+				quad->Transform = *(Render::GAPI::std140_mat4x4*)&transform_mat;
+				quad->Color = { sprite.Color };
+				quad->TextureView = Render::GAPI::GetTextureViewHandle(texture_view_id);
+				quad->TextureTilingFactor = sprite.TextureTilingFactor;
+				quad->AspecRatio = (float)spec.mDimentions.x / (float)spec.mDimentions.y; // do we need this?
+
+				triangles_count += 2;
+
+				++quad;
+			}
+
+			Render::GAPI::CommitRegion(sprite_region);
+
+			if (triangles_count)
+			{
+				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
+				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
+				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(sprite_region) / sizeof(QuadGPU);
+				Render::GAPI::CommitRegion(root_region);
+
+				//Render::GAPI::SetBlendStateCmd(
+				//{
+				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::OneMinusSourceAlpha
+				//});
+
+				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
+				Render::GAPI::RetireRegionCmd(root_region);
+
+				m_Stats.Quads += triangles_count / 2;
+				m_Stats.DrawCalls++;
+			}
+
+			Render::GAPI::RetireRegionCmd(sprite_region);
+		}
+
 		{
 			FE_PROFILER_SCOPE("Tiles");
 
@@ -227,80 +310,6 @@ namespace fe
 			}
 
 			Render::GAPI::RetireRegionCmd(tiles_region);
-		}
-
-		//if (false)
-		{
-			FE_PROFILER_SCOPE("Sprites");
-
-			registry.sort<CSprite>([&](const EntityID l, const EntityID r) {
-				const auto& lPosition = registry.get<CTransformGlobal>(l).GetRef().Shift;
-				const auto& rPosition = registry.get<CTransformGlobal>(r).GetRef().Shift;
-			
-				auto lDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, lPosition);
-				auto rDistance = glm::distance(Renderer::SceneData.CameraTransform.Shift, rPosition);
-			
-				return lDistance > rDistance;
-			});
-
-			auto view_sprites = registry.view<CSprite, CTransformGlobal>();
-
-			UInt sprite_count = view_sprites.size_hint();
-			UInt triangles_count = 0;
-
-			Render::GAPI::GID sprite_region = Render::GAPI::CreateRegion(sQuadsStream, sprite_count * sizeof(QuadGPU), quad_offset_align);
-			QuadGPU* quad = (QuadGPU*)Render::GAPI::GetRegionLocation(sprite_region);
-
-			for (auto ID : view_sprites)
-			{
-				auto [sprite_comp, entity_transform_comp] = view_sprites.get(ID);
-
-				auto& sprite = sprite_comp.Sprite;
-
-				if (!sprite.Texture.IsValid()) continue;
-				if (sprite.Texture.GetLoadingPriority() == AssetLoadingPriority::None) continue;
-
-				Transform transform = entity_transform_comp.GetRef() + sprite_comp.Offset;
-				auto transform_mat = transform.GetMatrix();
-
-				auto texture_observer = sprite.Texture.Observe();
-				auto texture_view_id = texture_observer.Get<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>().mTextureViewsGIDs[0]; // 0 is dogy, put this on tile?
-				auto& spec = texture_observer.Get<Texture2D::Core>().mSpecification;
-
-				quad->EntityID = ID;
-				quad->Transform = *(Render::GAPI::std140_mat4x4*)&transform_mat;
-				quad->Color = { sprite.Color };
-				quad->TextureView = Render::GAPI::GetTextureViewHandle(texture_view_id);
-				quad->TextureTilingFactor = sprite.TextureTilingFactor;
-				quad->AspecRatio = (float)spec.mDimentions.x / (float)spec.mDimentions.y; // do we need this?
-
-				triangles_count += 2;
-
-				++quad;
-			}
-
-			Render::GAPI::CommitRegion(sprite_region);
-
-			if (triangles_count)
-			{
-				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
-				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
-				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(sprite_region) / sizeof(QuadGPU);
-				Render::GAPI::CommitRegion(root_region);
-
-				//Render::GAPI::SetBlendStateCmd(
-				//{
-				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::OneMinusSourceAlpha
-				//});
-
-				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
-				Render::GAPI::RetireRegionCmd(root_region);
-
-				m_Stats.Quads += triangles_count / 2;
-				m_Stats.DrawCalls++;
-			}
-
-			Render::GAPI::RetireRegionCmd(sprite_region);
 		}
 			
 		Render::GAPI::EndRenderpass();

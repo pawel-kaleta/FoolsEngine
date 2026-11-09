@@ -19,7 +19,7 @@ namespace fe::Render::GAPI::OpenGL
 		constexpr static ObjType Type = ObjType::GraphicsPipeline;
 
 		GLuint mOpenGLID;
-		Raster::Specification mRaster;
+		Descriptors::Raster::Spec mRaster;
 		UInt mRootDataSize;
 
 		FE_TYPE_SETUP(GraphicsPipeline)
@@ -28,16 +28,23 @@ namespace fe::Render::GAPI::OpenGL
 		{
 			mOpenGLID = 0;
 			mRootDataSize = 0;
-			mRaster = Raster::Specification().Init();
+			mRaster.Init();
 		}
 
-		void CreateCmd(const Shader& vertexShader, const Shader& fragmentShader, const Raster::Specification& spec, UInt rootDataSize)
+		void CreateCmd(const Shader& vertexShader, const Shader& fragmentShader, const Descriptors::Raster::Spec& spec, UInt rootDataSize)
 		{
 			FE_PROFILER_FUNC();
 
 			mOpenGLID = glCreateProgram();
 			mRaster = spec;
 			mRootDataSize = rootDataSize;
+
+
+			if (spec.mFramebufferSpec.mDepthRange == Descriptors::Raster::DepthRange::ZeroToOne)
+				glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+			if (spec.mFramebufferSpec.mDepthRange == Descriptors::Raster::DepthRange::MinusOneToOne)
+				glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
+
 				
 			bool	cull_face_backup =			glIsEnabled(GL_CULL_FACE);
 			GLint	cull_face_mode_backup = 0;	glGetIntegerv(GL_CULL_FACE_MODE, &cull_face_mode_backup);
@@ -45,18 +52,18 @@ namespace fe::Render::GAPI::OpenGL
 
 			switch (spec.mFaceCullTest.Value)
 			{
-			case Raster::FaceCullTest::None:
+			case Descriptors::Raster::FaceCulling::None:
 				FE_CORE_ASSERT(false, "Unset facecull test");
 				glDisable(GL_CULL_FACE);
 			break;
-			case Raster::FaceCullTest::Never:
+			case Descriptors::Raster::FaceCulling::Never:
 				glDisable(GL_CULL_FACE);
 			break;
 			default:
 				GLenum face_cull_mode;
-				if		(mRaster.mFaceCullTest == Raster::FaceCullTest::Back)	face_cull_mode = GL_BACK;
-				else if	(mRaster.mFaceCullTest == Raster::FaceCullTest::Front)	face_cull_mode = GL_FRONT;
-				else if	(mRaster.mFaceCullTest == Raster::FaceCullTest::Always)	face_cull_mode = GL_FRONT_AND_BACK;
+				if		(mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Back)	face_cull_mode = GL_BACK;
+				else if	(mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Front)	face_cull_mode = GL_FRONT;
+				else if	(mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Always)	face_cull_mode = GL_FRONT_AND_BACK;
 				glEnable(GL_CULL_FACE);
 				glCullFace(face_cull_mode);
 			}
@@ -76,7 +83,7 @@ namespace fe::Render::GAPI::OpenGL
 			{
 				glGetBooleani_v(GL_COLOR_WRITEMASK, i, (GLboolean*) & (color_masks_backup[i]));
 				auto& mask = spec.mColorWriteMasks[i];
-				glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+				glColorMaski(i, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 			}
 
 			{
@@ -90,7 +97,7 @@ namespace fe::Render::GAPI::OpenGL
 			for (UInt i = 0; i < spec.mColorWriteMasks.Count; i++)
 			{
 				auto& mask = color_masks_backup[i];
-				glColorMaski(i, mask.red, mask.green, mask.blue, mask.alpha);
+				glColorMaski(i, mask.Red(), mask.Green(), mask.Blue(), mask.Alpha());
 			}
 
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId_backup);
@@ -101,6 +108,8 @@ namespace fe::Render::GAPI::OpenGL
 			if (cull_face_backup)	glEnable(GL_CULL_FACE);
 			else					glDisable(GL_CULL_FACE);
 			glCullFace(cull_face_mode_backup);
+
+			glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
 
 
 			GLint linking_success = 0;
@@ -136,7 +145,7 @@ namespace fe::Render::GAPI::OpenGL
 
 		void ActivateCmd()
 		{
-			if (mRaster.mFaceCullTest == Raster::FaceCullTest::Never)
+			if (mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Never)
 			{
 				glDisable(GL_CULL_FACE);
 			}
@@ -144,9 +153,9 @@ namespace fe::Render::GAPI::OpenGL
 			{
 				glEnable(GL_CULL_FACE);
 				
-				if		(mRaster.mFaceCullTest == Raster::FaceCullTest::Back)	glCullFace(GL_BACK);
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Front)	glCullFace(GL_FRONT);
-				else if (mRaster.mFaceCullTest == Raster::FaceCullTest::Always)	glCullFace(GL_FRONT_AND_BACK);
+				if		(mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Back)	glCullFace(GL_BACK);
+				else if (mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Front)	glCullFace(GL_FRONT);
+				else if (mRaster.mFaceCullTest == Descriptors::Raster::FaceCulling::Always)	glCullFace(GL_FRONT_AND_BACK);
 			}
 
 			glUseProgram(mOpenGLID);

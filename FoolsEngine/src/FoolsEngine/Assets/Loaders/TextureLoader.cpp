@@ -7,7 +7,7 @@
 #include "FoolsEngine/Application/Project.h"
 
 #include "FoolsEngine/Renderer/1 - GAPI/Stream.h"
-#include "FoolsEngine/Renderer/5 - Integration/Renderer.h"
+#include "FoolsEngine/Renderer/5 - Integration/Director.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -44,23 +44,23 @@ namespace fe
 
 		UInt data_size = width * height * channels;
 
-		Render::GAPI::GID region = Render::GAPI::CreateRegion(Renderer::sTextureDownStream, data_size);
+		Render::GAPI::GID region = Render::GAPI::CreateRegion(Render::Integration::sTextureDownStream, data_size);
 		Byte* region_location = Render::GAPI::GetRegionLocation(region);
 		std::memcpy(region_location, data, data_size);
 		stbi_image_free(data);
 
 		auto& spec = textureUser.Get<Texture2D::Core>().mSpecification;
 		spec.Init();
-		spec.mType = Render::GAPI::Descriptors::TextureType::Texture2D;
+		spec.mType = Render::GAPI::Descriptors::Texture::Type::Texture2D;
 		spec.mDimentions = { width, height, 0};
 		spec.mMipCount = 1;
 		spec.mLayerCount = 1;
 
 		switch (channels)
 		{
-		case 1: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::R_8; break;
-		case 3: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::RGB_8; break;
-		case 4: spec.mFormat = Render::GAPI::Descriptors::TextureFormat::RGBA_8; break;
+		case 1: spec.mFormat = Render::GAPI::Descriptors::Texture::Format::R_8; break;
+		case 3: spec.mFormat = Render::GAPI::Descriptors::Texture::Format::RGB_8; break;
+		case 4: spec.mFormat = Render::GAPI::Descriptors::Texture::Format::RGBA_8; break;
 		default:
 			FE_CORE_ASSERT(false, "Unimplemented texture format");
 		}
@@ -68,7 +68,7 @@ namespace fe
 		Render::GAPI::CommitRegion(region);
 
 
-		Renderer::sTextureAllocator.CreateTexture(textureUser);
+		Render::Integration::sTextureAllocator.CreateTexture(textureUser);
 
 		auto GPU_component = textureUser.GetIfExist<ACTexture2D_GPU<Render::GAPI::Platform::OpenGL>>();
 
@@ -79,7 +79,7 @@ namespace fe
 		Render::GAPI::RetireRegionCmd(region);
 	}
 
-	Render::GAPI::Descriptors::TextureSpec TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
+	Render::GAPI::Descriptors::Texture::Spec TextureLoader::InspectTexture(const std::filesystem::path& sourceFilePath)
 	{
 		using namespace Render::GAPI::Descriptors;
 		int width, height, channels;
@@ -96,7 +96,7 @@ namespace fe
 			result = stbi_info(file_path.c_str(), &width, &height, &channels);
 		}
 		
-		TextureSpec spec;
+		Render::GAPI::Descriptors::Texture::Spec spec;
 
 		if (!result)
 		{
@@ -104,7 +104,7 @@ namespace fe
 			return spec;
 		}
 
-		spec.mType = TextureType::Texture2D;
+		spec.mType = Render::GAPI::Descriptors::Texture::Type::Texture2D;
 		spec.mFormat.FromInt(channels); // TO DO: this is a dangerous hack
 
 		return spec;

@@ -15,7 +15,7 @@ namespace fe
 
 	struct ACShadingModel_Core final : public AssetComponent
 	{
-		Render::GAPI::Descriptors::Raster::Specification mRasterSpec;
+		Render::GAPI::Descriptors::Raster::Spec mRasterSpec;
 		Splice<Byte> mDefaultParamsData;
 		Splice<Byte> mConstantsData;
 		Splice<AssetID> mShaders;

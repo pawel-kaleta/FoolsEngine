@@ -11,7 +11,7 @@ namespace fe
 namespace fe::TypeRegs
 {
 
-#define FE_COMPONENT_TYPES_LIST CCamera, CTile, CSprite, CRenderMesh, CRenderMeshView, CModel, CModelView, CModelView, CDirectionalLight
+#define FE_COMPONENT_TYPES_LIST CCamera, CTile, CSprite, CSpriteBlend, CRenderMesh, CRenderMeshView, CModel, CModelView, CModelView, CDirectionalLight
 
 	class Components
 	{

@@ -25,4 +25,14 @@ namespace fe
 		virtual void Serialize(YAML::Emitter& emitter) override;
 		virtual void Deserialize(YAML::Node& data) override;
 	};
+
+	struct CSpriteBlend final : SpatialComponent
+	{
+		Renderer2D::Quad SpriteBlend;
+
+		FE_COMPONENT_SETUP(CSpriteBlend, "SpriteBlend");
+		virtual void DrawInspectorWidget(BaseEntity entity) override;
+		virtual void Serialize(YAML::Emitter& emitter) override;
+		virtual void Deserialize(YAML::Node& data) override;
+	};
 }
