@@ -52,6 +52,7 @@ namespace fe
 	struct alignas(16) RootData
 	{
 		Render::GAPI::std140_uint FirstQuadIndex;
+		Render::GAPI::std140_uint SceneDataIndex;
 	};
 
 	void Renderer2D::Startup()
@@ -165,9 +166,11 @@ namespace fe
 			.mDepthTestType = Render::GAPI::Descriptors::DepthStencil::DepthTestType::Greater
 		});
 		
-		Render::GAPI::SetRootSourceCmd(sRootDataStream);
-		Render::GAPI::SetUniformSourceCmd(1, Render::Integration::sSceneDataStream, Render::Integration::SceneData->sStreamOffset, sizeof(Render::Integration::SceneDataGPU));
-		Render::GAPI::SetBufferSourceCmd(0, sQuadsStream);
+		//Render::GAPI::SetRootSourceCmd(sRootDataStream);
+		//Render::GAPI::SetUniformSourceCmd(1, Render::Integration::sSceneDataStream, Render::Integration::SceneData->sStreamOffsetIndex, sizeof(Render::Integration::SceneDataGPU));
+		Render::GAPI::SetBufferSourceCmd(0, sRootDataStream);
+		Render::GAPI::SetBufferSourceCmd(1, Render::Integration::sSceneDataStream);
+		Render::GAPI::SetBufferSourceCmd(2, sQuadsStream);
 		Render::GAPI::SetIndexSourceCmd(sIndexBuffer);
 
 		
@@ -230,6 +233,7 @@ namespace fe
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
 				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(sprite_region) / sizeof(QuadGPU);
+				root->SceneDataIndex = Render::Integration::SceneData->sStreamOffsetIndex;
 				Render::GAPI::CommitRegion(root_region);
 
 				//Render::GAPI::SetBlendStateCmd(
@@ -237,7 +241,9 @@ namespace fe
 				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::OneMinusSourceAlpha
 				//});
 
-				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
+				UInt root_data_index = Render::GAPI::GetRegionOffset(root_region) / sizeof(RootData);
+
+				Render::GAPI::DrawCmd(triangles_count*3, 0, root_data_index);
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;
@@ -295,6 +301,7 @@ namespace fe
 				auto root_region = Render::GAPI::CreateRegion(sRootDataStream, sizeof(RootData), root_alignment);
 				RootData* root = (RootData*)Render::GAPI::GetRegionLocation(root_region);
 				root->FirstQuadIndex = Render::GAPI::GetRegionOffset(tiles_region) / sizeof(QuadGPU);
+				root->SceneDataIndex = Render::Integration::SceneData->sStreamOffsetIndex;
 				Render::GAPI::CommitRegion(root_region);
 
 				//Render::GAPI::SetBlendStateCmd(
@@ -302,7 +309,9 @@ namespace fe
 				//	.mBlendFunction = Render::GAPI::Descriptors::Blend::BlendFunction::None
 				//});
 
-				Render::GAPI::DrawCmd(triangles_count*3, 0, Render::GAPI::GetRegionOffset(root_region));
+				UInt root_data_index = Render::GAPI::GetRegionOffset(root_region) / sizeof(RootData);
+
+				Render::GAPI::DrawCmd(triangles_count*3, 0, root_data_index);
 				Render::GAPI::RetireRegionCmd(root_region);
 
 				m_Stats.Quads += triangles_count / 2;

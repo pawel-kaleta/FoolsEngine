@@ -21,7 +21,7 @@ namespace fe::Render::Integration
 		const Representation::Camera* MainCamera;
 		Transform CameraTransform;
 		AssetID Scene;
-		U32 sStreamOffset;
+		U32 sStreamOffsetIndex;
 	};
 
 	struct alignas(16) SceneDataGPU

@@ -223,7 +223,7 @@ namespace fe::Render::Integration
 			scene_data_gpu->AmbientLight.w = SceneData->AmbientLightIntensity;
 
 			Render::GAPI::CommitRegion(scene_data_region);
-			SceneData->sStreamOffset = Render::GAPI::GetRegionOffset(scene_data_region);
+			SceneData->sStreamOffsetIndex = Render::GAPI::GetRegionOffset(scene_data_region) / sizeof(SceneDataGPU);
 
 
 			Renderer2D::RenderScene(scene, framebuffer);

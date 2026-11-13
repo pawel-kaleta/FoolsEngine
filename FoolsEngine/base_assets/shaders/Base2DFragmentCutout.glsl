@@ -4,8 +4,8 @@
 layout (location = 0) out vec3 o_color;
 layout (location = 1) out uint o_entityID;
 
-layout (location = 0) in flat uint QuadIndex;
-layout (location = 1) in vec2 TexCoord;
+layout (location = 0) in flat	uint QuadIndex;
+layout (location = 1) in		vec2 TexCoord;
 
 struct QuadGPU
 {
@@ -21,7 +21,7 @@ struct QuadGPU
 	float	Padding4;
 };
 
-layout(std140, binding = 0) readonly buffer QuadGPUStream
+layout(std140, binding = 2) readonly buffer QuadGPUStream
 {
     QuadGPU QuadGPUBuffer[];
 };

@@ -1,10 +1,17 @@
 #version 450 core
 #extension GL_ARB_bindless_texture : require
 
+layout (location = 0) uniform uint RootDataIndex;
 
-layout(std140, binding = 0) uniform RootData
+struct RootData
 {
     uint FirsQuadIndex;
+	uint SceneDataIndex;
+};
+
+layout(std140, binding = 0) readonly buffer RootDataStream
+{
+	RootData RootDataBuffer[];
 };
 
 struct DirectionalLight
@@ -19,12 +26,17 @@ struct DirectionalLight
 	float zPadding_1;
 };
 
-layout(std140, binding = 1) uniform SceneData
+struct SceneData
 {
 	mat4x4 VPMatrix;
 	DirectionalLight MainLight;
 	vec4 AmbientLight;
 	vec3 CameraPosition;
+};
+
+layout(std140, binding = 1) readonly buffer SceneDataStream
+{
+	SceneData SceneDataBuffer[];
 };
 
 struct QuadGPU
@@ -41,7 +53,7 @@ struct QuadGPU
 	float	Padding4;
 };
 
-layout(std140, binding = 0) readonly buffer QuadGPUStream
+layout(std140, binding = 2) readonly buffer QuadGPUStream
 {
     QuadGPU QuadGPUBuffer[];
 };
@@ -67,7 +79,8 @@ const vec2 texture_coords[4] = {
 
 void main()
 {
-	QuadIndex = FirsQuadIndex + gl_VertexID / 4;
+	RootData root_data = RootDataBuffer[RootDataIndex];
+	QuadIndex = root_data.FirsQuadIndex + gl_VertexID / 4;
 
 	QuadGPU quad = QuadGPUBuffer[QuadIndex];
 
@@ -78,7 +91,9 @@ void main()
 	//gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
 	//vec3 shift = quad.Transform * vertex_position;
 
-	gl_Position = VPMatrix * quad.Transform * vertex_position;
+	SceneData scene_data = SceneDataBuffer[root_data.SceneDataIndex];
+
+	gl_Position = scene_data.VPMatrix * quad.Transform * vertex_position;
 
 	TexCoord = texture_coords[gl_VertexID % 4];
 }

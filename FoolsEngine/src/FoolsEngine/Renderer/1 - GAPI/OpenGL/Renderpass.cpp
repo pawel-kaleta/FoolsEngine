@@ -302,22 +302,6 @@ namespace fe::Render::GAPI
 		glBindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer_gl);
 	}
 
-	void SetUniformSourceCmd(UInt bindingIndex, GID source, U32 offset, U32 size)
-	{
-		GLuint buffer_gl;
-
-		switch ((ObjType::ValueType)((OpenGL::InternalID)source).mComps.Type)
-		{
-		case ObjType::Buffer:		buffer_gl = OpenGL::BufferRegistry.GetObj(source)->mGLID; break;
-		case ObjType::DownStream:	buffer_gl = OpenGL::DownStreamRegistry.GetObj(source)->mOpenGLBuffer; break;
-		case ObjType::None:
-		default:
-			FE_CORE_ASSERT(false, "Urecognised type of source buffer binding");
-		}
-
-		glBindBufferRange(GL_UNIFORM_BUFFER, bindingIndex, buffer_gl, offset, size);
-	}
-
 	void SetBufferSourceCmd(UInt bindingIndex, GID source)
 	{
 		GLuint source_gl;
@@ -348,27 +332,35 @@ namespace fe::Render::GAPI
 	}
 
 
-	void DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootOffset)
+	void DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootDataIndex)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+		//glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+
+		glUniform1ui(0, rootDataIndex);
 		glDrawElements(sMode, primitiveCount, GL_UNSIGNED_INT, (void*)indicesOffset);
 	}
 
-	void DrawIndirectCmd(UInt paramsOffset, U32 rootOffset)
+	void DrawIndirectCmd(UInt paramsOffset, U32 rootDataIndex)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+		//glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+
+		glUniform1ui(0, rootDataIndex);
 		glDrawElementsIndirect(sMode, GL_UNSIGNED_INT, (void*)paramsOffset);
 	}
 
-	void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootOffset)
+	void MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootDataIndex)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+		//glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+
+		glUniform1ui(0, rootDataIndex);
 		glMultiDrawElementsIndirect(sMode, GL_UNSIGNED_INT, (void*)paramsOffset, drawCount, sizeof(DrawParams));
 	}
 
-	void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootOffset)
+	void MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootDataIndex)
 	{
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+		//glBindBufferRange(GL_UNIFORM_BUFFER, 0, sRootDataSource, rootOffset, sRootDataSize);
+
+		glUniform1ui(0, rootDataIndex);
 		glMultiDrawElementsIndirectCount(sMode, GL_UNSIGNED_INT, (void*)(paramsOffset + 4), paramsOffset, maxDrawCount, sizeof(DrawParams));
 	}
 

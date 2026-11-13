@@ -13,8 +13,21 @@ namespace fe::GlobalContext
 
 	namespace Log
 	{
-		Sink Core;
-		Sink App;
+		DistSink Core;
+		DistSink App;
+
+		namespace LeafSinks
+		{
+			FileSink FileCore;
+			FileSink FileApp;
+			FileSink FileCommon;
+
+			ConsoleSink ConsoleCommon;
+
+			RingbufferSink EditorCore;
+			RingbufferSink EditorApp;
+			RingbufferSink EditorCommon;
+		}
 	}
 
 	namespace Platform

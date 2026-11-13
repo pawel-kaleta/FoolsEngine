@@ -1,0 +1,117 @@
+18:36:24:817286 | info     |  EditorLayer::OnAttach()
+18:36:24:817632 | warning  |  Fix this!
+18:36:31:392785 | trace    |  Base Event Class
+18:36:31:393053 | trace    |  EditorLayer::OnUpdate()
+18:36:31:402450 | trace    |  EditorLayer::OnUpdate()
+18:36:31:420344 | trace    |  EditorLayer::OnUpdate()
+18:36:31:436216 | trace    |  EditorLayer::OnUpdate()
+18:36:31:449336 | trace    |  EditorLayer::OnUpdate()
+18:36:31:487305 | trace    |  EditorLayer::OnUpdate()
+18:36:31:509296 | trace    |  EditorLayer::OnUpdate()
+18:36:31:531430 | trace    |  EditorLayer::OnUpdate()
+18:36:31:551657 | trace    |  EditorLayer::OnUpdate()
+18:36:31:572087 | trace    |  EditorLayer::OnUpdate()
+18:36:31:585023 | trace    |  EditorLayer::OnUpdate()
+18:36:31:598623 | trace    |  EditorLayer::OnUpdate()
+18:36:31:620072 | trace    |  EditorLayer::OnUpdate()
+18:36:31:639308 | trace    |  EditorLayer::OnUpdate()
+18:36:31:654202 | trace    |  EditorLayer::OnUpdate()
+18:36:31:667252 | trace    |  EditorLayer::OnUpdate()
+18:36:31:695821 | trace    |  EditorLayer::OnUpdate()
+18:36:31:707818 | trace    |  EditorLayer::OnUpdate()
+18:36:31:720360 | trace    |  EditorLayer::OnUpdate()
+18:36:31:731714 | trace    |  EditorLayer::OnUpdate()
+18:36:31:743850 | trace    |  EditorLayer::OnUpdate()
+18:36:31:758365 | trace    |  EditorLayer::OnUpdate()
+18:36:31:787888 | trace    |  EditorLayer::OnUpdate()
+18:36:31:809790 | trace    |  EditorLayer::OnUpdate()
+18:36:31:829954 | trace    |  EditorLayer::OnUpdate()
+18:36:31:850764 | trace    |  EditorLayer::OnUpdate()
+18:36:31:868970 | trace    |  EditorLayer::OnUpdate()
+18:36:31:881551 | trace    |  EditorLayer::OnUpdate()
+18:36:31:893923 | trace    |  EditorLayer::OnUpdate()
+18:36:31:906430 | trace    |  EditorLayer::OnUpdate()
+18:36:31:919099 | trace    |  EditorLayer::OnUpdate()
+18:36:31:934125 | trace    |  EditorLayer::OnUpdate()
+18:36:31:950839 | trace    |  EditorLayer::OnUpdate()
+18:36:31:967456 | trace    |  EditorLayer::OnUpdate()
+18:36:31:984305 | trace    |  Base Event Class
+18:36:31:984415 | trace    |  EditorLayer::OnUpdate()
+18:36:32:001260 | trace    |  Base Event Class
+18:36:32:001384 | trace    |  Base Event Class
+18:36:32:001471 | trace    |  EditorLayer::OnUpdate()
+18:36:32:017637 | trace    |  Base Event Class
+18:36:32:017764 | trace    |  EditorLayer::OnUpdate()
+18:36:32:034416 | trace    |  Base Event Class
+18:36:32:034553 | trace    |  EditorLayer::OnUpdate()
+18:36:32:051130 | trace    |  Base Event Class
+18:36:32:051256 | trace    |  EditorLayer::OnUpdate()
+18:36:32:067594 | trace    |  Base Event Class
+18:36:32:067714 | trace    |  EditorLayer::OnUpdate()
+18:36:32:084359 | trace    |  Base Event Class
+18:36:32:084468 | trace    |  EditorLayer::OnUpdate()
+18:36:32:101092 | trace    |  Base Event Class
+18:36:32:101219 | trace    |  EditorLayer::OnUpdate()
+18:36:32:117716 | trace    |  Base Event Class
+18:36:32:117837 | trace    |  EditorLayer::OnUpdate()
+18:36:32:139419 | trace    |  Base Event Class
+18:36:32:139532 | trace    |  EditorLayer::OnUpdate()
+18:36:32:171761 | trace    |  Base Event Class
+18:36:32:172044 | trace    |  EditorLayer::OnUpdate()
+18:36:32:192509 | trace    |  Base Event Class
+18:36:32:192799 | trace    |  EditorLayer::OnUpdate()
+18:36:32:213902 | trace    |  EditorLayer::OnUpdate()
+18:36:32:234778 | trace    |  Base Event Class
+18:36:32:235013 | trace    |  EditorLayer::OnUpdate()
+18:36:32:257378 | trace    |  Base Event Class
+18:36:32:257500 | trace    |  Base Event Class
+18:36:32:257586 | trace    |  EditorLayer::OnUpdate()
+18:36:32:269546 | trace    |  Base Event Class
+18:36:32:269673 | trace    |  EditorLayer::OnUpdate()
+18:36:32:281536 | trace    |  Base Event Class
+18:36:32:281702 | trace    |  EditorLayer::OnUpdate()
+18:36:32:295750 | trace    |  Base Event Class
+18:36:32:295870 | trace    |  EditorLayer::OnUpdate()
+18:36:32:307759 | trace    |  Base Event Class
+18:36:32:307872 | trace    |  EditorLayer::OnUpdate()
+18:36:32:319110 | trace    |  Base Event Class
+18:36:32:319239 | trace    |  EditorLayer::OnUpdate()
+18:36:32:334376 | trace    |  Base Event Class
+18:36:32:334513 | trace    |  EditorLayer::OnUpdate()
+18:36:32:351034 | trace    |  Base Event Class
+18:36:32:351165 | trace    |  EditorLayer::OnUpdate()
+18:36:32:370506 | trace    |  Base Event Class
+18:36:32:371174 | trace    |  Base Event Class
+18:36:32:371961 | trace    |  Base Event Class
+18:36:32:372511 | trace    |  EditorLayer::OnUpdate()
+18:36:32:396121 | trace    |  Base Event Class
+18:36:32:396362 | trace    |  EditorLayer::OnUpdate()
+18:36:32:415769 | trace    |  EditorLayer::OnUpdate()
+18:36:32:435551 | trace    |  Base Event Class
+18:36:32:435817 | trace    |  EditorLayer::OnUpdate()
+18:36:32:457767 | trace    |  EditorLayer::OnUpdate()
+18:36:32:474020 | trace    |  EditorLayer::OnUpdate()
+18:36:32:485777 | trace    |  EditorLayer::OnUpdate()
+18:36:32:498363 | trace    |  EditorLayer::OnUpdate()
+18:36:32:510370 | trace    |  EditorLayer::OnUpdate()
+18:36:32:522148 | trace    |  EditorLayer::OnUpdate()
+18:36:32:534400 | trace    |  Base Event Class
+18:36:32:534556 | trace    |  EditorLayer::OnUpdate()
+18:36:32:550675 | trace    |  EditorLayer::OnUpdate()
+18:36:32:577112 | trace    |  EditorLayer::OnUpdate()
+18:36:32:598705 | trace    |  EditorLayer::OnUpdate()
+18:36:32:621684 | trace    |  Base Event Class
+18:36:32:621929 | trace    |  EditorLayer::OnUpdate()
+18:36:32:644285 | trace    |  EditorLayer::OnUpdate()
+18:36:32:658515 | trace    |  EditorLayer::OnUpdate()
+18:36:32:673021 | trace    |  EditorLayer::OnUpdate()
+18:36:32:690376 | trace    |  EditorLayer::OnUpdate()
+18:36:32:707176 | trace    |  EditorLayer::OnUpdate()
+18:36:32:718252 | trace    |  EditorLayer::OnUpdate()
+18:36:32:729563 | trace    |  EditorLayer::OnUpdate()
+18:36:32:741031 | trace    |  EditorLayer::OnUpdate()
+18:36:32:753727 | trace    |  EditorLayer::OnUpdate()
+18:36:32:764826 | trace    |  EditorLayer::OnUpdate()
+18:36:32:776714 | trace    |  EditorLayer::OnUpdate()
+18:36:32:800245 | trace    |  EditorLayer::OnUpdate()
+18:36:32:896816 | trace    |  EditorLayer::OnUpdate()

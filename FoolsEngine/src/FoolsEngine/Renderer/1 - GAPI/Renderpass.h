@@ -21,17 +21,14 @@ namespace fe::Render::GAPI
 	void	SetDepthStencilStateCmd(const Descriptors::DepthStencil::Spec& depthStencil);
 	void	SetBlendStateCmd(const Descriptors::Blend::Spec& blend);
 
-	void	SetRootSourceCmd(GID source);
 	void	SetIndexSourceCmd(GID source);
 	void	SetDrawParamsSourceCmd(GID source);
-
-	void	SetUniformSourceCmd(UInt bindingIndex, GID source, U32 offset, U32 size);
 	void	SetBufferSourceCmd(UInt bindingIndex, GID source);
 
-	void	DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootOffset);
-	void	DrawIndirectCmd(UInt paramsOffset, U32 rootOffset);
-	void	MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootOffset);
-	void	MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootOffset);
+	void	DrawCmd(UInt primitiveCount, UInt indicesOffset, U32 rootDataIndex);
+	void	DrawIndirectCmd(UInt paramsOffset, U32 rootDataIndex);
+	void	MultiDrawIndirectCmd(UInt paramsOffset, UInt drawCount, U32 rootDataIndex);
+	void	MultiDrawIndirectCountCmd(UInt paramsOffset, UInt maxDrawCount, U32 rootDataIndex);
 
 	void	EndRenderpass();
 }
