@@ -15,10 +15,10 @@ namespace fe::GlobalContext
 
 	namespace Log
 	{
-		extern DistSink Core;
-		extern DistSink App;
+		extern Logstream Core;
+		extern Logstream App;
 
-		namespace LeafSinks
+		namespace LogSinks
 		{
 			extern FileSink FileCore;
 			extern FileSink FileApp;

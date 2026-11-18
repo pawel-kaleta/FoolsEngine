@@ -86,10 +86,6 @@ void main()
 
 	vec4 vertex_position = quad_vertex_positions[gl_VertexID % 4];
 	vertex_position.y *= quad.AspecRatio;
-	//vertex_position = vertex_position;
-
-	//gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
-	//vec3 shift = quad.Transform * vertex_position;
 
 	SceneData scene_data = SceneDataBuffer[root_data.SceneDataIndex];
 

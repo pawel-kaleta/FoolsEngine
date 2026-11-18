@@ -31,13 +31,13 @@ namespace fe
 	public:
 		void Init(UInt msgCount)
 		{
-			mSink = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(msgCount);
+			mSink = std::make_shared<spdlog::sinks::ringbuffer_sink_st>(msgCount);
 			mSink->set_pattern("%^%M:%S:%f | %v%$");
 		}
 
 		void InitCommon(UInt msgCount)
 		{
-			mSink = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(msgCount);
+			mSink = std::make_shared<spdlog::sinks::ringbuffer_sink_st>(msgCount);
 			mSink->set_pattern("%^%M:%S:%f | %-2n | %v%$");
 		}
 	};
@@ -47,13 +47,13 @@ namespace fe
 	public:
 		void Init()
 		{
-			mSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+			mSink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
 			mSink->set_pattern("%^%M:%S:%f | %v%$");
 		}
 
 		void InitCommon()
 		{
-			mSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+			mSink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
 			mSink->set_pattern("%^%M:%S:%f | %-2n | %v%$");
 		}
 	};
@@ -74,9 +74,11 @@ namespace fe
 		}
 	};
 
-	class DistSink : public Sink
+	class Logstream
 	{
 	public:
+		std::shared_ptr<spdlog::sinks::sink> mSink;
+
 		void Init()
 		{
 			mSink = std::make_shared<spdlog::sinks::dist_sink_mt>();
@@ -97,7 +99,7 @@ namespace fe
 		char mSuffixes[256];
 		UInt mSuffixesCount;
 
-		void Init(CString name)
+		void Init(CString name, Logstream& logstream)
 		{
 			mSuffixes[255] = 'X';
 
@@ -106,11 +108,8 @@ namespace fe
 
 			mLogger = std::make_shared<spdlog::logger>(name.Data);
 			mLogger->set_level(spdlog::level::trace);
-		}
 
-		void AddSink(Sink& sink)
-		{
-			mLogger->sinks().push_back(sink.mSink);
+			mLogger->sinks().push_back(logstream.mSink);
 		}
 
 		template <typename... Args>

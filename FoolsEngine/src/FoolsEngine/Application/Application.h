@@ -48,7 +48,7 @@ namespace fe
 		virtual void ClientAppShutdown() {};
 		virtual bool ClientAppProjectInit() = 0;
 
-		void PushInnerLayer(Ref<Layer> layer) { LayerStack::sInstance->PushInnerLayer(layer);	}
+		void PushInnerLayer(Ref<Layer> layer) { LayerStack::sInstance->PushInnerLayer(layer); }
 		void PushOuterLayer(Ref<Layer> layer) { LayerStack::sInstance->PushOuterLayer(layer); }
 		void PopInnerLayer(Ref<Layer> layer)  { LayerStack::sInstance->PopInnerLayer(layer); }
 		void PopOuterLayer(Ref<Layer> layer)  { LayerStack::sInstance->PopOuterLayer(layer); }

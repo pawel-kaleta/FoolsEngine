@@ -17,36 +17,33 @@ void InitContext::InitGlobal()
 {
 	using namespace fe;
 
-	GlobalContext::Log::LeafSinks::FileCore.Init(CString("Logs/Core.log", 14));
-	GlobalContext::Log::LeafSinks::FileApp.Init(CString("Logs/App.log", 13));
-	GlobalContext::Log::LeafSinks::FileCommon.InitCommon(CString("Logs/Common.log", 16));
+	GlobalContext::Log::LogSinks::FileCore.Init(CString("Logs/Core.log", 14));
+	GlobalContext::Log::LogSinks::FileApp.Init(CString("Logs/App.log", 13));
+	GlobalContext::Log::LogSinks::FileCommon.InitCommon(CString("Logs/Common.log", 16));
 
-	GlobalContext::Log::LeafSinks::ConsoleCommon.InitCommon();
+	GlobalContext::Log::LogSinks::ConsoleCommon.InitCommon();
 
-	GlobalContext::Log::LeafSinks::EditorCore.Init(128);
-	GlobalContext::Log::LeafSinks::EditorApp.Init(128);
-	GlobalContext::Log::LeafSinks::EditorCommon.InitCommon(256);
+	GlobalContext::Log::LogSinks::EditorCore.Init(128);
+	GlobalContext::Log::LogSinks::EditorApp.Init(128);
+	GlobalContext::Log::LogSinks::EditorCommon.InitCommon(256);
 
 	GlobalContext::Log::Core.Init();
 	GlobalContext::Log::App.Init();
 
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LeafSinks::FileCore);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LeafSinks::FileCommon);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LeafSinks::ConsoleCommon);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LeafSinks::EditorCore);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LeafSinks::EditorCommon);
+	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::FileCore);
+	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::FileCommon);
+	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::ConsoleCommon);
+	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::EditorCore);
+	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::EditorCommon);
 
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LeafSinks::FileApp);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LeafSinks::FileCommon);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LeafSinks::ConsoleCommon);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LeafSinks::EditorApp);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LeafSinks::EditorCommon);
+	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::FileApp);
+	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::FileCommon);
+	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::ConsoleCommon);
+	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::EditorApp);
+	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::EditorCommon);
 
-	Context::Log::Core.Init(CString("FE", 3));
-	Context::Log::App.Init(CString("AP", 3));
-
-	Context::Log::Core.AddSink(GlobalContext::Log::Core);
-	Context::Log::App.AddSink(GlobalContext::Log::App);
+	Context::Log::Core.Init(CString("FE", 3), GlobalContext::Log::Core);
+	Context::Log::App.Init(CString("AP", 3), GlobalContext::Log::App);
 
 	Context::Log::ScopeCore init_scope("Global Init"_FE, LoggingLevel::Trace);
 	FE_PROFILER_SESSION_START("INIT", "Logs/ProfileData_Init.json");
