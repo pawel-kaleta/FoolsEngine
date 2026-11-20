@@ -215,7 +215,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Context\Context.h">
       <Filter>FoolsEngine\Foundation\Context</Filter>
     </ClInclude>
-    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContext.h">
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContextStruct.h">
       <Filter>FoolsEngine\Foundation\Context</Filter>
     </ClInclude>
     <ClInclude Include="src\FoolsEngine\Foundation\Context\Pile.h">
@@ -460,6 +460,7 @@
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\BaseAssets.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\5 - Integration\SceneData.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\ContextStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FoolsEngine\Application\Application.cpp">
@@ -520,9 +521,6 @@
       <Filter>FoolsEngine\Foundation\Allocators</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Context\Context.cpp">
-      <Filter>FoolsEngine\Foundation\Context</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FoolsEngine\Foundation\Context\GlobalContext.cpp">
       <Filter>FoolsEngine\Foundation\Context</Filter>
     </ClCompile>
     <ClCompile Include="src\FoolsEngine\Foundation\Context\Pile.cpp">

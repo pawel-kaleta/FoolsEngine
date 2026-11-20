@@ -1,7 +1,6 @@
 #include "Init.h"
 
 #include "Context/Context.h"
-#include "Context/GlobalContext.h"
 
 #include "FoolsEngine/Foundation/Containers/String.h"
 
@@ -17,54 +16,56 @@ void InitContext::InitGlobal()
 {
 	using namespace fe;
 
-	GlobalContext::Log::LogSinks::FileCore.Init(CString("Logs/Core.log", 14));
-	GlobalContext::Log::LogSinks::FileApp.Init(CString("Logs/App.log", 13));
-	GlobalContext::Log::LogSinks::FileCommon.InitCommon(CString("Logs/Common.log", 16));
+	GlobalContext->Log.Sinks.File.FE.Init(CString("Logs/Core.log", 14));
+	GlobalContext->Log.Sinks.File.AP.Init(CString("Logs/App.log", 13));
+	GlobalContext->Log.Sinks.File.Common.InitCommon(CString("Logs/Common.log", 16));
 
-	GlobalContext::Log::LogSinks::ConsoleCommon.InitCommon();
+	GlobalContext->Log.Sinks.Console.Common.InitCommon();
 
-	GlobalContext::Log::LogSinks::EditorCore.Init(128);
-	GlobalContext::Log::LogSinks::EditorApp.Init(128);
-	GlobalContext::Log::LogSinks::EditorCommon.InitCommon(256);
+	GlobalContext->Log.Sinks.Editor.FE.Init(128);
+	GlobalContext->Log.Sinks.Editor.AP.Init(128);
+	GlobalContext->Log.Sinks.Editor.Common.InitCommon(256);
 
-	GlobalContext::Log::Core.Init();
-	GlobalContext::Log::App.Init();
+	GlobalContext->Log.FE.Init();
+	GlobalContext->Log.AP.Init();
 
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::FileCore);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::FileCommon);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::ConsoleCommon);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::EditorCore);
-	GlobalContext::Log::Core.AddSink(GlobalContext::Log::LogSinks::EditorCommon);
+	GlobalContext->Log.FE.AddSink(GlobalContext->Log.Sinks.File.FE);
+	GlobalContext->Log.FE.AddSink(GlobalContext->Log.Sinks.File.Common);
+	GlobalContext->Log.FE.AddSink(GlobalContext->Log.Sinks.Console.Common);
+	GlobalContext->Log.FE.AddSink(GlobalContext->Log.Sinks.Editor.FE);
+	GlobalContext->Log.FE.AddSink(GlobalContext->Log.Sinks.Editor.Common);
 
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::FileApp);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::FileCommon);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::ConsoleCommon);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::EditorApp);
-	GlobalContext::Log::App.AddSink(GlobalContext::Log::LogSinks::EditorCommon);
+	GlobalContext->Log.AP.AddSink(GlobalContext->Log.Sinks.File.AP);
+	GlobalContext->Log.AP.AddSink(GlobalContext->Log.Sinks.File.Common);
+	GlobalContext->Log.AP.AddSink(GlobalContext->Log.Sinks.Console.Common);
+	GlobalContext->Log.AP.AddSink(GlobalContext->Log.Sinks.Editor.AP);
+	GlobalContext->Log.AP.AddSink(GlobalContext->Log.Sinks.Editor.Common);
 
-	Context::Log::Core.Init(CString("FE", 3), GlobalContext::Log::Core);
-	Context::Log::App.Init(CString("AP", 3), GlobalContext::Log::App);
+	Context->Log.FE.Init(CString("FE", 3), GlobalContext->Log.FE);
+	Context->Log.AP.Init(CString("AP", 3), GlobalContext->Log.AP);
 
-	Context::Log::ScopeCore init_scope("Global Init"_FE, LoggingLevel::Trace);
+	ContextScope::Log::FE init_scope("Global Init"_FE, LoggingLevel::Trace);
 	FE_PROFILER_SESSION_START("INIT", "Logs/ProfileData_Init.json");
 
 	{
-		Context::Log::ScopeCore log_scope("Logging"_FE);
-		Context::Log::Core.Info("Logging initialized");
+		ContextScope::Log::FE log_scope("Logging"_FE);
+		Context->Log.FE.Info("Logging initialized");
 	}
 
 	{
 		FE_PROFILER_SCOPE("Allocators");
 
-		Context::Log::ScopeCore log_scope("Alloc"_FE);
+		ContextScope::Log::FE log_scope("Alloc"_FE);
 
-		Context::Alloc::Permanent.Init();
-		Context::Log::Core.Info("Permanent initialized");
-		Context::Alloc::MainLoopArena.Clear();
-		Context::Log::Core.Info("MainLoopArena initialized");
-		Context::Alloc::Default = (PMAlloc*) & Context::Alloc::GeneralPurpose;
-		Context::Alloc::Auxiliary = (PMAlloc*)&Context::Alloc::GeneralPurpose;
-		Context::Alloc::Output = (PMAlloc*)&Context::Alloc::GeneralPurpose;
+		FE_CORE_ASSERT(false, "Allocators are now pointers sometimes and don't exist");
+		Context->Alloc.Permanent->Init();
+		Context->Log.FE.Info("Permanent initialized");
+		Context->Alloc.MainLoopArena->Clear();
+		Context->Log.FE.Info("MainLoopArena initialized");
+
+		Context->Alloc.Default = (PMAlloc*)  Context->Alloc.GeneralPurpose;
+		Context->Alloc.Auxiliary = (PMAlloc*)Context->Alloc.GeneralPurpose;
+		Context->Alloc.Output = (PMAlloc*)Context->Alloc.GeneralPurpose;
 	}
 
 	{

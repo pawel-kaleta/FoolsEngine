@@ -11,10 +11,10 @@ namespace fe
 	extern bool EnableAssertionBreak;
 	extern bool EnableCoreAssertionBreak;
 
-	namespace Context::Log
-	{
-		extern Logger Core;
-	}
+	//namespace Context::Log
+	//{
+	//	extern Logger Core;
+	//}
 }
 
 #ifdef FE_INTERNAL_BUILD

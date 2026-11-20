@@ -164,6 +164,7 @@
     <ClInclude Include="src\FoolsEngine\Assets\AssetInterface.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetManager.h" />
     <ClInclude Include="src\FoolsEngine\Assets\AssetTypesList.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\ContextStruct.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Descriptors.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\OpenGL\Framebuffer.h" />
     <ClInclude Include="src\FoolsEngine\Renderer\1 - GAPI\Renderpass.h" />
@@ -196,7 +197,7 @@
     <ClInclude Include="src\FoolsEngine\Foundation\Containers\StringBuilder.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Containers\Xar.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Context\Context.h" />
-    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContext.h" />
+    <ClInclude Include="src\FoolsEngine\Foundation\Context\GlobalContextStruct.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Context\Pile.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\DataTypes.h" />
     <ClInclude Include="src\FoolsEngine\Foundation\Debug\Asserts.h" />
@@ -299,7 +300,6 @@
     <ClCompile Include="src\FoolsEngine\Assets\Serialization\YAML.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Allocators\AllocatorsImplementation.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Context\Context.cpp" />
-    <ClCompile Include="src\FoolsEngine\Foundation\Context\GlobalContext.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Context\Pile.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Asserts.cpp" />
     <ClCompile Include="src\FoolsEngine\Foundation\Debug\Profiler.cpp" />

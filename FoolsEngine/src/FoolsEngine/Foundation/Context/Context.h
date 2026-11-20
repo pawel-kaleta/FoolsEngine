@@ -1,101 +1,128 @@
 #pragma once
 
-#include "FoolsEngine/Foundation/Debug/Logger.h"
+#include "ContextStruct.h"
+#include "GlobalContextStruct.h"
 
-#include "FoolsEngine/Foundation/Allocators/Allocator.h"
-#include "FoolsEngine/Foundation/Allocators/StaticArenaAlloc.h"
-#include "FoolsEngine/Foundation/Allocators/MallocAlloc.h"
-#include "FoolsEngine/Foundation/Allocators/MonotonicAlloc.h"
-
-#include "FoolsEngine/Renderer/1 - GAPI/Context.h"
-
-#include "FoolsEngine/Platform/PlatformBase.h"
-
-namespace fe::Context
+namespace fe
 {
-	namespace Alloc
+	extern ContextStruct* Context;
+	extern GlobalContextStruct* GlobalContext;
+
+	namespace ContextScope
 	{
-		extern TypedAlloc<MonotonicAlloc>		Permanent;
-		extern TypedAlloc<MallocAlloc>			GeneralPurpose;
-		extern TypedAlloc<StaticArenaAlloc
-				<FE_PARAMS_MAIN_ARENA_SIZE>>	MainLoopArena;
-
-		extern PMAlloc						*	Default;
-		extern PMAlloc						*	Auxiliary;
-		extern PMAlloc						*	Output;
-
-		class ScopeDefault
+		namespace Alloc
 		{
-		public:
-			ScopeDefault(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
-			~ScopeDefault() { Default = mBackup; }
-		private:
-			PMAlloc* mBackup;
-		};
-
-		class ScopeAuxiliary
-		{
-		public:
-			ScopeAuxiliary(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
-			~ScopeAuxiliary() { Default = mBackup; }
-		private:
-			PMAlloc* mBackup;
-		};
-
-		class ScopeOutput
-		{
-		public:
-			ScopeOutput(PMAlloc* alloc) : mBackup(Default) { Default = alloc; }
-			~ScopeOutput() { Default = mBackup; }
-		private:
-			PMAlloc* mBackup;
-		};
-	}
-
-	namespace Log
-	{
-		extern Logger Core;
-		extern Logger App;
-
-		class ScopeCore
-		{
-		public:
-			ScopeCore(String prefix, LoggingLevel lvl = Core.mLoggingLevel) :
-				mPrefixCount(prefix.Count),
-				mLvlBackup(Core.mLoggingLevel)
+			class Default
 			{
-				Core.mSuffixes[Core.mSuffixesCount] = '[';
-				std::memcpy(&Core.mSuffixes[Core.mSuffixesCount + 1], prefix.Data, prefix.Count);
-				Core.mSuffixes[Core.mSuffixesCount + 1 + prefix.Count] = ']';
-				Core.mSuffixesCount += prefix.Count + 2;
-				Core.mLoggingLevel = lvl;
-			}
-			~ScopeCore()
+			public:
+				Default(PMAlloc* alloc) : mBackup(Context->Alloc.Default) { Context->Alloc.Default = alloc; }
+				~Default() { Context->Alloc.Default = mBackup; }
+			private:
+				PMAlloc* mBackup;
+			};
+
+			class Auxiliary
 			{
-				Core.mSuffixesCount -= mPrefixCount + 2;
-				Core.mLoggingLevel = mLvlBackup;
-			}
-		private:
-			UInt mPrefixCount;
-			LoggingLevel mLvlBackup;
-		};
+			public:
+				Auxiliary(PMAlloc* alloc) : mBackup(Context->Alloc.Auxiliary) { Context->Alloc.Auxiliary = alloc; }
+				~Auxiliary() { Context->Alloc.Auxiliary = mBackup; }
+			private:
+				PMAlloc* mBackup;
+			};
+
+			class Output
+			{
+			public:
+				Output(PMAlloc* alloc) : mBackup(Context->Alloc.Output) { Context->Alloc.Output = alloc; }
+				~Output() { Context->Alloc.Output = mBackup; }
+			private:
+				PMAlloc* mBackup;
+			};
+		}
+
+		namespace Log
+		{
+			class FE
+			{
+			public:
+				FE(String prefix, LoggingLevel lvl = Context->Log.FE.mLoggingLevel) :
+					mPrefixCount(prefix.Count),
+					mLvlBackup(Context->Log.FE.mLoggingLevel)
+				{
+					auto& suffixes = Context->Log.FE.mSuffixes;
+					auto& suffixes_count = Context->Log.FE.mSuffixesCount;
+
+					suffixes[suffixes_count] = '[';
+					std::memcpy(&suffixes[suffixes_count + 1], prefix.Data, prefix.Count);
+					suffixes[suffixes_count + 1 + prefix.Count] = ']';
+					suffixes_count += prefix.Count + 2;
+					Context->Log.FE.mLoggingLevel = lvl;
+				}
+				~FE()
+				{
+					Context->Log.FE.mSuffixesCount -= mPrefixCount + 2;
+					Context->Log.FE.mLoggingLevel = mLvlBackup;
+				}
+			private:
+				UInt mPrefixCount;
+				LoggingLevel mLvlBackup;
+			};
+
+			class AP
+			{
+			public:
+				AP(String prefix, LoggingLevel lvl = Context->Log.AP.mLoggingLevel) :
+					mPrefixCount(prefix.Count),
+					mLvlBackup(Context->Log.AP.mLoggingLevel)
+				{
+					auto& suffixes = Context->Log.AP.mSuffixes;
+					auto& suffixes_count = Context->Log.AP.mSuffixesCount;
+
+					suffixes[suffixes_count] = '[';
+					std::memcpy(&suffixes[suffixes_count + 1], prefix.Data, prefix.Count);
+					suffixes[suffixes_count + 1 + prefix.Count] = ']';
+					suffixes_count += prefix.Count + 2;
+					Context->Log.AP.mLoggingLevel = lvl;
+				}
+				~AP()
+				{
+					Context->Log.AP.mSuffixesCount -= mPrefixCount + 2;
+					Context->Log.AP.mLoggingLevel = mLvlBackup;
+				}
+			private:
+				UInt mPrefixCount;
+				LoggingLevel mLvlBackup;
+			};
+
+			class ED
+			{
+			public:
+				ED(String prefix, LoggingLevel lvl = Context->Log.ED.mLoggingLevel) :
+					mPrefixCount(prefix.Count),
+					mLvlBackup(Context->Log.ED.mLoggingLevel)
+				{
+					auto& suffixes = Context->Log.ED.mSuffixes;
+					auto& suffixes_count = Context->Log.ED.mSuffixesCount;
+
+					suffixes[suffixes_count] = '[';
+					std::memcpy(&suffixes[suffixes_count + 1], prefix.Data, prefix.Count);
+					suffixes[suffixes_count + 1 + prefix.Count] = ']';
+					suffixes_count += prefix.Count + 2;
+					Context->Log.ED.mLoggingLevel = lvl;
+				}
+				~ED()
+				{
+					Context->Log.ED.mSuffixesCount -= mPrefixCount + 2;
+					Context->Log.ED.mLoggingLevel = mLvlBackup;
+				}
+			private:
+				UInt mPrefixCount;
+				LoggingLevel mLvlBackup;
+			};
+		}
+
+		// namespace Debug { // assertion failure handler }
+		// namespace Rand { }
+		// namespace GPU { }
 	}
-
-	namespace Debug
-	{
-		// assertion failure handler
-	}
-
-	namespace Rand
-	{
-
-	}
-
-	namespace GPU
-	{
-		using namespace Render;
-		extern GAPI::GID ScratchBuffer;
-		constexpr U32 ScratchBufferSize = FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE;
-	}
-
 }
