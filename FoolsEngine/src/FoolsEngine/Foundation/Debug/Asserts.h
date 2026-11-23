@@ -9,7 +9,7 @@ namespace fe
 	extern bool EnableAssertionBreak;
 	extern bool EnableCoreAssertionBreak;
 
-	extern void HandleAssert(const std::source_location& location, const char* message);
+	void HandleAssert(const std::source_location& location, const char* message);
 }
 
 #ifdef FE_INTERNAL_BUILD

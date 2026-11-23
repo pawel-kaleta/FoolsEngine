@@ -8,6 +8,8 @@
 #include "FoolsEngine/Foundation/Utils/Colors.h"
 #include "FoolsEngine/Foundation/Utils/BitOperations.h"
 #include "FoolsEngine/Foundation/Containers/Xar.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
+
 
 #ifdef FE_INTERNAL_BUILD
 #include "FoolsEngine/Foundation/Debug/Profiler.h"

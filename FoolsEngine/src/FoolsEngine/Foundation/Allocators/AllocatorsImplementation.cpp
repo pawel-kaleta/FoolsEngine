@@ -12,7 +12,7 @@ namespace fe
 		FE_CORE_ASSERT(AlignTo(allocation.begin(), alignment) == allocation.begin(), "Cannot realloc to a different alignment");
 	
 		Splice<Byte> result;
-		result.Elements = (Byte*)MBR.allocate(newSize, alignment);
+		result.Elements = (Byte*)MBR->allocate(newSize, alignment);
 		result.Count = newSize;
 	
 		if (result.Elements && result.Count)

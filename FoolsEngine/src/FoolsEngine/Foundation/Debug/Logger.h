@@ -106,7 +106,6 @@ namespace fe
 			mLoggingLevel = LoggingLevel::Trace;
 			mSuffixesCount = 0;
 
-			new (&mLogger) std::shared_ptr<spdlog::logger>();
 			mLogger = std::make_shared<spdlog::logger>(name.Data);
 			mLogger->set_level(spdlog::level::trace);
 

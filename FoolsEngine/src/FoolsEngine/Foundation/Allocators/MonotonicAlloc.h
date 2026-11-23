@@ -12,28 +12,29 @@ namespace fe
 	class MonotonicAlloc : public Allocator
 	{
 	public:
-		STD_PMR_Allocator<Allocator> UpStreamAlloc;
-		union { std::pmr::monotonic_buffer_resource MBR; };
-
-		MonotonicAlloc() {};
-		~MonotonicAlloc() {};
+		STD_PMR_Allocator<Allocator> * UpStreamAlloc;
+		std::pmr::monotonic_buffer_resource * MBR;
 
 		void Init(Allocator* upStreamAlloc)
 		{
-			new (&UpStreamAlloc) STD_PMR_Allocator<Allocator>();
-			UpStreamAlloc.fe_allocator = upStreamAlloc;
-			new(&MBR) std::pmr::monotonic_buffer_resource(&UpStreamAlloc);
+			UpStreamAlloc = upStreamAlloc->Cast<PMAlloc>().Allocate<STD_PMR_Allocator<Allocator>>();
+			new (UpStreamAlloc) STD_PMR_Allocator<Allocator>(upStreamAlloc);
+
+			MBR = upStreamAlloc->Cast<PMAlloc>().Allocate<std::pmr::monotonic_buffer_resource>();
+			new (MBR) std::pmr::monotonic_buffer_resource(UpStreamAlloc);
 		}
 		void Deinit()
 		{
-			MBR.~monotonic_buffer_resource();
-			UpStreamAlloc = nullptr;
+			MBR->~monotonic_buffer_resource();
+			UpStreamAlloc->fe_allocator->Cast<PMAlloc>().Deallocate(MBR);
+
+			UpStreamAlloc->fe_allocator->Cast<PMAlloc>().Deallocate(UpStreamAlloc);
 		}
 
 		virtual Splice<Byte> AllocateRaw(UInt bytes) final override
 		{
 			Splice<Byte> mem_reg;
-			mem_reg.Elements = (Byte*)MBR.allocate(bytes);
+			mem_reg.Elements = (Byte*)MBR->allocate(bytes);
 			mem_reg.Count = bytes;
 			return mem_reg;
 		}
@@ -41,7 +42,7 @@ namespace fe
 		virtual Splice<Byte> AllocateRaw(UInt bytes, UInt alignment) final override
 		{
 			Splice<Byte> mem_reg;
-			mem_reg.Elements = (Byte*)MBR.allocate(bytes, alignment);
+			mem_reg.Elements = (Byte*)MBR->allocate(bytes, alignment);
 			mem_reg.Count = bytes;
 			return mem_reg;
 		}
@@ -62,7 +63,7 @@ namespace fe
 		};
 
 		template <UInt Size, UInt Alignment>
-		Array<Byte, Size>* AllocateRaw() { return (Array<Byte, Size>*)MBR.allocate(Size, Alignment); }
+		Array<Byte, Size>* AllocateRaw() { return (Array<Byte, Size>*)MBR->allocate(Size, Alignment); }
 
 		template <UInt Alignment>
 		Splice<Byte> AllocateRaw(UInt size) { return AllocateRaw(size, Alignment); }
@@ -70,6 +71,6 @@ namespace fe
 		template <UInt Size>
 		void DeallocateRaw(Byte* ptr) { DeallocateRaw(Splice<Byte>()); }
 
-		void Clear() { MBR.release(); }
+		void Clear() { MBR->release(); }
 	};
 }

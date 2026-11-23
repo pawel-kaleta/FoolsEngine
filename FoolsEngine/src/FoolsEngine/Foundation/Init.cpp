@@ -21,7 +21,7 @@ void InitContext::InitGlobal()
 	GlobalContext->Alloc.Permanent.Init(GlobalContext->Alloc.GeneralPurpose.P());
 	
 	Context = GlobalContext->Alloc.Permanent.Allocate<ContextStruct>();
-
+	new (Context) ContextStruct();
 
 	GlobalContext->Log.Sinks.File.FE.Init(CString("Logs/Core.log", 14));
 	GlobalContext->Log.Sinks.File.AP.Init(CString("Logs/App.log", 13));
@@ -50,6 +50,8 @@ void InitContext::InitGlobal()
 
 	Context->Log.FE.Init(CString("FE", 3), GlobalContext->Log.FE);
 	Context->Log.AP.Init(CString("AP", 3), GlobalContext->Log.AP);
+	Context->Log.ED.Init(CString("ED", 3), GlobalContext->Log.FE);
+
 
 	ContextScope::Log::FE init_scope("Global Init"_FE, LoggingLevel::Trace);
 	FE_PROFILER_SESSION_START("INIT", "Logs/ProfileData_Init.json");
