@@ -38,7 +38,7 @@ namespace fe
 
 		if (!data)
 		{
-			Context::Log::Core.Error("{0}"_FE, file_path.c_str());
+			Context->Log.FE.Error("{0}"_FE, file_path.c_str());
 			FE_CORE_ASSERT(false, "Aaaa");
 		}
 

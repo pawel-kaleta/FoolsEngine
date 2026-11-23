@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FoolsEngine/Renderer/1 - GAPI/Context.h"
+#include "FoolsEngine/Foundation/Utils/Core.h"
 
 namespace fe
 {

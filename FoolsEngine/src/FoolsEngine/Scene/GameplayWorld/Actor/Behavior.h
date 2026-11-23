@@ -33,8 +33,8 @@ namespace fe
 		virtual String GetBehaviorName() const { return String("Unnamed Behavior"_FE); }
 		static String GetName() { return String("Base Behavior"_FE); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { Context::Log::Core.Error("{0} serialization not implemented!"_FE, this->GetBehaviorName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context::Log::Core.Error("{0} deserialization not implemented!"_FE, this->GetBehaviorName()); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Context->Log.FE.Error("{0} serialization not implemented!"_FE, this->GetBehaviorName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context->Log.FE.Error("{0} deserialization not implemented!"_FE, this->GetBehaviorName()); }
 
 
 		template<SimulationStage::ValueType stage>

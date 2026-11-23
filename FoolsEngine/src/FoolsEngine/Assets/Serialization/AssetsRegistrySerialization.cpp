@@ -75,7 +75,7 @@ namespace fe::AssetSerializer
 			}
 		}
 
-		Context::Log::Core.Info("Asset Registry deserialized"_FE);
+		Context->Log.FE.Info("Asset Registry deserialized"_FE);
 
 		return true;
 	}
@@ -126,7 +126,7 @@ namespace fe::AssetSerializer
 					source_path.Filepath = node["Source Filepath"].as<std::string>();
 				}
 
-				Context::Log::Core.Error("tnAssetType::LoadMetadata() not implemented"_FE);
+				Context->Log.FE.Error("tnAssetType::LoadMetadata() not implemented"_FE);
 				
 				//bool result = tnAssetType::LoadMetadata(asset_id);
 
@@ -149,6 +149,6 @@ namespace fe::AssetSerializer
 		LoadMetaData<Model>();
 		LoadMetaData<Scene>();
 
-		Context::Log::Core.Info("Assets' meta data loaded"_FE);
+		Context->Log.FE.Info("Assets' meta data loaded"_FE);
 	}
 }

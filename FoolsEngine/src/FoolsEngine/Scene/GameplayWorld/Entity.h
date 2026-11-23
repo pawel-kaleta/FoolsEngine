@@ -25,7 +25,7 @@ namespace fe
 
 		TransformHandle	GetTransformHandle() { return TransformHandle(ID(), m_Handle.registry()); }
 		TagsHandle		GetTagsHandle() { return TagsHandle(ID(), m_Handle.registry()); }
-		Splice<EntityID> GetChildrenList(Allocator* alloc = Context::Alloc::Output) { return ChildrenList(ID(), *m_Handle.registry(), alloc); }
+		Splice<EntityID> GetChildrenList(Allocator* alloc = Context->Alloc.Output) { return ChildrenList(ID(), *m_Handle.registry(), alloc); }
 
 		// destruction is scheduled 
 		void Destroy();
@@ -45,7 +45,7 @@ namespace fe
 		}
 
 		template <typename tAlloc>
-		String GetNameSignature(tAlloc* alloc = Context::Alloc::Output) const
+		String GetNameSignature(tAlloc* alloc = Context->Alloc.Output) const
 		{
 			Pile p;
 			StringBuilderSA<Pile> ID_and_name;

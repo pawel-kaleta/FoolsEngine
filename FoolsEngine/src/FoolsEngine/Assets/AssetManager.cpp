@@ -207,7 +207,7 @@ namespace fe
 			case AssetType::Texture2D:
 			{
 				auto texture_user = AssetUser(id);
-				Context::Log::Core.Error("Texture2D Loading not implemented"); // no filepath for LoadTexture to grab
+				Context->Log.FE.Error("Texture2D Loading not implemented"); // no filepath for LoadTexture to grab
 				//break;
 				if (!texture_user.IsLoaded())
 				{
@@ -216,7 +216,7 @@ namespace fe
 				}
 				else
 				{
-					Context::Log::Core.Warn("Texture allready loaded"_FE);
+					Context->Log.FE.Warn("Texture allready loaded"_FE);
 					FE_CORE_ASSERT(false, "Shloudnt happen");
 				}
 				break;
@@ -225,7 +225,7 @@ namespace fe
 			{
 				auto mesh_user = AssetUser(id);
 				
-				Context::Log::Core.Error("Mesh Loading not implemented");
+				Context->Log.FE.Error("Mesh Loading not implemented");
 				//if (!mesh_user.GetBuffer())
 				//{
 				//	GeometryLoader::LoadMesh(mesh_user);
@@ -241,7 +241,7 @@ namespace fe
 			}
 			case AssetType::Material:
 			{
-				Context::Log::Core.Error("Material Loading not implemented");
+				Context->Log.FE.Error("Material Loading not implemented");
 				
 				//auto material_user = AssetUser(id);
 				//material_user.SendDataToGPU(GAPI);
@@ -250,7 +250,7 @@ namespace fe
 			}
 			case AssetType::Model:
 			{
-				Context::Log::Core.Error("Model Loading not implemented");
+				Context->Log.FE.Error("Model Loading not implemented");
 
 				//auto model_user = AssetUser(id);
 				//GeometryLoader::LoadModel(model_user);

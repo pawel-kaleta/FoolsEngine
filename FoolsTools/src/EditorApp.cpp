@@ -10,13 +10,13 @@ namespace fe
 {
 	EditorApp::EditorApp()
 	{
-		Context::Log::Core.Info("EditorApp()"_FE);
+		Context->Log.ED.Info("EditorApp()"_FE);
 	}
 
 	void EditorApp::ClientAppStartup()
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Info("EditorApp::ClientAppStartup()"_FE);
+		Context->Log.ED.Info("EditorApp::ClientAppStartup()"_FE);
 		AssetImportModal::Init();
 		m_EditorLayer = CreateRef<EditorLayer>();
 	}
@@ -94,7 +94,7 @@ namespace fe
 			}
 			else
 			{
-				Context::Log::Core.Fatal("Failed to display launch modal window"_FE);
+				Context->Log.ED.Fatal("Failed to display launch modal window"_FE);
 				Application::Close();
 			}
 		}
@@ -146,7 +146,7 @@ namespace fe
 			}
 			else
 			{
-				Context::Log::Core.Fatal("Failed to display launch modal window"_FE);
+				Context->Log.ED.Fatal("Failed to display launch modal window"_FE);
 				Application::Close();
 			}
 		}

@@ -4,7 +4,6 @@
 #include "Project.h"
 
 #include "FoolsEngine/Foundation/Context/Context.h"
-#include "FoolsEngine/Foundation/Context/GlobalContext.h"
 #include "FoolsEngine/Foundation/Containers/Xar.h"
 #include "FoolsEngine/Foundation/Allocators/Allocator.h"
 
@@ -62,100 +61,100 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Context::Log::ScopeCore scope_log("App"_FE);
+		ContextScope::Log::FE scope_log("App"_FE);
 
 		{
 			FE_PROFILER_SCOPE("Window");
-			Context::Log::ScopeCore scope("Window"_FE);
+			ContextScope::Log::FE scope("Window"_FE);
 
-			GlobalContext::Window::Base->mEventCallback = std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1);
-			Context::Log::Core.Info("Callback set"_FE);
+			GlobalContext->Window.Base->mEventCallback = std::bind(&MainEventDispacher::ReceiveEvent, &m_MainEventDispacher, std::placeholders::_1);
+			Context->Log.FE.Info("Callback set"_FE);
 		}
 
 		{
 			FE_PROFILER_SCOPE("Renderer");
-			Context::Log::ScopeCore scope("Renderer"_FE);
+			ContextScope::Log::FE scope("Renderer"_FE);
 
 			Render::Integration::Director::Startup();
-			Context::Log::Core.Info("Renderer initialized"_FE);
+			Context->Log.FE.Info("Renderer initialized"_FE);
 		}
 		
 		// Types Registries
 		{
 			FE_PROFILER_SCOPE("Types Registries");
-			Context::Log::ScopeCore scope("Types Registries"_FE);
+			ContextScope::Log::FE scope("Types Registries"_FE);
 
 			{ 
 				FE_PROFILER_SCOPE("Components");
 				TypeRegs::Components::Init();
 				TypeRegs::Components::RegisterComponents();
-				Context::Log::Core.Info("Componets registry created"_FE);
+				Context->Log.FE.Info("Componets registry created"_FE);
 			}
 
 			{
 				FE_PROFILER_SCOPE("Behaviors");
 				TypeRegs::Behaviors::Init();
 				TypeRegs::Behaviors::RegisterBehaviors();
-				Context::Log::Core.Info("Behaviors registry created"_FE);
+				Context->Log.FE.Info("Behaviors registry created"_FE);
 			}
 		
 			{
 				FE_PROFILER_SCOPE("Systems");
 				TypeRegs::Systems::Init();
 				TypeRegs::Systems::RegisterSystems();
-				Context::Log::Core.Info("Systems registry created"_FE);
+				Context->Log.FE.Info("Systems registry created"_FE);
 			}
 
 			{
 				FE_PROFILER_SCOPE("Assets");
 				TypeRegs::Assets::Init();
 				TypeRegs::Assets::RegisterAssetTypes();
-				Context::Log::Core.Info("AssetTypes registry created"_FE);
+				Context->Log.FE.Info("AssetTypes registry created"_FE);
 			}
 
 			{
 				FE_PROFILER_SCOPE("Loaders");
 				TypeRegs::Loaders::Init();
 				TypeRegs::Loaders::RegisterLoaders();
-				Context::Log::Core.Info("Loaders registry created"_FE);
+				Context->Log.FE.Info("Loaders registry created"_FE);
 			}
 
-			Context::Log::Core.Info("Types Registries created"_FE);
+			Context->Log.FE.Info("Types Registries created"_FE);
 		}
 
 		// Asset manager
 		{
 			FE_PROFILER_SCOPE("Asset manager");
-			Context::Log::ScopeCore scope("Asset manager"_FE);
+			ContextScope::Log::FE scope("Asset manager"_FE);
 
-			auto asset_manager = Context::Alloc::Permanent.Allocate<AssetManager>();
+			auto asset_manager = Context->Alloc.Permanent.Allocate<AssetManager>();
 			new (asset_manager) AssetManager();
 
-			Context::Log::Core.Info("Asset manager created"_FE);
+			Context->Log.FE.Info("Asset manager created"_FE);
 		}
 
 		// Layers Stack
 		{
 			FE_PROFILER_SCOPE("Layer Stack");
-			Context::Log::ScopeCore scope("Layer Stack"_FE);
+			ContextScope::Log::FE scope("Layer Stack"_FE);
 
-			auto layer_stack = Context::Alloc::Permanent.Allocate<LayerStack>();
+			auto layer_stack = Context->Alloc.Permanent.Allocate<LayerStack>();
 			new (layer_stack) LayerStack();
 
-			Context::Log::Core.Info("Layer Stack created"_FE);
+			Context->Log.FE.Info("Layer Stack created"_FE);
 		}
 
 		// Core layers
 		{
 			FE_PROFILER_SCOPE("Core layers");
-			Context::Log::ScopeCore scope("Core layers"_FE);
+			ContextScope::Log::FE scope("Core layers"_FE);
 
 			{
 				FE_PROFILER_SCOPE("Application");
 
 				m_AppLayer = CreateRef<ApplicationLayer>(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 				LayerStack::sInstance->PushOuterLayer(m_AppLayer);
-				Context::Log::Core.Info("Application layer created"_FE);
+				Context->Log.FE.Info("Application layer created"_FE);
 			}
 
 			{
@@ -164,37 +163,37 @@ namespace fe
 				m_ImGuiLayer = CreateRef<ImGuiLayer>();
 				m_ImGuiLayer->Startup();
 				LayerStack::sInstance->PushOuterLayer(m_ImGuiLayer);
-				Context::Log::Core.Info("ImGui layer created"_FE);
+				Context->Log.FE.Info("ImGui layer created"_FE);
 			}
 
 
-			Context::Log::Core.Info("Core layers created"_FE);
+			Context->Log.FE.Info("Core layers created"_FE);
 		}
 
 		// Client Application
 		{
 			FE_PROFILER_SCOPE("Client app startup");
-			Context::Log::ScopeCore scope("Client app"_FE);
+			ContextScope::Log::FE scope("Client app"_FE);
 
 			ClientAppStartup();
 
-			Context::Log::Core.Info("Client app created"_FE);
+			Context->Log.FE.Info("Client app created"_FE);
 		}
 	}
 
 	void Application::Run()
 	{
 		{
-			Context::Log::ScopeCore scope("Project loading"_FE, LoggingLevel::Info);
-			Context::Log::Core.Info("Project loading start"_FE);
+			ContextScope::Log::FE scope("Project loading"_FE, LoggingLevel::Info);
+			Context->Log.FE.Info("Project loading start"_FE);
 
 			m_ImGuiLayer->Begin();
 			while (ClientAppProjectInit() && m_Running)
 			{
 				m_ImGuiLayer->End();
-				GlobalContext::Window::Base->PollEvents();
+				GlobalContext->Window.Base->PollEvents();
 				m_MainEventDispacher.DispachEvents(*LayerStack::sInstance);
-				GlobalContext::Window::Base->SwapBuffers();
+				GlobalContext->Window.Base->SwapBuffers();
 				m_ImGuiLayer->Begin();
 			}
 			m_ImGuiLayer->End();
@@ -225,14 +224,14 @@ namespace fe
 			Time::s_LastFrameTimeStep = Time::TimeStep(Time::s_LastFrameTimePoint, now);
 			Time::s_LastFrameTimePoint = now;
 
-			Context::Log::Core.Trace("m_LastFrameTimeStep:  {0}"_FE, Time::s_LastFrameTimeStep.GetSeconds());
-			Context::Log::Core.Trace("m_LastFrameTimePoint: {0}"_FE, Time::s_LastFrameTimePoint.GetTime());
+			Context->Log.FE.Trace("m_LastFrameTimeStep:  {0}"_FE, Time::s_LastFrameTimeStep.GetSeconds());
+			Context->Log.FE.Trace("m_LastFrameTimePoint: {0}"_FE, Time::s_LastFrameTimePoint.GetTime());
 
 			m_FrameCount++;
 
 			auto& l_stack = *LayerStack::sInstance;
 
-			GlobalContext::Window::Base->PollEvents();
+			GlobalContext->Window.Base->PollEvents();
 			m_MainEventDispacher.DispachEvents(l_stack);
 
 			if (!m_Minimized)
@@ -261,7 +260,7 @@ namespace fe
 				}
 			}
 
-			GlobalContext::Window::Base->SwapBuffers();
+			GlobalContext->Window.Base->SwapBuffers();
 		}
 
 #ifdef FE_INTERNAL_BUILD
@@ -393,8 +392,8 @@ namespace fe
 	void Application::OnEvent(Ref<Events::Event> event)
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Trace("Application::OnEvent"_FE);
-		Context::Log::Core.Trace(event->GetName());
+		Context->Log.FE.Trace("Application::OnEvent"_FE);
+		Context->Log.FE.Trace(event->GetName());
 
 		Events::EventDispacher dispacher(event);
 		dispacher.Dispach<Events::WindowCloseEvent>(FE_BIND_EVENT_HANDLER(Application::OnWindowCloseEvent));
@@ -408,7 +407,7 @@ namespace fe
 
 		m_Running = false;
 		event->Owned = true;
-		Context::Log::Core.Info("Window Close Event"_FE);
+		Context->Log.FE.Info("Window Close Event"_FE);
 	}
 
 	void Application::OnKeyPressedEvent(Ref<Events::KeyPressedEvent> event)
@@ -442,6 +441,6 @@ namespace fe
 		m_Minimized = false;
 		Render::Integration::Director::OnWindowResize(event->GetWidth(), event->GetHeight());
 
-		Context::Log::Core.Info("Window resize (width: {0}, height: {1})"_FE, event->GetWidth(), event->GetHeight());
+		Context->Log.FE.Info("Window resize (width: {0}, height: {1})"_FE, event->GetWidth(), event->GetHeight());
 	}
 }

@@ -31,7 +31,7 @@ namespace fe
 			if (m_ID != NullEntityID)
 			{
 				FE_PROFILER_FUNC();
-				Context::Log::Core.Debug("CActorData destruction: {0}"_FE, m_ID);
+				Context->Log.FE.Debug("CActorData destruction: {0}"_FE, m_ID);
 
 				for (size_t i = 0; i < SimulationStage::Count; i++)
 				{

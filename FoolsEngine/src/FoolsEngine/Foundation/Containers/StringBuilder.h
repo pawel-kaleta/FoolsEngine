@@ -1,23 +1,16 @@
 #pragma once
 
+#include "FoolsEngine/Foundation/Context/Context.h"
 #include "FoolsEngine/Foundation/DataTypes.h"
 #include "FoolsEngine/Foundation/Allocators/Allocator.h"
 #include "Splice.h"
 #include "String.h"
 
+
 namespace fe
 {
-	namespace Context
-	{
-		namespace Alloc
-		{
-			extern PMAlloc* Default;
-			extern PMAlloc* Output;
-		}
-	}
-
 	template <typename tAlloc>
-	CString GetCString(String string, tAlloc* alloc = Context::Alloc::Output)
+	CString GetCString(String string, tAlloc* alloc = Context->Alloc.Output)
 	{
 		CString output;
 		output.Data = alloc->Allocate<char>(string.Count + 1).Elements;
@@ -28,7 +21,7 @@ namespace fe
 	}
 
 	template <typename tAlloc>
-	String CopyString(String string, tAlloc* alloc = Context::Alloc::Output)
+	String CopyString(String string, tAlloc* alloc = Context->Alloc.Output)
 	{
 		String output;
 		output.Data = alloc->Allocate<char8_t>(string.Count).Elements;
@@ -38,7 +31,7 @@ namespace fe
 	}
 
 	template <typename tAlloc>
-	String MakeString(UInt charCount, tAlloc* alloc = Context::Alloc::Output)
+	String MakeString(UInt charCount, tAlloc* alloc = Context->Alloc.Output)
 	{
 		String output;
 		output.Data = alloc->Allocate<char8_t>(charCount).Elements;
@@ -47,7 +40,7 @@ namespace fe
 	}
 
 	template <typename tAlloc>
-	CString MakeCString(UInt charCountWithNull, tAlloc* alloc = Context::Alloc::Output)
+	CString MakeCString(UInt charCountWithNull, tAlloc* alloc = Context->Alloc.Output)
 	{
 		CString output;
 		output.Data = alloc->Allocate<char>(charCountWithNull).Elements;
@@ -69,7 +62,7 @@ namespace fe
 		const	char8_t* end()		const	{ return Buffer.Elements + Count; }
 				char8_t* end()				{ return Buffer.Elements + Count; }
 
-		StringBuilder& Init(Allocator* allocator = Context::Alloc::Default)
+		StringBuilder& Init(Allocator* allocator = Context->Alloc.Default)
 		{
 			Alloc = allocator->Cast<PMAlloc>().P();
 			Count = 0;
@@ -129,7 +122,7 @@ namespace fe
 		}
 
 		template <typename tAlloc>
-		String GetString(tAlloc* allocator = Context::Alloc::Output)
+		String GetString(tAlloc* allocator = Context->Alloc.Output)
 		{
 			String output;
 			output.Data = allocator->Cast<TypedAlloc<tAlloc>>().Allocate<char8_t>(Count).Elements;
@@ -147,7 +140,7 @@ namespace fe
 		}
 
 		template <typename tAlloc>
-		CString GetCString(tAlloc* allocator = Context::Alloc::Output)
+		CString GetCString(tAlloc* allocator = Context->Alloc.Output)
 		{
 			CString output;
 			output.Data = allocator->Cast<TypedAlloc<tAlloc>>().Allocate<char>(Count + 1).Elements;

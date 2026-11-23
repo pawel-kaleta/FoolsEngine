@@ -27,7 +27,7 @@ namespace fe::Render::GAPI::OpenGL
 			case ShaderType::Fragment:	return GL_FRAGMENT_SHADER;
 			case ShaderType::Compute:	return GL_COMPUTE_SHADER;
 			default:
-				Context::Log::Core.Error("Unrecognized shader type"_FE);
+				Context->Log.FE.Error("Unrecognized shader type"_FE);
 				return GL_NONE;
 			}
 		}
@@ -55,7 +55,7 @@ namespace fe::Render::GAPI::OpenGL
 			mType = type;
 			mOpenGLID = glCreateShader(Utils::ShaderTypeToGLEnum(type));
 
-			Context::Log::Core.Warn("Should this be  (GLchar**) & source.Data ?"_FE);
+			Context->Log.FE.Warn("Should this be  (GLchar**) & source.Data ?"_FE);
 			glShaderSource(mOpenGLID, 1, (GLchar**)&source.Data, 0);
 
 			GLint compilation_success;
@@ -79,7 +79,7 @@ namespace fe::Render::GAPI::OpenGL
 
 				mOpenGLID = 0;
 
-				Context::Log::Core.Error("{0}"_FE, info_log.Elements);
+				Context->Log.FE.Error("{0}"_FE, info_log.Elements);
 				FE_CORE_ASSERT(false, "OpenGL shader compilation failed!");
 
 				return;

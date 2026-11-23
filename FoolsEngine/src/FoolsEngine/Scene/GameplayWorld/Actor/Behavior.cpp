@@ -13,7 +13,7 @@ namespace fe
     {
         if (m_Active)
         {
-            Context::Log::Core.Warn("{0} already active"_FE, GetBehaviorName());
+            Context->Log.FE.Warn("{0} already active"_FE, GetBehaviorName());
         }
 
         m_Active = true;
@@ -24,7 +24,7 @@ namespace fe
     {
         if (!m_Active)
         {
-            Context::Log::Core.Warn("{0} already deactivated"_FE, GetBehaviorName());
+            Context->Log.FE.Warn("{0} already deactivated"_FE, GetBehaviorName());
         }
 
         m_Active = false;

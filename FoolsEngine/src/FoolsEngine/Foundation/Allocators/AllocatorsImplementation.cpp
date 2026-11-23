@@ -5,7 +5,7 @@
 
 namespace fe
 {
-	void MonotonicAlloc::DeallocateRaw(Splice<Byte> memReg) { Context::Log::Core.Warn("Deallocation in MonotonicAllocator"_FE); }
+	void MonotonicAlloc::DeallocateRaw(Splice<Byte> memReg) { Context->Log.FE.Warn("Deallocation in MonotonicAllocator"_FE); }
 	
 	Splice<Byte> MonotonicAlloc::ReallocateRaw(Splice<Byte> allocation, Splice<Byte> moveRegion, UInt newSize, UInt alignment)
 	{

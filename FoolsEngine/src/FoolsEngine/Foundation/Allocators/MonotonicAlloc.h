@@ -12,18 +12,17 @@ namespace fe
 	class MonotonicAlloc : public Allocator
 	{
 	public:
-		Allocator* UpStreamAlloc = nullptr;
-		std::pmr::monotonic_buffer_resource MBR;
+		STD_PMR_Allocator<Allocator> UpStreamAlloc;
+		union { std::pmr::monotonic_buffer_resource MBR; };
+
+		MonotonicAlloc() {};
+		~MonotonicAlloc() {};
 
 		void Init(Allocator* upStreamAlloc)
 		{
-			new(&MBR) std::pmr::monotonic_buffer_resource((STD_PMR_Allocator<Allocator>*)upStreamAlloc);
-			UpStreamAlloc = upStreamAlloc;
-		}
-		void Init()
-		{
-			new(&MBR) std::pmr::monotonic_buffer_resource();
-			UpStreamAlloc = nullptr;
+			new (&UpStreamAlloc) STD_PMR_Allocator<Allocator>();
+			UpStreamAlloc.fe_allocator = upStreamAlloc;
+			new(&MBR) std::pmr::monotonic_buffer_resource(&UpStreamAlloc);
 		}
 		void Deinit()
 		{

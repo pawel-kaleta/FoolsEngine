@@ -322,7 +322,7 @@ namespace fe
 			if (!scene_properties)
 			{
 				FE_CORE_ASSERT(false, "Deserialization failed");
-				Context::Log::Core.Error("Deserialization failed"_FE);
+				Context->Log.FE.Error("Deserialization failed"_FE);
 				return false;
 			}
 
@@ -470,7 +470,7 @@ namespace fe
 							auto* item = TypeRegs::Behaviors::GetItemFromName(my_behavior_type_name);
 							if (!item)
 							{
-								Context::Log::Core.Error("Deserialization of {0} failed"_FE, behavior_type_name);
+								Context->Log.FE.Error("Deserialization of {0} failed"_FE, behavior_type_name);
 								continue;
 							}
 							auto& create_funk_ptr = item->Create;
@@ -511,7 +511,7 @@ namespace fe
 
 					if (!new_system)
 					{
-						Context::Log::Core.Info("Deserialization of {0} failed"_FE, system_type_name);
+						Context->Log.FE.Info("Deserialization of {0} failed"_FE, system_type_name);
 						continue;
 					}
 					new_system->m_UUID = system_node["UUID"].as<uint64_t>();

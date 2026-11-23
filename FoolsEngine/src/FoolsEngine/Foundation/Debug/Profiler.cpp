@@ -31,7 +31,7 @@ namespace fe
 	{
 		if (m_ActiveSession)
 		{
-			Context::Log::Core.Error("Profiler::StartSession('{0}') with already active session: '{1}'."_FE, name, m_ActiveSession);
+			Context->Log.FE.Error("Profiler::StartSession('{0}') with already active session: '{1}'."_FE, name, m_ActiveSession);
 
 			EndSession(); // Simultaneous profileing with more then 1 session may cause strange behaviours
 		}
@@ -46,11 +46,11 @@ namespace fe
 			m_SessionName = name;
 			WriteHeader();
 
-			Context::Log::Core.Info("Profiler session '{0}' started."_FE, name);
+			Context->Log.FE.Info("Profiler session '{0}' started."_FE, name);
 		}
 		else
 		{
-			Context::Log::Core.Error("Profiler failed to open a results stream to file '{0}'."_FE, filepath);
+			Context->Log.FE.Error("Profiler failed to open a results stream to file '{0}'."_FE, filepath);
 		}
 	}
 
@@ -63,13 +63,13 @@ namespace fe
 			m_OutputStream.close();
 			m_ActiveSession = false;
 
-			Context::Log::Core.Info("Profiler session '{0}' closed."_FE, m_SessionName);
+			Context->Log.FE.Info("Profiler session '{0}' closed."_FE, m_SessionName);
 
 			m_SessionName = nullptr;
 			return;
 		}
 
-		Context::Log::Core.Warn("Attempt to close profiler session with no active session."_FE);
+		Context->Log.FE.Warn("Attempt to close profiler session with no active session."_FE);
 	}
 
 	void Profiler::WriteHeader()

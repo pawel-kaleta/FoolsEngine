@@ -126,7 +126,7 @@ namespace fe::Render::GAPI::OpenGL
 				glDeleteProgram(mOpenGLID);
 				mOpenGLID = 0;
 
-				Context::Log::Core.Error("{0}"_FE, info_log.Elements); // is this null terminated?
+				Context->Log.FE.Error("{0}"_FE, info_log.Elements); // is this null terminated?
 				FE_CORE_ASSERT(false, "OpenGL shader program linking failed!");
 				return;
 			}

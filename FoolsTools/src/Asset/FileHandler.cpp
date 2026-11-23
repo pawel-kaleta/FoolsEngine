@@ -90,7 +90,7 @@ namespace fe
         {
             if (s_ImportData)
             {
-                Context::Log::Core.Warn("Should s_ImportData be alive before the import setup?"_FE);
+                Context->Log.ED.Warn("Should s_ImportData be alive before the import setup?"_FE);
                 delete s_ImportData;
             }
 

@@ -54,24 +54,24 @@ namespace fe::Render::GAPI
 
 		switch (severity)
 		{
-		case GL_DEBUG_SEVERITY_HIGH:         Context::Log::Core.Fatal("OpenGL:"_FE); break;
-		case GL_DEBUG_SEVERITY_MEDIUM:       Context::Log::Core.Error("OpenGL:"_FE); break;
-		case GL_DEBUG_SEVERITY_LOW:          Context::Log::Core.Warn("OpenGL:"_FE); break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: Context::Log::Core.Debug("OpenGL:"_FE); break;
+		case GL_DEBUG_SEVERITY_HIGH:         Context->Log.FE.Fatal("OpenGL:"_FE); break;
+		case GL_DEBUG_SEVERITY_MEDIUM:       Context->Log.FE.Error("OpenGL:"_FE); break;
+		case GL_DEBUG_SEVERITY_LOW:          Context->Log.FE.Warn("OpenGL:"_FE); break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: Context->Log.FE.Debug("OpenGL:"_FE); break;
 		}
 
-		Context::Log::Core.Debug("    Source:  {0}"_FE, Sources.at(source));
-		Context::Log::Core.Debug("    Type:    {0}"_FE, Types.at(type));
-		Context::Log::Core.Debug("    ID:      {0}"_FE, id);
+		Context->Log.FE.Debug("    Source:  {0}"_FE, Sources.at(source));
+		Context->Log.FE.Debug("    Type:    {0}"_FE, Types.at(type));
+		Context->Log.FE.Debug("    ID:      {0}"_FE, id);
 
 		std::string logMessage = "    Message: ";
 		logMessage += message;
 		switch (severity)
 		{
-		case GL_DEBUG_SEVERITY_HIGH:         Context::Log::Core.Fatal("{}"_FE, logMessage); break;
-		case GL_DEBUG_SEVERITY_MEDIUM:       Context::Log::Core.Error("{}"_FE, logMessage); break;
-		case GL_DEBUG_SEVERITY_LOW:          Context::Log::Core.Warn("{}"_FE, logMessage);  break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: Context::Log::Core.Debug("{}"_FE, logMessage); break;
+		case GL_DEBUG_SEVERITY_HIGH:         Context->Log.FE.Fatal("{}"_FE, logMessage); break;
+		case GL_DEBUG_SEVERITY_MEDIUM:       Context->Log.FE.Error("{}"_FE, logMessage); break;
+		case GL_DEBUG_SEVERITY_LOW:          Context->Log.FE.Warn("{}"_FE, logMessage);  break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: Context->Log.FE.Debug("{}"_FE, logMessage); break;
 		}
 
 		if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
@@ -86,15 +86,15 @@ namespace fe::Render::GAPI
 			FE_PROFILER_SCOPE("gladLoadGLLoader");
 			int status = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
 			FE_CORE_ASSERT(status, "Failed to initialize glad - modern OpenGL loader!");
-			Context::Log::Core.Info("GAPI Loaded - OpenGL"_FE);
+			Context->Log.FE.Info("GAPI Loaded - OpenGL"_FE);
 		}
 
 		{
 			FE_PROFILER_SCOPE("OpenGL debug");
-			Context::Log::Core.Info("Rendering platform info:"_FE);
-			Context::Log::Core.Info("    Vendor:   {0}"_FE, (const char*)glGetString(GL_VENDOR));
-			Context::Log::Core.Info("    Renderer: {0}"_FE, (const char*)glGetString(GL_RENDERER));
-			Context::Log::Core.Info("    Version:  {0}"_FE, (const char*)glGetString(GL_VERSION));
+			Context->Log.FE.Info("Rendering platform info:"_FE);
+			Context->Log.FE.Info("    Vendor:   {0}"_FE, (const char*)glGetString(GL_VENDOR));
+			Context->Log.FE.Info("    Renderer: {0}"_FE, (const char*)glGetString(GL_RENDERER));
+			Context->Log.FE.Info("    Version:  {0}"_FE, (const char*)glGetString(GL_VERSION));
 
 			FE_CORE_ASSERT(GL_MAJOR_VERSION > 4 || (GL_MAJOR_VERSION == 4 && GL_MINOR_VERSION >= 5), "Minimal required OpenGL version is 4.5!");
 
@@ -112,7 +112,7 @@ namespace fe::Render::GAPI
 			OpenGL::CreateRegistries();
 		}
 
-		Context::Log::Core.Info("GAPI Registries created"_FE);
+		Context->Log.FE.Info("GAPI Registries created"_FE);
 	}
 
 	void SetViewportCmd(U32 x, U32 y, U32 width, U32 height)

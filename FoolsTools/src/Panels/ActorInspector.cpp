@@ -215,15 +215,15 @@ namespace fe
         strncpy_s(buffer, GetCString(name.EntityName, &p).Data, sizeof(buffer)); // to do: 2 copies (getCString and strncpy_s)
         if (ImGui::InputText("Name", buffer, sizeof(buffer)))
         {
-            Context::Log::Core.Error("to do: get proper allocator for entities names"_FE);
+            Context->Log.ED.Error("to do: get proper allocator for entities names"_FE);
 
             Splice<char8_t> name_splice;
             name_splice.Elements = name.EntityName.Data;
             name_splice.Count = name.EntityName.Count;
-            Context::Alloc::Default->Deallocate(name_splice);
+            Context->Alloc.Default->Deallocate(name_splice);
 
             String name_string(buffer);
-            name.EntityName.Data = Context::Alloc::Default->Allocate<char8_t>(name_string.Count).Elements;
+            name.EntityName.Data = Context->Alloc.Default->Allocate<char8_t>(name_string.Count).Elements;
             name.EntityName.Count = name_string.Count;
 
             std::memcpy(name.EntityName.Data, buffer, name_string.Count);

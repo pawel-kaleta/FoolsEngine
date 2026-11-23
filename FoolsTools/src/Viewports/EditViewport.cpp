@@ -239,7 +239,7 @@ namespace fe
 		{
 			String attachment_name; attachment_name.FromConstCharPtr("EntityID", 9);
 
-			Context::Log::Core.Error("EditViewport::ReadEntityIDfromBuffer() not implemented");
+			Context->Log.ED.Error("EditViewport::ReadEntityIDfromBuffer() not implemented");
 
 			//int attachment_index = m_Framebuffer->GetColorAttachmentIndex(attachment_name);
 			//Command::PipelineState::BindFramebuffer_OpenGL(*(Resource::RFramebuffer_OpenGL*) & *m_Framebuffer);

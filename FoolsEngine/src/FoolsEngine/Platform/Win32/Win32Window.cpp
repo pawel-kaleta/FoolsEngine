@@ -24,7 +24,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Context::Log::Core.Info("Closing Window."_FE);
+		Context->Log.FE.Info("Closing Window."_FE);
 
 		{
 			FE_PROFILER_SCOPE("glfwDestroyWindow()");
@@ -35,14 +35,14 @@ namespace fe
 	void Win32Window::PollEvents()
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Trace("Win10Window::PollEvents()"_FE);
+		Context->Log.FE.Trace("Win10Window::PollEvents()"_FE);
 		glfwPollEvents();
 	}
 
 	void Win32Window::SwapBuffers()
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Trace("Win10Window::SwapBuffers()"_FE);
+		Context->Log.FE.Trace("Win10Window::SwapBuffers()"_FE);
 		glfwSwapBuffers(m_Window);
 	}
 
@@ -85,12 +85,12 @@ namespace fe
 		if (enabled)
 		{
 			glfwSwapInterval(1);
-			Context::Log::Core.Info("VSync enabled."_FE);
+			Context->Log.FE.Info("VSync enabled."_FE);
 		}
 		else
 		{
 			glfwSwapInterval(0);
-			Context::Log::Core.Info("VSync disabled."_FE);
+			Context->Log.FE.Info("VSync disabled."_FE);
 		}
 		mVSync = enabled;
 

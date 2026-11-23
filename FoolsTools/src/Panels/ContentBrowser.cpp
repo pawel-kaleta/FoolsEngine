@@ -34,7 +34,7 @@ namespace fe
 	{
 		FE_PROFILER_FUNC();
 
-		Context::Log::Core.Info("ContentBrowser()"_FE);
+		Context->Log.ED.Info("ContentBrowser()"_FE);
 
 		m_Icons.File = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_Icons.Folder = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
@@ -171,7 +171,7 @@ namespace fe
 				{
 					//CreateAsset::OpenWindow(m_CurrentPath, AssetType::Material);
 					//CreateAsset::CreateMaterial(m_CurrentPath);
-					Context::Log::Core.Error("Unimplemented Material Import"_FE);
+					Context->Log.ED.Error("Unimplemented Material Import"_FE);
 				}
 
 				ImGui::EndPopup();

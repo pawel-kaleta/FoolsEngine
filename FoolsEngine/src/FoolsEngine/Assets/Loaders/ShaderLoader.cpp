@@ -25,7 +25,7 @@ namespace fe
 
 		if (!in.good())
 		{	
-			Context::Log::Core.Error("Could not load shader file: \"{0}\""_FE, filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
+			Context->Log.FE.Error("Could not load shader file: \"{0}\""_FE, filePath.string<PMR_STRING_TEMPLATE_PARAMS>(&pmr));
 			return;
 		}
 

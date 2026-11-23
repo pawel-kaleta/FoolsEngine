@@ -52,14 +52,14 @@ namespace fe
 
 		if (!UUID_node.IsDefined())
 		{
-			Context::Log::Core.Error("Misspecified Texture in serialized node"_FE);
+			Context->Log.FE.Error("Misspecified Texture in serialized node"_FE);
 			return false;
 		}
 
 		auto uuid = UUID_node.as<UUID>();
 		if (uuid == UUID(0))
 		{
-			Context::Log::Core.Error("Missing Texture definition!"_FE);
+			Context->Log.FE.Error("Missing Texture definition!"_FE);
 			return false;
 		}
 
@@ -69,7 +69,7 @@ namespace fe
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
 		{
-			Context::Log::Core.Error("Ill defined Texture in serialized node"_FE);
+			Context->Log.FE.Error("Ill defined Texture in serialized node"_FE);
 			return false;
 		}
 
@@ -101,14 +101,14 @@ namespace fe
 
 		if (!UUID_node.IsDefined())
 		{
-			Context::Log::Core.Error("Misspecified Texture in serialized node"_FE);
+			Context->Log.FE.Error("Misspecified Texture in serialized node"_FE);
 			return NullAssetID;
 		}
 
 		auto uuid = UUID_node.as<UUID>();
 		if (uuid == UUID(0))
 		{
-			Context::Log::Core.Error("Missing Texture definition!"_FE);
+			Context->Log.FE.Error("Missing Texture definition!"_FE);
 			return NullAssetID;
 		}
 
@@ -121,7 +121,7 @@ namespace fe
 			!node["Height"].IsDefined() ||
 			!node["Source Filepath"].IsDefined())
 		{
-			Context::Log::Core.Error("Ill defined Texture in serialized node"_FE);
+			Context->Log.FE.Error("Ill defined Texture in serialized node"_FE);
 			return NullAssetID;
 		}
 

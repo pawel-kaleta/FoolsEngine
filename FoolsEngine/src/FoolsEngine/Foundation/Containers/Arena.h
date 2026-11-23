@@ -201,7 +201,7 @@ namespace fe
 			return *this;
 		}
 
-		SpliceArena& InitAllocate(UInt capacity, Allocator* alloc = Context::Alloc::Default)
+		SpliceArena& InitAllocate(UInt capacity, Allocator* alloc = Context->Alloc.Default)
 		{
 			FE_CORE_ASSERT(!Buffer.Elements, "Not released SpliceArena - memory leak!");
 			((PMAlloc*)alloc)->Allocate<T>(capacity);
@@ -214,7 +214,7 @@ namespace fe
 			Count = 0;
 		}
 
-		void Release(Allocator* alloc = Context::Alloc::Default)
+		void Release(Allocator* alloc = Context->Alloc.Default)
 		{
 			((PMAlloc*)alloc)->Deallocate(Buffer);
 			Buffer.Elements = nullptr;
@@ -365,7 +365,7 @@ namespace fe
 
 		bool IsFull() const { return Count == Buffer.Count; }
 
-		DynamicArena& Init(Allocator* allocator = Context::Alloc::Default)
+		DynamicArena& Init(Allocator* allocator = Context->Alloc.Default)
 		{
 			Alloc = (PMAlloc*) allocator;
 			Count = 0;
@@ -413,7 +413,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(Count > index);
 
-			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
+			Context->Log.FE.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (Count == Buffer.Count)
 			{
@@ -436,9 +436,9 @@ namespace fe
 
 		T* Emplace(UInt index)
 		{
-			FE_CORE_ASSERT(Count > index);
+			FE_CORE_ASSERT(Count > index, "");
 
-			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
+			Context->Log.FE.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (Count == Buffer.Count)
 			{
@@ -578,7 +578,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
 
-			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
+			Context->Log.FE.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
 			{
@@ -603,7 +603,7 @@ namespace fe
 		{
 			FE_CORE_ASSERT(DynamicArena<T>::Count > index);
 
-			Context::Log::Core.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
+			Context->Log.FE.Warn("Could be optimized!"_FE); // by combining ExpandDefault() and move to make place for new element
 
 			if (DynamicArena<T>::Count == DynamicArena<T>::Buffer.Count)
 			{

@@ -1,7 +1,7 @@
 #include "ImGuiLayer.h"
 
 #include "FoolsEngine/Foundation/Context/Pile.h"
-#include "FoolsEngine/Foundation/Context/GlobalContext.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
 
 
 #include "FoolsEngine/Platform/Events/Event.h"
@@ -80,7 +80,7 @@ namespace fe {
 		{
 			FE_PROFILER_SCOPE("Platform/Renderer backends");
 			// Setup Platform/Renderer backends
-			GLFWwindow* window = static_cast<GLFWwindow*>(GlobalContext::Window::Base->GetNativeWindow());
+			GLFWwindow* window = static_cast<GLFWwindow*>(GlobalContext->Window.Base->GetNativeWindow());
 			ImGui_ImplGlfw_InitForOpenGL(window, true);
 			ImGui_ImplOpenGL3_Init("#version 410");
 		}
@@ -114,7 +114,7 @@ namespace fe {
 		FE_PROFILER_FUNC();
 
 		ImGuiIO& io = ImGui::GetIO();
-		Window::Attributes& win_attr = GlobalContext::Window::Base->mAttributes;
+		Window::Attributes& win_attr = GlobalContext->Window.Base->mAttributes;
 		io.DisplaySize = ImVec2((float)win_attr.Width, (float)win_attr.Height);
 
 		ImGui::Render();

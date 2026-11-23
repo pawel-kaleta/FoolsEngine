@@ -165,7 +165,7 @@ namespace fe
 			inst.BaseAssets.Materials.DefaultTranslucent	= materials_node["DefaultTranslucent"].as<UUID>();
 		}
 
-		Context::Log::Core.Info("Project deserialized"_FE);
+		Context->Log.FE.Info("Project deserialized"_FE);
 
 		return true;
 	}

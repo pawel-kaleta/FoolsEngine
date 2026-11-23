@@ -19,14 +19,15 @@ namespace fe
 	{
 		struct
 		{
-			TypedAlloc<MonotonicAlloc>			* Permanent;
-			TypedAlloc<MallocAlloc>				* GeneralPurpose;
-			TypedAlloc<
-				StaticArenaAlloc<arena_size>>	* MainLoopArena;
+			TypedAlloc<MonotonicAlloc>	Permanent;
+			TypedAlloc<MallocAlloc>		GeneralPurpose;
+			//TypedAlloc<
+			//	StaticArenaAlloc<
+			//		arena_size>>		MainLoopArena;
 
-			PMAlloc* Default;
-			PMAlloc* Auxiliary;
-			PMAlloc* Output;
+			PMAlloc * Default;
+			PMAlloc * Auxiliary;
+			PMAlloc * Output;
 		} Alloc;
 
 		struct

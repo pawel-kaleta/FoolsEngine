@@ -34,8 +34,8 @@ namespace fe
 
 		virtual String GetName() const { return String("BaseSystem"_FE); }
 
-		virtual void Serialize(YAML::Emitter& emitter) const { Context::Log::Core.Error("{0} serialization not implemented!"_FE, GetName()); }
-		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context::Log::Core.Error("{0} deserialization not implemented!"_FE, GetName()); }
+		virtual void Serialize(YAML::Emitter& emitter) const { Context->Log.FE.Error("{0} serialization not implemented!"_FE, GetName()); }
+		virtual void Deserialize(YAML::Node& data, GameplayWorld* world) { Context->Log.FE.Error("{0} deserialization not implemented!"_FE, GetName()); }
 		static String GetNameStatic() { return String("BaseSystem"_FE); }
 
 

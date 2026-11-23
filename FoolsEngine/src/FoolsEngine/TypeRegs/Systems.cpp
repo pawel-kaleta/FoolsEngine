@@ -13,7 +13,7 @@ namespace fe::TypeRegs
 	{
 		FE_PROFILER_FUNC();
 
-		Context::Log::Core.Warn("Register systems not implemented");
+		Context->Log.FE.Warn("Register systems not implemented");
 	}
 
 	const Systems::Item* Systems::GetItem(String name)

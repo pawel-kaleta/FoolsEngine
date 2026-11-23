@@ -76,8 +76,8 @@ namespace fe::Render::GAPI::OpenGL
 
 		FE_TYPE_SETUP(Stream)
 
-		DownStream* ToDown() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::DownStream); return (DownStream*)this; }
-		UpStream* ToUp() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::UpStream); return (UpStream*)this; }
+		DownStream* ToDown() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::DownStream, ""); return (DownStream*)this; }
+		UpStream* ToUp() { FE_CORE_ASSERT(mID.mComps.Type == ObjType::UpStream, ""); return (UpStream*)this; }
 
 		struct Fence
 		{

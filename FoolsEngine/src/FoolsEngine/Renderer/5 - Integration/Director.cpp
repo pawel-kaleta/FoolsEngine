@@ -35,7 +35,7 @@ namespace fe::Render::Integration
 		void Startup()
 		{
 			FE_PROFILER_FUNC();
-			Context::Log::ScopeCore("Renderer::Startup"_FE);
+			ContextScope::Log::FE("Renderer::Startup"_FE);
 
 			sTextureAllocator.Init();
 			sTextureAllocator.Create(100, 100 * 1024 * 1024 * 4, 200);
@@ -45,8 +45,8 @@ namespace fe::Render::Integration
 			sSceneDataStream = Render::GAPI::CreateDownStream();
 			Render::GAPI::AllocateDownStream(sSceneDataStream, sizeof(SceneDataGPU) * 4);
 
-			BaseAssets = Context::Alloc::Permanent.Allocate<BaseAssetsStruct>();
-			SceneData = Context::Alloc::Permanent.Allocate<SceneDataStruct>();
+			BaseAssets = Context->Alloc.Permanent.Allocate<BaseAssetsStruct>();
+			SceneData = Context->Alloc.Permanent.Allocate<SceneDataStruct>();
 
 			Renderer2D::Startup();
 		}
@@ -188,11 +188,11 @@ namespace fe::Render::Integration
 				//BaseAssets.Materials.DefaultTranslucent.Use().MakeMaterial(BaseAssets.ShadingModels.Base3DBlend.Observe());
 			}
 
-			Context::Log::Core.Error("AcquireBaseAssets() not implemented"_FE);
+			Context->Log.FE.Error("AcquireBaseAssets() not implemented"_FE);
 
 			Renderer2D::AcquireBaseAssets();
 
-			Context::Log::Core.Info("Base Assets acquired"_FE);
+			Context->Log.FE.Info("Base Assets acquired"_FE);
 		}
 
 		void OnWindowResize(uint32_t width, uint32_t height)
@@ -260,7 +260,7 @@ namespace fe::Render::Integration
 			GLenum error = glGetError();
 
 			if (error)
-				Context::Log::Core.Info("{0}"_FE, error);
+				Context->Log.FE.Info("{0}"_FE, error);
 		}
 
 	}

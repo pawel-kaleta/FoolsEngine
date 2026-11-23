@@ -43,7 +43,7 @@ namespace fe
 		tnSystem* CreateSystem()
 		{
 			FE_PROFILER_FUNC();
-			Context::Log::Core.Debug("System creation"_FE);
+			Context->Log.FE.Debug("System creation"_FE);
 			static_assert(std::is_base_of_v<System, tnSystem>, "This is not a system!");
 
 			tnSystem* system = new tnSystem();

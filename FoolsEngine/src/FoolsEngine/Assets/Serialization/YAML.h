@@ -92,7 +92,7 @@ namespace YAML
 			if (!node.IsScalar())
 				return false;
 			
-			rhs = fe::CopyString(fe::String(node.Scalar().c_str(), node.Scalar().size()+1), fe::Context::Alloc::Output);
+			rhs = fe::CopyString(fe::String(node.Scalar().c_str(), node.Scalar().size()+1), fe::Context->Alloc.Output);
 			
 			return true;
 		}

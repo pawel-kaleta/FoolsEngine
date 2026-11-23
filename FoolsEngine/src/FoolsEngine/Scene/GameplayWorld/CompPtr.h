@@ -39,7 +39,7 @@ namespace fe
 		{
 			if (!entity)
 			{
-				Context::Log::Core.Warn("Not a valid entity"_FE);
+				Context->Log.FE.Warn("Not a valid entity"_FE);
 				return;
 			}
 			if (entity.AllOf<tnComponent>())
@@ -49,7 +49,7 @@ namespace fe
 			}
 			else
 			{
-				Context::Log::Core.Error("This entity ({0}) does not have this component ({1})"_FE, entity.Get<CEntityName>().EntityName, tnComponent::GetNameStatic());
+				Context->Log.FE.Error("This entity ({0}) does not have this component ({1})"_FE, entity.Get<CEntityName>().EntityName, tnComponent::GetNameStatic());
 			}
 		}
 

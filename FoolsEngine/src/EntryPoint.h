@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
 	fe::Application* app;
 	{
-		Context::Log::ScopeCore startup("STARTUP"_FE, LoggingLevel::Trace);
+		ContextScope::Log::FE startup("STARTUP"_FE, LoggingLevel::Trace);
 	
 		FE_PROFILER_SESSION_START("Startup", "Logs/ProfileData_Startup.json");
 		app = fe::CreateApplication();
@@ -33,13 +33,13 @@ int main(int argc, char** argv)
 	}
 
 	{
-		Context::Log::ScopeCore startup("RUN"_FE, LoggingLevel::Debug);
+		ContextScope::Log::FE startup("RUN"_FE, LoggingLevel::Debug);
 
 		app->Run();
 	}
 
 	{
-		Context::Log::ScopeCore startup("SHUTDOWN"_FE, LoggingLevel::Trace);
+		ContextScope::Log::FE startup("SHUTDOWN"_FE, LoggingLevel::Trace);
 
 		FE_PROFILER_SESSION_START("Shutdown", "Logs/ProfileData_Shutdown.json");
 		app->ShutDown();

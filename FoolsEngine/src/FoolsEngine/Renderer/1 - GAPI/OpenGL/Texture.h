@@ -190,7 +190,7 @@ namespace fe::Render::GAPI::OpenGL
 					glTextureParameterfv(mOpenGLID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(mViewSpec.mBorderColor));
 				break;
 				default:
-					Context::Log::Core.Error("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
+					Context->Log.FE.Error("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
 				}
 			}
 
@@ -205,7 +205,7 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); mSpec.mMipCount = 1; break;
 					case Mipmapping::Nearest:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); mSpec.CalculateMipCount(); break;
 					case Mipmapping::Liniear:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); mSpec.CalculateMipCount(); break;
-					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
+					default: Context->Log.FE.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
 					}
 				break;
 				case Filtering::Bilinear:
@@ -215,11 +215,11 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); mSpec.CalculateMipCount(); break;
 					case Mipmapping::Nearest:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); mSpec.CalculateMipCount(); break;
 					case Mipmapping::Liniear:	glTextureParameteri(mOpenGLID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); mSpec.CalculateMipCount(); break;
-					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
+					default: Context->Log.FE.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE); mSpec.CalculateMipCount();
 					}
 				break;
 				default:
-					Context::Log::Core.Info("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					Context->Log.FE.Info("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 					mSpec.CalculateMipCount();
 				}
 			}
@@ -294,7 +294,7 @@ namespace fe::Render::GAPI::OpenGL
 					glSamplerParameterfv(mSamplerID, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(sampler.mBorderColor));
 					break;
 				default:
-					Context::Log::Core.Warn("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
+					Context->Log.FE.Warn("Unrecognized texture wrapping mode, defaulted to repeat"_FE);
 				}
 			}
 
@@ -309,7 +309,7 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST); break;
 					case Mipmapping::Nearest:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST); break;
 					case Mipmapping::Liniear:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR); break;
-					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					default: Context->Log.FE.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 					}
 					break;
 				case Filtering::Bilinear:
@@ -319,11 +319,11 @@ namespace fe::Render::GAPI::OpenGL
 					case Mipmapping::None:		glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); break;
 					case Mipmapping::Nearest:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); break;
 					case Mipmapping::Liniear:	glSamplerParameteri(mSamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); break;
-					default: Context::Log::Core.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					default: Context->Log.FE.Error("Unrecognized texture Mipmapping mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 					}
 					break;
 				default:
-					Context::Log::Core.Warn("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
+					Context->Log.FE.Warn("Unrecognized texture Filtering mode, defaulted filtering-mipmapping to GL_NEAREST_MIPMAP_LINEAR"_FE);
 				}
 			}
 		}

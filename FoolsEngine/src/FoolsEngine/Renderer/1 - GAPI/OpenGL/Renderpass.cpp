@@ -97,7 +97,7 @@ namespace fe::Render::GAPI
 			case BlendFunction::OneMinusSourceAlpha:	return GL_ONE_MINUS_SRC_ALPHA;
 
 			default:
-				Context::Log::Core.Error("Unrecognized BlendFunction"_FE);
+				Context->Log.FE.Error("Unrecognized BlendFunction"_FE);
 				return GL_NONE;
 			}
 		}

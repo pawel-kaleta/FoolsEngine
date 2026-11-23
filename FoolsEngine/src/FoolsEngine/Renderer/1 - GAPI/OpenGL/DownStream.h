@@ -46,10 +46,10 @@ namespace fe::Render::GAPI::OpenGL
 			mFrontFences = mFencesA.P();
 			mBackFences = mFencesB.P();
 
-			mMainAlloc = Context::Alloc::Default;
+			mMainAlloc = Context->Alloc.Default;
 		}
 
-		void Create(U32 size, PMAlloc* mainAlloc = Context::Alloc::Default, PMAlloc* auxAlloc = Context::Alloc::Auxiliary)
+		void Create(U32 size, PMAlloc* mainAlloc = Context->Alloc.Default, PMAlloc* auxAlloc = Context->Alloc.Auxiliary)
 		{
 			FE_CORE_ASSERT(size, "Size is 0.");
 
@@ -139,7 +139,7 @@ namespace fe::Render::GAPI::OpenGL
 				auto& fence = mFrontFences->At(mNextFrontFenceIndex / 64)->At(mNextFrontFenceIndex % 64);
 				if (fence.Location < position_candidate)
 				{
-					Context::Log::Core.Warn("Not enough space in DownStream"_FE);
+					Context->Log.FE.Warn("Not enough space in DownStream"_FE);
 					FE_CORE_ASSERT(false, "AAAA");
 					return false;
 				}
@@ -152,7 +152,7 @@ namespace fe::Render::GAPI::OpenGL
 
 				if (region_end_candidate > mDMABegin + mCapacity) // region most likely bigger then whole stream
 				{
-					Context::Log::Core.Warn("Not enough space in DownStream"_FE);
+					Context->Log.FE.Warn("Not enough space in DownStream"_FE);
 					FE_CORE_ASSERT(false, "AAAA");
 					return false;
 				}
@@ -180,7 +180,7 @@ namespace fe::Render::GAPI::OpenGL
 					auto& fence = mBackFences->At(next_back_fence_index / 64)->At(next_back_fence_index % 64);
 					if (fence.Location < position_candidate) // can we fit?
 					{
-						Context::Log::Core.Warn("Not enough space in DownStream"_FE);
+						Context->Log.FE.Warn("Not enough space in DownStream"_FE);
 						FE_CORE_ASSERT(false, "AAAA");
 						return false;
 					}

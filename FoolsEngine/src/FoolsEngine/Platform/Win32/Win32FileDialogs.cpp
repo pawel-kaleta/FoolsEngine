@@ -4,7 +4,7 @@
 
 #include "FoolsEngine/Application/Application.h"
 
-#include "FoolsEngine/Foundation/Context/GlobalContext.h"
+#include "FoolsEngine/Foundation/Context/Context.h"
 
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -22,7 +22,7 @@ namespace fe
 		CHAR currentDir[256] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)GlobalContext::Window::Base->GetNativeWindow());
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)GlobalContext->Window.Base->GetNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		if (GetCurrentDirectoryA(256, currentDir))
@@ -49,7 +49,7 @@ namespace fe
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		strncpy_s(szFile, defaultpath, sizeof(szFile));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)GlobalContext::Window::Base->GetNativeWindow());
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)GlobalContext->Window.Base->GetNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		CHAR currentDir[256] = { 0 };

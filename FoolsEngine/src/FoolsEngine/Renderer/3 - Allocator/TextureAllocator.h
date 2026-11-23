@@ -32,7 +32,7 @@ namespace fe::Render
 			mAlloc = nullptr;
 		}
 
-		void Create(UInt texturesCountBudget, UInt texturesSizeBudget, UInt viewsCountBudget, PMAlloc* alloc = Context::Alloc::Default)
+		void Create(UInt texturesCountBudget, UInt texturesSizeBudget, UInt viewsCountBudget, PMAlloc* alloc = Context->Alloc.Default)
 		{
 			mTexturesCount = 0;
 			mTexturesCountBudget = texturesCountBudget;

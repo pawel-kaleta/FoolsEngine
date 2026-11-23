@@ -16,6 +16,13 @@ void InitContext::InitGlobal()
 {
 	using namespace fe;
 
+	GlobalContext = new GlobalContextStruct();
+
+	GlobalContext->Alloc.Permanent.Init(GlobalContext->Alloc.GeneralPurpose.P());
+	
+	Context = GlobalContext->Alloc.Permanent.Allocate<ContextStruct>();
+
+
 	GlobalContext->Log.Sinks.File.FE.Init(CString("Logs/Core.log", 14));
 	GlobalContext->Log.Sinks.File.AP.Init(CString("Logs/App.log", 13));
 	GlobalContext->Log.Sinks.File.Common.InitCommon(CString("Logs/Common.log", 16));
@@ -57,60 +64,61 @@ void InitContext::InitGlobal()
 
 		ContextScope::Log::FE log_scope("Alloc"_FE);
 
-		FE_CORE_ASSERT(false, "Allocators are now pointers sometimes and don't exist");
-		Context->Alloc.Permanent->Init();
+		Context->Alloc.Permanent.Init(GlobalContext->Alloc.Permanent.P());
 		Context->Log.FE.Info("Permanent initialized");
-		Context->Alloc.MainLoopArena->Clear();
-		Context->Log.FE.Info("MainLoopArena initialized");
 
-		Context->Alloc.Default = (PMAlloc*)  Context->Alloc.GeneralPurpose;
-		Context->Alloc.Auxiliary = (PMAlloc*)Context->Alloc.GeneralPurpose;
-		Context->Alloc.Output = (PMAlloc*)Context->Alloc.GeneralPurpose;
+		//GlobalContext->Alloc.MainLoopArena.Clear();
+		//Context->Alloc.MainLoopArena.Clear();
+		//Context->Log.FE.Info("MainLoopArena initialized");
+
+		Context->Alloc.Default		= (PMAlloc*)Context->Alloc.GeneralPurpose.P();
+		Context->Alloc.Auxiliary	= (PMAlloc*)Context->Alloc.GeneralPurpose.P();
+		Context->Alloc.Output		= (PMAlloc*)Context->Alloc.GeneralPurpose.P();
 	}
 
 	{
 		FE_PROFILER_SCOPE("Platform");
-		Context::Log::ScopeCore log_scope("Platform"_FE);
-		GlobalContext::Platform::Base.Create();
+		ContextScope::Log::FE log_scope("Platform"_FE);
+		GlobalContext->Platform.Base.Create();
 	}
 
 	{
 		FE_PROFILER_SCOPE("Render Context");
-		Context::Log::ScopeCore log_scope("Render"_FE);
+		ContextScope::Log::FE log_scope("Render"_FE);
 
 		{
 			FE_PROFILER_SCOPE("Window");
-			Context::Log::ScopeCore scope("Window"_FE);
+			ContextScope::Log::FE scope("Window"_FE);
 			
 			if (FE_PARAMS_HEADLESS)
 			{
 				glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-				Context::Log::Core.Info("Headless selected - window invisible"_FE);
+				Context->Log.FE.Info("Headless selected - window invisible"_FE);
 			}
 
-			Win32Window* window = Context::Alloc::Permanent.Allocate<Win32Window>();
+			Win32Window* window = Context->Alloc.Permanent.Allocate<Win32Window>();
 			window->Init({ FE_PARAMS_NAME, 1900, 1000, fe::Render::GAPI::Platform::FE_PARAMS_GAPI });
 			window->Create();
-			Context::Log::Core.Info("Window created"_FE);
+			Context->Log.FE.Info("Window created"_FE);
 
-			GlobalContext::Platform::Base.SetEventCallbacks(window);
-			GlobalContext::Window::Base = window;
+			GlobalContext->Platform.Base.SetEventCallbacks(window);
+			GlobalContext->Window.Base = window;
 		}
 
 		{
 			FE_PROFILER_SCOPE("GAPI");
-			Context::Log::ScopeCore scope("GAPI"_FE);
+			ContextScope::Log::FE scope("GAPI"_FE);
 
-			GlobalContext::GPU::GAPI = Render::GAPI::Platform::FE_PARAMS_GAPI;
+			GlobalContext->GPU.GAPI = Render::GAPI::Platform::FE_PARAMS_GAPI;
 
 			Render::GAPI::Create();
 
 			{
 				FE_PROFILER_SCOPE("Screach Buffer creation");
-				Context::GPU::ScratchBuffer = Render::GAPI::CreateBuffer();
-				Render::GAPI::AllocateCommitBuffer(Context::GPU::ScratchBuffer, FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE);
+				Context->GPU.ScratchBuffer = Render::GAPI::CreateBuffer();
+				Render::GAPI::AllocateCommitBuffer(Context->GPU.ScratchBuffer, FE_PARAMS_GPU_SCRATCH_BUFFER_SIZE);
 
-				Context::Log::Core.Info("GPU ScratchBuffer initialized"_FE);
+				Context->Log.FE.Info("GPU ScratchBuffer initialized"_FE);
 			}
 		}
 	}
@@ -122,17 +130,19 @@ void InitContext::DeinitGlobal()
 {
 	using namespace fe;
 
+	FE_CORE_ASSERT(false, "Is this ever called?"); //deinit monotonic allocs!
+
 	// Rendering, Window and Platform Layer
 	{
 		FE_PROFILER_SCOPE("Window");
 
-		GlobalContext::Window::Base->~Window(); // abstraction, safer to destroy
+		GlobalContext->Window.Base->~Window(); // abstraction, safer to destroy
 	}
 
 	{
 		FE_PROFILER_SCOPE("PlatformBase");
 
-		GlobalContext::Platform::Base.Terminate();
+		GlobalContext->Platform.Base.Terminate();
 	}
 
 	// Allocators
@@ -145,7 +155,5 @@ void InitContext::Init()
 {
 	using namespace fe;
 
-
-
-	
+	FE_CORE_ASSERT(false, "Not implemented");
 }

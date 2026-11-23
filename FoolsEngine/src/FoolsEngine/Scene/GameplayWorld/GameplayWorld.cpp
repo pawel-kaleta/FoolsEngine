@@ -47,7 +47,7 @@ namespace fe
 
 		Entity entity = World::CreateEntity();
 
-		Context::Log::Core.Error("this is dengerous, we do not know the liftime and original allocator"_FE);
+		Context->Log.FE.Error("this is dengerous, we do not know the liftime and original allocator"_FE);
 		entity.Emplace<CEntityName>().EntityName = name;
 
 		entity.Emplace<CHeadEntity>().HeadEntity = m_Registry.get<CHeadEntity>(parentEntity).HeadEntity;
@@ -60,12 +60,12 @@ namespace fe
 	Actor GameplayWorld::CreateActor(EntityID attachmentEntityID, String name)
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Debug("Actor Creation"_FE);
+		Context->Log.FE.Debug("Actor Creation"_FE);
 
 		FE_CORE_ASSERT(attachmentEntityID != NullEntityID, "Cannot create a loose actor");
 
 		Entity entity = World::CreateEntity();
-		Context::Log::Core.Error("this is dengerous, we do not know the liftime and original allocator"_FE);
+		Context->Log.FE.Error("this is dengerous, we do not know the liftime and original allocator"_FE);
 		entity.Emplace<CEntityName>().EntityName = name;
 		m_Hierarchy->CreateNode(entity, attachmentEntityID);
 		entity.Emplace<CHeadEntity>().HeadEntity = entity.ID();
@@ -179,7 +179,7 @@ namespace fe
 	void GameplayWorld::SetPrimaryCameraEntity(Entity entity)
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Info("Primary Camera Set."_FE);
+		Context->Log.FE.Info("Primary Camera Set."_FE);
 
 		if (!(entity))
 		{
@@ -221,7 +221,7 @@ namespace fe
 	void GameplayWorld::SetPrimaryDirectionalLightEntity(Entity entity)
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::Core.Info("Primary Directional Light Set."_FE);
+		Context->Log.FE.Info("Primary Directional Light Set."_FE);
 
 		if (!(entity))
 		{

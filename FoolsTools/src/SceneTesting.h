@@ -63,7 +63,7 @@ namespace fe
 			{
 				if (!first_error)
 				{
-					Context::Log::App.Info("Missing references on PlayerMovementBehavior"_FE);
+					Context->Log.AP.Info("Missing references on PlayerMovementBehavior"_FE);
 					first_error = true;
 				}
 				return;
@@ -199,7 +199,7 @@ namespace fe
 	void TestSceneSetup(const AssetObserver& sceneObserver)
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::App.Info("Test Scene Setup"_FE);
+		Context->Log.AP.Info("Test Scene Setup"_FE);
 
 		auto gameplay_world = sceneObserver.Get<Scene::Core>().GameplayWorld.get();
 		Actor enviro_actor = gameplay_world->CreateActor("Enviro");

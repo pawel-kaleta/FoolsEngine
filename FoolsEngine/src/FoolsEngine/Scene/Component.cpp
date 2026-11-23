@@ -24,18 +24,18 @@ namespace fe
 {
 	void DataComponent::DrawInspectorWidget(BaseEntity entity)
 	{
-		Context::Log::Core.Error("UI widget drawing of {0} not implemented!", this->GetName());
+		Context->Log.FE.Error("UI widget drawing of {0} not implemented!", this->GetName());
 		ImGui::TextWrapped("UI widget drawing not implemented");
 	}
 
 	void DataComponent::Serialize(YAML::Emitter& emitter)
 	{
-		Context::Log::Core.Error("{0} serialization not implemented!", this->GetName());
+		Context->Log.FE.Error("{0} serialization not implemented!", this->GetName());
 	}
 
 	void DataComponent::Deserialize(YAML::Node& data)
 	{
-		Context::Log::Core.Error("{0} deserialization not implemented!", this->GetName());
+		Context->Log.FE.Error("{0} deserialization not implemented!", this->GetName());
 	}
 
 	void SpatialComponent::SerializeOffset(YAML::Emitter& emitter) const

@@ -126,3 +126,5 @@ namespace fe
 		// namespace GPU { }
 	}
 }
+
+#include "FoolsEngine/Foundation/Debug/Asserts.h"

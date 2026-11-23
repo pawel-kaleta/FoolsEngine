@@ -7,8 +7,8 @@ namespace fe
 	Toolbar::Toolbar()
 	{
 		FE_PROFILER_FUNC();
-		Context::Log::ScopeCore scope("Toolbar"_FE);
-		Context::Log::Core.Info("Toolbar()"_FE);
+		ContextScope::Log::FE scope("Toolbar"_FE);
+		Context->Log.ED.Info("Toolbar()"_FE);
 
 		m_IconPlay  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
 		m_IconStop  = EditorAssetHandle(AssetManager::AssetCreation::EditorAsset<Texture2D>());
@@ -39,7 +39,7 @@ namespace fe
 
 		{
 			FE_PROFILER_SCOPE("Loadings");
-			Context::Log::ScopeCore scope2("LoadTexture"_FE);
+			ContextScope::Log::FE scope2("LoadTexture"_FE);
 
 			TextureLoader::LoadTexture("resources/PlayButton.png", m_IconPlay);
 			TextureLoader::LoadTexture("resources/StopButton.png", m_IconStop);

@@ -76,7 +76,7 @@ namespace fe
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			Context::Log::Core.Error("ERROR::ASSIMP::{0}"_FE, s_Inspector.GetErrorString());
+			Context->Log.FE.Error("ERROR::ASSIMP::{0}"_FE, s_Inspector.GetErrorString());
 			return nullptr;
 		}
 

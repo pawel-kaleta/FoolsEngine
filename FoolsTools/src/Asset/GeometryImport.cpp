@@ -118,7 +118,7 @@ namespace fe::GeometryImport
 			{
 				aiTextureType& texture_type = (aiTextureType&)j;
 				if (mat->GetTextureCount(texture_type) > 1)
-					Context::Log::Core.Warn("No support for layered materials!"_FE);
+					Context->Log.ED.Warn("No support for layered materials!"_FE);
 
 				aiString new_texture;
 				if (AI_SUCCESS != mat->GetTexture(texture_type, 0, &new_texture))
@@ -131,12 +131,12 @@ namespace fe::GeometryImport
 					{
 						if (aiTextureFlags::aiTextureFlags_UseAlpha & texture_flags)
 						{
-							FE_CORE_ASSERT(material_data.AlphaMode);
+							FE_CORE_ASSERT(material_data.AlphaMode, "");
 							material_data.AlphaMode = AlphaMode::Blend;
 						}
 						if (aiTextureFlags::aiTextureFlags_IgnoreAlpha & texture_flags)
 						{
-							FE_CORE_ASSERT(!material_data.AlphaMode);
+							FE_CORE_ASSERT(!material_data.AlphaMode, "");
 							material_data.AlphaMode = AlphaMode::Opaque;
 						}
 					}
